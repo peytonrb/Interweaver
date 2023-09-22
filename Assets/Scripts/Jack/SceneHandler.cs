@@ -61,7 +61,6 @@ public class SceneHandler : MonoBehaviour
         }
     }
 
-
     public IEnumerator LoadLevel(string sceneToLoad)
     {
         yield return new WaitForSeconds(1.5f);

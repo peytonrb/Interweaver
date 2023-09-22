@@ -22,9 +22,9 @@ public class SettingsManager : MonoBehaviour
     public Toggle vSyncToggle;
     [HideInInspector] public int vsyncInt;
 
-    [Header("Tutorial Variables")]
-    public Toggle tutorialToggle;
-    [HideInInspector] public int tutorialInt;
+    //[Header("Tutorial Variables")]
+    //public Toggle tutorialToggle;
+    //[HideInInspector] public int tutorialInt;
 
     void Awake()
     {
