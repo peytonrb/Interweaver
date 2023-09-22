@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement; //this is for testing 
 
 public class PlayerScript : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class PlayerScript : MonoBehaviour
     private Transform playerTransform;
     private float gravity;
 
+    private GameMasterScript GM; //This is refrencing the game master script
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +29,9 @@ public class PlayerScript : MonoBehaviour
 
         //Section reserved for initiating inputs 
         moveInput = inputs.FindAction("Player/Move");
+
+        GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>(); //these two lines are grabing the game master's last checkpoint position
+        transform.position = GM.LastCheckPointPos;
     }
 
     void OnEnable() {
@@ -44,6 +49,11 @@ public class PlayerScript : MonoBehaviour
        //Debug.Log(movement);
        LookAndMove();
 
+
+        if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //this is for testing
+        }
     }
 
     void FixedUpdate() {
