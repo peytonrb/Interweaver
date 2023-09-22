@@ -112,8 +112,7 @@ public class MainMenu : MonoBehaviour
     //Function for playing sound when a button is pressed
     public void PlayButtonPress()
     {
-        //SceneManager.LoadScene("DuelScene");
-        SceneHandler.instance.GoToJoinScene();
+        // Start Game!
     }
     public void PlayHoverSound()
     {

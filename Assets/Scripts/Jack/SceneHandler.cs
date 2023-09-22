@@ -13,12 +13,6 @@ public class SceneHandler : MonoBehaviour
 
     public static SceneHandler instance;
     public string currentSceneName;
-    public Animator anim;
-
-    public bool isInDuelScene = false;
-
-    public List<string> duelScenes;
-
     void OnEnable()
     {
         //Tell our 'OnLevelFinishedLoading' function to start listening for a scene change as soon as this script is enabled.
@@ -42,9 +36,6 @@ public class SceneHandler : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-
-        anim = GetComponentInChildren<Animator>();
-
  
     }
 
@@ -54,109 +45,22 @@ public class SceneHandler : MonoBehaviour
         Debug.Log(scene.name);
         //Debug.Log(mode);
 
-        anim.SetTrigger("SceneStart");
-
         currentSceneName = scene.name;
 
         AudioManager.instance.PlayMusicOnSceneChange(scene.name);
 
-        var cam = GameObject.Find("Camera Target").GetComponent<MultiplayerCam>();
-        cam.players = new List<Transform>();
-
-        for (int i = 0; i < PlayerManager.players.Count; i++)
-        {
-            cam.players.Add(PlayerManager.players[i].transform);
-        }
-
-
         switch (scene.name)
         {
-            case "MenuScene":
+            case "Menu":
                 {
-                    isInDuelScene = false;
-                    DuelManager.instance.SetWinnerToNull();
-                    DuelManager.instance.DuelSceneEnded();
+                    
                     
 
-                    break;
-                }
-            case "JoinScene":
-                {
-                    isInDuelScene = false;
-                    DuelManager.instance.SetWinnerToNull();
-                    break;
-                }
-            case "PactScene":
-                {
-                    isInDuelScene = false;
-                    foreach (Player player in FindObjectsOfType<Player>())
-                    {
-                        player.ResetPlayerOnSceneChange();
-                    }
-                    DuelManager.instance.DuelSceneEnded();
-                    DuelManager.instance.SetWinnerToNull();
-                    UI.instance.EnablePactSceneUI();
-                    break;
-                }
-            case "MerchantScene":
-                {
-                    isInDuelScene = false;
-                    foreach (Player player in FindObjectsOfType<Player>())
-                    {
-                        player.MoveToSpawnPoint();
-                        player.ResetPlayerOnSceneChange();
-                        player.GetComponent<PlayerUIControl>().canReadyUp = true;
-                    }
-
-                    DDOLCamera.instance.GetComponentInChildren<MultiplayerCam>().ResetFocus(true);
-                    DuelManager.instance.DuelSceneEnded();
-                    DuelManager.instance.SetWinnerToNull();
-                    UI.instance.EnableMerchantSceneUI();
-                    break;
-                }
-            case "WinScene":
-                {
-                    isInDuelScene = false;
-                    DuelManager.instance.DuelSceneEnded();
-                    UI.instance.EnableWinSceneUI();
-                    break;
-                }
-            default:
-                {
-                    //Duel Scene
-                    
-                    isInDuelScene = true;
-                    DuelManager.instance.PactSceneEnded();
-                    DuelManager.instance.MerchantSceneEnded();
-                    DuelManager.instance.DuelSceneStarted();
-                    DuelManager.instance.SetWinnerToNull();
-                    DDOLCamera.instance.GetComponentInChildren<AssignCameraBounds>().AssignCamBounds();
-
-                    foreach (Player player in FindObjectsOfType<Player>())
-                    {
-                        player.ResetPlayerOnSceneChange();
-                        player.GetComponent<PlayerUIControl>().SetPlayerUI();
-                    }
-
-                    StartCoroutine(DelayPlayerAnims());
-                    
                     break;
                 }
         }
     }
 
-    public IEnumerator DelayPlayerAnims()
-    {
-        yield return new WaitForSeconds(1.5f);
-
-        foreach (Player player in FindObjectsOfType<Player>())
-        {
-            player.SpawnAnimation();
-
-        }
-
-        yield break;
-    }
 
     public IEnumerator LoadLevel(string sceneToLoad)
     {
@@ -168,41 +72,8 @@ public class SceneHandler : MonoBehaviour
     public void GoToMenuScene()
     {
         Time.timeScale = 1f;
-        GameObject duelManager = GameObject.Find("DuelManager");
-        duelManager.GetComponent<DuelManager>().DestroyAll();
-        anim.SetTrigger("SceneEnd");
         StartCoroutine(LoadLevel("MenuScene"));
     }
 
-    public void GoToJoinScene()
-    {
-        Time.timeScale = 1f;
-        anim.SetTrigger("SceneEnd");
-        StartCoroutine(LoadLevel("JoinScene"));
-    }
-
-    public void GoToDuelScene()
-    {
-        anim.SetTrigger("SceneEnd");
-        StartCoroutine(LoadLevel(duelScenes[Random.Range(0,duelScenes.Count)]));
-    }
-
-    public void GoToPactScene()
-    {
-        anim.SetTrigger("SceneEnd");
-        StartCoroutine(LoadLevel("PactScene"));
-    }
-
-    public void GoToMerchantScene()
-    {
-        anim.SetTrigger("SceneEnd");
-        StartCoroutine(LoadLevel("MerchantScene"));
-    }
-
-    public void GoToWinScene()
-    {
-        anim.SetTrigger("SceneEnd");
-        StartCoroutine(LoadLevel("WinScene"));
-    }
 
 }
