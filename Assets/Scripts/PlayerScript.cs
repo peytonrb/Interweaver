@@ -57,6 +57,7 @@ public class PlayerScript : MonoBehaviour
     }
 
     void FixedUpdate() {
+
         if (direction.magnitude >= 0.1f) {
             characterController.Move(direction.normalized * speed * Time.deltaTime);
         }
@@ -69,13 +70,16 @@ public class PlayerScript : MonoBehaviour
     }
 
     private void LookAndMove() {
-
-        direction = new Vector3(-movement.x,0,-movement.y).normalized;
         
+        direction = new Vector3(-movement.x,0,-movement.y).normalized; //direction of movement
+
         if (direction.magnitude >= 0.1f) {
             //playerTransform.transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
 
-            transform.forward = direction;
+            var matrix = Matrix4x4.Rotate(Quaternion.Euler(0,45,0));
+            var skewRotation = matrix.MultiplyPoint3x4(direction);
+
+            transform.rotation = Quaternion.LookRotation(skewRotation,Vector3.up);
         }
         
     }
