@@ -12,6 +12,16 @@ public class PlayerScript : MonoBehaviour
     public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
     private InputAction moveInput; //Is the specific input action regarding arrow keys, WASD, and left stick
     private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
+
+    //Character Rotation values
+    //**********************************************************
+    private float rotationSpeed; 
+    private float rotationVelocity;
+    private Vector3 newDirection;
+    public GameObject cam; //Camera object reference
+    //**********************************************************
+
+
     private Vector3 direction; //A reference to the directional movement of the player in 3D space
     private Vector3 velocity; //Velocity in relation to gravity
     private float gravity; //Gravity of player
@@ -25,6 +35,7 @@ public class PlayerScript : MonoBehaviour
         characterController = GetComponent<CharacterController>();
 
         gravity = -3f;
+        rotationSpeed = 0.1f;
 
         //Section reserved for initiating inputs 
         moveInput = inputs.FindAction("Player/Move");
@@ -46,9 +57,11 @@ public class PlayerScript : MonoBehaviour
     {
         //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
         movement = moveInput.ReadValue<Vector2>();
-        //Debug.Log(movement);
-        LookAndMove();
 
+        //Move character only if they are on the ground
+        if (characterController.isGrounded) {
+            LookAndMove();
+        }
 
         if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
         {
@@ -58,28 +71,32 @@ public class PlayerScript : MonoBehaviour
 
     void FixedUpdate() {
 
+        //Character movement
         if (direction.magnitude >= 0.1f) {
-            characterController.Move(direction.normalized * speed * Time.deltaTime);
+            characterController.Move(newDirection.normalized * speed * Time.deltaTime);
         }
 
+        //Character gravity
         if (!characterController.isGrounded) {
             velocity.y += gravity * Time.deltaTime;
         }
-        characterController.Move(velocity * Time.deltaTime);
+        characterController.Move(velocity * Time.deltaTime);   
             
     }
 
     private void LookAndMove() {
-        
-        direction = new Vector3(-movement.x,0,-movement.y).normalized; //direction of movement
 
+        direction = new Vector3(movement.x,0,movement.y).normalized; //direction of movement
+
+        //Character rotations
         if (direction.magnitude >= 0.1f) {
-            //playerTransform.transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
 
-            var matrix = Matrix4x4.Rotate(Quaternion.Euler(0,45,0));
-            var skewRotation = matrix.MultiplyPoint3x4(direction);
+            float targetangle = Mathf.Atan2(direction.x,direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y,targetangle, ref rotationVelocity, rotationSpeed);
 
-            transform.rotation = Quaternion.LookRotation(skewRotation,Vector3.up);
+            transform.rotation = Quaternion.Euler(0,angle,0);
+            newDirection = Quaternion.Euler(0,targetangle,0) * Vector3.forward;     
+
         }
         
     }
