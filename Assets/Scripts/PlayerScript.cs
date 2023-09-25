@@ -40,8 +40,10 @@ public class PlayerScript : MonoBehaviour
         //Section reserved for initiating inputs 
         moveInput = inputs.FindAction("Player/Move");
 
-        GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>(); //these two lines are grabing the game master's last checkpoint position
+        //these two lines are grabing the game master's last checkpoint position
+        GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>(); 
         transform.position = GM.LastCheckPointPos;
+        Debug.Log("Active Checkpoint Position: " + transform.position);
     }
 
     void OnEnable() {

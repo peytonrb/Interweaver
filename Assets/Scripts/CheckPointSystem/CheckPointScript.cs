@@ -16,6 +16,7 @@ public class CheckPointScript : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             GM.LastCheckPointPos = transform.position;
+            Debug.Log("Active Checkpoint Position: " + GM.LastCheckPointPos);
         }
     }
 }
