@@ -28,11 +28,17 @@ public class PlayerScript : MonoBehaviour
     private GameMasterScript GM; //This is refrencing the game master script
 
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         //references to character components
         characterController = GetComponent<CharacterController>();
+        characterController.enabled = false;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+       
 
         gravity = -3f;
         rotationSpeed = 0.1f;
@@ -43,7 +49,8 @@ public class PlayerScript : MonoBehaviour
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>(); 
         transform.position = GM.LastCheckPointPos;
-        Debug.Log("Active Checkpoint Position: " + transform.position);
+        characterController.enabled = true;
+        Debug.Log("Active Current Position: " + transform.position);
     }
 
     void OnEnable() {
@@ -68,6 +75,7 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //this is for testing
+            
         }
     }
 
