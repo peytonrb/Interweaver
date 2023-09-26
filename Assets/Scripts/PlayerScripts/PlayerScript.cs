@@ -38,7 +38,7 @@ public class PlayerScript : MonoBehaviour
     public float WeaveDistance = 12f;
     public LayerMask weaveObject;
     private Vector3 playerPosition;
-    [SerializeField] private Vector3 position;
+    [SerializeField] private Vector3 raycastPosition;
     
 
     [SerializeField]
@@ -145,7 +145,7 @@ public class PlayerScript : MonoBehaviour
 
     private void weaving()
     {
-         playerPosition =  new Vector3 (transform.position.x, position.y, transform.position.z);
+         playerPosition =  new Vector3 (transform.position.x, raycastPosition.y, transform.position.z);
         Vector3 rayDirection = transform.forward;
         Ray ray = new Ray(playerPosition, rayDirection);
         RaycastHit hitInfo;
