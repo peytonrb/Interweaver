@@ -145,24 +145,25 @@ public class PlayerScript : MonoBehaviour
         
     }
 
-    private void weaving()
+    private void weaving() //this method will shoot out a raycast that will see if there are objects with the weaeObject layermask and the IInteractable interface
     {
-         playerPosition =  new Vector3 (transform.position.x, raycastPosition.y, transform.position.z);
-        Vector3 rayDirection = transform.forward;
-        Ray ray = new Ray(playerPosition, rayDirection);
+         playerPosition =  new Vector3 (transform.position.x, raycastPosition.y, transform.position.z); //this is the raycast origin 
+        Vector3 rayDirection = transform.forward; 
+        Ray ray = new Ray(playerPosition, rayDirection); //the actual  raycast
         RaycastHit hitInfo;
-        Debug.DrawRay(ray.origin, ray.direction * WeaveDistance, Color.red);
+        Debug.DrawRay(ray.origin, ray.direction * WeaveDistance, Color.red); //debug  for  when the game  starts and the line can be  seen on  scene
 
 
        
         if (Physics.Raycast(ray, out hitInfo, WeaveDistance, weaveObject))
         {                     
-                IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>();
+                IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
                 if (interactable != null)
                 {
                    if (interactInput.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
                     {
                       interactable.Interact();
+                      transform.LookAt(new Vector3 (hitInfo.collider.transform.position.x,0,0));
                     }
                   if (UninteractInput.WasPressedThisFrame())
                    {
