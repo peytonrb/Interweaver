@@ -43,6 +43,7 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField]
     private InputAction interactInput;
+    private InputAction UninteractInput;
 
     [Header("Familiar Reference")]
     public GameObject familiar;
@@ -67,6 +68,7 @@ public class PlayerScript : MonoBehaviour
         //Section reserved for initiating inputs 
         moveInput = inputs.FindAction("Player/Move");
         interactInput = inputs.FindAction("Player/Interact");
+        UninteractInput = inputs.FindAction("Player/Uninteract");
         possessInput = inputs.FindAction("Player/Switch");
 
 
@@ -154,16 +156,19 @@ public class PlayerScript : MonoBehaviour
 
        
         if (Physics.Raycast(ray, out hitInfo, WeaveDistance, weaveObject))
-        {
-            if (interactInput.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
-            {
+        {                     
                 IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>();
                 if (interactable != null)
                 {
-                    interactable.Interact();
-                }
-            }
-            
+                   if (interactInput.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
+                    {
+                      interactable.Interact();
+                    }
+                  if (UninteractInput.WasPressedThisFrame())
+                   {
+                    interactable.Uninteract(); 
+                   }
+                }                     
         }
     }
 

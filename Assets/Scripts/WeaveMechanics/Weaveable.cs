@@ -8,4 +8,9 @@ public class Weaveable : MonoBehaviour, IInteractable
     {
         Debug.Log("This is interactable");
     }
+
+    public void Uninteract()
+    {
+        Debug.Log("this is now not  woven");
+    }
 }
