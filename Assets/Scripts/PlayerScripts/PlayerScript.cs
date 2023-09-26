@@ -38,6 +38,7 @@ public class PlayerScript : MonoBehaviour
     public float WeaveDistance = 12f;
     public LayerMask weaveObject;
     private Vector3 playerPosition;
+    private bool IsWeaving;
     [SerializeField] private Vector3 raycastPosition;
     
 
@@ -64,6 +65,7 @@ public class PlayerScript : MonoBehaviour
         gravity = -3f;
         rotationSpeed = 0.1f;
         possessing = false;
+        IsWeaving = false;
 
         //Section reserved for initiating inputs 
         moveInput = inputs.FindAction("Player/Move");
@@ -136,9 +138,8 @@ public class PlayerScript : MonoBehaviour
         if (direction.magnitude >= 0.1f) {
 
             float targetangle = Mathf.Atan2(direction.x,direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y,targetangle, ref rotationVelocity, rotationSpeed);
-
-            transform.rotation = Quaternion.Euler(0,angle,0);
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y,targetangle, ref rotationVelocity, rotationSpeed);                      
+                transform.rotation = Quaternion.Euler(0, angle, 0);                       
             newDirection = Quaternion.Euler(0,targetangle,0) * Vector3.forward;     
 
         }
@@ -164,10 +165,12 @@ public class PlayerScript : MonoBehaviour
                     {
                       interactable.Interact();
                       transform.LookAt(new Vector3 (hitInfo.collider.transform.position.x,0,0));
+                      IsWeaving = true;
                     }
                   if (UninteractInput.WasPressedThisFrame())
                    {
-                    interactable.Uninteract(); 
+                    interactable.Uninteract();
+                    IsWeaving = false;
                    }
                 }                     
         }
