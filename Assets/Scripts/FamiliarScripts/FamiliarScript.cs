@@ -4,14 +4,20 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement; //this is for testing 
 
-public class PlayerScript : MonoBehaviour
+public class FamiliarScript : MonoBehaviour
 {
+
+    public int playerIndex; //Set to 0 for the weaver and 1 for the familiar
+
     [Header("Movement Variables")]
     public float speed; //Base walk speed for player
     private CharacterController characterController; //references the character controller component
     public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
     private InputAction moveInput; //Is the specific input action regarding arrow keys, WASD, and left stick
+    private InputAction possessInput; //Input for depossessing
     private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
+    private bool depossess; //Only used for reading if depossessing
+    public bool myTurn; //Responsible for determining if the familiar can move
 
 
     [Header("character's camera")]
@@ -35,6 +41,7 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField]
     private InputAction interactInput;
+    
 
     void Awake()
     {
@@ -46,18 +53,20 @@ public class PlayerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       
-
+      
         gravity = -3f;
         rotationSpeed = 0.1f;
+        myTurn = false;
 
         //Section reserved for initiating inputs 
         moveInput = inputs.FindAction("Player/Move");
         interactInput = inputs.FindAction("Player/Interact");
+        possessInput = inputs.FindAction("Player/Switch");
+
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>(); 
-        transform.position = GM.LastCheckPointPos;
+        //transform.position = GM.LastCheckPointPos;
         characterController.enabled = true;
         Debug.Log("Active Current Position: " + transform.position);
     }
@@ -74,39 +83,46 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
-        movement = moveInput.ReadValue<Vector2>();
-
-        //Move character only if they are on the ground
-        if (characterController.isGrounded) {
-            LookAndMove();
-        }
-
-        if (interactInput.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
-        {
-            Debug.Log("interact button was pressed"); //a general debug to see if the input was pressed
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //this is for testing
+        if (myTurn) {
+            //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
+            movement = moveInput.ReadValue<Vector2>();
+            depossess = possessInput.WasPressedThisFrame();
             
+            //Move character only if they are on the ground
+            if (characterController.isGrounded) {
+                LookAndMove();
+                if (depossess) {
+                    myTurn = false;
+                }
+            }
+
+            if (interactInput.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
+            {
+                Debug.Log("interact button was pressed"); //a general debug to see if the input was pressed
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //this is for testing
+            
+            }
         }
+        
     }
 
     void FixedUpdate() {
+        if (myTurn) {
+            //Character movement
+            if (direction.magnitude >= 0.1f) {
+                characterController.Move(newDirection.normalized * speed * Time.deltaTime);
+            }
 
-        //Character movement
-        if (direction.magnitude >= 0.1f) {
-            characterController.Move(newDirection.normalized * speed * Time.deltaTime);
-        }
-
-        //Character gravity
-        if (!characterController.isGrounded) {
-            velocity.y += gravity * Time.deltaTime;
-        }
-        characterController.Move(velocity * Time.deltaTime);   
-            
+            //Character gravity
+            if (!characterController.isGrounded) {
+                velocity.y += gravity * Time.deltaTime;
+            }
+            characterController.Move(velocity * Time.deltaTime); 
+        }          
     }
 
     private void LookAndMove() {
