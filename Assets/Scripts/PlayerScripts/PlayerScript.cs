@@ -36,6 +36,10 @@ public class PlayerScript : MonoBehaviour
 
     [Header("Weave Variables")]
     public float WeaveDistance = 12f;
+    public LayerMask weaveObject;
+    private Vector3 playerPosition;
+    [SerializeField] private Vector3 position;
+    
 
     [SerializeField]
     private InputAction interactInput;
@@ -98,11 +102,8 @@ public class PlayerScript : MonoBehaviour
             Possession();
         }
 
-        if (interactInput.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
-        {
-            Debug.Log("interact button was pressed"); //a general debug to see if the input was pressed
-        }
-
+        weaving();
+      
         if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //this is for testing
@@ -140,6 +141,30 @@ public class PlayerScript : MonoBehaviour
 
         }
         
+    }
+
+    private void weaving()
+    {
+         playerPosition =  new Vector3 (transform.position.x, position.y, transform.position.z);
+        Vector3 rayDirection = transform.forward;
+        Ray ray = new Ray(playerPosition, rayDirection);
+        RaycastHit hitInfo;
+        Debug.DrawRay(ray.origin, ray.direction * WeaveDistance, Color.red);
+
+
+       
+        if (Physics.Raycast(ray, out hitInfo, WeaveDistance, weaveObject))
+        {
+            if (interactInput.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
+            {
+                IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>();
+                if (interactable != null)
+                {
+                    interactable.Interact();
+                }
+            }
+            
+        }
     }
 
     private void Possession() {
