@@ -153,26 +153,28 @@ public class PlayerScript : MonoBehaviour
         Ray ray = new Ray(playerPosition, rayDirection); //the actual  raycast
         RaycastHit hitInfo;
         Debug.DrawRay(ray.origin, ray.direction * WeaveDistance, Color.red); //debug  for  when the game  starts and the line can be  seen on  scene
-
-
-       
+      
         if (Physics.Raycast(ray, out hitInfo, WeaveDistance, weaveObject))
         {                     
-                IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
-                if (interactable != null)
-                {
-                   if (interactInput.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
-                    {
-                      interactable.Interact();
-                      transform.LookAt(new Vector3 (hitInfo.collider.transform.position.x,0,0));
-                      IsWeaving = true;
-                    }
-                  if (UninteractInput.WasPressedThisFrame())
-                   {
-                    interactable.Uninteract();
-                    IsWeaving = false;
-                   }
-                }                     
+          IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
+           if (interactable != null)
+           {
+             if (interactInput.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
+             {
+              interactable.Interact();             
+              IsWeaving = true;
+             }
+             if (UninteractInput.WasPressedThisFrame())
+             {
+              interactable.Uninteract();
+              IsWeaving = false;
+             }
+           }                     
+        }
+
+        if (IsWeaving == true)
+        {
+            transform.LookAt(new Vector3(hitInfo.collider.transform.position.x, 0, 0));
         }
     }
 
