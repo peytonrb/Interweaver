@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement; //this is for testing 
@@ -49,6 +50,9 @@ public class PlayerScript : MonoBehaviour
     [Header("Familiar Reference")]
     public GameObject familiar;
     private FamiliarScript familiarScript;
+
+    [Header("Animation Calls")]
+    public WeaverAnimationHandler weaverAnimationHandler;
 
     void Awake()
     {
@@ -120,14 +124,21 @@ public class PlayerScript : MonoBehaviour
         //Character movement
         if (direction.magnitude >= 0.1f) {
             characterController.Move(newDirection.normalized * speed * Time.deltaTime);
+            weaverAnimationHandler.ToggleMoveSpeedBlend(speed); // note: speed is static now, but this should work fine when variable speed is added
         }
+
+        characterController.Move(velocity * Time.deltaTime);   
 
         //Character gravity
         if (!characterController.isGrounded) {
             velocity.y += gravity * Time.deltaTime;
+            weaverAnimationHandler.ToggleFallAnim(true);
         }
-        characterController.Move(velocity * Time.deltaTime);   
-            
+        else
+        {
+            weaverAnimationHandler.ToggleFallAnim(false);
+            velocity.y = -2f;
+        } 
     }
 
     private void LookAndMove() {
@@ -163,11 +174,14 @@ public class PlayerScript : MonoBehaviour
              {
               interactable.Interact();             
               IsWeaving = true;
+              weaverAnimationHandler.ToggleWeaveAnim(IsWeaving); // start weaving animations 
+
              }
              if (UninteractInput.WasPressedThisFrame())
              {
               interactable.Uninteract();
               IsWeaving = false;
+              weaverAnimationHandler.ToggleWeaveAnim(IsWeaving); // end weaving animations
              }
            }                     
         }
