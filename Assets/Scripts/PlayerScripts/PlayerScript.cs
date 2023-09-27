@@ -15,7 +15,7 @@ public class PlayerScript : MonoBehaviour
     private InputAction possessInput; //Used for possession of familiar, or switching between weaver and familiar
     private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
     private bool possessButton; //State that checks if the possess button is being pressed
-    private bool possessing;
+    private bool possessing; //Determines if the weaver is using possessing at the moment
 
 
     [Header("character's camera")]
@@ -33,6 +33,11 @@ public class PlayerScript : MonoBehaviour
     private float gravity; //Gravity of player
     private GameMasterScript GM; //This is refrencing the game master script
 
+    [Header("Pause Menu")]
+    public GameObject pauseMenu;
+    public bool isPaused;
+    private InputAction pauseInput;
+    private bool pauseButton;
 
     [Header("Weave Variables")]
     public float WeaveDistance = 12f;
@@ -66,12 +71,15 @@ public class PlayerScript : MonoBehaviour
         rotationSpeed = 0.1f;
         possessing = false;
         IsWeaving = false;
+        isPaused = false;
+        pauseMenu.SetActive(false);
 
         //Section reserved for initiating inputs 
         moveInput = inputs.FindAction("Player/Move");
         interactInput = inputs.FindAction("Player/Interact");
         UninteractInput = inputs.FindAction("Player/Uninteract");
         possessInput = inputs.FindAction("Player/Switch");
+        pauseInput = inputs.FindAction("Player/Pause");
 
 
         //these two lines are grabing the game master's last checkpoint position
@@ -93,26 +101,40 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Move character only if they are on the ground
-        if (characterController.isGrounded) {
-            if (possessing == false) {
-                 //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
-                movement = moveInput.ReadValue<Vector2>();
-                LookAndMove();
+        //If game is not paused, return to normal movement functions
+        if (isPaused == false) {
+            //Move character only if they are on the ground
+            if (characterController.isGrounded) {
+                if (possessing == false) {
+                    //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
+                    movement = moveInput.ReadValue<Vector2>();
+                    LookAndMove();
+                }
+                //Looks at input coming from TAB on keyboard (for now)
+                possessButton = possessInput.WasPressedThisFrame();
+                Possession();
+
+                pauseButton = pauseInput.WasPressedThisFrame();
+                Pausing();
             }
-            //Looks at input coming from TAB on keyboard (for now)
-            possessButton = possessInput.WasPressedThisFrame();
+
+            weaving();
+      
+            if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //this is for testing
             
-            Possession();
+            }
         }
 
-        weaving();
-      
-        if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //this is for testing
-            
+
+        //KILL SWITCH
+        //**************************************
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Application.Quit();
         }
+        //**************************************
+        
     }
 
     void FixedUpdate() {
@@ -194,6 +216,13 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
+    }
+
+    private void Pausing() {
+        if (pauseButton) {
+            pauseMenu.SetActive(true);
+            isPaused = true;
+        }
     }
 
 }
