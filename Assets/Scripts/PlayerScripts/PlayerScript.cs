@@ -72,6 +72,7 @@ public class PlayerScript : MonoBehaviour
         possessing = false;
         IsWeaving = false;
         isPaused = false;
+        familiarScript.isPaused = false;
         pauseMenu.SetActive(false);
 
         //Section reserved for initiating inputs 
@@ -113,10 +114,12 @@ public class PlayerScript : MonoBehaviour
                 //Looks at input coming from TAB on keyboard (for now)
                 possessButton = possessInput.WasPressedThisFrame();
                 Possession();
-
-                pauseButton = pauseInput.WasPressedThisFrame();
-                Pausing();
+                
             }
+
+            //For pausing
+            pauseButton = pauseInput.WasPressedThisFrame();
+            Pausing();
 
             weaving();
       
@@ -138,18 +141,19 @@ public class PlayerScript : MonoBehaviour
     }
 
     void FixedUpdate() {
+        if (isPaused == false) {
+            //Character movement
+            if (direction.magnitude >= 0.1f) {
+                characterController.Move(newDirection.normalized * speed * Time.deltaTime);
+            }
 
-        //Character movement
-        if (direction.magnitude >= 0.1f) {
-            characterController.Move(newDirection.normalized * speed * Time.deltaTime);
+            //Character gravity
+            if (!characterController.isGrounded) {
+                velocity.y += gravity * Time.deltaTime;
+            }
+            characterController.Move(velocity * Time.deltaTime);   
         }
-
-        //Character gravity
-        if (!characterController.isGrounded) {
-            velocity.y += gravity * Time.deltaTime;
-        }
-        characterController.Move(velocity * Time.deltaTime);   
-            
+             
     }
 
     private void LookAndMove() {
@@ -222,7 +226,13 @@ public class PlayerScript : MonoBehaviour
         if (pauseButton) {
             pauseMenu.SetActive(true);
             isPaused = true;
+            familiarScript.isPaused = true;
         }
+    }
+
+    public void Unpausing() {
+        isPaused = false;
+        familiarScript.isPaused = false;
     }
 
 }

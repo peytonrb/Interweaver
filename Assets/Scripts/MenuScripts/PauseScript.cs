@@ -15,6 +15,6 @@ public class PauseScript : MonoBehaviour
     //Resumes the game
     public void Resume() {
         gameObject.SetActive(false);
-        playerScript.isPaused = false;
+        playerScript.Unpausing();
     }
 }
