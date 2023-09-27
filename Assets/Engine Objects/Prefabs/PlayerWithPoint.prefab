@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 5402126169904835267}
   - component: {fileID: 7154158912224162450}
   - component: {fileID: 591368551210576134}
-  - component: {fileID: 3857285769336230368}
-  - component: {fileID: 5921576099528221584}
   m_Layer: 0
   m_Name: PlayerWithPoint
   m_TagString: Player
@@ -36,7 +34,7 @@ Transform:
   - {fileID: 5058674367002751257}
   - {fileID: 7944469985821822247}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7154158912224162450
 MonoBehaviour:
@@ -55,6 +53,10 @@ MonoBehaviour:
   cam: {fileID: 0}
   virtualCam: {fileID: 0}
   WeaveDistance: 12
+  weaveObject:
+    serializedVersion: 2
+    m_Bits: 0
+  raycastPosition: {x: 0, y: 0, z: 0}
   interactInput:
     m_Name: Interact Input
     m_Type: 1
@@ -99,30 +101,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.1, z: 0}
---- !u!114 &3857285769336230368
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1359264606954408796}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c89374fc1e159f469b2b8f1c007f3f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &5921576099528221584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1359264606954408796}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c89374fc1e159f469b2b8f1c007f3f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4592930378548025011
 GameObject:
   m_ObjectHideFlags: 0

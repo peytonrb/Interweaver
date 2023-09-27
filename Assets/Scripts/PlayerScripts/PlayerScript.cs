@@ -196,7 +196,7 @@ public class PlayerScript : MonoBehaviour
 
         if (IsWeaving == true)
         {
-            transform.LookAt(new Vector3(hitInfo.collider.transform.position.x, 0, 0));
+            this.transform.LookAt(new Vector3(hitInfo.collider.transform.position.x, 0, hitInfo.collider.transform.position.z));
         }
     }
 
