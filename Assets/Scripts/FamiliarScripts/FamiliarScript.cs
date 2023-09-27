@@ -18,6 +18,7 @@ public class FamiliarScript : MonoBehaviour
     private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
     private bool depossess; //Only used for reading if depossessing
     public bool myTurn; //Responsible for determining if the familiar can move
+    public bool isPaused; //Determines if the game is paused
 
 
     [Header("character's camera")]
@@ -84,27 +85,29 @@ public class FamiliarScript : MonoBehaviour
     void Update()
     {
         if (myTurn) {
-            //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
-            movement = moveInput.ReadValue<Vector2>();
-            depossess = possessInput.WasPressedThisFrame();
-            
-            //Move character only if they are on the ground
-            if (characterController.isGrounded) {
-                LookAndMove();
-                if (depossess) {
-                    myTurn = false;
+            if (isPaused == false) {
+                //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
+                movement = moveInput.ReadValue<Vector2>();
+                depossess = possessInput.WasPressedThisFrame();
+                
+                //Move character only if they are on the ground
+                if (characterController.isGrounded) {
+                    LookAndMove();
+                    if (depossess) {
+                        myTurn = false;
+                    }
                 }
-            }
 
-            if (interactInput.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
-            {
-                Debug.Log("interact button was pressed"); //a general debug to see if the input was pressed
-            }
+                if (interactInput.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
+                {
+                    Debug.Log("interact button was pressed"); //a general debug to see if the input was pressed
+                }
 
-            if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //this is for testing
-            
+                if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
+                {
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //this is for testing
+                
+                }
             }
         }
         
@@ -112,16 +115,19 @@ public class FamiliarScript : MonoBehaviour
 
     void FixedUpdate() {
         if (myTurn) {
-            //Character movement
-            if (direction.magnitude >= 0.1f) {
-                characterController.Move(newDirection.normalized * speed * Time.deltaTime);
-            }
+            if (isPaused == false) {
+                //Character movement
+                if (direction.magnitude >= 0.1f) {
+                    characterController.Move(newDirection.normalized * speed * Time.deltaTime);
+                }
 
-            //Character gravity
-            if (!characterController.isGrounded) {
-                velocity.y += gravity * Time.deltaTime;
+                //Character gravity
+                if (!characterController.isGrounded) {
+                    velocity.y += gravity * Time.deltaTime;
+                }
+                characterController.Move(velocity * Time.deltaTime); 
             }
-            characterController.Move(velocity * Time.deltaTime); 
+            
         }          
     }
 
