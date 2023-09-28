@@ -41,21 +41,24 @@ public class PlayerScript : MonoBehaviour
     private InputAction pauseInput;
     private bool pauseButton;
 
+    //Weave Variables
+    //**********************************************************
     [Header("Weave Variables")]
     public float WeaveDistance = 12f;
     public LayerMask weaveObject;
     private Vector3 playerPosition;
     private bool IsWeaving;
-    [SerializeField]
-    private Vector3 raycastPosition;
+    [SerializeField] private Vector3 raycastPosition;
+    [SerializeField] private InputAction interactInput;
+    [SerializeField]private InputAction UninteractInput;
+    //**********************************************************
 
-    [SerializeField]
-    private InputAction interactInput;
-    private InputAction UninteractInput;
-
+    //Familiar
+    //**********************************************************
     [Header("Familiar Reference")]
     public GameObject familiar;
     private FamiliarScript familiarScript;
+    //**********************************************************
 
     [Header("Animation Calls")]
     public WeaverAnimationHandler weaverAnimationHandler;
@@ -213,6 +216,7 @@ public class PlayerScript : MonoBehaviour
              {
               interactable.Interact();             
               IsWeaving = true;
+              interactInput.Disable();//disables the interactInput so  that the player can't press it multiple times
               weaverAnimationHandler.ToggleWeaveAnim(IsWeaving); // start weaving animations 
 
              }
@@ -220,12 +224,13 @@ public class PlayerScript : MonoBehaviour
              {
               interactable.Uninteract();
               IsWeaving = false;
+              interactInput.Enable();//renables the inputs
               weaverAnimationHandler.ToggleWeaveAnim(IsWeaving); // end weaving animations
              }
            }                     
         }
 
-        if (IsWeaving == true)
+        if (IsWeaving == true) //if the player is weaving an object thet will look at the object
         {
             this.transform.LookAt(new Vector3(hitInfo.collider.transform.position.x, 0, hitInfo.collider.transform.position.z));
         }
