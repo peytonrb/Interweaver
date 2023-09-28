@@ -33,6 +33,7 @@ public class PlayerScript : MonoBehaviour
     private Vector3 velocity; //Velocity in relation to gravity
     private float gravity; //Gravity of player
     private GameMasterScript GM; //This is refrencing the game master script
+    public int numLostSouls;
 
     [Header("Pause Menu")]
     public GameObject pauseMenu;
@@ -45,8 +46,8 @@ public class PlayerScript : MonoBehaviour
     public LayerMask weaveObject;
     private Vector3 playerPosition;
     private bool IsWeaving;
-    [SerializeField] private Vector3 raycastPosition;
-    
+    [SerializeField]
+    private Vector3 raycastPosition;
 
     [SerializeField]
     private InputAction interactInput;
@@ -66,7 +67,6 @@ public class PlayerScript : MonoBehaviour
         characterController.enabled = false;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
@@ -76,6 +76,7 @@ public class PlayerScript : MonoBehaviour
         possessing = false;
         IsWeaving = false;
         isPaused = false;
+        numLostSouls = 0;
         familiarScript.isPaused = false;
         pauseMenu.SetActive(false);
 
@@ -85,7 +86,6 @@ public class PlayerScript : MonoBehaviour
         UninteractInput = inputs.FindAction("Player/Uninteract");
         possessInput = inputs.FindAction("Player/Switch");
         pauseInput = inputs.FindAction("Player/Pause");
-
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>(); 
@@ -103,7 +103,6 @@ public class PlayerScript : MonoBehaviour
         inputs.Disable();
     }
 
-    // Update is called once per frame
     void Update()
     {
         //If game is not paused, return to normal movement functions
@@ -169,8 +168,16 @@ public class PlayerScript : MonoBehaviour
             weaverAnimationHandler.ToggleFallAnim(false);
             velocity.y = -2f;
         }   
+        }    
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.tag == "Lost Soul")
+        {
+            numLostSouls++;
+            Destroy(hit.gameObject);
         }
-             
     }
 
     private void LookAndMove() {
