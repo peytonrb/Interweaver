@@ -201,7 +201,7 @@ public class PlayerScript : MonoBehaviour
 
     private void weaving() //this method will shoot out a raycast that will see if there are objects with the weaeObject layermask and the IInteractable interface
     {
-         playerPosition =  new Vector3 (transform.position.x, raycastPosition.y, transform.position.z); //this is the raycast origin 
+         playerPosition =  new Vector3 (transform.position.x,transform.position.y + raycastPosition.y, transform.position.z); //this is the raycast origin 
         Vector3 rayDirection = transform.forward; 
         Ray ray = new Ray(playerPosition, rayDirection); //the actual  raycast
         RaycastHit hitInfo;

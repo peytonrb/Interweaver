@@ -9,11 +9,13 @@ public class Weaveable : MonoBehaviour, IInteractable
     [Header("Weaveable's variables")]
     [SerializeField] private Rigidbody rigidbody;
     [SerializeField] private float HoveringValue;
+    [SerializeField] private float WeaveSpeed = 12;
     private bool Startfloating;
     private bool rellocate;
     public InputAction WeaveMove;
     public Vector2 weave;
     public Transform objectposition;
+    private Vector3 direction;
 
     void start()
     {
@@ -36,12 +38,22 @@ public class Weaveable : MonoBehaviour, IInteractable
         {
            transform.position = transform.position + new Vector3 (0, HoveringValue*Time.deltaTime, 0);
             Startfloating = false;
-        }     
+           
+        }
+        if (rellocate) 
+        {
+            MovingWeave();
+        }
+       
     }
 
     void MovingWeave()
     {
         weave = WeaveMove.ReadValue<Vector2>();
+        //direction = new Vector3( transform.position.x + weave.x, transform.position.y, transform.position.y + weave.y);
+        //transform.position = direction * WeaveSpeed * Time.deltaTime;
+        Debug.Log("this is the X" + weave.x);
+        Debug.Log("this is theY" + weave.y);
     }
 
     public void Interact()
