@@ -7,12 +7,14 @@ public class Weaveable : MonoBehaviour, IInteractable
 {
 
     [Header("Weaveable's variables")]
-    [SerializeField] private Rigidbody rigidbody;
-    [SerializeField] private float HoveringValue;
-    [SerializeField] private float WeaveSpeed = 12;
-    private bool Startfloating;
-    private bool rellocate;
-    public InputAction WeaveMove;
+    [SerializeField] private Rigidbody rigidbody; //this is grabbing the reffrence from the  rigidbody if we're going to use gravity (this can be deleted but just make sure that when the uninteract activates do the inverse)
+    [SerializeField] private float HoveringValue; // thee value for hovering over the floor
+    [SerializeField] private float WeaveSpeed = 12; // the value for the weave speed, though not sure if it's needed at the current moment
+    [SerializeField] private Camera mainCamera; // grabbing the main camera
+    [SerializeField] private LayerMask LayerstoHit; //a layermask
+   private bool Startfloating; //a bool to detect if the weaveable is interacted and will start floating
+    private bool rellocate; // bool for relocate
+    public InputAction WeaveMove; //the input action for the right stick (still don't know the method for that)
     public Vector2 weave;
     public Transform objectposition;
     private Vector3 direction;
@@ -42,9 +44,20 @@ public class Weaveable : MonoBehaviour, IInteractable
         }
         if (rellocate) 
         {
-            MovingWeave();
+            MovingWeaveMouse();
         }
        
+    }
+
+
+    void MovingWeaveMouse()
+    {
+
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 100, LayerstoHit))
+        {
+            transform.position = new Vector3(raycastHit.point.x, transform.position.y, raycastHit.point.z);
+        }
     }
 
     void MovingWeave()
