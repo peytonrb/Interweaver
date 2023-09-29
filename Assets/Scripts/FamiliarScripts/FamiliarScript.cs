@@ -145,7 +145,14 @@ public class FamiliarScript : MonoBehaviour
             newDirection = Quaternion.Euler(0,targetangle,0) * Vector3.forward;     
 
         }
-        
+ 
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit other) {
+        if (other.gameObject.tag == "Crystal") {
+            Debug.Log("Hit crystal!");
+            Destroy(other.gameObject);
+        }
     }
 
 }
