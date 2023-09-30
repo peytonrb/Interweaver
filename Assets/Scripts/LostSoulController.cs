@@ -17,5 +17,9 @@ public class LostSoulController : MonoBehaviour
             float attractionForce = attractionStrength / distanceToPlayer;
             gameObject.GetComponent<Rigidbody>().AddForce(directionToPlayer.normalized * -attractionForce);
         }
+        else
+        {
+            gameObject.GetComponent<Rigidbody>().velocity = Vector2.zero;
+        }
     }
 }
