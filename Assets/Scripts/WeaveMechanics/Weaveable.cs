@@ -67,7 +67,7 @@ public class Weaveable : MonoBehaviour, IInteractable
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 100, LayerstoHit))
         {
-            transform.position = new Vector3(raycastHit.point.x, transform.position.y, raycastHit.point.z);
+            rigidbody.velocity = new Vector3(raycastHit.point.x - rigidbody.position.x, transform.position.y - rigidbody.position.y, raycastHit.point.z - rigidbody.position.z);
         }
     }
 
