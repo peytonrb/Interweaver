@@ -9,11 +9,11 @@ public class DialogueManager : MonoBehaviour
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI dialogueText;
     private GameObject textBoxUI;
+    private AudioClip audioClip;
     
     void Start()
     {
         sentences = new Queue<string>();
-        // textBoxUI.SetActive(false);
     }
 
     void Update()
@@ -59,7 +59,7 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueText.text = "";
 
-        foreach (char letter in sentence.ToCharArray())
+        foreach (char letter in sentence.ToCharArray()) // add array of clips w pitches to be randomly called from here
         {
             dialogueText.text += letter;
             yield return null;
