@@ -47,6 +47,7 @@ public class Weaveable : MonoBehaviour, IInteractable
         {
             MovingWeaveMouse();
             UninteractDistance();
+            rigidbody.freezeRotation = true;
         }
        
     }
@@ -85,7 +86,7 @@ public class Weaveable : MonoBehaviour, IInteractable
         Debug.Log("This is interactable");
         rigidbody.useGravity = false;
         Startfloating = true;
-       rellocate = true;
+        rellocate = true;
     }
     
     public void Uninteract()
