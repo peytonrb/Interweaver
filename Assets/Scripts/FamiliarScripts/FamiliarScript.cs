@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement; //this is for testing 
 
@@ -19,6 +20,7 @@ public class FamiliarScript : MonoBehaviour
     private bool depossess; //Only used for reading if depossessing
     public bool myTurn; //Responsible for determining if the familiar can move
     public bool isPaused; //Determines if the game is paused
+    private bool trustFall; //Determines if owl familiar is in trust fall
 
 
     [Header("character's camera")]
@@ -28,6 +30,7 @@ public class FamiliarScript : MonoBehaviour
     private float rotationVelocity;
     private Vector3 newDirection;
     public GameObject cam; //Camera object reference
+    public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
     //**********************************************************
 
 
@@ -121,11 +124,15 @@ public class FamiliarScript : MonoBehaviour
                     characterController.Move(newDirection.normalized * speed * Time.deltaTime);
                 }
 
+                characterController.Move(velocity * Time.deltaTime); 
+
                 //Character gravity
                 if (!characterController.isGrounded) {
                     velocity.y += gravity * Time.deltaTime;
                 }
-                characterController.Move(velocity * Time.deltaTime); 
+                else {
+                    velocity.y = -2f;
+                }
             }
             
         }          
@@ -147,5 +154,25 @@ public class FamiliarScript : MonoBehaviour
         }
         
     }
+
+    private void StartTrustFall()
+    {
+        virtualCam.transform.eulerAngles = new Vector3(90f, virtualCam.transform.eulerAngles.y, virtualCam.transform.eulerAngles.z);
+        virtualCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, 12f, 0);
+        
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject.CompareTag("Trustfall Trigger"))
+        {
+            trustFall = true;
+            StartTrustFall();
+            Debug.Log("YEEHAW");
+        }
+        
+    }
+
+
 
 }

@@ -170,7 +170,7 @@ public class PlayerScript : MonoBehaviour
         {
             weaverAnimationHandler.ToggleFallAnim(false);
             velocity.y = -2f;
-        }   
+        }
         }    
     }
 
