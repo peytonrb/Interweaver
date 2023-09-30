@@ -20,7 +20,9 @@ public class FamiliarScript : MonoBehaviour
     private bool depossess; //Only used for reading if depossessing
     public bool myTurn; //Responsible for determining if the familiar can move
     public bool isPaused; //Determines if the game is paused
-    private bool trustFall; //Determines if owl familiar is in trust fall
+    private bool leapOfFaith; //Determines if owl familiar is in a leap of faith
+    private InputAction familiarMovementAbilityInput;
+    private bool familiarMovementAbility;
 
 
     [Header("character's camera")]
@@ -65,6 +67,7 @@ public class FamiliarScript : MonoBehaviour
         //Section reserved for initiating inputs 
         moveInput = inputs.FindAction("Player/Move");
         interactInput = inputs.FindAction("Player/Interact");
+        familiarMovementAbilityInput = inputs.FindAction("Player/Familiar Movement Ability");
         possessInput = inputs.FindAction("Player/Switch");
 
 
@@ -92,11 +95,17 @@ public class FamiliarScript : MonoBehaviour
                 //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
                 movement = moveInput.ReadValue<Vector2>();
                 depossess = possessInput.WasPressedThisFrame();
+                familiarMovementAbility = familiarMovementAbilityInput.IsPressed();
+
+                if (familiarMovementAbility)
+                {
+                    Debug.Log("Snart");
+                }
                 
-                //Move character only if they are on the ground
-                if (characterController.isGrounded) {
+                //Move character only if they are on the ground or in leapOfFaith
+                if (characterController.isGrounded || leapOfFaith) {
                     LookAndMove();
-                    if (depossess) {
+                    if (depossess && !leapOfFaith) {
                         myTurn = false;
                     }
                 }
@@ -112,8 +121,7 @@ public class FamiliarScript : MonoBehaviour
                 
                 }
             }
-        }
-        
+        }        
     }
 
     void FixedUpdate() {
@@ -155,7 +163,7 @@ public class FamiliarScript : MonoBehaviour
         
     }
 
-    private void StartTrustFall()
+    private void StartLeapOfFaith()
     {
         virtualCam.transform.eulerAngles = new Vector3(90f, virtualCam.transform.eulerAngles.y, virtualCam.transform.eulerAngles.z);
         virtualCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, 12f, 0);
@@ -164,13 +172,20 @@ public class FamiliarScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.CompareTag("Trustfall Trigger"))
+        if (collision.gameObject.CompareTag("Leap of Faith Trigger"))
         {
-            trustFall = true;
-            StartTrustFall();
-            Debug.Log("YEEHAW");
+            leapOfFaith = true;
+            StartLeapOfFaith();
         }
         
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit) 
+    {
+        if (hit.gameObject.CompareTag("Breakable") && familiarMovementAbility) // if familiar collides with breakable object while using movement ability
+        {
+            Destroy(hit.gameObject); // TEMPORARY, in future, do something like this on the object's end
+        }
     }
 
 
