@@ -227,6 +227,12 @@ public class PlayerScript : MonoBehaviour
               interactInput.Enable();//renables the inputs
               weaverAnimationHandler.ToggleWeaveAnim(IsWeaving); // end weaving animations
              }
+             float distanceBetween = Vector3.Distance(hitInfo.collider.transform.position, transform.position);
+             if (distanceBetween > WeaveDistance)
+             {
+              IsWeaving = false;
+              interactInput.Enable();
+             }
            }                     
         }
 
@@ -234,7 +240,9 @@ public class PlayerScript : MonoBehaviour
         {
             this.transform.LookAt(new Vector3(hitInfo.collider.transform.position.x, 0, hitInfo.collider.transform.position.z));
         }
+       
     }
+
 
     private void Possession() {
 
