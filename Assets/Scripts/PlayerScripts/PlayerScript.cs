@@ -51,6 +51,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private Vector3 raycastPosition;
     [SerializeField] private InputAction interactInput;
     [SerializeField] private InputAction UninteractInput;
+    [SerializeField] private float TooCloseDistance;
     //**********************************************************
 
     //Familiar
@@ -252,9 +253,10 @@ public class PlayerScript : MonoBehaviour
                     weaverAnimationHandler.ToggleWeaveAnim(IsWeaving); // end weaving animations
                 }
                 float distanceBetween = Vector3.Distance(hitInfo.collider.transform.position, transform.position);
-                if (distanceBetween > WeaveDistance)
+                if (distanceBetween > WeaveDistance || distanceBetween < TooCloseDistance)
                 {
                     IsWeaving = false;
+                    interactable.Uninteract();
                     interactInput.Enable();
                 }
             }
