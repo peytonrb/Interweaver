@@ -183,6 +183,10 @@ public class FamiliarScript : MonoBehaviour
             FIScript.isfalling = true;
             Destroy(other.gameObject);
         }
+        else if (other.gameObject.CompareTag("Breakable") && familiarMovementAbility) // if familiar collides with breakable object while using movement ability
+        {
+            Destroy(other.gameObject); // TEMPORARY, in future, do something like this on the object's end
+        }
     }
 
     private void StartLeapOfFaith()
@@ -215,15 +219,4 @@ public class FamiliarScript : MonoBehaviour
         }
         
     }
-
-    private void OnControllerColliderHit(ControllerColliderHit hit) 
-    {
-        if (hit.gameObject.CompareTag("Breakable") && familiarMovementAbility) // if familiar collides with breakable object while using movement ability
-        {
-            Destroy(hit.gameObject); // TEMPORARY, in future, do something like this on the object's end
-        }
-    }
-
-
-
 }
