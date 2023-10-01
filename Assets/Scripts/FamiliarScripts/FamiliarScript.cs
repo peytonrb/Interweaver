@@ -21,8 +21,8 @@ public class FamiliarScript : MonoBehaviour
     public bool myTurn; //Responsible for determining if the familiar can move
     public bool isPaused; //Determines if the game is paused
     private bool leapOfFaith; //Determines if owl familiar is in a leap of faith
-    private InputAction familiarMovementAbilityInput;
-    private bool familiarMovementAbility;
+    private InputAction familiarMovementAbilityInput;//Input for movement ability
+    private bool familiarMovementAbility;//Only used for reading if familiar is using movemeny ability
 
 
     [Header("character's camera")]
@@ -33,6 +33,8 @@ public class FamiliarScript : MonoBehaviour
     private Vector3 newDirection;
     public GameObject cam; //Camera object reference
     public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
+    private Vector3 originalVirtualCamRotation; // Original rotation values for the virtual camera
+    private Vector3 originalVirtualCamTransposeOffset; //Virtual Camera original transpose offset values
     //**********************************************************
 
 
@@ -47,6 +49,12 @@ public class FamiliarScript : MonoBehaviour
 
     [SerializeField]
     private InputAction interactInput;
+
+
+
+
+
+    
     
 
     void Awake()
@@ -73,6 +81,8 @@ public class FamiliarScript : MonoBehaviour
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>(); 
+        originalVirtualCamTransposeOffset = virtualCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
+        originalVirtualCamRotation = virtualCam.transform.eulerAngles;
         //transform.position = GM.LastCheckPointPos;
         characterController.enabled = true;
         Debug.Log("Active Current Position: " + transform.position);
@@ -91,16 +101,11 @@ public class FamiliarScript : MonoBehaviour
     void Update()
     {
         if (myTurn) {
-            if (isPaused == false) {
+            if (!isPaused) {
                 //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
                 movement = moveInput.ReadValue<Vector2>();
                 depossess = possessInput.WasPressedThisFrame();
                 familiarMovementAbility = familiarMovementAbilityInput.IsPressed();
-
-                if (familiarMovementAbility)
-                {
-                    Debug.Log("Snart");
-                }
                 
                 //Move character only if they are on the ground or in leapOfFaith
                 if (characterController.isGrounded || leapOfFaith) {
@@ -126,19 +131,19 @@ public class FamiliarScript : MonoBehaviour
 
     void FixedUpdate() {
         if (myTurn) {
-            if (isPaused == false) {
+            if (!isPaused) {
                 //Character movement
                 if (direction.magnitude >= 0.1f) {
                     characterController.Move(newDirection.normalized * speed * Time.deltaTime);
                 }
 
-                characterController.Move(velocity * Time.deltaTime); 
-
+                characterController.Move(velocity * Time.deltaTime);
+                    
                 //Character gravity
                 if (!characterController.isGrounded) {
                     velocity.y += gravity * Time.deltaTime;
                 }
-                else {
+                else if (!familiarMovementAbility) { // retain gravitational momementum if dashing
                     velocity.y = -2f;
                 }
             }
@@ -165,17 +170,31 @@ public class FamiliarScript : MonoBehaviour
 
     private void StartLeapOfFaith()
     {
+        leapOfFaith = true;
         virtualCam.transform.eulerAngles = new Vector3(90f, virtualCam.transform.eulerAngles.y, virtualCam.transform.eulerAngles.z);
-        virtualCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, 12f, 0);
-        
+        virtualCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, originalVirtualCamTransposeOffset.y, 0);
+    }
+
+    private void EndLeapOfFaith()
+    {
+        leapOfFaith = false;
+        virtualCam.transform.eulerAngles = originalVirtualCamRotation;
+        virtualCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = originalVirtualCamTransposeOffset;
     }
 
     private void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.CompareTag("Leap of Faith Trigger"))
         {
-            leapOfFaith = true;
             StartLeapOfFaith();
+        }
+
+        else if (collision.gameObject.CompareTag("Kill Area"))
+        {
+            EndLeapOfFaith();
+            characterController.enabled = false;
+            transform.position = GM.LastCheckPointPos;
+            characterController.enabled = true;
         }
         
     }

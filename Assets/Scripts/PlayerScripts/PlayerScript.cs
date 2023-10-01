@@ -17,6 +17,7 @@ public class PlayerScript : MonoBehaviour
     private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
     private bool possessButton; //State that checks if the possess button is being pressed
     private bool possessing; //Determines if the weaver is using possessing at the moment
+    private bool inTransition; //Determines if player is currently being sent back to checkpoint
 
 
     [Header("character's camera")]
@@ -109,7 +110,7 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {
         //If game is not paused, return to normal movement functions
-        if (isPaused == false) {
+        if (!isPaused) {
             //Move character only if they are on the ground
             if (characterController.isGrounded) {
                 if (possessing == false) {
@@ -147,7 +148,7 @@ public class PlayerScript : MonoBehaviour
     }
 
     void FixedUpdate() {
-        if (isPaused == false) {
+        if (!isPaused) {
             //Character movement
             if (direction.magnitude >= 0.1f) {
                 characterController.Move(newDirection.normalized * speed * Time.deltaTime);
