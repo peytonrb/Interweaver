@@ -9,6 +9,7 @@ public class FamiliarScript : MonoBehaviour
 {
 
     public int playerIndex; //Set to 0 for the weaver and 1 for the familiar
+    private bool pickedupCrystal; //Determines if the crystal has been picked up for the island to fall
 
     [Header("Movement Variables")]
     public float speed; //Base walk speed for player
@@ -43,6 +44,10 @@ public class FamiliarScript : MonoBehaviour
     private float gravity; //Gravity of player
     private GameMasterScript GM; //This is refrencing the game master script
 
+    [Header ("Floating Island")]
+    public GameObject floatingIsland;
+    private FloatingIslandScript FIScript;
+
 
     [Header("Weave Variables")]
     public float WeaveDistance = 12f;
@@ -67,10 +72,13 @@ public class FamiliarScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-      
+        FIScript = floatingIsland.GetComponent<FloatingIslandScript>();
+
+
         gravity = -3f;
         rotationSpeed = 0.1f;
         myTurn = false;
+        pickedupCrystal = false;
 
         //Section reserved for initiating inputs 
         moveInput = inputs.FindAction("Player/Move");
@@ -165,7 +173,16 @@ public class FamiliarScript : MonoBehaviour
             newDirection = Quaternion.Euler(0,targetangle,0) * Vector3.forward;     
 
         }
-        
+ 
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit other) {
+        if (other.gameObject.tag == "Crystal") {
+            Debug.Log("Hit crystal!");
+            pickedupCrystal = true;
+            FIScript.isfalling = true;
+            Destroy(other.gameObject);
+        }
     }
 
     private void StartLeapOfFaith()
