@@ -17,6 +17,7 @@ public class PlayerScript : MonoBehaviour
     private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
     private bool possessButton; //State that checks if the possess button is being pressed
     private bool possessing; //Determines if the weaver is using possessing at the moment
+    private bool inTransition; //Determines if player is currently being sent back to checkpoint
 
 
     [Header("character's camera")]
