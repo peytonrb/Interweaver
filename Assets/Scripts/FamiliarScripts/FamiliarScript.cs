@@ -10,7 +10,6 @@ public class FamiliarScript : MonoBehaviour
 {
 
     public int playerIndex; //Set to 0 for the weaver and 1 for the familiar
-    //private bool pickedupCrystal; //Determines if the crystal has been picked up for the island to fall
 
     [Header("Movement Variables")]
     public float speed; //Base walk speed for player
@@ -67,7 +66,7 @@ public class FamiliarScript : MonoBehaviour
     {
         //references to character components
         characterController = GetComponent<CharacterController>();
-        //characterController.enabled = false;
+        characterController.enabled = false;
     }
 
     // Start is called before the first frame update
@@ -77,7 +76,6 @@ public class FamiliarScript : MonoBehaviour
         gravity = -3f;
         rotationSpeed = 0.1f;
         myTurn = false;
-        //pickedupCrystal = false;
 
         //Section reserved for initiating inputs 
         moveInput = inputs.FindAction("Player/Move");
