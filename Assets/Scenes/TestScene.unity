@@ -887,7 +887,7 @@ GameObject:
   - component: {fileID: 327588153}
   m_Layer: 6
   m_Name: weaveable object
-  m_TagString: Untagged
+  m_TagString: Weaveable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1048,6 +1048,23 @@ MonoBehaviour:
       m_Processors: 
       m_Groups: 
       m_Action: Weave Move
+      m_Flags: 0
+    m_Flags: 0
+  WeaveMode:
+    m_Name: Weave Mode
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 52000fa0-b6c0-48a4-a1e6-883eaf8b92cb
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 0d022769-4d8e-4f09-8b43-35571ae48704
+      m_Path: <Mouse>/rightButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Weave Mode
       m_Flags: 0
     m_Flags: 0
   PlayerPrefab: {fileID: 1023923967}
@@ -4822,7 +4839,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: UninteractInput.m_SingletonActionBindings.Array.data[0].m_Path
-      value: <Mouse>/rightButton
+      value: <Keyboard>/e
       objectReference: {fileID: 0}
     - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: interactInput.m_SingletonActionBindings.Array.data[0].m_Action

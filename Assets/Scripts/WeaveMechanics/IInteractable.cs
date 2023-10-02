@@ -6,4 +6,6 @@ public interface IInteractable
 {
     void Interact();
     void Uninteract();
+    void Relocate();
+    void WeaveMode();
 }

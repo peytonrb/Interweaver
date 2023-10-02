@@ -49,8 +49,10 @@ public class PlayerScript : MonoBehaviour
     public LayerMask weaveObject;
     private Vector3 playerPosition;
     private bool IsWeaving;
+    [SerializeField] private int WeaveModeNumbers = 1;
     [SerializeField] private Vector3 raycastPosition;
     [SerializeField] private InputAction interactInput;
+    [SerializeField] private InputAction WeaveModeSwitch;
     [SerializeField] private InputAction UninteractInput;
     [SerializeField] private float TooCloseDistance;
     //**********************************************************
@@ -89,6 +91,7 @@ public class PlayerScript : MonoBehaviour
         moveInput = inputs.FindAction("Player/Move");
         interactInput = inputs.FindAction("Player/Interact");
         UninteractInput = inputs.FindAction("Player/Uninteract");
+        WeaveModeSwitch = inputs.FindAction("Player/WeaveModeSwitch");
         possessInput = inputs.FindAction("Player/Switch");
         pauseInput = inputs.FindAction("Player/Pause");
 
@@ -134,7 +137,7 @@ public class PlayerScript : MonoBehaviour
             pauseButton = pauseInput.WasPressedThisFrame();
             Pausing();
 
-            weaving();
+            weaving();           
 
             if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
             {
@@ -260,6 +263,26 @@ public class PlayerScript : MonoBehaviour
                     interactable.Uninteract();
                     interactInput.Enable();
                 }
+
+                switch (WeaveModeNumbers)
+                {
+                    case 1:
+                        if (WeaveModeSwitch.WasPressedThisFrame())
+                        {
+                            interactable.Relocate();
+                            WeaveModeNumbers += 1;
+                        }
+                        break;
+
+                    case 2:
+                        if (WeaveModeSwitch.WasPressedThisFrame())
+                        {
+                            interactable.WeaveMode();
+                            WeaveModeNumbers -= 1;
+                        }
+                        break;
+                }
+                
             }
         }
 

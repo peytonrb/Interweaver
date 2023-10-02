@@ -14,7 +14,7 @@ public class Weaveable : MonoBehaviour, IInteractable
     [SerializeField] private LayerMask LayerstoHit; //a layermask
     [SerializeField] private float distance = 12f;
     private bool Startfloating; //a bool to detect if the weaveable is interacted and will start floating
-    private bool rellocate; // bool for relocate
+    private bool relocate; // bool for relocate
     public InputAction WeaveMove; //the input action for the right stick (still don't know the method for that)
     private Vector2 weave;
     public Transform PlayerPrefab;
@@ -23,6 +23,7 @@ public class Weaveable : MonoBehaviour, IInteractable
     void start()
     {
         rigidbody = GetComponent<Rigidbody>();
+       
     }
 
     void OnEnable()
@@ -42,12 +43,15 @@ public class Weaveable : MonoBehaviour, IInteractable
            transform.position = transform.position + new Vector3 (0, HoveringValue*Time.deltaTime, 0);
             Startfloating = false;
            
-        }
-        if (rellocate) 
+        }        
+        if (relocate) 
         {
-            MovingWeaveMouse();
-            UninteractDistance();
-            rigidbody.freezeRotation = true;
+
+         MovingWeaveMouse();
+         UninteractDistance();
+         rigidbody.freezeRotation = true;
+           
+
         }
        
     }
@@ -86,16 +90,27 @@ public class Weaveable : MonoBehaviour, IInteractable
         Debug.Log("This is interactable");
         rigidbody.useGravity = false;
         Startfloating = true;
-        rellocate = true;
+       
     }
     
     public void Uninteract()
     {
         Debug.Log("this is now not woven");
         rigidbody.useGravity = true;
-        rellocate = false;
+        relocate = false;
     }
 
+    public void Relocate()
+    {
+        relocate = true;
+        rigidbody.constraints = RigidbodyConstraints.None;
+        Debug.Log("Relocate Mode");
+    }
 
-
+    public void WeaveMode()
+    {
+        relocate = false;
+        rigidbody.constraints = RigidbodyConstraints.FreezePosition; 
+        Debug.Log("weave Mode");
+    }
 }
