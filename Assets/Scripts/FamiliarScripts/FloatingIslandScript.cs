@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FloatingIslandScript : MonoBehaviour
 {
-    public int islandIndex; //Which island is falling
+    
     public bool isfalling;
     private Rigidbody rb;
 
@@ -13,23 +13,17 @@ public class FloatingIslandScript : MonoBehaviour
     {
         isfalling = false;
 
-        rb = this.GetComponent<Rigidbody>();   
+        rb = gameObject.GetComponent<Rigidbody>();   
     }
 
     // Update is called once per frame
     void Update()
     {
-       if (isfalling) {
-            StartFalling(islandIndex);
-            isfalling = false;
-       } 
+        
     }
     
-    public void StartFalling(int isindex) {
-        if (isindex == this.islandIndex) {
-            rb.constraints = RigidbodyConstraints.None;
-        }
-        
+    public void StartFalling() {
+        rb.constraints = RigidbodyConstraints.None; 
     }
             
 }

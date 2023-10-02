@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement; //this is for testing 
+using UnityEngine.SceneManagement;
+using System; //this is for testing 
 
 public class FamiliarScript : MonoBehaviour
 {
 
     public int playerIndex; //Set to 0 for the weaver and 1 for the familiar
-    private bool pickedupCrystal; //Determines if the crystal has been picked up for the island to fall
+    //private bool pickedupCrystal; //Determines if the crystal has been picked up for the island to fall
 
     [Header("Movement Variables")]
     public float speed; //Base walk speed for player
@@ -45,8 +46,8 @@ public class FamiliarScript : MonoBehaviour
     private GameMasterScript GM; //This is refrencing the game master script
 
     [Header ("Floating Island")]
-    public GameObject floatingIsland;
-    private FloatingIslandScript FIScript;
+    public GameObject[] floatingIsland;
+    private int crystalIndexRef;
 
 
     [Header("Weave Variables")]
@@ -55,7 +56,7 @@ public class FamiliarScript : MonoBehaviour
     [SerializeField]
     private InputAction interactInput;
 
-
+    
 
 
 
@@ -66,19 +67,17 @@ public class FamiliarScript : MonoBehaviour
     {
         //references to character components
         characterController = GetComponent<CharacterController>();
-        characterController.enabled = false;
+        //characterController.enabled = false;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        FIScript = floatingIsland.GetComponent<FloatingIslandScript>();
-
 
         gravity = -3f;
         rotationSpeed = 0.1f;
         myTurn = false;
-        pickedupCrystal = false;
+        //pickedupCrystal = false;
 
         //Section reserved for initiating inputs 
         moveInput = inputs.FindAction("Player/Move");
@@ -177,9 +176,14 @@ public class FamiliarScript : MonoBehaviour
     }
 
     private void OnControllerColliderHit(ControllerColliderHit other) {
+        //Familiar collides with Crystal (Can add input later if needed)
         if (other.gameObject.tag == "Crystal") {
-            Debug.Log("Hit crystal!");
-            pickedupCrystal = true;
+            CrystalScript crystalScript = other.gameObject.GetComponent<CrystalScript>();
+            crystalIndexRef = crystalScript.crystalIndex;
+            FloatingIslandScript FIScript = floatingIsland[crystalIndexRef].GetComponent<FloatingIslandScript>();
+            FIScript.StartFalling();
+            
+            
             FIScript.isfalling = true;
             Destroy(other.gameObject);
         }
