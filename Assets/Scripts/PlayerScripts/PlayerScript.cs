@@ -100,6 +100,8 @@ public class PlayerScript : MonoBehaviour
         transform.position = GM.LastCheckPointPos;
         characterController.enabled = true;
         Debug.Log("Active Current Position: " + transform.position);
+
+        WeaveModeSwitch.Disable();
     }
 
     void OnEnable()
@@ -244,6 +246,7 @@ public class PlayerScript : MonoBehaviour
                 {
                     interactable.Interact();
                     IsWeaving = true;
+                    UninteractInput.Enable();//Enables the input
                     interactInput.Disable();//disables the interactInput so  that the player can't press it multiple times
                     weaverAnimationHandler.ToggleWeaveAnim(IsWeaving); // start weaving animations 
 
@@ -253,6 +256,8 @@ public class PlayerScript : MonoBehaviour
                     interactable.Uninteract();
                     IsWeaving = false;
                     interactInput.Enable();//renables the inputs
+                    WeaveModeSwitch.Disable();//disables the weavemodeswitch inputs
+                    UninteractInput.Disable();//disables the uninteract inputs
                     weaverAnimationHandler.ToggleWeaveAnim(IsWeaving); // end weaving animations
                 }
                 float distanceBetween = Vector3.Distance(hitInfo.collider.transform.position, transform.position);
@@ -261,6 +266,7 @@ public class PlayerScript : MonoBehaviour
                     IsWeaving = false;
                     interactable.Uninteract();
                     interactInput.Enable();
+                    WeaveModeSwitch.Disable();
                 }
 
                 switch (WeaveModeNumbers)
@@ -288,6 +294,7 @@ public class PlayerScript : MonoBehaviour
         if (IsWeaving == true) //if the player is weaving an object thet will look at the object
         {
             this.transform.LookAt(new Vector3(hitInfo.collider.transform.position.x, 0, hitInfo.collider.transform.position.z));
+            WeaveModeSwitch.Enable();
         }
 
     }
