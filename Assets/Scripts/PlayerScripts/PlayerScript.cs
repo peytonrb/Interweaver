@@ -310,7 +310,6 @@ public class PlayerScript : MonoBehaviour
             this.transform.LookAt(new Vector3(hitInfo.collider.transform.position.x, 0, hitInfo.collider.transform.position.z));
             WeaveModeSwitch.Enable();
         }
-
     }
 
 
