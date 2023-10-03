@@ -24,6 +24,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Familiar Movement Ability",
+                    "type": "Button",
+                    "id": "098129a8-4938-4f53-8ae5-98f20f5c656c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Fire",
                     "type": "Button",
                     "id": "3ad76316-91e6-4f63-a8c3-6c5f29fa76f4",
@@ -54,6 +63,24 @@
                     "name": "Uninteract",
                     "type": "Button",
                     "id": "03cac032-24ac-4e49-bac7-e873c8c2c3e7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "08cd3fc1-e763-48a5-a582-14e6878fb46c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "WeaveModeSwitch",
+                    "type": "Button",
+                    "id": "5b8fb45f-e14e-454b-990b-cf3895822882",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -305,12 +332,67 @@
                 },
                 {
                     "name": "",
+                    "id": "5646724e-2415-4dc0-a152-104763fa7626",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Switch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "2aafc5b6-8f97-48aa-a0b7-854634661938",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Uninteract",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "90c59537-a323-4c91-81d4-ecf3bcdf9818",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ff738f76-3869-43d4-9fc7-42cf0f86a557",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1a6a65af-abdb-4018-bfa1-8ca4ffa17956",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Familiar Movement Ability",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fe945c62-0164-4960-9512-c3c0086bf07b",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WeaveModeSwitch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
