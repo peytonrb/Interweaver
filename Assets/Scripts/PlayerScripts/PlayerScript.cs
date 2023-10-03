@@ -27,6 +27,7 @@ public class PlayerScript : MonoBehaviour
     private float rotationVelocity;
     private Vector3 newDirection;
     public GameObject cam; //Camera object reference
+    [SerializeField] private Camera mainCamera;
     public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
     //**********************************************************
 
@@ -49,8 +50,7 @@ public class PlayerScript : MonoBehaviour
     public LayerMask weaveObject;
     private Vector3 playerPosition;
     private bool IsWeaving;
-    [SerializeField] private int WeaveModeNumbers = 1;
-    [SerializeField] private Vector3 raycastPosition;
+    [SerializeField] private int WeaveModeNumbers = 1;    
     [SerializeField] private InputAction interactInput;
     [SerializeField] private InputAction WeaveModeSwitch;
     [SerializeField] private InputAction UninteractInput;
@@ -150,7 +150,7 @@ public class PlayerScript : MonoBehaviour
             }
 
 
-            weaving();           
+            Weaving();           
 
             if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
             {
@@ -243,15 +243,11 @@ public class PlayerScript : MonoBehaviour
 
     }
 
-    private void weaving() //this method will shoot out a raycast that will see if there are objects with the weaeObject layermask and the IInteractable interface
+    private void Weaving() //this method will shoot out a raycast that will see if there are objects with the weaeObject layermask and the IInteractable interface
     {
-        playerPosition = new Vector3(transform.position.x, transform.position.y + raycastPosition.y, transform.position.z); //this is the raycast origin 
-        Vector3 rayDirection = transform.forward;
-        Ray ray = new Ray(playerPosition, rayDirection); //the actual  raycast
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
-        Debug.DrawRay(ray.origin, ray.direction * WeaveDistance, Color.red); //debug  for  when the game  starts and the line can be  seen on  scene
-
-        if (Physics.Raycast(ray, out hitInfo, WeaveDistance, weaveObject))
+        if (Physics.Raycast(ray, out hitInfo, 100, weaveObject))// the value 100 is for the raycast distance
         {
             IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
             if (interactable != null)
