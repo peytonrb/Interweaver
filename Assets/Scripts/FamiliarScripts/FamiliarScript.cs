@@ -4,7 +4,8 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using System; //this is for testing 
+using System;
+using Unity.VisualScripting; //this is for testing 
 
 public class FamiliarScript : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class FamiliarScript : MonoBehaviour
     private InputAction possessInput; //Input for depossessing
     private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
     private bool depossess; //Only used for reading if depossessing
+    public bool depossessing;
     public bool myTurn; //Responsible for determining if the familiar can move
     public bool isPaused; //Determines if the game is paused
     private bool leapOfFaith; //Determines if owl familiar is in a leap of faith
@@ -55,8 +57,8 @@ public class FamiliarScript : MonoBehaviour
     [SerializeField]
     private InputAction interactInput;
 
-    
-
+    public bool islandisfalling;
+    private bool delayon;
 
 
     
@@ -76,6 +78,10 @@ public class FamiliarScript : MonoBehaviour
         gravity = -3f;
         rotationSpeed = 0.1f;
         myTurn = false;
+        islandisfalling = false;
+        depossessing = false;
+        leapOfFaith = false;
+        delayon = false;
 
         //Section reserved for initiating inputs 
         moveInput = inputs.FindAction("Player/Move");
@@ -107,16 +113,20 @@ public class FamiliarScript : MonoBehaviour
     {
         if (myTurn) {
             if (!isPaused) {
-                //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
-                movement = moveInput.ReadValue<Vector2>();
-                depossess = possessInput.WasPressedThisFrame();
+                if (!islandisfalling) {
+                    //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
+                    movement = moveInput.ReadValue<Vector2>();
+                    depossess = possessInput.WasPressedThisFrame();
+                }
+                
                 familiarMovementAbility = familiarMovementAbilityInput.IsPressed();
                 
                 //Move character only if they are on the ground or in leapOfFaith
                 if (characterController.isGrounded || leapOfFaith) {
                     LookAndMove();
                     if (depossess && !leapOfFaith) {
-                        myTurn = false;
+                        Debug.Log("Depossessing");
+                        depossessing = true;
                     }
                 }
 
@@ -137,20 +147,23 @@ public class FamiliarScript : MonoBehaviour
     void FixedUpdate() {
         if (myTurn) {
             if (!isPaused) {
-                //Character movement
-                if (direction.magnitude >= 0.1f) {
-                    characterController.Move(newDirection.normalized * speed * Time.deltaTime);
-                }
+                if (!islandisfalling) {
+                    //Character movement
+                    if (direction.magnitude >= 0.1f) {
+                        characterController.Move(newDirection.normalized * speed * Time.deltaTime);
+                    }
 
-                characterController.Move(velocity * Time.deltaTime);
-                    
-                //Character gravity
-                if (!characterController.isGrounded) {
-                    velocity.y += gravity * Time.deltaTime;
+                    characterController.Move(velocity * Time.deltaTime);
+                        
+                    //Character gravity
+                    if (!characterController.isGrounded) {
+                        velocity.y += gravity * Time.deltaTime;
+                    }
+                    else if (!familiarMovementAbility) { // retain gravitational momementum if dashing
+                        velocity.y = -2f;
+                    }
                 }
-                else if (!familiarMovementAbility) { // retain gravitational momementum if dashing
-                    velocity.y = -2f;
-                }
+                
             }
             
         }          
@@ -180,9 +193,7 @@ public class FamiliarScript : MonoBehaviour
             crystalIndexRef = crystalScript.crystalIndex;
             FloatingIslandScript FIScript = floatingIsland[crystalIndexRef].GetComponent<FloatingIslandScript>();
             FIScript.StartFalling();
-            
-            
-            FIScript.isfalling = true;
+            FIScript.isislandfalling = true;
             Destroy(other.gameObject);
         }
         else if (other.gameObject.CompareTag("Breakable") && familiarMovementAbility) // if familiar collides with breakable object while using movement ability
@@ -220,5 +231,11 @@ public class FamiliarScript : MonoBehaviour
             characterController.enabled = true;
         }
         
+    }
+
+    public IEnumerator ForcedDelay() {
+        yield return new WaitForNextFrameUnit();
+        myTurn = true;
+        StopCoroutine(ForcedDelay());
     }
 }

@@ -128,16 +128,27 @@ public class PlayerScript : MonoBehaviour
                     //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
                     movement = moveInput.ReadValue<Vector2>();
                     LookAndMove();
+
+                    //Looks at input coming from TAB on keyboard (for now)
+                    possessButton = possessInput.WasPressedThisFrame();
+                    Possession();
                 }
-                //Looks at input coming from TAB on keyboard (for now)
-                possessButton = possessInput.WasPressedThisFrame();
-                Possession();
+                
 
             }
 
             //For pausing
             pauseButton = pauseInput.WasPressedThisFrame();
             Pausing();
+
+            if (familiarScript.depossessing)
+            {
+                virtualCam.m_Follow = gameObject.transform;
+                familiarScript.myTurn = false;
+                possessing = false;
+                familiarScript.depossessing = false;
+            }
+
 
             weaving();           
 
@@ -174,32 +185,35 @@ public class PlayerScript : MonoBehaviour
     {
         if (isPaused == false)
         {
-            //Character movement
-            if (direction.magnitude >= 0.1f)
-            {
-                characterController.Move(newDirection.normalized * speed * Time.deltaTime);
-            }
+            if (possessing == false) {
+                //Character movement
+                if (direction.magnitude >= 0.1f)
+                {
+                    characterController.Move(newDirection.normalized * speed * Time.deltaTime);
+                }
 
-            //Character movement
-            if (direction.magnitude >= 0.1f)
-            {
-                characterController.Move(newDirection.normalized * speed * Time.deltaTime);
-                weaverAnimationHandler.ToggleMoveSpeedBlend(speed); // note: speed is static now, but this should work fine when variable speed is added
-            }
+                //Character movement
+                if (direction.magnitude >= 0.1f)
+                {
+                    characterController.Move(newDirection.normalized * speed * Time.deltaTime);
+                    weaverAnimationHandler.ToggleMoveSpeedBlend(speed); // note: speed is static now, but this should work fine when variable speed is added
+                }
 
-            characterController.Move(velocity * Time.deltaTime);
+                characterController.Move(velocity * Time.deltaTime);
 
-            //Character gravity
-            if (!characterController.isGrounded)
-            {
-                velocity.y += gravity * Time.deltaTime;
-                weaverAnimationHandler.ToggleFallAnim(true);
+                //Character gravity
+                if (!characterController.isGrounded)
+                {
+                    velocity.y += gravity * Time.deltaTime;
+                    weaverAnimationHandler.ToggleFallAnim(true);
+                }
+                else
+                {
+                    weaverAnimationHandler.ToggleFallAnim(false);
+                    velocity.y = -2f;
+                }
             }
-            else
-            {
-                weaverAnimationHandler.ToggleFallAnim(false);
-                velocity.y = -2f;
-            }
+            
         }
     }
 
@@ -302,24 +316,15 @@ public class PlayerScript : MonoBehaviour
 
     private void Possession()
     {
-
         if (possessButton)
         {
-            if (possessing == false)
-            {
-                //Switches to Familiar
-                virtualCam.m_Follow = familiar.transform;
-                familiarScript.myTurn = true;
-                possessing = true;
-            }
-            else
-            {
-                if (familiarScript.myTurn == false)
-                {
-                    virtualCam.m_Follow = gameObject.transform;
-                    possessing = false;
-                }
-            }
+            
+            //Switches to Familiar
+            virtualCam.m_Follow = familiar.transform;
+            possessing = true;
+            Debug.Log("Possessing");
+            StartCoroutine(familiarScript.ForcedDelay());
+            
         }
 
     }
