@@ -218,7 +218,6 @@ public class PlayerScript : MonoBehaviour
         //Character rotations
         if (direction.magnitude >= 0.1f)
         {
-
             float targetangle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetangle, ref rotationVelocity, rotationSpeed);
             transform.rotation = Quaternion.Euler(0, angle, 0);

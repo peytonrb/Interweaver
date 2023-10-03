@@ -1023,8 +1023,10 @@ MonoBehaviour:
   mainCamera: {fileID: 963194227}
   LayerstoHit:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 65
   distance: 12
+  raycastPosition: {x: 0, y: 0, z: 0}
+  WeaveDistance: 12
   WeaveMove:
     m_Name: Weave Move
     m_Type: 0
@@ -1048,23 +1050,6 @@ MonoBehaviour:
       m_Processors: 
       m_Groups: 
       m_Action: Weave Move
-      m_Flags: 0
-    m_Flags: 0
-  WeaveMode:
-    m_Name: Weave Mode
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 52000fa0-b6c0-48a4-a1e6-883eaf8b92cb
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 0d022769-4d8e-4f09-8b43-35571ae48704
-      m_Path: <Mouse>/rightButton
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Weave Mode
       m_Flags: 0
     m_Flags: 0
   PlayerPrefab: {fileID: 1023923967}
@@ -2893,7 +2878,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91afd4a883fb8494aaf6252e5b72487f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  islandIndex: 0
   isfalling: 0
 --- !u!54 &1322615131
 Rigidbody:
@@ -4779,7 +4763,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: raycastPosition.y
-      value: 1
+      value: 1.1
       objectReference: {fileID: 0}
     - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: WeaveObject.m_Bits
@@ -4798,12 +4782,20 @@ PrefabInstance:
       value: 60fcd634-167e-4622-8195-f8a1e39a084a
       objectReference: {fileID: 0}
     - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      propertyPath: WeaveModeSwitch.m_Id
+      value: 4a7c8968-4464-440f-9651-c25727400758
+      objectReference: {fileID: 0}
+    - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: interactInput.m_Type
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: UninteractInput.m_Name
       value: Uninteract Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      propertyPath: WeaveModeSwitch.m_Name
+      value: Weave Mode Switch
       objectReference: {fileID: 0}
     - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: interactInput.m_ExpectedControlType
