@@ -196,9 +196,19 @@ public class FamiliarScript : MonoBehaviour
             FIScript.isislandfalling = true;
             Destroy(other.gameObject);
         }
-        else if (other.gameObject.CompareTag("Breakable") && familiarMovementAbility) // if familiar collides with breakable object while using movement ability
+        else if (other.gameObject.CompareTag("Breakable")) // if familiar collides with breakable object while using movement ability
         {
-            Destroy(other.gameObject); // TEMPORARY, in future, do something like this on the object's end
+            if (familiarMovementAbility)
+            {
+                Destroy(other.gameObject); // TEMPORARY, in future, do something like this on the object's end
+            }
+            else
+            {
+                EndLeapOfFaith();
+                characterController.enabled = false;
+                transform.position = GM.LastCheckPointPos;
+                characterController.enabled = true;
+            }
         }
     }
 
