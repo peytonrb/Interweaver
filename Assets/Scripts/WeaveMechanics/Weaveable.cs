@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-public class Weaveable : MonoBehaviour, IInteractable
+public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
 {
 
@@ -12,14 +12,22 @@ public class Weaveable : MonoBehaviour, IInteractable
     [SerializeField] private float WeaveSpeed = 12; // the value for the weave speed, though not sure if it's needed at the current moment
     [SerializeField] private Camera mainCamera; // grabbing the main camera
     [SerializeField] private LayerMask LayerstoHit; //a layermask
-    [SerializeField] private float distance = 12f;
+    [SerializeField] private float distance = 12;
     [SerializeField] private Vector3 raycastPosition;
-    [SerializeField] private float WeaveDistance = 12f;
+    [SerializeField] private float WeaveDistance = 12; //this is for if the weaveable is too far away
+    [SerializeField] private float TooCloseDistance = 6; //this is for   
     private Vector3 WeaveablePos;
     private bool Startfloating; //a bool to detect if the weaveable is interacted and will start floating
     private bool relocate; // bool for relocate
     private bool Weave; //bool for weaving the weaveables
-    public InputAction WeaveMove; //the input action for the right stick (still don't know the method for that)
+    private InputAction WeaveMove; //the input action for the right stick (still don't know the method for that)
+
+    //inputs
+    //**********************************************************************
+    public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
+    private InputAction CombineInput; //the input action for combineing the weaveables
+    //**********************************************************************
+
     private Vector2 weave;
     public Transform PlayerPrefab;
     private Vector3 direction;
@@ -27,17 +35,18 @@ public class Weaveable : MonoBehaviour, IInteractable
     void start()
     {
         rigidbody = GetComponent<Rigidbody>();
+        CombineInput = inputs.FindAction("Weaveables/Combine");
        
     }
 
     void OnEnable()
     {
-        WeaveMove.Enable();        
+        inputs.Enable();        
     }
 
     void OnDisable()
     {
-        WeaveMove.Disable();       
+        inputs.Disable();       
     }
 
     void Update()
@@ -54,19 +63,23 @@ public class Weaveable : MonoBehaviour, IInteractable
 
         if (relocate) 
         {
-          UninteractDistance();
-         rigidbody.freezeRotation = true;           
+         FreezeDistance();
+         rigidbody.freezeRotation = true;
         }
       
     }
 
 
-    void UninteractDistance()
+    void FreezeDistance()
     {
         float distanceBetween = Vector3.Distance(PlayerPrefab.transform.position, transform.position);
-        if (distanceBetween > distance) 
+        if (distanceBetween > distance || distanceBetween < TooCloseDistance)
         {
-            Uninteract();
+            rigidbody.constraints = RigidbodyConstraints.FreezePosition;
+        }
+        else if (distanceBetween >= TooCloseDistance && distanceBetween <= distance)
+        {
+            rigidbody.constraints = RigidbodyConstraints.None;
         }
     }
 
@@ -105,13 +118,24 @@ public class Weaveable : MonoBehaviour, IInteractable
         Ray ray = new Ray(WeaveablePos, rayDirection); //the actual  raycast
         RaycastHit hitInfo;
         Debug.DrawRay(ray.origin, ray.direction * WeaveDistance, Color.red); //debug  for  when the game  starts and the line can be  seen on  scene
+        if (Physics.Raycast(ray, out hitInfo, WeaveDistance)) 
+        {           
+            ICombineable combineable = hitInfo.collider.GetComponent<ICombineable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
+            if (combineable != null)
+            {               
+                    Combine();               
+            }
+        }
+       
     }
 
+    //this section is from the IInteractable interface
+    //********************************************************************
     public void Interact()
     {
         Debug.Log("This is interactable");
         rigidbody.useGravity = false;
-        Startfloating = true;      
+        Startfloating = true;
     }
     
     public void Uninteract()
@@ -121,6 +145,7 @@ public class Weaveable : MonoBehaviour, IInteractable
         rigidbody.useGravity = true;
         relocate = false;
         Weave = false;
+        Startfloating = false;        
     }
 
     public void Relocate()
@@ -128,7 +153,7 @@ public class Weaveable : MonoBehaviour, IInteractable
         relocate = true;
         Weave = false;
         rigidbody.constraints = RigidbodyConstraints.None;
-        Debug.Log("Relocate Mode");
+        Debug.Log("Relocate Mode");       
     }
 
     public void WeaveMode()
@@ -136,6 +161,15 @@ public class Weaveable : MonoBehaviour, IInteractable
         relocate = false;
         Weave = true;
         rigidbody.constraints = RigidbodyConstraints.FreezePosition; 
-        Debug.Log("weave Mode");
+        Debug.Log("weave Mode");       
     }
+    //********************************************************************
+
+    //this section is from the IInteractable interface
+    //********************************************************************
+    public void Combine()
+    {
+        Debug.Log("This is the combine code");
+    }
+    //********************************************************************
 }
