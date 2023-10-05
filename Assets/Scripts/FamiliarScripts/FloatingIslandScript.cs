@@ -36,9 +36,11 @@ public class FloatingIslandScript : MonoBehaviour
     }
     
     public void StartFalling() {
+        //Camera is switched to a new view which watches the whole island fall from the sky. (Lasts about 2 seconds)
         if (cameraswitched == false) {
             SwitchCamera();
         } else {
+            //Island starts to fall once the camera has been switched
             rb.constraints = RigidbodyConstraints.None;
             cameraswitched = false;
         }

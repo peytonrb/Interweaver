@@ -58,11 +58,8 @@ public class FamiliarScript : MonoBehaviour
     private InputAction interactInput;
 
     public bool islandisfalling;
-    private bool delayon;
 
-
-    
-    
+ 
 
     void Awake()
     {
@@ -81,7 +78,6 @@ public class FamiliarScript : MonoBehaviour
         islandisfalling = false;
         depossessing = false;
         leapOfFaith = false;
-        delayon = false;
 
         //Section reserved for initiating inputs 
         moveInput = inputs.FindAction("Player/Move");
@@ -192,6 +188,7 @@ public class FamiliarScript : MonoBehaviour
             CrystalScript crystalScript = other.gameObject.GetComponent<CrystalScript>();
             crystalIndexRef = crystalScript.crystalIndex;
             FloatingIslandScript FIScript = floatingIsland[crystalIndexRef].GetComponent<FloatingIslandScript>();
+            //Floating island starts falling
             FIScript.StartFalling();
             FIScript.isislandfalling = true;
             Destroy(other.gameObject);
@@ -243,6 +240,8 @@ public class FamiliarScript : MonoBehaviour
         
     }
 
+    //This coroutine is for an intentional delay that lasts exactly 1 frame, which starts on the frame the possession button is pressed.
+    //This is so the the control for depossessing does not get activated on the same frame.
     public IEnumerator ForcedDelay() {
         yield return new WaitForNextFrameUnit();
         myTurn = true;
