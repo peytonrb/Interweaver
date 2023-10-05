@@ -20,12 +20,13 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     private bool Startfloating; //a bool to detect if the weaveable is interacted and will start floating
     private bool relocate; // bool for relocate
     private bool Weave; //bool for weaving the weaveables
+    private bool Woven;//bool for starting the weave
     private InputAction WeaveMove; //the input action for the right stick (still don't know the method for that)
 
     //inputs
     //**********************************************************************
     public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
-    private InputAction CombineInput; //the input action for combineing the weaveables
+    
     //**********************************************************************
 
     private Vector2 weave;
@@ -34,9 +35,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     void start()
     {
-        rigidbody = GetComponent<Rigidbody>();
-        CombineInput = inputs.FindAction("Weaveables/Combine");
-       
+        rigidbody = GetComponent<Rigidbody>();     
     }
 
     void OnEnable()
@@ -50,21 +49,16 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     }
 
     void Update()
-    {
-        MovingWeaveMouse();
-
-
+    {       
         if (Startfloating) 
         {
            transform.position = transform.position + new Vector3 (0, HoveringValue*Time.deltaTime, 0);
             Startfloating = false;          
-        } 
-        
-
-        if (relocate) 
+        }
+      
+        if (Woven) 
         {
-         FreezeDistance();
-         rigidbody.freezeRotation = true;
+            MovingWeaveMouse();
         }
       
     }
@@ -91,6 +85,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
             if (relocate)
             {
                 rigidbody.velocity = new Vector3(raycastHit.point.x - rigidbody.position.x, transform.position.y - rigidbody.position.y, raycastHit.point.z - rigidbody.position.z);
+                FreezeDistance();
+                rigidbody.freezeRotation = true;
             }
             if (Weave)
             {
@@ -136,6 +132,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         Debug.Log("This is interactable");
         rigidbody.useGravity = false;
         Startfloating = true;
+        Woven = true;
     }
     
     public void Uninteract()
@@ -145,6 +142,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         rigidbody.useGravity = true;
         relocate = false;
         Weave = false;
+        Woven = false;
         Startfloating = false;        
     }
 
