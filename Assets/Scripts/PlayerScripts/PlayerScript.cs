@@ -27,6 +27,7 @@ public class PlayerScript : MonoBehaviour
     private float rotationVelocity;
     private Vector3 newDirection;
     public GameObject cam; //Camera object reference
+    [SerializeField] private Camera mainCamera;
     public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
     //**********************************************************
 
@@ -49,8 +50,7 @@ public class PlayerScript : MonoBehaviour
     public LayerMask weaveObject;
     private Vector3 playerPosition;
     private bool IsWeaving;
-    [SerializeField] private int WeaveModeNumbers = 1;
-    [SerializeField] private Vector3 raycastPosition;
+    [SerializeField] private int WeaveModeNumbers = 1;    
     [SerializeField] private InputAction interactInput;
     [SerializeField] private InputAction WeaveModeSwitch;
     [SerializeField] private InputAction UninteractInput;
@@ -128,10 +128,12 @@ public class PlayerScript : MonoBehaviour
                     //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
                     movement = moveInput.ReadValue<Vector2>();
                     LookAndMove();
+
+                    //Looks at input coming from TAB on keyboard (for now)
+                    possessButton = possessInput.WasPressedThisFrame();
+                    Possession();
                 }
-                //Looks at input coming from TAB on keyboard (for now)
-                possessButton = possessInput.WasPressedThisFrame();
-                Possession();
+                
 
             }
 
@@ -139,7 +141,16 @@ public class PlayerScript : MonoBehaviour
             pauseButton = pauseInput.WasPressedThisFrame();
             Pausing();
 
-            weaving();           
+            if (familiarScript.depossessing)
+            {
+                virtualCam.m_Follow = gameObject.transform;
+                familiarScript.myTurn = false;
+                possessing = false;
+                familiarScript.depossessing = false;
+            }
+
+
+            Weaving();           
 
             if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
             {
@@ -174,32 +185,35 @@ public class PlayerScript : MonoBehaviour
     {
         if (isPaused == false)
         {
-            //Character movement
-            if (direction.magnitude >= 0.1f)
-            {
-                characterController.Move(newDirection.normalized * speed * Time.deltaTime);
-            }
+            if (possessing == false) {
+                //Character movement
+                if (direction.magnitude >= 0.1f)
+                {
+                    characterController.Move(newDirection.normalized * speed * Time.deltaTime);
+                }
 
-            //Character movement
-            if (direction.magnitude >= 0.1f)
-            {
-                characterController.Move(newDirection.normalized * speed * Time.deltaTime);
-                weaverAnimationHandler.ToggleMoveSpeedBlend(speed); // note: speed is static now, but this should work fine when variable speed is added
-            }
+                //Character movement
+                if (direction.magnitude >= 0.1f)
+                {
+                    characterController.Move(newDirection.normalized * speed * Time.deltaTime);
+                    weaverAnimationHandler.ToggleMoveSpeedBlend(speed); // note: speed is static now, but this should work fine when variable speed is added
+                }
 
-            characterController.Move(velocity * Time.deltaTime);
+                characterController.Move(velocity * Time.deltaTime);
 
-            //Character gravity
-            if (!characterController.isGrounded)
-            {
-                velocity.y += gravity * Time.deltaTime;
-                weaverAnimationHandler.ToggleFallAnim(true);
+                //Character gravity
+                if (!characterController.isGrounded)
+                {
+                    velocity.y += gravity * Time.deltaTime;
+                    weaverAnimationHandler.ToggleFallAnim(true);
+                }
+                else
+                {
+                    weaverAnimationHandler.ToggleFallAnim(false);
+                    velocity.y = -2f;
+                }
             }
-            else
-            {
-                weaverAnimationHandler.ToggleFallAnim(false);
-                velocity.y = -2f;
-            }
+            
         }
     }
 
@@ -229,15 +243,11 @@ public class PlayerScript : MonoBehaviour
 
     }
 
-    private void weaving() //this method will shoot out a raycast that will see if there are objects with the weaeObject layermask and the IInteractable interface
+    private void Weaving() //this method will shoot out a raycast that will see if there are objects with the weaeObject layermask and the IInteractable interface
     {
-        playerPosition = new Vector3(transform.position.x, transform.position.y + raycastPosition.y, transform.position.z); //this is the raycast origin 
-        Vector3 rayDirection = transform.forward;
-        Ray ray = new Ray(playerPosition, rayDirection); //the actual  raycast
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
-        Debug.DrawRay(ray.origin, ray.direction * WeaveDistance, Color.red); //debug  for  when the game  starts and the line can be  seen on  scene
-
-        if (Physics.Raycast(ray, out hitInfo, WeaveDistance, weaveObject))
+        if (Physics.Raycast(ray, out hitInfo, 100, weaveObject))// the value 100 is for the raycast distance
         {
             IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
             if (interactable != null)
@@ -296,30 +306,20 @@ public class PlayerScript : MonoBehaviour
             this.transform.LookAt(new Vector3(hitInfo.collider.transform.position.x, 0, hitInfo.collider.transform.position.z));
             WeaveModeSwitch.Enable();
         }
-
     }
 
 
     private void Possession()
     {
-
         if (possessButton)
         {
-            if (possessing == false)
-            {
-                //Switches to Familiar
-                virtualCam.m_Follow = familiar.transform;
-                familiarScript.myTurn = true;
-                possessing = true;
-            }
-            else
-            {
-                if (familiarScript.myTurn == false)
-                {
-                    virtualCam.m_Follow = gameObject.transform;
-                    possessing = false;
-                }
-            }
+            
+            //Switches to Familiar
+            virtualCam.m_Follow = familiar.transform;
+            possessing = true;
+            Debug.Log("Possessing");
+            StartCoroutine(familiarScript.ForcedDelay());
+            
         }
 
     }

@@ -1036,14 +1036,6 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings:
     - m_Name: 
-      m_Id: b486e119-30d9-44ef-a622-0635cf3626e3
-      m_Path: <Mouse>/delta
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Weave Move
-      m_Flags: 0
-    - m_Name: 
       m_Id: 0b3ed1b4-f863-46a9-94a2-0c3b2b01fffa
       m_Path: <Gamepad>/rightStick
       m_Interactions: 
@@ -2878,7 +2870,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91afd4a883fb8494aaf6252e5b72487f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isfalling: 0
+  cameraswitched: 0
+  isislandfalling: 0
+  vcam1: {fileID: 0}
+  vcam2: {fileID: 0}
+  familiar: {fileID: 0}
 --- !u!54 &1322615131
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4741,6 +4737,10 @@ PrefabInstance:
       propertyPath: pauseMenu
       value: 
       objectReference: {fileID: 856117384}
+    - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 963194227}
     - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: position.y
       value: 1
