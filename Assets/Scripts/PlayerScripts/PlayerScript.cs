@@ -63,6 +63,10 @@ public class PlayerScript : MonoBehaviour
     private FamiliarScript familiarScript;
     //**********************************************************
 
+    //weaveable refrence
+    //**********************************************************
+    private Weaveable weaveableScript;
+
     [Header("Animation Calls")]
     public WeaverAnimationHandler weaverAnimationHandler;
 
@@ -70,7 +74,7 @@ public class PlayerScript : MonoBehaviour
     {
         //references to character components
         characterController = GetComponent<CharacterController>();
-        characterController.enabled = false;
+        characterController.enabled = false;       
     }
 
     void Start()
@@ -250,9 +254,11 @@ public class PlayerScript : MonoBehaviour
         RaycastHit hitInfo;
         if (Physics.Raycast(ray, out hitInfo, 100, weaveObject))// the value 100 is for the raycast distance
         {
+            weaveableScript = hitInfo.collider.GetComponent<Weaveable>();
             IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
             if (interactable != null)
             {
+               
                 if (interactInput.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
                 {
                     interactable.Interact();
@@ -262,7 +268,7 @@ public class PlayerScript : MonoBehaviour
                 }
 
 
-                if (UninteractInput.WasPressedThisFrame())
+                if (UninteractInput.WasPressedThisFrame() && weaveableScript.Woven == true)
                 {
                     interactable.Uninteract();
                     IsWeaving = false;
@@ -276,7 +282,7 @@ public class PlayerScript : MonoBehaviour
                 switch (WeaveModeNumbers)
                 {
                     case 1:
-                        if (WeaveModeSwitch.WasPressedThisFrame())
+                        if (WeaveModeSwitch.WasPressedThisFrame() && weaveableScript.Woven == true)
                         {
                             interactable.Relocate();
                             WeaveModeNumbers += 1;
@@ -284,7 +290,7 @@ public class PlayerScript : MonoBehaviour
                         break;
 
                     case 2:
-                        if (WeaveModeSwitch.WasPressedThisFrame())
+                        if (WeaveModeSwitch.WasPressedThisFrame() && weaveableScript.Woven == true)
                         {
                             interactable.WeaveMode();
                             WeaveModeNumbers -= 1;

@@ -20,14 +20,10 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     private bool Startfloating; //a bool to detect if the weaveable is interacted and will start floating
     private bool relocate; // bool for relocate
     private bool Weave; //bool for weaving the weaveables
-    private bool Woven;//bool for starting the weave
-    private InputAction WeaveMove; //the input action for the right stick (still don't know the method for that)
-
-    //inputs
-    //**********************************************************************
-    public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
+    public bool Woven;//bool for starting the weave
     
-    //**********************************************************************
+
+   
 
     private Vector2 weave;
     public Transform PlayerPrefab;
@@ -38,15 +34,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         rigidbody = GetComponent<Rigidbody>();     
     }
 
-    void OnEnable()
-    {
-        inputs.Enable();        
-    }
-
-    void OnDisable()
-    {
-        inputs.Disable();       
-    }
+  
 
     void Update()
     {       
@@ -100,7 +88,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     void MovingWeave() //method for moving the weaveable object
     {
-        weave = WeaveMove.ReadValue<Vector2>();
+       
         //direction = new Vector3( transform.position.x + weave.x, transform.position.y, transform.position.y + weave.y);
         //transform.position = direction * WeaveSpeed * Time.deltaTime;
         Debug.Log("this is the X" + weave.x);
