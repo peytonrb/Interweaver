@@ -15,8 +15,11 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     [SerializeField] private float distance = 12;
     [SerializeField] private Vector3 raycastPosition;
     [SerializeField] private float WeaveDistance = 12; //this is for if the weaveable is too far away
-    [SerializeField] private float TooCloseDistance = 6; //this is for   
+    [SerializeField] private float TooCloseDistance = 6; //this is for if the weaveable get's too close to the weaver  
+    public int ID; //an ID for objects
     private Vector3 WeaveablePos;
+    private bool HasJoint;
+    private bool CanCombine;
     private bool Startfloating; //a bool to detect if the weaveable is interacted and will start floating
     private bool relocate; // bool for relocate
     private bool Weave; //bool for weaving the weaveables
@@ -33,7 +36,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     void start()
     {
-        rigidbody = GetComponent<Rigidbody>();     
+        rigidbody = GetComponent<Rigidbody>();
+        HasJoint = false;
     }
 
   
@@ -80,7 +84,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
             }
             if (Weave)
             {
-                transform.LookAt(new Vector3(raycastHit.point.x, transform.position.y , raycastHit.point.z));
+                //transform.LookAt(new Vector3(raycastHit.point.x, transform.position.y , raycastHit.point.z));
                 WeaveWeaveables();
             }
         }
@@ -99,33 +103,39 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     void WeaveWeaveables() //method for weaving the weaveables
     {
-        WeaveablePos = new Vector3(transform.position.x, transform.position.y + raycastPosition.y, transform.position.z); //this is the raycast origin 
-        Vector3 rayDirection = transform.forward;
-        Ray ray = new Ray(WeaveablePos, rayDirection); //the actual  raycast
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
-        Debug.DrawRay(ray.origin, ray.direction * WeaveDistance, Color.red); //debug  for  when the game  starts and the line can be  seen on  scene
-        if (Physics.Raycast(ray, out hitInfo, WeaveDistance)) 
+        if (Physics.Raycast(ray, out hitInfo, 100, LayerstoHit))// the value 100 is for the raycast distance
         {
             weaveableScript = hitInfo.collider.GetComponent<Weaveable>();
             ICombineable combineable = hitInfo.collider.GetComponent<ICombineable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
-            if (combineable != null && weaveableScript.Woven == false && (Input.GetKeyDown("q")))// this is the band aid solution will need a more concrete solution later on
+            if (combineable != null && weaveableScript.Woven == false && weaveableScript.ID == this.ID && (Input.GetKeyDown("q")))// this is the band aid solution will need a more concrete solution later on
             {
-                Combine();                  
+                Combine();
             }
         }
        
     }
 
-
-    //this section is from the IInteractable interface
-    //********************************************************************
-    public void Interact()
+    void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("This is interactable");
-        rigidbody.useGravity = false;
-        Startfloating = true;
-        Woven = true;
+        if (collision.gameObject.GetComponent<Rigidbody>() != null && !HasJoint && CanCombine)
+        {
+            gameObject.AddComponent<FixedJoint>();
+            gameObject.GetComponent<FixedJoint>().connectedBody = collision.rigidbody;
+            HasJoint = true;
+        }
     }
+
+        //this section is from the IInteractable interface
+        //********************************************************************
+        public void Interact()
+        {
+          Debug.Log("This is interactable");
+          rigidbody.useGravity = false;
+          Startfloating = true;
+          Woven = true;
+         }
     
     public void Uninteract()
     {
@@ -160,6 +170,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     public void Combine()
     {
         Debug.Log("This is the combine code");
+  
+        CanCombine = true;
     }
     //********************************************************************
 }
