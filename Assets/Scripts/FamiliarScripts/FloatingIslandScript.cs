@@ -6,7 +6,7 @@ using UnityEngine.Assertions.Must;
 
 public class FloatingIslandScript : MonoBehaviour
 {
-    public bool cameraswitched;
+    private bool cameraswitched;
     public bool isislandfalling;
     private Rigidbody rb;
     public CinemachineVirtualCamera vcam1; //Player Camera

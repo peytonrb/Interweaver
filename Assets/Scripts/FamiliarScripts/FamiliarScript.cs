@@ -113,13 +113,15 @@ public class FamiliarScript : MonoBehaviour
                     //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
                     movement = moveInput.ReadValue<Vector2>();
                     depossess = possessInput.WasPressedThisFrame();
+
+                    LookAndMove();
                 }
                 
                 familiarMovementAbility = familiarMovementAbilityInput.IsPressed();
                 
                 //Move character only if they are on the ground or in leapOfFaith
                 if (characterController.isGrounded || leapOfFaith) {
-                    LookAndMove();
+                    
                     if (depossess && !leapOfFaith) {
                         Debug.Log("Depossessing");
                         depossessing = true;
@@ -148,8 +150,6 @@ public class FamiliarScript : MonoBehaviour
                     if (direction.magnitude >= 0.1f) {
                         characterController.Move(newDirection.normalized * speed * Time.deltaTime);
                     }
-
-                    characterController.Move(velocity * Time.deltaTime);
                         
                     //Character gravity
                     if (!characterController.isGrounded) {
@@ -158,6 +158,8 @@ public class FamiliarScript : MonoBehaviour
                     else if (!familiarMovementAbility) { // retain gravitational momementum if dashing
                         velocity.y = -2f;
                     }
+
+                     characterController.Move(velocity * Time.deltaTime);
                 }
                 
             }
