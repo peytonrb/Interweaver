@@ -109,7 +109,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         {
             weaveableScript = hitInfo.collider.GetComponent<Weaveable>();
             ICombineable combineable = hitInfo.collider.GetComponent<ICombineable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
-            if (combineable != null && weaveableScript.Woven == false && weaveableScript.ID == this.ID && (Input.GetKeyDown("q")))// this is the band aid solution will need a more concrete solution later on
+            if (combineable != null && !weaveableScript.CanCombine && weaveableScript.ID == ID && (Input.GetKeyDown("q")))// this is the band aid solution will need a more concrete solution later on
             {
                 Combine();
             }
@@ -119,11 +119,14 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.GetComponent<Rigidbody>() != null && !HasJoint && CanCombine)
+        weaveableScript = GetComponent<Weaveable>();
+        if (collision.gameObject.GetComponent<Rigidbody>() != null && !HasJoint && weaveableScript.CanCombine)
         {
             gameObject.AddComponent<FixedJoint>();
             gameObject.GetComponent<FixedJoint>().connectedBody = collision.rigidbody;
             HasJoint = true;
+            weaveableScript.rigidbody.velocity = new Vector3 (0,0,0);
+            weaveableScript.rigidbody.useGravity = true;
         }
     }
 
@@ -172,6 +175,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         Debug.Log("This is the combine code");
         
         weaveableScript.CanCombine = true;
+        weaveableScript.rigidbody.velocity = transform.position - weaveableScript.rigidbody.transform.position;
+        weaveableScript.rigidbody.useGravity = false;
     }
     //********************************************************************
 }
