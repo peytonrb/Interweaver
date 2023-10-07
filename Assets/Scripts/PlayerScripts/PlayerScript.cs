@@ -50,7 +50,7 @@ public class PlayerScript : MonoBehaviour
     public LayerMask weaveObject;
     private Vector3 playerPosition;
     private bool IsWeaving;
-    [SerializeField] private int WeaveModeNumbers = 1;    
+    [SerializeField] private int WeaveModeNumbers;    
      private InputAction interactInput;
      private InputAction WeaveModeSwitch;
      private InputAction UninteractInput;
@@ -265,6 +265,8 @@ public class PlayerScript : MonoBehaviour
                     IsWeaving = true;
                     UninteractInput.Enable();//Enables the input                   
                     weaverAnimationHandler.ToggleWeaveAnim(IsWeaving); // start weaving animations 
+                    WeaveModeNumbers = 1;
+                    interactable.Relocate();
                 }
 
 
@@ -284,7 +286,7 @@ public class PlayerScript : MonoBehaviour
                     case 1:
                         if (WeaveModeSwitch.WasPressedThisFrame() && weaveableScript.Woven == true)
                         {
-                            interactable.Relocate();
+                            interactable.WeaveMode();
                             WeaveModeNumbers += 1;
                         }
                         break;
@@ -292,7 +294,7 @@ public class PlayerScript : MonoBehaviour
                     case 2:
                         if (WeaveModeSwitch.WasPressedThisFrame() && weaveableScript.Woven == true)
                         {
-                            interactable.WeaveMode();
+                            interactable.Relocate();
                             WeaveModeNumbers -= 1;
                         }
                         break;

@@ -175,7 +175,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         Debug.Log("This is the combine code");
         
         weaveableScript.CanCombine = true;
-        weaveableScript.rigidbody.velocity = transform.position - weaveableScript.rigidbody.transform.position;
+        weaveableScript.rigidbody.velocity =  new Vector3 (transform.position.x - weaveableScript.rigidbody.transform.position.x, transform.position.y, transform.position.z - weaveableScript.rigidbody.transform.position.z);
         weaveableScript.rigidbody.useGravity = false;
     }
     //********************************************************************
