@@ -233,20 +233,11 @@ public class PlayerScript : MonoBehaviour
         {
             alreadyCollidedWith.Add(hit.gameObject);
             animator.SetBool("isOpen", true);
-            // lostSoulUI.SetActive(true);
             numLostSouls++;
             lostSoulText.text = "" + numLostSouls;
             Destroy(hit.gameObject);
             StartCoroutine(lostSoulOnScreen());
         }
-    }
-
-    // keeps lost soul UI on screen for a little bit then hides
-    IEnumerator lostSoulOnScreen()
-    {
-        yield return new WaitForSeconds(5);
-        // lostSoulUI.SetActive(false);
-        animator.SetBool("isOpen", false);
     }
 
     private void LookAndMove()
@@ -361,4 +352,10 @@ public class PlayerScript : MonoBehaviour
         familiarScript.isPaused = false;
     }
 
+    // keeps lost soul UI on screen for a little bit then hides
+    IEnumerator lostSoulOnScreen()
+    {
+        yield return new WaitForSeconds(5);
+        animator.SetBool("isOpen", false);
+    }
 }
