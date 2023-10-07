@@ -19,7 +19,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     public int ID; //an ID for objects
     private Vector3 WeaveablePos;
     private bool HasJoint;
-    private bool CanCombine;
+    public bool CanCombine;
     private bool Startfloating; //a bool to detect if the weaveable is interacted and will start floating
     private bool relocate; // bool for relocate
     private bool Weave; //bool for weaving the weaveables
@@ -170,8 +170,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     public void Combine()
     {
         Debug.Log("This is the combine code");
-  
-        CanCombine = true;
+        
+        weaveableScript.CanCombine = true;
     }
     //********************************************************************
 }
