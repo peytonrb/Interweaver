@@ -242,7 +242,9 @@ public class FamiliarScript : MonoBehaviour
 
         else if (collision.gameObject.CompareTag("Hazard")) {
             Destroy(collision.gameObject);
-            Debug.Log("OUCH!");
+            characterController.enabled = false;
+            transform.position = GM.LastCheckPointPos;
+            characterController.enabled = true;
         }
         
     }
