@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
+using TMPro;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement; //this is for testing 
 
@@ -35,7 +36,6 @@ public class PlayerScript : MonoBehaviour
     private Vector3 velocity; //Velocity in relation to gravity
     private float gravity; //Gravity of player
     private GameMasterScript GM; //This is refrencing the game master script
-    public int numLostSouls;
 
     [Header("Pause Menu")]
     public GameObject pauseMenu;
@@ -70,6 +70,13 @@ public class PlayerScript : MonoBehaviour
     [Header("Animation Calls")]
     public WeaverAnimationHandler weaverAnimationHandler;
 
+    [Header("Lost Souls")]
+    public int numLostSouls;
+    public GameObject lostSoulUI;
+    public TextMeshProUGUI lostSoulText;
+    private readonly HashSet<GameObject> alreadyCollidedWith = new HashSet<GameObject>();
+    public Animator animator;
+
     void Awake()
     {
         //references to character components
@@ -80,7 +87,6 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
-
         gravity = -3f;
         rotationSpeed = 0.1f;
         possessing = false;
@@ -103,7 +109,6 @@ public class PlayerScript : MonoBehaviour
         transform.position = GM.LastCheckPointPos;
         characterController.enabled = true;
         Debug.Log("Active Current Position: " + transform.position);
-
 
         UninteractInput.Disable();
         WeaveModeSwitch.Disable();
@@ -224,11 +229,24 @@ public class PlayerScript : MonoBehaviour
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (hit.gameObject.tag == "Lost Soul")
+        if (hit.gameObject.tag == "Lost Soul" && !alreadyCollidedWith.Contains(hit.gameObject))
         {
+            alreadyCollidedWith.Add(hit.gameObject);
+            animator.SetBool("isOpen", true);
+            // lostSoulUI.SetActive(true);
             numLostSouls++;
+            lostSoulText.text = "" + numLostSouls;
             Destroy(hit.gameObject);
+            StartCoroutine(lostSoulOnScreen());
         }
+    }
+
+    // keeps lost soul UI on screen for a little bit then hides
+    IEnumerator lostSoulOnScreen()
+    {
+        yield return new WaitForSeconds(5);
+        // lostSoulUI.SetActive(false);
+        animator.SetBool("isOpen", false);
     }
 
     private void LookAndMove()
