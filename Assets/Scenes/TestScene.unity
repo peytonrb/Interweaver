@@ -6325,24 +6325,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4766373589327111783, guid: 3eecb22b409431840a7578addcb86c64, type: 3}
   m_PrefabInstance: {fileID: 8510999948299018433}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1359264606525544832
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1359264606525544827}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d81c3474ba536648af37971310067f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 10
-  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
-  aerialControl: 1
-  cam: {fileID: 963194225}
-  virtualCam: {fileID: 0}
-  active: 0
 --- !u!1001 &6611767422449768526
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6566,6 +6548,10 @@ PrefabInstance:
       propertyPath: floatingIsland
       value: 
       objectReference: {fileID: 1322615129}
+    - target: {fileID: 1589125052728893389, guid: 3eecb22b409431840a7578addcb86c64, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 963194225}
     - target: {fileID: 4766373589327111783, guid: 3eecb22b409431840a7578addcb86c64, type: 3}
       propertyPath: m_Name
       value: FamiliarWithPoint
@@ -6617,8 +6603,5 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4766373589327111783, guid: 3eecb22b409431840a7578addcb86c64, type: 3}
-      insertIndex: 3
-      addedObject: {fileID: 1359264606525544832}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3eecb22b409431840a7578addcb86c64, type: 3}

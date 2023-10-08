@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5214822084340261175}
   - component: {fileID: 2404717404260384247}
   - component: {fileID: 2648732394092549178}
+  - component: {fileID: 1589125052728893389}
   - component: {fileID: 561915622479374034}
   m_Layer: 0
   m_Name: FamiliarWithPoint
@@ -74,6 +75,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c89374fc1e159f469b2b8f1c007f3f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1589125052728893389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4766373589327111783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d81c3474ba536648af37971310067f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10
+  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  aerialControl: 1
+  cam: {fileID: 0}
+  virtualCam: {fileID: 0}
+  active: 0
 --- !u!114 &561915622479374034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,10 +106,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerIndex: 1
-  speed: 10
   inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  depossessing: 0
   myTurn: 0
   cam: {fileID: 0}
+  virtualCam: {fileID: 0}
+  floatingIsland: []
   WeaveDistance: 12
   interactInput:
     m_Name: Interact Input
@@ -101,6 +122,7 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  islandisfalling: 0
 --- !u!1 &4790128978794148584
 GameObject:
   m_ObjectHideFlags: 0
