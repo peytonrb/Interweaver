@@ -23,6 +23,9 @@ public class PlayerScript : MonoBehaviour
     public GameObject cam; //Camera object reference
     [SerializeField] private Camera mainCamera;
     public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
+    public CinemachineVirtualCamera[] virtualCameraList; //Virtual Camera references for chaning camera priorities
+    private int vCamRotationState; //State 0 is default
+    private bool cameraTransition;
     //**********************************************************
 
     private GameMasterScript GM; //This is refrencing the game master script
@@ -80,6 +83,8 @@ public class PlayerScript : MonoBehaviour
         possessing = false;
         IsWeaving = false;
         numLostSouls = 0;
+        vCamRotationState = 0;
+        cameraTransition = false;
         pauseMenu.SetActive(false);
 
         //Section reserved for initiating inputs 
@@ -193,6 +198,33 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter(Collider other) {
+        if (other.gameObject.tag == "CameraTrigger") { 
+            switch (vCamRotationState) {
+                case 0:
+                    cameraTransition = true;
+                    //Disable character controller
+                    characterController.enabled = false;
+                    //Move camera to new position (change cameras to the one at the new position)
+                    virtualCameraList[0].Priority = 0;
+                    virtualCameraList[1].Priority = 1;
+                    StartCoroutine(CameraTransitionDelay());
+                    vCamRotationState = 1;
+                break;
+                case 1:
+                    cameraTransition = true;
+                    characterController.enabled = false;
+                    virtualCameraList[0].Priority = 1;
+                    virtualCameraList[1].Priority = 0;
+                    StartCoroutine(CameraTransitionDelay());
+                    vCamRotationState = 0;
+                break;
+
+            }
+            
+        }
+    }
+
     private void Weaving() //this method will shoot out a raycast that will see if there are objects with the weaeObject layermask and the IInteractable interface
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -285,5 +317,14 @@ public class PlayerScript : MonoBehaviour
     {
         yield return new WaitForSeconds(5);
         animator.SetBool("isOpen", false);
+    }
+
+
+    // I'm sorry I had to take the easy approach D:
+    IEnumerator CameraTransitionDelay() {
+        yield return new WaitForSeconds(1);
+        cameraTransition = false;
+        characterController.enabled = true;
+        StopCoroutine(CameraTransitionDelay());
     }
 }
