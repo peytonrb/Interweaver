@@ -9,11 +9,15 @@ public class DialogueManager : MonoBehaviour
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI dialogueText;
     private GameObject textBoxUI;
-    private AudioClip audioClip;
-    
+    private AudioSource audioSource;
+    private bool isCharacter;
+    // add audio clips for different characters
+
     void Start()
     {
         sentences = new Queue<string>();
+        audioSource = gameObject.GetComponent<AudioSource>();
+        audioSource.Stop();
     }
 
     void Update()
@@ -25,8 +29,9 @@ public class DialogueManager : MonoBehaviour
     }
 
     // begins the dialogue
-    public void StartDialogue(Dialogue dialogue, GameObject textBox)
+    public void StartDialogue(Dialogue dialogue, GameObject textBox, bool isNPC)
     {
+        isCharacter = isNPC;
         initialize(textBox);
         nameText.text = dialogue.name;
         sentences.Clear();
@@ -59,11 +64,17 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueText.text = "";
 
-        foreach (char letter in sentence.ToCharArray()) // add array of clips w pitches to be randomly called from here
+        if (isCharacter)
+            audioSource.Play();
+
+        foreach (char letter in sentence.ToCharArray())
         {
             dialogueText.text += letter;
+            audioSource.pitch = (float)Random.Range(0.1f, 1.0f);
             yield return null;
         }
+
+        audioSource.Stop();
     }
 
     void EndDialogue()

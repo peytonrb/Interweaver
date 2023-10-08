@@ -18,6 +18,7 @@ public class MovementScript : MonoBehaviour
     private Vector3 direction; //A reference to the directional movement of the player in 3D space
     private Vector3 velocity; //Velocity in relation to gravity
     private float gravity; //Gravity of player
+    private float originalGravity; // Original gravity of the player
     public bool aerialControl; //Bool which determines if controller can move in air 
 
     [Header("character's camera")]
@@ -40,6 +41,7 @@ public class MovementScript : MonoBehaviour
     void Start()
     {
         gravity = -3f;
+        originalGravity = gravity;
         rotationSpeed = 0.1f;
 
         //Section reserved for initiating inputs 
@@ -101,7 +103,6 @@ public class MovementScript : MonoBehaviour
         }
     }
 
-
     private void LookAndMove()
     {
         direction = new Vector3(movement.x, 0, movement.y).normalized; //direction of movement
@@ -114,5 +115,15 @@ public class MovementScript : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, angle, 0);
             newDirection = Quaternion.Euler(0, targetangle, 0) * Vector3.forward;
         }
+    }
+
+    public void ChangeInGravity(float gravityChange)
+    {
+        gravity = gravityChange;
+    }
+
+    public void ResetGravity()
+    {
+        gravity = originalGravity;
     }
 }
