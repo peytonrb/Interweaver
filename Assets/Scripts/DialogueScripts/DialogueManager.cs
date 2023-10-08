@@ -10,7 +10,9 @@ public class DialogueManager : MonoBehaviour
     private TextMeshProUGUI dialogueText;
     private GameObject textBoxUI;
     private AudioSource audioSource;
-    
+    private bool isCharacter;
+    // add audio clips for different characters
+
     void Start()
     {
         sentences = new Queue<string>();
@@ -27,8 +29,9 @@ public class DialogueManager : MonoBehaviour
     }
 
     // begins the dialogue
-    public void StartDialogue(Dialogue dialogue, GameObject textBox)
+    public void StartDialogue(Dialogue dialogue, GameObject textBox, bool isNPC)
     {
+        isCharacter = isNPC;
         initialize(textBox);
         nameText.text = dialogue.name;
         sentences.Clear();
@@ -60,15 +63,17 @@ public class DialogueManager : MonoBehaviour
     IEnumerator SentenceScroll(string sentence)
     {
         dialogueText.text = "";
-        audioSource.Play();
+
+        if (isCharacter)
+            audioSource.Play();
 
         foreach (char letter in sentence.ToCharArray())
         {
             dialogueText.text += letter;
-            audioSource.pitch = (float) Random.Range(-1.0f, 1.0f);
-            // yield return new WaitForSeconds(0.1f);
+            audioSource.pitch = (float)Random.Range(-1.0f, 1.0f);
             yield return null;
         }
+
         audioSource.Stop();
     }
 
