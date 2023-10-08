@@ -58,11 +58,8 @@ public class FamiliarScript : MonoBehaviour
     private InputAction interactInput;
 
     public bool islandisfalling;
-    private bool delayon;
 
-
-    
-    
+ 
 
     void Awake()
     {
@@ -81,7 +78,6 @@ public class FamiliarScript : MonoBehaviour
         islandisfalling = false;
         depossessing = false;
         leapOfFaith = false;
-        delayon = false;
 
         //Section reserved for initiating inputs 
         moveInput = inputs.FindAction("Player/Move");
@@ -117,13 +113,15 @@ public class FamiliarScript : MonoBehaviour
                     //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
                     movement = moveInput.ReadValue<Vector2>();
                     depossess = possessInput.WasPressedThisFrame();
+
+                    LookAndMove();
                 }
                 
                 familiarMovementAbility = familiarMovementAbilityInput.IsPressed();
                 
                 //Move character only if they are on the ground or in leapOfFaith
                 if (characterController.isGrounded || leapOfFaith) {
-                    LookAndMove();
+                    
                     if (depossess && !leapOfFaith) {
                         Debug.Log("Depossessing");
                         depossessing = true;
@@ -152,8 +150,6 @@ public class FamiliarScript : MonoBehaviour
                     if (direction.magnitude >= 0.1f) {
                         characterController.Move(newDirection.normalized * speed * Time.deltaTime);
                     }
-
-                    characterController.Move(velocity * Time.deltaTime);
                         
                     //Character gravity
                     if (!characterController.isGrounded) {
@@ -162,6 +158,8 @@ public class FamiliarScript : MonoBehaviour
                     else if (!familiarMovementAbility) { // retain gravitational momementum if dashing
                         velocity.y = -2f;
                     }
+
+                     characterController.Move(velocity * Time.deltaTime);
                 }
                 
             }
@@ -192,6 +190,7 @@ public class FamiliarScript : MonoBehaviour
             CrystalScript crystalScript = other.gameObject.GetComponent<CrystalScript>();
             crystalIndexRef = crystalScript.crystalIndex;
             FloatingIslandScript FIScript = floatingIsland[crystalIndexRef].GetComponent<FloatingIslandScript>();
+            //Floating island starts falling
             FIScript.StartFalling();
             FIScript.isislandfalling = true;
             Destroy(other.gameObject);
@@ -240,9 +239,18 @@ public class FamiliarScript : MonoBehaviour
             transform.position = GM.LastCheckPointPos;
             characterController.enabled = true;
         }
+
+        else if (collision.gameObject.CompareTag("Hazard")) {
+            Destroy(collision.gameObject);
+            characterController.enabled = false;
+            transform.position = GM.LastCheckPointPos;
+            characterController.enabled = true;
+        }
         
     }
 
+    //This coroutine is for an intentional delay that lasts exactly 1 frame, which starts on the frame the possession button is pressed.
+    //This is so the the control for depossessing does not get activated on the same frame.
     public IEnumerator ForcedDelay() {
         yield return new WaitForNextFrameUnit();
         myTurn = true;
