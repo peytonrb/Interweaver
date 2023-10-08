@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,13 +8,18 @@ public class WeaverController : MonoBehaviour
 {
     public InputActionAsset inputs;
     [SerializeField] private Camera mainCamera;
+    private InputAction possessInput; //Used for possession of familiar, or switching between weaver and familiar
+    private bool possessButton; //State that checks if the possess button is being pressed
+    private bool possessing; //Determines if the weaver is using possessing at the moment
+    private MovementController movementController;// references the movement controller script
+    private CharacterController characterController; //references the character controller component
+    public FamiliarController familiarController;
 
     //Weave Variables
     //**********************************************************
     [Header("Weave Variables")]
     public float WeaveDistance = 12f;
     public LayerMask weaveObject;
-    private Vector3 playerPosition;
     private bool IsWeaving;
     [SerializeField] private int WeaveModeNumbers = 1;
     [SerializeField] private InputAction interactInput;
@@ -22,6 +28,12 @@ public class WeaverController : MonoBehaviour
     [SerializeField] private float TooCloseDistance;
     //**********************************************************
 
+    void Awake()
+    {
+        characterController = GetComponent<CharacterController>();
+        movementController = GetComponent<MovementController>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +41,7 @@ public class WeaverController : MonoBehaviour
         interactInput = inputs.FindAction("Player/Interact");
         UninteractInput = inputs.FindAction("Player/Uninteract");
         WeaveModeSwitch = inputs.FindAction("Player/WeaveModeSwitch");
+        possessInput = inputs.FindAction("Player/Switch");
     }
 
     void OnEnable()
@@ -48,6 +61,19 @@ public class WeaverController : MonoBehaviour
         if (Time.timeScale != 0)
         {
             Weaving();
+
+            if (!possessing)
+            {
+                possessButton = possessInput.WasPressedThisFrame();
+                Possession();
+            }
+
+            if (familiarController.depossessing && familiarController != null)
+            {
+                movementController.virtualCam.m_Follow = gameObject.transform;
+                possessing = false;
+                familiarController.depossessing = false;
+            }
         }
     }
 
@@ -115,5 +141,16 @@ public class WeaverController : MonoBehaviour
             WeaveModeSwitch.Enable();
             interactInput.Disable(); //disables the inputs
         }
-    }    
+    }
+
+    private void Possession()
+    {
+        if (possessButton)
+        {
+            movementController.active = false;
+            movementController.virtualCam.m_Follow = familiarController.transform;
+            possessing = true;
+            StartCoroutine(familiarController.ForcedDelay());
+        }
+    }
 }

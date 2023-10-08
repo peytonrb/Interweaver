@@ -18,6 +18,7 @@ public class MovementController : MonoBehaviour
     private Vector3 direction; //A reference to the directional movement of the player in 3D space
     private Vector3 velocity; //Velocity in relation to gravity
     private float gravity; //Gravity of player
+    public bool aerialControl; //Bool which determines if controller can move in air 
 
     [Header("character's camera")]
     //Character Rotation values
@@ -27,6 +28,8 @@ public class MovementController : MonoBehaviour
     public GameObject cam; //Camera object reference
     [SerializeField] private Camera mainCamera;
     public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
+
+    public bool active; //Determines if movement controller is active
 
     
     void Awake()
@@ -65,9 +68,9 @@ public class MovementController : MonoBehaviour
     void Update()
     {
         //Move character only if they are on the ground
-        if (characterController.isGrounded)
+        if (characterController.isGrounded || aerialControl)
         {
-            if (Time.timeScale != 0)
+            if (Time.timeScale != 0 && active)
             {
                 //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad
                 movement = moveInput.ReadValue<Vector2>();
