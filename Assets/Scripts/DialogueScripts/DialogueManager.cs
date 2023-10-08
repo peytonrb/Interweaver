@@ -9,11 +9,13 @@ public class DialogueManager : MonoBehaviour
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI dialogueText;
     private GameObject textBoxUI;
-    private AudioClip audioClip;
+    private AudioSource audioSource;
     
     void Start()
     {
         sentences = new Queue<string>();
+        audioSource = gameObject.GetComponent<AudioSource>();
+        audioSource.Stop();
     }
 
     void Update()
@@ -58,12 +60,16 @@ public class DialogueManager : MonoBehaviour
     IEnumerator SentenceScroll(string sentence)
     {
         dialogueText.text = "";
+        audioSource.Play();
 
-        foreach (char letter in sentence.ToCharArray()) // add array of clips w pitches to be randomly called from here
+        foreach (char letter in sentence.ToCharArray())
         {
             dialogueText.text += letter;
+            audioSource.pitch = (float) Random.Range(-1.0f, 1.0f);
+            // yield return new WaitForSeconds(0.1f);
             yield return null;
         }
+        audioSource.Stop();
     }
 
     void EndDialogue()
