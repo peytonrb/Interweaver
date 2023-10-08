@@ -10,36 +10,25 @@ using UnityEngine.SceneManagement; //this is for testing
 public class PlayerScript : MonoBehaviour
 {
     [Header("Movement Variables")]
-    public float speed; //Base walk speed for player
     private CharacterController characterController; //references the character controller component
+    private MovementScript movementScript; // reference for the movement script component
     public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
-    private InputAction moveInput; //Is the specific input action regarding arrow keys, WASD, and left stick
     private InputAction possessInput; //Used for possession of familiar, or switching between weaver and familiar
-    private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
     private bool possessButton; //State that checks if the possess button is being pressed
     private bool possessing; //Determines if the weaver is using possessing at the moment
-    private bool inTransition; //Determines if player is currently being sent back to checkpoint
-
 
     [Header("character's camera")]
     //Character Rotation values
     //**********************************************************
-    private float rotationSpeed;
-    private float rotationVelocity;
-    private Vector3 newDirection;
     public GameObject cam; //Camera object reference
     [SerializeField] private Camera mainCamera;
     public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
     //**********************************************************
 
-    private Vector3 direction; //A reference to the directional movement of the player in 3D space
-    private Vector3 velocity; //Velocity in relation to gravity
-    private float gravity; //Gravity of player
     private GameMasterScript GM; //This is refrencing the game master script
 
     [Header("Pause Menu")]
     public GameObject pauseMenu;
-    public bool isPaused;
     private InputAction pauseInput;
     private bool pauseButton;
 
@@ -81,23 +70,19 @@ public class PlayerScript : MonoBehaviour
     {
         //references to character components
         characterController = GetComponent<CharacterController>();
+        movementScript = GetComponent<MovementScript>();
         characterController.enabled = false;       
     }
 
     void Start()
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
-        gravity = -3f;
-        rotationSpeed = 0.1f;
         possessing = false;
         IsWeaving = false;
-        isPaused = false;
         numLostSouls = 0;
-        familiarScript.isPaused = false;
         pauseMenu.SetActive(false);
 
         //Section reserved for initiating inputs 
-        moveInput = inputs.FindAction("Player/Move");
         interactInput = inputs.FindAction("Player/Interact");
         UninteractInput = inputs.FindAction("Player/Uninteract");
         WeaveModeSwitch = inputs.FindAction("Player/WeaveModeSwitch");
@@ -128,23 +113,17 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {
         //If game is not paused, return to normal movement functions
-        if (isPaused == false)
+        if (Time.timeScale != 0)
         {
             //Move character only if they are on the ground
             if (characterController.isGrounded)
             {
                 if (possessing == false)
                 {
-                    //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
-                    movement = moveInput.ReadValue<Vector2>();
-                    LookAndMove();
-
                     //Looks at input coming from TAB on keyboard (for now)
                     possessButton = possessInput.WasPressedThisFrame();
                     Possession();
                 }
-                
-
             }
 
             //For pausing
@@ -157,8 +136,8 @@ public class PlayerScript : MonoBehaviour
                 familiarScript.myTurn = false;
                 possessing = false;
                 familiarScript.depossessing = false;
+                movementScript.active = true;
             }
-
 
             Weaving();           
 
@@ -193,35 +172,9 @@ public class PlayerScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isPaused == false)
+        if (Time.timeScale != 0)
         {
             if (possessing == false) {
-                //Character movement
-                if (direction.magnitude >= 0.1f)
-                {
-                    characterController.Move(newDirection.normalized * speed * Time.deltaTime);
-                }
-
-                //Character movement
-                if (direction.magnitude >= 0.1f)
-                {
-                    characterController.Move(newDirection.normalized * speed * Time.deltaTime);
-                    weaverAnimationHandler.ToggleMoveSpeedBlend(speed); // note: speed is static now, but this should work fine when variable speed is added
-                }
-
-                characterController.Move(velocity * Time.deltaTime);
-
-                //Character gravity
-                if (!characterController.isGrounded)
-                {
-                    velocity.y += gravity * Time.deltaTime;
-                    weaverAnimationHandler.ToggleFallAnim(true);
-                }
-                else
-                {
-                    weaverAnimationHandler.ToggleFallAnim(false);
-                    velocity.y = -2f;
-                }
             }
             
         }
@@ -238,23 +191,6 @@ public class PlayerScript : MonoBehaviour
             Destroy(hit.gameObject);
             StartCoroutine(lostSoulOnScreen());
         }
-    }
-
-    private void LookAndMove()
-    {
-
-        direction = new Vector3(movement.x, 0, movement.y).normalized; //direction of movement
-
-        //Character rotations
-        if (direction.magnitude >= 0.1f)
-        {
-            float targetangle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetangle, ref rotationVelocity, rotationSpeed);
-            transform.rotation = Quaternion.Euler(0, angle, 0);
-            newDirection = Quaternion.Euler(0, targetangle, 0) * Vector3.forward;
-
-        }
-
     }
 
     private void Weaving() //this method will shoot out a raycast that will see if there are objects with the weaeObject layermask and the IInteractable interface
@@ -308,7 +244,6 @@ public class PlayerScript : MonoBehaviour
                         }
                         break;
                 }
-                
             }
         }
 
@@ -325,11 +260,11 @@ public class PlayerScript : MonoBehaviour
     {
         if (possessButton)
         {
-            
             //Switches to Familiar
             virtualCam.m_Follow = familiar.transform;
             possessing = true;
             Debug.Log("Possessing");
+            movementScript.active = false;
             StartCoroutine(familiarScript.ForcedDelay());
             
         }
@@ -341,15 +276,8 @@ public class PlayerScript : MonoBehaviour
         if (pauseButton)
         {
             pauseMenu.SetActive(true);
-            isPaused = true;
-            familiarScript.isPaused = true;
+            Time.timeScale = 0;
         }
-    }
-
-    public void Unpausing()
-    {
-        isPaused = false;
-        familiarScript.isPaused = false;
     }
 
     // keeps lost soul UI on screen for a little bit then hides

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5402126169904835267}
+  - component: {fileID: 20847522854274277}
   - component: {fileID: 7154158912224162450}
   - component: {fileID: 591368551210576134}
   m_Layer: 0
@@ -36,6 +37,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &20847522854274277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359264606954408796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d81c3474ba536648af37971310067f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10
+  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  aerialControl: 0
+  cam: {fileID: 0}
+  virtualCam: {fileID: 0}
+  active: 1
 --- !u!114 &7154158912224162450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48,34 +67,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1feaa77bb6ed64840a88fa679e226134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
   inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
   cam: {fileID: 0}
+  mainCamera: {fileID: 0}
   virtualCam: {fileID: 0}
+  pauseMenu: {fileID: 0}
   WeaveDistance: 12
   weaveObject:
     serializedVersion: 2
     m_Bits: 0
-  raycastPosition: {x: 0, y: 0, z: 0}
-  interactInput:
-    m_Name: Interact Input
-    m_Type: 1
-    m_ExpectedControlType: Button
-    m_Id: 6b87dc83-d589-4a44-addc-2be63bee462a
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: bb8af314-e2c6-486b-b087-1d9bc17bcdac
-      m_Path: <Keyboard>/e
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Interact Input
-      m_Flags: 0
-    m_Flags: 0
+  WeaveModeNumbers: 0
   familiar: {fileID: 0}
   weaverAnimationHandler: {fileID: 7009046902244939009}
+  numLostSouls: 0
+  lostSoulUI: {fileID: 0}
+  lostSoulText: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!143 &591368551210576134
 CharacterController:
   m_ObjectHideFlags: 0
