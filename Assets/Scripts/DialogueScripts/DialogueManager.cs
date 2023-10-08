@@ -70,7 +70,7 @@ public class DialogueManager : MonoBehaviour
         foreach (char letter in sentence.ToCharArray())
         {
             dialogueText.text += letter;
-            audioSource.pitch = (float)Random.Range(-1.0f, 1.0f);
+            audioSource.pitch = (float)Random.Range(0.1f, 1.0f);
             yield return null;
         }
 
