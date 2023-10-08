@@ -23,6 +23,9 @@ public class PlayerScript : MonoBehaviour
     public GameObject cam; //Camera object reference
     [SerializeField] private Camera mainCamera;
     public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
+    public CinemachineVirtualCamera[] virtualCameraList; //Virtual Camera references for chaning camera priorities
+    private int vCamRotationState; //State 0 is default
+    private bool cameraTransition;
     //**********************************************************
 
     private GameMasterScript GM; //This is refrencing the game master script
@@ -80,6 +83,9 @@ public class PlayerScript : MonoBehaviour
         possessing = false;
         IsWeaving = false;
         numLostSouls = 0;
+        vCamRotationState = 0;
+        familiarScript.isPaused = false;
+        cameraTransition = false;
         pauseMenu.SetActive(false);
 
         //Section reserved for initiating inputs 
@@ -118,7 +124,7 @@ public class PlayerScript : MonoBehaviour
             //Move character only if they are on the ground
             if (characterController.isGrounded)
             {
-                if (possessing == false)
+                if (!possessing && !cameraTransition)
                 {
                     //Looks at input coming from TAB on keyboard (for now)
                     possessButton = possessInput.WasPressedThisFrame();
@@ -172,11 +178,36 @@ public class PlayerScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (Time.timeScale != 0)
+        if (!isPaused && !possessing && !cameraTransition && Time.timeScale != 0)
         {
-            if (possessing == false) {
-            }
             
+            //Character movement
+            if (direction.magnitude >= 0.1f)
+            {
+                characterController.Move(newDirection.normalized * speed * Time.deltaTime);
+            }
+
+            //Character movement
+            if (direction.magnitude >= 0.1f)
+            {
+                characterController.Move(newDirection.normalized * speed * Time.deltaTime);
+                weaverAnimationHandler.ToggleMoveSpeedBlend(speed); // note: speed is static now, but this should work fine when variable speed is added
+            }
+
+            characterController.Move(velocity * Time.deltaTime);
+
+            //Character gravity
+            if (!characterController.isGrounded)
+            {
+                velocity.y += gravity * Time.deltaTime;
+                weaverAnimationHandler.ToggleFallAnim(true);
+            }
+            else
+            {
+                weaverAnimationHandler.ToggleFallAnim(false);
+                velocity.y = -2f;
+            }
+                        
         }
     }
 
@@ -190,6 +221,50 @@ public class PlayerScript : MonoBehaviour
             lostSoulText.text = "" + numLostSouls;
             Destroy(hit.gameObject);
             StartCoroutine(lostSoulOnScreen());
+        }
+    }
+
+    private void LookAndMove()
+    {
+
+        direction = new Vector3(movement.x, 0, movement.y).normalized; //direction of movement
+
+        //Character rotations
+        if (direction.magnitude >= 0.1f)
+        {
+            float targetangle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetangle, ref rotationVelocity, rotationSpeed);
+            transform.rotation = Quaternion.Euler(0, angle, 0);
+            newDirection = Quaternion.Euler(0, targetangle, 0) * Vector3.forward;
+
+        }
+
+    }
+
+    void OnTriggerEnter(Collider other) {
+        if (other.gameObject.tag == "CameraTrigger") { 
+            switch (vCamRotationState) {
+                case 0:
+                    cameraTransition = true;
+                    //Disable character controller
+                    characterController.enabled = false;
+                    //Move camera to new position (change cameras to the one at the new position)
+                    virtualCameraList[0].Priority = 0;
+                    virtualCameraList[1].Priority = 1;
+                    StartCoroutine(CameraTransitionDelay());
+                    vCamRotationState = 1;
+                break;
+                case 1:
+                    cameraTransition = true;
+                    characterController.enabled = false;
+                    virtualCameraList[0].Priority = 1;
+                    virtualCameraList[1].Priority = 0;
+                    StartCoroutine(CameraTransitionDelay());
+                    vCamRotationState = 0;
+                break;
+
+            }
+            
         }
     }
 
@@ -285,5 +360,14 @@ public class PlayerScript : MonoBehaviour
     {
         yield return new WaitForSeconds(5);
         animator.SetBool("isOpen", false);
+    }
+
+
+    // I'm sorry I had to take the easy approach D:
+    IEnumerator CameraTransitionDelay() {
+        yield return new WaitForSeconds(1);
+        cameraTransition = false;
+        characterController.enabled = true;
+        StopCoroutine(CameraTransitionDelay());
     }
 }
