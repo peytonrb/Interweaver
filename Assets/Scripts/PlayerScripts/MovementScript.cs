@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MovementController : MonoBehaviour
+public class MovementScript : MonoBehaviour
 {
     private GameMasterScript GM; //This is refrencing the game master script
 
@@ -26,12 +26,10 @@ public class MovementController : MonoBehaviour
     private float rotationVelocity;
     private Vector3 newDirection;
     public GameObject cam; //Camera object reference
-    [SerializeField] private Camera mainCamera;
     public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
 
     public bool active; //Determines if movement controller is active
 
-    
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
