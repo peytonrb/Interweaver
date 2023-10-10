@@ -13,16 +13,13 @@ public class FamiliarScript : MonoBehaviour
     public int playerIndex; //Set to 0 for the weaver and 1 for the familiar
 
     [Header("Movement Variables")]
-    public float speed; //Base walk speed for player
     private CharacterController characterController; //references the character controller component
+    private MovementScript movementScript; // reference for the movement script component
     public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
-    private InputAction moveInput; //Is the specific input action regarding arrow keys, WASD, and left stick
     private InputAction possessInput; //Input for depossessing
-    private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
     private bool depossess; //Only used for reading if depossessing
     public bool depossessing;
     public bool myTurn; //Responsible for determining if the familiar can move
-    public bool isPaused; //Determines if the game is paused
     private bool leapOfFaith; //Determines if owl familiar is in a leap of faith
     private InputAction familiarMovementAbilityInput;//Input for movement ability
     private bool familiarMovementAbility;//Only used for reading if familiar is using movemeny ability
@@ -31,19 +28,11 @@ public class FamiliarScript : MonoBehaviour
     [Header("character's camera")]
     //Character Rotation values
     //**********************************************************
-    private float rotationSpeed; 
-    private float rotationVelocity;
-    private Vector3 newDirection;
     public GameObject cam; //Camera object reference
     public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
     private Vector3 originalVirtualCamRotation; // Original rotation values for the virtual camera
     private Vector3 originalVirtualCamTransposeOffset; //Virtual Camera original transpose offset values
     //**********************************************************
-
-
-    private Vector3 direction; //A reference to the directional movement of the player in 3D space
-    private Vector3 velocity; //Velocity in relation to gravity
-    private float gravity; //Gravity of player
     private GameMasterScript GM; //This is refrencing the game master script
 
     [Header ("Floating Island")]
@@ -58,37 +47,27 @@ public class FamiliarScript : MonoBehaviour
     private InputAction interactInput;
 
     public bool islandisfalling;
-    private bool delayon;
-
-
-    
-    
 
     void Awake()
     {
         //references to character components
         characterController = GetComponent<CharacterController>();
+        movementScript = GetComponent<MovementScript>();
         characterController.enabled = false;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-
-        gravity = -3f;
-        rotationSpeed = 0.1f;
         myTurn = false;
         islandisfalling = false;
         depossessing = false;
         leapOfFaith = false;
-        delayon = false;
 
         //Section reserved for initiating inputs 
-        moveInput = inputs.FindAction("Player/Move");
         interactInput = inputs.FindAction("Player/Interact");
         familiarMovementAbilityInput = inputs.FindAction("Player/Familiar Movement Ability");
         possessInput = inputs.FindAction("Player/Switch");
-
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>(); 
@@ -112,10 +91,9 @@ public class FamiliarScript : MonoBehaviour
     void Update()
     {
         if (myTurn) {
-            if (!isPaused) {
+            if (Time.timeScale != 0) {
                 if (!islandisfalling) {
                     //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
-                    movement = moveInput.ReadValue<Vector2>();
                     depossess = possessInput.WasPressedThisFrame();
                 }
                 
@@ -123,10 +101,11 @@ public class FamiliarScript : MonoBehaviour
                 
                 //Move character only if they are on the ground or in leapOfFaith
                 if (characterController.isGrounded || leapOfFaith) {
-                    LookAndMove();
+                    
                     if (depossess && !leapOfFaith) {
                         Debug.Log("Depossessing");
                         depossessing = true;
+                        movementScript.active = false;
                     }
                 }
 
@@ -145,45 +124,7 @@ public class FamiliarScript : MonoBehaviour
     }
 
     void FixedUpdate() {
-        if (myTurn) {
-            if (!isPaused) {
-                if (!islandisfalling) {
-                    //Character movement
-                    if (direction.magnitude >= 0.1f) {
-                        characterController.Move(newDirection.normalized * speed * Time.deltaTime);
-                    }
 
-                    characterController.Move(velocity * Time.deltaTime);
-                        
-                    //Character gravity
-                    if (!characterController.isGrounded) {
-                        velocity.y += gravity * Time.deltaTime;
-                    }
-                    else if (!familiarMovementAbility) { // retain gravitational momementum if dashing
-                        velocity.y = -2f;
-                    }
-                }
-                
-            }
-            
-        }          
-    }
-
-    private void LookAndMove() {
-
-        direction = new Vector3(movement.x,0,movement.y).normalized; //direction of movement
-
-        //Character rotations
-        if (direction.magnitude >= 0.1f) {
-
-            float targetangle = Mathf.Atan2(direction.x,direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y,targetangle, ref rotationVelocity, rotationSpeed);
-
-            transform.rotation = Quaternion.Euler(0,angle,0);
-            newDirection = Quaternion.Euler(0,targetangle,0) * Vector3.forward;     
-
-        }
- 
     }
 
     private void OnControllerColliderHit(ControllerColliderHit other) {
@@ -192,13 +133,24 @@ public class FamiliarScript : MonoBehaviour
             CrystalScript crystalScript = other.gameObject.GetComponent<CrystalScript>();
             crystalIndexRef = crystalScript.crystalIndex;
             FloatingIslandScript FIScript = floatingIsland[crystalIndexRef].GetComponent<FloatingIslandScript>();
+            //Floating island starts falling
             FIScript.StartFalling();
             FIScript.isislandfalling = true;
             Destroy(other.gameObject);
         }
-        else if (other.gameObject.CompareTag("Breakable") && familiarMovementAbility) // if familiar collides with breakable object while using movement ability
+        else if (other.gameObject.CompareTag("Breakable")) // if familiar collides with breakable object while using movement ability
         {
-            Destroy(other.gameObject); // TEMPORARY, in future, do something like this on the object's end
+            if (familiarMovementAbility)
+            {
+                Destroy(other.gameObject); // TEMPORARY, in future, do something like this on the object's end
+            }
+            else
+            {
+                EndLeapOfFaith();
+                characterController.enabled = false;
+                transform.position = GM.LastCheckPointPos;
+                characterController.enabled = true;
+            }
         }
     }
 
@@ -230,11 +182,21 @@ public class FamiliarScript : MonoBehaviour
             transform.position = GM.LastCheckPointPos;
             characterController.enabled = true;
         }
+
+        else if (collision.gameObject.CompareTag("Hazard")) {
+            Destroy(collision.gameObject);
+            characterController.enabled = false;
+            transform.position = GM.LastCheckPointPos;
+            characterController.enabled = true;
+        }
         
     }
 
+    //This coroutine is for an intentional delay that lasts exactly 1 frame, which starts on the frame the possession button is pressed.
+    //This is so the the control for depossessing does not get activated on the same frame.
     public IEnumerator ForcedDelay() {
         yield return new WaitForNextFrameUnit();
+        movementScript.active = true;
         myTurn = true;
         StopCoroutine(ForcedDelay());
     }

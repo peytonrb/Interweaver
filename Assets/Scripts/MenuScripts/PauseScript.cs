@@ -5,16 +5,13 @@ using UnityEngine;
 
 public class PauseScript : MonoBehaviour
 {   
-    public GameObject player;
-    private PlayerScript playerScript;
-
     void Start() {
-        playerScript = player.GetComponent<PlayerScript>();
+
     }
 
     //Resumes the game
     public void Resume() {
+        Time.timeScale = 1;
         gameObject.SetActive(false);
-        playerScript.Unpausing();
     }
 }
