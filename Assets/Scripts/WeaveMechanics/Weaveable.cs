@@ -46,7 +46,15 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         HasJoint = false;
     }
 
-  
+
+    void OnEnable()
+    {
+        inputs.FindActionMap("Weaveable").Enable();
+    }
+    void OnDisable()
+    {
+        inputs.FindActionMap("Weaveable").Disable();
+    }
 
     void Update()
     {       
@@ -104,7 +112,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         {
             weaveableScript = hitInfo.collider.GetComponent<Weaveable>();
             ICombineable combineable = hitInfo.collider.GetComponent<ICombineable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
-            if (combineable != null && !weaveableScript.CanCombine && weaveableScript.ID == ID)// this is the band aid solution will need a more concrete solution later on
+            if (combineable != null && !weaveableScript.CanCombine )// this is the band aid solution will need a more concrete solution later on
             {
                 inputs.FindActionMap("Weaveable").FindAction("CombineAction").performed += OnCombineInput;
             }
@@ -115,7 +123,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     void OnCollisionEnter(Collision collision)
     {
         weaveableScript = GetComponent<Weaveable>();
-        if (collision.gameObject.GetComponent<Rigidbody>() != null && !HasJoint && weaveableScript.CanCombine)
+        if (collision.gameObject.GetComponent<Rigidbody>() != null && !HasJoint && weaveableScript.CanCombine && weaveableScript.ID == ID)
         {
             gameObject.AddComponent<FixedJoint>();
             gameObject.GetComponent<FixedJoint>().connectedBody = collision.rigidbody;
@@ -166,7 +174,10 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     private void OnCombineInput(InputAction.CallbackContext context)
     {
-        Combine();
+        if (weaveableScript.ID == ID)
+        {
+            Combine();
+        }       
     }
 
     //this section is from the IInteractable interface
