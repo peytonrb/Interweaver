@@ -25,7 +25,7 @@ public class PlayerScript : MonoBehaviour
     public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
     public CinemachineVirtualCamera[] virtualCameraList; //Virtual Camera references for chaning camera priorities
     private int vCamRotationState; //State 0 is default
-    private bool cameraTransition;
+
     //**********************************************************
 
     private GameMasterScript GM; //This is refrencing the game master script
@@ -84,7 +84,6 @@ public class PlayerScript : MonoBehaviour
         IsWeaving = false;
         numLostSouls = 0;
         vCamRotationState = 0;
-        cameraTransition = false;
         pauseMenu.SetActive(false);
 
         //Section reserved for initiating inputs 
@@ -199,28 +198,39 @@ public class PlayerScript : MonoBehaviour
     }
 
     void OnTriggerEnter(Collider other) {
-        if (other.gameObject.tag == "CameraTrigger") { 
+        if (other.gameObject.tag == "CameraTrigger") {
+            CameraIndexScript cameraIndexScript = other.GetComponent<CameraIndexScript>();
+            vCamRotationState = cameraIndexScript.cameraIndex;
+            
             switch (vCamRotationState) {
+                //When adding a camera, there will always need to be 2 rotation states:
+                //One for the player moving forwards through the trigger, and one moving backwards through the trigger.
+                //For moving forwards, add 1 to the cameraIndex. For moving backwards, subtract 1 from cameraIndex.
+                //The player should only be able to travel to the next numbered camera (camera[0] to camera[1] or camera[2] to camera[1]).
+                //The player should never be able to go from camera[0] to camera[2], or camera[2] to camera [5], etc.
                 case 0:
-                    cameraTransition = true;
-                    //Disable character controller
-                    characterController.enabled = false;
-                    //Move camera to new position (change cameras to the one at the new position)
                     virtualCameraList[0].Priority = 0;
                     virtualCameraList[1].Priority = 1;
-                    StartCoroutine(CameraTransitionDelay());
-                    vCamRotationState = 1;
+                    cameraIndexScript.cameraIndex += 1;
                 break;
                 case 1:
-                    cameraTransition = true;
-                    characterController.enabled = false;
                     virtualCameraList[0].Priority = 1;
                     virtualCameraList[1].Priority = 0;
-                    StartCoroutine(CameraTransitionDelay());
-                    vCamRotationState = 0;
+                    cameraIndexScript.cameraIndex -= 1;
+                break;
+                case 2:
+                    virtualCameraList[1].Priority = 0;
+                    virtualCameraList[2].Priority = 1;
+                    cameraIndexScript.cameraIndex += 1;
+                break;
+                case 3:
+                    virtualCameraList[1].Priority = 1;
+                    virtualCameraList[2].Priority = 0;
+                    cameraIndexScript.cameraIndex -= 1;
                 break;
 
             }
+            
             
         }
     }
@@ -317,14 +327,5 @@ public class PlayerScript : MonoBehaviour
     {
         yield return new WaitForSeconds(5);
         animator.SetBool("isOpen", false);
-    }
-
-
-    // I'm sorry I had to take the easy approach D:
-    IEnumerator CameraTransitionDelay() {
-        yield return new WaitForSeconds(1);
-        cameraTransition = false;
-        characterController.enabled = true;
-        StopCoroutine(CameraTransitionDelay());
     }
 }
