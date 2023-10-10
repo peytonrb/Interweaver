@@ -81,26 +81,29 @@ public class MovementScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        //Character movement
-        if (direction.magnitude >= 0.1f)
-        {
-            characterController.Move(newDirection.normalized * speed * Time.deltaTime);
-            //weaverAnimationHandler.ToggleMoveSpeedBlend(speed); // note: speed is static now, but this should work fine when variable speed is added
-        }
+        if (Time.timeScale != 0 && active) {
+            //Character movement
+            if (direction.magnitude >= 0.1f)
+            {
+                characterController.Move(newDirection.normalized * speed * Time.deltaTime);
+                //weaverAnimationHandler.ToggleMoveSpeedBlend(speed); // note: speed is static now, but this should work fine when variable speed is added
+            }
 
-        characterController.Move(velocity * Time.deltaTime);
+            characterController.Move(velocity * Time.deltaTime);
 
-        //Character gravity
-        if (!characterController.isGrounded)
-        {
-            velocity.y += gravity * Time.deltaTime;
-            //weaverAnimationHandler.ToggleFallAnim(true);
+            //Character gravity
+            if (!characterController.isGrounded)
+            {
+                velocity.y += gravity * Time.deltaTime;
+                //weaverAnimationHandler.ToggleFallAnim(true);
+            }
+            else
+            {
+                //weaverAnimationHandler.ToggleFallAnim(false);
+                velocity.y = -2f;
+            }
         }
-        else
-        {
-            //weaverAnimationHandler.ToggleFallAnim(false);
-            velocity.y = -2f;
-        }
+        
     }
 
     private void LookAndMove()
