@@ -8,8 +8,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     [Header("Weaveable's variables")]
     [SerializeField] private Rigidbody rigidbody; //this is grabbing the reffrence from the  rigidbody if we're going to use gravity (this can be deleted but just make sure that when the uninteract activates do the inverse)
-    [SerializeField] private float HoveringValue; // thee value for hovering over the floor
-    [SerializeField] private float WeaveSpeed = 12; // the value for the weave speed, though not sure if it's needed at the current moment
+    [SerializeField] private float HoveringValue; // thee value for hovering over the floor    
     [SerializeField] private Camera mainCamera; // grabbing the main camera
     [SerializeField] private LayerMask LayerstoHit; //a layermask
     [SerializeField] private float distance = 12;
@@ -95,17 +94,6 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
                 WeaveWeaveables();
             }
         }
-    }
-
-
-
-    void MovingWeave() //method for moving the weaveable object
-    {
-       
-        //direction = new Vector3( transform.position.x + weave.x, transform.position.y, transform.position.y + weave.y);
-        //transform.position = direction * WeaveSpeed * Time.deltaTime;
-        Debug.Log("this is the X" + weave.x);
-        Debug.Log("this is theY" + weave.y);
     }
 
     void WeaveWeaveables() //method for weaving the weaveables
