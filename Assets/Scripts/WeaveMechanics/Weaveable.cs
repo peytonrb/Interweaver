@@ -20,10 +20,17 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     private Vector3 WeaveablePos;
     private bool HasJoint;
     public bool CanCombine;
+    public bool CanWeave;
     private bool Startfloating; //a bool to detect if the weaveable is interacted and will start floating
     private bool relocate; // bool for relocate
     private bool Weave; //bool for weaving the weaveables
     public bool Woven;//bool for starting the weave
+
+    //inputs
+    //**************************************
+    public InputActionAsset inputs;
+    private InputAction combineInput;
+    //**************************************
 
     //refrence
     //**************************************
@@ -109,9 +116,9 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         {
             weaveableScript = hitInfo.collider.GetComponent<Weaveable>();
             ICombineable combineable = hitInfo.collider.GetComponent<ICombineable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
-            if (combineable != null && !weaveableScript.CanCombine && weaveableScript.ID == ID && (Input.GetKeyDown("q")))// this is the band aid solution will need a more concrete solution later on
+            if (combineable != null && !weaveableScript.CanCombine && weaveableScript.ID == ID)// this is the band aid solution will need a more concrete solution later on
             {
-                Combine();
+                inputs.FindActionMap("Weaveable").FindAction("CombineAction").performed += OnCombineInput;
             }
         }
        
@@ -167,6 +174,12 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         Debug.Log("weave Mode");       
     }
     //********************************************************************
+
+
+    private void OnCombineInput(InputAction.CallbackContext context)
+    {
+        Combine();
+    }
 
     //this section is from the IInteractable interface
     //********************************************************************
