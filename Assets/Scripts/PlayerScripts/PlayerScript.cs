@@ -22,7 +22,7 @@ public class PlayerScript : MonoBehaviour
     //**********************************************************
     public GameObject cam; //Camera object reference
     [SerializeField] private Camera mainCamera;
-    public CinemachineVirtualCamera virtualCam; //Default virtual camera reference
+    public CinemachineVirtualCamera familiarVirtualCam;
     public CinemachineVirtualCamera[] virtualCameraList; //Virtual Camera references for chaning camera priorities
     private int vCamRotationState; //State 0 is default
     private int cameraOnPriority; //If 0, the camera priority is the default player camera.
@@ -139,10 +139,7 @@ public class PlayerScript : MonoBehaviour
             if (familiarScript.depossessing)
             {
                 virtualCameraList[cameraOnPriority].Priority = 1;
-                if (virtualCam.Priority == 1) {
-                    virtualCam.m_Follow = gameObject.transform;
-                }
-                virtualCam.Priority = 0;
+                familiarVirtualCam.Priority = 0;
                 familiarScript.myTurn = false;
                 possessing = false;
                 familiarScript.depossessing = false;
@@ -207,7 +204,7 @@ public class PlayerScript : MonoBehaviour
         if (other.gameObject.tag == "CameraTrigger") {
             CameraIndexScript cameraIndexScript = other.GetComponent<CameraIndexScript>();
             vCamRotationState = cameraIndexScript.cameraIndex;
-            
+                 
             switch (vCamRotationState) {
                 //When adding a camera, there will always need to be 2 rotation states:
                 //One for the player moving forwards through the trigger, and one moving backwards through the trigger.
@@ -237,6 +234,47 @@ public class PlayerScript : MonoBehaviour
                     virtualCameraList[2].Priority = 0;
                     cameraIndexScript.cameraIndex -= 1;
                     cameraOnPriority = 1;
+                break;
+                case 4:
+                    virtualCameraList[2].Priority = 0;
+                    virtualCameraList[3].Priority = 1;
+                    cameraIndexScript.cameraIndex += 1;
+                    cameraOnPriority = 3;
+                break;
+                case 5:
+                    virtualCameraList[2].Priority = 1;
+                    virtualCameraList[3].Priority = 0;
+                    cameraIndexScript.cameraIndex -= 1;
+                    cameraOnPriority = 2;
+                break;
+                case 6:
+                    virtualCameraList[3].Priority = 0;
+                    virtualCameraList[4].Priority = 1;
+                    cameraIndexScript.cameraIndex += 1;
+                    cameraOnPriority = 4;
+                break;
+                case 7:
+                    virtualCameraList[3].Priority = 1;
+                    virtualCameraList[4].Priority = 0;
+                    cameraIndexScript.cameraIndex -= 1;
+                    cameraOnPriority = 3;
+                break;
+                case 8:
+                    virtualCameraList[4].Priority = 0;
+                    virtualCameraList[5].Priority = 1;
+                    cameraIndexScript.cameraIndex += 1;
+                    cameraOnPriority = 5;
+                break;
+                case 9: 
+                    virtualCameraList[4].Priority = 1;
+                    virtualCameraList[5].Priority = 0;
+                    cameraIndexScript.cameraIndex -= 1;
+                    cameraOnPriority = 4;
+                break;
+                case 10:
+                    virtualCameraList[5].Priority = 0;
+                    virtualCameraList[0].Priority = 1;
+                    cameraOnPriority = 0;
                 break;
 
             }
@@ -313,11 +351,10 @@ public class PlayerScript : MonoBehaviour
         if (possessButton)
         {
             //Switches to Familiar
-            virtualCam.m_Follow = familiar.transform;
             for(int i = 0; i < virtualCameraList.Length; i++) {
                 virtualCameraList[i].Priority = 0;
             }
-            virtualCam.Priority = 1;
+            familiarVirtualCam.Priority = 1;
             possessing = true;
             Debug.Log("Possessing");
             movementScript.active = false;

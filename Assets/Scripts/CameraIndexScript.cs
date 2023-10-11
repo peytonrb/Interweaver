@@ -5,4 +5,5 @@ using UnityEngine;
 public class CameraIndexScript : MonoBehaviour
 {
     public int cameraIndex;
+    public bool wrapAround;
 }

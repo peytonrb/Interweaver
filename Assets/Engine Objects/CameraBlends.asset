@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CameraBlends
   m_EditorClassIdentifier: 
   m_CustomBlends:
-  - m_From: PlayerCamera
+  - m_From: FamiliarCamera
     m_To: FloatingIslandCamera
     m_Blend:
       m_Style: 5
@@ -25,7 +25,7 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 0
   - m_From: FloatingIslandCamera
-    m_To: PlayerCamera
+    m_To: FamiliarCamera
     m_Blend:
       m_Style: 1
       m_Time: 2
@@ -47,6 +47,39 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 0
   - m_From: PlayerCamera 2
+    m_To: PlayerCamera 3
+    m_Blend:
+      m_Style: 1
+      m_Time: 1.5
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - m_From: FamiliarCamera
+    m_To: PlayerCamera
+    m_Blend:
+      m_Style: 1
+      m_Time: 1.5
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - m_From: FamiliarCamera
+    m_To: PlayerCamera 2
+    m_Blend:
+      m_Style: 1
+      m_Time: 1.5
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - m_From: FamiliarCamera
     m_To: PlayerCamera 3
     m_Blend:
       m_Style: 1
