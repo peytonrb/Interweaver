@@ -49,11 +49,11 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     void OnEnable()
     {
-        inputs.FindActionMap("Weaveable").Enable();
+        inputs.FindActionMap("weaveableObject").Enable();
     }
     void OnDisable()
     {
-        inputs.FindActionMap("Weaveable").Disable();
+        inputs.FindActionMap("weaveableObject").Disable();
     }
 
     void Update()
@@ -112,9 +112,9 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         {
             weaveableScript = hitInfo.collider.GetComponent<Weaveable>();
             ICombineable combineable = hitInfo.collider.GetComponent<ICombineable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
-            if (combineable != null && !weaveableScript.CanCombine )// this is the band aid solution will need a more concrete solution later on
+            if (combineable != null && !weaveableScript.CanCombine)// this is the band aid solution will need a more concrete solution later on
             {
-                inputs.FindActionMap("Weaveable").FindAction("CombineAction").performed += OnCombineInput;
+                inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput;
             }
         }
        
@@ -151,7 +151,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         relocate = false;
         Weave = false;
         Woven = false;
-        Startfloating = false;        
+        Startfloating = false;
+        inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed -= OnCombineInput;
     }
 
     public void Relocate()
@@ -186,7 +187,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     {
         Debug.Log("This is the combine code");
         
-        weaveableScript.CanCombine = true;
+        CanCombine = true;
         weaveableScript.rigidbody.velocity =  new Vector3 (transform.position.x - weaveableScript.rigidbody.transform.position.x, transform.position.y, transform.position.z - weaveableScript.rigidbody.transform.position.z);
         weaveableScript.rigidbody.useGravity = false;
     }
