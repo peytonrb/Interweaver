@@ -926,17 +926,37 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "UncombineAction",
+                    "type": "Button",
+                    "id": "bd887768-d377-49d9-9edb-eb0146a27dee",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "",
                     "id": "4f8c4aa4-77d9-4a40-aff1-9af829581240",
-                    "path": "<Keyboard>/q",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "CombineAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4bdcefe2-9b40-4e84-9bc5-47f81b38fff7",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UncombineAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
