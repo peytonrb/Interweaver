@@ -24,6 +24,8 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private Camera mainCamera;
     public CinemachineVirtualCamera familiarVirtualCam;
     public CinemachineVirtualCamera[] virtualCameraList; //Virtual Camera references for chaning camera priorities
+    public GameObject cameraCheckpointMaster;
+    private CameraMasterScript CMScript;
     private int vCamRotationState; //State 0 is default
     private int cameraOnPriority; //If 0, the camera priority is the default player camera.
 
@@ -81,6 +83,7 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
+        CMScript = cameraCheckpointMaster.GetComponent<CameraMasterScript>();
         possessing = false;
         IsWeaving = false;
         numLostSouls = 0;
@@ -212,69 +215,96 @@ public class PlayerScript : MonoBehaviour
                 //The player should only be able to travel to the next numbered camera (camera[0] to camera[1] or camera[2] to camera[1]).
                 //The player should never be able to go from camera[0] to camera[2], or camera[2] to camera [5], etc.
                 case 0:
-                    virtualCameraList[0].Priority = 0;
-                    virtualCameraList[1].Priority = 1;
-                    cameraIndexScript.cameraIndex += 1;
-                    cameraOnPriority = 1;
+                    //checkpoint is being triggered
+                    if (cameraIndexScript.triggered == false) {
+                        virtualCameraList[0].Priority = 0;
+                        virtualCameraList[1].Priority = 1;
+                        cameraIndexScript.triggered = true;
+                        cameraOnPriority = 1;
+                        CMScript.ResetIsLoop();
+                    }
+                    //checkpoint is no longer triggered
+                    else {
+                        virtualCameraList[0].Priority = 1;
+                        virtualCameraList[1].Priority = 0;
+                        cameraIndexScript.triggered = false;
+                        cameraOnPriority = 0;
+                        CMScript.SetTriggerForIsLoop();
+                    }
+                    
                 break;
                 case 1:
-                    virtualCameraList[0].Priority = 1;
-                    virtualCameraList[1].Priority = 0;
-                    cameraIndexScript.cameraIndex -= 1;
-                    cameraOnPriority = 0;
+                    if (cameraIndexScript.triggered == false) {
+                        virtualCameraList[1].Priority = 0;
+                        virtualCameraList[2].Priority = 1;
+                        cameraIndexScript.triggered = true;
+                        cameraOnPriority = 2;
+                    }
+                    else {
+                        virtualCameraList[1].Priority = 1;
+                        virtualCameraList[2].Priority = 0;
+                        cameraIndexScript.triggered = false;
+                        cameraOnPriority = 1;
+                    }
                 break;
                 case 2:
-                    virtualCameraList[1].Priority = 0;
-                    virtualCameraList[2].Priority = 1;
-                    cameraIndexScript.cameraIndex += 1;
-                    cameraOnPriority = 2;
+                    if (cameraIndexScript.triggered == false) {
+                        virtualCameraList[2].Priority = 0;
+                        virtualCameraList[3].Priority = 1;
+                        cameraIndexScript.triggered = true;
+                        cameraOnPriority = 3;
+                    }
+                    else {
+                        virtualCameraList[2].Priority = 1;
+                        virtualCameraList[3].Priority = 0;
+                        cameraIndexScript.triggered = false;
+                        cameraOnPriority = 2;
+                    }
                 break;
                 case 3:
-                    virtualCameraList[1].Priority = 1;
-                    virtualCameraList[2].Priority = 0;
-                    cameraIndexScript.cameraIndex -= 1;
-                    cameraOnPriority = 1;
+                    if (cameraIndexScript.triggered == false) {
+                        virtualCameraList[3].Priority = 0;
+                        virtualCameraList[4].Priority = 1;
+                        cameraIndexScript.triggered = true;
+                        cameraOnPriority = 4;
+                    }
+                    else {
+                        virtualCameraList[3].Priority = 1;
+                        virtualCameraList[4].Priority = 0;
+                        cameraIndexScript.triggered = false;
+                        cameraOnPriority = 3;
+                    }
                 break;
                 case 4:
-                    virtualCameraList[2].Priority = 0;
-                    virtualCameraList[3].Priority = 1;
-                    cameraIndexScript.cameraIndex += 1;
-                    cameraOnPriority = 3;
+                    if (cameraIndexScript.triggered == false) {
+                        virtualCameraList[4].Priority = 0;
+                        virtualCameraList[5].Priority = 1;
+                        cameraIndexScript.triggered = true;
+                        cameraOnPriority = 5;
+                    }
+                    else {
+                        virtualCameraList[4].Priority = 1;
+                        virtualCameraList[5].Priority = 0;
+                        cameraIndexScript.triggered = false;
+                        cameraOnPriority = 4;
+                    }
                 break;
                 case 5:
-                    virtualCameraList[2].Priority = 1;
-                    virtualCameraList[3].Priority = 0;
-                    cameraIndexScript.cameraIndex -= 1;
-                    cameraOnPriority = 2;
-                break;
-                case 6:
-                    virtualCameraList[3].Priority = 0;
-                    virtualCameraList[4].Priority = 1;
-                    cameraIndexScript.cameraIndex += 1;
-                    cameraOnPriority = 4;
-                break;
-                case 7:
-                    virtualCameraList[3].Priority = 1;
-                    virtualCameraList[4].Priority = 0;
-                    cameraIndexScript.cameraIndex -= 1;
-                    cameraOnPriority = 3;
-                break;
-                case 8:
-                    virtualCameraList[4].Priority = 0;
-                    virtualCameraList[5].Priority = 1;
-                    cameraIndexScript.cameraIndex += 1;
-                    cameraOnPriority = 5;
-                break;
-                case 9: 
-                    virtualCameraList[4].Priority = 1;
-                    virtualCameraList[5].Priority = 0;
-                    cameraIndexScript.cameraIndex -= 1;
-                    cameraOnPriority = 4;
-                break;
-                case 10:
-                    virtualCameraList[5].Priority = 0;
-                    virtualCameraList[0].Priority = 1;
-                    cameraOnPriority = 0;
+                    //The loop back to camera 0
+                    if (cameraIndexScript.triggered == false) {
+                        virtualCameraList[5].Priority = 0;
+                        virtualCameraList[0].Priority = 1;
+                        cameraIndexScript.triggered = true;
+                        cameraOnPriority = 0;
+                        CMScript.ResetCameras();
+                    }
+                    else {
+                        virtualCameraList[5].Priority = 1;
+                        virtualCameraList[0].Priority = 0;
+                        cameraIndexScript.triggered = false;
+                        cameraOnPriority = 5;
+                        CMScript.SetTriggersForCameras();
+                    }
                 break;
 
             }
