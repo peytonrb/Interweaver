@@ -19,7 +19,7 @@ public class GustScript : MonoBehaviour
     {
         if (collider.gameObject.CompareTag("Gust"))
         {
-            movementScript.ChangeInGravity(gustForce);
+            movementScript.ChangeGravity(gustForce);
         }
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
@@ -11,15 +12,24 @@ public class MovementScript : MonoBehaviour
 
     [Header("Movement Variables")]
     public float speed; //Base walk speed for player
+    private float currentSpeed = 0; // the current speed for the player
     private CharacterController characterController; //references the character controller component
     public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
     private InputAction moveInput; //Is the specific input action regarding arrow keys, WASD, and left stick
     private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
     private Vector3 direction; //A reference to the directional movement of the player in 3D space
-    private Vector3 velocity; //Velocity in relation to gravity
-    private float gravity; //Gravity of player
-    private float originalGravity; // Original gravity of the player
+    private Vector3 velocity; // velocity of the controller
+    [SerializeField] private float gravity = -3f; //Gravity of the controller
+    private float originalGravity; // Original gravity of the controller
     public bool aerialControl; //Bool which determines if controller can move in air 
+    private float acceleration;
+    private float deceleration;
+    [SerializeField][Range(1f, 50f)] private float groundAcceleration; // ground acceleration of the controller
+    [SerializeField][Range(1f, 100f)] private float groundDeceleration; // ground deceleration of the controller
+    [SerializeField][Range(0f, 50f)] private float aerialAcceleration; // aerial horizontal acceleration of the controller
+    [SerializeField][Range(0f, 100f)] private float aerialDeceleration; // aerial horizontal deceleration of the controller
+    [SerializeField][Range(-50f, -5f)] private float terminalVelocity; // the terminal velocity of the controller
+    private float originalTerminalVelocity; // original terminal velocity of the controller
 
     [Header("character's camera")]
     //Character Rotation values
@@ -40,9 +50,9 @@ public class MovementScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gravity = -3f;
         rotationSpeed = 0.1f;
-        originalGravity = gravity;
+        originalGravity = gravity; // get original gravity of controller
+        originalTerminalVelocity = terminalVelocity; // get original terminal velocity of controller
 
         //Section reserved for initiating inputs 
         moveInput = inputs.FindAction("Player/Move");
@@ -82,19 +92,34 @@ public class MovementScript : MonoBehaviour
     void FixedUpdate()
     {
         if (Time.timeScale != 0 && active) {
+
+            // changes what acceleration/deceleration type is being used based on if controller is grouunded or not
+            acceleration = characterController.isGrounded ? groundAcceleration : aerialAcceleration;
+            deceleration = characterController.isGrounded ? groundDeceleration : aerialDeceleration;
+
             //Character movement
             if (direction.magnitude >= 0.1f)
             {
-                characterController.Move(newDirection.normalized * speed * Time.deltaTime);
+                currentSpeed += acceleration* Time.deltaTime;
+                currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
                 //weaverAnimationHandler.ToggleMoveSpeedBlend(speed); // note: speed is static now, but this should work fine when variable speed is added
             }
+            else
+            {
+                currentSpeed -= deceleration * Time.deltaTime;
+                currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
+            }
 
-            characterController.Move(velocity * Time.deltaTime);
+            velocity.x = currentSpeed * newDirection.x;
+            velocity.z = currentSpeed * newDirection.z;
+
+            characterController.Move(velocity * Time.deltaTime); // make move based on gravity
 
             //Character gravity
             if (!characterController.isGrounded)
             {
                 velocity.y += gravity * Time.deltaTime;
+                velocity.y = Mathf.Clamp(velocity.y, terminalVelocity, 200f);
                 //weaverAnimationHandler.ToggleFallAnim(true);
             }
             else
@@ -103,7 +128,6 @@ public class MovementScript : MonoBehaviour
                 velocity.y = -2f;
             }
         }
-        
     }
 
     private void LookAndMove()
@@ -120,13 +144,23 @@ public class MovementScript : MonoBehaviour
         }
     }
 
-    public void ChangeInGravity(float gravityChange)
+    public void ChangeGravity(float newGravity) // changes gravity to new value
     {
-        gravity = gravityChange;
+        gravity = newGravity;
     }
 
-    public void ResetGravity()
+    public void ResetGravity() // resets gravity to original value
     {
         gravity = originalGravity;
+    }
+
+    public void ChangeTerminalVelocity(float newTerminalVelocity) // changes terminal velocity to new value
+    {
+        terminalVelocity = newTerminalVelocity;
+    }
+
+    public void ResetTerminalVelocity() // resets terminal velocity to original value
+    {
+        terminalVelocity = originalTerminalVelocity;
     }
 }
