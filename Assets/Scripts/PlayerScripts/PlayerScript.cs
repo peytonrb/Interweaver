@@ -42,8 +42,15 @@ public class PlayerScript : MonoBehaviour
     public LayerMask weaveObject;
     private Vector3 playerPosition;
     private bool IsWeaving;
-    [SerializeField] private int WeaveModeNumbers;    
-     private InputAction interactInput;
+    [SerializeField] private int WeaveModeNumbers;
+    [SerializeField] private Vector2 sensitivity = new Vector2(1500f, 1500f);
+    [SerializeField] private Vector2 bias = new Vector2(0f, -1f);
+    [SerializeField] private Vector2 currentmousePosition;
+    private Vector2 warpPosition;
+    private Vector2 overflow;
+    private Vector2 Cursor;
+    private InputAction weaveCursor;
+    private InputAction interactInput;
      private InputAction WeaveModeSwitch;
      private InputAction UninteractInput;
     //**********************************************************
@@ -93,6 +100,7 @@ public class PlayerScript : MonoBehaviour
         WeaveModeSwitch = inputs.FindAction("Player/WeaveModeSwitch");
         possessInput = inputs.FindAction("Player/Switch");
         pauseInput = inputs.FindAction("Player/Pause");
+        weaveCursor = inputs.FindAction("Player/Weave");
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
@@ -146,8 +154,8 @@ public class PlayerScript : MonoBehaviour
                 movementScript.active = true;
             }
 
-            Weaving();           
-
+            Weaving();
+            //weaveController();// this works I just need to find a way to make it so that when the controller is detected it switches to this, it will for now be commented out for the time being
             if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //this is for testing
@@ -185,6 +193,20 @@ public class PlayerScript : MonoBehaviour
             }
             
         }
+    }
+
+    private void weaveController()
+    {
+        Cursor = weaveCursor.ReadValue<Vector2>();
+        if (Cursor.magnitude <= 0.1f)
+        {
+            return;
+        }
+        currentmousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        warpPosition = currentmousePosition + bias + overflow + sensitivity * Time.deltaTime * Cursor;
+        warpPosition = new Vector2(Mathf.Clamp(warpPosition.x, 0, Screen.width), Mathf.Clamp(warpPosition.y, 0, Screen.height));
+        overflow = new Vector2(warpPosition.x % 1, warpPosition.y % 1);
+        Mouse.current.WarpCursorPosition(warpPosition);
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)
