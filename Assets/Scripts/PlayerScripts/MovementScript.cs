@@ -119,6 +119,7 @@ public class MovementScript : MonoBehaviour
             if (!characterController.isGrounded)
             {
                 velocity.y += gravity * Time.deltaTime;
+                Debug.Log(velocity.y);
                 velocity.y = Mathf.Clamp(velocity.y, terminalVelocity, 200f);
                 //weaverAnimationHandler.ToggleFallAnim(true);
             }
@@ -151,6 +152,7 @@ public class MovementScript : MonoBehaviour
 
     public void ResetGravity() // resets gravity to original value
     {
+        Debug.Log("Yahoooo");
         gravity = originalGravity;
     }
 
