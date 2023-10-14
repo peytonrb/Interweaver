@@ -155,7 +155,7 @@ public class PlayerScript : MonoBehaviour
             }
 
             Weaving();
-            //weaveController();// this works I just need to find a way to make it so that when the controller is detected it switches to this, it will for now be commented out for the time being
+            DetectGamepad();
             if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //this is for testing
@@ -207,6 +207,19 @@ public class PlayerScript : MonoBehaviour
         warpPosition = new Vector2(Mathf.Clamp(warpPosition.x, 0, Screen.width), Mathf.Clamp(warpPosition.y, 0, Screen.height));
         overflow = new Vector2(warpPosition.x % 1, warpPosition.y % 1);
         Mouse.current.WarpCursorPosition(warpPosition);
+    }
+
+    void DetectGamepad()
+    {
+        var gamepad = Gamepad.current;
+        if (gamepad != null)
+        {
+            weaveController();// this works I just need to find a way to make it so that when the controller is detected it switches to this, it will for now be commented out for the time being
+        }
+        else
+        {
+            return;
+        }
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)
