@@ -12,8 +12,6 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     [SerializeField] private Camera mainCamera; // grabbing the main camera
     [SerializeField] private LayerMask LayerstoHit; //a layermask
     [SerializeField] private float distance = 12;
-    [SerializeField] private Vector3 raycastPosition;
-    [SerializeField] private float WeaveDistance = 12; //this is for if the weaveable is too far away
     [SerializeField] private float TooCloseDistance = 6; //this is for if the weaveable get's too close to the weaver  
     public int ID; //an ID for objects
     private Vector3 WeaveablePos;
