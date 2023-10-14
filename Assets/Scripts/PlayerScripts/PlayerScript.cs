@@ -25,7 +25,6 @@ public class PlayerScript : MonoBehaviour
     public GameObject cameraCheckpointMaster;
     private CameraMasterScript CMScript;
     private int vCamRotationState; //State 0 is default
-
     //**********************************************************
 
     private GameMasterScript GM; //This is refrencing the game master script
@@ -34,6 +33,14 @@ public class PlayerScript : MonoBehaviour
     public GameObject pauseMenu;
     private InputAction pauseInput;
     private bool pauseButton;
+
+
+    //**********************************************************
+    [Header("prototype purposes")]
+    public GameObject RelocateMode;
+    public GameObject CombineMode;
+    //**********************************************************
+
 
     //Weave Variables
     //**********************************************************
@@ -266,6 +273,7 @@ public class PlayerScript : MonoBehaviour
                     weaverAnimationHandler.ToggleWeaveAnim(IsWeaving); // start weaving animations 
                     WeaveModeNumbers = 1;
                     interactable.Relocate();
+                    RelocateMode.SetActive(true);// remember to delete this
                 }
 
 
@@ -277,6 +285,8 @@ public class PlayerScript : MonoBehaviour
                     UninteractInput.Disable();//disables the uninteract inputs
                     WeaveModeSwitch.Disable(); //disables the weavemodeswitch inputs
                     weaverAnimationHandler.ToggleWeaveAnim(IsWeaving); // end weaving animations
+                    RelocateMode.SetActive(false);// remember to delete this
+                    CombineMode.SetActive(false);// remember to delete this
                 }               
 
 
@@ -287,6 +297,8 @@ public class PlayerScript : MonoBehaviour
                         {
                             interactable.WeaveMode();
                             WeaveModeNumbers += 1;
+                            RelocateMode.SetActive(false);// remember to delete this
+                            CombineMode.SetActive(true);// remember to delete this
                         }
                         break;
 
@@ -295,6 +307,8 @@ public class PlayerScript : MonoBehaviour
                         {
                             interactable.Relocate();
                             WeaveModeNumbers -= 1;
+                            CombineMode.SetActive(false);// remember to delete this
+                            RelocateMode.SetActive(true);// remember to delete this
                         }
                         break;
                 }
