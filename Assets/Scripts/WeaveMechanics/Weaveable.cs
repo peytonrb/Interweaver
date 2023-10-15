@@ -159,6 +159,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         Weave = false;
         Woven = false;
         Startfloating = false;
+        rigidbody.constraints = RigidbodyConstraints.None;
         inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed -= OnCombineInput;
         inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed -= OnUncombineInput;
     }
