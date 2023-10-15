@@ -128,7 +128,13 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
             gameObject.AddComponent<FixedJoint>();
             gameObject.GetComponent<FixedJoint>().connectedBody = collision.rigidbody;
             HasJoint = true;
-            weaveableScript.rigidbody.velocity = new Vector3 (0,0,0);
+            weaveableScript.rigidbody.velocity = new Vector3(0, 0, 0);
+            weaveableScript.rigidbody.useGravity = true;
+        }
+
+        else
+        {
+            rigidbody.velocity = new Vector3(0,0,0);
             weaveableScript.rigidbody.useGravity = true;
         }
     }
@@ -141,8 +147,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
           rigidbody.useGravity = false;
           Startfloating = true;
           Woven = true;
-        rigidbody.isKinematic = true;
-    }
+         rigidbody.isKinematic = true;
+         }
     
     public void Uninteract()
     {
