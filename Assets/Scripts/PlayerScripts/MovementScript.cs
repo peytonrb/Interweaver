@@ -24,11 +24,14 @@ public class MovementScript : MonoBehaviour
     public bool aerialControl; //Bool which determines if controller can move in air 
     private float acceleration;
     private float deceleration;
-    [SerializeField][Range(1f, 50f)] private float groundAcceleration; // ground acceleration of the controller
-    [SerializeField][Range(1f, 100f)] private float groundDeceleration; // ground deceleration of the controller
-    [SerializeField][Range(0f, 50f)] private float aerialAcceleration; // aerial horizontal acceleration of the controller
-    [SerializeField][Range(0f, 100f)] private float aerialDeceleration; // aerial horizontal deceleration of the controller
+    [SerializeField][Range(1f, 20f)] private float groundAcceleration; // ground acceleration of the controller
+    [SerializeField][Range(1f, 30f)] private float groundDeceleration; // ground deceleration of the controller
+    [SerializeField][Range(0f, 20f)] private float aerialAcceleration; // aerial horizontal acceleration of the controller
+    private float originalAerialAcceleration;
+    [SerializeField][Range(0f, 30f)] private float aerialDeceleration; // aerial horizontal deceleration of the controller
+    private float originalAerialDeceleration;
     [SerializeField][Range(-50f, -5f)] private float terminalVelocity; // the terminal velocity of the controller
+    private bool resettingTerminalVelocity;
     private float originalTerminalVelocity; // original terminal velocity of the controller
 
     [Header("character's camera")]
@@ -53,6 +56,8 @@ public class MovementScript : MonoBehaviour
         rotationSpeed = 0.1f;
         originalGravity = gravity; // get original gravity of controller
         originalTerminalVelocity = terminalVelocity; // get original terminal velocity of controller
+        originalAerialAcceleration = aerialAcceleration;
+        originalAerialDeceleration = aerialDeceleration;
 
         //Section reserved for initiating inputs 
         moveInput = inputs.FindAction("Player/Move");
@@ -100,14 +105,16 @@ public class MovementScript : MonoBehaviour
             //Character movement
             if (direction.magnitude >= 0.1f)
             {
-                currentSpeed += acceleration* Time.deltaTime;
-                currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
+                currentSpeed = Mathf.Lerp(currentSpeed, speed, acceleration * Time.deltaTime);
+                //currentSpeed += acceleration * Time.deltaTime;
+                //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
                 //weaverAnimationHandler.ToggleMoveSpeedBlend(speed); // note: speed is static now, but this should work fine when variable speed is added
             }
             else
             {
-                currentSpeed -= deceleration * Time.deltaTime;
-                currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
+                currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
+                //currentSpeed -= deceleration * Time.deltaTime;
+                //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
             }
 
             velocity.x = currentSpeed * newDirection.x;
@@ -119,8 +126,6 @@ public class MovementScript : MonoBehaviour
             if (!characterController.isGrounded)
             {
                 velocity.y += gravity * Time.deltaTime;
-                Debug.Log(velocity.y);
-                velocity.y = Mathf.Clamp(velocity.y, terminalVelocity, 200f);
                 //weaverAnimationHandler.ToggleFallAnim(true);
             }
             else
@@ -128,6 +133,12 @@ public class MovementScript : MonoBehaviour
                 //weaverAnimationHandler.ToggleFallAnim(false);
                 velocity.y = -2f;
             }
+            velocity.y = Mathf.Clamp(velocity.y, terminalVelocity, 200f);
+        }
+
+        if (resettingTerminalVelocity)
+        {
+            ResetTerminalVelocity();
         }
     }
 
@@ -145,6 +156,26 @@ public class MovementScript : MonoBehaviour
         }
     }
 
+    public void ChangeAerialAcceleration(float newAerialAcceleration)
+    {
+        aerialAcceleration = newAerialAcceleration;
+    }
+
+    public void ResetAerialAcceleration()
+    {
+        aerialAcceleration = originalAerialAcceleration;
+    }
+
+    public void ChangeAerialDeceleration(float newAerialDeceleration)
+    {
+        aerialDeceleration = newAerialDeceleration;
+    }
+    
+    public void ResetAerialDeceleration()
+    {
+        aerialDeceleration = originalAerialDeceleration;
+    }
+
     public void ChangeGravity(float newGravity) // changes gravity to new value
     {
         gravity = newGravity;
@@ -152,7 +183,6 @@ public class MovementScript : MonoBehaviour
 
     public void ResetGravity() // resets gravity to original value
     {
-        Debug.Log("Yahoooo");
         gravity = originalGravity;
     }
 
@@ -163,6 +193,19 @@ public class MovementScript : MonoBehaviour
 
     public void ResetTerminalVelocity() // resets terminal velocity to original value
     {
-        terminalVelocity = originalTerminalVelocity;
+        resettingTerminalVelocity = true;
+        if (terminalVelocity != originalTerminalVelocity)
+        {
+            terminalVelocity = Mathf.Lerp(terminalVelocity, originalTerminalVelocity, 0.5f * Time.deltaTime);
+
+            if (characterController.isGrounded)
+            {
+                terminalVelocity = originalTerminalVelocity;
+            }
+        }
+        else
+        {
+            resettingTerminalVelocity = false;
+        }
     }
 }

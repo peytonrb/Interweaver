@@ -27,6 +27,7 @@ public class GustScript : MonoBehaviour
     {
         if (collider.gameObject.CompareTag("Gust"))
         {
+            // DO MATHF.LERP LATER BITCH
             movementScript.ResetGravity();
         }
     }
