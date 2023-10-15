@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 using UnityEngine.InputSystem;
+using UnityEditor;
+
 public class MainMenu : MonoBehaviour
 {
     [Header("Menu Variables")]
@@ -113,6 +115,7 @@ public class MainMenu : MonoBehaviour
     public void PlayButtonPress()
     {
         // Start Game!
+        SceneHandler.instance.LoadLevel("sc_Prototype");
     }
     public void PlayHoverSound()
     {

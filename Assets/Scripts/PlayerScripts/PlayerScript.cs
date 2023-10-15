@@ -168,17 +168,6 @@ public class PlayerScript : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //this is for testing
             }
 
-            if (Input.GetKeyDown(KeyCode.F)) // placeholder interaction key
-            {
-                Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, 10f); // second number is radius of sphere
-                foreach (var hitCollider in hitColliders)
-                {
-                    if (hitCollider.gameObject.tag == "NPC")
-                    {
-                        hitCollider.gameObject.GetComponent<DialogueTriggers>().triggerDialogue();
-                    }
-                }
-            }
         }
 
 
@@ -251,6 +240,18 @@ public class PlayerScript : MonoBehaviour
 
             //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
             
+        }
+    }
+
+    public void Interact()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, 10f); // second number is radius of sphere
+        foreach (var hitCollider in hitColliders)
+        {
+            if (hitCollider.gameObject.tag == "NPC")
+            {
+                hitCollider.gameObject.GetComponent<DialogueTriggers>().triggerDialogue();
+            }
         }
     }
 
