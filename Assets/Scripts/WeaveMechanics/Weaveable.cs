@@ -14,6 +14,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     [SerializeField] private float distance = 12;
     [SerializeField] private float TooCloseDistance = 6; //this is for if the weaveable get's too close to the weaver  
     public int ID; //an ID for objects
+    public int specialID; //this is forthe combineable objects that's going to be used for puzzles
     private Vector3 WeaveablePos;
     private bool HasJoint;
     public bool CanCombine;

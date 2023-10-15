@@ -58,8 +58,10 @@ public class PlayerScript : MonoBehaviour
     private Vector2 Cursor;
     private InputAction weaveCursor;
     private InputAction interactInput;
-     private InputAction WeaveModeSwitch;
-     private InputAction UninteractInput;
+    private InputAction WeaveModeSwitch;
+    private InputAction UninteractInput;
+    [SerializeField] private Vector3 raycastPosition;
+    [SerializeField] private Vector3 position;
     //**********************************************************
 
     //Familiar
@@ -257,11 +259,16 @@ public class PlayerScript : MonoBehaviour
 
     private void Weaving() //this method will shoot out a raycast that will see if there are objects with the weaeObject layermask and the IInteractable interface
     {
+
+        playerPosition = new Vector3(transform.position.x, raycastPosition.y, transform.position.z); //this is the raycast origin 
+        Vector3 rayDirection = transform.forward;
+        Ray rayPlayer = new Ray(playerPosition, rayDirection); //the actual  raycast from the player, this can be used for the line render
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, 100, weaveObject))// the value 100 is for the raycast distance
+        RaycastHit hitInfo;  //grabs the raycast  hit information from both the player's raycast and the mouse raycast
+        Debug.DrawRay(rayPlayer.origin, rayPlayer.direction * WeaveDistance, Color.red);//a debug line for the player's raycast
+        if (Physics.Raycast(ray, out hitInfo, 100, weaveObject) || Physics.Raycast(rayPlayer, out hitInfo, WeaveDistance, weaveObject))// the value 100 is for the raycast distance for the mouse raycast and uses the OR function for the raycast for  the player
         {
-            weaveableScript = hitInfo.collider.GetComponent<Weaveable>();
+            weaveableScript = hitInfo.collider.GetComponent<Weaveable>(); //local refrence to itself so that it can access itself from a different object 
             IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
             if (interactable != null)
             {
