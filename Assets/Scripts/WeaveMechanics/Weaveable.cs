@@ -12,8 +12,6 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     [SerializeField] private Camera mainCamera; // grabbing the main camera
     [SerializeField] private LayerMask LayerstoHit; //a layermask
     [SerializeField] private float distance = 12;
-    [SerializeField] private Vector3 raycastPosition;
-    [SerializeField] private float WeaveDistance = 12; //this is for if the weaveable is too far away
     [SerializeField] private float TooCloseDistance = 6; //this is for if the weaveable get's too close to the weaver  
     public int ID; //an ID for objects
     private Vector3 WeaveablePos;
@@ -49,11 +47,11 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     void OnEnable()
     {
-        inputs.FindActionMap("Weaveable").Enable();
+        inputs.FindActionMap("weaveableObject").Enable();
     }
     void OnDisable()
     {
-        inputs.FindActionMap("Weaveable").Disable();
+        inputs.FindActionMap("weaveableObject").Disable();
     }
 
     void Update()
@@ -112,9 +110,10 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         {
             weaveableScript = hitInfo.collider.GetComponent<Weaveable>();
             ICombineable combineable = hitInfo.collider.GetComponent<ICombineable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
-            if (combineable != null && !weaveableScript.CanCombine )// this is the band aid solution will need a more concrete solution later on
+            if (combineable != null && !weaveableScript.CanCombine)// this is the band aid solution will need a more concrete solution later on
             {
-                inputs.FindActionMap("Weaveable").FindAction("CombineAction").performed += OnCombineInput;
+                inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput;
+                inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed += OnUncombineInput;
             }
         }
        
@@ -141,24 +140,27 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
           rigidbody.useGravity = false;
           Startfloating = true;
           Woven = true;
-         }
+        rigidbody.isKinematic = true;
+    }
     
     public void Uninteract()
     {
         Debug.Log("this is now not woven");
-        rigidbody.constraints = RigidbodyConstraints.None;
+        rigidbody.isKinematic = false;
         rigidbody.useGravity = true;
         relocate = false;
         Weave = false;
         Woven = false;
-        Startfloating = false;        
+        Startfloating = false;
+        inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed -= OnCombineInput;
+        inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed -= OnUncombineInput;
     }
 
     public void Relocate()
     {
         relocate = true;
         Weave = false;
-        rigidbody.constraints = RigidbodyConstraints.None;
+        rigidbody.isKinematic = false;
         Debug.Log("Relocate Mode");       
     }
 
@@ -166,11 +168,17 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     {
         relocate = false;
         Weave = true;
-        rigidbody.constraints = RigidbodyConstraints.FreezePosition; 
+        rigidbody.isKinematic = true; 
         Debug.Log("weave Mode");       
     }
     //********************************************************************
-
+    private void OnUncombineInput(InputAction.CallbackContext context)
+    {
+        if (weaveableScript.ID == ID && HasJoint)
+        {
+            Uncombine();
+        }
+    }
 
     private void OnCombineInput(InputAction.CallbackContext context)
     {
@@ -182,11 +190,21 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     //this section is from the IInteractable interface
     //********************************************************************
+
+    public void Uncombine()
+    {
+        Debug.Log("This is the Uncombine code");
+        HasJoint = false;
+        Destroy(GetComponent<FixedJoint>());
+        CanCombine = false;
+        weaveableScript.rigidbody.useGravity = true;
+    }
+
     public void Combine()
     {
         Debug.Log("This is the combine code");
         
-        weaveableScript.CanCombine = true;
+        CanCombine = true;
         weaveableScript.rigidbody.velocity =  new Vector3 (transform.position.x - weaveableScript.rigidbody.transform.position.x, transform.position.y, transform.position.z - weaveableScript.rigidbody.transform.position.z);
         weaveableScript.rigidbody.useGravity = false;
     }

@@ -85,6 +85,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "InteractNEW",
+                    "type": "Button",
+                    "id": "2dedc3c0-73f7-4c63-9871-b4f2b4c2e3b8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -321,6 +330,17 @@
                 },
                 {
                     "name": "",
+                    "id": "574dfa2e-09f6-4608-9cae-1d7661155688",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "97f4a47c-e0ad-4703-ab9a-32e05b330f15",
                     "path": "<Keyboard>/tab",
                     "interactions": "",
@@ -345,6 +365,17 @@
                     "name": "",
                     "id": "2aafc5b6-8f97-48aa-a0b7-854634661938",
                     "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Uninteract",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d6213ead-2512-474f-b998-4da58b375c3f",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -393,6 +424,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "WeaveModeSwitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b0b20729-186a-48bd-9495-33e33edb14ba",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WeaveModeSwitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fb5e4a4a-51b7-4528-adf7-a603bce4d366",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "InteractNEW",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dd1e3140-a6de-484a-b569-5c414d161fc6",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "InteractNEW",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -915,7 +979,7 @@
             ]
         },
         {
-            "name": "Weaveable",
+            "name": "weaveableObject",
             "id": "28418d3a-f5a0-4f36-a2da-148daf2b3e2a",
             "actions": [
                 {
@@ -926,17 +990,59 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "UncombineAction",
+                    "type": "Button",
+                    "id": "bd887768-d377-49d9-9edb-eb0146a27dee",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "",
                     "id": "4f8c4aa4-77d9-4a40-aff1-9af829581240",
-                    "path": "<Keyboard>/q",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "CombineAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f4b4d833-1cbb-4414-badb-738210d5de07",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CombineAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4bdcefe2-9b40-4e84-9bc5-47f81b38fff7",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UncombineAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "04696ded-c820-4ca1-a1f2-9af29fd506ac",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UncombineAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

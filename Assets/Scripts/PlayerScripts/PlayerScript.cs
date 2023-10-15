@@ -17,16 +17,14 @@ public class PlayerScript : MonoBehaviour
     private bool possessButton; //State that checks if the possess button is being pressed
     private bool possessing; //Determines if the weaver is using possessing at the moment
 
-    [Header("character's camera")]
+    [Header("Character's Camera")]
     //Character Rotation values
     //**********************************************************
-    public GameObject cam; //Camera object reference
     [SerializeField] private Camera mainCamera;
     public CinemachineVirtualCamera familiarVirtualCam;
-    public CinemachineVirtualCamera[] virtualCameraList; //Virtual Camera references for chaning camera priorities
+    public GameObject cameraCheckpointMaster;
+    private CameraMasterScript CMScript;
     private int vCamRotationState; //State 0 is default
-    private int cameraOnPriority; //If 0, the camera priority is the default player camera.
-
     //**********************************************************
 
     private GameMasterScript GM; //This is refrencing the game master script
@@ -36,6 +34,14 @@ public class PlayerScript : MonoBehaviour
     private InputAction pauseInput;
     private bool pauseButton;
 
+
+    //**********************************************************
+    [Header("prototype purposes")]
+    public GameObject RelocateMode;
+    public GameObject CombineMode;
+    //**********************************************************
+
+
     //Weave Variables
     //**********************************************************
     [Header("Weave Variables")]
@@ -43,8 +49,15 @@ public class PlayerScript : MonoBehaviour
     public LayerMask weaveObject;
     private Vector3 playerPosition;
     private bool IsWeaving;
-    [SerializeField] private int WeaveModeNumbers;    
-     private InputAction interactInput;
+    [SerializeField] private int WeaveModeNumbers;
+    [SerializeField] private Vector2 sensitivity = new Vector2(1500f, 1500f);
+    [SerializeField] private Vector2 bias = new Vector2(0f, -1f);
+    [SerializeField] private Vector2 currentmousePosition;
+    private Vector2 warpPosition;
+    private Vector2 overflow;
+    private Vector2 Cursor;
+    private InputAction weaveCursor;
+    private InputAction interactInput;
      private InputAction WeaveModeSwitch;
      private InputAction UninteractInput;
     //**********************************************************
@@ -81,11 +94,11 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
+        CMScript = cameraCheckpointMaster.GetComponent<CameraMasterScript>();
         possessing = false;
         IsWeaving = false;
         numLostSouls = 0;
         vCamRotationState = 0;
-        cameraOnPriority = 0;
         pauseMenu.SetActive(false);
 
         //Section reserved for initiating inputs 
@@ -94,6 +107,7 @@ public class PlayerScript : MonoBehaviour
         WeaveModeSwitch = inputs.FindAction("Player/WeaveModeSwitch");
         possessInput = inputs.FindAction("Player/Switch");
         pauseInput = inputs.FindAction("Player/Pause");
+        weaveCursor = inputs.FindAction("Player/Weave");
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
@@ -138,7 +152,8 @@ public class PlayerScript : MonoBehaviour
 
             if (familiarScript.depossessing)
             {
-                virtualCameraList[cameraOnPriority].Priority = 1;
+                Debug.Log(CMScript.cameraOnPriority);
+                CMScript.vcams[CMScript.cameraOnPriority].Priority = 1;
                 familiarVirtualCam.Priority = 0;
                 familiarScript.myTurn = false;
                 possessing = false;
@@ -146,24 +161,13 @@ public class PlayerScript : MonoBehaviour
                 movementScript.active = true;
             }
 
-            Weaving();           
-
+            Weaving();
+            DetectGamepad();
             if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //this is for testing
             }
 
-            if (Input.GetKeyDown(KeyCode.F)) // placeholder interaction key
-            {
-                Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, 10f); // second number is radius of sphere
-                foreach (var hitCollider in hitColliders)
-                {
-                    if (hitCollider.gameObject.tag == "NPC")
-                    {
-                        hitCollider.gameObject.GetComponent<DialogueTriggers>().triggerDialogue();
-                    }
-                }
-            }
         }
 
 
@@ -187,6 +191,33 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    private void weaveController()
+    {
+        Cursor = weaveCursor.ReadValue<Vector2>();
+        if (Cursor.magnitude <= 0.1f)
+        {
+            return;
+        }
+        currentmousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        warpPosition = currentmousePosition + bias + overflow + sensitivity * Time.deltaTime * Cursor;
+        warpPosition = new Vector2(Mathf.Clamp(warpPosition.x, 0, Screen.width), Mathf.Clamp(warpPosition.y, 0, Screen.height));
+        overflow = new Vector2(warpPosition.x % 1, warpPosition.y % 1);
+        Mouse.current.WarpCursorPosition(warpPosition);
+    }
+
+    void DetectGamepad()
+    {
+        var gamepad = Gamepad.current;
+        if (gamepad != null)
+        {
+            weaveController();// this works I just need to find a way to make it so that when the controller is detected it switches to this, it will for now be commented out for the time being
+        }
+        else
+        {
+            return;
+        }
+    }
+
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (hit.gameObject.tag == "Lost Soul" && !alreadyCollidedWith.Contains(hit.gameObject))
@@ -204,82 +235,23 @@ public class PlayerScript : MonoBehaviour
         if (other.gameObject.tag == "CameraTrigger") {
             CameraIndexScript cameraIndexScript = other.GetComponent<CameraIndexScript>();
             vCamRotationState = cameraIndexScript.cameraIndex;
-                 
-            switch (vCamRotationState) {
-                //When adding a camera, there will always need to be 2 rotation states:
-                //One for the player moving forwards through the trigger, and one moving backwards through the trigger.
-                //For moving forwards, add 1 to the cameraIndex. For moving backwards, subtract 1 from cameraIndex.
-                //The player should only be able to travel to the next numbered camera (camera[0] to camera[1] or camera[2] to camera[1]).
-                //The player should never be able to go from camera[0] to camera[2], or camera[2] to camera [5], etc.
-                case 0:
-                    virtualCameraList[0].Priority = 0;
-                    virtualCameraList[1].Priority = 1;
-                    cameraIndexScript.cameraIndex += 1;
-                    cameraOnPriority = 1;
-                break;
-                case 1:
-                    virtualCameraList[0].Priority = 1;
-                    virtualCameraList[1].Priority = 0;
-                    cameraIndexScript.cameraIndex -= 1;
-                    cameraOnPriority = 0;
-                break;
-                case 2:
-                    virtualCameraList[1].Priority = 0;
-                    virtualCameraList[2].Priority = 1;
-                    cameraIndexScript.cameraIndex += 1;
-                    cameraOnPriority = 2;
-                break;
-                case 3:
-                    virtualCameraList[1].Priority = 1;
-                    virtualCameraList[2].Priority = 0;
-                    cameraIndexScript.cameraIndex -= 1;
-                    cameraOnPriority = 1;
-                break;
-                case 4:
-                    virtualCameraList[2].Priority = 0;
-                    virtualCameraList[3].Priority = 1;
-                    cameraIndexScript.cameraIndex += 1;
-                    cameraOnPriority = 3;
-                break;
-                case 5:
-                    virtualCameraList[2].Priority = 1;
-                    virtualCameraList[3].Priority = 0;
-                    cameraIndexScript.cameraIndex -= 1;
-                    cameraOnPriority = 2;
-                break;
-                case 6:
-                    virtualCameraList[3].Priority = 0;
-                    virtualCameraList[4].Priority = 1;
-                    cameraIndexScript.cameraIndex += 1;
-                    cameraOnPriority = 4;
-                break;
-                case 7:
-                    virtualCameraList[3].Priority = 1;
-                    virtualCameraList[4].Priority = 0;
-                    cameraIndexScript.cameraIndex -= 1;
-                    cameraOnPriority = 3;
-                break;
-                case 8:
-                    virtualCameraList[4].Priority = 0;
-                    virtualCameraList[5].Priority = 1;
-                    cameraIndexScript.cameraIndex += 1;
-                    cameraOnPriority = 5;
-                break;
-                case 9: 
-                    virtualCameraList[4].Priority = 1;
-                    virtualCameraList[5].Priority = 0;
-                    cameraIndexScript.cameraIndex -= 1;
-                    cameraOnPriority = 4;
-                break;
-                case 10:
-                    virtualCameraList[5].Priority = 0;
-                    virtualCameraList[0].Priority = 1;
-                    cameraOnPriority = 0;
-                break;
 
+            CMScript.SwitchCameras(vCamRotationState);
+
+            //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
+            
+        }
+    }
+
+    public void Interact()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, 10f); // second number is radius of sphere
+        foreach (var hitCollider in hitColliders)
+        {
+            if (hitCollider.gameObject.tag == "NPC")
+            {
+                hitCollider.gameObject.GetComponent<DialogueTriggers>().triggerDialogue();
             }
-            
-            
         }
     }
 
@@ -302,6 +274,7 @@ public class PlayerScript : MonoBehaviour
                     weaverAnimationHandler.ToggleWeaveAnim(IsWeaving); // start weaving animations 
                     WeaveModeNumbers = 1;
                     interactable.Relocate();
+                    RelocateMode.SetActive(true);// remember to delete this
                 }
 
 
@@ -313,6 +286,8 @@ public class PlayerScript : MonoBehaviour
                     UninteractInput.Disable();//disables the uninteract inputs
                     WeaveModeSwitch.Disable(); //disables the weavemodeswitch inputs
                     weaverAnimationHandler.ToggleWeaveAnim(IsWeaving); // end weaving animations
+                    RelocateMode.SetActive(false);// remember to delete this
+                    CombineMode.SetActive(false);// remember to delete this
                 }               
 
 
@@ -323,6 +298,8 @@ public class PlayerScript : MonoBehaviour
                         {
                             interactable.WeaveMode();
                             WeaveModeNumbers += 1;
+                            RelocateMode.SetActive(false);// remember to delete this
+                            CombineMode.SetActive(true);// remember to delete this
                         }
                         break;
 
@@ -331,6 +308,8 @@ public class PlayerScript : MonoBehaviour
                         {
                             interactable.Relocate();
                             WeaveModeNumbers -= 1;
+                            CombineMode.SetActive(false);// remember to delete this
+                            RelocateMode.SetActive(true);// remember to delete this
                         }
                         break;
                 }
@@ -351,8 +330,8 @@ public class PlayerScript : MonoBehaviour
         if (possessButton)
         {
             //Switches to Familiar
-            for(int i = 0; i < virtualCameraList.Length; i++) {
-                virtualCameraList[i].Priority = 0;
+            for(int i = 0; i < CMScript.vcams.Length; i++) {
+                CMScript.vcams[i].Priority = 0;
             }
             familiarVirtualCam.Priority = 1;
             possessing = true;
