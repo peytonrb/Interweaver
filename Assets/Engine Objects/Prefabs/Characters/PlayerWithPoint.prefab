@@ -51,7 +51,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  gravity: -3
   aerialControl: 0
+  groundAcceleration: 2.5
+  groundDeceleration: 10.6
+  aerialAcceleration: 0
+  aerialDeceleration: 0
+  terminalVelocity: -50
   cam: {fileID: 0}
   virtualCam: {fileID: 0}
   active: 1
@@ -70,7 +76,8 @@ MonoBehaviour:
   inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
   cam: {fileID: 0}
   mainCamera: {fileID: 0}
-  virtualCam: {fileID: 0}
+  familiarVirtualCam: {fileID: 0}
+  virtualCameraList: []
   pauseMenu: {fileID: 0}
   WeaveDistance: 12
   weaveObject:
