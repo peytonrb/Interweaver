@@ -159,6 +159,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         Weave = false;
         Woven = false;
         Startfloating = false;
+        rigidbody.constraints = RigidbodyConstraints.None;
         inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed -= OnCombineInput;
         inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed -= OnUncombineInput;
     }
@@ -212,7 +213,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         Debug.Log("This is the combine code");
         
         CanCombine = true;
-        weaveableScript.rigidbody.velocity =  new Vector3 (transform.position.x - weaveableScript.rigidbody.transform.position.x, transform.position.y, transform.position.z - weaveableScript.rigidbody.transform.position.z);
+        weaveableScript.rigidbody.velocity = transform.position - weaveableScript.rigidbody.transform.position;
         weaveableScript.rigidbody.useGravity = false;
     }
     //********************************************************************
