@@ -5,8 +5,6 @@ using TMPro;
 
 public class LostSoulManager : MonoBehaviour
 {
-    public GameObject canvas;
-    public GameObject pauseScreen;
     public GameObject lostSoulUI;
     public TextMeshProUGUI lostSoulText;
     public Animator animator;
@@ -18,21 +16,12 @@ public class LostSoulManager : MonoBehaviour
     {
         // numLostSouls = 0;
         gameMaster = GameObject.FindWithTag("GM").GetComponent<GameMasterScript>();
-
-        // these two lines shouldnt exist 
-        canvas = GameObject.Find("Canvas");
-        pauseScreen = GameObject.Find("PauseScreen");
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (hit.gameObject.tag == "Lost Soul" && !alreadyCollidedWith.Contains(hit.gameObject))
         {
-            // these two lines shouldnt exist but i cannot find which script is setting the entire canvas to inactive
-            // so i am manually resetting them
-            canvas.SetActive(true);
-            pauseScreen.SetActive(false);
-
             alreadyCollidedWith.Add(hit.gameObject);
             animator.SetBool("isOpen", true);
             // numLostSouls++;
