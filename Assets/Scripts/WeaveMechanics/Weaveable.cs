@@ -74,9 +74,13 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     void FreezeDistance()
     {
         float distanceBetween = Vector3.Distance(PlayerPrefab.transform.position, transform.position);
-        if (distanceBetween > distance || distanceBetween < TooCloseDistance)
+        if ( distanceBetween < TooCloseDistance)
         {
             rigidbody.constraints = RigidbodyConstraints.FreezePosition;
+        }
+        if (distanceBetween > distance)
+        {
+            Uninteract();
         }
         else if (distanceBetween >= TooCloseDistance && distanceBetween <= distance)
         {

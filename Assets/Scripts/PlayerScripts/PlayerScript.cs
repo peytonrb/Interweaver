@@ -249,8 +249,16 @@ public class PlayerScript : MonoBehaviour
         {
             weaveableScript = hitInfo.collider.GetComponent<Weaveable>(); //local refrence to itself so that it can access itself from a different object 
             IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
+            float DistanceBetween = Vector3.Distance(weaveableScript.transform.position, transform.position);
             if (interactable != null)
             {
+                if (DistanceBetween > WeaveDistance)
+                {
+                    IsWeaving = false;
+                    interactInput.Enable();
+                    RelocateMode.SetActive(false);// remember to delete this
+                    CombineMode.SetActive(false);// remember to delete this
+                }
                
                 if (interactInput.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
                 {
