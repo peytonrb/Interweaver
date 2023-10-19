@@ -47,6 +47,7 @@ public class FamiliarScript : MonoBehaviour
     private InputAction interactInput;
 
     public bool islandisfalling;
+    private bool movementInactive;
 
     void Awake()
     {
@@ -63,6 +64,7 @@ public class FamiliarScript : MonoBehaviour
         islandisfalling = false;
         depossessing = false;
         leapOfFaith = false;
+        movementInactive = false;
 
         //Section reserved for initiating inputs 
         interactInput = inputs.FindAction("Player/Interact");
@@ -93,8 +95,15 @@ public class FamiliarScript : MonoBehaviour
         if (myTurn) {
             if (Time.timeScale != 0) {
                 if (!islandisfalling) {
+                    if (movementInactive) {
+                        movementScript.active = true;
+                    }
                     //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
                     depossess = possessInput.WasPressedThisFrame();
+                }
+                if (islandisfalling) {
+                    movementScript.active = false;
+                    movementInactive = true;
                 }
                 
                 familiarMovementAbility = familiarMovementAbilityInput.IsPressed();
@@ -121,10 +130,6 @@ public class FamiliarScript : MonoBehaviour
                 }
             }
         }        
-    }
-
-    void FixedUpdate() {
-
     }
 
     private void OnControllerColliderHit(ControllerColliderHit other) {
