@@ -5,8 +5,8 @@ using UnityEngine;
 public class GameMasterScript : MonoBehaviour
 {
     private static GameMasterScript instance;
-
     public Vector3 LastCheckPointPos;
+    public int totalLostSouls;
 
     void Awake()
     {
@@ -19,5 +19,10 @@ public class GameMasterScript : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    void Start()
+    {
+        totalLostSouls = 0;
     }
 }

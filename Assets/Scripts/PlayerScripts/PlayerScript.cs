@@ -78,13 +78,6 @@ public class PlayerScript : MonoBehaviour
     [Header("Animation Calls")]
     public WeaverAnimationHandler weaverAnimationHandler;
 
-    [Header("Lost Souls")]
-    public int numLostSouls;
-    public GameObject lostSoulUI;
-    public TextMeshProUGUI lostSoulText;
-    private readonly HashSet<GameObject> alreadyCollidedWith = new HashSet<GameObject>();
-    public Animator animator;
-
     void Awake()
     {
         //references to character components
@@ -99,7 +92,6 @@ public class PlayerScript : MonoBehaviour
         CMScript = cameraCheckpointMaster.GetComponent<CameraMasterScript>();
         possessing = false;
         IsWeaving = false;
-        numLostSouls = 0;
         vCamRotationState = 0;
         pauseMenu.SetActive(false);
 
@@ -217,19 +209,6 @@ public class PlayerScript : MonoBehaviour
         else
         {
             return;
-        }
-    }
-
-    void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        if (hit.gameObject.tag == "Lost Soul" && !alreadyCollidedWith.Contains(hit.gameObject))
-        {
-            alreadyCollidedWith.Add(hit.gameObject);
-            animator.SetBool("isOpen", true);
-            numLostSouls++;
-            lostSoulText.text = "" + numLostSouls;
-            Destroy(hit.gameObject);
-            StartCoroutine(lostSoulOnScreen());
         }
     }
 
@@ -357,12 +336,5 @@ public class PlayerScript : MonoBehaviour
             pauseMenu.SetActive(true);
             Time.timeScale = 0;
         }
-    }
-
-    // keeps lost soul UI on screen for a little bit then hides
-    IEnumerator lostSoulOnScreen()
-    {
-        yield return new WaitForSeconds(5);
-        animator.SetBool("isOpen", false);
     }
 }
