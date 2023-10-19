@@ -12,8 +12,10 @@ public class PlayerScript : MonoBehaviour
     [Header("Movement Variables")]
     private CharacterController characterController; //references the character controller component
     private MovementScript movementScript; // reference for the movement script component
+    public GameObject inputManager;
+    private InputManagerScript inputManagerScript;
     public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
-    private InputAction possessInput; //Used for possession of familiar, or switching between weaver and familiar
+    //private InputAction possessInput; //Used for possession of familiar, or switching between weaver and familiar
     private bool possessButton; //State that checks if the possess button is being pressed
     private bool possessing; //Determines if the weaver is using possessing at the moment
 
@@ -31,9 +33,6 @@ public class PlayerScript : MonoBehaviour
 
     [Header("Pause Menu")]
     public GameObject pauseMenu;
-    private InputAction pauseInput;
-    private bool pauseButton;
-
 
     //**********************************************************
     [Header("prototype purposes")]
@@ -97,6 +96,7 @@ public class PlayerScript : MonoBehaviour
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
         CMScript = cameraCheckpointMaster.GetComponent<CameraMasterScript>();
+        inputManagerScript = inputManager.GetComponent<InputManagerScript>();
         possessing = false;
         IsWeaving = false;
         numLostSouls = 0;
@@ -107,8 +107,8 @@ public class PlayerScript : MonoBehaviour
         interactInput = inputs.FindAction("Player/Interact");
         UninteractInput = inputs.FindAction("Player/Uninteract");
         WeaveModeSwitch = inputs.FindAction("Player/WeaveModeSwitch");
-        possessInput = inputs.FindAction("Player/Switch");
-        pauseInput = inputs.FindAction("Player/Pause");
+        //possessInput = inputs.FindAction("Player/Switch");
+        //pauseInput = inputs.FindAction("Player/Pause");
         weaveCursor = inputs.FindAction("Player/Weave");
 
         //these two lines are grabing the game master's last checkpoint position
@@ -137,21 +137,6 @@ public class PlayerScript : MonoBehaviour
         //If game is not paused, return to normal movement functions
         if (Time.timeScale != 0)
         {
-            //Move character only if they are on the ground
-            if (characterController.isGrounded)
-            {
-                if (possessing == false)
-                {
-                    //Looks at input coming from TAB on keyboard (for now)
-                    possessButton = possessInput.WasPressedThisFrame();
-                    Possession();
-                }
-            }
-
-            //For pausing
-            pauseButton = pauseInput.WasPressedThisFrame();
-            Pausing();
-
             if (familiarScript.depossessing)
             {
                 Debug.Log(CMScript.cameraOnPriority);
@@ -181,16 +166,6 @@ public class PlayerScript : MonoBehaviour
         }
         //**************************************
 
-    }
-
-    void FixedUpdate()
-    {
-        if (Time.timeScale != 0)
-        {
-            if (possessing == false) {
-            }
-            
-        }
     }
 
     private void weaveController()
@@ -332,31 +307,30 @@ public class PlayerScript : MonoBehaviour
     }
 
 
-    private void Possession()
+    public void Possession()
     {
-        if (possessButton)
+        //Move character only if they are on the ground
+        if (characterController.isGrounded && Time.timeScale != 0)
         {
-            //Switches to Familiar
-            for(int i = 0; i < CMScript.vcams.Length; i++) {
-                CMScript.vcams[i].Priority = 0;
+            if (possessing == false)
+            {
+               //Switches to Familiar
+                for(int i = 0; i < CMScript.vcams.Length; i++) {
+                    CMScript.vcams[i].Priority = 0;
+                }
+                familiarVirtualCam.Priority = 1;
+                possessing = true;
+                Debug.Log("Possessing");
+                movementScript.active = false;
+                StartCoroutine(familiarScript.ForcedDelay()); 
             }
-            familiarVirtualCam.Priority = 1;
-            possessing = true;
-            Debug.Log("Possessing");
-            movementScript.active = false;
-            StartCoroutine(familiarScript.ForcedDelay());
-            
         }
-
     }
 
-    private void Pausing()
+    public void Pausing()
     {
-        if (pauseButton)
-        {
-            pauseMenu.SetActive(true);
-            Time.timeScale = 0;
-        }
+        pauseMenu.SetActive(true);
+        Time.timeScale = 0;
     }
 
     // keeps lost soul UI on screen for a little bit then hides

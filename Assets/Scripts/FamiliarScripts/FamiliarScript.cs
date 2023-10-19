@@ -15,9 +15,10 @@ public class FamiliarScript : MonoBehaviour
     [Header("Movement Variables")]
     private CharacterController characterController; //references the character controller component
     private MovementScript movementScript; // reference for the movement script component
+    public GameObject inputManager;
+    private InputManagerScript inputManagerScript;
     public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
-    private InputAction possessInput; //Input for depossessing
-    private bool depossess; //Only used for reading if depossessing
+    //private InputAction possessInput; //Input for depossessing
     public bool depossessing;
     public bool myTurn; //Responsible for determining if the familiar can move
     private bool leapOfFaith; //Determines if owl familiar is in a leap of faith
@@ -59,6 +60,7 @@ public class FamiliarScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        inputManagerScript = inputManager.GetComponent<InputManagerScript>();
         myTurn = false;
         islandisfalling = false;
         depossessing = false;
@@ -67,7 +69,7 @@ public class FamiliarScript : MonoBehaviour
         //Section reserved for initiating inputs 
         interactInput = inputs.FindAction("Player/Interact");
         familiarMovementAbilityInput = inputs.FindAction("Player/Familiar Movement Ability");
-        possessInput = inputs.FindAction("Player/Switch");
+        //possessInput = inputs.FindAction("Player/Switch");
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>(); 
@@ -91,24 +93,9 @@ public class FamiliarScript : MonoBehaviour
     void Update()
     {
         if (myTurn) {
-            if (Time.timeScale != 0) {
-                if (!islandisfalling) {
-                    //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad.
-                    depossess = possessInput.WasPressedThisFrame();
-                }
-                
+            if (Time.timeScale != 0) { 
                 familiarMovementAbility = familiarMovementAbilityInput.IsPressed();
                 
-                //Move character only if they are on the ground or in leapOfFaith
-                if (characterController.isGrounded || leapOfFaith) {
-                    
-                    if (depossess && !leapOfFaith) {
-                        Debug.Log("Depossessing");
-                        depossessing = true;
-                        movementScript.active = false;
-                    }
-                }
-
                 if (interactInput.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
                 {
                     Debug.Log("interact button was pressed"); //a general debug to see if the input was pressed
@@ -121,10 +108,6 @@ public class FamiliarScript : MonoBehaviour
                 }
             }
         }        
-    }
-
-    void FixedUpdate() {
-
     }
 
     private void OnControllerColliderHit(ControllerColliderHit other) {
@@ -190,6 +173,19 @@ public class FamiliarScript : MonoBehaviour
             characterController.enabled = true;
         }
         
+    }
+
+    public void Depossess() {
+        if (myTurn && Time.timeScale != 0 && !islandisfalling) {
+            //Move character only if they are on the ground or in leapOfFaith
+            if (characterController.isGrounded || leapOfFaith) {     
+                if (!leapOfFaith) {
+                    Debug.Log("Depossessing");
+                    depossessing = true;
+                    movementScript.active = false;
+                }
+            }
+        }   
     }
 
     //This coroutine is for an intentional delay that lasts exactly 1 frame, which starts on the frame the possession button is pressed.

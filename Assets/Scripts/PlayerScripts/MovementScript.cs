@@ -14,8 +14,10 @@ public class MovementScript : MonoBehaviour
     public float speed; //Base walk speed for player
     private float currentSpeed = 0; // the current speed for the player
     private CharacterController characterController; //references the character controller component
-    public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
-    private InputAction moveInput; //Is the specific input action regarding arrow keys, WASD, and left stick
+    public GameObject inputManager;
+    private InputManagerScript inputManagerScript;
+    //public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
+    //private InputAction moveInput; //Is the specific input action regarding arrow keys, WASD, and left stick
     private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
     private Vector3 direction; //A reference to the directional movement of the player in 3D space
     private Vector3 velocity; // velocity of the controller
@@ -60,23 +62,13 @@ public class MovementScript : MonoBehaviour
         originalAerialDeceleration = aerialDeceleration;
 
         //Section reserved for initiating inputs 
-        moveInput = inputs.FindAction("Player/Move");
+        inputManagerScript = inputManager.GetComponent<InputManagerScript>();
+        //moveInput = inputs.FindAction("Player/Move");
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
         //transform.position = GM.LastCheckPointPos;
         characterController.enabled = true;
-    }
-
-    void OnEnable()
-    {
-        inputs.Enable();
-
-    }
-
-    void OnDisable()
-    {
-        inputs.Disable();
     }
 
     // Update is called once per frame
@@ -88,7 +80,7 @@ public class MovementScript : MonoBehaviour
             if (Time.timeScale != 0 && active)
             {
                 //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad
-                movement = moveInput.ReadValue<Vector2>();
+                movement = inputManagerScript.movement;
                 LookAndMove();
             }
         }
@@ -142,7 +134,7 @@ public class MovementScript : MonoBehaviour
         }
     }
 
-    private void LookAndMove()
+    public void LookAndMove()
     {
         direction = new Vector3(movement.x, 0, movement.y).normalized; //direction of movement
 

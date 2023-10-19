@@ -27,7 +27,7 @@ public class OwlDiveScript : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         movementScript = GetComponent<MovementScript>();
-        inputs = movementScript.inputs; // this feels wrong, find better way to reference later
+        //inputs = movementScript.inputs; // this feels wrong, find better way to reference later
     }
 
     void OnEnable() 
