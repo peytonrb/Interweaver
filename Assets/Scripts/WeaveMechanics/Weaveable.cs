@@ -131,14 +131,13 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         {
             gameObject.AddComponent<FixedJoint>();
             gameObject.GetComponent<FixedJoint>().connectedBody = collision.rigidbody;
-            HasJoint = true;
-            weaveableScript.rigidbody.velocity = new Vector3(0, 0, 0);
+            HasJoint = true;            
         }
 
-        else if (weaveableScript.ID != ID)
+        else if (weaveableScript.ID != ID || !weaveableScript.CanCombine || HasJoint)
         {
             rigidbody.velocity = new Vector3(0,0,0);
-            weaveableScript.rigidbody.useGravity = true;
+            rigidbody.useGravity = true;
         }
     }
 
@@ -206,6 +205,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     {
         Debug.Log("This is the Uncombine code");
         HasJoint = false;
+        weaveableScript.HasJoint = false;
         Destroy(GetComponent<FixedJoint>());
         CanCombine = false;
         weaveableScript.rigidbody.useGravity = true;
@@ -213,11 +213,16 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     public void Combine()
     {
-        Debug.Log("This is the combine code");
+        if (!HasJoint) 
+        {
+            Debug.Log("This is the combine code");
+
+            CanCombine = true;
+            weaveableScript.HasJoint = true;
+            weaveableScript.rigidbody.velocity = transform.position - weaveableScript.rigidbody.transform.position;
+            weaveableScript.rigidbody.useGravity = false;
+        }
         
-        CanCombine = true;
-        weaveableScript.rigidbody.velocity = transform.position - weaveableScript.rigidbody.transform.position;
-        weaveableScript.rigidbody.useGravity = false;
     }
     //********************************************************************
 }
