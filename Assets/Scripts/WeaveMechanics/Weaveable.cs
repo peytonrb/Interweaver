@@ -16,7 +16,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     public int ID; //an ID for objects
     public int specialID; //this is forthe combineable objects that's going to be used for puzzles
     private Vector3 WeaveablePos;
-    private bool HasJoint;
+    public bool HasJoint;
     public bool CanCombine;
     public bool CanWeave;
     private bool Startfloating; //a bool to detect if the weaveable is interacted and will start floating
