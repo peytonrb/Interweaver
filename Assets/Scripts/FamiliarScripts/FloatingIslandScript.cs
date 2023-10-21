@@ -13,6 +13,8 @@ public class FloatingIslandScript : MonoBehaviour
     public CinemachineVirtualCamera vcam2; //Floating Island Falling
     public GameObject familiar;
     private FamiliarScript familiarScript;
+    public bool toggleTimer;
+    public float timer;
 
 
     // Start is called before the first frame update
@@ -33,6 +35,12 @@ public class FloatingIslandScript : MonoBehaviour
             
        } else {
             familiarScript.islandisfalling = true;
+            if (toggleTimer) {
+                timer -= Time.deltaTime;
+                if (timer <= 0) {
+                    ReturnCamera();
+                }
+            }
        }
     }
     
@@ -43,7 +51,8 @@ public class FloatingIslandScript : MonoBehaviour
         } else {
             //Island starts to fall once the camera has been switched
             rb.constraints = RigidbodyConstraints.None;
-            cameraswitched = false;
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
+            cameraswitched = false; 
         }
          
     }
@@ -58,7 +67,9 @@ public class FloatingIslandScript : MonoBehaviour
     public void ReturnCamera() {
         vcam1.Priority = 1;
         vcam2.Priority = 0;
-        rb.constraints = RigidbodyConstraints.FreezeAll;
+        if (toggleTimer == false) {
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+        }
         isislandfalling = false;
     }
             
