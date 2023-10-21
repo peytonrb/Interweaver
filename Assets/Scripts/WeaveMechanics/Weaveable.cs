@@ -71,14 +71,14 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     }
 
 
-    void FreezeDistance()
+    void DistanceCheck()
     {
         float distanceBetween = Vector3.Distance(PlayerPrefab.transform.position, transform.position);
-        if ( distanceBetween < TooCloseDistance)
+        if ( distanceBetween <= TooCloseDistance)
         {
             rigidbody.constraints = RigidbodyConstraints.FreezePosition;
         }
-        if (distanceBetween > distance)
+        if (distanceBetween >= distance)
         {
             Uninteract();
         }
@@ -98,11 +98,12 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
             if (relocate)
             {
                 rigidbody.velocity = new Vector3(raycastHit.point.x - rigidbody.position.x, transform.position.y - rigidbody.position.y, raycastHit.point.z - rigidbody.position.z);
-                FreezeDistance();
+                DistanceCheck();
                 rigidbody.freezeRotation = true;
             }
             if (Weave)
-            {                
+            {
+                DistanceCheck();
                 ICombineable combineable = raycastHit.collider.GetComponent<ICombineable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
                 if (combineable != null && !weaveableScript.CanCombine)// this is the band aid solution will need a more concrete solution later on
                 {
@@ -124,7 +125,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
             HasJoint = true;            
         }
 
-        else if (weaveableScript.ID != ID || !weaveableScript.CanCombine || HasJoint)
+        else if (weaveableScript.ID != ID || !weaveableScript.CanCombine || HasJoint || CompareTag("Player"))
         {
             rigidbody.velocity = new Vector3(0,0,0);
             rigidbody.useGravity = true;

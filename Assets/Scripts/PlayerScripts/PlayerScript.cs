@@ -48,7 +48,7 @@ public class PlayerScript : MonoBehaviour
     public float WeaveDistance = 12f;
     public LayerMask weaveObject;
     private Vector3 playerPosition;
-    private bool IsWeaving;
+    public bool IsWeaving { get; private set; }
     [SerializeField] private int WeaveModeNumbers;
     [SerializeField] private Vector2 sensitivity = new Vector2(1500f, 1500f);
     [SerializeField] private Vector2 bias = new Vector2(0f, -1f);
