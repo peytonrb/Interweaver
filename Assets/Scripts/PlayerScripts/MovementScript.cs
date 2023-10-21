@@ -153,12 +153,8 @@ public class MovementScript : MonoBehaviour
         if (direction.magnitude >= 0.1f)
         {
             float targetangle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetangle, ref rotationVelocity, rotationSpeed);
-            if (!PS.IsWeaving)
-            {
-                transform.rotation = Quaternion.Euler(0, angle, 0);
-            }
-            
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetangle, ref rotationVelocity, rotationSpeed);                     
+               transform.rotation = Quaternion.Euler(0, angle, 0);                     
             newDirection = Quaternion.Euler(0, targetangle, 0) * Vector3.forward;
         }
     }
