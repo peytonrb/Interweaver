@@ -137,9 +137,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         //********************************************************************
         public void Interact()
         {
-        Debug.Log("This is interactable");
-        Startfloating = true;
-         
+         Debug.Log("This is interactable");
+         Startfloating = true;
          }
     
     public void Uninteract()
@@ -151,6 +150,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         Weave = false;
         Woven = false;
         Startfloating = false;
+        CanCombine = false;
         rigidbody.constraints = RigidbodyConstraints.None;
         inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed -= OnCombineInput;
         inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed -= OnUncombineInput;
