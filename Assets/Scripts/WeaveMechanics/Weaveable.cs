@@ -59,7 +59,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     {       
         if (Startfloating) 
         {
-           transform.position = transform.position + new Vector3 (0, HoveringValue*Time.deltaTime, 0);
+           transform.position = transform.position + new Vector3 (0, HoveringValue, 0);
             Startfloating = false;          
         }
       
@@ -93,6 +93,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 100, LayerstoHit))
         {
+            weaveableScript = raycastHit.collider.GetComponent<Weaveable>();
+
             if (relocate)
             {
                 rigidbody.velocity = new Vector3(raycastHit.point.x - rigidbody.position.x, transform.position.y - rigidbody.position.y, raycastHit.point.z - rigidbody.position.z);
@@ -100,29 +102,17 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
                 rigidbody.freezeRotation = true;
             }
             if (Weave)
-            {
-                //transform.LookAt(new Vector3(raycastHit.point.x, transform.position.y , raycastHit.point.z));
-                WeaveWeaveables();
+            {                
+                ICombineable combineable = raycastHit.collider.GetComponent<ICombineable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
+                if (combineable != null && !weaveableScript.CanCombine)// this is the band aid solution will need a more concrete solution later on
+                {
+                    inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput;
+                    inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed += OnUncombineInput;
+                }
             }
         }
     }
 
-    void WeaveWeaveables() //method for weaving the weaveables
-    {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, 100, LayerstoHit))// the value 100 is for the raycast distance
-        {
-            weaveableScript = hitInfo.collider.GetComponent<Weaveable>();
-            ICombineable combineable = hitInfo.collider.GetComponent<ICombineable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
-            if (combineable != null && !weaveableScript.CanCombine)// this is the band aid solution will need a more concrete solution later on
-            {
-                inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput;
-                inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed += OnUncombineInput;
-            }
-        }
-       
-    }
 
     void OnCollisionEnter(Collision collision)
     {
@@ -145,11 +135,9 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         //********************************************************************
         public void Interact()
         {
-          Debug.Log("This is interactable");
-          rigidbody.useGravity = false;
-          Startfloating = true;
-          Woven = true;
-         rigidbody.isKinematic = true;
+        Debug.Log("This is interactable");
+        Startfloating = true;
+         
          }
     
     public void Uninteract()
@@ -168,6 +156,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     public void Relocate()
     {
+        Woven = true;
+        rigidbody.useGravity = false;
         relocate = true;
         Weave = false;
         rigidbody.isKinematic = false;
