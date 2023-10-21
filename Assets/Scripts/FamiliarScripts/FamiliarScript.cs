@@ -41,7 +41,6 @@ public class FamiliarScript : MonoBehaviour
 
     [SerializeField]
     public bool islandisfalling;
-    private bool movementInactive;
 
     void Awake()
     {

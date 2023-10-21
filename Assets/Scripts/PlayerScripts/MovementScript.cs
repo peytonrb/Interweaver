@@ -46,12 +46,9 @@ public class MovementScript : MonoBehaviour
 
     public bool active; //Determines if movement controller is active
 
-    private PlayerScript PS;
-
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
-        PS = GetComponent<PlayerScript>();
         characterController.enabled = false;
     }
     
@@ -146,11 +143,7 @@ public class MovementScript : MonoBehaviour
         {
             float targetangle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetangle, ref rotationVelocity, rotationSpeed);
-            if (!PS.IsWeaving)
-            {
-                transform.rotation = Quaternion.Euler(0, angle, 0);
-            }
-            
+            transform.rotation = Quaternion.Euler(0, angle, 0);
             newDirection = Quaternion.Euler(0, targetangle, 0) * Vector3.forward;
         }
     }

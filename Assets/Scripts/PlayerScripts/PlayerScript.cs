@@ -45,7 +45,7 @@ public class PlayerScript : MonoBehaviour
     public float WeaveDistance = 12f;
     public LayerMask weaveObject;
     private Vector3 playerPosition;
-    public bool IsWeaving { get; private set; }
+    private bool IsWeaving;
     [SerializeField] private int WeaveModeNumbers;
     [SerializeField] private Vector2 sensitivity = new Vector2(1500f, 1500f);
     [SerializeField] private Vector2 bias = new Vector2(0f, -1f);
@@ -76,6 +76,12 @@ public class PlayerScript : MonoBehaviour
     [Header("Animation Calls")]
     public WeaverAnimationHandler weaverAnimationHandler;
 
+    [Header("Lost Souls")]
+    public int numLostSouls;
+    public TextMeshProUGUI lostSoulText;
+    private readonly HashSet<GameObject> alreadyCollidedWith = new HashSet<GameObject>();
+    public Animator animator;
+
     void Awake()
     {
         //references to character components
@@ -91,6 +97,7 @@ public class PlayerScript : MonoBehaviour
         inputManagerScript = inputManager.GetComponent<InputManagerScript>();
         possessing = false;
         IsWeaving = false;
+        numLostSouls = 0;
         vCamRotationState = 0;
         pauseMenu.SetActive(false);
         enableInteractInput = true;
@@ -176,6 +183,19 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.tag == "Lost Soul" && !alreadyCollidedWith.Contains(hit.gameObject))
+        {
+            alreadyCollidedWith.Add(hit.gameObject);
+            animator.SetBool("isOpen", true);
+            numLostSouls++;
+            lostSoulText.text = "" + numLostSouls;
+            Destroy(hit.gameObject);
+            StartCoroutine(lostSoulOnScreen());
+        }
+    }
+
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag == "CameraTrigger") {
             CameraIndexScript cameraIndexScript = other.GetComponent<CameraIndexScript>();
@@ -213,16 +233,8 @@ public class PlayerScript : MonoBehaviour
         {
             weaveableScript = hitInfo.collider.GetComponent<Weaveable>(); //local refrence to itself so that it can access itself from a different object 
             IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
-            float DistanceBetween = Vector3.Distance(weaveableScript.transform.position, transform.position);
             if (interactable != null)
             {
-                if (DistanceBetween > WeaveDistance)
-                {
-                    IsWeaving = false;
-                    interactInput.Enable();
-                    RelocateMode.SetActive(false);// remember to delete this
-                    CombineMode.SetActive(false);// remember to delete this
-                }
                
                 if (interactInput) //this is the interact button that is taking from the player inputs
                 {
@@ -311,5 +323,12 @@ public class PlayerScript : MonoBehaviour
     {
         pauseMenu.SetActive(true);
         Time.timeScale = 0;
+    }
+
+    // keeps lost soul UI on screen for a little bit then hides
+    IEnumerator lostSoulOnScreen()
+    {
+        yield return new WaitForSeconds(5);
+        animator.SetBool("isOpen", false);
     }
 }
