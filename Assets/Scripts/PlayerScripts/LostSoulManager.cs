@@ -18,7 +18,7 @@ public class LostSoulManager : MonoBehaviour
         gameMaster = GameObject.FindWithTag("GM").GetComponent<GameMasterScript>();
     }
 
-    void OnControllerColliderHit(ControllerColliderHit hit)
+    void OnTriggerEnter(Collider hit) //void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (hit.gameObject.tag == "Lost Soul" && !alreadyCollidedWith.Contains(hit.gameObject))
         {
