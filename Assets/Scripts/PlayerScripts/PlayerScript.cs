@@ -144,7 +144,7 @@ public class PlayerScript : MonoBehaviour
             pauseButton = pauseInput.WasPressedThisFrame();
             Pausing();
 
-            // For dialogue, I don't understand the new input system 
+            // For dialogue, needs to be converted to new input system
             if (Input.GetKeyDown(KeyCode.E))
             {
                 Interact();
