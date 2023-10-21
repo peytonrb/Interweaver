@@ -176,7 +176,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     //********************************************************************
     private void OnUncombineInput(InputAction.CallbackContext context)
     {
-        if (weaveableScript.ID == ID && HasJoint)
+        if (HasJoint)
         {
             Uncombine();
         }
