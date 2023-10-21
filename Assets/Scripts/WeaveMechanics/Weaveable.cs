@@ -17,8 +17,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     public int specialID; //this is forthe combineable objects that's going to be used for puzzles
     private Vector3 WeaveablePos;
     public bool HasJoint;
-    public bool CanCombine;
-    public bool CanWeave;
+    public bool CanCombine{get; private set;}
+    public bool CanWeave { get; private set; }
     private bool Startfloating; //a bool to detect if the weaveable is interacted and will start floating
     private bool relocate; // bool for relocate
     private bool Weave; //bool for weaving the weaveables
@@ -125,10 +125,11 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
             HasJoint = true;            
         }
 
-        else if (weaveableScript.ID != ID || !weaveableScript.CanCombine || HasJoint || CompareTag("Player"))
+        else if (weaveableScript.ID != ID && !weaveableScript.CanCombine && !CompareTag("Player") || HasJoint )
         {
             rigidbody.velocity = new Vector3(0,0,0);
             rigidbody.useGravity = true;
+            HasJoint = false;
         }
     }
 
