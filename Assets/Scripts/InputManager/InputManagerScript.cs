@@ -72,6 +72,13 @@ public class InputManagerScript : MonoBehaviour
     public void WeaveCursor(InputAction.CallbackContext context) {
         weaveCursor = context.ReadValue<Vector2>();
     }
+
+    public void NPCInteraction(InputAction.CallbackContext context) {
+        PlayerScript playerScript = player.GetComponent<PlayerScript>();
+        if (context.started) {
+            playerScript.Interact();
+        }
+    }
     //******************************************************
 
     //SWITCHING
