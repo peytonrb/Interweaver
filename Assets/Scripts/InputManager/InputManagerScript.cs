@@ -42,11 +42,11 @@ public class InputManagerScript : MonoBehaviour
         PlayerScript playerScript = player.GetComponent<PlayerScript>();
         if (context.started) {
             if (playerScript.enableInteractInput) {
-                
                 playerScript.interactInput = true;
                 Debug.Log(playerScript.interactInput);
             }
         }
+        
     }
 
     public void WeaverUninteract(InputAction.CallbackContext context) {
@@ -56,6 +56,7 @@ public class InputManagerScript : MonoBehaviour
                 playerScript.uninteractInput = true;
             }
         }
+        
     }
 
     public void WeaveModeSwitch(InputAction.CallbackContext context) {
@@ -64,7 +65,8 @@ public class InputManagerScript : MonoBehaviour
             if (playerScript.enableWeaveModeSwitch) {
                 playerScript.weaveModeSwitch = true;
             }
-        } 
+        }
+         
     }
 
     public void WeaveCursor(InputAction.CallbackContext context) {

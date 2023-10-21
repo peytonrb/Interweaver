@@ -238,7 +238,7 @@ public class PlayerScript : MonoBehaviour
                
                 if (interactInput) //this is the interact button that is taking from the player inputs
                 {
-                    Debug.Log("Interaction");
+                    //Debug.Log("Interaction");
                     interactable.Interact();
                     IsWeaving = true;
                     enableUninteractInput = true;//Enables the input                   
