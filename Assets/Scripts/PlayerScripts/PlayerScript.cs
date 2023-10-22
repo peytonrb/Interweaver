@@ -60,6 +60,7 @@ public class PlayerScript : MonoBehaviour
     private InputAction interactInput;
     private InputAction WeaveModeSwitch;
     private InputAction UninteractInput;
+    public InputAction NPCInteraction; //This is temporary until we implement the new input event system sometime next week
     [SerializeField] private Vector3 raycastPosition;
     [SerializeField] private Vector3 position;
     //**********************************************************
@@ -115,12 +116,14 @@ public class PlayerScript : MonoBehaviour
 
     void OnEnable()
     {
+        NPCInteraction.Enable();
         inputs.Enable();
 
     }
 
     void OnDisable()
     {
+        NPCInteraction.Disable();
         inputs.Disable();
     }
 
@@ -144,8 +147,8 @@ public class PlayerScript : MonoBehaviour
             pauseButton = pauseInput.WasPressedThisFrame();
             Pausing();
 
-            // For dialogue, needs to be converted to new input system
-            if (Input.GetKeyDown(KeyCode.E))
+            //This is temporary until we implement the new input event system
+            if (NPCInteraction.WasPressedThisFrame())
             {
                 Interact();
             }
@@ -163,10 +166,12 @@ public class PlayerScript : MonoBehaviour
 
             Weaving();
             DetectGamepad();
+            /*
             if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //this is for testing
             }
+            */
 
         }
 
@@ -179,16 +184,6 @@ public class PlayerScript : MonoBehaviour
         }
         //**************************************
 
-    }
-
-    void FixedUpdate()
-    {
-        if (Time.timeScale != 0)
-        {
-            if (possessing == false) {
-            }
-            
-        }
     }
 
     private void weaveController()

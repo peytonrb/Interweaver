@@ -10,8 +10,6 @@ using Unity.VisualScripting; //this is for testing
 public class FamiliarScript : MonoBehaviour
 {
 
-    public int playerIndex; //Set to 0 for the weaver and 1 for the familiar
-
     [Header("Movement Variables")]
     private CharacterController characterController; //references the character controller component
     private MovementScript movementScript; // reference for the movement script component
@@ -44,7 +42,7 @@ public class FamiliarScript : MonoBehaviour
     public float WeaveDistance = 12f;
 
     [SerializeField]
-    private InputAction interactInput;
+    //public InputAction NPCInteraction;
 
     public bool islandisfalling;
     private bool movementInactive;
@@ -67,7 +65,6 @@ public class FamiliarScript : MonoBehaviour
         movementInactive = false;
 
         //Section reserved for initiating inputs 
-        interactInput = inputs.FindAction("Player/Interact");
         familiarMovementAbilityInput = inputs.FindAction("Player/Familiar Movement Ability");
         possessInput = inputs.FindAction("Player/Switch");
 
@@ -82,11 +79,12 @@ public class FamiliarScript : MonoBehaviour
 
     void OnEnable() {
         inputs.Enable();
-        
+        //NPCInteraction.Enable();
     }
 
     void OnDisable() {
         inputs.Disable();
+        //NPCInteraction.Disable();
     }
 
     // Update is called once per frame
@@ -118,10 +116,14 @@ public class FamiliarScript : MonoBehaviour
                     }
                 }
 
-                if (interactInput.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
+                /*
+                if (NPCInteraction.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
                 {
+                    PlayerScript playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerScript>();
+                    playerScript.Interact();
                     Debug.Log("interact button was pressed"); //a general debug to see if the input was pressed
                 }
+                */
 
                 if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
                 {
