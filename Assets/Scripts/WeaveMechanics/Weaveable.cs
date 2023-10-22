@@ -71,27 +71,27 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     }
 
 
-    void DistanceCheck()
+    void DistanceCheck() // this is for the distance check if the weaveable is too close or too far away
     {
         float distanceBetween = Vector3.Distance(PlayerPrefab.transform.position, transform.position);
-        if ( distanceBetween <= TooCloseDistance)
+        if ( distanceBetween <= TooCloseDistance) // this freezes the weaveable object in place
         {
             rigidbody.constraints = RigidbodyConstraints.FreezePosition;
         }
-        if (distanceBetween >= distance)
+        if (distanceBetween >= distance) //this uninteracts the weaveable object if it's too far away
         {
             Uninteract();
         }
-        else if (distanceBetween >= TooCloseDistance && distanceBetween <= distance)
+        else if (distanceBetween >= TooCloseDistance && distanceBetween <= distance) // it will start moving if it's in the right distance
         {
             rigidbody.constraints = RigidbodyConstraints.None;
         }
     }
 
-    void MovingWeaveMouse()
+    void MovingWeaveMouse() //this method is for using the mouse to move around the object
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit raycastHit, 100, LayerstoHit))
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 100, LayerstoHit)) //  this shoots a raycast from the camera to the 3D plane to get the position of the mouse
         {
             weaveableScript = raycastHit.collider.GetComponent<Weaveable>();
 
@@ -115,7 +115,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     }
 
 
-    void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision) //this will need to be refactored later but for now when the weaveable collides with another weaveable it will stick
     {
         weaveableScript = GetComponent<Weaveable>();
         if (collision.gameObject.GetComponent<Rigidbody>() != null && !HasJoint && weaveableScript.CanCombine && weaveableScript.ID == ID)
@@ -139,7 +139,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         {
          Debug.Log("This is interactable");
          Startfloating = true;
-         }
+        }
     
     public void Uninteract()
     {

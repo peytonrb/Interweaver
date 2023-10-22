@@ -242,13 +242,13 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    private void Weaving() //this method will shoot out a raycast that will see if there are objects with the weaeObject layermask and the IInteractable interface
+    private void Weaving() //this method will shoot out a raycast from the mouse and from the player that will see if there are objects with the weaeObject layermask and the IInteractable interface
     {
 
         playerPosition = new Vector3(transform.position.x, transform.position.y + raycastPosition.y, transform.position.z); //this is the raycast origin 
         Vector3 rayDirection = transform.forward;
         Ray rayPlayer = new Ray(playerPosition, rayDirection); //the actual  raycast from the player, this can be used for the line render
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition); // the raycast from the mouse
         RaycastHit hitInfo;  //grabs the raycast  hit information from both the player's raycast and the mouse raycast
         Debug.DrawRay(rayPlayer.origin, rayPlayer.direction * WeaveDistance, Color.red);//a debug line for the player's raycast
         if (Physics.Raycast(ray, out hitInfo, 100, weaveObject) || Physics.Raycast(rayPlayer, out hitInfo, WeaveDistance, weaveObject))// the value 100 is for the raycast distance for the mouse raycast and uses the OR function for the raycast for  the player
@@ -318,7 +318,7 @@ public class PlayerScript : MonoBehaviour
 
         if (IsWeaving == true) //if the player is weaving an object they will look at the object
         {
-            transform.LookAt(new Vector3(hitInfo.collider.transform.position.x, transform.position.y, hitInfo.collider.transform.position.z));
+            transform.LookAt(new Vector3(hitInfo.collider.transform.position.x, transform.position.y, hitInfo.collider.transform.position.z)); // this will use the look at function based off of the hitinfo (line 252)
             WeaveModeSwitch.Enable();
             interactInput.Disable(); //disables the inputs
         }       
