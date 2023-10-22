@@ -122,15 +122,17 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         {
             gameObject.AddComponent<FixedJoint>();
             gameObject.GetComponent<FixedJoint>().connectedBody = collision.rigidbody;
-            HasJoint = true;            
+            HasJoint = true;
         }
 
-        else if (weaveableScript.ID != ID && !weaveableScript.CanCombine && !CompareTag("Player") || HasJoint )
+        else if (weaveableScript.ID != ID && !weaveableScript.CanCombine && !CompareTag("Player") || HasJoint)
         {
-            rigidbody.velocity = new Vector3(0,0,0);
+            rigidbody.velocity = new Vector3(0, 0, 0);
             rigidbody.useGravity = true;
             HasJoint = false;
         }
+
+        
     }
 
         //this section is from the IInteractable interface
