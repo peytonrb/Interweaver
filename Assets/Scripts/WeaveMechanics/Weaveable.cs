@@ -16,9 +16,9 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     public int ID; //an ID for objects
     public int specialID; //this is forthe combineable objects that's going to be used for puzzles
     private Vector3 WeaveablePos;
-    private bool HasJoint;
-    public bool CanCombine;
-    public bool CanWeave;
+    public bool HasJoint;
+    public bool CanCombine{get; private set;}
+    public bool CanWeave { get; private set; }
     private bool Startfloating; //a bool to detect if the weaveable is interacted and will start floating
     private bool relocate; // bool for relocate
     private bool Weave; //bool for weaving the weaveables
@@ -59,7 +59,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     {       
         if (Startfloating) 
         {
-           transform.position = transform.position + new Vector3 (0, HoveringValue*Time.deltaTime, 0);
+           transform.position = transform.position + new Vector3 (0, HoveringValue, 0);
             Startfloating = false;          
         }
       
@@ -71,71 +71,65 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     }
 
 
-    void FreezeDistance()
+    void DistanceCheck() // this is for the distance check if the weaveable is too close or too far away
     {
         float distanceBetween = Vector3.Distance(PlayerPrefab.transform.position, transform.position);
-        if (distanceBetween > distance || distanceBetween < TooCloseDistance)
+        if ( distanceBetween <= TooCloseDistance) // this freezes the weaveable object in place
         {
             rigidbody.constraints = RigidbodyConstraints.FreezePosition;
         }
-        else if (distanceBetween >= TooCloseDistance && distanceBetween <= distance)
+        if (distanceBetween >= distance) //this uninteracts the weaveable object if it's too far away
+        {
+            Uninteract();
+        }
+        else if (distanceBetween >= TooCloseDistance && distanceBetween <= distance) // it will start moving if it's in the right distance
         {
             rigidbody.constraints = RigidbodyConstraints.None;
         }
     }
 
-    void MovingWeaveMouse()
+    void MovingWeaveMouse() //this method is for using the mouse to move around the object
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit raycastHit, 100, LayerstoHit))
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 100, LayerstoHit)) //  this shoots a raycast from the camera to the 3D plane to get the position of the mouse
         {
+            weaveableScript = raycastHit.collider.GetComponent<Weaveable>();
+
             if (relocate)
             {
                 rigidbody.velocity = new Vector3(raycastHit.point.x - rigidbody.position.x, transform.position.y - rigidbody.position.y, raycastHit.point.z - rigidbody.position.z);
-                FreezeDistance();
+                DistanceCheck();
                 rigidbody.freezeRotation = true;
             }
             if (Weave)
             {
-                //transform.LookAt(new Vector3(raycastHit.point.x, transform.position.y , raycastHit.point.z));
-                WeaveWeaveables();
+                DistanceCheck();
+                ICombineable combineable = raycastHit.collider.GetComponent<ICombineable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
+                if (combineable != null && !weaveableScript.CanCombine)// this is the band aid solution will need a more concrete solution later on
+                {
+                    inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput;
+                    inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed += OnUncombineInput;
+                }
             }
         }
     }
 
-    void WeaveWeaveables() //method for weaving the weaveables
-    {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, 100, LayerstoHit))// the value 100 is for the raycast distance
-        {
-            weaveableScript = hitInfo.collider.GetComponent<Weaveable>();
-            ICombineable combineable = hitInfo.collider.GetComponent<ICombineable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
-            if (combineable != null && !weaveableScript.CanCombine)// this is the band aid solution will need a more concrete solution later on
-            {
-                inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput;
-                inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed += OnUncombineInput;
-            }
-        }
-       
-    }
 
-    void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision) //this will need to be refactored later but for now when the weaveable collides with another weaveable it will stick
     {
         weaveableScript = GetComponent<Weaveable>();
         if (collision.gameObject.GetComponent<Rigidbody>() != null && !HasJoint && weaveableScript.CanCombine && weaveableScript.ID == ID)
         {
             gameObject.AddComponent<FixedJoint>();
             gameObject.GetComponent<FixedJoint>().connectedBody = collision.rigidbody;
-            HasJoint = true;
-            weaveableScript.rigidbody.velocity = new Vector3(0, 0, 0);
-            weaveableScript.rigidbody.useGravity = true;
+            HasJoint = true;            
         }
 
-        else
+        else if (weaveableScript.ID != ID && !weaveableScript.CanCombine && !CompareTag("Player") || HasJoint )
         {
             rigidbody.velocity = new Vector3(0,0,0);
-            weaveableScript.rigidbody.useGravity = true;
+            rigidbody.useGravity = true;
+            HasJoint = false;
         }
     }
 
@@ -143,12 +137,9 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         //********************************************************************
         public void Interact()
         {
-          Debug.Log("This is interactable");
-          rigidbody.useGravity = false;
-          Startfloating = true;
-          Woven = true;
-         rigidbody.isKinematic = true;
-         }
+         Debug.Log("This is interactable");
+         Startfloating = true;
+        }
     
     public void Uninteract()
     {
@@ -159,6 +150,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         Weave = false;
         Woven = false;
         Startfloating = false;
+        CanCombine = false;
         rigidbody.constraints = RigidbodyConstraints.None;
         inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed -= OnCombineInput;
         inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed -= OnUncombineInput;
@@ -166,6 +158,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     public void Relocate()
     {
+        Woven = true;
+        rigidbody.useGravity = false;
         relocate = true;
         Weave = false;
         rigidbody.isKinematic = false;
@@ -182,7 +176,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     //********************************************************************
     private void OnUncombineInput(InputAction.CallbackContext context)
     {
-        if (weaveableScript.ID == ID && HasJoint)
+        if (HasJoint)
         {
             Uncombine();
         }
@@ -203,6 +197,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     {
         Debug.Log("This is the Uncombine code");
         HasJoint = false;
+        weaveableScript.HasJoint = false;
         Destroy(GetComponent<FixedJoint>());
         CanCombine = false;
         weaveableScript.rigidbody.useGravity = true;
@@ -210,11 +205,16 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     public void Combine()
     {
-        Debug.Log("This is the combine code");
+        if (!HasJoint) 
+        {
+            Debug.Log("This is the combine code");
+
+            CanCombine = true;
+            weaveableScript.HasJoint = true;
+            weaveableScript.rigidbody.velocity = transform.position - weaveableScript.rigidbody.transform.position;
+            weaveableScript.rigidbody.useGravity = false;
+        }
         
-        CanCombine = true;
-        weaveableScript.rigidbody.velocity = transform.position - weaveableScript.rigidbody.transform.position;
-        weaveableScript.rigidbody.useGravity = false;
     }
     //********************************************************************
 }
