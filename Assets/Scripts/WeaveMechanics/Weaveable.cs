@@ -208,10 +208,10 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         if (!HasJoint) 
         {
             Debug.Log("This is the combine code");
-
+            weaveableScript.Startfloating = true;
             CanCombine = true;
             weaveableScript.HasJoint = true;
-            weaveableScript.rigidbody.velocity = transform.position - weaveableScript.rigidbody.transform.position;
+            weaveableScript.rigidbody.velocity = new Vector3(transform.position.x - weaveableScript.rigidbody.transform.position.x,0, transform.position.z - weaveableScript.rigidbody.transform.position.z);
             weaveableScript.rigidbody.useGravity = false;
         }
         
