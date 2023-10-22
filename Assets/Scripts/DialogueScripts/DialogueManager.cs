@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -18,7 +20,9 @@ public class DialogueManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+
+        //NEEDS TO USE INPUT SYSTEM ALSO THE WRONG INPUT
+        if (Input.GetKeyDown(KeyCode.E))
         {
             DisplayNextSentence();
         }

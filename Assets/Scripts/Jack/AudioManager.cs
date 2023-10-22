@@ -23,6 +23,7 @@ public class AudioManager : MonoBehaviour
 
     [Header("Music Audioclip List")]
     public AudioClip TitleMusic;
+    public AudioClip artTestMusic;
    
 
     void Awake()
@@ -58,6 +59,11 @@ public class AudioManager : MonoBehaviour
             case "Menu":
                 {
                     PlaySound(AudioManagerChannels.MusicChannel, TitleMusic);
+                    break;
+                }
+            case "ArtTestScene":
+                {
+                    PlaySound(AudioManagerChannels.MusicChannel, artTestMusic);
                     break;
                 }
         }
