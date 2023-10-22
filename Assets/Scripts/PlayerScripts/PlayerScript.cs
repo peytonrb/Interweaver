@@ -166,12 +166,12 @@ public class PlayerScript : MonoBehaviour
 
             Weaving();
             DetectGamepad();
-            /*
+            
             if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //this is for testing
             }
-            */
+            
 
         }
 
