@@ -11,17 +11,16 @@ public class DialogueTriggers : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindWithTag("Player");
     }
 
     void Update()
     {
-        float distance = Vector3.Distance(player.transform.position, FindObjectOfType<DialogueManager>().textBoxUI.transform.position);
+        //float distance = Vector3.Distance(player.transform.position, FindObjectOfType<DialogueManager>().textBoxUI.transform.position);
 
-        if (distance > maxDistance)
-        {
-            FindObjectOfType<DialogueManager>().EndDialogue();
-        }
+        //if (distance > maxDistance)
+        //{
+        //    FindObjectOfType<DialogueManager>().EndDialogue();
+        //}
     }
 
     // is called if near an NPC 
@@ -35,7 +34,17 @@ public class DialogueTriggers : MonoBehaviour
     {
         if (collider.gameObject.tag == "Player")
         {
+            Debug.Log("TRIGGERED");
             FindObjectOfType<DialogueManager>().StartDialogue(dialogue, textBox);
+        }
+    }
+
+    public void OnTriggerExit(Collider collider)
+    {
+        if (collider.gameObject.tag == "Player")
+        {
+            Debug.Log("TRIGGERED");
+            FindObjectOfType<DialogueManager>().EndDialogue();
         }
     }
 }

@@ -166,12 +166,12 @@ public class PlayerScript : MonoBehaviour
 
             Weaving();
             DetectGamepad();
-            /*
+            
             if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //this is for testing
             }
-            */
+            
 
         }
 
@@ -317,6 +317,19 @@ public class PlayerScript : MonoBehaviour
             WeaveModeSwitch.Enable();
             interactInput.Disable(); //disables the inputs
         }       
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        IInteractable interactable = collision.gameObject.GetComponent<IInteractable>();
+        if ( collision.gameObject.CompareTag("Weaveable"))
+        {
+            IsWeaving = false;
+            interactable.Uninteract();
+            interactInput.Enable();
+            RelocateMode.SetActive(false);// remember to delete this
+            CombineMode.SetActive(false);// remember to delete this
+        }
     }
 
 

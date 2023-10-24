@@ -92,7 +92,9 @@ public class MovementScript : MonoBehaviour
             {
                 //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad
                 movement = moveInput.ReadValue<Vector2>();
+                
                 LookAndMove();
+                
             }
         }
     }
@@ -109,6 +111,7 @@ public class MovementScript : MonoBehaviour
             if (direction.magnitude >= 0.1f)
             {
                 currentSpeed = Mathf.Lerp(currentSpeed, speed, acceleration * Time.deltaTime);
+                //Debug.Log(currentSpeed);
                 //currentSpeed += acceleration * Time.deltaTime;
                 //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
                 //weaverAnimationHandler.ToggleMoveSpeedBlend(speed); // note: speed is static now, but this should work fine when variable speed is added
@@ -116,6 +119,7 @@ public class MovementScript : MonoBehaviour
             else
             {
                 currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
+                //Debug.Log(currentSpeed);
                 //currentSpeed -= deceleration * Time.deltaTime;
                 //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
             }
@@ -150,11 +154,11 @@ public class MovementScript : MonoBehaviour
         direction = new Vector3(movement.x, 0, movement.y).normalized; //direction of movement
 
         //Character rotations
-        if (direction.magnitude >= 0.1f)
+        if (direction.magnitude >= 0.2f)
         {
             float targetangle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetangle, ref rotationVelocity, rotationSpeed);                     
-               transform.rotation = Quaternion.Euler(0, angle, 0);                     
+            transform.rotation = Quaternion.Euler(0, angle, 0);                     
             newDirection = Quaternion.Euler(0, targetangle, 0) * Vector3.forward;
         }
     }
