@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem;
 
 public class DialogueManager : MonoBehaviour
 {
     private Queue<string> sentences;
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI dialogueText;
-    private GameObject textBoxUI;
+    public GameObject textBoxUI;
     private AudioClip audioClip;
     
     void Start()
@@ -18,7 +20,9 @@ public class DialogueManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+
+        //NEEDS TO USE INPUT SYSTEM ALSO THE WRONG INPUT
+        if (Input.GetKeyDown(KeyCode.E))
         {
             DisplayNextSentence();
         }
@@ -28,6 +32,7 @@ public class DialogueManager : MonoBehaviour
     public void StartDialogue(Dialogue dialogue, GameObject textBox)
     {
         initialize(textBox);
+        textBoxUI = textBox;
         nameText.text = dialogue.name;
         sentences.Clear();
         textBoxUI.SetActive(true);
@@ -66,7 +71,7 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    void EndDialogue()
+    public void EndDialogue()
     {
         textBoxUI.SetActive(false);
     }

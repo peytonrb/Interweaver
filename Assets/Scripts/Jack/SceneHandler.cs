@@ -61,18 +61,13 @@ public class SceneHandler : MonoBehaviour
         }
     }
 
-    public IEnumerator LoadLevel(string sceneToLoad)
+    public void LoadLevel(string sceneToLoad)
     {
-        yield return new WaitForSeconds(1.5f);
+
         SceneManager.LoadScene(sceneToLoad);
-        yield break;
+
     }
 
-    public void GoToMenuScene()
-    {
-        Time.timeScale = 1f;
-        StartCoroutine(LoadLevel("MenuScene"));
-    }
 
 
 }
