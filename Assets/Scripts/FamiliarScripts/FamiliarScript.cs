@@ -133,19 +133,21 @@ public class FamiliarScript : MonoBehaviour
             }
         }        
     }
+    
+    public void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag("Crystal"))
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                other.GetComponent<CrystalScript>().TriggerBreak();
+            }
+        }
+    }
 
     private void OnControllerColliderHit(ControllerColliderHit other) {
-        //Familiar collides with Crystal (Can add input later if needed)
-        if (other.gameObject.tag == "Crystal") {
-            CrystalScript crystalScript = other.gameObject.GetComponent<CrystalScript>();
-            crystalIndexRef = crystalScript.crystalIndex;
-            FloatingIslandScript FIScript = floatingIsland[crystalIndexRef].GetComponent<FloatingIslandScript>();
-            //Floating island starts falling
-            FIScript.StartFalling();
-            FIScript.isislandfalling = true;
-            Destroy(other.gameObject);
-        }
-        else if (other.gameObject.CompareTag("Breakable")) // if familiar collides with breakable object while using movement ability
+        
+        if (other.gameObject.CompareTag("Breakable")) // if familiar collides with breakable object while using movement ability
         {
             if (familiarMovementAbility)
             {

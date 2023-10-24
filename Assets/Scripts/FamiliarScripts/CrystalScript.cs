@@ -4,6 +4,19 @@ using UnityEngine;
 
 public class CrystalScript : MonoBehaviour
 {
-    public int crystalIndex; //The index of the crystal belongs to the island of the same number
+    public FloatingIslandScript myFloatingIsland;
+
+    private bool inRange = false;
+
+    public void AssignFloatingIsland(FloatingIslandScript myIsland)
+    {
+        myFloatingIsland = myIsland;
+    }
+
+    public void TriggerBreak()
+    {
+        myFloatingIsland.StartFalling();
+        Destroy(gameObject);
+    }
 
 }

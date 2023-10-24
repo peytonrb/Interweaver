@@ -6,55 +6,119 @@ using UnityEngine.Assertions.Must;
 
 public class FloatingIslandScript : MonoBehaviour
 {
-    private bool cameraswitched;
-    public bool isislandfalling;
-    private Rigidbody rb;
+   
+    //Attachments
+    [Header("Prereqs")]
     public CinemachineVirtualCamera vcam1; //Player Camera
     public CinemachineVirtualCamera vcam2; //Floating Island Falling
     public GameObject familiar;
+    public CrystalScript myCrystal;
+
     private FamiliarScript familiarScript;
+
+    //Designer Variables
+    [Header("Designer Variables")] 
+    [SerializeField] private bool startsFloating = true;
     public bool toggleTimer;
-    public float timer;
+    [SerializeField] private float timerBeforeSwap;
+    [SerializeField] private Transform floatTransform;
+    [SerializeField] private Transform sitTransform;
 
 
-    // Start is called before the first frame update
-    void Start()
+    [Header("Animation Variables")]
+    public float verticalOffset = 0;
+
+    //Internal Reqs
+    private bool cameraswitched;
+    public bool isislandfalling;
+    private Rigidbody rb;
+    private Animator anim;
+
+    private void Awake()
     {
+        //Assign Components
+        rb = gameObject.GetComponent<Rigidbody>();
+        familiarScript = familiar.GetComponent<FamiliarScript>();
+        anim = GetComponent<Animator>();
+        myCrystal.AssignFloatingIsland(this);
+
+        //Set Variables
         cameraswitched = false;
         isislandfalling = false;
 
-        rb = gameObject.GetComponent<Rigidbody>();
-        familiarScript = familiar.GetComponent<FamiliarScript>();  
+        //Set Animator
+        if (startsFloating)
+        {
+            anim.SetTrigger("Float");
+        }
+        else
+        {
+            anim.SetTrigger("Sit");
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-       if (isislandfalling == false) {
-            familiarScript.islandisfalling = false;
+       //if (isislandfalling == false) {
+       //     familiarScript.islandisfalling = false;
             
-       } else {
-            familiarScript.islandisfalling = true;
-            if (toggleTimer) {
-                timer -= Time.deltaTime;
-                if (timer <= 0) {
-                    ReturnCamera();
-                }
-            }
-       }
+       //} else {
+       //     familiarScript.islandisfalling = true;
+       //     if (toggleTimer) {
+       //         timer -= Time.deltaTime;
+       //         if (timer <= 0) {
+       //             ReturnCamera();
+       //         }
+       //     }
+       //}
+
+       if (verticalOffset != 0)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y + verticalOffset, transform.position.z);
+        }
     }
     
-    public void StartFalling() {
-        //Camera is switched to a new view which watches the whole island fall from the sky. (Lasts about 2 seconds)
-        if (cameraswitched == false) {
+    public void StartFalling() 
+    {
+        anim.SetTrigger("Fall");
+
+        StartCoroutine(TimerBeforeRespawn(true));
+    }
+
+    public IEnumerator TimerBeforeRespawn(bool isFalling)
+    {
+        yield return new WaitForSeconds(timerBeforeSwap);
+
+        if (isFalling)
+        {
+            transform.position = sitTransform.position;
+            anim.SetTrigger("Sit");
+        }
+        else
+        {
+            transform.position = floatTransform.position;
+            anim.SetTrigger("Float");
+        }
+        
+        yield break;
+    }
+
+    public void StartRising()
+    {
+        //Camera is switched to a new view which watches the whole island rise. (Lasts about 2 seconds)
+        if (cameraswitched == false)
+        {
             SwitchCamera();
-        } else {
+        }
+        else
+        {
             //Island starts to fall once the camera has been switched
+            //Needs to be changed to play rise animation instead
             rb.constraints = RigidbodyConstraints.None;
             rb.constraints = RigidbodyConstraints.FreezeRotation;
-            cameraswitched = false; 
+            cameraswitched = false;
         }
-         
     }
 
     void SwitchCamera() {
