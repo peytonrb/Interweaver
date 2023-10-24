@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2943,7 +2943,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 856117384}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d97c4d340288d046bf4d29910091ae2, type: 3}
   m_Name: 
@@ -3352,21 +3352,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5402126169904835267, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
   m_PrefabInstance: {fileID: 6611767422449768526}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1023923968
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 881157174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da110c87864be82458ea7793cf2270de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lostSoulUI: {fileID: 1756340005}
-  lostSoulText: {fileID: 479650408}
-  animator: {fileID: 1756340007}
 --- !u!1 &1034983047
 GameObject:
   m_ObjectHideFlags: 0
@@ -3767,7 +3752,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LastCheckPointPos: {x: 0, y: 0, z: 0}
-  totalLostSouls: 0
 --- !u!1 &1192455560
 GameObject:
   m_ObjectHideFlags: 0
@@ -4287,8 +4271,6 @@ MonoBehaviour:
   vcam1: {fileID: 0}
   vcam2: {fileID: 0}
   familiar: {fileID: 0}
-  toggleTimer: 0
-  timer: 0
 --- !u!54 &1322615131
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5214,9 +5196,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a069c524680bf184891effa1af78a02a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkpoints: []
-  vcams:
-  - {fileID: 1363450577}
+  checkpoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  vcams: []
   cameraOnPriority: 0
 --- !u!4 &1494190702
 Transform:
@@ -5439,7 +5426,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1556322028}
-  - component: {fileID: 1556322029}
   m_Layer: 5
   m_Name: PauseScreen
   m_TagString: Untagged
@@ -5470,18 +5456,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1556322029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1556322027}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d97c4d340288d046bf4d29910091ae2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1578251535
 GameObject:
   m_ObjectHideFlags: 0
@@ -5566,7 +5540,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1556322029}
+      - m_Target: {fileID: 856117389}
         m_TargetAssemblyTypeName: PauseScript, Assembly-CSharp
         m_MethodName: Resume
         m_Mode: 1
@@ -7411,7 +7385,7 @@ PrefabInstance:
     - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: animator
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1756340007}
     - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: familiar
       value: 
@@ -7419,7 +7393,7 @@ PrefabInstance:
     - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: pauseMenu
       value: 
-      objectReference: {fileID: 1556322027}
+      objectReference: {fileID: 856117384}
     - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: lostSoulUI
       value: 
@@ -7569,10 +7543,7 @@ PrefabInstance:
     - {fileID: 5921576099528221584, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1359264606954408796, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
-      insertIndex: 3
-      addedObject: {fileID: 1023923968}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
 --- !u!1001 &8510999948299018433
 PrefabInstance:
@@ -7589,7 +7560,7 @@ PrefabInstance:
     - target: {fileID: 561915622479374034, guid: 3eecb22b409431840a7578addcb86c64, type: 3}
       propertyPath: virtualCam
       value: 
-      objectReference: {fileID: 335117135}
+      objectReference: {fileID: 1363450577}
     - target: {fileID: 561915622479374034, guid: 3eecb22b409431840a7578addcb86c64, type: 3}
       propertyPath: floatingIsland
       value: 
@@ -7601,7 +7572,7 @@ PrefabInstance:
     - target: {fileID: 1589125052728893389, guid: 3eecb22b409431840a7578addcb86c64, type: 3}
       propertyPath: virtualCam
       value: 
-      objectReference: {fileID: 335117135}
+      objectReference: {fileID: 1363450577}
     - target: {fileID: 4766373589327111783, guid: 3eecb22b409431840a7578addcb86c64, type: 3}
       propertyPath: m_Name
       value: FamiliarWithPoint
