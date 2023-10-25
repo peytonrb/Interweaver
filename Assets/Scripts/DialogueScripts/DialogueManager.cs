@@ -70,7 +70,7 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    void EndDialogue()
+    public void EndDialogue()
     {
         textBoxUI.SetActive(false);
     }

@@ -76,7 +76,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         float distanceBetween = Vector3.Distance(PlayerPrefab.transform.position, transform.position);
         if ( distanceBetween <= TooCloseDistance) // this freezes the weaveable object in place
         {
-            rigidbody.constraints = RigidbodyConstraints.FreezePosition;
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition;
         }
         if (distanceBetween >= distance) //this uninteracts the weaveable object if it's too far away
         {
@@ -96,7 +96,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
             if (relocate)
             {
                 rb.velocity = new Vector3(raycastHit.point.x - rb.position.x, transform.position.y - rb.position.y, raycastHit.point.z - rb.position.z);
-                FreezeDistance();
+                //FreezeDistance();
                 rb.freezeRotation = true;
             }
             if (Weave)
@@ -136,8 +136,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
         else if (weaveableScript.ID != ID && !weaveableScript.CanCombine && !CompareTag("Player") || HasJoint)
         {
-            rigidbody.velocity = new Vector3(0, 0, 0);
-            rigidbody.useGravity = true;
+            GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+            GetComponent<Rigidbody>().useGravity = true;
             HasJoint = false;
         }
 
@@ -162,7 +162,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         Woven = false;
         Startfloating = false;
         CanCombine = false;
-        rigidbody.constraints = RigidbodyConstraints.None;
+        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed -= OnCombineInput;
         inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed -= OnUncombineInput;
     }
@@ -219,8 +219,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
             weaveableScript.Startfloating = true;
             CanCombine = true;
             weaveableScript.HasJoint = true;
-            weaveableScript.rigidbody.velocity = new Vector3(transform.position.x - weaveableScript.rigidbody.transform.position.x,0, transform.position.z - weaveableScript.rigidbody.transform.position.z);
-            weaveableScript.rigidbody.useGravity = false;
+            weaveableScript.GetComponent<Rigidbody>().velocity = new Vector3(transform.position.x - weaveableScript.GetComponent<Rigidbody>().transform.position.x,0, transform.position.z - weaveableScript.GetComponent<Rigidbody>().transform.position.z);
+            weaveableScript.GetComponent<Rigidbody>().useGravity = false;
         }
         
         CanCombine = true;

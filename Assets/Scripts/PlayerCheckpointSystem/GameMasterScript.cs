@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameMasterScript : MonoBehaviour
 {
     private static GameMasterScript instance;
-
+    public int totalLostSouls;
     public Vector3 LastCheckPointPos;
 
     void Awake()

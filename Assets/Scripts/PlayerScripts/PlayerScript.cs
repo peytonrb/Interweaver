@@ -296,8 +296,8 @@ public class PlayerScript : MonoBehaviour
         if (IsWeaving == true) //if the player is weaving an object they will look at the object
         {
             transform.LookAt(new Vector3(hitInfo.collider.transform.position.x, transform.position.y, hitInfo.collider.transform.position.z)); // this will use the look at function based off of the hitinfo (line 252)
-            WeaveModeSwitch.Enable();
-            interactInput.Disable(); //disables the inputs
+            weaveModeSwitch = true;
+            interactInput = false; //disables the inputs
         }       
     }
 
@@ -308,7 +308,7 @@ public class PlayerScript : MonoBehaviour
         {
             IsWeaving = false;
             interactable.Uninteract();
-            interactInput.Enable();
+            interactInput = true;
             RelocateMode.SetActive(false);// remember to delete this
             CombineMode.SetActive(false);// remember to delete this
         }
