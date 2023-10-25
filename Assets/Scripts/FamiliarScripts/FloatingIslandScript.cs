@@ -131,9 +131,7 @@ public class FloatingIslandScript : MonoBehaviour
     public void ReturnCamera() {
         vcam1.Priority = 1;
         vcam2.Priority = 0;
-        if (toggleTimer == false) {
-            rb.constraints = RigidbodyConstraints.FreezeAll;
-        }
+        rb.constraints = RigidbodyConstraints.FreezeAll;
         isislandfalling = false;
     }
             
