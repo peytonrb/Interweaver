@@ -8,7 +8,9 @@ public class GroundScript : MonoBehaviour
     void OnCollisionEnter(Collision other) {
         if (other.gameObject.tag == "FloatingIsland") {
             FloatingIslandScript floatingIsland = other.gameObject.GetComponent<FloatingIslandScript>();
-            floatingIsland.ReturnCamera();
+            if (floatingIsland.toggleTimer == false) {
+                floatingIsland.ReturnCamera();
+            }
         }
     }
 }

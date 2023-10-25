@@ -10,7 +10,7 @@ public class DialogueManager : MonoBehaviour
     private Queue<string> sentences;
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI dialogueText;
-    private GameObject textBoxUI;
+    public GameObject textBoxUI;
     private AudioClip audioClip;
     
     void Start()
@@ -32,6 +32,7 @@ public class DialogueManager : MonoBehaviour
     public void StartDialogue(Dialogue dialogue, GameObject textBox)
     {
         initialize(textBox);
+        textBoxUI = textBox;
         nameText.text = dialogue.name;
         sentences.Clear();
         textBoxUI.SetActive(true);
@@ -70,7 +71,7 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    void EndDialogue()
+    public void EndDialogue()
     {
         textBoxUI.SetActive(false);
     }
