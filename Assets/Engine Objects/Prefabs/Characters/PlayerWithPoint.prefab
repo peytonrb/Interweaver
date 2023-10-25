@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 20847522854274277}
   - component: {fileID: 7154158912224162450}
   - component: {fileID: 591368551210576134}
+  - component: {fileID: 1913745848674449468}
   m_Layer: 0
   m_Name: PlayerWithPoint
   m_TagString: Player
@@ -35,7 +36,7 @@ Transform:
   - {fileID: 5058674367002751257}
   - {fileID: 7944469985821822247}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &20847522854274277
 MonoBehaviour:
@@ -74,16 +75,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
-  cam: {fileID: 0}
   mainCamera: {fileID: 0}
   familiarVirtualCam: {fileID: 0}
-  virtualCameraList: []
+  cameraCheckpointMaster: {fileID: 0}
   pauseMenu: {fileID: 0}
+  RelocateMode: {fileID: 0}
+  CombineMode: {fileID: 0}
   WeaveDistance: 12
   weaveObject:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   WeaveModeNumbers: 0
+  sensitivity: {x: 1500, y: 1500}
+  bias: {x: 0, y: -1}
+  currentmousePosition: {x: 0, y: 0}
+  raycastPosition: {x: 0, y: 0.5, z: 0}
+  position: {x: 0, y: 1, z: 0}
   familiar: {fileID: 0}
   weaverAnimationHandler: {fileID: 7009046902244939009}
   numLostSouls: 0
@@ -115,7 +122,133 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.1, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1913745848674449468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359264606954408796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1f1c56a0-7e43-43ec-85db-47afd42eee48
+    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e5cafc5b-87a8-4bf4-a885-b4d611e05598
+    m_ActionName: Player/Weave[/Mouse/delta]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 098129a8-4938-4f53-8ae5-98f20f5c656c
+    m_ActionName: Player/Familiar Movement Ability[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c397e94f-105d-4c30-911e-ef37e3d850a2
+    m_ActionName: Player/Interact[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 39fac198-f1a4-495b-b7a9-19943fe87608
+    m_ActionName: Player/Switch[/Keyboard/tab]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 03cac032-24ac-4e49-bac7-e873c8c2c3e7
+    m_ActionName: Player/Uninteract[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 08cd3fc1-e763-48a5-a582-14e6878fb46c
+    m_ActionName: Player/Pause[/Keyboard/p]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5b8fb45f-e14e-454b-990b-cf3895822882
+    m_ActionName: Player/WeaveModeSwitch[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7154158912224162450}
+        m_TargetAssemblyTypeName: PlayerScript, Assembly-CSharp
+        m_MethodName: Interact
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 2dedc3c0-73f7-4c63-9871-b4f2b4c2e3b8
+    m_ActionName: Player/InteractNEW[/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 87dd1686-e95d-4b70-a377-18de178327a8
+    m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 400f7ea7-841c-4a3e-b080-a831c9dbfabe
+    m_ActionName: UI/Submit[/Keyboard/enter]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 673c7653-6786-4425-9988-1a763159a756
+    m_ActionName: UI/Cancel[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 797e9f43-1eb0-439b-99db-8b6cac79e05e
+    m_ActionName: UI/Point[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bbc62de3-5495-4a56-9a6d-349d16399c22
+    m_ActionName: UI/Click[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a1e5eaa9-a14b-486e-8bc7-4cfa2da2de0c
+    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e8bd9648-06f3-49ac-b222-bc4f9ba064e2
+    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 83bcd5a3-4598-4537-ab55-d52231c2c2c7
+    m_ActionName: UI/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f93bed13-7bd0-45fd-81db-ca4f807c8fa0
+    m_ActionName: UI/TrackedDevicePosition
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5c4eb095-52c0-4c8e-a346-801af87283f2
+    m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 07644cd4-c822-4718-8452-c29cdf99ac81
+    m_ActionName: weaveableObject/CombineAction[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bd887768-d377-49d9-9edb-eb0146a27dee
+    m_ActionName: weaveableObject/UncombineAction[/Keyboard/q]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &4592930378548025011
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,7 +276,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4592930378548025011}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.3, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0.5}
   m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -178,7 +311,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: d180d0871da81744295e6ecd9a481349, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -281,7 +414,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8450198178216627657}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -316,7 +449,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: d180d0871da81744295e6ecd9a481349, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
