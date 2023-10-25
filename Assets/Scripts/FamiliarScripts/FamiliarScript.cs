@@ -15,23 +15,23 @@ public class FamiliarScript : MonoBehaviour
     private MovementScript movementScript; // reference for the movement script component
     public bool depossessing; //True if the familiar is being deposessed
     public bool myTurn; //Responsible for determining if the familiar can move
-    private bool leapOfFaith; //Determines if owl familiar is in a leap of faith 
+    public bool leapOfFaith; //Determines if owl familiar is in a leap of faith 
     public bool familiarMovementAbility;//Only used for reading if familiar is using movemeny ability
 
 
     [Header("character's camera")]
     //Character Rotation values
     //**********************************************************
-    public GameObject cam; //Camera object reference
-    public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
-    private Vector3 originalVirtualCamRotation; // Original rotation values for the virtual camera
-    private Vector3 originalVirtualCamTransposeOffset; //Virtual Camera original transpose offset values
+    public GameObject cameraMaster; //Camera manager reference
+    private CameraMasterScript cameraMasterScript;
+    //public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
+    //private Vector3 originalVirtualCamRotation; // Original rotation values for the virtual camera
+    //private Vector3 originalVirtualCamTransposeOffset; //Virtual Camera original transpose offset values
     //**********************************************************
     private GameMasterScript GM; //This is refrencing the game master script
 
     [Header ("Floating Island")]
     public GameObject[] floatingIsland;
-    private int crystalIndexRef;
 
 
     [Header("Weave Variables")]
@@ -53,6 +53,8 @@ public class FamiliarScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        cameraMasterScript = cameraMaster.GetComponent<CameraMasterScript>();
+
         myTurn = false;
         islandisfalling = false;
         depossessing = false;
@@ -61,8 +63,8 @@ public class FamiliarScript : MonoBehaviour
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>(); 
-        originalVirtualCamTransposeOffset = virtualCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
-        originalVirtualCamRotation = virtualCam.transform.eulerAngles;
+        //originalVirtualCamTransposeOffset = virtualCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
+        //originalVirtualCamRotation = virtualCam.transform.eulerAngles;
         //transform.position = GM.LastCheckPointPos;
         characterController.enabled = true;
         Debug.Log("Active Current Position: " + transform.position);
@@ -104,7 +106,7 @@ public class FamiliarScript : MonoBehaviour
             }
             else
             {
-                EndLeapOfFaith();
+                cameraMasterScript.EndLeapOfFaith();
                 characterController.enabled = false;
                 transform.position = GM.LastCheckPointPos;
                 characterController.enabled = true;
@@ -112,30 +114,17 @@ public class FamiliarScript : MonoBehaviour
         }
     }
 
-    private void StartLeapOfFaith()
-    {
-        leapOfFaith = true;
-        virtualCam.transform.eulerAngles = new Vector3(90f, virtualCam.transform.eulerAngles.y, virtualCam.transform.eulerAngles.z);
-        virtualCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, originalVirtualCamTransposeOffset.y, 0);
-    }
-
-    private void EndLeapOfFaith()
-    {
-        leapOfFaith = false;
-        virtualCam.transform.eulerAngles = originalVirtualCamRotation;
-        virtualCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = originalVirtualCamTransposeOffset;
-    }
 
     private void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.CompareTag("Leap of Faith Trigger"))
         {
-            StartLeapOfFaith();
+            cameraMasterScript.StartLeapOfFaith();
         }
 
         else if (collision.gameObject.CompareTag("Kill Area"))
         {
-            EndLeapOfFaith();
+            cameraMasterScript.EndLeapOfFaith();
             characterController.enabled = false;
             transform.position = GM.LastCheckPointPos;
             characterController.enabled = true;

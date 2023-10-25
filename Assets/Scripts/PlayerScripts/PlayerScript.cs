@@ -127,9 +127,7 @@ public class PlayerScript : MonoBehaviour
         {
             if (familiarScript.depossessing)
             {
-                Debug.Log(CMScript.cameraOnPriority);
-                CMScript.vcams[CMScript.cameraOnPriority].Priority = 1;
-                familiarVirtualCam.Priority = 0;
+                CMScript.SwitchToWeaverCamera();
                 familiarScript.myTurn = false;
                 possessing = false;
                 familiarScript.depossessing = false;
@@ -337,10 +335,7 @@ public class PlayerScript : MonoBehaviour
             if (possessing == false)
             {
                //Switches to Familiar
-                for(int i = 0; i < CMScript.vcams.Length; i++) {
-                    CMScript.vcams[i].Priority = 0;
-                }
-                familiarVirtualCam.Priority = 1;
+                CMScript.SwitchToFamiliarCamera();
                 possessing = true;
                 Debug.Log("Possessing");
                 movementScript.active = false;
