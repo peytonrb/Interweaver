@@ -12,9 +12,9 @@ public class PlayerScript : MonoBehaviour
     [Header("Movement Variables")]
     private CharacterController characterController; //references the character controller component
     private MovementScript movementScript; // reference for the movement script component
-    public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
-    private InputAction possessInput; //Used for possession of familiar, or switching between weaver and familiar
-    private bool possessButton; //State that checks if the possess button is being pressed
+    public GameObject inputManager;
+    private InputManagerScript inputManagerScript;
+    //private InputAction possessInput; //Used for possession of familiar, or switching between weaver and familiar
     private bool possessing; //Determines if the weaver is using possessing at the moment
 
     [Header("Character's Camera")]
@@ -31,9 +31,6 @@ public class PlayerScript : MonoBehaviour
 
     [Header("Pause Menu")]
     public GameObject pauseMenu;
-    private InputAction pauseInput;
-    private bool pauseButton;
-
 
     //**********************************************************
     [Header("prototype purposes")]
@@ -48,21 +45,21 @@ public class PlayerScript : MonoBehaviour
     public float WeaveDistance = 12f;
     public LayerMask weaveObject;
     private Vector3 playerPosition;
-    public bool IsWeaving { get; private set; }
+    private bool IsWeaving;
     [SerializeField] private int WeaveModeNumbers;
     [SerializeField] private Vector2 sensitivity = new Vector2(1500f, 1500f);
     [SerializeField] private Vector2 bias = new Vector2(0f, -1f);
     [SerializeField] private Vector2 currentmousePosition;
     private Vector2 warpPosition;
     private Vector2 overflow;
-    private Vector2 Cursor;
-    private InputAction weaveCursor;
-    private InputAction interactInput;
-    private InputAction WeaveModeSwitch;
-    private InputAction UninteractInput;
-    public InputAction NPCInteraction; //This is temporary until we implement the new input event system sometime next week
+    private Vector2 cursor;
+    public bool interactInput;
+    public bool enableInteractInput;
+    public bool weaveModeSwitch;
+    public bool enableWeaveModeSwitch;
+    public bool uninteractInput;
+    public bool enableUninteractInput;
     [SerializeField] private Vector3 raycastPosition;
-    [SerializeField] private Vector3 position;
     //**********************************************************
 
     //Familiar
@@ -79,6 +76,12 @@ public class PlayerScript : MonoBehaviour
     [Header("Animation Calls")]
     public WeaverAnimationHandler weaverAnimationHandler;
 
+    [Header("Lost Souls")]
+    public int numLostSouls;
+    public TextMeshProUGUI lostSoulText;
+    private readonly HashSet<GameObject> alreadyCollidedWith = new HashSet<GameObject>();
+    public Animator animator;
+
     void Awake()
     {
         //references to character components
@@ -91,18 +94,21 @@ public class PlayerScript : MonoBehaviour
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
         CMScript = cameraCheckpointMaster.GetComponent<CameraMasterScript>();
+        inputManagerScript = inputManager.GetComponent<InputManagerScript>();
         possessing = false;
         IsWeaving = false;
+        numLostSouls = 0;
         vCamRotationState = 0;
         pauseMenu.SetActive(false);
+        enableInteractInput = true;
 
         //Section reserved for initiating inputs 
-        interactInput = inputs.FindAction("Player/Interact");
-        UninteractInput = inputs.FindAction("Player/Uninteract");
-        WeaveModeSwitch = inputs.FindAction("Player/WeaveModeSwitch");
-        possessInput = inputs.FindAction("Player/Switch");
-        pauseInput = inputs.FindAction("Player/Pause");
-        weaveCursor = inputs.FindAction("Player/Weave");
+        //interactInput = inputs.FindAction("Player/Interact");
+        //UninteractInput = inputs.FindAction("Player/Uninteract");
+        //WeaveModeSwitch = inputs.FindAction("Player/WeaveModeSwitch");
+        //possessInput = inputs.FindAction("Player/Switch");
+        //pauseInput = inputs.FindAction("Player/Pause");
+        //weaveCursor = inputs.FindAction("Player/Weave");
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
@@ -110,21 +116,8 @@ public class PlayerScript : MonoBehaviour
         characterController.enabled = true;
         Debug.Log("Active Current Position: " + transform.position);
 
-        UninteractInput.Disable();
-        WeaveModeSwitch.Disable();
-    }
-
-    void OnEnable()
-    {
-        NPCInteraction.Enable();
-        inputs.Enable();
-
-    }
-
-    void OnDisable()
-    {
-        NPCInteraction.Disable();
-        inputs.Disable();
+        enableUninteractInput = false;
+        enableWeaveModeSwitch = false;
     }
 
     void Update()
@@ -132,27 +125,6 @@ public class PlayerScript : MonoBehaviour
         //If game is not paused, return to normal movement functions
         if (Time.timeScale != 0)
         {
-            //Move character only if they are on the ground
-            if (characterController.isGrounded)
-            {
-                if (possessing == false)
-                {
-                    //Looks at input coming from TAB on keyboard (for now)
-                    possessButton = possessInput.WasPressedThisFrame();
-                    Possession();
-                }
-            }
-
-            //For pausing
-            pauseButton = pauseInput.WasPressedThisFrame();
-            Pausing();
-
-            //This is temporary until we implement the new input event system
-            if (NPCInteraction.WasPressedThisFrame())
-            {
-                Interact();
-            }
-
             if (familiarScript.depossessing)
             {
                 Debug.Log(CMScript.cameraOnPriority);
@@ -188,13 +160,13 @@ public class PlayerScript : MonoBehaviour
 
     private void weaveController()
     {
-        Cursor = weaveCursor.ReadValue<Vector2>();
-        if (Cursor.magnitude <= 0.1f)
+        cursor = inputManagerScript.weaveCursor;
+        if (cursor.magnitude <= 0.1f)
         {
             return;
         }
         currentmousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-        warpPosition = currentmousePosition + bias + overflow + sensitivity * Time.deltaTime * Cursor;
+        warpPosition = currentmousePosition + bias + overflow + sensitivity * Time.deltaTime * cursor;
         warpPosition = new Vector2(Mathf.Clamp(warpPosition.x, 0, Screen.width), Mathf.Clamp(warpPosition.y, 0, Screen.height));
         overflow = new Vector2(warpPosition.x % 1, warpPosition.y % 1);
         Mouse.current.WarpCursorPosition(warpPosition);
@@ -210,6 +182,19 @@ public class PlayerScript : MonoBehaviour
         else
         {
             return;
+        }
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.tag == "Lost Soul" && !alreadyCollidedWith.Contains(hit.gameObject))
+        {
+            alreadyCollidedWith.Add(hit.gameObject);
+            animator.SetBool("isOpen", true);
+            numLostSouls++;
+            lostSoulText.text = "" + numLostSouls;
+            Destroy(hit.gameObject);
+            StartCoroutine(lostSoulOnScreen());
         }
     }
 
@@ -237,7 +222,7 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    private void Weaving() //this method will shoot out a raycast from the mouse and from the player that will see if there are objects with the weaeObject layermask and the IInteractable interface
+    public void Weaving() //this method will shoot out a raycast that will see if there are objects with the weaeObject layermask and the IInteractable interface
     {
 
         playerPosition = new Vector3(transform.position.x, transform.position.y + raycastPosition.y, transform.position.z); //this is the raycast origin 
@@ -250,61 +235,58 @@ public class PlayerScript : MonoBehaviour
         {
             weaveableScript = hitInfo.collider.GetComponent<Weaveable>(); //local refrence to itself so that it can access itself from a different object 
             IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
-            float DistanceBetween = Vector3.Distance(weaveableScript.transform.position, transform.position);
             if (interactable != null)
             {
-                if (DistanceBetween > WeaveDistance)
-                {
-                    IsWeaving = false;
-                    interactInput.Enable();
-                    RelocateMode.SetActive(false);// remember to delete this
-                    CombineMode.SetActive(false);// remember to delete this
-                }
                
-                if (interactInput.WasPressedThisFrame()) //this is the interact button that is taking from the player inputs
+                if (interactInput) //this is the interact button that is taking from the player inputs
                 {
+                    //Debug.Log("Interaction");
                     interactable.Interact();
                     IsWeaving = true;
-                    UninteractInput.Enable();//Enables the input                   
+                    enableUninteractInput = true;//Enables the input                   
                     weaverAnimationHandler.ToggleWeaveAnim(IsWeaving); // start weaving animations 
                     WeaveModeNumbers = 1;
                     interactable.Relocate();
                     RelocateMode.SetActive(true);// remember to delete this
+                    interactInput = false;
                 }
 
 
-                if (UninteractInput.WasPressedThisFrame() && weaveableScript.Woven == true)
+                if (uninteractInput && weaveableScript.Woven == true)
                 {
                     interactable.Uninteract();
                     IsWeaving = false;
-                    interactInput.Enable();//renables the inputs                   
-                    UninteractInput.Disable();//disables the uninteract inputs
-                    WeaveModeSwitch.Disable(); //disables the weavemodeswitch inputs
+                    enableInteractInput = true;//renables the inputs                   
+                    enableUninteractInput = false;//disables the uninteract inputs
+                    enableWeaveModeSwitch = false; //disables the weavemodeswitch inputs
                     weaverAnimationHandler.ToggleWeaveAnim(IsWeaving); // end weaving animations
                     RelocateMode.SetActive(false);// remember to delete this
                     CombineMode.SetActive(false);// remember to delete this
+                    uninteractInput = false;
                 }               
 
 
                 switch (WeaveModeNumbers)
                 {
                     case 1:
-                        if (WeaveModeSwitch.WasPressedThisFrame() && weaveableScript.Woven == true)
+                        if (weaveModeSwitch && weaveableScript.Woven == true)
                         {
                             interactable.WeaveMode();
                             WeaveModeNumbers += 1;
                             RelocateMode.SetActive(false);// remember to delete this
                             CombineMode.SetActive(true);// remember to delete this
+                            weaveModeSwitch = false;
                         }
                         break;
 
                     case 2:
-                        if (WeaveModeSwitch.WasPressedThisFrame() && weaveableScript.Woven == true)
+                        if (weaveModeSwitch && weaveableScript.Woven == true)
                         {
                             interactable.Relocate();
                             WeaveModeNumbers -= 1;
                             CombineMode.SetActive(false);// remember to delete this
                             RelocateMode.SetActive(true);// remember to delete this
+                            weaveModeSwitch = false;
                         }
                         break;
                 }
@@ -314,8 +296,8 @@ public class PlayerScript : MonoBehaviour
         if (IsWeaving == true) //if the player is weaving an object they will look at the object
         {
             transform.LookAt(new Vector3(hitInfo.collider.transform.position.x, transform.position.y, hitInfo.collider.transform.position.z)); // this will use the look at function based off of the hitinfo (line 252)
-            WeaveModeSwitch.Enable();
-            interactInput.Disable(); //disables the inputs
+            weaveModeSwitch = true;
+            interactInput = false; //disables the inputs
         }       
     }
 
@@ -326,37 +308,42 @@ public class PlayerScript : MonoBehaviour
         {
             IsWeaving = false;
             interactable.Uninteract();
-            interactInput.Enable();
+            interactInput = true;
             RelocateMode.SetActive(false);// remember to delete this
             CombineMode.SetActive(false);// remember to delete this
         }
     }
 
-
-    private void Possession()
+    public void Possession()
     {
-        if (possessButton)
+        //Move character only if they are on the ground
+        if (characterController.isGrounded && Time.timeScale != 0)
         {
-            //Switches to Familiar
-            for(int i = 0; i < CMScript.vcams.Length; i++) {
-                CMScript.vcams[i].Priority = 0;
+            if (possessing == false)
+            {
+               //Switches to Familiar
+                for(int i = 0; i < CMScript.vcams.Length; i++) {
+                    CMScript.vcams[i].Priority = 0;
+                }
+                familiarVirtualCam.Priority = 1;
+                possessing = true;
+                Debug.Log("Possessing");
+                movementScript.active = false;
+                StartCoroutine(familiarScript.ForcedDelay()); 
             }
-            familiarVirtualCam.Priority = 1;
-            possessing = true;
-            Debug.Log("Possessing");
-            movementScript.active = false;
-            StartCoroutine(familiarScript.ForcedDelay());
-            
         }
-
     }
 
-    private void Pausing()
+    public void Pausing()
     {
-        if (pauseButton)
-        {
-            pauseMenu.SetActive(true);
-            Time.timeScale = 0;
-        }
+        pauseMenu.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    // keeps lost soul UI on screen for a little bit then hides
+    IEnumerator lostSoulOnScreen()
+    {
+        yield return new WaitForSeconds(5);
+        animator.SetBool("isOpen", false);
     }
 }

@@ -37,7 +37,7 @@ Transform:
   - {fileID: 8812801818404771755}
   - {fileID: 6051683453882045260}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &2404717404260384247
 CharacterController:
@@ -119,7 +119,8 @@ MonoBehaviour:
   myTurn: 0
   cam: {fileID: 0}
   virtualCam: {fileID: 0}
-  floatingIsland: []
+  floatingIsland:
+  - {fileID: 0}
   WeaveDistance: 12
   interactInput:
     m_Name: Interact Input
@@ -222,7 +223,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a871103ca05a22f4288d5d6d79bf017f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -329,7 +330,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a871103ca05a22f4288d5d6d79bf017f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
