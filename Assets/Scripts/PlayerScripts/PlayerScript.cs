@@ -100,7 +100,7 @@ public class PlayerScript : MonoBehaviour
         numLostSouls = 0;
         vCamRotationState = 0;
         pauseMenu.SetActive(false);
-        enableInteractInput = true;
+        enableInteractInput = false;
 
         //Section reserved for initiating inputs 
         //interactInput = inputs.FindAction("Player/Interact");
@@ -235,9 +235,19 @@ public class PlayerScript : MonoBehaviour
         {
             weaveableScript = hitInfo.collider.GetComponent<Weaveable>(); //local refrence to itself so that it can access itself from a different object 
             IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
+            float DistanceBetween = Vector3.Distance(weaveableScript.transform.position, transform.position);
             if (interactable != null)
             {
-               
+                enableInteractInput = true;
+
+                if (DistanceBetween > WeaveDistance)
+                {
+                    IsWeaving = false;
+                    enableInteractInput = true;
+                    RelocateMode.SetActive(false);// remember to delete this
+                    CombineMode.SetActive(false);// remember to delete this
+                }
+
                 if (interactInput) //this is the interact button that is taking from the player inputs
                 {
                     //Debug.Log("Interaction");
@@ -263,7 +273,7 @@ public class PlayerScript : MonoBehaviour
                     RelocateMode.SetActive(false);// remember to delete this
                     CombineMode.SetActive(false);// remember to delete this
                     uninteractInput = false;
-                }               
+                }
 
 
                 switch (WeaveModeNumbers)
@@ -291,13 +301,18 @@ public class PlayerScript : MonoBehaviour
                         break;
                 }
             }
+
+        }
+        else
+        {
+            enableInteractInput = false;
         }
 
         if (IsWeaving == true) //if the player is weaving an object they will look at the object
         {
             transform.LookAt(new Vector3(hitInfo.collider.transform.position.x, transform.position.y, hitInfo.collider.transform.position.z)); // this will use the look at function based off of the hitinfo (line 252)
-            weaveModeSwitch = true;
-            interactInput = false; //disables the inputs
+            enableWeaveModeSwitch = true;
+            enableInteractInput = false; //disables the inputs
         }       
     }
 
