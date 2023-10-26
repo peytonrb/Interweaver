@@ -23,14 +23,15 @@ public class RespawnController : MonoBehaviour
         // if respawn isn't caused by a collision
         if (startPosition == null || startRotation == null || respawnObject == null)
         {
-            InitializeObject();
+            InitializeObjects();
         }
 
         respawnObject.transform.position = startPosition;
         respawnObject.transform.rotation = startRotation;
     }
 
-    private void InitializeObject()
+    // will commonnly be called on puzzles that require a full reset if failed
+    private void InitializeObjects()
     {
         // populate once this case occurs, unsure how these will get initialized rn
     }
