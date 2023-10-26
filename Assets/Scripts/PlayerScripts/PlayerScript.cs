@@ -168,7 +168,7 @@ public class PlayerScript : MonoBehaviour
         var gamepad = Gamepad.current;
         if (gamepad != null)
         {
-            weaveController();// this works I just need to find a way to make it so that when the controller is detected it switches to this, it will for now be commented out for the time being
+            weaveController();
         }
         else
         {
@@ -203,22 +203,22 @@ public class PlayerScript : MonoBehaviour
     public void Weaving() //this method will shoot out a raycast that will see if there are objects with the weaeObject layermask and the IInteractable interface
     {
 
-        playerPosition = new Vector3(transform.position.x, transform.position.y + raycastPosition.y, transform.position.z); //this is the raycast origin 
-        Vector3 rayDirection = transform.forward;
-        Ray rayPlayer = new Ray(playerPosition, rayDirection); //the actual  raycast from the player, this can be used for the line render
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition); // the raycast from the mouse
+        playerPosition = new Vector3(transform.position.x, transform.position.y + raycastPosition.y, transform.position.z); //this is the raycast origin of the player
+        Vector3 rayDirection = transform.forward; //this casts a raycast that  is considered forward, as in the Z axis
+        Ray rayPlayer = new Ray(playerPosition, rayDirection); //the actual  raycast from the player, this can be used for the line render but it takes the  raycast origin and the  direction of the raycast
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition); // the raycast that is casted  from the camera to the 3D plane so then it can get the mouse position inside the 3D plane
         RaycastHit hitInfo;  //grabs the raycast  hit information from both the player's raycast and the mouse raycast
         Debug.DrawRay(rayPlayer.origin, rayPlayer.direction * WeaveDistance, Color.red);//a debug line for the player's raycast
-        if (Physics.Raycast(ray, out hitInfo, 100, weaveObject) || Physics.Raycast(rayPlayer, out hitInfo, WeaveDistance, weaveObject))// the value 100 is for the raycast distance for the mouse raycast and uses the OR function for the raycast for  the player
+        if (Physics.Raycast(ray, out hitInfo, 100, weaveObject) || Physics.Raycast(rayPlayer, out hitInfo, WeaveDistance, weaveObject))// this if statementis for when the  raycast from both the mouse and the player hit the layermask, weaveObject, it will do the following code from this if statement. The 100 units is for the raycast distance for the mouse
         {
-            weaveableScript = hitInfo.collider.GetComponent<Weaveable>(); //local refrence to itself so that it can access itself from a different object 
-            IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>(); //this will detect if the object it hits has the IInteractable interface  and will do some stuff
-            float DistanceBetween = Vector3.Distance(weaveableScript.transform.position, transform.position);
+            weaveableScript = hitInfo.collider.GetComponent<Weaveable>(); //local refrence of itself so that it can be used on different objects
+            IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>(); //this will detect if the object it hits has the IInteractable interface and it will do the methods inside the IInteractable interface
+            float DistanceBetween = Vector3.Distance(weaveableScript.transform.position, transform.position); // a local variable for the distance check (will be explained further in line 221)
             if (interactable != null)
             {
                 enableInteractInput = true;
 
-                if (DistanceBetween > WeaveDistance)
+                if (DistanceBetween > WeaveDistance) //this distance check for if the player and the interactable are beyond a set distance, the WeaveDistance variable, line 45 
                 {
                     IsWeaving = false;
                     enableInteractInput = true;
@@ -229,7 +229,7 @@ public class PlayerScript : MonoBehaviour
                 if (interactInput) //this is the interact button that is taking from the player inputs
                 {
                     //Debug.Log("Interaction");
-                    interactable.Interact();
+                    interactable.Interact();// this tells the interface to do the method Interact and the scripts that have the Interactable interface that has the same method to do method
                     IsWeaving = true;
                     enableUninteractInput = true;//Enables the input                   
                     weaverAnimationHandler.ToggleWeaveAnim(IsWeaving); // start weaving animations 
@@ -288,13 +288,13 @@ public class PlayerScript : MonoBehaviour
 
         if (IsWeaving == true) //if the player is weaving an object they will look at the object
         {
-            transform.LookAt(new Vector3(hitInfo.collider.transform.position.x, transform.position.y, hitInfo.collider.transform.position.z)); // this will use the look at function based off of the hitinfo (line 252)
+            transform.LookAt(new Vector3(hitInfo.collider.transform.position.x, transform.position.y, hitInfo.collider.transform.position.z)); // this will use the look at function based off of the hitinfo (line 210)
             enableWeaveModeSwitch = true;
             enableInteractInput = false; //disables the inputs
         }       
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision) //this is here so that if in the case that the object does hit the player it will uninteract itself 
     {
         IInteractable interactable = collision.gameObject.GetComponent<IInteractable>();
         if ( collision.gameObject.CompareTag("Weaveable"))

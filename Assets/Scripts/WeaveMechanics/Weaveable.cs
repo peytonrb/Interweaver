@@ -16,10 +16,10 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     public int ID; //an ID for objects
     public int specialID; //this is forthe combineable objects that's going to be used for puzzles
     private Vector3 WeaveablePos;
-    public bool HasJoint;
-    public bool CanRotate;
-    public bool CanCombine { get; private set; }
-    public bool CanWeave { get; private set; }
+    public bool HasJoint; //this bool and anything that usues this bool will need to  be deleted
+    public bool CanRotate;//a new bool for  the rotate function
+    public bool CanCombine { get; private set; } //this is ia private set so that no other script could accidentally change this bool
+    public bool CanWeave { get; private set; } //this is ia private set so that no other script could accidentally change this bool
     private bool Startfloating; //a bool to detect if the weaveable is interacted and will start floating
     private bool relocate; // bool for relocate
     private bool Weave; //bool for weaving the weaveables
@@ -133,7 +133,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     }
 
 
-    void OnCollisionEnter(Collision collision) //this will need to be refactored later but for now when the weaveable collides with another weaveable it will stick
+    void OnCollisionEnter(Collision collision) //this will need to be refactored later but for now when the weaveable collides with another weaveable it will make a fixed joint component and then add itself as the rigidbody to be connected
     {
         weaveableScript = GetComponent<Weaveable>();
         if (collision.gameObject.GetComponent<Rigidbody>() != null && !HasJoint && weaveableScript.CanCombine && weaveableScript.ID == ID)
@@ -155,7 +155,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     //section for rotate function
    //**********************************************************************************
-    private void OnRotateCWInput(InputAction.CallbackContext context)
+    private void OnRotateCWInput(InputAction.CallbackContext context) //
     {
         OnRotateCW();
     }
@@ -174,19 +174,19 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     private void OnRotateCW()
     {
-        StartCoroutine(Rotate(Vector3.up, 90, 1.0f));
+        StartCoroutine(Rotate(Vector3.up, 45, 1.0f));
     }
     private void OnRotateCtrW()
     {
-        StartCoroutine(RotatectrW(Vector3.up, -90, 1.0f));
+        StartCoroutine(RotatectrW(Vector3.up, -45, 1.0f));
     }
     private void OnRotateUP()
     {
-        StartCoroutine(RotateUP(Vector3.forward, 90, 1.0f));
+        StartCoroutine(RotateUP(Vector3.forward, 45, 1.0f));
     }
     private void OnRotateDown()
     {
-        StartCoroutine(Rotatedown(Vector3.forward, -90, 1.0f));
+        StartCoroutine(Rotatedown(Vector3.forward, -45, 1.0f));
     }
 
     IEnumerator Rotate(Vector3 axis, float angle, float duration = 1.0f)
