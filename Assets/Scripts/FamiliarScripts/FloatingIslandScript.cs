@@ -80,8 +80,8 @@ public class FloatingIslandScript : MonoBehaviour
         if (cameraswitched == false)
         {
             GameObject cameraMaster = GameObject.FindGameObjectWithTag("CameraMaster");
-            CameraMasterScript cameraMasterScript = cameraMaster.GetComponent<CameraMasterScript>();
-            cameraMasterScript.FloatingIslandCameraSwitch();
+            //CameraMasterScript cameraMasterScript = cameraMaster.GetComponent<CameraMasterScript>();
+            //cameraMasterScript.FloatingIslandCameraSwitch();
             anim.SetTrigger("Fall");
         }
         else {

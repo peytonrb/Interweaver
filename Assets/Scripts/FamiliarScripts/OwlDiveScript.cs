@@ -18,6 +18,7 @@ public class OwlDiveScript : MonoBehaviour
     [SerializeField][Range(0f, 20f)]private float aerialAcceleration = 4f;
     [SerializeField][Range(0f, 30f)]private float aerialDeceleration = 2f;
     private bool isDiving;
+    private bool onCooldown = false;
 
     void Awake()
     {
@@ -29,20 +30,9 @@ public class OwlDiveScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (movementScript.active && !characterController.isGrounded) // owl should only be able to dive when they are active & in the air
+        if (movementScript.active && !characterController.isGrounded && divePressed && !onCooldown) // owl should only be able to dive when they are active & in the air
         {
-            if (divePressed) // dive starts, assign values
-            {
-                movementScript.ChangeGravity(diveAcceleration); 
-                movementScript.ChangeTerminalVelocity(terminalVelocity);
-                movementScript.ChangeAerialAcceleration(aerialAcceleration);
-                movementScript.ChangeAerialDeceleration(aerialDeceleration);
-                isDiving = true;
-            }
-            if (isDiving && !diveHeld) // if dive input stops being held, end dive
-            {
-                EndDive();
-            }
+              DivePressed();
         }
         else if (isDiving) // if on the ground and isDiving is true, make sure to end dive
         {
@@ -50,8 +40,63 @@ public class OwlDiveScript : MonoBehaviour
         }
     }
 
+    public void DiveStart()
+    {
+        divePressed = true;
+
+    }
+
+    public void DivePressed()
+    {
+        Debug.Log("Pressed");
+
+            movementScript.ChangeGravity(diveAcceleration);
+            movementScript.ChangeTerminalVelocity(terminalVelocity);
+            movementScript.ChangeAerialAcceleration(aerialAcceleration);
+            movementScript.ChangeAerialDeceleration(aerialDeceleration);
+            isDiving = true;
+    }
+
+    public void DiveRelease()
+    {
+        divePressed = false;
+        if (isDiving)
+        {
+            Debug.Log("Dive Release Triggered");
+            EndDive();
+        }
+       
+    }
+
+    public void startDiveCooldown(float duration)
+    {
+        EndDive();
+        StartCoroutine(diveCooldown(duration));
+    }
+
+    public IEnumerator diveCooldown(float duration)
+    {
+        
+        onCooldown = true;
+        
+        movementScript.ChangeGravity(200);
+        
+        yield return new WaitForSeconds(duration);
+
+        movementScript.ChangeGravity(-50);
+
+        yield return new WaitForSeconds(.3f);
+
+        movementScript.ResetGravity();
+
+        yield return new WaitForSeconds(2f);
+        onCooldown = false;
+        yield break;
+    }
+
     private void EndDive() // returns values to their original forms
     {
+        //Debug.Log("Ended Dive");
         isDiving = false;
         movementScript.ResetGravity();
         movementScript.ResetTerminalVelocity();

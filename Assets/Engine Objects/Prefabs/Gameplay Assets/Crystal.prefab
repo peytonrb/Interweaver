@@ -13,11 +13,10 @@ GameObject:
   - component: {fileID: 6996844180158300826}
   - component: {fileID: 2908029168829144956}
   - component: {fileID: 3613315730579189555}
-  - component: {fileID: 4386516126514874628}
   - component: {fileID: 6249517806523136731}
   m_Layer: 0
   m_Name: Crystal
-  m_TagString: Crystal
+  m_TagString: Breakable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,7 +103,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 2
@@ -122,21 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 456eb5517630ea74daac361bee4821f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  crystalIndex: 0
---- !u!114 &4386516126514874628
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3738485478540167410}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 430fa7c235343aa499b5f63a8dd48a37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnLoc: {fileID: 0}
-  spawnedPrefab: {fileID: 2526917163611040970, guid: 6723f19e50df9894bb90787c86f80062, type: 3}
+  myFloatingIsland: {fileID: 0}
 --- !u!65 &6249517806523136731
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -156,5 +141,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.2759094, y: 3.0164185, z: 2.3873062}
-  m_Center: {x: 0.12567139, y: 0.5082092, z: 0.073387146}
+  m_Size: {x: 2.2759094, y: 3.9252472, z: 2.3873062}
+  m_Center: {x: 0.12567139, y: 0.9626236, z: 0.073387146}

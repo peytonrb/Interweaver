@@ -17,6 +17,7 @@ public class FamiliarScript : MonoBehaviour
     public bool myTurn; //Responsible for determining if the familiar can move
     public bool leapOfFaith; //Determines if owl familiar is in a leap of faith 
     public bool familiarMovementAbility;//Only used for reading if familiar is using movemeny ability
+    
 
 
     [Header("character's camera")]
@@ -102,7 +103,12 @@ public class FamiliarScript : MonoBehaviour
         {
             if (familiarMovementAbility)
             {
-                Destroy(other.gameObject); // TEMPORARY, in future, do something like this on the object's end
+                movementScript.Bounce();
+                
+                if (other.gameObject.TryGetComponent<CrystalScript>(out CrystalScript crystal))
+                {
+                    crystal.TriggerBreak();
+                }
             }
             else
             {
@@ -130,13 +136,27 @@ public class FamiliarScript : MonoBehaviour
             characterController.enabled = true;
         }
 
-        else if (collision.gameObject.CompareTag("Hazard")) {
+        else if (collision.gameObject.CompareTag("Hazard"))
+        {
             Destroy(collision.gameObject);
             characterController.enabled = false;
             transform.position = GM.LastCheckPointPos;
             characterController.enabled = true;
         }
-        
+
+        else if (collision.gameObject.CompareTag("Breakable")) // if familiar collides with breakable object while using movement ability
+        {
+            if (familiarMovementAbility && !characterController.isGrounded)
+            {
+                movementScript.Bounce();
+
+                if (collision.gameObject.TryGetComponent<CrystalScript>(out CrystalScript crystal))
+                {
+                    crystal.TriggerBreak();
+                }
+            }
+
+        }
     }
 
     public void Depossess() {
@@ -160,4 +180,5 @@ public class FamiliarScript : MonoBehaviour
         myTurn = true;
         StopCoroutine(ForcedDelay());
     }
+
 }

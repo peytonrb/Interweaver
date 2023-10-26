@@ -35,6 +35,10 @@ public class MovementScript : MonoBehaviour
     [SerializeField][Range(-50f, -5f)] private float terminalVelocity; // the terminal velocity of the controller
     private bool resettingTerminalVelocity;
     private float originalTerminalVelocity; // original terminal velocity of the controller
+    public Vector3 bounceVector; //max velocity for bounce
+    public float bounceValue = 3;
+
+    private bool bouncing = false;
 
     [Header("character's camera")]
     //Character Rotation values
@@ -90,6 +94,7 @@ public class MovementScript : MonoBehaviour
     void FixedUpdate()
     {
         if (Time.timeScale != 0 && active) {
+            Debug.Log(characterController.isGrounded);
 
             // changes what acceleration/deceleration type is being used based on if controller is grouunded or not
             acceleration = characterController.isGrounded ? groundAcceleration : aerialAcceleration;
@@ -120,8 +125,9 @@ public class MovementScript : MonoBehaviour
             //Character gravity
             if (!characterController.isGrounded)
             {
-                velocity.y += gravity * Time.deltaTime;
-                //weaverAnimationHandler.ToggleFallAnim(true);
+                    velocity.y += gravity * Time.deltaTime;
+                    //Debug.Log(gravity);
+                    //weaverAnimationHandler.ToggleFallAnim(true);
             }
             else
             {
@@ -181,10 +187,27 @@ public class MovementScript : MonoBehaviour
         gravity = originalGravity;
     }
 
+    public void ResetVelocityY()
+    {
+        velocity.y = 0;
+    }
+
     public void ChangeTerminalVelocity(float newTerminalVelocity) // changes terminal velocity to new value
     {
         terminalVelocity = newTerminalVelocity;
     }
+
+    public void Bounce()
+    {
+        ResetGravity();
+        ResetTerminalVelocity();
+        ResetAerialAcceleration();
+        ResetAerialDeceleration();
+        ResetVelocityY();
+        GetComponent<OwlDiveScript>().startDiveCooldown(.1f);
+        //characterController.Move(bounceVector);
+    }
+
 
     public void ResetTerminalVelocity() // resets terminal velocity to original value
     {
