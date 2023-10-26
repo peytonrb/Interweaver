@@ -94,6 +94,7 @@ public class MovementScript : MonoBehaviour
     void FixedUpdate()
     {
         if (Time.timeScale != 0 && active) {
+            Debug.Log(characterController.isGrounded);
 
             // changes what acceleration/deceleration type is being used based on if controller is grouunded or not
             acceleration = characterController.isGrounded ? groundAcceleration : aerialAcceleration;

@@ -146,7 +146,7 @@ public class FamiliarScript : MonoBehaviour
 
         else if (collision.gameObject.CompareTag("Breakable")) // if familiar collides with breakable object while using movement ability
         {
-            if (familiarMovementAbility)
+            if (familiarMovementAbility && !characterController.isGrounded)
             {
                 movementScript.Bounce();
 
@@ -180,4 +180,5 @@ public class FamiliarScript : MonoBehaviour
         myTurn = true;
         StopCoroutine(ForcedDelay());
     }
+
 }

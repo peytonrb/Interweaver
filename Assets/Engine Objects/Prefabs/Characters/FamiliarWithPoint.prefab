@@ -15,9 +15,10 @@ GameObject:
   - component: {fileID: 561915622479374034}
   - component: {fileID: 777818743776325740}
   - component: {fileID: 2139394294988104313}
+  - component: {fileID: 5452366103461141350}
   m_Layer: 0
   m_Name: FamiliarWithPoint
-  m_TagString: Player
+  m_TagString: Familiar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -37,7 +38,7 @@ Transform:
   - {fileID: 8812801818404771755}
   - {fileID: 6051683453882045260}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &2404717404260384247
 CharacterController:
@@ -98,6 +99,8 @@ MonoBehaviour:
   aerialAcceleration: 5.6
   aerialDeceleration: 5.3
   terminalVelocity: -5
+  bounceVector: {x: 0, y: 1, z: 0}
+  bounceValue: 3
   cam: {fileID: 0}
   virtualCam: {fileID: 0}
   active: 0
@@ -117,7 +120,6 @@ MonoBehaviour:
   myTurn: 0
   leapOfFaith: 0
   familiarMovementAbility: 0
-  bounceVector: {x: 0, y: 4, z: 0}
   cameraMaster: {fileID: 0}
   floatingIsland:
   - {fileID: 0}
@@ -154,6 +156,196 @@ MonoBehaviour:
   terminalVelocity: -30
   aerialAcceleration: 4
   aerialDeceleration: 2
+--- !u!114 &5452366103461141350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4766373589327111783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1f1c56a0-7e43-43ec-85db-47afd42eee48
+    m_ActionName: Weaver/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e5cafc5b-87a8-4bf4-a885-b4d611e05598
+    m_ActionName: Weaver/Weave[/Mouse/delta,/Pen/delta]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c397e94f-105d-4c30-911e-ef37e3d850a2
+    m_ActionName: Weaver/Interact[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 03cac032-24ac-4e49-bac7-e873c8c2c3e7
+    m_ActionName: Weaver/Uninteract[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 39fac198-f1a4-495b-b7a9-19943fe87608
+    m_ActionName: Weaver/Switch[/Keyboard/tab]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 08cd3fc1-e763-48a5-a582-14e6878fb46c
+    m_ActionName: Weaver/Pause[/Keyboard/p]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5b8fb45f-e14e-454b-990b-cf3895822882
+    m_ActionName: Weaver/WeaveModeSwitch[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: dec0d6cc-8a67-425f-850b-a9834d2dfe80
+    m_ActionName: Weaver/NPCInteractions[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 87dd1686-e95d-4b70-a377-18de178327a8
+    m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 400f7ea7-841c-4a3e-b080-a831c9dbfabe
+    m_ActionName: UI/Submit[/Keyboard/enter]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 673c7653-6786-4425-9988-1a763159a756
+    m_ActionName: UI/Cancel[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 797e9f43-1eb0-439b-99db-8b6cac79e05e
+    m_ActionName: UI/Point[/Mouse/position,/Pen/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bbc62de3-5495-4a56-9a6d-349d16399c22
+    m_ActionName: UI/Click[/Mouse/leftButton,/Pen/tip]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a1e5eaa9-a14b-486e-8bc7-4cfa2da2de0c
+    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e8bd9648-06f3-49ac-b222-bc4f9ba064e2
+    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 83bcd5a3-4598-4537-ab55-d52231c2c2c7
+    m_ActionName: UI/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f93bed13-7bd0-45fd-81db-ca4f807c8fa0
+    m_ActionName: UI/TrackedDevicePosition
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5c4eb095-52c0-4c8e-a346-801af87283f2
+    m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 07644cd4-c822-4718-8452-c29cdf99ac81
+    m_ActionName: weaveableObject/CombineAction[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bd887768-d377-49d9-9edb-eb0146a27dee
+    m_ActionName: weaveableObject/UncombineAction[/Keyboard/q]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InputManagerScript, Assembly-CSharp
+        m_MethodName: Move
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 729a6a3e-6db8-4a8f-bcb4-676aec309e5f
+    m_ActionName: Owl/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InputManagerScript, Assembly-CSharp
+        m_MethodName: Switch
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 3858650e-5a23-4b94-b104-4b013da81101
+    m_ActionName: Owl/Switch[/Keyboard/tab]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InputManagerScript, Assembly-CSharp
+        m_MethodName: OwlDive
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: b6b66238-ead1-4e75-a177-8efe0e5d4fee
+    m_ActionName: Owl/Dive[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InputManagerScript, Assembly-CSharp
+        m_MethodName: OwlAbility
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 610491b1-08c5-4a71-af6b-23ab33e5f86b
+    m_ActionName: Owl/NPCInteraction[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 316466f2-6f4d-4179-8fa1-71cbdf30d073
+    m_ActionName: weaveableObject/RotateCW[/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4ca55817-f7e4-468c-a41c-37383d736a2e
+    m_ActionName: weaveableObject/RotateCtrW[/Keyboard/leftArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c6a1f655-47d6-44d1-a821-d2de5dc1285f
+    m_ActionName: weaveableObject/RotateUP[/Keyboard/upArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0e9628e9-d06f-4db2-80f2-cd39c50e7f8c
+    m_ActionName: weaveableObject/RotateDOWN[/Keyboard/downArrow]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Owl
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &4790128978794148584
 GameObject:
   m_ObjectHideFlags: 0
