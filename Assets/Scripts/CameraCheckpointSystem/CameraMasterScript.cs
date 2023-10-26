@@ -24,7 +24,6 @@ public class CameraMasterScript : MonoBehaviour
         originalFamiliarCamRotation = familiarCamera.transform.eulerAngles;
 
     }
-    
 
     //WEAVER CAMERAS
     //**************************************************************************************
