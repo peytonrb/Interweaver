@@ -16,7 +16,6 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     public int ID; //an ID for objects
     public int specialID; //this is forthe combineable objects that's going to be used for puzzles
     private Vector3 WeaveablePos;
-    public bool HasJoint; //this bool and anything that usues this bool will need to  be deleted
     public bool CanRotate;//a new bool for  the rotate function
     public bool CanCombine { get; private set; } //this is ia private set so that no other script could accidentally change this bool
     public bool CanWeave { get; private set; } //this is ia private set so that no other script could accidentally change this bool
@@ -43,7 +42,6 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     void start()
     {
         rigidbody = GetComponent<Rigidbody>();
-        HasJoint = false;
         CanRotate = false;
     }
 
@@ -73,7 +71,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         if (CanRotate)
         {
             inputs.FindActionMap("weaveableObject").FindAction("RotateCW").performed += OnRotateCWInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateCtrW").performed += OnRotateCWInput;
+            inputs.FindActionMap("weaveableObject").FindAction("RotateCtrW").performed += OnRotateCtrWInput;
             inputs.FindActionMap("weaveableObject").FindAction("RotateUP").performed += OnRotateUPInput;
             inputs.FindActionMap("weaveableObject").FindAction("RotateDOWN").performed += OnRotateDownInput;
         }
@@ -81,7 +79,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         else if (!CanRotate)
         {
             inputs.FindActionMap("weaveableObject").FindAction("RotateCW").performed -= OnRotateCWInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateCtrW").performed -= OnRotateCWInput;
+            inputs.FindActionMap("weaveableObject").FindAction("RotateCtrW").performed -= OnRotateCtrWInput;
             inputs.FindActionMap("weaveableObject").FindAction("RotateUP").performed -= OnRotateUPInput;
             inputs.FindActionMap("weaveableObject").FindAction("RotateDOWN").performed -= OnRotateDownInput;
         }
@@ -95,10 +93,12 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         {
             rigidbody.constraints = RigidbodyConstraints.FreezePosition;
         }
+
         if (distanceBetween >= distance) //this uninteracts the weaveable object if it's too far away
         {
             Uninteract();
         }
+
         else if (distanceBetween >= TooCloseDistance && distanceBetween <= distance) // it will start moving if it's in the right distance
         {
             rigidbody.constraints = RigidbodyConstraints.None;
@@ -136,21 +136,17 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     void OnCollisionEnter(Collision collision) //this will need to be refactored later but for now when the weaveable collides with another weaveable it will make a fixed joint component and then add itself as the rigidbody to be connected
     {
         weaveableScript = GetComponent<Weaveable>();
-        if (collision.gameObject.GetComponent<Rigidbody>() != null && !HasJoint && weaveableScript.CanCombine && weaveableScript.ID == ID)
+        if (collision.gameObject.GetComponent<Rigidbody>() != null && weaveableScript.CanCombine && weaveableScript.ID == ID)
         {
-            gameObject.AddComponent<FixedJoint>();
-            gameObject.GetComponent<FixedJoint>().connectedBody = collision.rigidbody;
-            HasJoint = true;
+            //gameObject.AddComponent<FixedJoint>();
+            //gameObject.GetComponent<FixedJoint>().connectedBody = collision.rigidbody;
+            collision.gameObject.transform.SetParent(transform);
+            collision.rigidbody.constraints = RigidbodyConstraints.FreezePosition;
+            collision.rigidbody.freezeRotation = true;
+            collision.rigidbody.useGravity = true;
         }
 
-        else if (weaveableScript.ID != ID && !weaveableScript.CanCombine && !CompareTag("Player") || HasJoint)
-        {
-            rigidbody.velocity = new Vector3(0, 0, 0);
-            rigidbody.useGravity = true;
-            HasJoint = false;
-        }
-
-
+      
     }
 
     //section for rotate function
@@ -267,21 +263,26 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     {
         Debug.Log("This is interactable");
         Startfloating = true;
+        transform.rotation = Quaternion.identity;
     }
 
     public void Uninteract()
     {
-        Debug.Log("this is now not woven");
-        rigidbody.isKinematic = false;
-        rigidbody.useGravity = true;
-        relocate = false;
-        Weave = false;
-        Woven = false;
-        Startfloating = false;
-        CanCombine = false;
-        rigidbody.constraints = RigidbodyConstraints.None;
-        inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed -= OnCombineInput;
-        inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed -= OnUncombineInput;
+        if (Woven)
+        {
+            Debug.Log("this is now not woven");
+            rigidbody.isKinematic = false;
+            rigidbody.useGravity = true;
+            relocate = false;
+            Weave = false;
+            Woven = false;
+            Startfloating = false;
+            CanCombine = false;
+            rigidbody.constraints = RigidbodyConstraints.None;
+            inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed -= OnCombineInput;
+            inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed -= OnUncombineInput;
+        }
+       
     }
 
     public void Relocate()
@@ -305,16 +306,13 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     }
     //********************************************************************
     private void OnUncombineInput(InputAction.CallbackContext context)
-    {
-        if (HasJoint)
-        {
-            Uncombine();
-        }
+    {               
+      Uncombine();       
     }
 
     private void OnCombineInput(InputAction.CallbackContext context)
     {
-        if (weaveableScript.ID == ID)
+        if (weaveableScript.ID == ID && !weaveableScript.Woven)
         {
             Combine();
         }
@@ -325,26 +323,22 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     public void Uncombine()
     {
-        Debug.Log("This is the Uncombine code");
-        HasJoint = false;
-        weaveableScript.HasJoint = false;
-        Destroy(GetComponent<FixedJoint>());
+        Debug.Log("This is the Uncombine code");    
+        //Destroy(GetComponent<FixedJoint>());
         CanCombine = false;
+        weaveableScript.gameObject.transform.SetParent(null);
         weaveableScript.rigidbody.useGravity = true;
+        weaveableScript.rigidbody.constraints = RigidbodyConstraints.None;
+        weaveableScript.rigidbody.freezeRotation = false;
     }
 
     public void Combine()
-    {
-        if (!HasJoint)
-        {
+    {              
             Debug.Log("This is the combine code");
             weaveableScript.Startfloating = true;
             CanCombine = true;
-            weaveableScript.HasJoint = true;
             weaveableScript.rigidbody.velocity = new Vector3(transform.position.x - weaveableScript.rigidbody.transform.position.x, 0, transform.position.z - weaveableScript.rigidbody.transform.position.z);
-            weaveableScript.rigidbody.useGravity = false;
-        }
-
+            weaveableScript.rigidbody.useGravity = false;        
     }
     //********************************************************************
 }

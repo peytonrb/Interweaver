@@ -301,7 +301,7 @@ public class PlayerScript : MonoBehaviour
         {
             IsWeaving = false;
             interactable.Uninteract();
-            interactInput = true;
+            enableInteractInput = true;
             RelocateMode.SetActive(false);// remember to delete this
             CombineMode.SetActive(false);// remember to delete this
         }
