@@ -37,7 +37,7 @@ Transform:
   - {fileID: 8812801818404771755}
   - {fileID: 6051683453882045260}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &2404717404260384247
 CharacterController:
@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  inputManager: {fileID: 0}
   gravity: -3
   aerialControl: 1
   groundAcceleration: 2.5
@@ -113,24 +113,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66084289e766eb8419086251ebaa212c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerIndex: 1
-  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
   depossessing: 0
   myTurn: 0
-  cam: {fileID: 0}
-  virtualCam: {fileID: 0}
+  leapOfFaith: 0
+  familiarMovementAbility: 0
+  bounceVector: {x: 0, y: 4, z: 0}
+  cameraMaster: {fileID: 0}
   floatingIsland:
   - {fileID: 0}
   WeaveDistance: 12
-  interactInput:
-    m_Name: Interact Input
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 8e4d5263-5e87-4c04-bcc1-46a24a742685
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
   islandisfalling: 0
 --- !u!114 &777818743776325740
 MonoBehaviour:
@@ -157,6 +148,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b52fae56050b10042b692b632f17a0b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  divePressed: 0
+  diveHeld: 0
   diveAcceleration: -20
   terminalVelocity: -30
   aerialAcceleration: 4

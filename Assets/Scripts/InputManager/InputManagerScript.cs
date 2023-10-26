@@ -124,17 +124,16 @@ public class InputManagerScript : MonoBehaviour
         OwlDiveScript owlDiveScript = familiar.GetComponent<OwlDiveScript>();
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
         if (context.started) {
-            owlDiveScript.divePressed = true;
+            owlDiveScript.DiveStart();
             familiarScript.familiarMovementAbility = true;
 
         }
         else if (context.performed && !context.canceled) {
-            owlDiveScript.diveHeld = true;
+            owlDiveScript.DivePressed();
             familiarScript.familiarMovementAbility = true;
         }
         else if (context.canceled) {
-            owlDiveScript.divePressed = false;
-            owlDiveScript.diveHeld = false;
+            owlDiveScript.DiveRelease();
             familiarScript.familiarMovementAbility = false;
         }
     }
