@@ -14,8 +14,6 @@ public class CameraMasterScript : MonoBehaviour
     private Vector3 originalFamiliarCamRotation;
     private Vector3 originalFamiliarCamTransposeOffset;
     
-    //Floating Island Camera
-    public CinemachineVirtualCamera floatingIslandCamera;
     private int vcamListLength;
     public int cameraOnPriority;
 
@@ -152,26 +150,22 @@ public class CameraMasterScript : MonoBehaviour
 
     //**************************************************************************************
 
-
     //FLOATING ISLAND CAMERA
     //**************************************************************************************
-    public void FloatingIslandCameraSwitch() {
-        GameObject floatingIsland = GameObject.FindGameObjectWithTag("FloatingIsland");
-        FloatingIslandScript floatingIslandScript = floatingIsland.GetComponent<FloatingIslandScript>();
+    public void FloatingIslandCameraSwitch(CinemachineVirtualCamera cameraToSwitchTo, FloatingIslandScript floatingIsland)
+    {
 
         familiarCamera.Priority = 0;
-        floatingIslandCamera.Priority = 1;
-        floatingIslandScript.cameraswitched = true;
-        floatingIslandScript.StartFalling();
+        cameraToSwitchTo.Priority = 1;
+        floatingIsland.cameraswitched = true;
+        floatingIsland.RaiseIsland();
     }
 
-    public void FloatingIslandCameraReturn() {
-        GameObject floatingIsland = GameObject.FindGameObjectWithTag("FloatingIsland");
-        FloatingIslandScript floatingIslandScript = floatingIsland.GetComponent<FloatingIslandScript>();
+    public void FloatingIslandCameraReturn(CinemachineVirtualCamera cameraToSwitchFrom)
+    {
 
-        familiarCamera.Priority = 1;
-        floatingIslandCamera.Priority = 0;
-        floatingIslandScript.rb.constraints = RigidbodyConstraints.FreezeAll;
-        floatingIslandScript.isislandfalling = false;
+        weaverVirtualCams[cameraOnPriority].Priority = 1;
+        cameraToSwitchFrom.Priority = 0;
+
     }
 }

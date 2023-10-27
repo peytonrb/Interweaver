@@ -12,10 +12,11 @@ public class FloatingIslandScript : MonoBehaviour
     //public CinemachineVirtualCamera vcam1; //Player Camera
     //public CinemachineVirtualCamera vcam2; //Floating Island Falling
     public CrystalScript myCrystal;
+    public CinemachineVirtualCamera myFloatCamera;
 
     //Designer Variables
     [Header("Designer Variables")] 
-    [SerializeField] private bool startsFloating = true;
+    [SerializeField] private bool isFloating = true;
     //public bool toggleTimer;
     [SerializeField] private float timerBeforeSwap;
     [SerializeField] private Transform floatTransform;
@@ -24,6 +25,7 @@ public class FloatingIslandScript : MonoBehaviour
 
     [Header("Animation Variables")]
     public float verticalOffset = 0;
+    [SerializeField] private float RaiseSpeed = 1;
 
     //Internal Reqs
     public bool cameraswitched;
@@ -34,7 +36,6 @@ public class FloatingIslandScript : MonoBehaviour
     private void Awake()
     {
         //Assign Components
-        rb = gameObject.GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         myCrystal.AssignFloatingIsland(this);
 
@@ -43,7 +44,7 @@ public class FloatingIslandScript : MonoBehaviour
         isislandfalling = false;
 
         //Set Animator
-        if (startsFloating)
+        if (isFloating)
         {
             anim.SetTrigger("Float");
         }
@@ -56,19 +57,6 @@ public class FloatingIslandScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       //if (isislandfalling == false) {
-       //     familiarScript.islandisfalling = false;
-            
-       //} else {
-       //     familiarScript.islandisfalling = true;
-       //     if (toggleTimer) {
-       //         timer -= Time.deltaTime;
-       //         if (timer <= 0) {
-       //             ReturnCamera();
-       //         }
-       //     }
-       //}
-
        if (verticalOffset != 0)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y + verticalOffset, transform.position.z);
@@ -77,78 +65,58 @@ public class FloatingIslandScript : MonoBehaviour
     
     public void StartFalling() 
     {
-        if (cameraswitched == false)
-        {
-            GameObject cameraMaster = GameObject.FindGameObjectWithTag("CameraMaster");
-            //CameraMasterScript cameraMasterScript = cameraMaster.GetComponent<CameraMasterScript>();
-            //cameraMasterScript.FloatingIslandCameraSwitch();
-            anim.SetTrigger("Fall");
-        }
-        else {
-            StartCoroutine(TimerBeforeRespawn(true));
-            rb.constraints = RigidbodyConstraints.None;
-            rb.constraints = RigidbodyConstraints.FreezeRotation;
-            cameraswitched = false;
-        }
-        
-        
+        anim.SetTrigger("Fall");
+        StartCoroutine(TimerBeforeRespawn(true));
+        cameraswitched = false;
+       
     }
 
     public IEnumerator TimerBeforeRespawn(bool isFalling)
     {
-        yield return new WaitForSeconds(timerBeforeSwap);
+        yield return new WaitForSeconds(timerBeforeSwap / 2);
+
+        CameraMasterScript cameraMasterScript = GameObject.FindGameObjectWithTag("CameraMaster").GetComponent<CameraMasterScript>();
+        cameraMasterScript.FloatingIslandCameraReturn(myFloatCamera);
+
+        yield return new WaitForSeconds(timerBeforeSwap /2);
 
         if (isFalling)
         {
-            transform.position = sitTransform.position;
             anim.SetTrigger("Sit");
+            verticalOffset = 0;
+            transform.position = sitTransform.position;
+            
         }
         else
         {
-            transform.position = floatTransform.position;
             anim.SetTrigger("Float");
+            verticalOffset = 0;
+            transform.position = floatTransform.position;
+            
         }
         
         yield break;
     }
 
-    public void StartRising()
+    public void SwapToRiseCamera()
     {
         //Camera is switched to a new view which watches the whole island rise. (Lasts about 2 seconds)
         if (cameraswitched == false)
         {
-            GameObject cameraMaster = GameObject.FindGameObjectWithTag("CameraMaster");
-            CameraMasterScript cameraMasterScript = cameraMaster.GetComponent<CameraMasterScript>();
-            cameraMasterScript.FloatingIslandCameraSwitch();
+            CameraMasterScript cameraMasterScript = GameObject.FindGameObjectWithTag("CameraMaster").GetComponent<CameraMasterScript>();
+            cameraMasterScript.FloatingIslandCameraSwitch(myFloatCamera, this);
         }
-        else
-        {
-            //Island starts to fall once the camera has been switched
-            //Needs to be changed to play rise animation instead
-            StartCoroutine(TimerBeforeRespawn(false));
-            rb.constraints = RigidbodyConstraints.None;
-            rb.constraints = RigidbodyConstraints.FreezeRotation;
-            cameraswitched = false;
-        }
+
     }
 
-    //OBSOLETE
-    //****************************************************************
-    /*
-    void SwitchCamera() {
-        vcam1.Priority = 0;
-        vcam2.Priority = 1;
-        cameraswitched = true;
-        StartFalling();
-    }
-    
+    public void RaiseIsland()
+    {
+        StartCoroutine(TimerBeforeRespawn(false));
+        cameraswitched = false;
 
-    public void ReturnCamera() {
-        vcam1.Priority = 1;
-        vcam2.Priority = 0;
-        rb.constraints = RigidbodyConstraints.FreezeAll;
-        isislandfalling = false;
+        anim.SetTrigger("Rise");
     }
-    */
+
+
             
 }
