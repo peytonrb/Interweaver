@@ -116,7 +116,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
             {
                 rigidbody.velocity = new Vector3(raycastHit.point.x - rigidbody.position.x, transform.position.y - rigidbody.position.y, raycastHit.point.z - rigidbody.position.z);
                 DistanceCheck();
-                rigidbody.freezeRotation = true;
+                 
+                rigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ; //this freezes the Y position so that the combined objects won't drag it down because of gravity and it freezes in all rotation so it won't droop because of the gravity  from the objects
             }
             if (Weave)
             {
@@ -138,13 +139,10 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
         weaveableScript = GetComponent<Weaveable>();
         if (collision.gameObject.GetComponent<Rigidbody>() != null && weaveableScript.CanCombine && weaveableScript.ID == ID)
         {
-            //gameObject.AddComponent<FixedJoint>();
-            //gameObject.GetComponent<FixedJoint>().connectedBody = collision.rigidbody;
-            collision.gameObject.transform.SetParent(transform);
-            collision.rigidbody.constraints = RigidbodyConstraints.FreezePosition;
-            collision.rigidbody.freezeRotation = true;
+            var fixedJoint = gameObject.AddComponent<FixedJoint>();
+            fixedJoint.connectedBody = collision.rigidbody;
             collision.rigidbody.useGravity = true;
-            collision.rigidbody.velocity =  Vector3.zero;
+            
         }
 
       
@@ -326,9 +324,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     public void Uncombine()
     {
         Debug.Log("This is the Uncombine code");    
-        //Destroy(GetComponent<FixedJoint>());
+        Destroy(GetComponent<FixedJoint>());
         CanCombine = false;
-        weaveableScript.gameObject.transform.SetParent(null);
         weaveableScript.rigidbody.useGravity = true;
         weaveableScript.rigidbody.constraints = RigidbodyConstraints.None;
         weaveableScript.rigidbody.freezeRotation = false;
