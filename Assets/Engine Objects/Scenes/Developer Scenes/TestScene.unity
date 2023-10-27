@@ -1452,7 +1452,7 @@ MonoBehaviour:
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
+  m_DefaultActionMap: Weaver
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &544188255
@@ -1467,21 +1467,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f43254a5aebfd2458990574e3f1970c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody: {fileID: 544188256}
-  HoveringValue: 120
+  rb: {fileID: 544188256}
+  hoveringValue: 1
   mainCamera: {fileID: 963194227}
-  LayerstoHit:
+  layersToHit:
     serializedVersion: 2
     m_Bits: 65
   distance: 12
-  TooCloseDistance: 4
+  tooCloseDistance: 6
   ID: 1
   specialID: 0
-  HasJoint: 0
-  CanRotate: 0
+  canRotate: 0
   Woven: 0
-  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
   PlayerPrefab: {fileID: 1023923967}
+  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
 --- !u!54 &544188256
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1644,7 +1643,7 @@ MonoBehaviour:
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
+  m_DefaultActionMap: Weaver
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &594115935
@@ -1659,21 +1658,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f43254a5aebfd2458990574e3f1970c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody: {fileID: 594115936}
-  HoveringValue: 120
+  rb: {fileID: 594115936}
+  hoveringValue: 1
   mainCamera: {fileID: 963194227}
-  LayerstoHit:
+  layersToHit:
     serializedVersion: 2
     m_Bits: 65
   distance: 12
-  TooCloseDistance: 4
+  tooCloseDistance: 6
   ID: 2
   specialID: 0
-  HasJoint: 0
-  CanRotate: 0
+  canRotate: 0
   Woven: 0
-  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
   PlayerPrefab: {fileID: 1023923967}
+  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
 --- !u!54 &594115936
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4370,11 +4368,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myCrystal: {fileID: 0}
-  startsFloating: 1
+  myFloatCamera: {fileID: 0}
+  isFloating: 1
   timerBeforeSwap: 0
   floatTransform: {fileID: 0}
   sitTransform: {fileID: 0}
   verticalOffset: 0
+  RaiseSpeed: 1
   cameraswitched: 0
   isislandfalling: 0
   rb: {fileID: 0}
@@ -5333,7 +5333,6 @@ MonoBehaviour:
   - {fileID: 0}
   weaverVirtualCams: []
   familiarCamera: {fileID: 0}
-  floatingIslandCamera: {fileID: 0}
   cameraOnPriority: 0
 --- !u!4 &1494190702
 Transform:
@@ -6549,21 +6548,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f43254a5aebfd2458990574e3f1970c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody: {fileID: 1800429386}
-  HoveringValue: 120
+  rb: {fileID: 1800429386}
+  hoveringValue: 1
   mainCamera: {fileID: 963194227}
-  LayerstoHit:
+  layersToHit:
     serializedVersion: 2
     m_Bits: 65
   distance: 12
-  TooCloseDistance: 4
+  tooCloseDistance: 6
   ID: 1
   specialID: 0
-  HasJoint: 0
-  CanRotate: 0
+  canRotate: 0
   Woven: 0
-  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
   PlayerPrefab: {fileID: 1023923967}
+  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
 --- !u!54 &1800429386
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6704,7 +6702,7 @@ MonoBehaviour:
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
+  m_DefaultActionMap: Weaver
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!1 &1827379388
