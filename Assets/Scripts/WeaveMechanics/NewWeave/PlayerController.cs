@@ -41,6 +41,14 @@ public class PlayerController : MonoBehaviour
     private Vector3 raycastPosition;
     private WeaveableNew weaveableScript;
 
+    // new variables
+    public bool inRelocateMode;
+    public bool inCombineMode;
+    public bool uninteract;
+    public IInteractable interactableObject;
+    private GameObject wovenObject;
+    [SerializeField] private float distanceBetween;
+
     [Header("References")]
     public GameObject familiar;
     private FamiliarScript familiarScript;
@@ -52,17 +60,6 @@ public class PlayerController : MonoBehaviour
     [Header("Prototype")]
     public GameObject relocateMode;
     public GameObject combineMode;
-
-    // NEW VARIABLES
-    [Header("Flags")]
-    public bool inRelocateMode;
-    public bool inCombineMode;
-    public bool uninteract;
-
-    [Header("Im going crazy")]
-    public IInteractable interactableObject;
-    private GameObject wovenObject;
-    [SerializeField] private float distanceBetween;
 
     void Awake()
     {
@@ -120,6 +117,7 @@ public class PlayerController : MonoBehaviour
             }
 
             // inRelocateMode and inCombineMode both set by InputManager
+            // handles things that occur while the weave is active
             if (inRelocateMode || inCombineMode)
             {
                 // player points towards woven object

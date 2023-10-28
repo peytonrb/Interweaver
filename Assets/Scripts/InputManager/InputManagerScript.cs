@@ -59,15 +59,15 @@ public class InputManagerScript : MonoBehaviour
 
         // if (context.started)
         // {
-        //     playerScript.interactInput = true;
-        //     if (playerScript.inCombineMode)                 // occasionally reads a hit during compile time????
+        //     if (!playerScript.inRelocateMode && !playerScript.inCombineMode) // occasionally reads a hit during compile time????
+        //     {
+        //         playerScript.interactInput = true;
+        //         playerScript.inRelocateMode = true;
+        //     }
+        //     else if (playerScript.inCombineMode)                 
         //     {
         //         playerScript.inRelocateMode = true;
         //         playerScript.inCombineMode = false;
-        //     }
-        //     else
-        //     {
-        //         playerScript.inRelocateMode = true;
         //     }
         // }
     }
