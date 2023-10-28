@@ -13,6 +13,20 @@ public class DialogueManager : MonoBehaviour
     private GameObject textBoxUI;
     private AudioClip audioClip;
     
+    public static DialogueManager instance;
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         sentences = new Queue<string>();

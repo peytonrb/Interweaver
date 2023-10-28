@@ -14,8 +14,6 @@ public class MovementScript : MonoBehaviour
     public float speed; //Base walk speed for player
     private float currentSpeed = 0; // the current speed for the player
     private CharacterController characterController; //references the character controller component
-    public GameObject inputManager;
-    private InputManagerScript inputManagerScript;
     //public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
     //private InputAction moveInput; //Is the specific input action regarding arrow keys, WASD, and left stick
     private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
@@ -64,8 +62,6 @@ public class MovementScript : MonoBehaviour
         originalAerialAcceleration = aerialAcceleration;
         originalAerialDeceleration = aerialDeceleration;
 
-        //Section reserved for initiating inputs 
-        inputManagerScript = inputManager.GetComponent<InputManagerScript>();
         //moveInput = inputs.FindAction("Player/Move");
 
         //these two lines are grabing the game master's last checkpoint position
@@ -83,7 +79,7 @@ public class MovementScript : MonoBehaviour
             if (Time.timeScale != 0 && active)
             {
                 //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad
-                movement = inputManagerScript.movement;
+                movement = InputManagerScript.instance.movement;
                 LookAndMove();
                 
             }

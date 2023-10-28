@@ -24,7 +24,6 @@ public class FamiliarScript : MonoBehaviour
     //Character Rotation values
     //**********************************************************
     public GameObject cameraMaster; //Camera manager reference
-    private CameraMasterScript cameraMasterScript;
     //public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
     //private Vector3 originalVirtualCamRotation; // Original rotation values for the virtual camera
     //private Vector3 originalVirtualCamTransposeOffset; //Virtual Camera original transpose offset values
@@ -54,8 +53,6 @@ public class FamiliarScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cameraMasterScript = cameraMaster.GetComponent<CameraMasterScript>();
-
         myTurn = false;
         islandisfalling = false;
         depossessing = false;
@@ -112,7 +109,7 @@ public class FamiliarScript : MonoBehaviour
             }
             else
             {
-                cameraMasterScript.EndLeapOfFaith();
+                CameraMasterScript.instance.EndLeapOfFaith();
                 characterController.enabled = false;
                 transform.position = GM.LastCheckPointPos;
                 characterController.enabled = true;
@@ -125,12 +122,12 @@ public class FamiliarScript : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Leap of Faith Trigger"))
         {
-            cameraMasterScript.StartLeapOfFaith();
+            CameraMasterScript.instance.StartLeapOfFaith();
         }
 
         else if (collision.gameObject.CompareTag("Kill Area"))
         {
-            cameraMasterScript.EndLeapOfFaith();
+            CameraMasterScript.instance.EndLeapOfFaith();
             characterController.enabled = false;
             transform.position = GM.LastCheckPointPos;
             characterController.enabled = true;

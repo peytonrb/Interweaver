@@ -5,6 +5,9 @@ using Cinemachine;
 
 public class CameraMasterScript : MonoBehaviour
 {
+    //Singleton
+    public static CameraMasterScript instance;
+
     //Weaver Camera + Checkpoints
     public GameObject[] checkpoints; //Put all checkpoints here.
     public CinemachineVirtualCamera[] weaverVirtualCams; //For all cameras that are around the weaver
@@ -16,6 +19,18 @@ public class CameraMasterScript : MonoBehaviour
     
     private int vcamListLength;
     public int cameraOnPriority;
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start() {
         originalFamiliarCamTransposeOffset = familiarCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;

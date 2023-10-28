@@ -12,6 +12,20 @@ public class InputManagerScript : MonoBehaviour
     public Vector2 weaveCursor;
     public bool switching;
 
+    public static InputManagerScript instance;
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     //Familiar Script only has player switch and player interact and familiar movement ability inputs.
     //Player Script handles a majority of inputs.
     //Dont listen to this ^^^ Its just me talking to myself...

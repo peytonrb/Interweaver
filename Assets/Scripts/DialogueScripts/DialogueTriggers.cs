@@ -10,7 +10,7 @@ public class DialogueTriggers : MonoBehaviour
     // is called if near an NPC 
     public void triggerDialogue()
     {
-        FindObjectOfType<DialogueManager>().StartDialogue(dialogue, textBox);
+        DialogueManager.instance.StartDialogue(dialogue, textBox);
     }
 
     // occurs only with Event Triggers
@@ -19,7 +19,7 @@ public class DialogueTriggers : MonoBehaviour
         if (collider.gameObject.tag == "Player")
         {
             Debug.Log("TRIGGERED");
-            FindObjectOfType<DialogueManager>().StartDialogue(dialogue, textBox);
+            DialogueManager.instance.StartDialogue(dialogue, textBox);
         }
     }
 
@@ -28,7 +28,7 @@ public class DialogueTriggers : MonoBehaviour
         if (collider.gameObject.tag == "Player")
         {
             Debug.Log("TRIGGERED");
-            FindObjectOfType<DialogueManager>().EndDialogue();
+            DialogueManager.instance.EndDialogue();
         }
     }
 }

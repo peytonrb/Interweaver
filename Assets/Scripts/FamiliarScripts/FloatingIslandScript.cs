@@ -77,8 +77,8 @@ public class FloatingIslandScript : MonoBehaviour
 
         if (!isFalling)
         {
-            CameraMasterScript cameraMasterScript = GameObject.FindGameObjectWithTag("CameraMaster").GetComponent<CameraMasterScript>();
-            cameraMasterScript.FloatingIslandCameraReturn(myFloatCamera);
+            
+            CameraMasterScript.instance.FloatingIslandCameraReturn(myFloatCamera);
         }
         
 
@@ -107,8 +107,7 @@ public class FloatingIslandScript : MonoBehaviour
         //Camera is switched to a new view which watches the whole island rise. (Lasts about 2 seconds)
         if (cameraswitched == false)
         {
-            CameraMasterScript cameraMasterScript = GameObject.FindGameObjectWithTag("CameraMaster").GetComponent<CameraMasterScript>();
-            cameraMasterScript.FloatingIslandCameraSwitch(myFloatCamera, this);
+            CameraMasterScript.instance.FloatingIslandCameraSwitch(myFloatCamera, this);
         }
 
     }

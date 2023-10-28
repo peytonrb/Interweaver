@@ -12,15 +12,11 @@ public class PlayerScript : MonoBehaviour
     [Header("Movement Variables")]
     private CharacterController characterController; 
     private MovementScript movementScript; 
-    public GameObject inputManager;
-    private InputManagerScript inputManagerScript;
     private bool possessing;
 
     [Header("Character's Camera")]
     [SerializeField] private Camera mainCamera;
     public CinemachineVirtualCamera familiarVirtualCam;
-    public GameObject cameraCheckpointMaster;
-    private CameraMasterScript CMScript;
     private int vCamRotationState; //State 0 is default
 
     [Header("Pause Menu")]
@@ -69,8 +65,6 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
-        CMScript = cameraCheckpointMaster.GetComponent<CameraMasterScript>();
-        inputManagerScript = inputManager.GetComponent<InputManagerScript>();
         possessing = false;
         isWeaving = false;
         vCamRotationState = 0;
@@ -94,7 +88,7 @@ public class PlayerScript : MonoBehaviour
         {
             if (familiarScript.depossessing)
             {
-                CMScript.SwitchToWeaverCamera();
+                CameraMasterScript.instance.SwitchToWeaverCamera();
                 familiarScript.myTurn = false;
                 possessing = false;
                 familiarScript.depossessing = false;
@@ -120,7 +114,7 @@ public class PlayerScript : MonoBehaviour
 
     private void weaveController()
     {
-        cursor = inputManagerScript.weaveCursor;
+        cursor = InputManagerScript.instance.weaveCursor;
         if (cursor.magnitude <= 0.1f)
         {
             return;
@@ -153,7 +147,7 @@ public class PlayerScript : MonoBehaviour
             CameraIndexScript cameraIndexScript = other.GetComponent<CameraIndexScript>();
             vCamRotationState = cameraIndexScript.cameraIndex;
 
-            CMScript.SwitchCameras(vCamRotationState);
+            CameraMasterScript.instance.SwitchCameras(vCamRotationState);
 
             //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
         }
@@ -293,7 +287,7 @@ public class PlayerScript : MonoBehaviour
             if (possessing == false)
             {
                 //Switches to Familiar
-                CMScript.SwitchToFamiliarCamera();
+                CameraMasterScript.instance.SwitchToFamiliarCamera();
                 possessing = true;
                 Debug.Log("Possessing");
                 movementScript.active = false;
