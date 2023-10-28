@@ -9,7 +9,6 @@ public class NetProjectileScript : MonoBehaviour
     //*******************************
     //These variables are set by NetCannonScript
     public float speed;
-    public bool shootingonZ;
     public float lifetime = 4;
     //*******************************
 
@@ -18,12 +17,7 @@ public class NetProjectileScript : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        if (shootingonZ == true) {
-            rb.AddForce(new Vector3(0,0,speed), ForceMode.Impulse);
-        }
-        else {
-            rb.AddForce(new Vector3(speed,0,0), ForceMode.Impulse);
-        }
+        rb.AddRelativeForce(Vector3.forward * speed, ForceMode.Impulse);
 
         StartCoroutine(TimerBeforeDestroy(lifetime));
     }
@@ -31,7 +25,6 @@ public class NetProjectileScript : MonoBehaviour
     public IEnumerator TimerBeforeDestroy(float lifetime)
     {
         yield return new WaitForSeconds(lifetime);
-
 
         Destroy(gameObject);
         yield break;
