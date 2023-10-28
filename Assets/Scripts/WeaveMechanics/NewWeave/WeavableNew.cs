@@ -59,7 +59,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         if (canRotate)
         {
             // this finds the the different action map called weaveableObject and then subscribes to the method 
-            inputs.FindActionMap("weaveableObject").FindAction("RotateCW").performed += OnRotateCWInput; 
+            inputs.FindActionMap("weaveableObject").FindAction("RotateCW").performed += OnRotateCWInput;
             inputs.FindActionMap("weaveableObject").FindAction("RotateCtrW").performed += OnRotateCtrWInput;
             inputs.FindActionMap("weaveableObject").FindAction("RotateUP").performed += OnRotateUPInput;
             inputs.FindActionMap("weaveableObject").FindAction("RotateDOWN").performed += OnRotateDownInput;
@@ -69,7 +69,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         {
             // this finds the the different action map called weaveableObject and then unsubscribes to the method, 
             //      it's there so that it can prevent memory leakage 
-            inputs.FindActionMap("weaveableObject").FindAction("RotateCW").performed -= OnRotateCWInput; 
+            inputs.FindActionMap("weaveableObject").FindAction("RotateCW").performed -= OnRotateCWInput;
             inputs.FindActionMap("weaveableObject").FindAction("RotateCtrW").performed -= OnRotateCtrWInput;
             inputs.FindActionMap("weaveableObject").FindAction("RotateUP").performed -= OnRotateUPInput;
             inputs.FindActionMap("weaveableObject").FindAction("RotateDOWN").performed -= OnRotateDownInput;
@@ -82,7 +82,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
         // this shoots a raycast from the camera to the 3D plane to get the position of the mouse
-        if (Physics.Raycast(ray, out RaycastHit raycastHit, 100, layersToHit)) 
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 100, layersToHit))
         {
             weaveableScript = raycastHit.collider.GetComponent<WeaveableNew>();
 
@@ -101,15 +101,15 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 if (combineable != null && !weaveableScript.canCombine)
                 {
                     //this finds the the different action map called weaveableObject and then subscribes to the method 
-                    inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput; 
+                    inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput;
                     inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed += OnUncombineInput;
                 }
             }
         }
     }
 
-     // this will need to be refactored later but for now when the weaveable collides with another 
-     //     weaveable it will make a fixed joint component and then add itself as the rigidbody to be connected
+    // this will need to be refactored later but for now when the weaveable collides with another 
+    //     weaveable it will make a fixed joint component and then add itself as the rigidbody to be connected
     void OnCollisionEnter(Collision collision)
     {
         weaveableScript = GetComponent<WeaveableNew>();
