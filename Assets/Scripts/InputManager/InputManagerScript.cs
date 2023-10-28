@@ -16,23 +16,26 @@ public class InputManagerScript : MonoBehaviour
     //Player Script handles a majority of inputs.
     //Dont listen to this ^^^ Its just me talking to myself...
 
-    // REMOVE ALL PLAYERCONTROLLER CALLS. THIS IS FOR TESTING FOR THE WEAVE
 
     //MOVE
     //******************************************************
-    public void Move(InputAction.CallbackContext context) {
+    public void Move(InputAction.CallbackContext context)
+    {
         movement = context.ReadValue<Vector2>();
     }
 
-    public void WeaverLookandMove() {
+    public void WeaverLookandMove()
+    {
         MovementScript movementScript = player.GetComponent<MovementScript>();
         movementScript.LookAndMove();
     }
 
-    public void FamiliarLookandMove() {
+    public void FamiliarLookandMove()
+    {
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
         MovementScript movementScript = familiar.GetComponent<MovementScript>();
-        if (familiarScript.myTurn) {
+        if (familiarScript.myTurn)
+        {
             movementScript.LookAndMove();
         }
     }
@@ -40,63 +43,86 @@ public class InputManagerScript : MonoBehaviour
 
     //WEAVER ABILITIES
     //******************************************************
-    public void WeaverInteract(InputAction.CallbackContext context) {
-        // PlayerScript playerScript = player.GetComponent<PlayerScript>();
-        PlayerController playerScript = player.GetComponent<PlayerController>();
-        if (context.started) {
-            // if (playerScript.enableInteractInput) {
+    public void WeaverInteract(InputAction.CallbackContext context)
+    {
+        PlayerScript playerScript = player.GetComponent<PlayerScript>();         // old weave
+        if (context.started)
+        {
+            if (playerScript.enableInteractInput)
+            {
                 playerScript.interactInput = true;
-                // Debug.Log(playerScript.interactInput);
-
-                // delete - peytons tests
-                if (playerScript.inCombineMode)                 // occasionally reads a hit during compile time????
-                {
-                    playerScript.inRelocateMode = true;
-                    playerScript.inCombineMode = false;
-                }
-                else
-                {
-                    playerScript.inRelocateMode = true;
-                }
-            // }
+                Debug.Log(playerScript.interactInput);
+            }
         }
-        
+
+        // PlayerController playerScript = player.GetComponent<PlayerController>();    // new weave
+
+        // if (context.started)
+        // {
+        //     playerScript.interactInput = true;
+        //     if (playerScript.inCombineMode)                 // occasionally reads a hit during compile time????
+        //     {
+        //         playerScript.inRelocateMode = true;
+        //         playerScript.inCombineMode = false;
+        //     }
+        //     else
+        //     {
+        //         playerScript.inRelocateMode = true;
+        //     }
+        // }
     }
 
-    public void WeaverUninteract(InputAction.CallbackContext context) {
-        // PlayerScript playerScript = player.GetComponent<PlayerScript>();
-        PlayerController playerScript = player.GetComponent<PlayerController>();
-        if (context.started) {
-            // if (playerScript.enableUninteractInput) {
-                playerScript.uninteract = true;
-                playerScript.interactInput = false;
-                playerScript.inRelocateMode = false;
-                playerScript.inCombineMode = true;
-            // }
+    public void WeaverUninteract(InputAction.CallbackContext context)
+    {
+        PlayerScript playerScript = player.GetComponent<PlayerScript>();     // old weave
+        if (context.started)
+        {
+            if (playerScript.enableUninteractInput)
+            {
+                playerScript.uninteractInput = true;
+            }
         }
-        
+
+        // PlayerController playerScript = player.GetComponent<PlayerController>(); // new weave
+        // if (context.started)
+        // {
+        //     playerScript.uninteract = true;
+        //     playerScript.interactInput = false;
+        //     playerScript.inRelocateMode = false;
+        //     playerScript.inCombineMode = false;
+        // }
     }
 
-    public void WeaveModeSwitch(InputAction.CallbackContext context) {
-        // PlayerScript playerScript = player.GetComponent<PlayerScript>();
-        PlayerController playerScript = player.GetComponent<PlayerController>();
-        if (context.started) {
-            // if (playerScript.enableWeaveModeSwitch) {
-                playerScript.inCombineMode = true;
-                playerScript.inRelocateMode = false;
-            // }
+    public void WeaveModeSwitch(InputAction.CallbackContext context)
+    {
+        PlayerScript playerScript = player.GetComponent<PlayerScript>();     // old weave
+        if (context.started)
+        {
+            if (playerScript.enableWeaveModeSwitch)
+            {
+                playerScript.weaveModeSwitch = true;
+            }
         }
-         
+
+        // PlayerController playerScript = player.GetComponent<PlayerController>(); // new weave
+        // if (context.started)
+        // {
+        //     playerScript.inCombineMode = true;
+        //     playerScript.inRelocateMode = false;
+        // }
     }
 
-    public void WeaveCursor(InputAction.CallbackContext context) {
+    public void WeaveCursor(InputAction.CallbackContext context)
+    {
         weaveCursor = context.ReadValue<Vector2>();
     }
 
-    public void NPCInteraction(InputAction.CallbackContext context) {
+    public void NPCInteraction(InputAction.CallbackContext context)
+    {
         // PlayerScript playerScript = player.GetComponent<PlayerScript>();
         PlayerController playerScript = player.GetComponent<PlayerController>();
-        if (context.started) {
+        if (context.started)
+        {
             playerScript.Interact();
         }
     }
@@ -104,15 +130,19 @@ public class InputManagerScript : MonoBehaviour
 
     //SWITCHING
     //******************************************************
-    public void Switch(InputAction.CallbackContext context) {
+    public void Switch(InputAction.CallbackContext context)
+    {
         // PlayerScript playerScript = player.GetComponent<PlayerScript>();
         PlayerController playerScript = player.GetComponent<PlayerController>();
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
-        if (context.started) {
-            if (familiarScript.myTurn) {
+        if (context.started)
+        {
+            if (familiarScript.myTurn)
+            {
                 familiarScript.Depossess();
-            } 
-            else {
+            }
+            else
+            {
                 playerScript.Possession();
             }
         }
@@ -121,10 +151,12 @@ public class InputManagerScript : MonoBehaviour
 
     //PAUSING
     //******************************************************
-    public void Pause(InputAction.CallbackContext context) {
+    public void Pause(InputAction.CallbackContext context)
+    {
         // PlayerScript playerScript = player.GetComponent<PlayerScript>();
         PlayerController playerScript = player.GetComponent<PlayerController>();
-        if (context.started) {
+        if (context.started)
+        {
             playerScript.Pausing();
         }
     }
@@ -132,30 +164,37 @@ public class InputManagerScript : MonoBehaviour
 
     //OWL FAMILIAR ABILITIES
     //******************************************************
-    public void OwlAbility(InputAction.CallbackContext context) {
+    public void OwlAbility(InputAction.CallbackContext context)
+    {
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
-        if (context.started) {
+        if (context.started)
+        {
             //This has to be performed through a bool since this particular method is only activated through collisions
             familiarScript.familiarMovementAbility = true;
         }
-        else {
+        else
+        {
             familiarScript.familiarMovementAbility = false;
         }
     }
 
-    public void OwlDive(InputAction.CallbackContext context) {
+    public void OwlDive(InputAction.CallbackContext context)
+    {
         OwlDiveScript owlDiveScript = familiar.GetComponent<OwlDiveScript>();
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
-        if (context.started) {
+        if (context.started)
+        {
             owlDiveScript.DiveStart();
             familiarScript.familiarMovementAbility = true;
 
         }
-        else if (context.performed && !context.canceled) {
+        else if (context.performed && !context.canceled)
+        {
             owlDiveScript.DivePressed();
             familiarScript.familiarMovementAbility = true;
         }
-        else if (context.canceled) {
+        else if (context.canceled)
+        {
             owlDiveScript.DiveRelease();
             familiarScript.familiarMovementAbility = false;
         }

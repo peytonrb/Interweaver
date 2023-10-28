@@ -10,8 +10,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [SerializeField] private float hoveringValue = 1f;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private LayerMask layersToHit;
-    [SerializeField] private float distance = 12f;
-    [SerializeField] private float tooCloseDistance = 6f;
     [SerializeField] public WeaveInteraction weaveInteraction;
     public int ID;
     public bool canRotate;
@@ -78,27 +76,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         }
     }
 
-    // this is for the distance check if the weaveable is too close or too far away
-    void DistanceCheck()
-    {
-        float distanceBetween = Vector3.Distance(PlayerPrefab.transform.position, transform.position);
-        if (distanceBetween <= tooCloseDistance)
-        {
-            rb.constraints = RigidbodyConstraints.FreezePosition;
-        }
-
-        // this uninteracts the weaveable object if it's too far away
-        if (distanceBetween >= distance) 
-        {
-            Uninteract();
-        }
-        // it will start moving if it's in the right distance
-        else if (distanceBetween >= tooCloseDistance && distanceBetween <= distance) 
-        {
-            rb.constraints = RigidbodyConstraints.None;
-        }
-    }
-
     // this method is for using the mouse to move around the object
     private void MovingWeaveMouse()
     {
@@ -112,13 +89,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             if (relocate)
             {
                 rb.velocity = new Vector3(raycastHit.point.x - rb.position.x, transform.position.y - rb.position.y, raycastHit.point.z - rb.position.z);
-                DistanceCheck();
 
                 rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ; //this freezes the Y position so that the combined objects won't drag it down because of gravity and it freezes in all rotation so it won't droop because of the gravity  from the objects
             }
             if (inWeaveMode)
             {
-                DistanceCheck();
                 ICombineable combineable = raycastHit.collider.GetComponent<ICombineable>();
                 canRotate = true;
 
@@ -283,7 +258,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed -= OnCombineInput; //this finds the the different action map called weaveableObject and then unsubscribes to the method, this is there so that there won't be any memory leakage
             inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed -= OnUncombineInput;
         }
-
     }
 
     public void Relocate()

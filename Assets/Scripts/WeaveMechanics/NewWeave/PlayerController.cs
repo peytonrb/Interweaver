@@ -106,33 +106,38 @@ public class PlayerController : MonoBehaviour
                 movementScript.active = true;
             }
 
-            // weave triggered
+            // WEAVE - interactInput set by InputManager
             if (interactInput)
             {
                 WeaveActivated();
             }
-            // switched into combining mode
+            // switch into combining mode - relocate is default
             else if (!interactInput && inCombineMode && interactableObject != null)
             {
                 interactableObject.WeaveMode();
-                relocateMode.SetActive(false);// remember to delete this
-                combineMode.SetActive(true);// remember to delete this
+                relocateMode.SetActive(false); // on-screen ui
+                combineMode.SetActive(true); // on-screen ui
             }
 
-            playerLookAt();
+            // inRelocateMode and inCombineMode both set by InputManager
+            if (inRelocateMode || inCombineMode)
+            {
+                // player points towards woven object
+                transform.LookAt(new Vector3(wovenObject.transform.position.x, transform.position.y, wovenObject.transform.position.z));
 
-            // snap weave
+                distanceBetween = Vector3.Distance(weaveableScript.transform.position, transform.position);
+
+                // if the player moves too far from the object while weaving
+                if (distanceBetween > WeaveDistance)
+                {
+                    Uninteract();
+                }
+            }
+
+            // snap weave - uninteract set by InputManager
             if (uninteract)
             {
-                if (interactableObject != null)
-                {
-                    interactableObject.Uninteract();
-                    interactableObject = null;
-                    weaverAnimationHandler.ToggleWeaveAnim(isWeaving);
-                    relocateMode.SetActive(false); // remember to delete this
-                    combineMode.SetActive(false); // remember to delete this
-                    uninteract = false;
-                }
+                Uninteract();
             }
 
             DetectGamepad();
@@ -154,23 +159,9 @@ public class PlayerController : MonoBehaviour
     private void WeaveActivated()
     {
         interactableObject = determineInteractability();
-        distanceBetween = Vector3.Distance(weaveableScript.transform.position, transform.position);
 
         // if too far apart
-        if (distanceBetween > WeaveDistance)    // OBJECT ISNT DROPPING FOR SOME REASON
-        {
-            Debug.Log("too far!");
-            inRelocateMode = false;
-            inCombineMode = false;
-            interactInput = false;
-
-            interactableObject.Uninteract();                // repeat code, can be made into a function
-            interactableObject = null;
-            weaverAnimationHandler.ToggleWeaveAnim(isWeaving);
-            relocateMode.SetActive(false); // on-screen ui
-            combineMode.SetActive(false); // on-screen ui
-        }
-        else
+        if (distanceBetween < WeaveDistance)
         {
             if (inRelocateMode && interactableObject != null)
             {
@@ -190,7 +181,7 @@ public class PlayerController : MonoBehaviour
 
         // the actual raycast from the player, this can be used for the line render 
         //      but it takes the raycast origin and the  direction of the raycast
-        Ray rayPlayer = new Ray(playerPosition, rayDirection); 
+        Ray rayPlayer = new Ray(playerPosition, rayDirection);
 
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
@@ -208,13 +199,19 @@ public class PlayerController : MonoBehaviour
         return null;
     }
 
-    private void playerLookAt()
+    private void Uninteract()
     {
-        if (inRelocateMode || inCombineMode)
+        if (interactableObject != null)
         {
-            transform.LookAt(new Vector3(wovenObject.transform.position.x, transform.position.y, wovenObject.transform.position.z));
+            interactableObject.Uninteract();
+            interactableObject = null;
+            weaverAnimationHandler.ToggleWeaveAnim(isWeaving);
+            relocateMode.SetActive(false); // remember to delete this
+            combineMode.SetActive(false); // remember to delete this
+            uninteract = false;
         }
     }
+
 
     private void weaveController()
     {
