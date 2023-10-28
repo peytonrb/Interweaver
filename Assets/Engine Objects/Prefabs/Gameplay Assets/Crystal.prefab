@@ -14,7 +14,10 @@ GameObject:
   - component: {fileID: 2908029168829144956}
   - component: {fileID: 3613315730579189555}
   - component: {fileID: 6249517806523136731}
-  m_Layer: 0
+  - component: {fileID: 6442319356163835654}
+  - component: {fileID: 4158530418111038473}
+  - component: {fileID: 1841184153702313467}
+  m_Layer: 6
   m_Name: Crystal
   m_TagString: Breakable
   m_Icon: {fileID: 0}
@@ -34,7 +37,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6913367074132591515
 MeshFilter:
@@ -103,7 +106,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 2
@@ -143,3 +146,68 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.2759094, y: 3.9252472, z: 2.3873062}
   m_Center: {x: 0.12567139, y: 0.9626236, z: 0.073387146}
+--- !u!114 &6442319356163835654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3738485478540167410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f43254a5aebfd2458990574e3f1970c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 1841184153702313467}
+  hoveringValue: 1
+  mainCamera: {fileID: 0}
+  layersToHit:
+    serializedVersion: 2
+    m_Bits: 0
+  distance: 12
+  tooCloseDistance: 6
+  weaveInteraction: {fileID: 4158530418111038473}
+  ID: 0
+  canRotate: 0
+  isWoven: 0
+  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  PlayerPrefab: {fileID: 0}
+--- !u!114 &4158530418111038473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3738485478540167410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 876c5915612931f4cad072f73921ad85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &1841184153702313467
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3738485478540167410}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

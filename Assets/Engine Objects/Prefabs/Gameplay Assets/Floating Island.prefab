@@ -15,7 +15,8 @@ GameObject:
   - component: {fileID: 1926140711349057970}
   - component: {fileID: 4696450466119618846}
   - component: {fileID: 4387577231250320792}
-  m_Layer: 0
+  - component: {fileID: 7856179694913842657}
+  m_Layer: 6
   m_Name: Floating Island
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35,7 +36,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &967863317956628430
 MeshFilter:
@@ -148,14 +149,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myCrystal: {fileID: 0}
-  startsFloating: 1
+  myFloatCamera: {fileID: 0}
+  isFloating: 1
   timerBeforeSwap: 2
   floatTransform: {fileID: 0}
   sitTransform: {fileID: 0}
   verticalOffset: 0
+  RaiseSpeed: 1
   cameraswitched: 0
   isislandfalling: 0
-  rb: {fileID: 0}
+  rb: {fileID: 1926140711349057970}
 --- !u!95 &4387577231250320792
 Animator:
   serializedVersion: 5
@@ -177,3 +180,29 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7856179694913842657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4379241841909581374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f43254a5aebfd2458990574e3f1970c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 1926140711349057970}
+  hoveringValue: 1
+  mainCamera: {fileID: 0}
+  layersToHit:
+    serializedVersion: 2
+    m_Bits: 64
+  distance: 12
+  tooCloseDistance: 6
+  weaveInteraction: {fileID: 0}
+  ID: 0
+  canRotate: 0
+  isWoven: 0
+  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  PlayerPrefab: {fileID: 0}

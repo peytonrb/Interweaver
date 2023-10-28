@@ -75,8 +75,12 @@ public class FloatingIslandScript : MonoBehaviour
     {
         yield return new WaitForSeconds(timerBeforeSwap / 2);
 
-        CameraMasterScript cameraMasterScript = GameObject.FindGameObjectWithTag("CameraMaster").GetComponent<CameraMasterScript>();
-        cameraMasterScript.FloatingIslandCameraReturn(myFloatCamera);
+        if (!isFalling)
+        {
+            CameraMasterScript cameraMasterScript = GameObject.FindGameObjectWithTag("CameraMaster").GetComponent<CameraMasterScript>();
+            cameraMasterScript.FloatingIslandCameraReturn(myFloatCamera);
+        }
+        
 
         yield return new WaitForSeconds(timerBeforeSwap /2);
 

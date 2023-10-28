@@ -12,6 +12,7 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
     [SerializeField] private LayerMask layersToHit;
     [SerializeField] private float distance = 12f;
     [SerializeField] private float tooCloseDistance = 6f;
+    [SerializeField] public WeaveInteraction weaveInteraction;
     public int ID;
     public bool canRotate;
     public bool canCombine { get; private set; }
@@ -142,6 +143,11 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
             var fixedJoint = gameObject.AddComponent<FixedJoint>();
             fixedJoint.connectedBody = collision.rigidbody;
             collision.rigidbody.useGravity = true;
+
+            if (weaveInteraction != null)
+            {
+                weaveInteraction.OnWeave(collision.gameObject);
+            }
         }
     }
 

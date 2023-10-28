@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class WeaveInteraction : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public virtual void OnWeave(GameObject other)
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public virtual void OnUnweave()
     {
-        
+
+    }
+
+    public virtual void WeaveUpdate()
+    {
+
     }
 }
