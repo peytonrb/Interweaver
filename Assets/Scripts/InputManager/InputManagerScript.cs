@@ -16,6 +16,8 @@ public class InputManagerScript : MonoBehaviour
     //Player Script handles a majority of inputs.
     //Dont listen to this ^^^ Its just me talking to myself...
 
+    // REMOVE ALL PLAYERCONTROLLER CALLS. THIS IS FOR TESTING FOR THE WEAVE
+
     //MOVE
     //******************************************************
     public void Move(InputAction.CallbackContext context) {
@@ -39,32 +41,50 @@ public class InputManagerScript : MonoBehaviour
     //WEAVER ABILITIES
     //******************************************************
     public void WeaverInteract(InputAction.CallbackContext context) {
-        PlayerScript playerScript = player.GetComponent<PlayerScript>();
+        // PlayerScript playerScript = player.GetComponent<PlayerScript>();
+        PlayerController playerScript = player.GetComponent<PlayerController>();
         if (context.started) {
-            if (playerScript.enableInteractInput) {
+            // if (playerScript.enableInteractInput) {
                 playerScript.interactInput = true;
-                Debug.Log(playerScript.interactInput);
-            }
+                // Debug.Log(playerScript.interactInput);
+
+                // delete - peytons tests
+                if (playerScript.inCombineMode)                 // occasionally reads a hit during compile time????
+                {
+                    playerScript.inRelocateMode = true;
+                    playerScript.inCombineMode = false;
+                }
+                else
+                {
+                    playerScript.inRelocateMode = true;
+                }
+            // }
         }
         
     }
 
     public void WeaverUninteract(InputAction.CallbackContext context) {
-        PlayerScript playerScript = player.GetComponent<PlayerScript>();
+        // PlayerScript playerScript = player.GetComponent<PlayerScript>();
+        PlayerController playerScript = player.GetComponent<PlayerController>();
         if (context.started) {
-            if (playerScript.enableUninteractInput) {
-                playerScript.uninteractInput = true;
-            }
+            // if (playerScript.enableUninteractInput) {
+                playerScript.uninteract = true;
+                playerScript.interactInput = false;
+                playerScript.inRelocateMode = false;
+                playerScript.inCombineMode = true;
+            // }
         }
         
     }
 
     public void WeaveModeSwitch(InputAction.CallbackContext context) {
-        PlayerScript playerScript = player.GetComponent<PlayerScript>();
+        // PlayerScript playerScript = player.GetComponent<PlayerScript>();
+        PlayerController playerScript = player.GetComponent<PlayerController>();
         if (context.started) {
-            if (playerScript.enableWeaveModeSwitch) {
-                playerScript.weaveModeSwitch = true;
-            }
+            // if (playerScript.enableWeaveModeSwitch) {
+                playerScript.inCombineMode = true;
+                playerScript.inRelocateMode = false;
+            // }
         }
          
     }
@@ -74,7 +94,8 @@ public class InputManagerScript : MonoBehaviour
     }
 
     public void NPCInteraction(InputAction.CallbackContext context) {
-        PlayerScript playerScript = player.GetComponent<PlayerScript>();
+        // PlayerScript playerScript = player.GetComponent<PlayerScript>();
+        PlayerController playerScript = player.GetComponent<PlayerController>();
         if (context.started) {
             playerScript.Interact();
         }
@@ -84,7 +105,8 @@ public class InputManagerScript : MonoBehaviour
     //SWITCHING
     //******************************************************
     public void Switch(InputAction.CallbackContext context) {
-        PlayerScript playerScript = player.GetComponent<PlayerScript>();
+        // PlayerScript playerScript = player.GetComponent<PlayerScript>();
+        PlayerController playerScript = player.GetComponent<PlayerController>();
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
         if (context.started) {
             if (familiarScript.myTurn) {
@@ -100,7 +122,8 @@ public class InputManagerScript : MonoBehaviour
     //PAUSING
     //******************************************************
     public void Pause(InputAction.CallbackContext context) {
-        PlayerScript playerScript = player.GetComponent<PlayerScript>();
+        // PlayerScript playerScript = player.GetComponent<PlayerScript>();
+        PlayerController playerScript = player.GetComponent<PlayerController>();
         if (context.started) {
             playerScript.Pausing();
         }
