@@ -30,7 +30,7 @@ public class PlayerScript : MonoBehaviour
     public float WeaveDistance = 12f;
     public LayerMask weaveObject;
     private Vector3 playerPosition;
-    private bool isWeaving;
+    private bool isGrabbed;
     [SerializeField] private int weaveModeNumbers;
     [SerializeField] private Vector2 sensitivity = new Vector2(1500f, 1500f);
     [SerializeField] private Vector2 bias = new Vector2(0f, -1f);
@@ -38,14 +38,22 @@ public class PlayerScript : MonoBehaviour
     private Vector2 warpPosition;
     private Vector2 overflow;
     private Vector2 cursor;
+
+    private bool isWeaving = false;
+
     public bool interactInput;
     public bool enableInteractInput;
     public bool weaveModeSwitch;
     public bool enableWeaveModeSwitch;
     public bool uninteractInput;
     public bool enableUninteractInput;
+
+
     [SerializeField] private Vector3 raycastPosition;
     private Weaveable weaveableScript;
+
+    private Collider lastObjHit;
+
 
     [Header("References")]
     public GameObject familiar;
@@ -72,7 +80,7 @@ public class PlayerScript : MonoBehaviour
         CMScript = cameraCheckpointMaster.GetComponent<CameraMasterScript>();
         inputManagerScript = inputManager.GetComponent<InputManagerScript>();
         possessing = false;
-        isWeaving = false;
+        isGrabbed = false;
         vCamRotationState = 0;
         pauseMenu.SetActive(false);
         enableInteractInput = false;
@@ -101,7 +109,12 @@ public class PlayerScript : MonoBehaviour
                 movementScript.active = true;
             }
 
-            Weaving();
+            
+            if (isWeaving)
+            {
+                GetWeaveRaycasts();
+            }
+
             DetectGamepad();
 
             //this is purely for testing the checkpoint function if it's working properly
@@ -171,9 +184,20 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    // this method will shoot out a raycast that will see if there are objects with the weaveObject LayerMask 
-    //      and the IInteractable interface
-    public void Weaving()
+    public void WeavePressed()
+    {
+        isWeaving = true;
+        //Debug.Log("Interaction");
+
+        
+    }
+
+    public void StopWeaving()
+    {
+        isWeaving = false;
+    }
+
+    public void GetWeaveRaycasts()
     {
         playerPosition = new Vector3(transform.position.x, transform.position.y + raycastPosition.y, transform.position.z);
 
@@ -181,8 +205,20 @@ public class PlayerScript : MonoBehaviour
         Vector3 rayDirection = transform.forward;
         Ray rayPlayer = new Ray(playerPosition, rayDirection); //the actual raycast from the player, this can be used for the line render but it takes the  raycast origin and the  direction of the raycast
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfo;
+
+        
         Debug.DrawRay(rayPlayer.origin, rayPlayer.direction * WeaveDistance, Color.red);
+
+        Weaving(ray, rayPlayer);
+    }
+
+    // this method will shoot out a raycast that will see if there are objects with the weaveObject LayerMask 
+    //      and the IInteractable interface
+    public void Weaving( Ray rayPass, Ray rayPlayerPass)
+    {
+        Ray rayPlayer = rayPlayerPass;
+        Ray ray = rayPass;
+        RaycastHit hitInfo;
 
         // checks for a Weavable object within distance of Ray
         if (Physics.Raycast(ray, out hitInfo, 100, weaveObject) || Physics.Raycast(rayPlayer, out hitInfo, WeaveDistance, weaveObject))
@@ -194,36 +230,35 @@ public class PlayerScript : MonoBehaviour
             if (interactable != null)
             {
                 enableInteractInput = true;
+                lastObjHit = hitInfo.collider;
 
                 if (distanceBetween > WeaveDistance) 
                 {
-                    isWeaving = false;
+                    isGrabbed = false;
                     enableInteractInput = true;
                     relocateMode.SetActive(false);// remember to delete this
                     combineMode.SetActive(false);// remember to delete this
                 }
 
-                if (interactInput) //this is the interact button that is taking from the player inputs
-                {
-                    //Debug.Log("Interaction");
-                    interactable.Interact();
-                    isWeaving = true;
-                    enableUninteractInput = true;               
-                    weaverAnimationHandler.ToggleWeaveAnim(isWeaving); 
+                    isGrabbed = true;
+                    enableUninteractInput = true;
+                    weaverAnimationHandler.ToggleWeaveAnim(isGrabbed);
                     weaveModeNumbers = 1;
-                    interactable.Relocate();
+
                     relocateMode.SetActive(true);// remember to delete this
                     interactInput = false;
-                }
+                    interactable.Interact();
+                    interactable.Relocate();
+
 
                 if (uninteractInput && weaveableScript.isWoven == true)
                 {
                     interactable.Uninteract();
-                    isWeaving = false;
+                    isGrabbed = false;
                     enableInteractInput = true;                
                     enableUninteractInput = false;
                     enableWeaveModeSwitch = false; 
-                    weaverAnimationHandler.ToggleWeaveAnim(isWeaving); 
+                    weaverAnimationHandler.ToggleWeaveAnim(isGrabbed); 
                     relocateMode.SetActive(false);// remember to delete this
                     combineMode.SetActive(false);// remember to delete this
                     uninteractInput = false;
@@ -261,10 +296,10 @@ public class PlayerScript : MonoBehaviour
         }
 
         //if the player is weaving an object they will look at the object
-        if (isWeaving == true) 
+        if (isGrabbed == true) 
         {
             // this will use the look at function based off of the hitinfo (line 210)
-            transform.LookAt(new Vector3(hitInfo.collider.transform.position.x, transform.position.y, hitInfo.collider.transform.position.z)); 
+            transform.LookAt(new Vector3(lastObjHit.transform.position.x, transform.position.y, lastObjHit.transform.position.z)); 
             enableWeaveModeSwitch = true;
             enableInteractInput = false; 
         }
@@ -277,7 +312,7 @@ public class PlayerScript : MonoBehaviour
         // this is here so that if in the case that the object does hit the player it will uninteract itself 
         if (collision.gameObject.CompareTag("Weaveable"))
         {
-            isWeaving = false;
+            isGrabbed = false;
             interactable.Uninteract();
             enableInteractInput = true;
             relocateMode.SetActive(false);// remember to delete this
