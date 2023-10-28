@@ -10,6 +10,7 @@ public class NetProjectileScript : MonoBehaviour
     //These variables are set by NetCannonScript
     public float speed;
     public bool shootingonZ;
+    public float lifetime = 4;
     //*******************************
 
     // Start is called before the first frame update
@@ -23,13 +24,17 @@ public class NetProjectileScript : MonoBehaviour
         else {
             rb.AddForce(new Vector3(speed,0,0), ForceMode.Impulse);
         }
-            
+
+        StartCoroutine(TimerBeforeDestroy(lifetime));
     }
 
-    void Update() {
-        if (transform.position.magnitude > 100f) {
-            Destroy(gameObject);
-        }
+    public IEnumerator TimerBeforeDestroy(float lifetime)
+    {
+        yield return new WaitForSeconds(lifetime);
+
+
+        Destroy(gameObject);
+        yield break;
     }
 
 }
