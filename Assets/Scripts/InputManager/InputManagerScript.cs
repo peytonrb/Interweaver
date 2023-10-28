@@ -41,13 +41,10 @@ public class InputManagerScript : MonoBehaviour
     public void WeaverInteract(InputAction.CallbackContext context) {
         PlayerScript playerScript = player.GetComponent<PlayerScript>();
         if (context.started) {
-            Debug.Log("Interact Hit");
             if (playerScript.enableInteractInput) {
                 playerScript.interactInput = true;
-                
+                Debug.Log(playerScript.interactInput);
             }
-
-            playerScript.WeavePressed();
         }
         
     }
@@ -58,7 +55,6 @@ public class InputManagerScript : MonoBehaviour
             if (playerScript.enableUninteractInput) {
                 playerScript.uninteractInput = true;
             }
-            playerScript.StopWeaving();
         }
         
     }
