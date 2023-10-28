@@ -45,71 +45,74 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void WeaverInteract(InputAction.CallbackContext context)
     {
-        PlayerScript playerScript = player.GetComponent<PlayerScript>();         // old weave
-        if (context.started)
-        {
-            if (playerScript.enableInteractInput)
-            {
-                playerScript.interactInput = true;
-                Debug.Log(playerScript.interactInput);
-            }
-        }
-
-        // PlayerController playerScript = player.GetComponent<PlayerController>();    // new weave
-
+        // PlayerScript playerScript = player.GetComponent<PlayerScript>();         // old weave
         // if (context.started)
         // {
-        //     if (!playerScript.inRelocateMode && !playerScript.inCombineMode) // occasionally reads a hit during compile time????
+        //     if (playerScript.enableInteractInput)
         //     {
         //         playerScript.interactInput = true;
-        //         playerScript.inRelocateMode = true;
-        //     }
-        //     else if (playerScript.inCombineMode)                 
-        //     {
-        //         playerScript.inRelocateMode = true;
-        //         playerScript.inCombineMode = false;
+        //         Debug.Log(playerScript.interactInput);
         //     }
         // }
+
+        PlayerController playerScript = player.GetComponent<PlayerController>();    // new weave
+
+        if (context.started)
+        {
+            if (!playerScript.inRelocateMode && !playerScript.inCombineMode) // occasionally reads a hit during compile time????
+            {
+                playerScript.interactInput = true;
+                playerScript.inRelocateMode = true;
+            }
+            else if (playerScript.inCombineMode)
+            {
+                playerScript.inRelocateMode = true;
+                playerScript.inCombineMode = false;
+            }
+        }
     }
 
     public void WeaverUninteract(InputAction.CallbackContext context)
     {
-        PlayerScript playerScript = player.GetComponent<PlayerScript>();     // old weave
-        if (context.started)
-        {
-            if (playerScript.enableUninteractInput)
-            {
-                playerScript.uninteractInput = true;
-            }
-        }
-
-        // PlayerController playerScript = player.GetComponent<PlayerController>(); // new weave
+        // PlayerScript playerScript = player.GetComponent<PlayerScript>();     // old weave
         // if (context.started)
         // {
-        //     playerScript.uninteract = true;
-        //     playerScript.interactInput = false;
-        //     playerScript.inRelocateMode = false;
-        //     playerScript.inCombineMode = false;
+        //     if (playerScript.enableUninteractInput)
+        //     {
+        //         playerScript.uninteractInput = true;
+        //     }
         // }
+
+        PlayerController playerScript = player.GetComponent<PlayerController>(); // new weave
+        if (context.started)
+        {
+            playerScript.uninteract = true;
+            playerScript.interactInput = false;
+            playerScript.inRelocateMode = false;
+            playerScript.inCombineMode = false;
+        }
     }
 
     public void WeaveModeSwitch(InputAction.CallbackContext context)
     {
-        PlayerScript playerScript = player.GetComponent<PlayerScript>();     // old weave
-        if (context.started)
-        {
-            if (playerScript.enableWeaveModeSwitch)
-            {
-                playerScript.weaveModeSwitch = true;
-            }
-        }
-
-        // PlayerController playerScript = player.GetComponent<PlayerController>(); // new weave
+        // PlayerScript playerScript = player.GetComponent<PlayerScript>();     // old weave
         // if (context.started)
         // {
-        //     playerScript.inCombineMode = true;
-        //     playerScript.inRelocateMode = false;
+        //     if (playerScript.enableWeaveModeSwitch)
+        //     {
+        //         playerScript.weaveModeSwitch = true;
+        //     }
         // }
+
+        PlayerController playerScript = player.GetComponent<PlayerController>(); // new weave
+        if (context.started)
+        {
+            if (playerScript.inRelocateMode)
+            {
+                playerScript.inCombineMode = true;
+                playerScript.inRelocateMode = false;
+            }
+        }
     }
 
     public void WeaveCursor(InputAction.CallbackContext context)

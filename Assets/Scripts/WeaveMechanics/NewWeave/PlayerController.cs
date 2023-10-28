@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     public GameObject pauseMenu;
 
     [Header("Weave Variables")]
-    public float WeaveDistance = 12f;
+    public float weaveDistance = 20f;
     public LayerMask weaveObject;
     private Vector3 playerPosition;
     private bool isWeaving;
@@ -115,6 +115,13 @@ public class PlayerController : MonoBehaviour
                 relocateMode.SetActive(false); // on-screen ui
                 combineMode.SetActive(true); // on-screen ui
             }
+            // switch back into relocate mode 
+            else if (!interactInput && inRelocateMode && interactableObject != null)
+            {
+                interactableObject.Relocate();
+                relocateMode.SetActive(true); // on-screen ui
+                combineMode.SetActive(false); // on-screen ui
+            }
 
             // inRelocateMode and inCombineMode both set by InputManager
             // handles things that occur while the weave is active
@@ -126,7 +133,7 @@ public class PlayerController : MonoBehaviour
                 distanceBetween = Vector3.Distance(weaveableScript.transform.position, transform.position);
 
                 // if the player moves too far from the object while weaving
-                if (distanceBetween > WeaveDistance)
+                if (distanceBetween > weaveDistance)
                 {
                     Uninteract();
                 }
@@ -159,7 +166,7 @@ public class PlayerController : MonoBehaviour
         interactableObject = determineInteractability();
 
         // if too far apart
-        if (distanceBetween < WeaveDistance)
+        if (distanceBetween < weaveDistance)
         {
             if (inRelocateMode && interactableObject != null)
             {
@@ -183,10 +190,10 @@ public class PlayerController : MonoBehaviour
 
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
-        Debug.DrawRay(rayPlayer.origin, rayPlayer.direction * WeaveDistance, Color.red);
+        Debug.DrawRay(rayPlayer.origin, rayPlayer.direction * weaveDistance, Color.red);
 
         // checks for a Weavable object within distance of Ray
-        if (Physics.Raycast(ray, out hitInfo, 100, weaveObject) || Physics.Raycast(rayPlayer, out hitInfo, WeaveDistance, weaveObject))
+        if (Physics.Raycast(ray, out hitInfo, 100, weaveObject) || Physics.Raycast(rayPlayer, out hitInfo, weaveDistance, weaveObject))
         {
             weaveableScript = hitInfo.collider.GetComponent<WeaveableNew>();
             IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>();
@@ -209,7 +216,6 @@ public class PlayerController : MonoBehaviour
             uninteract = false;
         }
     }
-
 
     private void weaveController()
     {

@@ -14,24 +14,31 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public int ID;
     public bool canRotate;
     public bool canCombine { get; private set; }
-    public bool canWeave { get; private set; }
     private bool startFloating;
     private bool relocate;
     private bool inWeaveMode;
     public bool isWoven;
+    public float rotationSpeed = 0.5f;
+
+    [Header("Respawn")] // accessed by RespawnController
+    public bool isCombined; 
+    public Vector3 combinedObjectStartPos;
+    public Quaternion combinedObjectStartRot;
 
     [Header("Inputs")]
     public InputActionAsset inputs;
     private InputAction combineInput;
 
     [Header("References")]
-    public Transform PlayerPrefab;
-    private WeaveableNew weaveableScript;
+    public WeaveableNew weaveableScript; // has to be public for respawn
+    [SerializeField] private PlayerController player;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        canRotate = false;
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        weaveableScript = gameObject.GetComponent<WeaveableNew>();
+        isCombined = false;
     }
 
     void OnEnable()
@@ -53,7 +60,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
         if (isWoven)
         {
-            MovingWeaveMouse();
+            MovingWeaveMouse(); // fix drag on object here
         }
 
         if (canRotate)
@@ -64,7 +71,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             inputs.FindActionMap("weaveableObject").FindAction("RotateUP").performed += OnRotateUPInput;
             inputs.FindActionMap("weaveableObject").FindAction("RotateDOWN").performed += OnRotateDownInput;
         }
-
         else if (!canRotate)
         {
             // this finds the the different action map called weaveableObject and then unsubscribes to the method, 
@@ -73,6 +79,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             inputs.FindActionMap("weaveableObject").FindAction("RotateCtrW").performed -= OnRotateCtrWInput;
             inputs.FindActionMap("weaveableObject").FindAction("RotateUP").performed -= OnRotateUPInput;
             inputs.FindActionMap("weaveableObject").FindAction("RotateDOWN").performed -= OnRotateDownInput;
+        }
+
+        if (isCombined)
+        {
+            inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed += OnUncombineInput;
         }
     }
 
@@ -88,8 +99,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
             if (relocate)
             {
+                canRotate = true;
                 rb.velocity = new Vector3(raycastHit.point.x - rb.position.x, transform.position.y - rb.position.y, raycastHit.point.z - rb.position.z);
-
                 rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ; //this freezes the Y position so that the combined objects won't drag it down because of gravity and it freezes in all rotation so it won't droop because of the gravity  from the objects
             }
             if (inWeaveMode)
@@ -97,12 +108,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 ICombineable combineable = raycastHit.collider.GetComponent<ICombineable>();
                 canRotate = true;
 
-                // this is the band aid solution will need a more concrete solution later on
                 if (combineable != null && !weaveableScript.canCombine)
                 {
-                    //this finds the the different action map called weaveableObject and then subscribes to the method 
                     inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput;
-                    inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed += OnUncombineInput;
                 }
             }
         }
@@ -130,104 +138,36 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     //**********************************************************************************
     private void OnRotateCWInput(InputAction.CallbackContext context) //
     {
-        OnRotateCW();
+        StartCoroutine(Rotate(Vector3.up, 90));
     }
     private void OnRotateCtrWInput(InputAction.CallbackContext context)
     {
-        OnRotateCtrW();
+        StartCoroutine(Rotate(Vector3.up, -90));
     }
     private void OnRotateUPInput(InputAction.CallbackContext context)
     {
-        OnRotateUP();
+        StartCoroutine(Rotate(Vector3.forward, 90));
     }
     private void OnRotateDownInput(InputAction.CallbackContext context)
     {
-        OnRotateDown();
+        StartCoroutine(Rotate(Vector3.forward, -90));
     }
 
-    private void OnRotateCW()
-    {
-        StartCoroutine(Rotate(Vector3.up, 45, 1.0f));
-    }
-    private void OnRotateCtrW()
-    {
-        StartCoroutine(RotatectrW(Vector3.up, -45, 1.0f));
-    }
-    private void OnRotateUP()
-    {
-        StartCoroutine(RotateUP(Vector3.forward, 45, 1.0f));
-    }
-    private void OnRotateDown()
-    {
-        StartCoroutine(Rotatedown(Vector3.forward, -45, 1.0f));
-    }
-
-    IEnumerator Rotate(Vector3 axis, float angle, float duration = 1.0f)
+    IEnumerator Rotate(Vector3 axis, float angle)
     {
         Quaternion from = transform.rotation;
         Quaternion to = transform.rotation;
         to *= Quaternion.Euler(axis * angle);
-
         float elapsed = 0.0f;
-        while (elapsed < duration && canRotate)
+
+        while (elapsed < rotationSpeed && canRotate)
         {
-            transform.rotation = Quaternion.Slerp(from, to, elapsed / duration);
+            transform.rotation = Quaternion.Slerp(from, to, elapsed / rotationSpeed);
             elapsed += Time.deltaTime;
             yield return null;
         }
+
         transform.rotation = to;
-        canRotate = false;
-    }
-
-    IEnumerator RotatectrW(Vector3 axis, float angle, float duration = 1.0f)
-    {
-        Quaternion from = transform.rotation;
-        Quaternion to = transform.rotation;
-        to *= Quaternion.Euler(axis * angle);
-
-        float elapsed = 0.0f;
-        while (elapsed < duration && canRotate)
-        {
-            transform.rotation = Quaternion.Slerp(from, to, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-        transform.rotation = to;
-        canRotate = false;
-    }
-
-    IEnumerator RotateUP(Vector3 axis, float angle, float duration = 1.0f)
-    {
-        Quaternion from = transform.rotation;
-        Quaternion to = transform.rotation;
-        to *= Quaternion.Euler(axis * angle);
-
-        float elapsed = 0.0f;
-        while (elapsed < duration && canRotate)
-        {
-            transform.rotation = Quaternion.Slerp(from, to, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-        transform.rotation = to;
-        canRotate = false;
-    }
-
-    IEnumerator Rotatedown(Vector3 axis, float angle, float duration = 1.0f)
-    {
-        Quaternion from = transform.rotation;
-        Quaternion to = transform.rotation;
-        to *= Quaternion.Euler(axis * angle);
-
-        float elapsed = 0.0f;
-        while (elapsed < duration && canRotate)
-        {
-            transform.rotation = Quaternion.Slerp(from, to, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-        transform.rotation = to;
-        canRotate = false;
     }
     //**********************************************************************************
 
@@ -267,7 +207,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         relocate = true;
         inWeaveMode = false;
         rb.isKinematic = false;
-        canRotate = false;
+        canRotate = true;
         Debug.Log("Relocate Mode");
     }
 
@@ -283,6 +223,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     private void OnUncombineInput(InputAction.CallbackContext context)
     {
+        isCombined = false;
         Uncombine();
     }
 
@@ -290,7 +231,14 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         if (weaveableScript.ID == ID && !weaveableScript.isWoven)
         {
+            // respawn variables
+            combinedObjectStartPos = weaveableScript.transform.position;
+            combinedObjectStartRot = weaveableScript.transform.rotation;
+            Debug.Log(combinedObjectStartPos);
+            Debug.Log(combinedObjectStartRot);
+
             Combine();
+            isCombined = true;
         }
     }
 
@@ -301,9 +249,13 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         Debug.Log("This is the Uncombine code");
         Destroy(GetComponent<FixedJoint>());
         canCombine = false;
+        canRotate = false;
         weaveableScript.rb.useGravity = true;
         weaveableScript.rb.constraints = RigidbodyConstraints.None;
         weaveableScript.rb.freezeRotation = false;
+        player.inRelocateMode = false;
+        player.inCombineMode = false;
+        Uninteract();
     }
 
     public void Combine()
@@ -312,7 +264,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         weaveableScript.startFloating = true;
         canCombine = true;
         weaveableScript.rb.velocity = new Vector3(transform.position.x - weaveableScript.rb.transform.position.x, 0, transform.position.z - weaveableScript.rb.transform.position.z);
-        weaveableScript.rb.useGravity = false;
+        weaveableScript.rb.useGravity = false;       
     }
     //********************************************************************
 }

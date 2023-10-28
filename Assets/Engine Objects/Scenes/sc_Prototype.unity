@@ -129,7 +129,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh42514
+  m_Name: pb_Mesh59186
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -539,6 +539,7 @@ GameObject:
   - component: {fileID: 60834646}
   - component: {fileID: 60834645}
   - component: {fileID: 60834644}
+  - component: {fileID: 60834651}
   - component: {fileID: 60834643}
   m_Layer: 6
   m_Name: Ramp (1)
@@ -554,7 +555,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 60834641}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f43254a5aebfd2458990574e3f1970c, type: 3}
   m_Name: 
@@ -567,12 +568,12 @@ MonoBehaviour:
     m_Bits: 65
   distance: 20
   tooCloseDistance: 6
+  weaveInteraction: {fileID: 0}
   ID: 1
-  specialID: 0
   canRotate: 0
-  Woven: 0
-  PlayerPrefab: {fileID: 2122026645}
+  isWoven: 0
   inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  PlayerPrefab: {fileID: 2122026645}
 --- !u!54 &60834644
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -931,13 +932,42 @@ Transform:
   m_Father: {fileID: 1195876029}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 187.009, z: 0}
+--- !u!114 &60834651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 60834641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afb9d456079c05c4dbbecf85046314bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 60834644}
+  hoveringValue: 1
+  mainCamera: {fileID: 823247043}
+  layersToHit:
+    serializedVersion: 2
+    m_Bits: 65
+  weaveInteraction: {fileID: 0}
+  ID: 1
+  canRotate: 0
+  isWoven: 0
+  rotationSpeed: 0.5
+  isCombined: 0
+  combinedObjectStartPos: {x: 0, y: 0, z: 0}
+  combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
+  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  weaveableScript: {fileID: 0}
+  player: {fileID: 2122026650}
 --- !u!43 &71242933
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43538
+  m_Name: pb_Mesh60210
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1309,7 +1339,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh42488
+  m_Name: pb_Mesh59160
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1484,7 +1514,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43038
+  m_Name: pb_Mesh59710
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2726,6 +2756,7 @@ GameObject:
   - component: {fileID: 185668399}
   - component: {fileID: 185668398}
   - component: {fileID: 185668397}
+  - component: {fileID: 185668404}
   - component: {fileID: 185668396}
   m_Layer: 6
   m_Name: Ramp (2)
@@ -2741,7 +2772,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 185668394}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f43254a5aebfd2458990574e3f1970c, type: 3}
   m_Name: 
@@ -2754,12 +2785,12 @@ MonoBehaviour:
     m_Bits: 65
   distance: 20
   tooCloseDistance: 6
+  weaveInteraction: {fileID: 0}
   ID: 1
-  specialID: 0
   canRotate: 0
-  Woven: 0
-  PlayerPrefab: {fileID: 2122026645}
+  isWoven: 0
   inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  PlayerPrefab: {fileID: 2122026645}
 --- !u!54 &185668397
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3118,6 +3149,35 @@ Transform:
   m_Father: {fileID: 1195876029}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 187.009, z: 0}
+--- !u!114 &185668404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185668394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afb9d456079c05c4dbbecf85046314bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 185668397}
+  hoveringValue: 1
+  mainCamera: {fileID: 823247043}
+  layersToHit:
+    serializedVersion: 2
+    m_Bits: 65
+  weaveInteraction: {fileID: 0}
+  ID: 1
+  canRotate: 0
+  isWoven: 0
+  rotationSpeed: 0.5
+  isCombined: 0
+  combinedObjectStartPos: {x: 0, y: 0, z: 0}
+  combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
+  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  weaveableScript: {fileID: 0}
+  player: {fileID: 2122026650}
 --- !u!1001 &191710734
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3156,7 +3216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1913745848674449468, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: m_ActionEvents.Array.size
-      value: 24
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 1913745848674449468, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: m_ActionEvents.Array.data[2].m_ActionId
@@ -3247,6 +3307,22 @@ PrefabInstance:
       value: 610491b1-08c5-4a71-af6b-23ab33e5f86b
       objectReference: {fileID: 0}
     - target: {fileID: 1913745848674449468, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      propertyPath: m_ActionEvents.Array.data[24].m_ActionId
+      value: 316466f2-6f4d-4179-8fa1-71cbdf30d073
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913745848674449468, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      propertyPath: m_ActionEvents.Array.data[25].m_ActionId
+      value: 4ca55817-f7e4-468c-a41c-37383d736a2e
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913745848674449468, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      propertyPath: m_ActionEvents.Array.data[26].m_ActionId
+      value: c6a1f655-47d6-44d1-a821-d2de5dc1285f
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913745848674449468, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      propertyPath: m_ActionEvents.Array.data[27].m_ActionId
+      value: 0e9628e9-d06f-4db2-80f2-cd39c50e7f8c
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913745848674449468, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: m_ActionEvents.Array.data[2].m_ActionName
       value: Player/Interact[/Mouse/leftButton]
       objectReference: {fileID: 0}
@@ -3333,6 +3409,22 @@ PrefabInstance:
     - target: {fileID: 1913745848674449468, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: m_ActionEvents.Array.data[23].m_ActionName
       value: Owl/NPCInteraction[/Keyboard/e]
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913745848674449468, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      propertyPath: m_ActionEvents.Array.data[24].m_ActionName
+      value: weaveableObject/RotateCW[/Keyboard/rightArrow]
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913745848674449468, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      propertyPath: m_ActionEvents.Array.data[25].m_ActionName
+      value: weaveableObject/RotateCtrW[/Keyboard/leftArrow]
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913745848674449468, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      propertyPath: m_ActionEvents.Array.data[26].m_ActionName
+      value: weaveableObject/RotateUP[/Keyboard/upArrow]
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913745848674449468, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      propertyPath: m_ActionEvents.Array.data[27].m_ActionName
+      value: weaveableObject/RotateDOWN[/Keyboard/downArrow]
       objectReference: {fileID: 0}
     - target: {fileID: 1913745848674449468, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: m_ActionEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.size
@@ -3627,6 +3719,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1783837062}
     - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: pauseMenu
       value: 
       objectReference: {fileID: 829967490}
@@ -3837,9 +3933,23 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1359264606954408796, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
-      insertIndex: 3
+      insertIndex: 2
+      addedObject: {fileID: 2122026650}
+    - targetCorrespondingSourceObject: {fileID: 1359264606954408796, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      insertIndex: 4
       addedObject: {fileID: 2122026649}
   m_SourcePrefab: {fileID: 100100000, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+--- !u!114 &191710735 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7009046902244939009, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+  m_PrefabInstance: {fileID: 191710734}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890dd20412d5884438309ed20a9530ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &211402188
 GameObject:
   m_ObjectHideFlags: 0
@@ -4003,7 +4113,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43522
+  m_Name: pb_Mesh60194
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -13877,7 +13987,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43420
+  m_Name: pb_Mesh60092
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -14152,7 +14262,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43144
+  m_Name: pb_Mesh59816
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -15562,6 +15672,7 @@ GameObject:
   - component: {fileID: 624643146}
   - component: {fileID: 624643145}
   - component: {fileID: 624643144}
+  - component: {fileID: 624643152}
   - component: {fileID: 624643150}
   - component: {fileID: 624643151}
   m_Layer: 6
@@ -15909,7 +16020,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 624643143}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f43254a5aebfd2458990574e3f1970c, type: 3}
   m_Name: 
@@ -15922,12 +16033,12 @@ MonoBehaviour:
     m_Bits: 65
   distance: 20
   tooCloseDistance: 6
+  weaveInteraction: {fileID: 0}
   ID: 1
-  specialID: 0
   canRotate: 0
-  Woven: 0
-  PlayerPrefab: {fileID: 2122026645}
+  isWoven: 0
   inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  PlayerPrefab: {fileID: 2122026645}
 --- !u!54 &624643151
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -15955,6 +16066,35 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &624643152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624643143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afb9d456079c05c4dbbecf85046314bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 624643151}
+  hoveringValue: 1
+  mainCamera: {fileID: 823247043}
+  layersToHit:
+    serializedVersion: 2
+    m_Bits: 65
+  weaveInteraction: {fileID: 0}
+  ID: 1
+  canRotate: 0
+  isWoven: 0
+  rotationSpeed: 0.5
+  isCombined: 0
+  combinedObjectStartPos: {x: 0, y: 0, z: 0}
+  combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
+  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  weaveableScript: {fileID: 0}
+  player: {fileID: 2122026650}
 --- !u!1 &625698718
 GameObject:
   m_ObjectHideFlags: 0
@@ -21568,7 +21708,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh42420
+  m_Name: pb_Mesh59092
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -32791,6 +32931,7 @@ GameObject:
   - component: {fileID: 1333816045}
   - component: {fileID: 1333816044}
   - component: {fileID: 1333816043}
+  - component: {fileID: 1333816049}
   - component: {fileID: 1333816042}
   - component: {fileID: 1333816041}
   m_Layer: 6
@@ -32834,7 +32975,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1333816039}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f43254a5aebfd2458990574e3f1970c, type: 3}
   m_Name: 
@@ -32847,12 +32988,12 @@ MonoBehaviour:
     m_Bits: 65
   distance: 20
   tooCloseDistance: 6
+  weaveInteraction: {fileID: 0}
   ID: 2
-  specialID: 0
   canRotate: 0
-  Woven: 0
-  PlayerPrefab: {fileID: 2122026645}
+  isWoven: 0
   inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  PlayerPrefab: {fileID: 2122026645}
 --- !u!64 &1333816043
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -33184,6 +33325,35 @@ Transform:
   m_Father: {fileID: 445969091}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1333816049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333816039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afb9d456079c05c4dbbecf85046314bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 1333816041}
+  hoveringValue: 1
+  mainCamera: {fileID: 823247043}
+  layersToHit:
+    serializedVersion: 2
+    m_Bits: 65
+  weaveInteraction: {fileID: 0}
+  ID: 2
+  canRotate: 0
+  isWoven: 0
+  rotationSpeed: 0.5
+  isCombined: 0
+  combinedObjectStartPos: {x: 0, y: 0, z: 0}
+  combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
+  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  weaveableScript: {fileID: 0}
+  player: {fileID: 2122026650}
 --- !u!1 &1334866542
 GameObject:
   m_ObjectHideFlags: 0
@@ -34078,7 +34248,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh42672
+  m_Name: pb_Mesh59344
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -35247,7 +35417,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh42690
+  m_Name: pb_Mesh59362
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -36340,7 +36510,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43320
+  m_Name: pb_Mesh59992
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -36505,7 +36675,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh42438
+  m_Name: pb_Mesh59110
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -37170,7 +37340,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43020
+  m_Name: pb_Mesh59692
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -37812,7 +37982,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43392
+  m_Name: pb_Mesh60064
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -42503,7 +42673,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh42354
+  m_Name: pb_Mesh59026
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -42773,7 +42943,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43460
+  m_Name: pb_Mesh60132
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -43323,6 +43493,7 @@ GameObject:
   - component: {fileID: 1939284219}
   - component: {fileID: 1939284218}
   - component: {fileID: 1939284217}
+  - component: {fileID: 1939284224}
   - component: {fileID: 1939284216}
   m_Layer: 6
   m_Name: Ramp
@@ -43338,7 +43509,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1939284215}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f43254a5aebfd2458990574e3f1970c, type: 3}
   m_Name: 
@@ -43351,12 +43522,12 @@ MonoBehaviour:
     m_Bits: 65
   distance: 20
   tooCloseDistance: 6
+  weaveInteraction: {fileID: 0}
   ID: 1
-  specialID: 0
   canRotate: 0
-  Woven: 0
-  PlayerPrefab: {fileID: 2122026645}
+  isWoven: 0
   inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  PlayerPrefab: {fileID: 2122026645}
 --- !u!54 &1939284217
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -43715,6 +43886,35 @@ Transform:
   m_Father: {fileID: 1195876029}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1939284224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1939284215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afb9d456079c05c4dbbecf85046314bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 1939284217}
+  hoveringValue: 1
+  mainCamera: {fileID: 823247043}
+  layersToHit:
+    serializedVersion: 2
+    m_Bits: 65
+  weaveInteraction: {fileID: 0}
+  ID: 1
+  canRotate: 0
+  isWoven: 0
+  rotationSpeed: 0.5
+  isCombined: 0
+  combinedObjectStartPos: {x: 0, y: 0, z: 0}
+  combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
+  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  weaveableScript: {fileID: 0}
+  player: {fileID: 2122026650}
 --- !u!1 &1947466156
 GameObject:
   m_ObjectHideFlags: 0
@@ -47942,7 +48142,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh42912
+  m_Name: pb_Mesh59584
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -54371,6 +54571,7 @@ GameObject:
   - component: {fileID: 2090186632}
   - component: {fileID: 2090186631}
   - component: {fileID: 2090186630}
+  - component: {fileID: 2090186636}
   - component: {fileID: 2090186629}
   - component: {fileID: 2090186628}
   m_Layer: 6
@@ -54414,7 +54615,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2090186626}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f43254a5aebfd2458990574e3f1970c, type: 3}
   m_Name: 
@@ -54427,12 +54628,12 @@ MonoBehaviour:
     m_Bits: 65
   distance: 20
   tooCloseDistance: 6
+  weaveInteraction: {fileID: 0}
   ID: 1
-  specialID: 0
   canRotate: 0
-  Woven: 0
-  PlayerPrefab: {fileID: 2122026645}
+  isWoven: 0
   inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  PlayerPrefab: {fileID: 2122026645}
 --- !u!64 &2090186630
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -54764,6 +54965,35 @@ Transform:
   m_Father: {fileID: 445969091}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 22.816, z: 0}
+--- !u!114 &2090186636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090186626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afb9d456079c05c4dbbecf85046314bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 2090186628}
+  hoveringValue: 1
+  mainCamera: {fileID: 823247043}
+  layersToHit:
+    serializedVersion: 2
+    m_Bits: 65
+  weaveInteraction: {fileID: 0}
+  ID: 1
+  canRotate: 0
+  isWoven: 0
+  rotationSpeed: 0.5
+  isCombined: 0
+  combinedObjectStartPos: {x: 0, y: 0, z: 0}
+  combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
+  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  weaveableScript: {fileID: 2090186636}
+  player: {fileID: 2122026650}
 --- !u!1 &2122026641 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1359264606954408796, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
@@ -54789,6 +55019,39 @@ MonoBehaviour:
   lostSoulUI: {fileID: 941591079}
   lostSoulText: {fileID: 137299925}
   animator: {fileID: 941591080}
+--- !u!114 &2122026650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2122026641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b18dace2dbb7604f839bc1ec5ff34f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputManager: {fileID: 409886852}
+  mainCamera: {fileID: 823247043}
+  familiarVirtualCam: {fileID: 1903062312}
+  cameraCheckpointMaster: {fileID: 124120810}
+  pauseMenu: {fileID: 829967490}
+  weaveDistance: 20
+  weaveObject:
+    serializedVersion: 2
+    m_Bits: 64
+  sensitivity: {x: 1500, y: 1500}
+  bias: {x: 0, y: -1}
+  currentMousePosition: {x: 0, y: 0}
+  interactInput: 0
+  inRelocateMode: 0
+  inCombineMode: 0
+  uninteract: 0
+  distanceBetween: 0
+  familiar: {fileID: 1783837062}
+  weaverAnimationHandler: {fileID: 191710735}
+  relocateMode: {fileID: 789705724}
+  combineMode: {fileID: 1821816238}
 --- !u!1 &2129858510
 GameObject:
   m_ObjectHideFlags: 0
