@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     public bool inRelocateMode;
     public bool inCombineMode;
     public bool uninteract;
-    public IInteractable interactableObject;
+    private IInteractable interactableObject;
     private GameObject wovenObject;
     [SerializeField] private float distanceBetween;
 
