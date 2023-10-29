@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 raycastPosition;
     private WeaveableNew weaveableScript;
 
-    // new variables
+    //new variables
     public bool inRelocateMode;
     public bool inCombineMode;
     public bool uninteract;
@@ -105,7 +105,7 @@ public class PlayerController : MonoBehaviour
             // WEAVE - interactInput set by InputManager
             if (interactInput)
             {
-                WeaveActivated();
+                
             }
             // switch into combining mode - relocate is default
             else if (!interactInput && inCombineMode && interactableObject != null)
@@ -160,22 +160,31 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void WeaveActivated()
+    public void WeaveActivated()
     {
         interactableObject = determineInteractability();
+        Debug.Log(distanceBetween);
 
-        // if too far apart
-        if (distanceBetween < weaveDistance)
+        
+        if (interactableObject != null)
         {
-            if (inRelocateMode && interactableObject != null)
+            distanceBetween = Vector3.Distance(weaveableScript.transform.position, transform.position);
+
+            if (distanceBetween < weaveDistance)
             {
+                Debug.Log("Object checked!");
+
                 interactableObject.Interact();
+                inRelocateMode = true;
                 weaverAnimationHandler.ToggleWeaveAnim(isWeaving);
                 interactableObject.Relocate();
                 relocateMode.SetActive(true); // on-screen ui
-                interactInput = false;
             }
         }
+        // if too far apart & object is weavable
+        
+
+        interactInput = false;
     }
 
     private IInteractable determineInteractability()
@@ -184,7 +193,7 @@ public class PlayerController : MonoBehaviour
         Vector3 rayDirection = transform.forward;
 
         // the actual raycast from the player, this can be used for the line render 
-        //      but it takes the raycast origin and the  direction of the raycast
+        //      but it takes the raycast origin and the direction of the raycast
         Ray rayPlayer = new Ray(playerPosition, rayDirection);
 
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -194,6 +203,8 @@ public class PlayerController : MonoBehaviour
         // checks for a Weavable object within distance of Ray
         if (Physics.Raycast(ray, out hitInfo, 100, weaveObject) || Physics.Raycast(rayPlayer, out hitInfo, weaveDistance, weaveObject))
         {
+            Debug.Log("Raycast hit");
+            
             weaveableScript = hitInfo.collider.GetComponent<WeaveableNew>();
             IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>();
             wovenObject = hitInfo.collider.gameObject;
@@ -213,6 +224,8 @@ public class PlayerController : MonoBehaviour
             relocateMode.SetActive(false); // remember to delete this
             combineMode.SetActive(false); // remember to delete this
             uninteract = false;
+            inRelocateMode = false;
+            inCombineMode = false;
         }
     }
 

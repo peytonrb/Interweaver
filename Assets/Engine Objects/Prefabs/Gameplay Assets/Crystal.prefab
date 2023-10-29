@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 2908029168829144956}
   - component: {fileID: 3613315730579189555}
   - component: {fileID: 6249517806523136731}
-  - component: {fileID: 6442319356163835654}
   - component: {fileID: 4158530418111038473}
   - component: {fileID: 1841184153702313467}
+  - component: {fileID: 2412979489667069877}
   m_Layer: 6
   m_Name: Crystal
   m_TagString: Breakable
@@ -37,7 +37,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6913367074132591515
 MeshFilter:
@@ -146,32 +146,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.2759094, y: 3.9252472, z: 2.3873062}
   m_Center: {x: 0.12567139, y: 0.9626236, z: 0.073387146}
---- !u!114 &6442319356163835654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3738485478540167410}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f43254a5aebfd2458990574e3f1970c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 1841184153702313467}
-  hoveringValue: 1
-  mainCamera: {fileID: 0}
-  layersToHit:
-    serializedVersion: 2
-    m_Bits: 0
-  distance: 12
-  tooCloseDistance: 6
-  weaveInteraction: {fileID: 4158530418111038473}
-  ID: 0
-  canRotate: 0
-  isWoven: 0
-  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
-  PlayerPrefab: {fileID: 0}
 --- !u!114 &4158530418111038473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,3 +185,32 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2412979489667069877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3738485478540167410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afb9d456079c05c4dbbecf85046314bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 1841184153702313467}
+  hoveringValue: 1
+  mainCamera: {fileID: 0}
+  layersToHit:
+    serializedVersion: 2
+    m_Bits: 65
+  weaveInteraction: {fileID: 4158530418111038473}
+  ID: 1
+  canRotate: 0
+  isWoven: 0
+  rotationSpeed: 0.5
+  isCombined: 0
+  combinedObjectStartPos: {x: 0, y: 0, z: 0}
+  combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
+  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+  weaveableScript: {fileID: 0}
+  player: {fileID: 0}

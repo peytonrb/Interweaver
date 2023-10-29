@@ -25,7 +25,6 @@ public class FloatingIslandScript : MonoBehaviour
 
     [Header("Animation Variables")]
     public float verticalOffset = 0;
-    [SerializeField] private float RaiseSpeed = 1;
 
     //Internal Reqs
     public bool cameraswitched;
@@ -65,10 +64,12 @@ public class FloatingIslandScript : MonoBehaviour
     
     public void StartFalling() 
     {
-        anim.SetTrigger("Fall");
-        StartCoroutine(TimerBeforeRespawn(true));
-        cameraswitched = false;
-       
+        if (isFloating)
+        {
+            anim.SetTrigger("Fall");
+            StartCoroutine(TimerBeforeRespawn(true));
+            cameraswitched = false;
+        }
     }
 
     public IEnumerator TimerBeforeRespawn(bool isFalling)
@@ -77,7 +78,6 @@ public class FloatingIslandScript : MonoBehaviour
 
         if (!isFalling)
         {
-            
             CameraMasterScript.instance.FloatingIslandCameraReturn(myFloatCamera);
         }
         
@@ -89,14 +89,14 @@ public class FloatingIslandScript : MonoBehaviour
             anim.SetTrigger("Sit");
             verticalOffset = 0;
             transform.position = sitTransform.position;
-            
+            isFloating = false;
         }
         else
         {
             anim.SetTrigger("Float");
             verticalOffset = 0;
             transform.position = floatTransform.position;
-            
+            isFloating = true;
         }
         
         yield break;
@@ -104,22 +104,23 @@ public class FloatingIslandScript : MonoBehaviour
 
     public void SwapToRiseCamera()
     {
-        //Camera is switched to a new view which watches the whole island rise. (Lasts about 2 seconds)
-        if (cameraswitched == false)
-        {
-            CameraMasterScript.instance.FloatingIslandCameraSwitch(myFloatCamera, this);
-        }
 
+        if (!isFloating)
+        {
+            //Camera is switched to a new view which watches the whole island rise. (Lasts about 2 seconds)
+            if (cameraswitched == false)
+            {
+                CameraMasterScript.instance.FloatingIslandCameraSwitch(myFloatCamera, this);
+            }
+        }
+         
     }
 
     public void RaiseIsland()
     {
+        
         StartCoroutine(TimerBeforeRespawn(false));
         cameraswitched = false;
-
         anim.SetTrigger("Rise");
-    }
-
-
-            
+    }   
 }

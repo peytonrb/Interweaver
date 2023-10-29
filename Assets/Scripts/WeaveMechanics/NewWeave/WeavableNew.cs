@@ -19,6 +19,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     private bool inWeaveMode;
     public bool isWoven;
     public float rotationSpeed = 0.5f;
+    public bool canBeRelocated = true;
 
     [Header("Respawn")] // accessed by RespawnController
     public bool isCombined; 
@@ -99,9 +100,14 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
             if (relocate)
             {
-                canRotate = true;
-                rb.velocity = new Vector3(raycastHit.point.x - rb.position.x, transform.position.y - rb.position.y, raycastHit.point.z - rb.position.z);
-                rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ; //this freezes the Y position so that the combined objects won't drag it down because of gravity and it freezes in all rotation so it won't droop because of the gravity  from the objects
+                if (canBeRelocated)
+                {
+                    canRotate = true;
+                    rb.velocity = new Vector3(raycastHit.point.x - rb.position.x, transform.position.y - rb.position.y, raycastHit.point.z - rb.position.z);
+                    rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ; 
+                    //this freezes the Y position so that the combined objects won't drag it down because of gravity and it freezes in all rotation so it won't droop because of the gravity  from the objects
+                }
+                
             }
             if (inWeaveMode)
             {
@@ -229,8 +235,10 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     private void OnCombineInput(InputAction.CallbackContext context)
     {
+        
         if (weaveableScript.ID == ID && !weaveableScript.isWoven)
         {
+            Debug.Log("OnCombineInput");
             // respawn variables
             combinedObjectStartPos = weaveableScript.transform.position;
             combinedObjectStartRot = weaveableScript.transform.rotation;
@@ -263,8 +271,18 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         Debug.Log("This is the combine code");
         weaveableScript.startFloating = true;
         canCombine = true;
-        weaveableScript.rb.velocity = new Vector3(transform.position.x - weaveableScript.rb.transform.position.x, 0, transform.position.z - weaveableScript.rb.transform.position.z);
-        weaveableScript.rb.useGravity = false;       
+
+        if (weaveableScript.canBeRelocated)
+        {
+            weaveableScript.rb.velocity = new Vector3(transform.position.x - weaveableScript.rb.transform.position.x, 0, transform.position.z - weaveableScript.rb.transform.position.z);
+        }
+        else
+        {
+            rb.velocity = new Vector3( weaveableScript.rb.transform.position.x - transform.position.x, 0, weaveableScript.rb.transform.position.z - transform.position.z);
+        }
+        weaveableScript.rb.useGravity = false;
+        
+       
     }
     //********************************************************************
 }
