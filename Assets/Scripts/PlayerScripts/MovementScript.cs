@@ -183,6 +183,11 @@ public class MovementScript : MonoBehaviour
         gravity = originalGravity;
     }
 
+    public float GetGravity()
+    {
+        return gravity;
+    }
+
     public void ResetVelocityY()
     {
         velocity.y = 0;
