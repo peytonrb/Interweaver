@@ -36,7 +36,8 @@ public class MovementScript : MonoBehaviour
     public Vector3 bounceVector; //max velocity for bounce
     public float bounceValue = 3;
 
-    private bool bouncing = false;
+    //private bool bouncing = false;
+
 
     [Header("character's camera")]
     //Character Rotation values

@@ -9,6 +9,10 @@ using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour
 {
+    //*******************************************************************************************************************
+    // /!\ SCRIPT IS NO LONGER USED /!\
+    //*******************************************************************************************************************
+
     [Header("Movement Variables")]
     private CharacterController characterController; 
     private MovementScript movementScript; 

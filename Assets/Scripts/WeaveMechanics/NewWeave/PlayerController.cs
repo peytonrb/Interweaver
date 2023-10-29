@@ -57,6 +57,10 @@ public class PlayerController : MonoBehaviour
     public GameObject relocateMode;
     public GameObject combineMode;
 
+    [Header("Cutscene")]
+    public GameObject cutsceneManager;
+    private CutsceneManagerScript cms;
+
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -67,6 +71,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
+        cms = cutsceneManager.GetComponent<CutsceneManagerScript>();
         possessing = false;
         vCamRotationState = 0;
         pauseMenu.SetActive(false);
@@ -249,6 +254,10 @@ public class PlayerController : MonoBehaviour
             CameraMasterScript.instance.SwitchCameras(vCamRotationState);
 
             //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
+        }
+
+        if (other.gameObject.tag == "CutsceneTrigger") {
+            cms.StartCutscene();
         }
     }
 
