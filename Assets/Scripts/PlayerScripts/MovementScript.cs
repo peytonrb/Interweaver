@@ -198,6 +198,11 @@ public class MovementScript : MonoBehaviour
         terminalVelocity = newTerminalVelocity;
     }
 
+    public Vector3 GetVelocity()
+    {
+        return velocity;
+    }
+
     public void Bounce()
     {
         ResetGravity();

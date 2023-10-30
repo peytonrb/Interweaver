@@ -12,6 +12,9 @@ public class UpdraftScript : MonoBehaviour
     private bool boosting;
     public float end = 500f;
     public float t = 1;
+
+    private MovementScript movementScript;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,8 +24,6 @@ public class UpdraftScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currentBoost = Mathf.Lerp(start, end, animationCurve.Evaluate(1/t));
-        t += 1f * Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -31,20 +32,43 @@ public class UpdraftScript : MonoBehaviour
         {
             if (collider.GetComponent<MovementScript>() != null)
             {
-                MovementScript movementScript = collider.GetComponent<MovementScript>();
+                movementScript = collider.GetComponent<MovementScript>();
                 movementScript.ChangeGravity(1);
-                if (movementScript.GetGravity() > 0)
+                if (movementScript.GetVelocity().y > 0)
                 {
-                    
+                    boosting = true;
                 }
-                StartCoroutine(boostCountdown(collider));
+                //StartCoroutine(boostCountdown(collider));
             }
         }
     }
 
-        private void OnTriggerStay(Collider collider)
+    private void OnTriggerStay(Collider collider)
     {
+        if (movementScript.GetVelocity().y > 0)
+        {
+            boosting = true;
+        }
+        if (boosting)
+        {
+            Debug.Log("Hey!");
+            currentBoost = Mathf.Lerp(start, end, animationCurve.Evaluate(1/t));
+            t += 1f * Time.deltaTime;
+            movementScript.ChangeGravity(currentBoost);
+        }
+    }
 
+    private void OnTriggerExit(Collider collider)
+    {
+        if (collider.CompareTag("Familiar"))
+        {
+            boosting = false;
+            if (collider.GetComponent<MovementScript>() != null)
+            {
+                movementScript = collider.GetComponent<MovementScript>();
+                movementScript.ResetGravity();
+            }
+        }
     }
 
     IEnumerator boostCountdown(Collider collider)
