@@ -21,8 +21,12 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public float rotationSpeed = 0.5f;
     public bool canBeRelocated = true;
 
+    [Header("Floating Islands + Crystals")]
+    private bool onFloatingIsland;
+    private GameObject snapPoint;
+
     [Header("Respawn")] // accessed by RespawnController
-    public bool isCombined; 
+    public bool isCombined;
     public Vector3 combinedObjectStartPos;
     public Quaternion combinedObjectStartRot;
 
@@ -40,12 +44,14 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         weaveableScript = gameObject.GetComponent<WeaveableNew>();
         isCombined = false;
+        onFloatingIsland = false;
     }
 
     void OnEnable()
     {
         inputs.FindActionMap("weaveableObject").Enable();
     }
+
     void OnDisable()
     {
         inputs.FindActionMap("weaveableObject").Disable();
@@ -55,7 +61,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         if (startFloating)
         {
-            transform.position = transform.position + new Vector3(0, hoveringValue, 0);
+            if (gameObject.tag != "FloatingIsland")
+            {
+                transform.position = transform.position + new Vector3(0, hoveringValue, 0);
+            }
+
             startFloating = false;
         }
 
@@ -86,6 +96,24 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         {
             inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed += OnUncombineInput;
         }
+
+        if (onFloatingIsland)
+        {
+            relocate = false;
+            rb.isKinematic = false;
+            rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+
+            rb.velocity = new Vector3(snapPoint.transform.position.x - rb.position.x, rb.position.y, snapPoint.transform.position.z - rb.position.z);
+            float distanceToSnap = Vector3.Distance(rb.position, snapPoint.transform.position);
+
+            if (distanceToSnap <= 2f) // if crystal is close enough to snap point
+            {
+                rb.isKinematic = true;
+                isWoven = true;
+                Uninteract();
+                onFloatingIsland = false;
+            }
+        }
     }
 
     // this method is for using the mouse to move around the object
@@ -104,11 +132,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 {
                     canRotate = true;
                     rb.velocity = new Vector3(raycastHit.point.x - rb.position.x, transform.position.y - rb.position.y, raycastHit.point.z - rb.position.z);
-                    rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ; 
+                    rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
                     //this freezes the Y position so that the combined objects won't drag it down because of gravity and it freezes in all rotation so it won't droop because of the gravity  from the objects
                 }
-                
             }
+
             if (inWeaveMode)
             {
                 ICombineable combineable = raycastHit.collider.GetComponent<ICombineable>();
@@ -142,7 +170,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     //section for rotate function
     //**********************************************************************************
-    private void OnRotateCWInput(InputAction.CallbackContext context) //
+    private void OnRotateCWInput(InputAction.CallbackContext context)
     {
         StartCoroutine(Rotate(Vector3.up, 90));
     }
@@ -235,15 +263,12 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     private void OnCombineInput(InputAction.CallbackContext context)
     {
-        
         if (weaveableScript.ID == ID && !weaveableScript.isWoven)
         {
             Debug.Log("OnCombineInput");
             // respawn variables
             combinedObjectStartPos = weaveableScript.transform.position;
             combinedObjectStartRot = weaveableScript.transform.rotation;
-            Debug.Log(combinedObjectStartPos);
-            Debug.Log(combinedObjectStartRot);
 
             Combine();
             isCombined = true;
@@ -269,20 +294,25 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public void Combine()
     {
         Debug.Log("This is the combine code");
-        weaveableScript.startFloating = true;
         canCombine = true;
 
         if (weaveableScript.canBeRelocated)
         {
+            weaveableScript.startFloating = true;
             weaveableScript.rb.velocity = new Vector3(transform.position.x - weaveableScript.rb.transform.position.x, 0, transform.position.z - weaveableScript.rb.transform.position.z);
         }
         else
         {
-            rb.velocity = new Vector3( weaveableScript.rb.transform.position.x - transform.position.x, 0, weaveableScript.rb.transform.position.z - transform.position.z);
+            if (weaveableScript.gameObject.tag == "FloatingIsland")
+            {
+                onFloatingIsland = true;
+                player.floatingIslandCrystal = true; // for input manager
+            }
+
+            snapPoint = weaveableScript.gameObject.transform.GetChild(0).gameObject;
         }
+
         weaveableScript.rb.useGravity = false;
-        
-       
     }
     //********************************************************************
 }

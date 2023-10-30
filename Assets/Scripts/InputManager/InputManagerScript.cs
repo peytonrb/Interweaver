@@ -128,7 +128,7 @@ public class InputManagerScript : MonoBehaviour
                 playerScript.inCombineMode = true;
                 playerScript.inRelocateMode = false;
             }
-            else if (playerScript.inCombineMode)
+            else if (playerScript.inCombineMode && !playerScript.floatingIslandCrystal)
             {
                 playerScript.inCombineMode = false;
                 playerScript.inRelocateMode = true;

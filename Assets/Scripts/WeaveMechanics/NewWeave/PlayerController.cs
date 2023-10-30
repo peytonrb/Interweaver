@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     private IInteractable interactableObject;
     private GameObject wovenObject;
     [SerializeField] private float distanceBetween;
+    public bool floatingIslandCrystal = false; // used by input manager
 
     [Header("References")]
     public GameObject familiar;
@@ -102,13 +103,8 @@ public class PlayerController : MonoBehaviour
                 movementScript.active = true;
             }
 
-            // WEAVE - interactInput set by InputManager
-            if (interactInput)
-            {
-                
-            }
             // switch into combining mode - relocate is default
-            else if (!interactInput && inCombineMode && interactableObject != null)
+            if (!interactInput && inCombineMode && interactableObject != null)
             {
                 interactableObject.WeaveMode();
                 relocateMode.SetActive(false); // on-screen ui
@@ -165,7 +161,6 @@ public class PlayerController : MonoBehaviour
         interactableObject = determineInteractability();
         Debug.Log(distanceBetween);
 
-        
         if (interactableObject != null)
         {
             distanceBetween = Vector3.Distance(weaveableScript.transform.position, transform.position);
@@ -181,9 +176,8 @@ public class PlayerController : MonoBehaviour
                 relocateMode.SetActive(true); // on-screen ui
             }
         }
-        // if too far apart & object is weavable
-        
 
+        // if too far apart & object is weavable
         interactInput = false;
     }
 
@@ -221,8 +215,8 @@ public class PlayerController : MonoBehaviour
             interactableObject.Uninteract();
             interactableObject = null;
             weaverAnimationHandler.ToggleWeaveAnim(isWeaving);
-            relocateMode.SetActive(false); // remember to delete this
-            combineMode.SetActive(false); // remember to delete this
+            relocateMode.SetActive(false); // on screen ui
+            combineMode.SetActive(false); // on screen ui
             uninteract = false;
             inRelocateMode = false;
             inCombineMode = false;
