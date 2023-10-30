@@ -33,7 +33,7 @@ public class UpdraftScript : MonoBehaviour
             if (collider.GetComponent<MovementScript>() != null)
             {
                 movementScript = collider.GetComponent<MovementScript>();
-                movementScript.ChangeGravity(1);
+                movementScript.ChangeGravity(5);
                 if (movementScript.GetVelocity().y > 0)
                 {
                     boosting = true;
