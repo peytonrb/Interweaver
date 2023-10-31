@@ -223,6 +223,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             Debug.Log("this is now not woven");
             rb.isKinematic = false;
             rb.useGravity = true;
+            player.inRelocateMode = false;
+            player.inCombineMode = false;
             relocate = false;
             inWeaveMode = false;
             isWoven = false;
