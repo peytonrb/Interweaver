@@ -9,8 +9,6 @@ public class FloatingIslandScript : MonoBehaviour
    
     //Attachments
     [Header("Prereqs")]
-    //public CinemachineVirtualCamera vcam1; //Player Camera
-    //public CinemachineVirtualCamera vcam2; //Floating Island Falling
     public CrystalScript myCrystal;
     public CinemachineVirtualCamera myFloatCamera;
 
@@ -25,7 +23,7 @@ public class FloatingIslandScript : MonoBehaviour
 
     [Header("Animation Variables")]
     public float verticalOffset = 0;
-
+    public GameObject crystalPrefab;
     //Internal Reqs
     public bool cameraswitched;
     public bool isislandfalling;
@@ -36,7 +34,13 @@ public class FloatingIslandScript : MonoBehaviour
     {
         //Assign Components
         anim = GetComponent<Animator>();
-        myCrystal.AssignFloatingIsland(this);
+
+        //if it has a crystal, it'll auto assign the itself to the crystals variable
+        if (myCrystal != null)
+        {
+            myCrystal.AssignFloatingIsland(this);
+        }
+       
 
         //Set Variables
         cameraswitched = false;
@@ -56,12 +60,14 @@ public class FloatingIslandScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Vertical Offset is set in the animations, this bit makes it actually fall
        if (verticalOffset != 0)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y + verticalOffset, transform.position.z);
         }
     }
     
+    //Called by the crystal, changes animation state, starts timer before respawning at sit location
     public void StartFalling() 
     {
         if (isFloating)
@@ -72,6 +78,7 @@ public class FloatingIslandScript : MonoBehaviour
         }
     }
 
+    //Coroutine timer for respawning the object at the float and sit locations
     public IEnumerator TimerBeforeRespawn(bool isFalling)
     {
         yield return new WaitForSeconds(timerBeforeSwap / 2);
@@ -102,6 +109,7 @@ public class FloatingIslandScript : MonoBehaviour
         yield break;
     }
 
+    //Swaps to the rising camera when woven to, called by the IslandSwap WeaveInteraction
     public void SwapToRiseCamera()
     {
 
@@ -113,14 +121,46 @@ public class FloatingIslandScript : MonoBehaviour
                 CameraMasterScript.instance.FloatingIslandCameraSwitch(myFloatCamera, this);
             }
         }
-         
+
     }
 
+    //changes the animation and starts the respawn at float spot timer
     public void RaiseIsland()
     {
-        
+
         StartCoroutine(TimerBeforeRespawn(false));
         cameraswitched = false;
         anim.SetTrigger("Rise");
-    }   
+    }
+
+#if UNITY_EDITOR
+    public void SpawnTransforms()
+    {
+        //spawn Transforms
+        GameObject sitObj = new GameObject();
+        GameObject floatObj = new GameObject();
+
+        //assign names
+        sitObj.name = "sitTransform";
+        floatObj.name = "floatTransform";
+
+        //move locations
+        sitObj.transform.position = new Vector3(transform.position.x, transform.position.y - 10, transform.position.z);
+        floatObj.transform.position = new Vector3(transform.position.x, transform.position.y + 10, transform.position.z);
+
+        //assign transforms
+        floatTransform = floatObj.transform;
+        sitTransform = sitObj.transform;
+    }
+
+    public void SpawnCrystal()
+    {
+        GameObject crystal = Instantiate(crystalPrefab);
+
+        myCrystal = crystal.GetComponent<CrystalScript>();
+
+        crystal.transform.position = new Vector3(transform.position.x - 10, transform.position.y, transform.position.z);
+    }
+#endif
+
 }
