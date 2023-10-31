@@ -38,6 +38,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public WeaveableNew weaveableScript; // has to be public for respawn
     [SerializeField] private PlayerController player;
 
+    private GameObject wovenFloatingIsland;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -72,6 +74,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         if (isWoven)
         {
             MovingWeaveMouse(); // fix drag on object here
+            
         }
 
         if (canRotate)
@@ -108,6 +111,14 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
             if (distanceToSnap <= 2f) // if crystal is close enough to snap point
             {
+                if (TryGetComponent<CrystalScript>(out CrystalScript crystal))
+                {
+                    if (onFloatingIsland)
+                    {
+                        wovenFloatingIsland.GetComponent<FloatingIslandScript>().SwapToRiseCamera();
+                    }
+                }
+
                 rb.isKinematic = true;
                 canBeRelocated = false;  // NEEDS TO BE SET TO TRUE WHEN ISLAND IS SENT BACK DOWN
                 isWoven = true;
@@ -313,6 +324,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             {
                 onFloatingIsland = true;
                 player.floatingIslandCrystal = true; // for input manager
+
+                wovenFloatingIsland = weaveableScript.gameObject;
             }
 
             snapPoint = weaveableScript.gameObject.transform.GetChild(0).gameObject;
