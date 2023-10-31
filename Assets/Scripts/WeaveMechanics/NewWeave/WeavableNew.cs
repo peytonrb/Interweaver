@@ -111,6 +111,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
             if (distanceToSnap <= 2f) // if crystal is close enough to snap point
             {
+                gameObject.transform.SetParent(wovenFloatingIsland.transform);
+
                 if (TryGetComponent<CrystalScript>(out CrystalScript crystal))
                 {
                     if (onFloatingIsland)
