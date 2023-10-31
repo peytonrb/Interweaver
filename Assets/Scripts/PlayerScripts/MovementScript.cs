@@ -14,8 +14,8 @@ public class MovementScript : MonoBehaviour
     public float speed; //Base walk speed for player
     private float currentSpeed = 0; // the current speed for the player
     private CharacterController characterController; //references the character controller component
-    public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
-    private InputAction moveInput; //Is the specific input action regarding arrow keys, WASD, and left stick
+    //public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
+    //private InputAction moveInput; //Is the specific input action regarding arrow keys, WASD, and left stick
     private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
     private Vector3 direction; //A reference to the directional movement of the player in 3D space
     private Vector3 velocity; // velocity of the controller
@@ -33,6 +33,11 @@ public class MovementScript : MonoBehaviour
     [SerializeField][Range(-50f, -5f)] private float terminalVelocity; // the terminal velocity of the controller
     private bool resettingTerminalVelocity;
     private float originalTerminalVelocity; // original terminal velocity of the controller
+    public Vector3 bounceVector; //max velocity for bounce
+    public float bounceValue = 3;
+
+    //private bool bouncing = false;
+
 
     [Header("character's camera")]
     //Character Rotation values
@@ -41,15 +46,11 @@ public class MovementScript : MonoBehaviour
     private Vector3 newDirection;
     public GameObject cam; //Camera object reference
     public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
-
     public bool active; //Determines if movement controller is active
-
-    private PlayerScript PS;
 
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
-        PS = GetComponent<PlayerScript>();
         characterController.enabled = false;
     }
     
@@ -62,24 +63,12 @@ public class MovementScript : MonoBehaviour
         originalAerialAcceleration = aerialAcceleration;
         originalAerialDeceleration = aerialDeceleration;
 
-        //Section reserved for initiating inputs 
-        moveInput = inputs.FindAction("Player/Move");
+        //moveInput = inputs.FindAction("Player/Move");
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
         //transform.position = GM.LastCheckPointPos;
         characterController.enabled = true;
-    }
-
-    void OnEnable()
-    {
-        inputs.Enable();
-
-    }
-
-    void OnDisable()
-    {
-        inputs.Disable();
     }
 
     // Update is called once per frame
@@ -91,8 +80,7 @@ public class MovementScript : MonoBehaviour
             if (Time.timeScale != 0 && active)
             {
                 //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad
-                movement = moveInput.ReadValue<Vector2>();
-                
+                movement = InputManagerScript.instance.movement;
                 LookAndMove();
                 
             }
@@ -102,6 +90,7 @@ public class MovementScript : MonoBehaviour
     void FixedUpdate()
     {
         if (Time.timeScale != 0 && active) {
+            // Debug.Log(characterController.isGrounded);
 
             // changes what acceleration/deceleration type is being used based on if controller is grouunded or not
             acceleration = characterController.isGrounded ? groundAcceleration : aerialAcceleration;
@@ -132,8 +121,9 @@ public class MovementScript : MonoBehaviour
             //Character gravity
             if (!characterController.isGrounded)
             {
-                velocity.y += gravity * Time.deltaTime;
-                //weaverAnimationHandler.ToggleFallAnim(true);
+                    velocity.y += gravity * Time.deltaTime;
+                    //Debug.Log(gravity);
+                    //weaverAnimationHandler.ToggleFallAnim(true);
             }
             else
             {
@@ -149,7 +139,7 @@ public class MovementScript : MonoBehaviour
         }
     }
 
-    private void LookAndMove()
+    public void LookAndMove()
     {
         direction = new Vector3(movement.x, 0, movement.y).normalized; //direction of movement
 
@@ -193,10 +183,27 @@ public class MovementScript : MonoBehaviour
         gravity = originalGravity;
     }
 
+    public void ResetVelocityY()
+    {
+        velocity.y = 0;
+    }
+
     public void ChangeTerminalVelocity(float newTerminalVelocity) // changes terminal velocity to new value
     {
         terminalVelocity = newTerminalVelocity;
     }
+
+    public void Bounce()
+    {
+        ResetGravity();
+        ResetTerminalVelocity();
+        ResetAerialAcceleration();
+        ResetAerialDeceleration();
+        ResetVelocityY();
+        GetComponent<OwlDiveScript>().startDiveCooldown(.1f);
+        //characterController.Move(bounceVector);
+    }
+
 
     public void ResetTerminalVelocity() // resets terminal velocity to original value
     {

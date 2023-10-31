@@ -10,9 +10,23 @@ public class DialogueManager : MonoBehaviour
     private Queue<string> sentences;
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI dialogueText;
-    public GameObject textBoxUI;
+    private GameObject textBoxUI;
     private AudioClip audioClip;
     
+    public static DialogueManager instance;
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         sentences = new Queue<string>();
@@ -32,7 +46,6 @@ public class DialogueManager : MonoBehaviour
     public void StartDialogue(Dialogue dialogue, GameObject textBox)
     {
         initialize(textBox);
-        textBoxUI = textBox;
         nameText.text = dialogue.name;
         sentences.Clear();
         textBoxUI.SetActive(true);
