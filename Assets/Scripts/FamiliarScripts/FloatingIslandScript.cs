@@ -10,6 +10,7 @@ public class FloatingIslandScript : MonoBehaviour
     //Attachments
     [Header("Prereqs")]
     public CrystalScript myCrystal;
+    [CannotBeNullObjectField]
     public CinemachineVirtualCamera myFloatCamera;
 
     //Designer Variables
@@ -17,14 +18,19 @@ public class FloatingIslandScript : MonoBehaviour
     [SerializeField] private bool isFloating = true;
     //public bool toggleTimer;
     [SerializeField] private float timerBeforeSwap;
+    [CannotBeNullObjectField]
     [SerializeField] private Transform floatTransform;
+    [CannotBeNullObjectField]
     [SerializeField] private Transform sitTransform;
 
 
-    [Header("Animation Variables")]
+    [Header("Don't Touch!")]
     public float verticalOffset = 0;
+
+    [CannotBeNullObjectField]
     public GameObject crystalPrefab;
-    //Internal Reqs
+    [CannotBeNullObjectField]
+    public GameObject vcamPrefab;
     public bool cameraswitched;
     public bool isislandfalling;
     public Rigidbody rb;
@@ -40,7 +46,6 @@ public class FloatingIslandScript : MonoBehaviour
         {
             myCrystal.AssignFloatingIsland(this);
         }
-       
 
         //Set Variables
         cameraswitched = false;
@@ -160,6 +165,15 @@ public class FloatingIslandScript : MonoBehaviour
         myCrystal = crystal.GetComponent<CrystalScript>();
 
         crystal.transform.position = new Vector3(transform.position.x - 10, transform.position.y, transform.position.z);
+    }
+
+    public void SpawnCamera()
+    {
+        GameObject cam = Instantiate(vcamPrefab);
+
+        cam.transform.position = new Vector3(transform.position.x - 10, transform.position.y + 10, transform.position.z);
+
+        myFloatCamera = cam.GetComponent<CinemachineVirtualCamera>();
     }
 #endif
 

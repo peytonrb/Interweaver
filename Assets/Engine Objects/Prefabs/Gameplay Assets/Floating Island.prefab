@@ -36,7 +36,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &967863317956628430
 MeshFilter:
@@ -155,7 +155,8 @@ MonoBehaviour:
   floatTransform: {fileID: 0}
   sitTransform: {fileID: 0}
   verticalOffset: 0
-  RaiseSpeed: 1
+  crystalPrefab: {fileID: 3738485478540167410, guid: f68a5af436eec1b46819d0ceb33ce8f4, type: 3}
+  vcamPrefab: {fileID: 6941654704022576730, guid: 31bbebad683476d4a9c02286e4e9251e, type: 3}
   cameraswitched: 0
   isislandfalling: 0
   rb: {fileID: 1926140711349057970}
@@ -203,6 +204,7 @@ MonoBehaviour:
   canRotate: 0
   isWoven: 0
   rotationSpeed: 0.5
+  canBeRelocated: 1
   isCombined: 0
   combinedObjectStartPos: {x: 0, y: 0, z: 0}
   combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
