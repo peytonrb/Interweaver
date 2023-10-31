@@ -109,6 +109,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             if (distanceToSnap <= 2f) // if crystal is close enough to snap point
             {
                 rb.isKinematic = true;
+                canBeRelocated = false;  // NEEDS TO BE SET TO TRUE WHEN ISLAND IS SENT BACK DOWN
                 isWoven = true;
                 Uninteract();
                 onFloatingIsland = false;
@@ -236,13 +237,16 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     public void Relocate()
     {
-        isWoven = true;
-        rb.useGravity = false;
-        relocate = true;
-        inWeaveMode = false;
-        rb.isKinematic = false;
-        canRotate = true;
-        Debug.Log("Relocate Mode");
+        if (canBeRelocated)
+        {
+            isWoven = true;
+            rb.useGravity = false;
+            relocate = true;
+            inWeaveMode = false;
+            rb.isKinematic = false;
+            canRotate = true;
+            Debug.Log("Relocate Mode");
+        }
     }
 
     public void WeaveMode()
