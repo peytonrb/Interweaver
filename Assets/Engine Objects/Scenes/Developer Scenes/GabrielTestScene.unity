@@ -2803,8 +2803,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 898997738}
-  m_LocalRotation: {x: -0.2735065, y: -0.13879077, z: -0.039917454, w: 0.95096684}
-  m_LocalPosition: {x: -37.55, y: 1.071, z: 1.97}
+  m_LocalRotation: {x: -0.16930956, y: 0.3795104, z: 0.07085882, w: 0.90679944}
+  m_LocalPosition: {x: -40.12, y: 1.071, z: 1.65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3132,6 +3132,7 @@ MonoBehaviour:
   inCombineMode: 0
   uninteract: 0
   distanceBetween: 0
+  floatingIslandCrystal: 0
   familiar: {fileID: 808626005}
   weaverAnimationHandler: {fileID: 1163366579}
   relocateMode: {fileID: 0}
@@ -4680,8 +4681,10 @@ MonoBehaviour:
   - {fileID: 898997739}
   - {fileID: 35632976}
   - {fileID: 739564158}
+  transitionSpeed: 0.5
   player: {fileID: 961843469}
   cutsceneWeaver: {fileID: 1206685493}
+  cutsceneTrigger: {fileID: 1979857323}
 --- !u!320 &1353595866
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -4833,7 +4836,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  m_CustomBlends: {fileID: 11400000, guid: 1ad7e4ac050c1ac44b2a457ffb3fbf9a, type: 2}
+  m_CustomBlends: {fileID: 11400000, guid: cc3c3098a6d28474994ec75c0f0ab9f7, type: 2}
   m_CameraCutEvent:
     m_PersistentCalls:
       m_Calls: []

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.UI;
@@ -14,7 +15,7 @@ public class CutsceneManagerScript : MonoBehaviour
     private bool isCutscene;
     private bool isTransitioning;
     private int cutscenePhase;
-    private float transitionSpeed;
+    [SerializeField] private float transitionSpeed;
     private float lerpval;
     private PlayableDirector director;
 
@@ -22,6 +23,7 @@ public class CutsceneManagerScript : MonoBehaviour
     public GameObject player;
     private MovementScript playerMovementScript;
     public GameObject cutsceneWeaver;
+    public GameObject cutsceneTrigger;
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +38,6 @@ public class CutsceneManagerScript : MonoBehaviour
         isTransitioning = false;
         cutscenePhase = 0;
         lerpval = 0;
-        transitionSpeed = 0.01f;
 
         foreach (CinemachineVirtualCamera vcam in cutsceneCams) {
             vcam.Priority = 0;
@@ -56,8 +57,8 @@ public class CutsceneManagerScript : MonoBehaviour
                         bpCanvasGroup.alpha = Mathf.Lerp(bpCanvasGroup.alpha,1,lerpval);
                         lerpval += transitionSpeed * Time.deltaTime;
                         
-                        if (bpCanvasGroup.alpha >= 0.95f) {
-                            cutscenePhase = 1;
+                        if (lerpval >= 1) {
+                            BeginTimeline();
                             bpCanvasGroup.alpha = 1;
                         }
                     }
@@ -65,11 +66,12 @@ public class CutsceneManagerScript : MonoBehaviour
                 case 1:
                     if (isTransitioning) {
                         bpCanvasGroup.alpha = Mathf.Lerp(bpCanvasGroup.alpha,0,lerpval);
-                        lerpval -= transitionSpeed * Time.deltaTime;
-                        if (bpCanvasGroup.alpha <= 0.05f) {
-                            BeginTimeline();
+                        lerpval += -transitionSpeed * Time.deltaTime;
+
+                        if (lerpval <= 0) {
                             isTransitioning = false;
                             bpCanvasGroup.alpha = 0;
+                            lerpval = 0;
                         }
                     }
                     else {
@@ -77,13 +79,43 @@ public class CutsceneManagerScript : MonoBehaviour
                     }
                 break;
                 case 2:
-                    if (director.time > 25f) {
-                        EndCutscene();
+                    if (director.time > 24f) {
                         cutscenePhase = 3;
                     }
                 break;
+                case 3:
+                    if (!isTransitioning) {
+                        isTransitioning = true;
+                    }
+                    else {
+                        bpCanvasGroup.alpha = Mathf.Lerp(bpCanvasGroup.alpha,1,lerpval);
+                        lerpval += transitionSpeed * Time.deltaTime;
+                        
+                        if (lerpval >= 1) {
+                            bpCanvasGroup.alpha = 1;
+                            EndCutscene();
+                        }
+                    }
+                break;
+                case 4:
+                    if (isTransitioning) {
+                        bpCanvasGroup.alpha = Mathf.Lerp(bpCanvasGroup.alpha,0,lerpval);
+                        lerpval += -transitionSpeed * Time.deltaTime;
+                        
+                        if (lerpval <= 0) {
+                            isTransitioning = false;
+                            bpCanvasGroup.alpha = 0;
+                            lerpval = 0;
+                            cutscenePhase = 0;
+                            isCutscene = false;
+                        }
+                    }
+                break;
+                
             }
+            Debug.Log(cutscenePhase);
         }
+        
     }
 
     public void StartCutscene() {
@@ -95,15 +127,25 @@ public class CutsceneManagerScript : MonoBehaviour
 
     private void BeginTimeline() {
         director.Play();
+        cutsceneWeaver.SetActive(true); 
         foreach (CinemachineVirtualCamera vcam in cutsceneCams) {
             vcam.Priority = 10;
         }
-        cutsceneWeaver.SetActive(true);    
+        cutscenePhase = 1;
         
     }
 
     private void EndCutscene() {
+        Destroy(cutsceneTrigger);
+        director.Stop();
+        foreach (CinemachineVirtualCamera vcam in cutsceneCams) {
+            vcam.Priority = 0;  
+        }
         
+        cutsceneWeaver.SetActive(false);
+        player.SetActive(true);
+        playerMovementScript.active = true;
+        cutscenePhase = 4;
     }
 
 }
