@@ -6,9 +6,9 @@ using UnityEngine.InputSystem;
 public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 {
     [Header("Weavables")]
-    [SerializeField] private Rigidbody rb;
+    [CannotBeNullObjectField] [SerializeField] private Rigidbody rb;
     [SerializeField] private float hoveringValue = 1f;
-    [SerializeField] private Camera mainCamera;
+    [CannotBeNullObjectField] [SerializeField] private Camera mainCamera;
     [SerializeField] private LayerMask layersToHit;
     [SerializeField] public WeaveInteraction weaveInteraction;
     public int ID;
@@ -31,7 +31,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public Quaternion combinedObjectStartRot;
 
     [Header("Inputs")]
-    public InputActionAsset inputs;
+    [CannotBeNullObjectField] public InputActionAsset inputs;
     private InputAction combineInput;
 
     [Header("References")]
@@ -112,6 +112,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             if (distanceToSnap <= 2f) // if crystal is close enough to snap point
             {
                 gameObject.transform.SetParent(wovenFloatingIsland.transform);
+                player.uninteract = true;
 
                 if (TryGetComponent<CrystalScript>(out CrystalScript crystal))
                 {
@@ -124,7 +125,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 rb.isKinematic = true;
                 canBeRelocated = false;  // NEEDS TO BE SET TO TRUE WHEN ISLAND IS SENT BACK DOWN
                 isWoven = true;
-                Uninteract();
                 onFloatingIsland = false;
             }
         }
@@ -307,7 +307,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         weaveableScript.rb.freezeRotation = false;
         player.inRelocateMode = false;
         player.inCombineMode = false;
-        Uninteract();
+        player.uninteract = true;
     }
 
     public void Combine()

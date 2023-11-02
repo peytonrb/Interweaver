@@ -15,12 +15,12 @@ public class PlayerController : MonoBehaviour
     private bool possessing;
 
     [Header("Character's Camera")]
-    [SerializeField] private Camera mainCamera;
-    public CinemachineVirtualCamera familiarVirtualCam;
+    [CannotBeNullObjectField] [SerializeField] private Camera mainCamera;
+    [CannotBeNullObjectField] public CinemachineVirtualCamera familiarVirtualCam;
     private int vCamRotationState; //State 0 is default
 
     [Header("Pause Menu")]
-    public GameObject pauseMenu;
+    [CannotBeNullObjectField] public GameObject pauseMenu;
 
     [Header("Weave Variables")]
     public float weaveDistance = 20f;
@@ -46,20 +46,24 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float distanceBetween;
     public bool floatingIslandCrystal = false; // used by input manager
 
+    // vfx controls
+    [CannotBeNullObjectField] public GameObject weaveSpawn;   //  WILL BE ASSIGNED AT RUNTIME ONCE SCRIPTS ARE FINALIZED
+    private WeaveFXScript weaveVisualizer;
+
     [Header("References")]
-    public GameObject familiar;
+    [CannotBeNullObjectField] public GameObject familiar;
     private FamiliarScript familiarScript;
     private GameMasterScript GM;
 
     [Header("Animation")]
-    public WeaverAnimationHandler weaverAnimationHandler;
+    [CannotBeNullObjectField] public WeaverAnimationHandler weaverAnimationHandler;
 
     [Header("Prototype")]
-    public GameObject relocateMode;
-    public GameObject combineMode;
+    [CannotBeNullObjectField] public GameObject relocateMode;
+    [CannotBeNullObjectField] public GameObject combineMode;
 
     [Header("Cutscene")]
-    public GameObject cutsceneManager;
+    [CannotBeNullObjectField] public GameObject cutsceneManager;
     private CutsceneManagerScript cms;
 
     void Awake()
@@ -73,6 +77,8 @@ public class PlayerController : MonoBehaviour
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
         cms = cutsceneManager.GetComponent<CutsceneManagerScript>();
+        weaveVisualizer = GetComponent<WeaveFXScript>(); // THIS WILL CAUSE A NULL IF THERE IS NO WEAVEFXSCRIPT ATTACHED TO PLAYER
+        weaveVisualizer.DisableWeave();
         possessing = false;
         vCamRotationState = 0;
         pauseMenu.SetActive(false);
@@ -125,12 +131,15 @@ public class PlayerController : MonoBehaviour
                 // player points towards woven object
                 transform.LookAt(new Vector3(wovenObject.transform.position.x, transform.position.y, wovenObject.transform.position.z));
 
+                // line renderer draws weave
+                weaveVisualizer.DrawWeave(weaveSpawn.transform.position, wovenObject.transform.position);
+
                 distanceBetween = Vector3.Distance(weaveableScript.transform.position, transform.position);
 
                 // if the player moves too far from the object while weaving
                 if (distanceBetween > weaveDistance)
                 {
-                    Uninteract();
+                    uninteract = true;
                 }
             }
 
@@ -138,6 +147,7 @@ public class PlayerController : MonoBehaviour
             if (uninteract)
             {
                 Uninteract();
+                weaveVisualizer.DisableWeave();
             }
 
             DetectGamepad();

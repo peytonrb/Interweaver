@@ -1442,6 +1442,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1359264606954408796, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       insertIndex: 4
       addedObject: {fileID: 2122026649}
+    - targetCorrespondingSourceObject: {fileID: 1359264606954408796, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      insertIndex: 5
+      addedObject: {fileID: 2122026655}
   m_SourcePrefab: {fileID: 100100000, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
 --- !u!1 &284850127
 GameObject:
@@ -3043,7 +3046,7 @@ LineRenderer:
     shadowBias: 0.5
     generateLightingData: 0
   m_MaskInteraction: 0
-  m_UseWorldSpace: 0
+  m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
 --- !u!1 &789705724
@@ -7122,11 +7125,25 @@ MonoBehaviour:
   uninteract: 0
   distanceBetween: 0
   floatingIslandCrystal: 0
+  weaveSpawn: {fileID: 724319193}
   familiar: {fileID: 1783837062}
   weaverAnimationHandler: {fileID: 1362197098}
   relocateMode: {fileID: 789705724}
   combineMode: {fileID: 1821816238}
   cutsceneManager: {fileID: 710614726}
+--- !u!114 &2122026655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2122026641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d5af4afbcc62e147901b758b75bacd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaveRenderer: {fileID: 779052772}
 --- !u!1 &2129858510
 GameObject:
   m_ObjectHideFlags: 0
