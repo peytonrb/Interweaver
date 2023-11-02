@@ -123,7 +123,6 @@ public class InputManagerScript : MonoBehaviour
         PlayerController playerScript = player.GetComponent<PlayerController>(); // new weave
         if (context.started)
         {
-            Debug.Log("here");
             if (playerScript.inRelocateMode)
             {
                 playerScript.inCombineMode = true;
