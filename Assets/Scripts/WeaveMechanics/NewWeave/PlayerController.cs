@@ -63,8 +63,8 @@ public class PlayerController : MonoBehaviour
     [CannotBeNullObjectField] public GameObject combineMode;
 
     [Header("Cutscene")]
-    [CannotBeNullObjectField] public GameObject cutsceneManager;
-    private CutsceneManagerScript cms;
+    [CannotBeNullObjectField] public GameObject[] cutsceneManager;
+    //private CutsceneManagerScript cms;
 
     void Awake()
     {
@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
-        cms = cutsceneManager.GetComponent<CutsceneManagerScript>();
+        
         weaveVisualizer = GetComponent<WeaveFXScript>(); // THIS WILL CAUSE A NULL IF THERE IS NO WEAVEFXSCRIPT ATTACHED TO PLAYER
         weaveVisualizer.DisableWeave();
         possessing = false;
@@ -93,6 +93,7 @@ public class PlayerController : MonoBehaviour
         inCombineMode = false;
         inRelocateMode = false;
         interactInput = false;
+
     }
 
     void Update()
@@ -274,7 +275,11 @@ public class PlayerController : MonoBehaviour
         }
 
         if (other.gameObject.tag == "CutsceneTrigger") {
-            cms.StartCutscene();
+            //Only the trigger that is a child of a certain cutscene manager will activate a cutscene.
+            foreach (GameObject cm in cutsceneManager) {
+                CutsceneManagerScript cms = cm.GetComponent<CutsceneManagerScript>();
+                cms.StartCutscene();
+            }     
         }
     }
 

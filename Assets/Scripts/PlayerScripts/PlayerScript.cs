@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 public class PlayerScript : MonoBehaviour
 {
     //*******************************************************************************************************************
-    // /!\ SCRIPT IS NO LONGER USED /!\
+    // /!\ SCRIPT IS OBSOLETE /!\
     //*******************************************************************************************************************
 
     [Header("Movement Variables")]
