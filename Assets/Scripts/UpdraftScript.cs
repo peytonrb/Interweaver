@@ -7,67 +7,59 @@ public class UpdraftScript : MonoBehaviour
     public AnimationCurve animationCurve;
 
     public float start = 0f;
-    [SerializeField][Range (3f, 10f)] private float boost;
     private float currentBoost = 0;
-    private bool boosting;
+    private bool inUpdraft;
+    private bool upDraftEntered;
     public float end = 500f;
-    public float t = 1;
-
+    private float t = 1; // t for lerp
     private MovementScript movementScript;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.CompareTag("Familiar"))
+        if (collider.CompareTag("Gust") && !inUpdraft)
         {
-            if (collider.GetComponent<MovementScript>() != null)
+            if (GetComponent<MovementScript>() != null)
             {
-                movementScript = collider.GetComponent<MovementScript>();
-                movementScript.ChangeGravity(5);
-                if (movementScript.GetVelocity().y > 0)
+                upDraftEntered = true;    
+                movementScript = GetComponent<MovementScript>();
+                if (movementScript.GetVelocity().y < 0)
                 {
-                    boosting = true;
+                    movementScript.ChangeVelocity(new Vector3 (movementScript.GetVelocity().x, 0, movementScript.GetVelocity().z));
                 }
-                //StartCoroutine(boostCountdown(collider));
             }
         }
     }
 
     private void OnTriggerStay(Collider collider)
     {
-        if (movementScript.GetVelocity().y > 0)
+        if (collider.CompareTag("Gust"))
         {
-            boosting = true;
-        }
-        if (boosting)
-        {
-            Debug.Log("Hey!");
+            inUpdraft = true;
             currentBoost = Mathf.Lerp(start, end, animationCurve.Evaluate(1/t));
             t += 1f * Time.deltaTime;
             movementScript.ChangeGravity(currentBoost);
         }
+
     }
 
     private void OnTriggerExit(Collider collider)
     {
-        if (collider.CompareTag("Familiar"))
+        if (collider.CompareTag("Gust"))
         {
-            boosting = false;
-            if (collider.GetComponent<MovementScript>() != null)
+            if (GetComponent<MovementScript>() != null)
             {
-                movementScript = collider.GetComponent<MovementScript>();
+                upDraftEntered = false;
+                movementScript = GetComponent<MovementScript>();
+                movementScript.ChangeVelocity(new Vector3 (movementScript.GetVelocity().x, currentBoost/(0.5f*t), movementScript.GetVelocity().z));
                 movementScript.ResetGravity();
             }
+
+            if (!upDraftEntered)
+            {
+                inUpdraft = false;
+            }
+
+            t = 1;
         }
     }
 

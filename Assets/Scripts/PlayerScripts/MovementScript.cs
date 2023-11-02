@@ -198,6 +198,11 @@ public class MovementScript : MonoBehaviour
         terminalVelocity = newTerminalVelocity;
     }
 
+    public void ChangeVelocity(Vector3 newVelocity)
+    {
+        velocity = newVelocity;
+    }
+
     public Vector3 GetVelocity()
     {
         return velocity;
