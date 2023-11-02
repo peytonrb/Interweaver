@@ -118,7 +118,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 {
                     if (onFloatingIsland)
                     {
-                        wovenFloatingIsland.GetComponent<FloatingIslandScript>().SwapToRiseCamera();
+                        weaveInteraction.OnWeave(wovenFloatingIsland, gameObject);
                     }
                 }
 
@@ -233,6 +233,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         if (isWoven)
         {
+
+            player.floatingIslandCrystal = false;
             Debug.Log("this is now not woven");
             rb.isKinematic = false;
             rb.useGravity = true;
@@ -260,7 +262,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             inWeaveMode = false;
             rb.isKinematic = false;
             canRotate = true;
-            Debug.Log("Relocate Mode");
+            //Debug.Log("Relocate Mode");
         }
     }
 
@@ -270,7 +272,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         inWeaveMode = true;
         rb.isKinematic = true;
         canRotate = true;
-        Debug.Log("weave Mode");
+        //Debug.Log("weave Mode");
     }
     //********************************************************************
 

@@ -71,6 +71,15 @@ public class FloatingIslandScript : MonoBehaviour
             transform.position = new Vector3(transform.position.x, transform.position.y + verticalOffset, transform.position.z);
         }
     }
+
+    public void AssignNewCrystal(CrystalScript crystal)
+    {
+
+        myCrystal = crystal;
+   
+        crystal.AssignFloatingIsland(this);
+
+    }
     
     //Called by the crystal, changes animation state, starts timer before respawning at sit location
     public void StartFalling() 
