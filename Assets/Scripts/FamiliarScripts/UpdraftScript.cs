@@ -1,0 +1,70 @@
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
+
+public class UpdraftScript : MonoBehaviour
+{
+    public AnimationCurve animationCurve;
+
+    private bool inUpdraft; // is character currently in an updraft?
+    private bool upDraftEntered; // has a character entered an updraft this frame?
+    private float currentBoost = 0;
+    [SerializeField]private float maxBoost = 10f; // endpoint for lerp
+    private float t = 1; // t for lerp
+    private MovementScript movementScript;
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.CompareTag("Updraft") && !upDraftEntered)
+        {
+            if (GetComponent<MovementScript>() != null)
+            {  
+                upDraftEntered = true;
+                movementScript = GetComponent<MovementScript>();
+                if (movementScript.GetVelocity().y < 0)
+                {
+                    movementScript.ChangeVelocity(new Vector3 (movementScript.GetVelocity().x, 0, movementScript.GetVelocity().z));
+                }
+            }
+        }
+    }
+
+    private void OnTriggerStay(Collider collider)
+    {
+        if (collider.CompareTag("Updraft"))
+        {
+            inUpdraft = true;
+            currentBoost = Mathf.Lerp(movementScript.GetVelocity().y, maxBoost, animationCurve.Evaluate(1/t));
+            t += 1f * Time.deltaTime;
+            movementScript.ChangeGravity(currentBoost);
+        }
+
+    }
+
+    private void OnTriggerExit(Collider collider)
+    {
+        if (collider.CompareTag("Updraft"))
+        {
+            inUpdraft = false;
+
+            if (GetComponent<MovementScript>() != null)
+            {
+                StartCoroutine(EndUpdraft());
+            }
+        }
+    }
+
+    IEnumerator EndUpdraft()
+    {
+        yield return new WaitForNextFrameUnit();
+        if (!inUpdraft)
+        {
+            upDraftEntered = false;
+            movementScript = GetComponent<MovementScript>();
+            movementScript.ChangeVelocity(new Vector3 (movementScript.GetVelocity().x, currentBoost/t, movementScript.GetVelocity().z));
+            movementScript.ResetGravity();
+            t = 1;
+        }
+    }
+}
