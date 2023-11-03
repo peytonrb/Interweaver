@@ -117,7 +117,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
             if (distanceToSnap <= 2f) // if crystal is close enough to snap point
             {
-                Debug.Log("here 1");
                 gameObject.transform.SetParent(wovenFloatingIsland.transform);
                 player.uninteract = true;
 
