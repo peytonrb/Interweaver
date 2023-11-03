@@ -32,7 +32,7 @@ public class OwlDiveScript : MonoBehaviour
     {
         if (movementScript.active && !characterController.isGrounded && divePressed && !onCooldown) // owl should only be able to dive when they are active & in the air
         {
-              DivePressed();
+            DivePressed();
         }
         else if (isDiving) // if on the ground and isDiving is true, make sure to end dive
         {

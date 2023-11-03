@@ -208,17 +208,20 @@ public class InputManagerScript : MonoBehaviour
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
         if (context.started)
         {
+            Debug.Log("dive start");
             owlDiveScript.DiveStart();
             familiarScript.familiarMovementAbility = true;
 
         }
         else if (context.performed && !context.canceled)
         {
+            Debug.Log("dive pressed");
             owlDiveScript.DivePressed();
             familiarScript.familiarMovementAbility = true;
         }
         else if (context.canceled)
         {
+            Debug.Log("dive released");
             owlDiveScript.DiveRelease();
             familiarScript.familiarMovementAbility = false;
         }
