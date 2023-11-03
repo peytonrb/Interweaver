@@ -106,7 +106,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed += OnUncombineInput;
         }
 
-        if (onFloatingIsland)
+        if (onFloatingIsland && gameObject.tag == "Breakable")
         {
             relocate = false;
             rb.isKinematic = false;
@@ -166,7 +166,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 if (combineable != null && !weaveableScript.canCombine)
                 {
                     inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput;
-                    Debug.Log("idk: " + inputs.FindActionMap("weaveableObject").FindAction("CombineAction"));
                 }
             }
         }
@@ -289,7 +288,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         Uncombine();
     }
 
-    private void OnCombineInput(InputAction.CallbackContext context) // somehow this doesn't run once the floating island gets sent back down - this is the issue 
+    private void OnCombineInput(InputAction.CallbackContext context) // this doesn't run once the floating island gets sent back down - this is the issue 
     {
         if (weaveableScript.ID == ID && !weaveableScript.isWoven)
         {
