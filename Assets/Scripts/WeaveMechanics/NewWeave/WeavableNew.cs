@@ -298,6 +298,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             combinedObjectStartRot = weaveableScript.transform.rotation;
 
             Combine();
+            Snapping();
             isCombined = true;
         }
     }
@@ -326,8 +327,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         if (weaveableScript.canBeRelocated)
         {
             weaveableScript.startFloating = true;
-            Snapping();
-            weaveableScript.rb.velocity = new Vector3(transform.position.x - weaveableScript.rb.transform.position.x, 0, transform.position.z - weaveableScript.rb.transform.position.z);
+            
+            //weaveableScript.rb.velocity = new Vector3(transform.position.x - weaveableScript.rb.transform.position.x, 0, transform.position.z - weaveableScript.rb.transform.position.z);
         }
         else
         {
@@ -349,20 +350,22 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     void Snapping()
     {
-      
+
         //old method
-        
+        weaveableScript.nearestDistance = Mathf.Infinity;
+        GameObject closestPoint = null;
         for (int i = 0; i < myTransformPoints.Length; i++)
         {
-            snapDistance = Vector3.Distance(transform.position, weaveableScript.myTransformPoints[i].transform.position);
+            snapDistance = Vector3.Distance(weaveableScript.transform.position, myTransformPoints[i].transform.position);
             if (snapDistance < nearestDistance)
             {
-                weaveableScript.nearestPoint = myTransformPoints[i];
-                weaveableScript.nearestDistance = snapDistance;
-                Debug.Log("this is the distance between points " + snapDistance, myTransformPoints[i]);
-                //weaveableScript.rb.velocity = transform.position - weaveableScript.nearestPoint.transform.position;
+                closestPoint = myTransformPoints[i];
+                nearestDistance = snapDistance;
+                Debug.Log("this is the distance between points " + snapDistance + ",this is the closestpoint" + myTransformPoints[i]);               
             }
         }
-        
+        weaveableScript.nearestPoint = closestPoint;
+        weaveableScript.nearestDistance = nearestDistance;
+        weaveableScript.rb.velocity = transform.position - weaveableScript.nearestPoint.transform.position;
     }
 }

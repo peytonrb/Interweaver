@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -283,6 +283,37 @@ Transform:
   m_GameObject: {fileID: 37609706}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 145186134}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &55840446
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 55840447}
+  m_Layer: 0
+  m_Name: SnappingPoint3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &55840447
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 55840446}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -618,7 +649,12 @@ MonoBehaviour:
   myTransformPoints:
   - {fileID: 423710946}
   - {fileID: 37609706}
+  - {fileID: 55840446}
+  - {fileID: 1999042778}
+  - {fileID: 1975498657}
+  - {fileID: 1958713793}
   nearestPoint: {fileID: 0}
+  combineSpeed: 20
   nearestDistance: 50
   isCombined: 0
   combinedObjectStartPos: {x: 0, y: 0, z: 0}
@@ -711,6 +747,10 @@ Transform:
   m_Children:
   - {fileID: 423710947}
   - {fileID: 37609707}
+  - {fileID: 55840447}
+  - {fileID: 1999042779}
+  - {fileID: 1975498658}
+  - {fileID: 1958713794}
   m_Father: {fileID: 1623248231}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1673,6 +1713,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d97c4d340288d046bf4d29910091ae2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  toggle: {fileID: 0}
+  usingController: 0
 --- !u!114 &307079619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1767,6 +1809,37 @@ Transform:
   - {fileID: 2113382228}
   m_Father: {fileID: 0}
   m_RootOrder: 18
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &380970593
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 380970594}
+  m_Layer: 0
+  m_Name: 'SnappingPoint4 '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &380970594
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380970593}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1101176065}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &385720344 stripped
 Transform:
@@ -1889,6 +1962,7 @@ MonoBehaviour:
   canBeRelocated: 1
   myTransformPoints: []
   nearestPoint: {fileID: 0}
+  combineSpeed: 0
   nearestDistance: 0
   isCombined: 0
   combinedObjectStartPos: {x: 0, y: 0, z: 0}
@@ -2361,7 +2435,7 @@ GameObject:
   m_Component:
   - component: {fileID: 615846730}
   m_Layer: 0
-  m_Name: SnappingPoint3
+  m_Name: SnappingPoint1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3462,6 +3536,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f68a5af436eec1b46819d0ceb33ce8f4, type: 3}
+--- !u!1 &877865854
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 877865855}
+  m_Layer: 0
+  m_Name: 'SnappingPoint6 '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &877865855
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877865854}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1101176065}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &906296361
 GameObject:
   m_ObjectHideFlags: 0
@@ -4254,6 +4359,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1225899048
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1225899049}
+  m_Layer: 0
+  m_Name: 'SnappingPoint3 '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1225899049
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1225899048}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1101176065}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1232190546
 GameObject:
   m_ObjectHideFlags: 0
@@ -5647,6 +5783,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d97c4d340288d046bf4d29910091ae2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  toggle: {fileID: 0}
+  usingController: 0
 --- !u!114 &1648945995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5872,6 +6010,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6138786360273511931, guid: eaf1009e6c29a7c4fbb57b403d04e9fe, type: 3}
   m_PrefabInstance: {fileID: 740948556}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1752489465
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1752489466}
+  m_Layer: 0
+  m_Name: 'SnappingPoint5 '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1752489466
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752489465}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1101176065}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1753793498
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6525,7 +6694,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1897669805}
   m_Layer: 0
-  m_Name: SnappingPoint4
+  m_Name: SnappingPoint2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6922,6 +7091,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1958713793
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1958713794}
+  m_Layer: 0
+  m_Name: SnappingPoint6
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1958713794
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958713793}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 145186134}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1965216705
 GameObject:
   m_ObjectHideFlags: 0
@@ -7034,6 +7234,37 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &1975498657
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1975498658}
+  m_Layer: 0
+  m_Name: SnappingPoint5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1975498658
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1975498657}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 145186134}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1984048068
 GameObject:
   m_ObjectHideFlags: 0
@@ -7125,6 +7356,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1984048068}
   m_CullTransparentMesh: 1
+--- !u!1 &1999042778
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1999042779}
+  m_Layer: 0
+  m_Name: SnappingPoint4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1999042779
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999042778}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 145186134}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2005699768
 GameObject:
   m_ObjectHideFlags: 0
@@ -12328,7 +12590,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 823247043}
-  familiarVirtualCam: {fileID: 1903062312}
   pauseMenu: {fileID: 829967490}
   weaveDistance: 20
   weaveObject:
@@ -12804,12 +13065,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 823247043}
     - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: combineSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
       propertyPath: nearestDistance
       value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
       propertyPath: myTransformPoints.Array.size
-      value: 2
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
       propertyPath: myTransformPoints.Array.data[0]
@@ -12819,6 +13084,22 @@ PrefabInstance:
       propertyPath: myTransformPoints.Array.data[1]
       value: 
       objectReference: {fileID: 1897669804}
+    - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: myTransformPoints.Array.data[2]
+      value: 
+      objectReference: {fileID: 1225899048}
+    - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: myTransformPoints.Array.data[3]
+      value: 
+      objectReference: {fileID: 380970593}
+    - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: myTransformPoints.Array.data[4]
+      value: 
+      objectReference: {fileID: 1752489465}
+    - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: myTransformPoints.Array.data[5]
+      value: 
+      objectReference: {fileID: 877865854}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -12828,6 +13109,18 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1897669805}
+    - targetCorrespondingSourceObject: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1225899049}
+    - targetCorrespondingSourceObject: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 380970594}
+    - targetCorrespondingSourceObject: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1752489466}
+    - targetCorrespondingSourceObject: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 877865855}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bea7478cfa148934898144d1385794a4, type: 3}
 --- !u!1001 &5218626895782024513
