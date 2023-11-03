@@ -170,7 +170,6 @@ public class PlayerController : MonoBehaviour
     public void WeaveActivated()
     {
         interactableObject = determineInteractability();
-        Debug.Log(distanceBetween);
 
         if (interactableObject != null)
         {
@@ -180,6 +179,7 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("Object checked!");
 
+                weaveVisualizer.ActivateWeave();
                 interactableObject.Interact();
                 inRelocateMode = true;
                 weaverAnimationHandler.ToggleWeaveAnim(isWeaving);

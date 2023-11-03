@@ -6,10 +6,14 @@ public class WeaveFXScript : MonoBehaviour
 {
     [CannotBeNullObjectField]
     public LineRenderer weaveRenderer;
+    
+    [CannotBeNullObjectField]
+    public ParticleSystem weaveActivation;
 
     void Start()
     {
         weaveRenderer.gameObject.SetActive(false);
+        weaveActivation.Stop();
     }
 
     public void DrawWeave(Vector3 playerPos, Vector3 weaveablePos)
@@ -23,5 +27,11 @@ public class WeaveFXScript : MonoBehaviour
     public void DisableWeave()
     {
         weaveRenderer.gameObject.SetActive(false);
+    }
+
+    public void ActivateWeave()
+    {
+        Debug.Log("here");
+        weaveActivation.Play();
     }
 }
