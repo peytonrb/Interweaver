@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
-using TMPro;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
@@ -16,11 +15,11 @@ public class PlayerController : MonoBehaviour
 
     [Header("Character's Camera")]
     [CannotBeNullObjectField] [SerializeField] private Camera mainCamera;
-    [CannotBeNullObjectField] public CinemachineVirtualCamera familiarVirtualCam;
     private int vCamRotationState; //State 0 is default
 
     [Header("Pause Menu")]
     [CannotBeNullObjectField] public GameObject pauseMenu;
+    private PauseScript pauseScript;
 
     [Header("Weave Variables")]
     public float weaveDistance = 20f;
@@ -76,7 +75,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
-        
+        pauseScript = pauseMenu.GetComponent<PauseScript>();
         weaveVisualizer = GetComponent<WeaveFXScript>(); // THIS WILL CAUSE A NULL IF THERE IS NO WEAVEFXSCRIPT ATTACHED TO PLAYER
         weaveVisualizer.DisableWeave();
         possessing = false;
@@ -158,6 +157,7 @@ public class PlayerController : MonoBehaviour
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
+            //Debug.Log("Using a controller = " + pauseScript.usingController);
         }
 
         // KILL SWITCH
@@ -255,9 +255,13 @@ public class PlayerController : MonoBehaviour
         if (gamepad != null)
         {
             weaveController();
+            pauseScript.usingController = true;
+            pauseScript.toggle.isOn = true;
         }
         else
         {
+            pauseScript.usingController = false;
+            pauseScript.toggle.isOn = false;
             return;
         }
     }
@@ -271,7 +275,7 @@ public class PlayerController : MonoBehaviour
 
             CameraMasterScript.instance.SwitchCameras(vCamRotationState);
 
-            //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
+            //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAM ERMASTERSCRIPT~
         }
 
         if (other.gameObject.tag == "CutsceneTrigger") {
