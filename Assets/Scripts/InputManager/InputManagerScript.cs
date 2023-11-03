@@ -27,7 +27,6 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
-
     //MOVE
     //******************************************************
     public void Move(InputAction.CallbackContext context)
@@ -156,6 +155,7 @@ public class InputManagerScript : MonoBehaviour
         // PlayerScript playerScript = player.GetComponent<PlayerScript>();
         PlayerController playerScript = player.GetComponent<PlayerController>();
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
+
         if (context.started)
         {
             if (familiarScript.myTurn)
