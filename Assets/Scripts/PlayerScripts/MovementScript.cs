@@ -183,6 +183,11 @@ public class MovementScript : MonoBehaviour
         gravity = originalGravity;
     }
 
+    public float GetGravity()
+    {
+        return gravity;
+    }
+
     public void ResetVelocityY()
     {
         velocity.y = 0;
@@ -191,6 +196,16 @@ public class MovementScript : MonoBehaviour
     public void ChangeTerminalVelocity(float newTerminalVelocity) // changes terminal velocity to new value
     {
         terminalVelocity = newTerminalVelocity;
+    }
+
+    public void ChangeVelocity(Vector3 newVelocity)
+    {
+        velocity = newVelocity;
+    }
+
+    public Vector3 GetVelocity()
+    {
+        return velocity;
     }
 
     public void Bounce()
