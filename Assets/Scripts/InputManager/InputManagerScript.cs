@@ -11,6 +11,7 @@ public class InputManagerScript : MonoBehaviour
     public Vector2 movement;
     public Vector2 weaveCursor;
     public bool switching;
+    public InputActionAsset inputAction;
 
     public static InputManagerScript instance;
 
@@ -25,10 +26,6 @@ public class InputManagerScript : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    //Familiar Script only has player switch and player interact and familiar movement ability inputs.
-    //Player Script handles a majority of inputs.
-    //Dont listen to this ^^^ Its just me talking to myself...
 
 
     //MOVE
@@ -206,27 +203,23 @@ public class InputManagerScript : MonoBehaviour
     {
         OwlDiveScript owlDiveScript = familiar.GetComponent<OwlDiveScript>();
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
+
         if (context.started)
         {
-            Debug.Log("dive start");
             owlDiveScript.DiveStart();
             familiarScript.familiarMovementAbility = true;
 
         }
         else if (context.performed && !context.canceled)
         {
-            Debug.Log("dive pressed");
             owlDiveScript.DivePressed();
             familiarScript.familiarMovementAbility = true;
         }
         else if (context.canceled)
         {
-            Debug.Log("dive released");
             owlDiveScript.DiveRelease();
             familiarScript.familiarMovementAbility = false;
         }
     }
     //******************************************************
-
-
 }

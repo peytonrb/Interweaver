@@ -62,7 +62,6 @@ public class FloatingIslandScript : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         // Vertical Offset is set in the animations, this bit makes it actually fall
@@ -89,6 +88,7 @@ public class FloatingIslandScript : MonoBehaviour
             anim.SetTrigger("Fall");
             StartCoroutine(TimerBeforeRespawn(true));
             cameraswitched = false;
+            myCrystal.GetComponent<WeaveableNew>().canBeRelocated = true;
         }
     }
 
@@ -126,7 +126,6 @@ public class FloatingIslandScript : MonoBehaviour
     //Swaps to the rising camera when woven to, called by the IslandSwap WeaveInteraction
     public void SwapToRiseCamera()
     {
-
         if (!isFloating)
         {
             //Camera is switched to a new view which watches the whole island rise. (Lasts about 2 seconds)
@@ -135,13 +134,11 @@ public class FloatingIslandScript : MonoBehaviour
                 CameraMasterScript.instance.FloatingIslandCameraSwitch(myFloatCamera, this);
             }
         }
-
     }
 
     //changes the animation and starts the respawn at float spot timer
     public void RaiseIsland()
     {
-
         StartCoroutine(TimerBeforeRespawn(false));
         cameraswitched = false;
         anim.SetTrigger("Rise");

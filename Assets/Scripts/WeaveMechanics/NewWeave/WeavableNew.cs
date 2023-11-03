@@ -117,6 +117,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
             if (distanceToSnap <= 2f) // if crystal is close enough to snap point
             {
+                Debug.Log("here 1");
                 gameObject.transform.SetParent(wovenFloatingIsland.transform);
                 player.uninteract = true;
 
@@ -129,7 +130,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 }
 
                 rb.isKinematic = true;
-                canBeRelocated = false;  // NEEDS TO BE SET TO TRUE WHEN ISLAND IS SENT BACK DOWN
+                canBeRelocated = false; 
                 isWoven = true;
                 onFloatingIsland = false;
             }
@@ -165,6 +166,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 if (combineable != null && !weaveableScript.canCombine)
                 {
                     inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput;
+                    Debug.Log("idk: " + inputs.FindActionMap("weaveableObject").FindAction("CombineAction"));
                 }
             }
         }
@@ -239,7 +241,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         if (isWoven)
         {
-
             player.floatingIslandCrystal = false;
             Debug.Log("this is now not woven");
             rb.isKinematic = false;
@@ -278,7 +279,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         inWeaveMode = true;
         rb.isKinematic = true;
         canRotate = true;
-        //Debug.Log("weave Mode");
+        //Debug.Log("in weave Mode");
     }
     //********************************************************************
 
@@ -288,7 +289,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         Uncombine();
     }
 
-    private void OnCombineInput(InputAction.CallbackContext context)
+    private void OnCombineInput(InputAction.CallbackContext context) // somehow this doesn't run once the floating island gets sent back down - this is the issue 
     {
         if (weaveableScript.ID == ID && !weaveableScript.isWoven)
         {
