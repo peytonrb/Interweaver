@@ -15,12 +15,12 @@ public class PlayerController : MonoBehaviour
     private bool possessing;
 
     [Header("Character's Camera")]
-    [SerializeField] private Camera mainCamera;
-    public CinemachineVirtualCamera familiarVirtualCam;
+    [CannotBeNullObjectField] [SerializeField] private Camera mainCamera;
+    [CannotBeNullObjectField] public CinemachineVirtualCamera familiarVirtualCam;
     private int vCamRotationState; //State 0 is default
 
     [Header("Pause Menu")]
-    public GameObject pauseMenu;
+    [CannotBeNullObjectField] public GameObject pauseMenu;
 
     [Header("Weave Variables")]
     public float weaveDistance = 20f;
@@ -37,29 +37,34 @@ public class PlayerController : MonoBehaviour
     private Vector3 raycastPosition;
     private WeaveableNew weaveableScript;
 
-    // new variables
+    //new variables
     public bool inRelocateMode;
     public bool inCombineMode;
     public bool uninteract;
     private IInteractable interactableObject;
     private GameObject wovenObject;
     [SerializeField] private float distanceBetween;
+    public bool floatingIslandCrystal = false; // used by input manager
+
+    // vfx controls
+    [CannotBeNullObjectField] public GameObject weaveSpawn;   //  WILL BE ASSIGNED AT RUNTIME ONCE SCRIPTS ARE FINALIZED
+    private WeaveFXScript weaveVisualizer;
 
     [Header("References")]
-    public GameObject familiar;
+    [CannotBeNullObjectField] public GameObject familiar;
     private FamiliarScript familiarScript;
     private GameMasterScript GM;
 
     [Header("Animation")]
-    public WeaverAnimationHandler weaverAnimationHandler;
+    [CannotBeNullObjectField] public WeaverAnimationHandler weaverAnimationHandler;
 
     [Header("Prototype")]
-    public GameObject relocateMode;
-    public GameObject combineMode;
+    [CannotBeNullObjectField] public GameObject relocateMode;
+    [CannotBeNullObjectField] public GameObject combineMode;
 
     [Header("Cutscene")]
-    public GameObject cutsceneManager;
-    private CutsceneManagerScript cms;
+    [CannotBeNullObjectField] public GameObject[] cutsceneManager;
+    //private CutsceneManagerScript cms;
 
     void Awake()
     {
@@ -71,7 +76,9 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
-        cms = cutsceneManager.GetComponent<CutsceneManagerScript>();
+        
+        weaveVisualizer = GetComponent<WeaveFXScript>(); // THIS WILL CAUSE A NULL IF THERE IS NO WEAVEFXSCRIPT ATTACHED TO PLAYER
+        weaveVisualizer.DisableWeave();
         possessing = false;
         vCamRotationState = 0;
         pauseMenu.SetActive(false);
@@ -86,6 +93,7 @@ public class PlayerController : MonoBehaviour
         inCombineMode = false;
         inRelocateMode = false;
         interactInput = false;
+
     }
 
     void Update()
@@ -102,13 +110,8 @@ public class PlayerController : MonoBehaviour
                 movementScript.active = true;
             }
 
-            // WEAVE - interactInput set by InputManager
-            if (interactInput)
-            {
-                WeaveActivated();
-            }
             // switch into combining mode - relocate is default
-            else if (!interactInput && inCombineMode && interactableObject != null)
+            if (!interactInput && inCombineMode && interactableObject != null)
             {
                 interactableObject.WeaveMode();
                 relocateMode.SetActive(false); // on-screen ui
@@ -129,12 +132,15 @@ public class PlayerController : MonoBehaviour
                 // player points towards woven object
                 transform.LookAt(new Vector3(wovenObject.transform.position.x, transform.position.y, wovenObject.transform.position.z));
 
+                // line renderer draws weave
+                weaveVisualizer.DrawWeave(weaveSpawn.transform.position, wovenObject.transform.position);
+
                 distanceBetween = Vector3.Distance(weaveableScript.transform.position, transform.position);
 
                 // if the player moves too far from the object while weaving
                 if (distanceBetween > weaveDistance)
                 {
-                    Uninteract();
+                    uninteract = true;
                 }
             }
 
@@ -142,6 +148,7 @@ public class PlayerController : MonoBehaviour
             if (uninteract)
             {
                 Uninteract();
+                weaveVisualizer.DisableWeave();
             }
 
             DetectGamepad();
@@ -160,22 +167,29 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void WeaveActivated()
+    public void WeaveActivated()
     {
         interactableObject = determineInteractability();
 
-        // if too far apart
-        if (distanceBetween < weaveDistance)
+        if (interactableObject != null)
         {
-            if (inRelocateMode && interactableObject != null)
+            distanceBetween = Vector3.Distance(weaveableScript.transform.position, transform.position);
+
+            if (distanceBetween < weaveDistance)
             {
+                Debug.Log("Object checked!");
+
+                weaveVisualizer.ActivateWeave();
                 interactableObject.Interact();
+                inRelocateMode = true;
                 weaverAnimationHandler.ToggleWeaveAnim(isWeaving);
                 interactableObject.Relocate();
                 relocateMode.SetActive(true); // on-screen ui
-                interactInput = false;
             }
         }
+
+        // if too far apart & object is weavable
+        interactInput = false;
     }
 
     private IInteractable determineInteractability()
@@ -184,7 +198,7 @@ public class PlayerController : MonoBehaviour
         Vector3 rayDirection = transform.forward;
 
         // the actual raycast from the player, this can be used for the line render 
-        //      but it takes the raycast origin and the  direction of the raycast
+        //      but it takes the raycast origin and the direction of the raycast
         Ray rayPlayer = new Ray(playerPosition, rayDirection);
 
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -194,6 +208,8 @@ public class PlayerController : MonoBehaviour
         // checks for a Weavable object within distance of Ray
         if (Physics.Raycast(ray, out hitInfo, 100, weaveObject) || Physics.Raycast(rayPlayer, out hitInfo, weaveDistance, weaveObject))
         {
+            Debug.Log("Raycast hit");
+            
             weaveableScript = hitInfo.collider.GetComponent<WeaveableNew>();
             IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>();
             wovenObject = hitInfo.collider.gameObject;
@@ -210,9 +226,11 @@ public class PlayerController : MonoBehaviour
             interactableObject.Uninteract();
             interactableObject = null;
             weaverAnimationHandler.ToggleWeaveAnim(isWeaving);
-            relocateMode.SetActive(false); // remember to delete this
-            combineMode.SetActive(false); // remember to delete this
+            relocateMode.SetActive(false); // on screen ui
+            combineMode.SetActive(false); // on screen ui
             uninteract = false;
+            inRelocateMode = false;
+            inCombineMode = false;
         }
     }
 
@@ -257,7 +275,11 @@ public class PlayerController : MonoBehaviour
         }
 
         if (other.gameObject.tag == "CutsceneTrigger") {
-            cms.StartCutscene();
+            //Only the trigger that is a child of a certain cutscene manager will activate a cutscene.
+            foreach (GameObject cm in cutsceneManager) {
+                CutsceneManagerScript cms = cm.GetComponent<CutsceneManagerScript>();
+                cms.StartCutscene();
+            }     
         }
     }
 

@@ -15,7 +15,11 @@ public class CrystalScript : MonoBehaviour
 
     public void TriggerBreak()
     {
-        myFloatingIsland.StartFalling();
+        if (myFloatingIsland != null)
+        {
+            myFloatingIsland.StartFalling();
+        }
+        
         Destroy(gameObject);
     }
 

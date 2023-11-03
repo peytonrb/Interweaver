@@ -76,7 +76,9 @@ public class InputManagerScript : MonoBehaviour
             if (!playerScript.inRelocateMode && !playerScript.inCombineMode) // occasionally reads a hit during compile time????
             {
                 playerScript.interactInput = true;
-                playerScript.inRelocateMode = true;
+                playerScript.WeaveActivated();
+
+                //playerScript.inRelocateMode = true;
             }
             else if (playerScript.inCombineMode)
             {
@@ -125,6 +127,11 @@ public class InputManagerScript : MonoBehaviour
             {
                 playerScript.inCombineMode = true;
                 playerScript.inRelocateMode = false;
+            }
+            else if (playerScript.inCombineMode && !playerScript.floatingIslandCrystal)
+            {
+                playerScript.inCombineMode = false;
+                playerScript.inRelocateMode = true;
             }
         }
     }

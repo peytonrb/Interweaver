@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1926140711349057970}
   - component: {fileID: 4696450466119618846}
   - component: {fileID: 4387577231250320792}
-  - component: {fileID: 7856179694913842657}
+  - component: {fileID: 5489052820110539912}
   m_Layer: 6
   m_Name: Floating Island
   m_TagString: Untagged
@@ -36,7 +36,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &967863317956628430
 MeshFilter:
@@ -155,7 +155,8 @@ MonoBehaviour:
   floatTransform: {fileID: 0}
   sitTransform: {fileID: 0}
   verticalOffset: 0
-  RaiseSpeed: 1
+  crystalPrefab: {fileID: 3738485478540167410, guid: f68a5af436eec1b46819d0ceb33ce8f4, type: 3}
+  vcamPrefab: {fileID: 6941654704022576730, guid: 31bbebad683476d4a9c02286e4e9251e, type: 3}
   cameraswitched: 0
   isislandfalling: 0
   rb: {fileID: 1926140711349057970}
@@ -180,7 +181,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &7856179694913842657
+--- !u!114 &5489052820110539912
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -189,7 +190,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4379241841909581374}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f43254a5aebfd2458990574e3f1970c, type: 3}
+  m_Script: {fileID: 11500000, guid: afb9d456079c05c4dbbecf85046314bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 1926140711349057970}
@@ -197,12 +198,16 @@ MonoBehaviour:
   mainCamera: {fileID: 0}
   layersToHit:
     serializedVersion: 2
-    m_Bits: 64
-  distance: 12
-  tooCloseDistance: 6
+    m_Bits: 65
   weaveInteraction: {fileID: 0}
-  ID: 0
+  ID: 1
   canRotate: 0
   isWoven: 0
+  rotationSpeed: 0.5
+  canBeRelocated: 1
+  isCombined: 0
+  combinedObjectStartPos: {x: 0, y: 0, z: 0}
+  combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
   inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
-  PlayerPrefab: {fileID: 0}
+  weaveableScript: {fileID: 0}
+  player: {fileID: 0}
