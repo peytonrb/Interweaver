@@ -8,7 +8,7 @@ public class CrystalScript : MonoBehaviour
 
     private bool inRange = false;
 
-    public AudioClip ambientFile;
+    public AudioClip shatterFile;
 
     public void AssignFloatingIsland(FloatingIslandScript myIsland)
     {
@@ -17,7 +17,7 @@ public class CrystalScript : MonoBehaviour
 
     public void TriggerBreak()
     {
-        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, ambientFile, 1f);
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, shatterFile, 1f);
 
         if (myFloatingIsland != null)
         {
