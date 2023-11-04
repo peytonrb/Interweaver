@@ -16,6 +16,10 @@ public class MainMenu : MonoBehaviour
     public AudioClip soundFile;
     public AudioClip hoverFile;
 
+    public AudioClip startFile;
+
+    public AudioClip cancelFile;
+
     EventSystem eventSystem;
     void Start()
     {
@@ -69,7 +73,7 @@ public class MainMenu : MonoBehaviour
     //Function for closing the options menu by setting alpha to 0 and allowing for clicks to not be made
     public void CloseOptions()
     {
-        PlayButtonSound();
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, cancelFile, 1f);
         optionsMenu.alpha = 0;
         optionsMenu.blocksRaycasts = false;
         EventSystem.current.SetSelectedGameObject(null);
@@ -91,7 +95,7 @@ public class MainMenu : MonoBehaviour
     //Function for credits the options menu by setting alpha to 0 and allowing for clicks to not be made
     public void CloseCredits()
     {
-        PlayButtonSound();
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, cancelFile, 1f);
         creditsMenu.alpha = 0;
         creditsMenu.blocksRaycasts = false;
 
@@ -115,6 +119,7 @@ public class MainMenu : MonoBehaviour
     public void PlayButtonPress()
     {
         // Start Game!
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startFile, 1f);
         SceneHandler.instance.LoadLevel("sc_Prototype");
     }
     public void PlayHoverSound()
