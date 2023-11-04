@@ -6,7 +6,7 @@
             "id": "9f2cfc39-768f-4832-9eb1-6f724d04c922",
             "actions": [
                 {
-                    "name": "Move",
+                    "name": "WeaverMove",
                     "type": "Value",
                     "id": "1f1c56a0-7e43-43ec-85db-47afd42eee48",
                     "expectedControlType": "Vector2",
@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Weave",
+                    "name": "WeaveTargeting",
                     "type": "Value",
                     "id": "e5cafc5b-87a8-4bf4-a885-b4d611e05598",
                     "expectedControlType": "Vector2",
@@ -24,7 +24,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Interact",
+                    "name": "WeaverInteract",
                     "type": "Button",
                     "id": "c397e94f-105d-4c30-911e-ef37e3d850a2",
                     "expectedControlType": "Button",
@@ -33,7 +33,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Uninteract",
+                    "name": "Drop",
                     "type": "Button",
                     "id": "03cac032-24ac-4e49-bac7-e873c8c2c3e7",
                     "expectedControlType": "Button",
@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Switch",
+                    "name": "PossessFamiliar",
                     "type": "Button",
                     "id": "39fac198-f1a4-495b-b7a9-19943fe87608",
                     "expectedControlType": "Button",
@@ -60,7 +60,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "WeaveModeSwitch",
+                    "name": "ToggleWeaveMode",
                     "type": "Button",
                     "id": "5b8fb45f-e14e-454b-990b-cf3895822882",
                     "expectedControlType": "Button",
@@ -69,9 +69,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "NPCInteractions",
+                    "name": "WeaverNPCInteractions",
                     "type": "Button",
                     "id": "dec0d6cc-8a67-425f-850b-a9834d2dfe80",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Rotate",
+                    "type": "Value",
+                    "id": "eaaa6650-f93d-4061-9904-fcc8afcbb7c4",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "UncombineAction",
+                    "type": "Button",
+                    "id": "61d36602-0865-417b-91f5-9f7ed1fb37dd",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -86,7 +104,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Move",
+                    "action": "WeaverMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -97,7 +115,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "WeaverMove",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -108,7 +126,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Move",
+                    "action": "WeaverMove",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -119,7 +137,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Move",
+                    "action": "WeaverMove",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -130,7 +148,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Move",
+                    "action": "WeaverMove",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -141,31 +159,9 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Move",
+                    "action": "WeaverMove",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "1635d3fe-58b6-4ba9-a4e2-f4b964f6b5c8",
-                    "path": "<XRController>/{Primary2DAxis}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "XR",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3ea4d645-4504-4529-b061-ab81934c3752",
-                    "path": "<Joystick>/stick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Joystick",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 },
                 {
                     "name": "",
@@ -174,7 +170,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Weave",
+                    "action": "WeaveTargeting",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -184,8 +180,8 @@
                     "path": "<Pointer>/delta",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse;Touch",
-                    "action": "Weave",
+                    "groups": "Keyboard&Mouse",
+                    "action": "WeaveTargeting",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -196,7 +192,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Joystick",
-                    "action": "Weave",
+                    "action": "WeaveTargeting",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -207,7 +203,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Interact",
+                    "action": "WeaverInteract",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -218,7 +214,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Interact",
+                    "action": "WeaverInteract",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -229,7 +225,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Switch",
+                    "action": "PossessFamiliar",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -240,7 +236,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Switch",
+                    "action": "PossessFamiliar",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -272,8 +268,8 @@
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "WeaveModeSwitch",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ToggleWeaveMode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -283,8 +279,8 @@
                     "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "WeaveModeSwitch",
+                    "groups": "Gamepad",
+                    "action": "ToggleWeaveMode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -295,7 +291,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Uninteract",
+                    "action": "Drop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -306,7 +302,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Uninteract",
+                    "action": "Drop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -316,8 +312,8 @@
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "NPCInteractions",
+                    "groups": "Keyboard&Mouse",
+                    "action": "WeaverNPCInteractions",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -327,8 +323,96 @@
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
+                    "groups": "Gamepad",
+                    "action": "WeaverNPCInteractions",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Arrows",
+                    "id": "474f7f65-e479-4f55-b2dc-0f81ff5510ab",
+                    "path": "Dpad",
+                    "interactions": "",
+                    "processors": "",
                     "groups": "",
-                    "action": "NPCInteractions",
+                    "action": "Rotate",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "4750dae7-be67-46a5-a89c-47c42fde4201",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "216e706c-35eb-4ef6-9e2d-15b4be1c1e6d",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "19abef89-68e5-4e9a-a6d0-c2126f760bac",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "1b676af5-a72b-4994-80f9-43b48c5f5c6e",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "e71b0821-702d-4816-853c-420b59fd1bc1",
+                    "path": "<Gamepad>/dpad",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4c8e7e86-fbb8-4f81-b1c6-6e973547aa8a",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "UncombineAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b31e250f-0db8-4112-a93f-d8d02a2fde84",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "UncombineAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -851,161 +935,11 @@
             ]
         },
         {
-            "name": "weaveableObject",
-            "id": "28418d3a-f5a0-4f36-a2da-148daf2b3e2a",
-            "actions": [
-                {
-                    "name": "CombineAction",
-                    "type": "Button",
-                    "id": "07644cd4-c822-4718-8452-c29cdf99ac81",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "UncombineAction",
-                    "type": "Button",
-                    "id": "bd887768-d377-49d9-9edb-eb0146a27dee",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "RotateCW",
-                    "type": "Button",
-                    "id": "316466f2-6f4d-4179-8fa1-71cbdf30d073",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "RotateCtrW",
-                    "type": "Button",
-                    "id": "4ca55817-f7e4-468c-a41c-37383d736a2e",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "RotateUP",
-                    "type": "Button",
-                    "id": "c6a1f655-47d6-44d1-a821-d2de5dc1285f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "RotateDOWN",
-                    "type": "Button",
-                    "id": "0e9628e9-d06f-4db2-80f2-cd39c50e7f8c",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "4f8c4aa4-77d9-4a40-aff1-9af829581240",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "CombineAction",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f4b4d833-1cbb-4414-badb-738210d5de07",
-                    "path": "<Gamepad>/rightTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "CombineAction",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "4bdcefe2-9b40-4e84-9bc5-47f81b38fff7",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UncombineAction",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "04696ded-c820-4ca1-a1f2-9af29fd506ac",
-                    "path": "<Gamepad>/leftShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UncombineAction",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "769a8b63-5003-4b29-ad9d-b294b9e1b40d",
-                    "path": "<Keyboard>/rightArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "RotateCW",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "85d47277-24aa-4b0d-8b21-3f68d3d25175",
-                    "path": "<Keyboard>/leftArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RotateCtrW",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1e25dd1a-58b6-45df-85ab-5736a1bf95da",
-                    "path": "<Keyboard>/upArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RotateUP",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "99740362-87b1-4011-a6d6-c67ce1412fc2",
-                    "path": "<Keyboard>/downArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RotateDOWN",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Owl",
+            "name": "Familiar",
             "id": "5873b4a8-4b08-4847-808a-6dba072c1a59",
             "actions": [
                 {
-                    "name": "Move",
+                    "name": "FamiliarMove",
                     "type": "Value",
                     "id": "729a6a3e-6db8-4a8f-bcb4-676aec309e5f",
                     "expectedControlType": "Vector2",
@@ -1014,7 +948,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Switch",
+                    "name": "PossessWeaver",
                     "type": "Button",
                     "id": "3858650e-5a23-4b94-b104-4b013da81101",
                     "expectedControlType": "Button",
@@ -1023,7 +957,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Dive",
+                    "name": "FamiliarInteract",
                     "type": "Button",
                     "id": "b6b66238-ead1-4e75-a177-8efe0e5d4fee",
                     "expectedControlType": "Button",
@@ -1032,7 +966,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "NPCInteraction",
+                    "name": "FamiliarNPCInteraction",
                     "type": "Button",
                     "id": "610491b1-08c5-4a71-af6b-23ab33e5f86b",
                     "expectedControlType": "Button",
@@ -1049,7 +983,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "FamiliarMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1060,7 +994,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "FamiliarMove",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -1071,7 +1005,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "FamiliarMove",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1082,7 +1016,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "FamiliarMove",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1093,7 +1027,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "FamiliarMove",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1104,7 +1038,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "FamiliarMove",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1115,7 +1049,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Switch",
+                    "action": "PossessWeaver",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1126,7 +1060,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Switch",
+                    "action": "PossessWeaver",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1136,8 +1070,8 @@
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "Dive",
+                    "groups": "Gamepad",
+                    "action": "FamiliarInteract",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1147,8 +1081,8 @@
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "Dive",
+                    "groups": "Keyboard&Mouse",
+                    "action": "FamiliarInteract",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1158,8 +1092,8 @@
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "NPCInteraction",
+                    "groups": "Gamepad",
+                    "action": "FamiliarNPCInteraction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1169,8 +1103,8 @@
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "NPCInteraction",
+                    "groups": "Keyboard&Mouse",
+                    "action": "FamiliarNPCInteraction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

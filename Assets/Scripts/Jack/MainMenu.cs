@@ -124,9 +124,9 @@ public class MainMenu : MonoBehaviour
     }
 
     //Detect conntroller input
-    public void MoveSelect(InputAction.CallbackContext context)
+    public void MoveSelect(InputAction input)
     {
-        if (context.started && eventSystem.currentSelectedGameObject == null)
+        if (input.IsPressed() && eventSystem.currentSelectedGameObject == null)
         {
             if (!optionsMenu.gameObject.activeInHierarchy)
             {

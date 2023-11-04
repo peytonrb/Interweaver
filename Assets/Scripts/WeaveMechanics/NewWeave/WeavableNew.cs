@@ -55,15 +55,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         onFloatingIsland = false;
     }
 
-    void OnEnable()
-    {
-        inputs.FindActionMap("weaveableObject").Enable();
-    }
-
-    void OnDisable()
-    {
-        inputs.FindActionMap("weaveableObject").Disable();
-    }
 
     void Update()
     {
@@ -86,24 +77,19 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         if (canRotate)
         {
             // this finds the the different action map called weaveableObject and then subscribes to the method 
-            inputs.FindActionMap("weaveableObject").FindAction("RotateCW").performed += OnRotateCWInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateCtrW").performed += OnRotateCtrWInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateUP").performed += OnRotateUPInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateDOWN").performed += OnRotateDownInput;
+            
+                /*+= OnRotateDownInput;*/
         }
         else if (!canRotate)
         {
             // this finds the the different action map called weaveableObject and then unsubscribes to the method, 
             //      it's there so that it can prevent memory leakage 
-            inputs.FindActionMap("weaveableObject").FindAction("RotateCW").performed -= OnRotateCWInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateCtrW").performed -= OnRotateCtrWInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateUP").performed -= OnRotateUPInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateDOWN").performed -= OnRotateDownInput;
+            
         }
 
         if (isCombined)
         {
-            inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed += OnUncombineInput;
+            //inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed += OnUncombineInput;
         }
 
         if (onFloatingIsland && gameObject.tag == "Breakable")
@@ -164,7 +150,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
                 if (combineable != null && !weaveableScript.canCombine)
                 {
-                    inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput;
+                    canCombine = true;
+                    //inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput;
                 }
             }
         }
@@ -190,21 +177,30 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     //section for rotate function
     //**********************************************************************************
-    private void OnRotateCWInput(InputAction.CallbackContext context)
+    //private void OnRotateCWInput(InputAction input)
+    //{
+    //    if (input.IsPressed())
+    //    StartCoroutine(Rotate(Vector3.up, 90));
+    //}
+    //private void OnRotateCtrWInput(InputAction input)
+    //{
+    //    if (input.IsPressed())
+    //    StartCoroutine(Rotate(Vector3.up, -90));
+    //}
+    //private void OnRotateUPInput(InputAction input)
+    //{
+    //    if (input.IsPressed())
+    //    StartCoroutine(Rotate(Vector3.forward, 90));
+    //}
+    //private void OnRotateDownInput(InputAction input)
+    //{
+    //    if (input.IsPressed())
+    //    StartCoroutine(Rotate(Vector3.forward, -90));
+    //}
+
+    public void CallRotate(Vector3 dir, float angle)
     {
-        StartCoroutine(Rotate(Vector3.up, 90));
-    }
-    private void OnRotateCtrWInput(InputAction.CallbackContext context)
-    {
-        StartCoroutine(Rotate(Vector3.up, -90));
-    }
-    private void OnRotateUPInput(InputAction.CallbackContext context)
-    {
-        StartCoroutine(Rotate(Vector3.forward, 90));
-    }
-    private void OnRotateDownInput(InputAction.CallbackContext context)
-    {
-        StartCoroutine(Rotate(Vector3.forward, -90));
+        StartCoroutine(Rotate(dir, angle));
     }
 
     IEnumerator Rotate(Vector3 axis, float angle)
@@ -252,8 +248,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             canCombine = false;
             canRotate = false;
             rb.constraints = RigidbodyConstraints.None;
-            inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed -= OnCombineInput; //this finds the the different action map called weaveableObject and then unsubscribes to the method, this is there so that there won't be any memory leakage
-            inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed -= OnUncombineInput;
+            //inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed -= OnCombineInput; //this finds the the different action map called weaveableObject and then unsubscribes to the method, this is there so that there won't be any memory leakage
+            //inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed -= OnUncombineInput;
         }
     }
 
@@ -281,15 +277,15 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     }
     //********************************************************************
 
-    private void OnUncombineInput(InputAction.CallbackContext context)
-    {
-        isCombined = false;
-        Uncombine();
-    }
+    //private void OnUncombineInput(InputAction.CallbackContext context)
+    //{
+        
+    //    Uncombine();
+    //}
 
-    private void OnCombineInput(InputAction.CallbackContext context) // this doesn't run once the floating island gets sent back down - this is the issue 
+    public void OnCombineInput() // this doesn't run once the floating island gets sent back down - this is the issue 
     {
-        if (weaveableScript.ID == ID && !weaveableScript.isWoven)
+        if (weaveableScript.ID == ID && !weaveableScript.isWoven && canCombine)
         {
             Debug.Log("OnCombineInput");
             // respawn variables
@@ -306,6 +302,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     //********************************************************************
     public void Uncombine()
     {
+        isCombined = false;
         Debug.Log("This is the Uncombine code");
         Destroy(GetComponent<FixedJoint>());
         canCombine = false;
