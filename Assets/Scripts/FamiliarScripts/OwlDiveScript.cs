@@ -12,6 +12,8 @@ public class OwlDiveScript : MonoBehaviour
     public bool divePressed; // defines the initial press of the dive
     public bool diveHeld; // defines the dive as still being held
 
+    public AudioClip diveFile;
+
     [Header("Variables")]
     [SerializeField][Range(-40, -3)]private float diveAcceleration = -20f;
     [SerializeField][Range(-50, -25)]private float terminalVelocity = -30f;
@@ -49,6 +51,8 @@ public class OwlDiveScript : MonoBehaviour
     public void DivePressed()
     {
         Debug.Log("Pressed");
+
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, diveFile, 1f);
 
             movementScript.ChangeGravity(diveAcceleration);
             movementScript.ChangeTerminalVelocity(terminalVelocity);
