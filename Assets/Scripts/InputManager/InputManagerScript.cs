@@ -223,14 +223,10 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnFamiliarMove(InputValue input)
     {
-        if (input.Get<Vector2>() != Vector2.zero)
-        {
-            MovementScript movementScript = familiar.GetComponent<MovementScript>();
-            if (familiarScript.myTurn)
-            {
-                movementScript.LookAndMove();
-            }
-        }
+        movement = input.Get<Vector2>();
+        MovementScript movementScript = familiar.GetComponent<MovementScript>();    
+        movementScript.LookAndMove();
+        //Note: There wont need to be a check if its the familiar's turn as the weaver and familiar are on seperate input action maps.
     }
 
     public void OnFamiliarInteract(InputValue input)
