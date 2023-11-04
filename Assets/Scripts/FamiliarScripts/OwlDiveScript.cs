@@ -50,7 +50,7 @@ public class OwlDiveScript : MonoBehaviour
 
     public void DivePressed()
     {
-        Debug.Log("Pressed");
+
 
             //AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, diveFile, 1f);
 
@@ -66,7 +66,6 @@ public class OwlDiveScript : MonoBehaviour
         divePressed = false;
         if (isDiving)
         {
-            Debug.Log("Dive Release Triggered");
             EndDive();
         }
        
@@ -100,7 +99,6 @@ public class OwlDiveScript : MonoBehaviour
 
     private void EndDive() // returns values to their original forms
     {
-        //Debug.Log("Ended Dive");
         isDiving = false;
         movementScript.ResetGravity();
         movementScript.ResetTerminalVelocity();

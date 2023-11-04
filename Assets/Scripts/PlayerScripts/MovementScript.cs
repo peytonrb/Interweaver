@@ -48,6 +48,9 @@ public class MovementScript : MonoBehaviour
     public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
     public bool active; //Determines if movement controller is active
 
+    [Header("Character's sounds")]
+    [SerializeField] AudioClip fallFile;
+
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -121,9 +124,14 @@ public class MovementScript : MonoBehaviour
             //Character gravity
             if (!characterController.isGrounded)
             {
-                    velocity.y += gravity * Time.deltaTime;
-                    //Debug.Log(gravity);
-                    //weaverAnimationHandler.ToggleFallAnim(true);
+                if (fallFile)
+                {
+                    // PUT YA JAZZ FOR CALLING THE AUDIO MANAGER HERE
+                }
+                
+                velocity.y += gravity * Time.deltaTime;
+                //Debug.Log(gravity);
+                //weaverAnimationHandler.ToggleFallAnim(true);
             }
             else
             {
