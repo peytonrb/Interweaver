@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 cursor;
     public bool interactInput;
     private Vector3 raycastPosition;
-    private WeaveableNew weaveableScript;
+    public WeaveableNew weaveableScript;
 
     //new variables
     public bool inRelocateMode;
@@ -150,7 +150,7 @@ public class PlayerController : MonoBehaviour
                 weaveVisualizer.DisableWeave();
             }
 
-            DetectGamepad();
+            //DetectGamepad();
 
             //this is purely for testing the checkpoint function if it's working properly
             if (Input.GetKeyDown(KeyCode.Space))
@@ -284,18 +284,6 @@ public class PlayerController : MonoBehaviour
                 CutsceneManagerScript cms = cm.GetComponent<CutsceneManagerScript>();
                 cms.StartCutscene();
             }     
-        }
-    }
-
-    public void Interact()
-    {
-        Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, 10f); // second number is radius of sphere
-        foreach (var hitCollider in hitColliders)
-        {
-            if (hitCollider.gameObject.tag == "NPC")
-            {
-                hitCollider.gameObject.GetComponent<DialogueTriggers>().triggerDialogue();
-            }
         }
     }
 

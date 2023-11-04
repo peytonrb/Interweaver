@@ -956,6 +956,9 @@ MonoBehaviour:
   isWoven: 0
   rotationSpeed: 0.5
   canBeRelocated: 1
+  myTransformPoints: []
+  nearestPoint: {fileID: 0}
+  nearestDistance: 0
   isCombined: 0
   combinedObjectStartPos: {x: 0, y: 0, z: 0}
   combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
@@ -1208,7 +1211,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cutsceneCanvas: {fileID: 1751467422}
   blackPanel: {fileID: 1006864960}
+  cutsceneCams: []
+  transitionSpeed: 0
   player: {fileID: 2122026641}
+  cutsceneWeaver: {fileID: 0}
+  cutsceneTrigger: {fileID: 0}
 --- !u!1 &112224823
 GameObject:
   m_ObjectHideFlags: 0
@@ -3221,6 +3228,9 @@ MonoBehaviour:
   isWoven: 0
   rotationSpeed: 0.5
   canBeRelocated: 1
+  myTransformPoints: []
+  nearestPoint: {fileID: 0}
+  nearestDistance: 0
   isCombined: 0
   combinedObjectStartPos: {x: 0, y: 0, z: 0}
   combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
@@ -8756,6 +8766,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d97c4d340288d046bf4d29910091ae2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  toggle: {fileID: 0}
+  usingController: 0
 --- !u!114 &307079619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16139,6 +16151,9 @@ MonoBehaviour:
   isWoven: 0
   rotationSpeed: 0.5
   canBeRelocated: 1
+  myTransformPoints: []
+  nearestPoint: {fileID: 0}
+  nearestDistance: 0
   isCombined: 0
   combinedObjectStartPos: {x: 0, y: 0, z: 0}
   combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
@@ -33586,6 +33601,9 @@ MonoBehaviour:
   isWoven: 0
   rotationSpeed: 0.5
   canBeRelocated: 1
+  myTransformPoints: []
+  nearestPoint: {fileID: 0}
+  nearestDistance: 0
   isCombined: 0
   combinedObjectStartPos: {x: 0, y: 0, z: 0}
   combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
@@ -36646,6 +36664,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d97c4d340288d046bf4d29910091ae2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  toggle: {fileID: 0}
+  usingController: 0
 --- !u!114 &1648945995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42824,6 +42844,10 @@ PrefabInstance:
       propertyPath: layersToHit.m_Bits
       value: 64
       objectReference: {fileID: 0}
+    - target: {fileID: 3613315730579189555, guid: f68a5af436eec1b46819d0ceb33ce8f4, type: 3}
+      propertyPath: shatterFile
+      value: 
+      objectReference: {fileID: 8300000, guid: b19b2e0ed2c67cb4d9394f19382b00d5, type: 3}
     - target: {fileID: 3738485478540167410, guid: f68a5af436eec1b46819d0ceb33ce8f4, type: 3}
       propertyPath: m_Name
       value: Crystal
@@ -44321,6 +44345,9 @@ MonoBehaviour:
   isWoven: 0
   rotationSpeed: 0.5
   canBeRelocated: 1
+  myTransformPoints: []
+  nearestPoint: {fileID: 0}
+  nearestDistance: 0
   isCombined: 0
   combinedObjectStartPos: {x: 0, y: 0, z: 0}
   combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
@@ -55404,6 +55431,9 @@ MonoBehaviour:
   isWoven: 0
   rotationSpeed: 0.5
   canBeRelocated: 1
+  myTransformPoints: []
+  nearestPoint: {fileID: 0}
+  nearestDistance: 0
   isCombined: 0
   combinedObjectStartPos: {x: 0, y: 0, z: 0}
   combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
@@ -55448,7 +55478,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 823247043}
-  familiarVirtualCam: {fileID: 1903062312}
   pauseMenu: {fileID: 829967490}
   weaveDistance: 20
   weaveObject:
@@ -55458,15 +55487,19 @@ MonoBehaviour:
   bias: {x: 0, y: -1}
   currentMousePosition: {x: 0, y: 0}
   interactInput: 0
+  weaveableScript: {fileID: 0}
   inRelocateMode: 0
   inCombineMode: 0
   uninteract: 0
   distanceBetween: 0
+  floatingIslandCrystal: 0
+  weaveSpawn: {fileID: 0}
   familiar: {fileID: 1783837062}
   weaverAnimationHandler: {fileID: 191710735}
   relocateMode: {fileID: 789705724}
   combineMode: {fileID: 1821816238}
-  cutsceneManager: {fileID: 106933925}
+  cutsceneManager:
+  - {fileID: 0}
 --- !u!1 &2129858510
 GameObject:
   m_ObjectHideFlags: 0
