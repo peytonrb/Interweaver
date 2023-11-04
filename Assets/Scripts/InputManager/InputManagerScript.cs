@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.TextCore.Text;
 
 public class InputManagerScript : MonoBehaviour
 {
@@ -176,13 +177,15 @@ public class InputManagerScript : MonoBehaviour
     public void OnPossessFamiliar(InputValue input)
     {
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
+        CharacterController playerCharacterController = player.GetComponent<CharacterController>();
 
         if (input.isPressed)
         {
-            if (!familiarScript.myTurn)
+            if (!familiarScript.myTurn && playerCharacterController.isGrounded)
             {
                 playerScript.Possession();
                 playerInput.SwitchCurrentActionMap("Familiar");
+                Debug.Log(playerInput.currentActionMap);
             }
         }
     }
@@ -192,11 +195,13 @@ public class InputManagerScript : MonoBehaviour
         if (input.isPressed)
         {
             FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
-            if (familiarScript.myTurn)
+            CharacterController familiarCharacterController = familiar.GetComponent<CharacterController>();
+            if (familiarScript.myTurn && familiarCharacterController.isGrounded)
             {
 
                 familiarScript.Depossess();
                 playerInput.SwitchCurrentActionMap("Weaver");
+                Debug.Log(playerInput.currentActionMap);
             }
         }
     }
