@@ -5,8 +5,9 @@ using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
-public class MovementScript : MonoBehaviour
+public class MovementScript : MonoBehaviour 
 {
     private GameMasterScript GM; //This is refrencing the game master script
 
@@ -244,5 +245,11 @@ public class MovementScript : MonoBehaviour
         {
             resettingTerminalVelocity = false;
         }
+    }
+
+    public void GoToCheckPoint()
+    {
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Debug.Log("get good");
     }
 }
