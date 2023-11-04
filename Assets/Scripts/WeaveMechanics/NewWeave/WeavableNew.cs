@@ -344,11 +344,10 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     }
     //********************************************************************
 
-    void Snapping()
+    //the snapping method
+    void Snapping() 
     {
-
-        //old method
-        weaveableScript.nearestDistance = Mathf.Infinity;
+        weaveableScript.nearestDistance = Mathf.Infinity; //this is made the be infinite so that when it calculates the distance it wouldn't cap itself
         GameObject closestPoint = null;
         for (int i = 0; i < myTransformPoints.Length; i++)
         {
@@ -360,8 +359,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 Debug.Log("this is the distance between points " + snapDistance + ",this is the closestpoint" + myTransformPoints[i]);               
             }
         }
-        weaveableScript.nearestPoint = closestPoint;
+        weaveableScript.nearestPoint = closestPoint; //this two variables are stored outside of the for loop so it wouldn't reset and get the latest element
         weaveableScript.nearestDistance = nearestDistance;
-        weaveableScript.rb.velocity = transform.position - weaveableScript.nearestPoint.transform.position;
+        weaveableScript.rb.velocity =  weaveableScript.nearestPoint.transform.position - weaveableScript.transform.position;
     }
 }
