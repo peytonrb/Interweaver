@@ -198,7 +198,6 @@ public class InputManagerScript : MonoBehaviour
             CharacterController familiarCharacterController = familiar.GetComponent<CharacterController>();
             if (familiarScript.myTurn && familiarCharacterController.isGrounded)
             {
-
                 familiarScript.Depossess();
                 playerInput.SwitchCurrentActionMap("Weaver");
                 Debug.Log(playerInput.currentActionMap);
