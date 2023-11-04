@@ -52,7 +52,7 @@ public class OwlDiveScript : MonoBehaviour
     {
         Debug.Log("Pressed");
 
-            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, diveFile, 1f);
+            //AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, diveFile, 1f);
 
             movementScript.ChangeGravity(diveAcceleration);
             movementScript.ChangeTerminalVelocity(terminalVelocity);
