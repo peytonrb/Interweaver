@@ -255,12 +255,12 @@ public class PlayerController : MonoBehaviour
         if (gamepad != null)
         {
             weaveController();
-            pauseScript.usingController = true;
+            pauseScript.TurnOnUsingController();
             pauseScript.toggle.isOn = true;
         }
         else
         {
-            pauseScript.usingController = false;
+            pauseScript.TurnOffUsingController();
             pauseScript.toggle.isOn = false;
             return;
         }

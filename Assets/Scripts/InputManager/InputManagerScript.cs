@@ -12,6 +12,9 @@ public class InputManagerScript : MonoBehaviour
     public Vector2 movement;
     public Vector2 weaveCursor;
     public bool switching;
+    public GameObject pauseScreen;
+    private PauseScript pauseScript;
+    private bool usingController;
 
     public static InputManagerScript instance;
 
@@ -19,7 +22,7 @@ public class InputManagerScript : MonoBehaviour
     private PlayerController playerScript;
     private FamiliarScript familiarScript;
 
-    private PlayerInput playerInput;
+    public PlayerInput playerInput;
     void Awake()
     {
         if (instance == null)
@@ -33,8 +36,12 @@ public class InputManagerScript : MonoBehaviour
 
         playerScript = player.GetComponent<PlayerController>();
         familiarScript = familiar.GetComponent<FamiliarScript>();
-
+        pauseScript = pauseScreen.GetComponent<PauseScript>();
         playerInput = GetComponent<PlayerInput>();
+
+        usingController = pauseScript.GetUsingController(); //Checks if using the controller
+        Debug.Log(playerInput.currentControlScheme);
+
         
     }
 
@@ -101,7 +108,7 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
-    public void WeaveCursor(InputValue input)
+    public void OnWeaverTargeting(InputValue input)
     {
         weaveCursor = input.Get<Vector2>();
     }
@@ -111,10 +118,8 @@ public class InputManagerScript : MonoBehaviour
         if (input.isPressed)
         {
             NPCInteractionScript npcInteractScript = player.GetComponent<NPCInteractionScript>();
-            if (input.isPressed)
-            {
-                npcInteractScript.Interact();
-            }
+            npcInteractScript.Interact();
+            Debug.Log("Interacting");
         }
     }
 
@@ -209,12 +214,12 @@ public class InputManagerScript : MonoBehaviour
 
     //PAUSING
     //******************************************************
-    public void Pause(InputValue input)
+    public void OnPause(InputValue input)
     {
-        // PlayerScript playerScript = player.GetComponent<PlayerScript>();
+        PlayerController playerController = player.GetComponent<PlayerController>();
         if (input.isPressed)
         {
-            playerScript.Pausing();
+            playerController.Pausing();
         }
     }
     //******************************************************
@@ -253,12 +258,21 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
-    public void OnFamiliarNPCInteraction(InputAction input)
+    public void OnFamiliarNPCInteraction(InputValue input)
     {
-        if (input.IsPressed())
+        if (input.isPressed)
         {
             NPCInteractionScript npcInteractScript = familiar.GetComponent<NPCInteractionScript>();
             npcInteractScript.Interact();
+            Debug.Log("Interacting");
+        }
+    }
+
+    public void OnFamiliarPause(InputValue input)
+    {
+        if (input.isPressed) {
+            PlayerController playerController = player.GetComponent<PlayerController>();
+            playerController.Pausing();
         }
     }
    
