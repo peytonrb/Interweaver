@@ -48,8 +48,6 @@ public class OwlDiveScript : MonoBehaviour
 
     public void DivePressed()
     {
-        Debug.Log("Pressed");
-
             movementScript.ChangeGravity(diveAcceleration);
             movementScript.ChangeTerminalVelocity(terminalVelocity);
             movementScript.ChangeAerialAcceleration(aerialAcceleration);
@@ -62,7 +60,6 @@ public class OwlDiveScript : MonoBehaviour
         divePressed = false;
         if (isDiving)
         {
-            Debug.Log("Dive Release Triggered");
             EndDive();
         }
        
@@ -96,7 +93,6 @@ public class OwlDiveScript : MonoBehaviour
 
     private void EndDive() // returns values to their original forms
     {
-        //Debug.Log("Ended Dive");
         isDiving = false;
         movementScript.ResetGravity();
         movementScript.ResetTerminalVelocity();
