@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 overflow;
     private Vector2 cursor;
     public bool interactInput;
+    public bool isCurrentlyWeaving; //For input manager to read if currently weaving
     private Vector3 raycastPosition;
     public WeaveableNew weaveableScript;
 
@@ -178,6 +179,7 @@ public class PlayerController : MonoBehaviour
             if (distanceBetween < weaveDistance)
             {
                 Debug.Log("Object checked!");
+                isCurrentlyWeaving = true;
 
                 // vfx
                 weaveVisualizer.ActivateWeave();
@@ -233,6 +235,7 @@ public class PlayerController : MonoBehaviour
             uninteract = false;
             inRelocateMode = false;
             inCombineMode = false;
+            isCurrentlyWeaving = false;
         }
     }
 

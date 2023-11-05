@@ -39,7 +39,7 @@ public class InputManagerScript : MonoBehaviour
         pauseScript = pauseScreen.GetComponent<PauseScript>();
         playerInput = GetComponent<PlayerInput>();
 
-        usingController = pauseScript.GetUsingController(); //Checks if using the controller
+        //usingController = pauseScript.GetUsingController(); //Checks if using the controller
         // Debug.Log(playerInput.currentControlScheme);
     }
 
@@ -185,7 +185,7 @@ public class InputManagerScript : MonoBehaviour
 
         if (input.isPressed)
         {
-            if (!familiarScript.myTurn && playerCharacterController.isGrounded)
+            if (!familiarScript.myTurn && !playerScript.isCurrentlyWeaving && playerCharacterController.isGrounded)
             {
                 playerScript.Possession();
                 playerInput.SwitchCurrentActionMap("Familiar");
