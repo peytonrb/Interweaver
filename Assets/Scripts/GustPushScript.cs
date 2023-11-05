@@ -7,7 +7,6 @@ public class GustPushScript : MonoBehaviour
 
     [SerializeField] private float speed;
     [SerializeField] private Vector3 direction;
-    private List<GameObject> onBelt = new List<GameObject>();
 
     // Update is called once per frame
     void Update()
@@ -17,21 +16,11 @@ public class GustPushScript : MonoBehaviour
         // yippeeeeeeee
     }
 
-    void OnTriggerEnter(Collider collider)
-    {
-        onBelt.Add(collider.gameObject);
-    }
-
-    void OnTriggerExit(Collider collider)
-    {
-        onBelt.Remove(collider.gameObject);
-    }
-
     void OnTriggerStay(Collider collider)
     {
-        for (int i = 0; i <= onBelt.Count - 1; i++)
+        if (collider.CompareTag("Familiar"))
         {
-            onBelt[i].GetComponent<CharacterController>().Move(gameObject.transform.localRotation * direction.normalized * (speed/100));
+            collider.GetComponent<CharacterController>().Move(gameObject.transform.localRotation * direction.normalized * (speed/100));
         }
     }
 
