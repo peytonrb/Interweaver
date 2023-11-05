@@ -51,6 +51,7 @@ public class MovementScript : MonoBehaviour
 
     [Header("Character's sounds")]
     [SerializeField] AudioClip fallFile;
+    private bool isPlayingFallSound;
 
     void Awake()
     {
@@ -125,9 +126,10 @@ public class MovementScript : MonoBehaviour
             //Character gravity
             if (!characterController.isGrounded)
             {
-                if (fallFile)
+                if (fallFile && !isPlayingFallSound)
                 {
-                    // PUT YA JAZZ FOR CALLING THE AUDIO MANAGER HERE
+                  //  AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, fallFile, 1f); AUDIO WILL BE LOOKED AT LATER HERE
+                   // isPlayingFallSound = true;
                 }
                 
                 velocity.y += gravity * Time.deltaTime;
@@ -137,6 +139,8 @@ public class MovementScript : MonoBehaviour
             else
             {
                 //weaverAnimationHandler.ToggleFallAnim(false);
+              //  AudioManager.instance.StopSound(AudioManagerChannels.SoundEffectChannel);
+             //   isPlayingFallSound = false;
                 velocity.y = -2f;
             }
             velocity.y = Mathf.Clamp(velocity.y, terminalVelocity, 200f);
