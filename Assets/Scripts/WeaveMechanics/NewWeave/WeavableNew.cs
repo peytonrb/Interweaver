@@ -293,7 +293,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             combinedObjectStartRot = weaveableScript.transform.rotation;
 
             Combine();
-            Snapping();
             isCombined = true;
         }
     }
@@ -323,8 +322,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         if (weaveableScript.canBeRelocated)
         {
             weaveableScript.startFloating = true;
+            Snapping();
             
-            //weaveableScript.rb.velocity = new Vector3(transform.position.x - weaveableScript.rb.transform.position.x, 0, transform.position.z - weaveableScript.rb.transform.position.z);
         }
         else
         {
