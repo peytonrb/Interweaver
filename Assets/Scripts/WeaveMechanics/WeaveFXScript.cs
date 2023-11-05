@@ -1,26 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class WeaveFXScript : MonoBehaviour
 {
-    [CannotBeNullObjectField]
-    public LineRenderer weaveRenderer;
+    [CannotBeNullObjectField] public LineRenderer weaveRenderer;
+    [CannotBeNullObjectField] public ParticleSystem weaveActivation;
+    [CannotBeNullObjectField] public ParticleSystem objectSelectPS;
+    [CannotBeNullObjectField] public GameObject particleScattering;
+    [CannotBeNullObjectField] public Material emissiveMat;
 
-    [CannotBeNullObjectField]
-    public ParticleSystem weaveActivation;
-
-    [CannotBeNullObjectField]
-    public ParticleSystem objectSelectPS;
-
-    [CannotBeNullObjectField]
-    public GameObject particleScattering;
-
-    [CannotBeNullObjectField]
-    public Material emissiveMat;
+    [Header("Post Processing")]
+    [CannotBeNullObjectField] public GameObject postProcessing;
+    private Volume postProcessingVolume;
+    [CannotBeNullObjectField] public VolumeProfile defaultProfile;
+    [CannotBeNullObjectField] public VolumeProfile weavingProfile;
 
     void Start()
     {
+        postProcessingVolume = postProcessing.GetComponent<Volume>();
         weaveRenderer.gameObject.SetActive(false);
         weaveActivation.Stop();
     }
@@ -53,7 +52,8 @@ public class WeaveFXScript : MonoBehaviour
             Instantiate(objectSelectPS, weaveable.transform.position, Quaternion.Euler(-90f, 0f, 0f));
 
             // aura effect
-            weaveable.GetComponent<Renderer>().material = emissiveMat; // need to reset this somehow
+            postProcessingVolume.profile = weavingProfile;
+            weaveable.GetComponent<Renderer>().material = emissiveMat;
             StartCoroutine(StartAura(weaveable));
         }
     }
@@ -66,6 +66,8 @@ public class WeaveFXScript : MonoBehaviour
 
     public void StopAura(GameObject weaveable)
     {
+        postProcessingVolume.profile = defaultProfile;
+
         if (weaveable.gameObject.tag != "FloatingIsland")
         {
             weaveable.GetComponent<Renderer>().material = weaveable.GetComponent<WeaveableNew>().originalMat;
