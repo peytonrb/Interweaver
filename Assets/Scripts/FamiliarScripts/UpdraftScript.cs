@@ -62,7 +62,7 @@ public class UpdraftScript : MonoBehaviour
         {
             upDraftEntered = false;
             movementScript = GetComponent<MovementScript>();
-            movementScript.ChangeVelocity(new Vector3 (movementScript.GetVelocity().x, currentBoost/t, movementScript.GetVelocity().z));
+            movementScript.ChangeVelocity(new Vector3 (movementScript.GetVelocity().x, currentBoost/(2*t), movementScript.GetVelocity().z));
             movementScript.ResetGravity();
             t = 1;
         }
