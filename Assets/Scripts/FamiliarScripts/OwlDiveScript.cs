@@ -9,8 +9,7 @@ public class OwlDiveScript : MonoBehaviour
     private CharacterController characterController; //references the character controller component
     private MovementScript movementScript; // reference for the movement script component
     [Header("Inputs")]
-    public bool divePressed; // defines the initial press of the dive
-    public bool diveHeld; // defines the dive as still being held
+    //public bool divePressed; // defines the initial press of the dive
 
     public AudioClip diveFile;
 
@@ -32,43 +31,31 @@ public class OwlDiveScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (movementScript.active && !characterController.isGrounded && divePressed && !onCooldown) // owl should only be able to dive when they are active & in the air
-        {
-            DivePressed();
-        }
-        else if (isDiving) // if on the ground and isDiving is true, make sure to end dive
+        if (isDiving && characterController.isGrounded) // if on the ground and isDiving is true, make sure to end dive
         {
             EndDive();
         }
     }
 
-    public void DiveStart()
-    {
-        divePressed = true;
-
-    }
-
     public void DivePressed()
     {
-
-
+        if (!characterController.isGrounded) {
             //AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, diveFile, 1f);
-
             movementScript.ChangeGravity(diveAcceleration);
             movementScript.ChangeTerminalVelocity(terminalVelocity);
             movementScript.ChangeAerialAcceleration(aerialAcceleration);
             movementScript.ChangeAerialDeceleration(aerialDeceleration);
             isDiving = true;
+        }
+        
     }
 
     public void DiveRelease()
     {
-        divePressed = false;
         if (isDiving)
         {
             EndDive();
-        }
-       
+        } 
     }
 
     public void startDiveCooldown(float duration)

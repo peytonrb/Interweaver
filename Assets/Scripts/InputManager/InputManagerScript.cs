@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Rendering.LookDev;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 using UnityEngine.TextCore.Text;
 
 public class InputManagerScript : MonoBehaviour
@@ -240,16 +242,16 @@ public class InputManagerScript : MonoBehaviour
 
         if (check)
         {
-            
+            Debug.Log("Pressed");
             //This has to be performed through a bool since this particular method is only activated through collisions
             familiarScript.familiarMovementAbility = true;
 
             // Add a check per familiar for later
-            owlDiveScript.DiveStart();
             owlDiveScript.DivePressed();
         }
         else
         {
+            Debug.Log("Released");
             familiarScript.familiarMovementAbility = false;
 
             //Add a check per familiar for later
