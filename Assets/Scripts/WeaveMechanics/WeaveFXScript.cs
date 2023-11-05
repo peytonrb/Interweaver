@@ -6,9 +6,18 @@ public class WeaveFXScript : MonoBehaviour
 {
     [CannotBeNullObjectField]
     public LineRenderer weaveRenderer;
-    
+
     [CannotBeNullObjectField]
     public ParticleSystem weaveActivation;
+
+    [CannotBeNullObjectField]
+    public ParticleSystem objectSelectPS;
+
+    [CannotBeNullObjectField]
+    public GameObject particleScattering;
+
+    [CannotBeNullObjectField]
+    public Material emissiveMat;
 
     void Start()
     {
@@ -31,7 +40,37 @@ public class WeaveFXScript : MonoBehaviour
 
     public void ActivateWeave()
     {
-        Debug.Log("here");
         weaveActivation.Play();
+    }
+
+    public void WeaveableSelected(GameObject weaveable)
+    {
+        if (weaveable.gameObject.tag != "FloatingIsland")
+        {
+            // particles upon select
+            var psShape = objectSelectPS.shape; // i hate var but unity requires it to be like this. idk man.
+            psShape.radius = weaveable.GetComponent<BoxCollider>().bounds.size.x; // will break if object doesn't have box collider. will fix when issue arises
+            Instantiate(objectSelectPS, weaveable.transform.position, Quaternion.Euler(-90f, 0f, 0f));
+
+            // aura effect
+            weaveable.GetComponent<Renderer>().material = emissiveMat; // need to reset this somehow
+            StartCoroutine(StartAura(weaveable));
+        }
+    }
+
+    IEnumerator StartAura(GameObject weaveable)
+    {
+        yield return new WaitForSeconds(0.4f);
+        Instantiate(particleScattering, weaveable.transform.position, Quaternion.identity, weaveable.transform);
+    }
+
+    public void StopAura(GameObject weaveable)
+    {
+        if (weaveable.gameObject.tag != "FloatingIsland")
+        {
+            weaveable.GetComponent<Renderer>().material = weaveable.GetComponent<WeaveableNew>().originalMat;
+            Transform child = weaveable.transform.Find("WeaveableObjectAura(Clone)");
+            Destroy(child.gameObject);
+        }
     }
 }

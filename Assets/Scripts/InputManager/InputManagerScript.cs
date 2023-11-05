@@ -159,7 +159,7 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
-    public void OnUnCombineAction(InputValue input)
+    public void OnUncombineAction(InputValue input)
     {
         if (input.isPressed)
         {
@@ -170,6 +170,7 @@ public class InputManagerScript : MonoBehaviour
                 if (weaveable.isCombined)
                 {
                     weaveable.Uncombine();
+                    playerScript.weaveVisualizer.StopAura(weaveable.gameObject);
                 }
             }
         }
