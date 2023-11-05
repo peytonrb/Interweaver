@@ -31,7 +31,7 @@ public class GustPushScript : MonoBehaviour
     {
         for (int i = 0; i <= onBelt.Count - 1; i++)
         {
-            onBelt[i].GetComponent<CharacterController>().Move(gameObject.transform.localRotation * direction.normalized * speed);
+            onBelt[i].GetComponent<CharacterController>().Move(gameObject.transform.localRotation * direction.normalized * (speed/100));
         }
     }
 
