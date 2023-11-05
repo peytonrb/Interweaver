@@ -45,9 +45,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float distanceBetween;
     public bool floatingIslandCrystal = false; // used by input manager
 
-    // vfx controls
+    [Header("VFX")]
     [CannotBeNullObjectField] public GameObject weaveSpawn;   //  WILL BE ASSIGNED AT RUNTIME ONCE SCRIPTS ARE FINALIZED
-    private WeaveFXScript weaveVisualizer;
+    public WeaveFXScript weaveVisualizer;
 
     [Header("References")]
     [CannotBeNullObjectField] public GameObject familiar;
@@ -179,7 +179,9 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("Object checked!");
 
+                // vfx
                 weaveVisualizer.ActivateWeave();
+
                 interactableObject.Interact();
                 inRelocateMode = true;
                 weaverAnimationHandler.ToggleWeaveAnim(isWeaving);

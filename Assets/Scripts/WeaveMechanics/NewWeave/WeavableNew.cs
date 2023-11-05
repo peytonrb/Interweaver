@@ -31,6 +31,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     private bool onFloatingIsland;
     private GameObject snapPoint;
 
+    [Header("VFX")]
+    public Material originalMat; // accessed by WeaveFX
+
     [Header("Respawn")] // accessed by RespawnController
     public bool isCombined;
     public Vector3 combinedObjectStartPos;
@@ -53,6 +56,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         weaveableScript = gameObject.GetComponent<WeaveableNew>();
         isCombined = false;
         onFloatingIsland = false;
+        originalMat = gameObject.GetComponent<Renderer>().material;
     }
 
 
@@ -70,26 +74,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
         if (isWoven)
         {
-            MovingWeaveMouse(); // fix drag on object here
-            
-        }
-
-        if (canRotate)
-        {
-            // this finds the the different action map called weaveableObject and then subscribes to the method 
-            
-                /*+= OnRotateDownInput;*/
-        }
-        else if (!canRotate)
-        {
-            // this finds the the different action map called weaveableObject and then unsubscribes to the method, 
-            //      it's there so that it can prevent memory leakage 
-            
-        }
-
-        if (isCombined)
-        {
-            //inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed += OnUncombineInput;
+            MovingWeaveMouse(); // fix drag on object here  
         }
 
         if (onFloatingIsland && gameObject.tag == "Breakable")
@@ -175,29 +160,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         }
     }
 
-    //section for rotate function
-    //**********************************************************************************
-    //private void OnRotateCWInput(InputAction input)
-    //{
-    //    if (input.IsPressed())
-    //    StartCoroutine(Rotate(Vector3.up, 90));
-    //}
-    //private void OnRotateCtrWInput(InputAction input)
-    //{
-    //    if (input.IsPressed())
-    //    StartCoroutine(Rotate(Vector3.up, -90));
-    //}
-    //private void OnRotateUPInput(InputAction input)
-    //{
-    //    if (input.IsPressed())
-    //    StartCoroutine(Rotate(Vector3.forward, 90));
-    //}
-    //private void OnRotateDownInput(InputAction input)
-    //{
-    //    if (input.IsPressed())
-    //    StartCoroutine(Rotate(Vector3.forward, -90));
-    //}
-
     public void CallRotate(Vector3 dir, float angle)
     {
         StartCoroutine(Rotate(dir, angle));
@@ -229,6 +191,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         Debug.Log("This is interactable");
         startFloating = true;
         transform.rotation = Quaternion.identity;
+        player.weaveVisualizer.WeaveableSelected(gameObject);
     }
 
     public void Uninteract()
@@ -248,8 +211,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             canCombine = false;
             canRotate = false;
             rb.constraints = RigidbodyConstraints.None;
-            //inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed -= OnCombineInput; //this finds the the different action map called weaveableObject and then unsubscribes to the method, this is there so that there won't be any memory leakage
-            //inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed -= OnUncombineInput;
+            player.weaveVisualizer.StopAura(gameObject);
         }
     }
 
@@ -277,17 +239,13 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     }
     //********************************************************************
 
-    //private void OnUncombineInput(InputAction.CallbackContext context)
-    //{
-        
-    //    Uncombine();
-    //}
-
     public void OnCombineInput() // this doesn't run once the floating island gets sent back down - this is the issue 
     {
         if (weaveableScript.ID == ID && !weaveableScript.isWoven && canCombine)
         {
             Debug.Log("OnCombineInput");
+            player.weaveVisualizer.WeaveableSelected(weaveableScript.gameObject);
+
             // respawn variables
             combinedObjectStartPos = weaveableScript.transform.position;
             combinedObjectStartRot = weaveableScript.transform.rotation;
@@ -295,6 +253,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             Combine();
             Snapping();
             isCombined = true;
+            weaveableScript.isCombined = true;
         }
     }
 

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -655,6 +655,7 @@ MonoBehaviour:
   - {fileID: 1958713793}
   nearestPoint: {fileID: 0}
   nearestDistance: 50
+  originalMat: {fileID: 0}
   isCombined: 0
   combinedObjectStartPos: {x: 0, y: 0, z: 0}
   combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
@@ -1758,7 +1759,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toggle: {fileID: 0}
-  usingController: 0
+  inputManager: {fileID: 0}
 --- !u!114 &307079619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2007,6 +2008,7 @@ MonoBehaviour:
   myTransformPoints: []
   nearestPoint: {fileID: 0}
   nearestDistance: 0
+  originalMat: {fileID: 0}
   isCombined: 0
   combinedObjectStartPos: {x: 0, y: 0, z: 0}
   combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
@@ -2096,7 +2098,7 @@ Transform:
   m_LocalScale: {x: 3.2804, y: 3.2804, z: 3.2804}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1623248231}
+  m_Father: {fileID: 1032044544}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: -32.33, z: 0}
 --- !u!1001 &409886849
@@ -2171,6 +2173,10 @@ PrefabInstance:
       propertyPath: inputAction
       value: 
       objectReference: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
+    - target: {fileID: 8977571022788081958, guid: e6bf1b4f874e350498836e091dded2fe, type: 3}
+      propertyPath: pauseScreen
+      value: 
+      objectReference: {fileID: 829967490}
     - target: {fileID: 8977571022788081958, guid: e6bf1b4f874e350498836e091dded2fe, type: 3}
       propertyPath: inputActions.m_Id
       value: a4a50806-23d6-4ab7-9c07-2f4fb4e35936
@@ -3954,6 +3960,38 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1920, y: 1120}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1032044543
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1032044544}
+  m_Layer: 0
+  m_Name: SNAP POINTS NOT SET UP
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1032044544
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032044543}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 409736325}
+  m_Father: {fileID: 1623248231}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1083616477
 GameObject:
   m_ObjectHideFlags: 0
@@ -5892,7 +5930,7 @@ Transform:
   m_Children:
   - {fileID: 1101176065}
   - {fileID: 145186134}
-  - {fileID: 409736325}
+  - {fileID: 1032044544}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6020,7 +6058,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toggle: {fileID: 0}
-  usingController: 0
+  inputManager: {fileID: 0}
 --- !u!114 &1648945995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12982,6 +13020,7 @@ MonoBehaviour:
   distanceBetween: 0
   floatingIslandCrystal: 0
   weaveSpawn: {fileID: 724319193}
+  weaveVisualizer: {fileID: 0}
   familiar: {fileID: 1783837062}
   weaverAnimationHandler: {fileID: 1362197098}
   relocateMode: {fileID: 789705724}
@@ -13002,6 +13041,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaveRenderer: {fileID: 779052772}
   weaveActivation: {fileID: 466882948}
+  objectSelectPS: {fileID: 966520111295141262, guid: c66fd3973e8470244a439b4f8ed89605, type: 3}
+  particleScattering: {fileID: 8610475002134133077, guid: e48893297ec862449a024d3c77bcff53, type: 3}
+  emissiveMat: {fileID: 2100000, guid: 736cbc2efde784a418891c917acbb625, type: 2}
 --- !u!114 &2122026659
 MonoBehaviour:
   m_ObjectHideFlags: 0
