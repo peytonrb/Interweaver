@@ -38,11 +38,11 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
 
     void OnEnable()
     {
-        inputs.FindActionMap("weaveableObject").Enable();
+        //inputs.FindActionMap("weaveableObject").Enable();
     }
     void OnDisable()
     {
-        inputs.FindActionMap("weaveableObject").Disable();
+        //inputs.FindActionMap("weaveableObject").Disable();
     }
 
     void Update()
@@ -58,24 +58,24 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
             MovingWeaveMouse();
         }
 
-        if (canRotate)
-        {
-            // this finds the the different action map called weaveableObject and then subscribes to the method 
-            inputs.FindActionMap("weaveableObject").FindAction("RotateCW").performed += OnRotateCWInput; 
-            inputs.FindActionMap("weaveableObject").FindAction("RotateCtrW").performed += OnRotateCtrWInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateUP").performed += OnRotateUPInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateDOWN").performed += OnRotateDownInput;
-        }
+        //if (canRotate)
+        //{
+        //    // this finds the the different action map called weaveableObject and then subscribes to the method 
+        //    inputs.FindActionMap("weaveableObject").FindAction("RotateCW").performed += OnRotateCWInput; 
+        //    inputs.FindActionMap("weaveableObject").FindAction("RotateCtrW").performed += OnRotateCtrWInput;
+        //    inputs.FindActionMap("weaveableObject").FindAction("RotateUP").performed += OnRotateUPInput;
+        //    inputs.FindActionMap("weaveableObject").FindAction("RotateDOWN").performed += OnRotateDownInput;
+        //}
 
-        else if (!canRotate)
-        {
-            // this finds the the different action map called weaveableObject and then unsubscribes to the method, 
-            //      it's there so that it can prevent memory leakage 
-            inputs.FindActionMap("weaveableObject").FindAction("RotateCW").performed -= OnRotateCWInput; 
-            inputs.FindActionMap("weaveableObject").FindAction("RotateCtrW").performed -= OnRotateCtrWInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateUP").performed -= OnRotateUPInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateDOWN").performed -= OnRotateDownInput;
-        }
+        //else if (!canRotate)
+        //{
+        //    // this finds the the different action map called weaveableObject and then unsubscribes to the method, 
+        //    //      it's there so that it can prevent memory leakage 
+        //    inputs.FindActionMap("weaveableObject").FindAction("RotateCW").performed -= OnRotateCWInput; 
+        //    inputs.FindActionMap("weaveableObject").FindAction("RotateCtrW").performed -= OnRotateCtrWInput;
+        //    inputs.FindActionMap("weaveableObject").FindAction("RotateUP").performed -= OnRotateUPInput;
+        //    inputs.FindActionMap("weaveableObject").FindAction("RotateDOWN").performed -= OnRotateDownInput;
+        //}
     }
 
     // this is for the distance check if the weaveable is too close or too far away
@@ -126,8 +126,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
                 if (combineable != null && !weaveableScript.canCombine)
                 {
                     //this finds the the different action map called weaveableObject and then subscribes to the method 
-                    inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput; 
-                    inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed += OnUncombineInput;
+                    //inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput; 
+                    //inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed += OnUncombineInput;
                 }
             }
         }
@@ -280,8 +280,8 @@ public class Weaveable : MonoBehaviour, IInteractable, ICombineable
             canCombine = false;
             canRotate = false;
             rb.constraints = RigidbodyConstraints.None;
-            inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed -= OnCombineInput; //this finds the the different action map called weaveableObject and then unsubscribes to the method, this is there so that there won't be any memory leakage
-            inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed -= OnUncombineInput;
+            //inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed -= OnCombineInput; //this finds the the different action map called weaveableObject and then unsubscribes to the method, this is there so that there won't be any memory leakage
+            //inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed -= OnUncombineInput;
         }
 
     }
