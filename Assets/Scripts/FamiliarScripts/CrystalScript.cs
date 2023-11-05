@@ -17,7 +17,7 @@ public class CrystalScript : MonoBehaviour
 
     public void TriggerBreak()
     {
-        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, shatterFile, 1f);
+        //AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, shatterFile, 1f);
 
         if (myFloatingIsland != null)
         {

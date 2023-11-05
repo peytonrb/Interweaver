@@ -6,9 +6,9 @@ using UnityEngine.InputSystem;
 public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 {
     [Header("Weavables")]
-    [CannotBeNullObjectField] [SerializeField] private Rigidbody rb;
+    [CannotBeNullObjectField][SerializeField] private Rigidbody rb;
     [SerializeField] private float hoveringValue = 1f;
-    [CannotBeNullObjectField] [SerializeField] private Camera mainCamera;
+    [CannotBeNullObjectField][SerializeField] private Camera mainCamera;
     [SerializeField] private LayerMask layersToHit;
     [SerializeField] public WeaveInteraction weaveInteraction;
     public int ID;
@@ -100,7 +100,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 }
 
                 rb.isKinematic = true;
-                canBeRelocated = false; 
+                canBeRelocated = false;
                 isWoven = true;
                 onFloatingIsland = false;
             }
@@ -191,7 +191,23 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         Debug.Log("This is interactable");
         startFloating = true;
         transform.rotation = Quaternion.identity;
-        player.weaveVisualizer.WeaveableSelected(gameObject);
+
+        // if objects are combined, vfx needs to show up for both - not efficent :)
+        if (this.isCombined)
+        {
+            WeaveableNew[] weaveableArray = FindObjectsOfType<WeaveableNew>();
+            foreach (WeaveableNew weaveable in weaveableArray)
+            {
+                if (weaveable.isCombined)
+                {
+                    player.weaveVisualizer.WeaveableSelected(weaveable.gameObject);
+                }
+            }
+        }
+        else
+        {
+            player.weaveVisualizer.WeaveableSelected(gameObject);
+        }
     }
 
     public void Uninteract()
@@ -212,6 +228,16 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             canRotate = false;
             rb.constraints = RigidbodyConstraints.None;
             player.weaveVisualizer.StopAura(gameObject);
+
+            // disable vfx on all objects - not very efficent rn ik 
+            WeaveableNew[] weaveableArray = FindObjectsOfType<WeaveableNew>();
+            foreach (WeaveableNew weaveable in weaveableArray)
+            {
+                if (weaveable.isCombined)
+                {
+                    player.weaveVisualizer.StopAura(weaveable.gameObject);
+                }
+            }
         }
     }
 
@@ -282,7 +308,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         {
             weaveableScript.startFloating = true;
             Snapping();
-            
         }
         else
         {
@@ -298,12 +323,12 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         }
 
         weaveableScript.rb.useGravity = false;
-       
+
     }
     //********************************************************************
 
     //the snapping method
-    void Snapping() 
+    void Snapping()
     {
         weaveableScript.nearestDistance = Mathf.Infinity; //this is made the be infinite so that when it calculates the distance it wouldn't cap itself
         GameObject closestPoint = null;
@@ -314,11 +339,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             {
                 closestPoint = myTransformPoints[i];
                 nearestDistance = snapDistance;
-                Debug.Log("this is the distance between points " + snapDistance + ",this is the closestpoint" + myTransformPoints[i]);               
+                Debug.Log("this is the distance between points " + snapDistance + ",this is the closestpoint" + myTransformPoints[i]);
             }
         }
         weaveableScript.nearestPoint = closestPoint; //this two variables are stored outside of the for loop so it wouldn't reset and get the latest element
         weaveableScript.nearestDistance = nearestDistance;
-        weaveableScript.rb.velocity =  weaveableScript.nearestPoint.transform.position - weaveableScript.transform.position;
+        weaveableScript.rb.velocity = weaveableScript.nearestPoint.transform.position - weaveableScript.transform.position;
     }
 }

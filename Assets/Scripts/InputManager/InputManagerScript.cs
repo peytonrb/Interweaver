@@ -40,9 +40,7 @@ public class InputManagerScript : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
 
         usingController = pauseScript.GetUsingController(); //Checks if using the controller
-        Debug.Log(playerInput.currentControlScheme);
-
-        
+        // Debug.Log(playerInput.currentControlScheme);
     }
 
     #region//WEAVER ABILITIES
