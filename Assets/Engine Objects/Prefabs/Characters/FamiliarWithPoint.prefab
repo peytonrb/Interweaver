@@ -103,6 +103,7 @@ MonoBehaviour:
   cam: {fileID: 0}
   virtualCam: {fileID: 0}
   active: 0
+  fallFile: {fileID: 0}
 --- !u!114 &561915622479374034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,6 +139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   divePressed: 0
   diveHeld: 0
+  diveFile: {fileID: 0}
   diveAcceleration: -20
   terminalVelocity: -30
   aerialAcceleration: 4
@@ -357,11 +359,20 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.02341242
     - serializedVersion: 3
+      time: 0.6234743
+      value: 0.0051511303
+      inSlope: -0.03767096
+      outSlope: -0.011024825
+      tangentMode: 65
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
       time: 1
       value: 0.001
-      inSlope: -0.072388366
+      inSlope: -0.011024825
       outSlope: -0.072388366
-      tangentMode: 0
+      tangentMode: 5
       weightedMode: 0
       inWeight: 0.7802503
       outWeight: 0.33333334
