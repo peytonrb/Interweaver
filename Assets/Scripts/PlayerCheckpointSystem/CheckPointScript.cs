@@ -13,7 +13,7 @@ public class CheckPointScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Familiar"))
         {
             GM.LastCheckPointPos = transform.position;
             Debug.Log("Active Checkpoint Position: " + GM.LastCheckPointPos);

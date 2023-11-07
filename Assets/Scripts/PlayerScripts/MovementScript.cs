@@ -5,8 +5,9 @@ using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
-public class MovementScript : MonoBehaviour
+public class MovementScript : MonoBehaviour 
 {
     private GameMasterScript GM; //This is refrencing the game master script
 
@@ -47,6 +48,10 @@ public class MovementScript : MonoBehaviour
     public GameObject cam; //Camera object reference
     public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
     public bool active; //Determines if movement controller is active
+
+    [Header("Character's sounds")]
+    [SerializeField] AudioClip fallFile;
+    private bool isPlayingFallSound;
 
     void Awake()
     {
@@ -121,13 +126,21 @@ public class MovementScript : MonoBehaviour
             //Character gravity
             if (!characterController.isGrounded)
             {
-                    velocity.y += gravity * Time.deltaTime;
-                    //Debug.Log(gravity);
-                    //weaverAnimationHandler.ToggleFallAnim(true);
+                if (fallFile && !isPlayingFallSound)
+                {
+                  //  AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, fallFile, 1f); AUDIO WILL BE LOOKED AT LATER HERE
+                   // isPlayingFallSound = true;
+                }
+                
+                velocity.y += gravity * Time.deltaTime;
+                //Debug.Log(gravity);
+                //weaverAnimationHandler.ToggleFallAnim(true);
             }
             else
             {
                 //weaverAnimationHandler.ToggleFallAnim(false);
+              //  AudioManager.instance.StopSound(AudioManagerChannels.SoundEffectChannel);
+             //   isPlayingFallSound = false;
                 velocity.y = -2f;
             }
             velocity.y = Mathf.Clamp(velocity.y, terminalVelocity, 200f);
@@ -183,6 +196,11 @@ public class MovementScript : MonoBehaviour
         gravity = originalGravity;
     }
 
+    public float GetGravity()
+    {
+        return gravity;
+    }
+
     public void ResetVelocityY()
     {
         velocity.y = 0;
@@ -191,6 +209,16 @@ public class MovementScript : MonoBehaviour
     public void ChangeTerminalVelocity(float newTerminalVelocity) // changes terminal velocity to new value
     {
         terminalVelocity = newTerminalVelocity;
+    }
+
+    public void ChangeVelocity(Vector3 newVelocity)
+    {
+        velocity = newVelocity;
+    }
+
+    public Vector3 GetVelocity()
+    {
+        return velocity;
     }
 
     public void Bounce()
@@ -221,5 +249,11 @@ public class MovementScript : MonoBehaviour
         {
             resettingTerminalVelocity = false;
         }
+    }
+
+    public void GoToCheckPoint()
+    {
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Debug.Log("get good");
     }
 }

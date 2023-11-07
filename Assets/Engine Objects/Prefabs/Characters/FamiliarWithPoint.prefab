@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 2648732394092549178}
   - component: {fileID: 1589125052728893389}
   - component: {fileID: 561915622479374034}
-  - component: {fileID: 777818743776325740}
   - component: {fileID: 2139394294988104313}
   - component: {fileID: 5452366103461141350}
+  - component: {fileID: 6546953865862739236}
   m_Layer: 0
   m_Name: FamiliarWithPoint
   m_TagString: Familiar
@@ -38,7 +38,7 @@ Transform:
   - {fileID: 8812801818404771755}
   - {fileID: 6051683453882045260}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &2404717404260384247
 CharacterController:
@@ -91,7 +91,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  inputManager: {fileID: 0}
   gravity: -3
   aerialControl: 1
   groundAcceleration: 2.5
@@ -104,6 +103,7 @@ MonoBehaviour:
   cam: {fileID: 0}
   virtualCam: {fileID: 0}
   active: 0
+  fallFile: {fileID: 0}
 --- !u!114 &561915622479374034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,19 +125,6 @@ MonoBehaviour:
   - {fileID: 0}
   WeaveDistance: 12
   islandisfalling: 0
---- !u!114 &777818743776325740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4766373589327111783}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e8bd9397458c5b4f8a81afabf28ccc4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gustForce: 3
 --- !u!114 &2139394294988104313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,6 +139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   divePressed: 0
   diveHeld: 0
+  diveFile: {fileID: 0}
   diveAcceleration: -20
   terminalVelocity: -30
   aerialAcceleration: 4
@@ -346,6 +334,52 @@ MonoBehaviour:
   m_DefaultActionMap: Owl
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &6546953865862739236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4766373589327111783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f8416a9f53422c48858954a41d6a69d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -4.160649
+      outSlope: -4.160649
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.02341242
+    - serializedVersion: 3
+      time: 0.6234743
+      value: 0.0051511303
+      inSlope: -0.03767096
+      outSlope: -0.011024825
+      tangentMode: 65
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.001
+      inSlope: -0.011024825
+      outSlope: -0.072388366
+      tangentMode: 5
+      weightedMode: 0
+      inWeight: 0.7802503
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  maxBoost: 15
 --- !u!1 &4790128978794148584
 GameObject:
   m_ObjectHideFlags: 0

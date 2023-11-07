@@ -9,6 +9,11 @@ public class WeaveInteraction : MonoBehaviour
 
     }
 
+    public virtual void OnWeave(GameObject other, GameObject wovenObject)
+    {
+
+    }
+
     public virtual void OnUnweave()
     {
 

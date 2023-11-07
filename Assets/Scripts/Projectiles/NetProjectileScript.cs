@@ -6,6 +6,9 @@ public class NetProjectileScript : MonoBehaviour
 {
     private Rigidbody rb;
 
+    private MovementScript MS;
+
+    private MovementScript MSF;
     //*******************************
     //These variables are set by NetCannonScript
     public float speed;
@@ -20,6 +23,10 @@ public class NetProjectileScript : MonoBehaviour
         rb.AddRelativeForce(Vector3.forward * speed, ForceMode.Impulse);
 
         StartCoroutine(TimerBeforeDestroy(lifetime));
+
+        MS = GameObject.FindWithTag("Player").GetComponent<MovementScript>();
+
+        MSF = GameObject.FindWithTag("Familiar").GetComponent<MovementScript>();
     }
 
     public IEnumerator TimerBeforeDestroy(float lifetime)
@@ -29,5 +36,23 @@ public class NetProjectileScript : MonoBehaviour
         Destroy(gameObject);
         yield break;
     }
+    //*************************************************************************
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.gameObject.CompareTag("Player") && !other.gameObject.CompareTag("Familiar"))
+        {
+            Destroy(gameObject);
+        }
 
+        else if (other.gameObject.CompareTag("Player"))
+        {
+            MS.GoToCheckPoint();
+        }
+
+        else if (other.gameObject.CompareTag("Familiar"))
+        {
+            MSF.GoToCheckPoint();
+        }
+    }
+    //*************************************************************************************
 }

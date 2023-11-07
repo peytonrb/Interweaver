@@ -177,5 +177,4 @@ public class FamiliarScript : MonoBehaviour
         myTurn = true;
         StopCoroutine(ForcedDelay());
     }
-
 }

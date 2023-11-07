@@ -6,9 +6,9 @@ using UnityEngine.InputSystem;
 public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 {
     [Header("Weavables")]
-    [SerializeField] private Rigidbody rb;
+    [CannotBeNullObjectField][SerializeField] private Rigidbody rb;
     [SerializeField] private float hoveringValue = 1f;
-    [SerializeField] private Camera mainCamera;
+    [CannotBeNullObjectField][SerializeField] private Camera mainCamera;
     [SerializeField] private LayerMask layersToHit;
     [SerializeField] public WeaveInteraction weaveInteraction;
     public int ID;
@@ -21,9 +21,18 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public float rotationSpeed = 0.5f;
     public bool canBeRelocated = true;
 
+    [Header("Snapping feature")]
+    public GameObject[] myTransformPoints;
+    public GameObject nearestPoint;
+    private float snapDistance;
+    [SerializeField] private float nearestDistance;
+
     [Header("Floating Islands + Crystals")]
     private bool onFloatingIsland;
     private GameObject snapPoint;
+
+    [Header("VFX")]
+    public Material originalMat; // accessed by WeaveFX
 
     [Header("Respawn")] // accessed by RespawnController
     public bool isCombined;
@@ -31,12 +40,14 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public Quaternion combinedObjectStartRot;
 
     [Header("Inputs")]
-    public InputActionAsset inputs;
+    [CannotBeNullObjectField] public InputActionAsset inputs;
     private InputAction combineInput;
 
     [Header("References")]
     public WeaveableNew weaveableScript; // has to be public for respawn
     [SerializeField] private PlayerController player;
+
+    private GameObject wovenFloatingIsland;
 
     void Start()
     {
@@ -45,17 +56,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         weaveableScript = gameObject.GetComponent<WeaveableNew>();
         isCombined = false;
         onFloatingIsland = false;
+        originalMat = gameObject.GetComponent<Renderer>().material;
     }
 
-    void OnEnable()
-    {
-        inputs.FindActionMap("weaveableObject").Enable();
-    }
-
-    void OnDisable()
-    {
-        inputs.FindActionMap("weaveableObject").Disable();
-    }
 
     void Update()
     {
@@ -71,33 +74,10 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
         if (isWoven)
         {
-            MovingWeaveMouse(); // fix drag on object here
+            MovingWeaveMouse(); // fix drag on object here  
         }
 
-        if (canRotate)
-        {
-            // this finds the the different action map called weaveableObject and then subscribes to the method 
-            inputs.FindActionMap("weaveableObject").FindAction("RotateCW").performed += OnRotateCWInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateCtrW").performed += OnRotateCtrWInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateUP").performed += OnRotateUPInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateDOWN").performed += OnRotateDownInput;
-        }
-        else if (!canRotate)
-        {
-            // this finds the the different action map called weaveableObject and then unsubscribes to the method, 
-            //      it's there so that it can prevent memory leakage 
-            inputs.FindActionMap("weaveableObject").FindAction("RotateCW").performed -= OnRotateCWInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateCtrW").performed -= OnRotateCtrWInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateUP").performed -= OnRotateUPInput;
-            inputs.FindActionMap("weaveableObject").FindAction("RotateDOWN").performed -= OnRotateDownInput;
-        }
-
-        if (isCombined)
-        {
-            inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed += OnUncombineInput;
-        }
-
-        if (onFloatingIsland)
+        if (onFloatingIsland && gameObject.tag == "Breakable")
         {
             relocate = false;
             rb.isKinematic = false;
@@ -108,9 +88,20 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
             if (distanceToSnap <= 2f) // if crystal is close enough to snap point
             {
+                gameObject.transform.SetParent(wovenFloatingIsland.transform);
+                player.uninteract = true;
+
+                if (TryGetComponent<CrystalScript>(out CrystalScript crystal))
+                {
+                    if (onFloatingIsland)
+                    {
+                        weaveInteraction.OnWeave(wovenFloatingIsland, gameObject);
+                    }
+                }
+
                 rb.isKinematic = true;
+                canBeRelocated = false;
                 isWoven = true;
-                Uninteract();
                 onFloatingIsland = false;
             }
         }
@@ -144,7 +135,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
                 if (combineable != null && !weaveableScript.canCombine)
                 {
-                    inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput;
+                    canCombine = true;
+                    //inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput;
                 }
             }
         }
@@ -168,23 +160,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         }
     }
 
-    //section for rotate function
-    //**********************************************************************************
-    private void OnRotateCWInput(InputAction.CallbackContext context)
+    public void CallRotate(Vector3 dir, float angle)
     {
-        StartCoroutine(Rotate(Vector3.up, 90));
-    }
-    private void OnRotateCtrWInput(InputAction.CallbackContext context)
-    {
-        StartCoroutine(Rotate(Vector3.up, -90));
-    }
-    private void OnRotateUPInput(InputAction.CallbackContext context)
-    {
-        StartCoroutine(Rotate(Vector3.forward, 90));
-    }
-    private void OnRotateDownInput(InputAction.CallbackContext context)
-    {
-        StartCoroutine(Rotate(Vector3.forward, -90));
+        StartCoroutine(Rotate(dir, angle));
     }
 
     IEnumerator Rotate(Vector3 axis, float angle)
@@ -213,15 +191,35 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         Debug.Log("This is interactable");
         startFloating = true;
         transform.rotation = Quaternion.identity;
+
+        // if objects are combined, vfx needs to show up for both - not efficent :)
+        if (this.isCombined)
+        {
+            WeaveableNew[] weaveableArray = FindObjectsOfType<WeaveableNew>();
+            foreach (WeaveableNew weaveable in weaveableArray)
+            {
+                if (weaveable.isCombined)
+                {
+                    player.weaveVisualizer.WeaveableSelected(weaveable.gameObject);
+                }
+            }
+        }
+        else
+        {
+            player.weaveVisualizer.WeaveableSelected(gameObject);
+        }
     }
 
     public void Uninteract()
     {
         if (isWoven)
         {
+            player.floatingIslandCrystal = false;
             Debug.Log("this is now not woven");
             rb.isKinematic = false;
             rb.useGravity = true;
+            player.inRelocateMode = false;
+            player.inCombineMode = false;
             relocate = false;
             inWeaveMode = false;
             isWoven = false;
@@ -229,20 +227,32 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             canCombine = false;
             canRotate = false;
             rb.constraints = RigidbodyConstraints.None;
-            inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed -= OnCombineInput; //this finds the the different action map called weaveableObject and then unsubscribes to the method, this is there so that there won't be any memory leakage
-            inputs.FindActionMap("weaveableObject").FindAction("UncombineAction").performed -= OnUncombineInput;
+            player.weaveVisualizer.StopAura(gameObject);
+
+            // disable vfx on all objects - not very efficent rn ik 
+            WeaveableNew[] weaveableArray = FindObjectsOfType<WeaveableNew>();
+            foreach (WeaveableNew weaveable in weaveableArray)
+            {
+                if (weaveable.isCombined)
+                {
+                    player.weaveVisualizer.StopAura(weaveable.gameObject);
+                }
+            }
         }
     }
 
     public void Relocate()
     {
-        isWoven = true;
-        rb.useGravity = false;
-        relocate = true;
-        inWeaveMode = false;
-        rb.isKinematic = false;
-        canRotate = true;
-        Debug.Log("Relocate Mode");
+        if (canBeRelocated)
+        {
+            isWoven = true;
+            rb.useGravity = false;
+            relocate = true;
+            inWeaveMode = false;
+            rb.isKinematic = false;
+            canRotate = true;
+            //Debug.Log("Relocate Mode");
+        }
     }
 
     public void WeaveMode()
@@ -251,27 +261,24 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         inWeaveMode = true;
         rb.isKinematic = true;
         canRotate = true;
-        Debug.Log("weave Mode");
+        //Debug.Log("in weave Mode");
     }
     //********************************************************************
 
-    private void OnUncombineInput(InputAction.CallbackContext context)
+    public void OnCombineInput() // this doesn't run once the floating island gets sent back down - this is the issue 
     {
-        isCombined = false;
-        Uncombine();
-    }
-
-    private void OnCombineInput(InputAction.CallbackContext context)
-    {
-        if (weaveableScript.ID == ID && !weaveableScript.isWoven)
+        if (weaveableScript.ID == ID && !weaveableScript.isWoven && canCombine)
         {
             Debug.Log("OnCombineInput");
+            player.weaveVisualizer.WeaveableSelected(weaveableScript.gameObject);
+
             // respawn variables
             combinedObjectStartPos = weaveableScript.transform.position;
             combinedObjectStartRot = weaveableScript.transform.rotation;
 
             Combine();
             isCombined = true;
+            weaveableScript.isCombined = true;
         }
     }
 
@@ -279,6 +286,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     //********************************************************************
     public void Uncombine()
     {
+        isCombined = false;
         Debug.Log("This is the Uncombine code");
         Destroy(GetComponent<FixedJoint>());
         canCombine = false;
@@ -288,7 +296,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         weaveableScript.rb.freezeRotation = false;
         player.inRelocateMode = false;
         player.inCombineMode = false;
-        Uninteract();
+        player.uninteract = true;
     }
 
     public void Combine()
@@ -299,7 +307,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         if (weaveableScript.canBeRelocated)
         {
             weaveableScript.startFloating = true;
-            weaveableScript.rb.velocity = new Vector3(transform.position.x - weaveableScript.rb.transform.position.x, 0, transform.position.z - weaveableScript.rb.transform.position.z);
+            Snapping();
         }
         else
         {
@@ -307,12 +315,35 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             {
                 onFloatingIsland = true;
                 player.floatingIslandCrystal = true; // for input manager
+
+                wovenFloatingIsland = weaveableScript.gameObject;
             }
 
             snapPoint = weaveableScript.gameObject.transform.GetChild(0).gameObject;
         }
 
         weaveableScript.rb.useGravity = false;
+
     }
     //********************************************************************
+
+    //the snapping method
+    void Snapping()
+    {
+        weaveableScript.nearestDistance = Mathf.Infinity; //this is made the be infinite so that when it calculates the distance it wouldn't cap itself
+        GameObject closestPoint = null;
+        for (int i = 0; i < myTransformPoints.Length; i++)
+        {
+            snapDistance = Vector3.Distance(weaveableScript.transform.position, myTransformPoints[i].transform.position);
+            if (snapDistance < nearestDistance)
+            {
+                closestPoint = myTransformPoints[i];
+                nearestDistance = snapDistance;
+                Debug.Log("this is the distance between points " + snapDistance + ",this is the closestpoint" + myTransformPoints[i]);
+            }
+        }
+        weaveableScript.nearestPoint = closestPoint; //this two variables are stored outside of the for loop so it wouldn't reset and get the latest element
+        weaveableScript.nearestDistance = nearestDistance;
+        weaveableScript.rb.velocity = weaveableScript.nearestPoint.transform.position - weaveableScript.transform.position;
+    }
 }

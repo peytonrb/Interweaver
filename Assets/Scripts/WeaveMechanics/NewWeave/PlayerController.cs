@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
-using TMPro;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
@@ -15,12 +14,12 @@ public class PlayerController : MonoBehaviour
     private bool possessing;
 
     [Header("Character's Camera")]
-    [SerializeField] private Camera mainCamera;
-    public CinemachineVirtualCamera familiarVirtualCam;
+    [CannotBeNullObjectField] [SerializeField] private Camera mainCamera;
     private int vCamRotationState; //State 0 is default
 
     [Header("Pause Menu")]
-    public GameObject pauseMenu;
+    [CannotBeNullObjectField] public GameObject pauseMenu;
+    private PauseScript pauseScript;
 
     [Header("Weave Variables")]
     public float weaveDistance = 20f;
@@ -34,8 +33,9 @@ public class PlayerController : MonoBehaviour
     private Vector2 overflow;
     private Vector2 cursor;
     public bool interactInput;
+    public bool isCurrentlyWeaving; //For input manager to read if currently weaving
     private Vector3 raycastPosition;
-    private WeaveableNew weaveableScript;
+    public WeaveableNew weaveableScript;
 
     //new variables
     public bool inRelocateMode;
@@ -46,21 +46,25 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float distanceBetween;
     public bool floatingIslandCrystal = false; // used by input manager
 
+    [Header("VFX")]
+    [CannotBeNullObjectField] public GameObject weaveSpawn;   //  WILL BE ASSIGNED AT RUNTIME ONCE SCRIPTS ARE FINALIZED
+    public WeaveFXScript weaveVisualizer;
+
     [Header("References")]
-    public GameObject familiar;
+    [CannotBeNullObjectField] public GameObject familiar;
     private FamiliarScript familiarScript;
     private GameMasterScript GM;
 
     [Header("Animation")]
-    public WeaverAnimationHandler weaverAnimationHandler;
+    [CannotBeNullObjectField] public WeaverAnimationHandler weaverAnimationHandler;
 
     [Header("Prototype")]
-    public GameObject relocateMode;
-    public GameObject combineMode;
+    [CannotBeNullObjectField] public GameObject relocateMode;
+    [CannotBeNullObjectField] public GameObject combineMode;
 
     [Header("Cutscene")]
-    public GameObject cutsceneManager;
-    private CutsceneManagerScript cms;
+    [CannotBeNullObjectField] public GameObject[] cutsceneManager;
+    //private CutsceneManagerScript cms;
 
     void Awake()
     {
@@ -72,7 +76,9 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
-        cms = cutsceneManager.GetComponent<CutsceneManagerScript>();
+        pauseScript = pauseMenu.GetComponent<PauseScript>();
+        weaveVisualizer = GetComponent<WeaveFXScript>(); // THIS WILL CAUSE A NULL IF THERE IS NO WEAVEFXSCRIPT ATTACHED TO PLAYER
+        weaveVisualizer.DisableWeave();
         possessing = false;
         vCamRotationState = 0;
         pauseMenu.SetActive(false);
@@ -87,6 +93,7 @@ public class PlayerController : MonoBehaviour
         inCombineMode = false;
         inRelocateMode = false;
         interactInput = false;
+
     }
 
     void Update()
@@ -125,12 +132,15 @@ public class PlayerController : MonoBehaviour
                 // player points towards woven object
                 transform.LookAt(new Vector3(wovenObject.transform.position.x, transform.position.y, wovenObject.transform.position.z));
 
+                // line renderer draws weave
+                weaveVisualizer.DrawWeave(weaveSpawn.transform.position, wovenObject.transform.position);
+
                 distanceBetween = Vector3.Distance(weaveableScript.transform.position, transform.position);
 
                 // if the player moves too far from the object while weaving
                 if (distanceBetween > weaveDistance)
                 {
-                    Uninteract();
+                    uninteract = true;
                 }
             }
 
@@ -138,15 +148,17 @@ public class PlayerController : MonoBehaviour
             if (uninteract)
             {
                 Uninteract();
+                weaveVisualizer.DisableWeave();
             }
 
-            DetectGamepad();
+            //DetectGamepad();
 
             //this is purely for testing the checkpoint function if it's working properly
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
+            //Debug.Log("Using a controller = " + pauseScript.usingController);
         }
 
         // KILL SWITCH
@@ -159,7 +171,6 @@ public class PlayerController : MonoBehaviour
     public void WeaveActivated()
     {
         interactableObject = determineInteractability();
-        Debug.Log(distanceBetween);
 
         if (interactableObject != null)
         {
@@ -168,6 +179,10 @@ public class PlayerController : MonoBehaviour
             if (distanceBetween < weaveDistance)
             {
                 Debug.Log("Object checked!");
+                isCurrentlyWeaving = true;
+
+                // vfx
+                weaveVisualizer.ActivateWeave();
 
                 interactableObject.Interact();
                 inRelocateMode = true;
@@ -220,6 +235,7 @@ public class PlayerController : MonoBehaviour
             uninteract = false;
             inRelocateMode = false;
             inCombineMode = false;
+            isCurrentlyWeaving = false;
         }
     }
 
@@ -244,9 +260,13 @@ public class PlayerController : MonoBehaviour
         if (gamepad != null)
         {
             weaveController();
+            pauseScript.TurnOnUsingController();
+            pauseScript.toggle.isOn = true;
         }
         else
         {
+            pauseScript.TurnOffUsingController();
+            pauseScript.toggle.isOn = false;
             return;
         }
     }
@@ -260,23 +280,15 @@ public class PlayerController : MonoBehaviour
 
             CameraMasterScript.instance.SwitchCameras(vCamRotationState);
 
-            //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
+            //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAM ERMASTERSCRIPT~
         }
 
         if (other.gameObject.tag == "CutsceneTrigger") {
-            cms.StartCutscene();
-        }
-    }
-
-    public void Interact()
-    {
-        Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, 10f); // second number is radius of sphere
-        foreach (var hitCollider in hitColliders)
-        {
-            if (hitCollider.gameObject.tag == "NPC")
-            {
-                hitCollider.gameObject.GetComponent<DialogueTriggers>().triggerDialogue();
-            }
+            //Only the trigger that is a child of a certain cutscene manager will activate a cutscene.
+            foreach (GameObject cm in cutsceneManager) {
+                CutsceneManagerScript cms = cm.GetComponent<CutsceneManagerScript>();
+                cms.StartCutscene();
+            }     
         }
     }
 

@@ -15,6 +15,7 @@ public class CutsceneManagerScript : MonoBehaviour
     private bool isCutscene;
     private bool isTransitioning;
     private int cutscenePhase;
+    private BoxCollider bc;
     [SerializeField] private float transitionSpeed;
     private float lerpval;
     private PlayableDirector director;
@@ -33,6 +34,7 @@ public class CutsceneManagerScript : MonoBehaviour
         bpCanvasGroup = blackPanel.GetComponent<CanvasGroup>();
         playerMovementScript = player.GetComponent<MovementScript>();
         director = GetComponent<PlayableDirector>();
+        bc = GetComponentInChildren<BoxCollider>();
 
         isCutscene = false;
         isTransitioning = false;
@@ -119,10 +121,12 @@ public class CutsceneManagerScript : MonoBehaviour
     }
 
     public void StartCutscene() {
-        isCutscene = true;
-        playerMovementScript.active = false;
-        cutsceneCanvas.SetActive(true);
-        player.SetActive(false);
+        if (bc.isTrigger) {
+            isCutscene = true;
+            playerMovementScript.active = false;
+            cutsceneCanvas.SetActive(true);
+            player.SetActive(false);
+        }
     }
 
     private void BeginTimeline() {
