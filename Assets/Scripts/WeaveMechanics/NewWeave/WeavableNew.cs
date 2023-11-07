@@ -44,7 +44,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     private InputAction combineInput;
 
     [Header("References")]
-    public WeaveableNew weaveableScript; // has to be public for respawn
+    public WeaveableNew weaveableScript; // has to be public for respawn / attempting to make this obsolete
+    public List<WeaveableNew> wovenObjects;
     [SerializeField] private PlayerController player;
 
     private GameObject wovenFloatingIsland;
@@ -157,6 +158,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             {
                 weaveInteraction.OnWeave(collision.gameObject);
             }
+
+            wovenObjects.Add(collision.gameObject.GetComponent<WeaveableNew>());
         }
     }
 
@@ -191,17 +194,14 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         Debug.Log("This is interactable");
         startFloating = true;
         transform.rotation = Quaternion.identity;
+        wovenObjects.Add(this.GetComponent<WeaveableNew>());
 
-        // if objects are combined, vfx needs to show up for both - not efficent :)
+        // if objects are combined, vfx needs to show up for both
         if (this.isCombined)
         {
-            WeaveableNew[] weaveableArray = FindObjectsOfType<WeaveableNew>();
-            foreach (WeaveableNew weaveable in weaveableArray)
+            foreach (WeaveableNew weaveable in wovenObjects)
             {
-                if (weaveable.isCombined)
-                {
-                    player.weaveVisualizer.WeaveableSelected(weaveable.gameObject);
-                }
+                player.weaveVisualizer.WeaveableSelected(weaveable.gameObject);
             }
         }
         else
@@ -229,15 +229,13 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             rb.constraints = RigidbodyConstraints.None;
             player.weaveVisualizer.StopAura(gameObject);
 
-            // disable vfx on all objects - not very efficent rn ik 
-            WeaveableNew[] weaveableArray = FindObjectsOfType<WeaveableNew>();
-            foreach (WeaveableNew weaveable in weaveableArray)
+            // disables vfx on all woven objects
+            foreach (WeaveableNew weaveable in wovenObjects)
             {
-                if (weaveable.isCombined)
-                {
-                    player.weaveVisualizer.StopAura(weaveable.gameObject);
-                }
+                player.weaveVisualizer.StopAura(weaveable.gameObject);
             }
+
+            wovenObjects.Clear();
         }
     }
 
@@ -265,7 +263,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     }
     //********************************************************************
 
-    public void OnCombineInput() // this doesn't run once the floating island gets sent back down - this is the issue 
+    public void OnCombineInput() 
     {
         if (weaveableScript.ID == ID && !weaveableScript.isWoven && canCombine)
         {
@@ -297,6 +295,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         player.inRelocateMode = false;
         player.inCombineMode = false;
         player.uninteract = true;
+
     }
 
     public void Combine()
