@@ -151,7 +151,7 @@ public class PlayerScript : MonoBehaviour
             CameraIndexScript cameraIndexScript = other.GetComponent<CameraIndexScript>();
             vCamRotationState = cameraIndexScript.cameraIndex;
 
-            CameraMasterScript.instance.SwitchCameras(vCamRotationState);
+            CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
 
             //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
         }

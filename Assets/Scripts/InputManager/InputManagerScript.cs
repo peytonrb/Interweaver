@@ -16,7 +16,7 @@ public class InputManagerScript : MonoBehaviour
     public bool switching;
     public GameObject pauseScreen;
     private PauseScript pauseScript;
-    private bool usingController;
+    //private bool usingController;
 
     public static InputManagerScript instance;
 

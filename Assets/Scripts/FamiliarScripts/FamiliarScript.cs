@@ -24,6 +24,7 @@ public class FamiliarScript : MonoBehaviour
     //Character Rotation values
     //**********************************************************
     public GameObject cameraMaster; //Camera manager reference
+    private int vCamRotationState;
     //public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
     //private Vector3 originalVirtualCamRotation; // Original rotation values for the virtual camera
     //private Vector3 originalVirtualCamTransposeOffset; //Virtual Camera original transpose offset values
@@ -153,6 +154,15 @@ public class FamiliarScript : MonoBehaviour
                 }
             }
 
+        }
+        else if (collision.gameObject.tag == "CameraTrigger")
+        {
+            CameraIndexScript cameraIndexScript = collision.GetComponent<CameraIndexScript>();
+            vCamRotationState = cameraIndexScript.cameraIndex;
+
+            CameraMasterScript.instance.SwitchFamiliarCameras(vCamRotationState);
+
+            //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAM ERMASTERSCRIPT~
         }
     }
 

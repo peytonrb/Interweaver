@@ -9,16 +9,19 @@ public class CameraMasterScript : MonoBehaviour
     public static CameraMasterScript instance;
 
     //Weaver Camera + Checkpoints
-    public GameObject[] checkpoints; //Put all checkpoints here.
+    public GameObject[] weaverCheckpoints; //Put all weaver checkpoints here.
     public CinemachineVirtualCamera[] weaverVirtualCams; //For all cameras that are around the weaver
     
-    //Familiar Camera
-    public CinemachineVirtualCamera familiarCamera;
+    //Familiar Camera + Checkpoints
+    public GameObject[] familiarCheckpoints; //Put all familiar checkpoints here.
+    public CinemachineVirtualCamera[] familiarVirtualCams; //For all cameras that are around the familiar
     private Vector3 originalFamiliarCamRotation;
     private Vector3 originalFamiliarCamTransposeOffset;
     
-    private int vcamListLength;
-    public int cameraOnPriority;
+    private int weaverVcamListLength;
+    private int familiarVcamListLength;
+    public int weaverCameraOnPriority;
+    public int familiarCameraOnPriority;
 
     void Awake()
     {
@@ -33,43 +36,43 @@ public class CameraMasterScript : MonoBehaviour
     }
 
     void Start() {
-        originalFamiliarCamTransposeOffset = familiarCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
-        originalFamiliarCamRotation = familiarCamera.transform.eulerAngles;
+        originalFamiliarCamTransposeOffset = familiarVirtualCams[0].GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
+        originalFamiliarCamRotation = familiarVirtualCams[0].transform.eulerAngles;
 
     }
 
     //WEAVER CAMERAS
     //**************************************************************************************
-    public void SwitchCameras(int rotationstate) {
-        vcamListLength = weaverVirtualCams.Length;
-        CameraIndexScript cis = checkpoints[rotationstate].GetComponent<CameraIndexScript>();
+    public void SwitchWeaverCameras(int rotationstate) {
+        weaverVcamListLength = weaverVirtualCams.Length;
+        CameraIndexScript cis = weaverCheckpoints[rotationstate].GetComponent<CameraIndexScript>();
 
-        for (int i = 0; i < vcamListLength; i++) {
+        for (int i = 0; i < weaverVcamListLength; i++) {
             if (rotationstate == i) {
                 Debug.Log(rotationstate);
                 if (cis.triggered == false) {
                     weaverVirtualCams[i].Priority = 0;
-                    if (i < vcamListLength - 1) {
+                    if (i < weaverVcamListLength - 1) {
                         weaverVirtualCams[i+1].Priority = 1;
-                        cameraOnPriority = i+1;
+                        weaverCameraOnPriority = i+1;
                     }
                     else {
                         weaverVirtualCams[0].Priority = 1;
-                        cameraOnPriority = 0;
+                        weaverCameraOnPriority = 0;
                     }
                     
                     cis.triggered = true;
                     
                     if (i == 0) {
-                        ResetIsLoop();
+                        ResetWeaverIsLoop();
                     }
-                    else if (i == vcamListLength - 1) {
-                        ResetCameras();
+                    else if (i == weaverVcamListLength - 1) {
+                        ResetWeaverCameras();
                     }
                 } 
                 else {
                     weaverVirtualCams[i].Priority = 1;
-                    if (i < vcamListLength - 1) {
+                    if (i < weaverVcamListLength - 1) {
                         weaverVirtualCams[i+1].Priority = 0;
                     }
                     else {
@@ -77,13 +80,13 @@ public class CameraMasterScript : MonoBehaviour
                     }
                     
                     cis.triggered = false;
-                    cameraOnPriority = i;
+                    weaverCameraOnPriority = i;
 
                     if (i == 0) {
-                        SetTriggerForIsLoop();
+                        SetTriggerForWeaverIsLoop();
                     }
-                    else if (i == vcamListLength - 1) {
-                        SetTriggersForCameras();
+                    else if (i == weaverVcamListLength - 1) {
+                        SetTriggersForWeaverCameras();
                     }
                 }
             }
@@ -95,18 +98,21 @@ public class CameraMasterScript : MonoBehaviour
        for(int i = 0; i < weaverVirtualCams.Length; i++) {
             weaverVirtualCams[i].Priority = 0;
         }
-        familiarCamera.Priority = 1; 
+        familiarVirtualCams[familiarCameraOnPriority].Priority = 1; 
     }
 
     public void SwitchToWeaverCamera() {
-        weaverVirtualCams[cameraOnPriority].Priority = 1;
-        familiarCamera.Priority = 0;
-        Debug.Log(cameraOnPriority);
+        for(int i = 0; i < familiarVirtualCams.Length; i++) {
+            familiarVirtualCams[i].Priority = 0;
+        }
+        weaverVirtualCams[weaverCameraOnPriority].Priority = 1;
+        
+        Debug.Log(weaverCameraOnPriority);
     }
 
-    public void ResetCameras() {
-        for (int i = 0; i < checkpoints.Length; i++) {
-            CameraIndexScript cis = checkpoints[i].GetComponent<CameraIndexScript>();
+    public void ResetWeaverCameras() {
+        for (int i = 0; i < weaverCheckpoints.Length; i++) {
+            CameraIndexScript cis = weaverCheckpoints[i].GetComponent<CameraIndexScript>();
             if (cis.isLoop == false) {
                 cis.triggered = false;
             }
@@ -114,27 +120,27 @@ public class CameraMasterScript : MonoBehaviour
         }
     }
 
-    public void SetTriggersForCameras() {
-        for (int i = 0; i < checkpoints.Length; i++) {
-            CameraIndexScript cis = checkpoints[i].GetComponent<CameraIndexScript>();
+    public void SetTriggersForWeaverCameras() {
+        for (int i = 0; i < weaverCheckpoints.Length; i++) {
+            CameraIndexScript cis = weaverCheckpoints[i].GetComponent<CameraIndexScript>();
             if (cis.isLoop == false) {
                 cis.triggered = true;
             }
         }
     }
 
-    public void SetTriggerForIsLoop() {
-        for (int i = 0; i < checkpoints.Length; i++) {
-            CameraIndexScript cis = checkpoints[i].GetComponent<CameraIndexScript>();
+    public void SetTriggerForWeaverIsLoop() {
+        for (int i = 0; i < weaverCheckpoints.Length; i++) {
+            CameraIndexScript cis = weaverCheckpoints[i].GetComponent<CameraIndexScript>();
             if (cis.isLoop == true) {
                 cis.triggered = true;
             }
         }
     }
 
-    public void ResetIsLoop() {
-        for (int i = 0; i < checkpoints.Length; i++) {
-            CameraIndexScript cis = checkpoints[i].GetComponent<CameraIndexScript>();
+    public void ResetWeaverIsLoop() {
+        for (int i = 0; i < weaverCheckpoints.Length; i++) {
+            CameraIndexScript cis = weaverCheckpoints[i].GetComponent<CameraIndexScript>();
             if (cis.isLoop == true) {
                 cis.triggered = false;
             }
@@ -145,13 +151,101 @@ public class CameraMasterScript : MonoBehaviour
 
     //FAMILIAR CAMERA
     //**************************************************************************************
+    public void SwitchFamiliarCameras(int rotationstate) {
+        familiarVcamListLength = familiarVirtualCams.Length;
+        CameraIndexScript cis = familiarCheckpoints[rotationstate].GetComponent<CameraIndexScript>();
+
+        for (int i = 0; i < familiarVcamListLength; i++) {
+            if (rotationstate == i) {
+                Debug.Log(rotationstate);
+                if (cis.triggered == false) {
+                    familiarVirtualCams[i].Priority = 0;
+                    if (i < familiarVcamListLength - 1) {
+                        familiarVirtualCams[i+1].Priority = 1;
+                        familiarCameraOnPriority = i+1;
+                    }
+                    else {
+                        familiarVirtualCams[0].Priority = 1;
+                        familiarCameraOnPriority = 0;
+                    }
+                    
+                    cis.triggered = true;
+                    
+                    if (i == 0) {
+                        ResetFamiliarIsLoop();
+                    }
+                    else if (i == familiarVcamListLength - 1) {
+                        ResetFamiliarCameras();
+                    }
+                } 
+                else {
+                    familiarVirtualCams[i].Priority = 1;
+                    if (i < familiarVcamListLength - 1) {
+                        familiarVirtualCams[i+1].Priority = 0;
+                    }
+                    else {
+                        familiarVirtualCams[0].Priority = 0;
+                    }
+                    
+                    cis.triggered = false;
+                    familiarCameraOnPriority = i;
+
+                    if (i == 0) {
+                        SetTriggerForFamiliarIsLoop();
+                    }
+                    else if (i == familiarVcamListLength - 1) {
+                        SetTriggersForFamiliarCameras();
+                    }
+                }
+            }
+        }
+        
+    }
+
+    public void ResetFamiliarCameras() {
+        for (int i = 0; i < familiarCheckpoints.Length; i++) {
+            CameraIndexScript cis = familiarCheckpoints[i].GetComponent<CameraIndexScript>();
+            if (cis.isLoop == false) {
+                cis.triggered = false;
+            }
+            
+        }
+    }
+
+    public void SetTriggersForFamiliarCameras() {
+        for (int i = 0; i < familiarCheckpoints.Length; i++) {
+            CameraIndexScript cis = familiarCheckpoints[i].GetComponent<CameraIndexScript>();
+            if (cis.isLoop == false) {
+                cis.triggered = true;
+            }
+        }
+    }
+
+    public void SetTriggerForFamiliarIsLoop() {
+        for (int i = 0; i < familiarCheckpoints.Length; i++) {
+            CameraIndexScript cis = familiarCheckpoints[i].GetComponent<CameraIndexScript>();
+            if (cis.isLoop == true) {
+                cis.triggered = true;
+            }
+        }
+    }
+
+    public void ResetFamiliarIsLoop() {
+        for (int i = 0; i < familiarCheckpoints.Length; i++) {
+            CameraIndexScript cis = familiarCheckpoints[i].GetComponent<CameraIndexScript>();
+            if (cis.isLoop == true) {
+                cis.triggered = false;
+            }
+        }
+    }
+
     public void StartLeapOfFaith() {
         GameObject familiar = GameObject.FindGameObjectWithTag("Familiar");
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
 
         familiarScript.leapOfFaith = true;
-        familiarCamera.transform.eulerAngles = new Vector3(90f, familiarCamera.transform.eulerAngles.y, familiarCamera.transform.eulerAngles.z);
-        familiarCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, originalFamiliarCamTransposeOffset.y, 0);
+        familiarVirtualCams[familiarCameraOnPriority].transform.eulerAngles = new Vector3(90f, familiarVirtualCams[familiarCameraOnPriority].transform.eulerAngles.y, familiarVirtualCams[familiarCameraOnPriority].transform.eulerAngles.z);
+        familiarVirtualCams[familiarCameraOnPriority].GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, originalFamiliarCamTransposeOffset.y, 0);
     }
 
     public void EndLeapOfFaith() {
@@ -159,8 +253,8 @@ public class CameraMasterScript : MonoBehaviour
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
 
         familiarScript.leapOfFaith = false;
-        familiarCamera.transform.eulerAngles = originalFamiliarCamRotation;
-        familiarCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = originalFamiliarCamTransposeOffset;
+        familiarVirtualCams[familiarCameraOnPriority].transform.eulerAngles = originalFamiliarCamRotation;
+        familiarVirtualCams[familiarCameraOnPriority].GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = originalFamiliarCamTransposeOffset;
     }
 
     //**************************************************************************************
@@ -170,7 +264,7 @@ public class CameraMasterScript : MonoBehaviour
     public void FloatingIslandCameraSwitch(CinemachineVirtualCamera cameraToSwitchTo, FloatingIslandScript floatingIsland)
     {
 
-        familiarCamera.Priority = 0;
+        familiarVirtualCams[familiarCameraOnPriority].Priority = 0;
         cameraToSwitchTo.Priority = 1;
         floatingIsland.cameraswitched = true;
         floatingIsland.RaiseIsland();
@@ -179,7 +273,7 @@ public class CameraMasterScript : MonoBehaviour
     public void FloatingIslandCameraReturn(CinemachineVirtualCamera cameraToSwitchFrom)
     {
 
-        weaverVirtualCams[cameraOnPriority].Priority = 1;
+        weaverVirtualCams[weaverCameraOnPriority].Priority = 1;
         cameraToSwitchFrom.Priority = 0;
 
     }
