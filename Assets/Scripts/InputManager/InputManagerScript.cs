@@ -116,7 +116,12 @@ public class InputManagerScript : MonoBehaviour
 
             if (isGamepad)
             {
-                if (inputVector != Vector2.zero)
+                if (playerScript.isCurrentlyWeaving)
+                {
+                    playerScript.weaveableScript.MovingWeaveController(inputVector);
+                }
+
+            if (inputVector != Vector2.zero)
                 {
                     playerScript.ControllerAimTargetter(inputVector);
                 }
@@ -124,8 +129,6 @@ public class InputManagerScript : MonoBehaviour
             else
             {
                 playerScript.MouseAimTargetter(inputVector);
-            
-                //weaveCursor = inputVector;
             }
 
     }

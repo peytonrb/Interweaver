@@ -20,6 +20,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public bool isWoven;
     public float rotationSpeed = 0.5f;
     public bool canBeRelocated = true;
+    private Vector3 worldPosition;
+    [SerializeField]
+    private GameObject TargetingArrow;
 
     [Header("Snapping feature")]
     public GameObject[] myTransformPoints;
@@ -58,8 +61,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         isCombined = false;
         onFloatingIsland = false;
         originalMat = gameObject.GetComponent<Renderer>().material;
+        TargetingArrow.SetActive(false);
     }
-
 
     void Update()
     {
@@ -75,6 +78,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
         if (isWoven)
         {
+            if (!InputManagerScript.instance.isGamepad)
             MovingWeaveMouse(); // fix drag on object here  
         }
 
@@ -122,10 +126,24 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             {
                 if (canBeRelocated)
                 {
+                    TargetingArrow.SetActive(true);
                     canRotate = true;
                     rb.velocity = new Vector3(raycastHit.point.x - rb.position.x, transform.position.y - rb.position.y, raycastHit.point.z - rb.position.z);
                     rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
                     //this freezes the Y position so that the combined objects won't drag it down because of gravity and it freezes in all rotation so it won't droop because of the gravity  from the objects
+
+                    //Targeting Arrow
+                    TargetingArrow.SetActive(true);
+
+                    RaycastHit hitData;
+                    if (Physics.Raycast(ray, out hitData, 1000))
+                    {
+                        worldPosition = hitData.point;
+                    }
+
+                    Vector3 AdjustedVector = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
+
+                    TargetingArrow.transform.LookAt(AdjustedVector);
                 }
             }
 
@@ -134,6 +152,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 ICombineable combineable = raycastHit.collider.GetComponent<ICombineable>();
                 canRotate = true;
 
+                TargetingArrow.SetActive(false);
+
                 if (combineable != null && !weaveableScript.canCombine)
                 {
                     canCombine = true;
@@ -141,6 +161,69 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 }
             }
         }
+    }
+
+    public void MovingWeaveController(Vector2 lookDir)
+    {
+        
+
+        //Add a raycast coming from directional arrow
+        float targetAngle = Mathf.Atan2(lookDir.x, lookDir.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
+
+        TargetingArrow.transform.rotation = Quaternion.Euler(0, targetAngle, 0);
+
+        Vector3 rayDirection = TargetingArrow.transform.forward;
+
+        // the actual raycast from the player, this can be used for the line render 
+        //      but it takes the raycast origin and the direction of the raycast
+        Ray arrowRay = new Ray(transform.position, rayDirection);
+        RaycastHit hitInfo;
+        if (relocate)
+        {
+            if (canBeRelocated)
+            {
+                
+                canRotate = true;
+
+                Debug.Log(lookDir);
+
+                //change this to send velocity in direction of (RS)
+                if (lookDir.magnitude >= 0.1f)
+                {
+                    rb.velocity = rayDirection * 6;
+                    TargetingArrow.SetActive(true);
+                }
+                else
+                {
+                    
+                    rb.velocity = Vector3.zero;
+                    TargetingArrow.SetActive(false);
+                }
+                
+
+                rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+                //this freezes the Y position so that the combined objects won't drag it down because of gravity and it freezes in all rotation so it won't droop because of the gravity  from the objects
+                
+            }
+        }
+
+        if (inWeaveMode)
+        {
+            if (Physics.Raycast(arrowRay, out hitInfo, 100, layersToHit))
+            { 
+                ICombineable combineable = hitInfo.collider.GetComponent<ICombineable>();
+                canRotate = true;
+
+                TargetingArrow.SetActive(false);
+
+                if (combineable != null && !weaveableScript.canCombine)
+                {
+                    canCombine = true;
+                }
+            }
+        }
+
+
     }
 
     // this will need to be refactored later but for now when the weaveable collides with another 
@@ -228,6 +311,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             canRotate = false;
             rb.constraints = RigidbodyConstraints.None;
             player.weaveVisualizer.StopAura(gameObject);
+            TargetingArrow.SetActive(false);
 
             // disables vfx on all woven objects
             foreach (WeaveableNew weaveable in wovenObjects)
