@@ -290,6 +290,13 @@ public class PlayerController : MonoBehaviour
                 cms.StartCutscene();
             }     
         }
+
+        if (other.gameObject.tag == "LevelTrigger") {
+            LevelTriggerScript levelTriggerScript = other.GetComponent<LevelTriggerScript>();
+            int section = levelTriggerScript.triggerType;
+            
+            LevelManagerScript.instance.TurnOnOffSection(section);
+        }
     }
 
     void OnCollisionEnter(Collision collision)
