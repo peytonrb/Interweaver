@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     public bool isCurrentlyWeaving; //For input manager to read if currently weaving
     private Vector3 raycastPosition;
     public WeaveableNew weaveableScript;
+    [SerializeField]
+    private GameObject TargetingArrow;
 
     //new variables
     public bool inRelocateMode;
@@ -82,6 +84,7 @@ public class PlayerController : MonoBehaviour
         possessing = false;
         vCamRotationState = 0;
         pauseMenu.SetActive(false);
+        TargetingArrow.SetActive(false);
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
@@ -241,17 +244,39 @@ public class PlayerController : MonoBehaviour
 
     private void weaveController()
     {
-        cursor = InputManagerScript.instance.weaveCursor;
-        if (cursor.magnitude <= 0.1f)
-        {
-            return;
-        }
+        //cursor = InputManagerScript.instance.weaveCursor;
+        //currentMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        //warpPosition = currentMousePosition + bias + overflow + sensitivity * Time.deltaTime * cursor;
+        //warpPosition = new Vector2(Mathf.Clamp(warpPosition.x, 0, Screen.width), Mathf.Clamp(warpPosition.y, 0, Screen.height));
+        //overflow = new Vector2(warpPosition.x % 1, warpPosition.y % 1);
+        //Mouse.current.WarpCursorPosition(warpPosition);
+    }
 
-        currentMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-        warpPosition = currentMousePosition + bias + overflow + sensitivity * Time.deltaTime * cursor;
-        warpPosition = new Vector2(Mathf.Clamp(warpPosition.x, 0, Screen.width), Mathf.Clamp(warpPosition.y, 0, Screen.height));
-        overflow = new Vector2(warpPosition.x % 1, warpPosition.y % 1);
-        Mouse.current.WarpCursorPosition(warpPosition);
+    public void ControllerAimTargetter(Vector2 lookDir)
+    {
+        if (lookDir.magnitude >= 0.1f)
+        {
+            TargetingArrow.SetActive(true);
+
+            Quaternion targetRot = Quaternion.LookRotation(transform.forward, lookDir);
+
+            TargetingArrow.transform.rotation = targetRot;
+        }
+        else
+        {
+            TargetingArrow.SetActive(false);
+        }
+    }
+
+    public void MouseAimTargetter(Vector2 lookDir)
+    {
+        TargetingArrow.SetActive(true);
+
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(lookDir.x, lookDir.y, Camera.main.transform.position.z - transform.position.z));
+
+        //Quaternion targetRot = Quaternion.LookRotation(transform.forward, lookDir);
+
+        TargetingArrow.transform.LookAt(mousePos);
     }
 
     void DetectGamepad()

@@ -20,6 +20,7 @@ public class InputManagerScript : MonoBehaviour
 
     public static InputManagerScript instance;
 
+    public bool isGamepad = false;
 
     private PlayerController playerScript;
     private FamiliarScript familiarScript;
@@ -110,7 +111,23 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnWeaverTargeting(InputValue input)
     {
-        weaveCursor = input.Get<Vector2>();
+
+        Vector2 inputVector = input.Get<Vector2>();
+
+            if (isGamepad)
+            {
+                if (inputVector != Vector2.zero)
+                {
+                    playerScript.ControllerAimTargetter(inputVector);
+                }
+            }
+            else
+            {
+                playerScript.MouseAimTargetter(inputVector);
+            
+                //weaveCursor = inputVector;
+            }
+
     }
 
     public void OnWeaverNPCInteractions(InputValue input)
@@ -178,7 +195,7 @@ public class InputManagerScript : MonoBehaviour
 
     #endregion//******************************************************
 
-    //SWITCHING
+    #region//SWITCHING
     //******************************************************
     public void OnPossessFamiliar(InputValue input)
     {
@@ -211,7 +228,7 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
-    //******************************************************
+    #endregion//******************************************************
 
     //PAUSING
     //******************************************************
