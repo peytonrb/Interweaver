@@ -6,7 +6,8 @@ public class GameMasterScript : MonoBehaviour
 {
     private static GameMasterScript instance;
     public int totalLostSouls;
-    public Vector3 LastCheckPointPos;
+    public Vector3 WeaverCheckPointPos;
+    public Vector3 FamiliarCheckPointPos;
 
     void Awake()
     {

@@ -31,10 +31,6 @@ public class FamiliarScript : MonoBehaviour
     //**********************************************************
     private GameMasterScript GM; //This is refrencing the game master script
 
-    [Header ("Floating Island")]
-    public GameObject[] floatingIsland;
-
-
     [Header("Weave Variables")]
     public float WeaveDistance = 12f;
 
@@ -111,9 +107,7 @@ public class FamiliarScript : MonoBehaviour
             else
             {
                 CameraMasterScript.instance.EndLeapOfFaith();
-                characterController.enabled = false;
-                transform.position = GM.LastCheckPointPos;
-                characterController.enabled = true;
+                Death();
             }
         }
     }
@@ -129,17 +123,12 @@ public class FamiliarScript : MonoBehaviour
         else if (collision.gameObject.CompareTag("Kill Area"))
         {
             CameraMasterScript.instance.EndLeapOfFaith();
-            characterController.enabled = false;
-            transform.position = GM.LastCheckPointPos;
-            characterController.enabled = true;
+            Death();
         }
 
         else if (collision.gameObject.CompareTag("Hazard"))
         {
-            Destroy(collision.gameObject);
-            characterController.enabled = false;
-            transform.position = GM.LastCheckPointPos;
-            characterController.enabled = true;
+            Death();
         }
 
         else if (collision.gameObject.CompareTag("Breakable")) // if familiar collides with breakable object while using movement ability
@@ -187,4 +176,12 @@ public class FamiliarScript : MonoBehaviour
         myTurn = true;
         StopCoroutine(ForcedDelay());
     }
+
+    public void Death()
+    {
+        characterController.enabled = false;
+        transform.position = GM.FamiliarCheckPointPos;
+        characterController.enabled = true;
+    }
+
 }

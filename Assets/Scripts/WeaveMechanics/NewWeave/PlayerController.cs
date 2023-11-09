@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
-        transform.position = GM.LastCheckPointPos;
+        transform.position = GM.WeaverCheckPointPos;
         characterController.enabled = true;
         Debug.Log("Active Current Position: " + transform.position);
 
@@ -329,6 +329,11 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(familiarScript.ForcedDelay());
             }
         }
+    }
+
+    public void Death()
+    {
+        transform.position = GM.WeaverCheckPointPos;
     }
 
     public void Pausing()

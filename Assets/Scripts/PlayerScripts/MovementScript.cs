@@ -253,7 +253,15 @@ public class MovementScript : MonoBehaviour
 
     public void GoToCheckPoint()
     {
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        Debug.Log("get good");
+        if (TryGetComponent<PlayerController>(out PlayerController playerCon))
+        {
+            playerCon.Death();
+        }
+
+        if (TryGetComponent<FamiliarScript>(out FamiliarScript familiarScript))
+        {
+            familiarScript.Death();
+        }
+        
     }
 }

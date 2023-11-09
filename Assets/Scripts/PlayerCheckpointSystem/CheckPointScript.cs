@@ -13,10 +13,13 @@ public class CheckPointScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("Familiar"))
+        if (other.CompareTag("Player"))
         {
-            GM.LastCheckPointPos = transform.position;
-            Debug.Log("Active Checkpoint Position: " + GM.LastCheckPointPos);
+            GM.WeaverCheckPointPos = transform.position;
+        }
+        else if (other.CompareTag("Familiar"))
+        {
+            GM.FamiliarCheckPointPos = transform.position;
         }
     }
 }
