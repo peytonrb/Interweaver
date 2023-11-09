@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class PlayerController : MonoBehaviour
 {
@@ -36,6 +37,9 @@ public class PlayerController : MonoBehaviour
     public bool isCurrentlyWeaving; //For input manager to read if currently weaving
     private Vector3 raycastPosition;
     public WeaveableNew weaveableScript;
+    [SerializeField]
+    private GameObject TargetingArrow;
+    private Vector3 worldPosition;
 
     //new variables
     public bool inRelocateMode;
@@ -82,6 +86,7 @@ public class PlayerController : MonoBehaviour
         possessing = false;
         vCamRotationState = 0;
         pauseMenu.SetActive(false);
+        TargetingArrow.SetActive(false);
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
@@ -199,18 +204,18 @@ public class PlayerController : MonoBehaviour
     private IInteractable determineInteractability()
     {
         playerPosition = new Vector3(transform.position.x, transform.position.y + raycastPosition.y, transform.position.z);
-        Vector3 rayDirection = transform.forward;
+        Vector3 rayDirection = TargetingArrow.transform.forward;
 
         // the actual raycast from the player, this can be used for the line render 
         //      but it takes the raycast origin and the direction of the raycast
         Ray rayPlayer = new Ray(playerPosition, rayDirection);
 
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        //Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
         Debug.DrawRay(rayPlayer.origin, rayPlayer.direction * weaveDistance, Color.red);
 
         // checks for a Weavable object within distance of Ray
-        if (Physics.Raycast(ray, out hitInfo, 100, weaveObject) || Physics.Raycast(rayPlayer, out hitInfo, weaveDistance, weaveObject))
+        if (Physics.Raycast(rayPlayer, out hitInfo, 100, weaveObject) || Physics.Raycast(rayPlayer, out hitInfo, weaveDistance, weaveObject))
         {
             Debug.Log("Raycast hit");
             
@@ -236,22 +241,46 @@ public class PlayerController : MonoBehaviour
             inRelocateMode = false;
             inCombineMode = false;
             isCurrentlyWeaving = false;
+        }        
+    }
+    public void ControllerAimTargetter(Vector2 lookDir)
+    {
+        if (lookDir.magnitude >= 0.1f)
+        {
+            float targetAngle = Mathf.Atan2(lookDir.x, lookDir.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
+
+            TargetingArrow.transform.rotation = Quaternion.Euler(0, targetAngle, 0);
+
+            if (isCurrentlyWeaving)
+            {              
+                TargetingArrow.SetActive(false);
+            }
+            else
+            {
+                TargetingArrow.SetActive(true);
+            }
+        }
+        else
+        {
+            TargetingArrow.SetActive(false);
         }
     }
 
-    private void weaveController()
+    public void MouseAimTargetter(Vector2 lookDir)
     {
-        cursor = InputManagerScript.instance.weaveCursor;
-        if (cursor.magnitude <= 0.1f)
+        
+        TargetingArrow.SetActive(true);
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitData;
+        if (Physics.Raycast(ray, out hitData, 1000))
         {
-            return;
+            worldPosition = hitData.point;
         }
 
-        currentMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-        warpPosition = currentMousePosition + bias + overflow + sensitivity * Time.deltaTime * cursor;
-        warpPosition = new Vector2(Mathf.Clamp(warpPosition.x, 0, Screen.width), Mathf.Clamp(warpPosition.y, 0, Screen.height));
-        overflow = new Vector2(warpPosition.x % 1, warpPosition.y % 1);
-        Mouse.current.WarpCursorPosition(warpPosition);
+        Vector3 AdjustedVector = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
+
+        TargetingArrow.transform.LookAt(AdjustedVector);
     }
 
     void DetectGamepad()
@@ -259,7 +288,6 @@ public class PlayerController : MonoBehaviour
         var gamepad = Gamepad.current;
         if (gamepad != null)
         {
-            weaveController();
             pauseScript.TurnOnUsingController();
             pauseScript.toggle.isOn = true;
         }
