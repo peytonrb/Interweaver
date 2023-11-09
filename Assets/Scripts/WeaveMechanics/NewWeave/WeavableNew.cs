@@ -39,8 +39,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     [Header("Respawn")] // accessed by RespawnController
     public bool isCombined;
-    public Vector3 combinedObjectStartPos;
-    public Quaternion combinedObjectStartRot;
+    public Vector3 startPos;
+    public Quaternion startRot;
 
     [Header("Inputs")]
     [CannotBeNullObjectField] public InputActionAsset inputs;
@@ -61,7 +61,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         isCombined = false;
         onFloatingIsland = false;
         originalMat = gameObject.GetComponent<Renderer>().material;
-        TargetingArrow.SetActive(false);
+        if (canBeRelocated)
+        {
+            TargetingArrow.SetActive(false);
+        }
+        
     }
 
     void Update()
@@ -353,10 +357,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         {
             Debug.Log("OnCombineInput");
             player.weaveVisualizer.WeaveableSelected(weaveableScript.gameObject);
-
-            // respawn variables
-            combinedObjectStartPos = weaveableScript.transform.position;
-            combinedObjectStartRot = weaveableScript.transform.rotation;
 
             Combine();
             isCombined = true;

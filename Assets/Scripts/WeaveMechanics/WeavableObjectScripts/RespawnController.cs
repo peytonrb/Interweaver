@@ -19,9 +19,9 @@ public class RespawnController : MonoBehaviour
                 Debug.Log("object: " + weaveableObject + " count: " + weaveableObject.wovenObjects.Count);
                 for (int i = 0; i < weaveableObject.wovenObjects.Count; i++)
                 {
-                    startPositions.Add(weaveableObject.wovenObjects[i].spawnPos);
+                    startPositions.Add(weaveableObject.wovenObjects[i].startPos);
                     Debug.Log("start pos: " + startPositions[i]);
-                    startRotations.Add(weaveableObject.wovenObjects[i].spawnRotation);
+                    startRotations.Add(weaveableObject.wovenObjects[i].startRot);
                     Debug.Log("start rot: " + startRotations[i]);
                     respawnObjects.Add(weaveableObject.wovenObjects[i].gameObject);
                     Debug.Log("respawn objects: " + respawnObjects[i]);
@@ -30,8 +30,8 @@ public class RespawnController : MonoBehaviour
             else
             {
                 // list will have max 1 element at this point
-                startPositions.Add(weaveableObject.spawnPos);
-                startRotations.Add(weaveableObject.spawnRotation);
+                startPositions.Add(weaveableObject.startPos);
+                startRotations.Add(weaveableObject.startRot);
                 respawnObjects.Add(weaveableObject.gameObject);
             }
         }

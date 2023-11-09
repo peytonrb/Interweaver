@@ -283,22 +283,6 @@ public class PlayerController : MonoBehaviour
         TargetingArrow.transform.LookAt(AdjustedVector);
     }
 
-    void DetectGamepad()
-    {
-        var gamepad = Gamepad.current;
-        if (gamepad != null)
-        {
-            pauseScript.TurnOnUsingController();
-            pauseScript.toggle.isOn = true;
-        }
-        else
-        {
-            pauseScript.TurnOffUsingController();
-            pauseScript.toggle.isOn = false;
-            return;
-        }
-    }
-
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "CameraTrigger")

@@ -36,7 +36,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &967863317956628430
 MeshFilter:
@@ -204,10 +204,16 @@ MonoBehaviour:
   canRotate: 0
   isWoven: 0
   rotationSpeed: 0.5
-  canBeRelocated: 1
+  canBeRelocated: 0
+  TargetingArrow: {fileID: 0}
+  myTransformPoints: []
+  nearestPoint: {fileID: 0}
+  nearestDistance: 0
+  originalMat: {fileID: 0}
   isCombined: 0
-  combinedObjectStartPos: {x: 0, y: 0, z: 0}
-  combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
+  startPos: {x: 0, y: 0, z: 0}
+  startRot: {x: 0, y: 0, z: 0, w: 0}
   inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
   weaveableScript: {fileID: 0}
+  wovenObjects: []
   player: {fileID: 0}
