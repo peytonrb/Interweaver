@@ -23,6 +23,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     private Vector3 worldPosition;
     [SerializeField]
     private GameObject TargetingArrow;
+    private bool isRotating = false;
 
     [Header("Snapping feature")]
     public GameObject[] myTransformPoints;
@@ -83,7 +84,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         if (isWoven)
         {
             if (!InputManagerScript.instance.isGamepad)
-            MovingWeaveMouse(); // fix drag on object here  
+                MovingWeaveMouse(); // fix drag on object here  
         }
 
         if (onFloatingIsland && gameObject.tag == "Breakable")
@@ -252,7 +253,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     public void CallRotate(Vector3 dir, float angle)
     {
-        StartCoroutine(Rotate(dir, angle));
+        if (!isRotating)
+        {
+            isRotating = true;
+            StartCoroutine(Rotate(dir, angle));
+        }
     }
 
     IEnumerator Rotate(Vector3 axis, float angle)
@@ -270,6 +275,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         }
 
         transform.rotation = to;
+        isRotating = false;
     }
     //**********************************************************************************
 
