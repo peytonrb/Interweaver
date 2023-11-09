@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
@@ -45,6 +46,10 @@ public class InputManagerScript : MonoBehaviour
         // Debug.Log(playerInput.currentControlScheme);
     }
 
+    public void Update()
+    {
+        Debug.Log(playerInput.currentControlScheme);
+    }
     #region//WEAVER ABILITIES
     //******************************************************
 
@@ -236,10 +241,9 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnPause(InputValue input)
     {
-        PlayerController playerController = player.GetComponent<PlayerController>();
         if (input.isPressed)
         {
-            playerController.Pausing();
+            playerScript.Pausing();
         }
     }
     //******************************************************

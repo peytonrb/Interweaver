@@ -8,7 +8,12 @@ using UnityEngine.UI;
 public class PauseScript : MonoBehaviour
 {   
     public static bool usingController = false;
+    private Toggle toggle;
 
+    public void Start()
+    {
+        toggle = GetComponentInChildren<Toggle>();
+    }
     //Resumes the game
     public void Resume() {
         Time.timeScale = 1;
@@ -18,35 +23,27 @@ public class PauseScript : MonoBehaviour
     //Switches between using controller and using keyboard
     public void ToggleUsingController(bool isController)
     {
-
-    }
-
-    public void UsingController() {
-        if (toggle.isOn == true) {
-            InputManagerScript ips = InputManagerScript.instance.GetComponent<InputManagerScript>();
-            ips.playerInput.SwitchCurrentControlScheme(Gamepad.current);
-            usingController = true;
+        if (isController)
+        {
+            if (Gamepad.current == null)
+            {
+                toggle.isOn = false;
+            }
+            else
+            {
+                InputManagerScript.instance.isGamepad = true;
+            }
         }
-        else {
-            InputManagerScript ips = InputManagerScript.instance.GetComponent<InputManagerScript>();
-            ips.playerInput.SwitchCurrentControlScheme(Keyboard.current);
-            usingController = false;
+        else
+        {
+            if (Keyboard.current == null)
+            {
+                toggle.isOn = true;
+            }
+            else
+            {
+                InputManagerScript.instance.isGamepad = false;
+            }
         }
-    }
-
-    public void TurnOnUsingController() {
-        InputManagerScript ips = InputManagerScript.instance.GetComponent<InputManagerScript>();
-        ips.playerInput.SwitchCurrentControlScheme(Gamepad.current);
-        usingController = true;
-    }
-
-    public void TurnOffUsingController() {
-        InputManagerScript ips = InputManagerScript.instance.GetComponent<InputManagerScript>();
-        ips.playerInput.SwitchCurrentControlScheme(Keyboard.current);
-        usingController = false;
-    }
-
-    public bool GetUsingController() {
-        return usingController;
     }
 }
