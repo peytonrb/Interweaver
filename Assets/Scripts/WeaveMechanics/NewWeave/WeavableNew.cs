@@ -24,7 +24,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [Header("Snapping feature")]
     public GameObject[] myTransformPoints;
     public GameObject nearestPoint;
-    private float snapDistance;
+    private float distance;
+    [SerializeField] private float snapDistance;
     [SerializeField] private float nearestDistance;
 
     [Header("Floating Islands + Crystals")]
@@ -336,16 +337,21 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         GameObject closestPoint = null;
         for (int i = 0; i < myTransformPoints.Length; i++)
         {
-            snapDistance = Vector3.Distance(weaveableScript.transform.position, myTransformPoints[i].transform.position);
-            if (snapDistance < nearestDistance)
+            distance = Vector3.Distance(weaveableScript.transform.position, myTransformPoints[i].transform.position);
+            if (distance < nearestDistance)
             {
                 closestPoint = myTransformPoints[i];
-                nearestDistance = snapDistance;
-                Debug.Log("this is the distance between points " + snapDistance + ",this is the closestpoint" + myTransformPoints[i]);
+                nearestDistance = distance;
+                Debug.Log("this is the distance between points " + distance + ",this is the closestpoint" + myTransformPoints[i]);
             }
         }
         weaveableScript.nearestPoint = closestPoint; //this two variables are stored outside of the for loop so it wouldn't reset and get the latest element
         weaveableScript.nearestDistance = nearestDistance;
         weaveableScript.rb.velocity = weaveableScript.nearestPoint.transform.position - weaveableScript.transform.position;
+
+        if (weaveableScript.nearestDistance < weaveableScript.snapDistance)
+        {
+            weaveableScript.rb.transform.position = new Vector3(weaveableScript.nearestPoint.transform.position.x, weaveableScript.nearestPoint.transform.position.y - weaveableScript.transform.position.y, weaveableScript.nearestPoint.transform.position.z); ;
+        }
     }
 }
