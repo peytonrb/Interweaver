@@ -49,12 +49,14 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public List<WeaveableNew> wovenObjects;
     [SerializeField] private PlayerController player;
     private GameObject wovenFloatingIsland;
+    private DayblockScript dayblockScript;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         weaveableScript = gameObject.GetComponent<WeaveableNew>();
+        dayblockScript = GetComponent<DayblockScript>();
         isCombined = false;
         onFloatingIsland = false;
         originalMat = gameObject.GetComponent<Renderer>().material;
