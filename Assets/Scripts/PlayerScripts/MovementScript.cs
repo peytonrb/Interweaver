@@ -128,8 +128,8 @@ public class MovementScript : MonoBehaviour
             {
                 if (fallFile && !isPlayingFallSound)
                 {
-                  //  AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, fallFile, 1f); AUDIO WILL BE LOOKED AT LATER HERE
-                   // isPlayingFallSound = true;
+                    AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, fallFile, 1f); //AUDIO WILL BE LOOKED AT LATER HERE
+                    isPlayingFallSound = true;
                 }
                 
                 velocity.y += gravity * Time.deltaTime;
@@ -139,8 +139,8 @@ public class MovementScript : MonoBehaviour
             else
             {
                 //weaverAnimationHandler.ToggleFallAnim(false);
-              //  AudioManager.instance.StopSound(AudioManagerChannels.SoundEffectChannel);
-             //   isPlayingFallSound = false;
+                AudioManager.instance.StopSound(AudioManagerChannels.SoundEffectChannel);
+                isPlayingFallSound = false;
                 velocity.y = -2f;
             }
             velocity.y = Mathf.Clamp(velocity.y, terminalVelocity, 200f);

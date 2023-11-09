@@ -9,7 +9,7 @@ public class OwlDiveScript : MonoBehaviour
     private CharacterController characterController; //references the character controller component
     private MovementScript movementScript; // reference for the movement script component
     [Header("Inputs")]
-    //public bool divePressed; // defines the initial press of the dive
+    public bool divePressed; // defines the initial press of the dive
 
     public AudioClip diveFile;
 
@@ -40,7 +40,7 @@ public class OwlDiveScript : MonoBehaviour
     public void DivePressed()
     {
         if (!characterController.isGrounded) {
-            //AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, diveFile, 1f);
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, diveFile, 1f);
             movementScript.ChangeGravity(diveAcceleration);
             movementScript.ChangeTerminalVelocity(terminalVelocity);
             movementScript.ChangeAerialAcceleration(aerialAcceleration);
@@ -88,7 +88,7 @@ public class OwlDiveScript : MonoBehaviour
     private void EndDive() // returns values to their original forms
     {
         isDiving = false;
-        //AudioManager.instance.StopSound(AudioManagerChannels.SoundEffectChannel);
+        AudioManager.instance.StopSound(AudioManagerChannels.SoundEffectChannel);
         movementScript.ResetGravity();
         movementScript.ResetTerminalVelocity();
         movementScript.ResetAerialAcceleration();
