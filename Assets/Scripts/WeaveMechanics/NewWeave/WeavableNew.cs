@@ -36,8 +36,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     [Header("Respawn")] // accessed by RespawnController
     public bool isCombined;
-    public Vector3 combinedObjectStartPos;
-    public Quaternion combinedObjectStartRot;
+    public Vector3 spawnPos;
+    public Quaternion spawnRotation;
 
     [Header("Inputs")]
     [CannotBeNullObjectField] public InputActionAsset inputs;
@@ -47,7 +47,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public WeaveableNew weaveableScript; // has to be public for respawn / attempting to make this obsolete
     public List<WeaveableNew> wovenObjects;
     [SerializeField] private PlayerController player;
-
     private GameObject wovenFloatingIsland;
 
     void Start()
@@ -58,8 +57,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         isCombined = false;
         onFloatingIsland = false;
         originalMat = gameObject.GetComponent<Renderer>().material;
+        spawnPos = transform.position;
+        spawnRotation = transform.rotation;
     }
-
 
     void Update()
     {
@@ -194,7 +194,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         Debug.Log("This is interactable");
         startFloating = true;
         transform.rotation = Quaternion.identity;
-        wovenObjects.Add(this.GetComponent<WeaveableNew>());
+
+        if (!isCombined)
+        {
+            wovenObjects.Add(this.GetComponent<WeaveableNew>());
+        }
 
         // if objects are combined, vfx needs to show up for both
         if (this.isCombined)
@@ -234,8 +238,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             {
                 player.weaveVisualizer.StopAura(weaveable.gameObject);
             }
-
-            wovenObjects.Clear();
         }
     }
 
@@ -263,16 +265,12 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     }
     //********************************************************************
 
-    public void OnCombineInput() 
+    public void OnCombineInput()
     {
         if (weaveableScript.ID == ID && !weaveableScript.isWoven && canCombine)
         {
             Debug.Log("OnCombineInput");
             player.weaveVisualizer.WeaveableSelected(weaveableScript.gameObject);
-
-            // respawn variables
-            combinedObjectStartPos = weaveableScript.transform.position;
-            combinedObjectStartRot = weaveableScript.transform.rotation;
 
             Combine();
             isCombined = true;
@@ -289,13 +287,18 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         Destroy(GetComponent<FixedJoint>());
         canCombine = false;
         canRotate = false;
-        weaveableScript.rb.useGravity = true;
-        weaveableScript.rb.constraints = RigidbodyConstraints.None;
-        weaveableScript.rb.freezeRotation = false;
+
+        if (weaveableScript != null)
+        {
+            weaveableScript.rb.useGravity = true;
+            weaveableScript.rb.constraints = RigidbodyConstraints.None;
+            weaveableScript.rb.freezeRotation = false;
+        }
+
         player.inRelocateMode = false;
         player.inCombineMode = false;
         player.uninteract = true;
-
+        wovenObjects.Clear();
     }
 
     public void Combine()

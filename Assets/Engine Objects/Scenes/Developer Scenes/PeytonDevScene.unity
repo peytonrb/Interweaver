@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -657,10 +657,11 @@ MonoBehaviour:
   nearestDistance: 50
   originalMat: {fileID: 0}
   isCombined: 0
-  combinedObjectStartPos: {x: 0, y: 0, z: 0}
-  combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
+  spawnPos: {x: 0, y: 0, z: 0}
+  spawnRotation: {x: 0, y: 0, z: 0, w: 0}
   inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
   weaveableScript: {fileID: 0}
+  wovenObjects: []
   player: {fileID: 0}
 --- !u!65 &145186131
 BoxCollider:
@@ -2010,10 +2011,11 @@ MonoBehaviour:
   nearestDistance: 0
   originalMat: {fileID: 0}
   isCombined: 0
-  combinedObjectStartPos: {x: 0, y: 0, z: 0}
-  combinedObjectStartRot: {x: 0, y: 0, z: 0, w: 0}
+  spawnPos: {x: 0, y: 0, z: 0}
+  spawnRotation: {x: 0, y: 0, z: 0, w: 0}
   inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
   weaveableScript: {fileID: 0}
+  wovenObjects: []
   player: {fileID: 0}
 --- !u!65 &409736322
 BoxCollider:
@@ -4052,7 +4054,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1083616477}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.16, y: -68.9, z: -0.1}
+  m_LocalPosition: {x: -10.16, y: -30.2, z: -0.1}
   m_LocalScale: {x: 554.10583, y: 4.7646885, z: 364.93707}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4071,10 +4073,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06fdb565b808d0345aae8ffb62659097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPosition: {x: 0, y: 0, z: 0}
-  startRotation: {x: 0, y: 0, z: 0, w: 0}
-  respawnObject: {fileID: 0}
-  weavableObject: {fileID: 0}
+  startPositions: []
+  startRotations: []
+  respawnObjects: []
 --- !u!4 &1101176065 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}

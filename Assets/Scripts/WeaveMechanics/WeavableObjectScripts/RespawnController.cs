@@ -4,17 +4,41 @@ using UnityEngine;
 
 public class RespawnController : MonoBehaviour
 {
-    [SerializeField] private Vector3 startPosition;
-    [SerializeField] private Quaternion startRotation;
-    [SerializeField] private GameObject respawnObject;
-    [SerializeField] private WeaveableNew weavableObject;
+    [SerializeField] private List<Vector3> startPositions;
+    [SerializeField] private List<Quaternion> startRotations;
+    [SerializeField] private List<GameObject> respawnObjects;
 
     private void OnTriggerEnter(Collider collider)
     {
-        startPosition = collider.gameObject.GetComponent<RespawnableObject>().spawnPos;
-        startRotation = collider.gameObject.GetComponent<RespawnableObject>().spawnRotation;
-        respawnObject = collider.gameObject;
-        weavableObject = respawnObject.GetComponent<WeaveableNew>();
+        if (collider.gameObject.GetComponent<WeaveableNew>() != null)
+        {
+            WeaveableNew weaveableObject = collider.gameObject.GetComponent<WeaveableNew>();
+
+            if (weaveableObject.isCombined)
+            {
+                Debug.Log("object: " + weaveableObject + " count: " + weaveableObject.wovenObjects.Count);
+                for (int i = 0; i < weaveableObject.wovenObjects.Count; i++)
+                {
+                    startPositions.Add(weaveableObject.wovenObjects[i].spawnPos);
+                    Debug.Log("start pos: " + startPositions[i]);
+                    startRotations.Add(weaveableObject.wovenObjects[i].spawnRotation);
+                    Debug.Log("start rot: " + startRotations[i]);
+                    respawnObjects.Add(weaveableObject.wovenObjects[i].gameObject);
+                    Debug.Log("respawn objects: " + respawnObjects[i]);
+                }
+            }
+            else
+            {
+                // list will have max 1 element at this point
+                startPositions.Add(weaveableObject.spawnPos);
+                startRotations.Add(weaveableObject.spawnRotation);
+                respawnObjects.Add(weaveableObject.gameObject);
+            }
+        }
+        else
+        {
+            // other objects not set up to respawn yet
+        }
 
         RespawnObject();
     }
@@ -23,25 +47,26 @@ public class RespawnController : MonoBehaviour
     public void RespawnObject()
     {
         // if respawn isn't caused by a collision
-        if (startPosition == null || startRotation == null || respawnObject == null)
+        if (startPositions == null || startRotations == null || respawnObjects == null)
         {
             InitializeObjects();
         }
 
-        if (!weavableObject.isCombined)
+        for (int i = 0; i < respawnObjects.Count; i++)
         {
-            respawnObject.transform.position = startPosition;
-            respawnObject.transform.rotation = startRotation;
-        }
-        else
-        {
-            weavableObject.Uncombine();
-            weavableObject.weaveableScript.gameObject.transform.position = weavableObject.combinedObjectStartPos;
-            weavableObject.weaveableScript.gameObject.transform.rotation = weavableObject.combinedObjectStartRot;
+            if (respawnObjects[i].GetComponent<WeaveableNew>() != null)
+            {
+                respawnObjects[i].GetComponent<WeaveableNew>().Uncombine();
+            }
 
-            respawnObject.transform.position = startPosition;
-            respawnObject.transform.rotation = startRotation;
+            respawnObjects[i].transform.position = startPositions[i];
+            respawnObjects[i].transform.rotation = startRotations[i];
         }
+
+        // clear all references once objects have been respawned
+        startPositions.Clear();
+        startRotations.Clear();
+        respawnObjects.Clear();
     }
 
     // will commonnly be called on puzzles that require a full reset if failed
