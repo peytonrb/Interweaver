@@ -237,18 +237,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         weaveableScript = GetComponent<WeaveableNew>();
 
-        if (collision.gameObject.GetComponent<Rigidbody>() != null && canCombine && weaveableScript.ID == ID)
-        {
-            var fixedJoint = gameObject.AddComponent<FixedJoint>();
-            fixedJoint.connectedBody = collision.rigidbody;
-            collision.rigidbody.useGravity = true;
-
-            if (weaveInteraction != null)
-            {
-                weaveInteraction.OnWeave(collision.gameObject);
-            }
-        }
-
         // for objects that are being connected that are NOT the parent
         if (collision.gameObject.GetComponent<Rigidbody>() != null && canCombine && !isParent && weaveableScript.ID == ID)
         {
@@ -265,6 +253,21 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             if (parentWeaveable != null && !parentWeaveable.wovenObjects.Contains(this.GetComponent<WeaveableNew>()))
             {
                 parentWeaveable.wovenObjects.Add(this.GetComponent<WeaveableNew>());
+            }
+        }
+
+        if (collision.gameObject.GetComponent<Rigidbody>() != null && canCombine && weaveableScript.ID == ID)
+        {
+            if (collision.gameObject != parentWeaveable.gameObject)
+            {
+                var fixedJoint = parentWeaveable.gameObject.AddComponent<FixedJoint>();
+                fixedJoint.connectedBody = collision.rigidbody;
+                collision.rigidbody.useGravity = true;
+            }
+
+            if (weaveInteraction != null)
+            {
+                weaveInteraction.OnWeave(collision.gameObject);
             }
         }
     }
@@ -404,7 +407,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         {
             Destroy(joint);
         }
-        
+
         canRotate = false;
         weaveableScript.rb.useGravity = true;
         weaveableScript.rb.constraints = RigidbodyConstraints.None;
