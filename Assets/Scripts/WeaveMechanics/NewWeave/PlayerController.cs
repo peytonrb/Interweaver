@@ -347,10 +347,4 @@ public class PlayerController : MonoBehaviour
     {
         transform.position = GM.WeaverCheckPointPos;
     }
-
-    public void Pausing()
-    {
-        pauseMenu.SetActive(true);
-        Time.timeScale = 0;
-    }
 }
