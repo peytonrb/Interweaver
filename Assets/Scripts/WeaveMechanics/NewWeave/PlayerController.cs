@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
         pauseScript = pauseMenu.GetComponent<PauseScript>();
-        weaveVisualizer = GetComponent<WeaveFXScript>(); // THIS WILL CAUSE A NULL IF THERE IS NO WEAVEFXSCRIPT ATTACHED TO PLAYER
+        weaveVisualizer = GetComponent<WeaveFXScript>();
         weaveVisualizer.DisableWeave();
         possessing = false;
         vCamRotationState = 0;
