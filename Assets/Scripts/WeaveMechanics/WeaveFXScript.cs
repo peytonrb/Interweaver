@@ -30,7 +30,7 @@ public class WeaveFXScript : MonoBehaviour
         weaveRenderer.positionCount = 2;
         weaveRenderer.SetPosition(0, playerPos);
         weaveRenderer.SetPosition(1, weaveablePos);
-        postProcessingVolume.profile = defaultProfile;
+        // postProcessingVolume.profile = defaultProfile;
     }
 
     public void DisableWeave()
@@ -66,7 +66,7 @@ public class WeaveFXScript : MonoBehaviour
 
     public void StopAura(GameObject weaveable)
     {
-        postProcessingVolume.profile = weavingProfile;
+        // postProcessingVolume.profile = weavingProfile;
 
         if (weaveable.gameObject.tag != "FloatingIsland")
         {
