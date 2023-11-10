@@ -247,11 +247,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             {
                 weaveInteraction.OnWeave(collision.gameObject);
             }
-
-            if (!wovenObjects.Contains(collision.gameObject.GetComponent<WeaveableNew>()))
-            {
-                wovenObjects.Add(collision.gameObject.GetComponent<WeaveableNew>());
-            }
         }
 
         // for objects that are being connected that are NOT the parent
@@ -267,7 +262,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 }
             }
 
-            if (!parentWeaveable.wovenObjects.Contains(this.GetComponent<WeaveableNew>()))
+            if (parentWeaveable != null && !parentWeaveable.wovenObjects.Contains(this.GetComponent<WeaveableNew>()))
             {
                 parentWeaveable.wovenObjects.Add(this.GetComponent<WeaveableNew>());
             }
@@ -403,7 +398,13 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         weaveableScript = this.GetComponent<WeaveableNew>(); // hardcoded to prevent nulls
         isCombined = false;
         Debug.Log("This is the Uncombine code");
-        Destroy(GetComponent<FixedJoint>());
+
+        FixedJoint[] joints = GetComponents<FixedJoint>();
+        foreach (FixedJoint joint in joints)
+        {
+            Destroy(joint);
+        }
+        
         canRotate = false;
         weaveableScript.rb.useGravity = true;
         weaveableScript.rb.constraints = RigidbodyConstraints.None;
@@ -411,6 +412,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         player.inRelocateMode = false;
         player.inCombineMode = false;
         player.uninteract = true;
+
         wovenObjects.Clear();
     }
 
