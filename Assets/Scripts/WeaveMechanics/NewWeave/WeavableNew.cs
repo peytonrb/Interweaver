@@ -481,7 +481,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
         if (nearestDistance < weaveableScript.snapDistance)
         {
-            weaveableScript.rb.transform.position =  weaveableScript.myNearestPoint.transform.position; //math is probably wrong
+            weaveableScript.rb.transform.position = weaveableScript.nearestPoint.transform.position - 
+                                                    (weaveableScript.nearestPoint.transform.position - 
+                                                     weaveableScript.myNearestPoint.transform.position).normalized;
         }
     }
 }
