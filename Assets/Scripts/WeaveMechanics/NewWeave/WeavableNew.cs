@@ -13,7 +13,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [SerializeField] public WeaveInteraction weaveInteraction;
     public int ID;
     public bool canRotate;
-    public bool canCombine;
+    public bool canCombine = true;
     private bool startFloating;
     private bool relocate;
     private bool inWeaveMode;
