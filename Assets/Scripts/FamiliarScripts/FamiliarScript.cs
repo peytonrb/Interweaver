@@ -122,6 +122,7 @@ public class FamiliarScript : MonoBehaviour
 
         else if (collision.gameObject.CompareTag("Kill Area"))
         {
+            Debug.Log("Death");
             CameraMasterScript.instance.EndLeapOfFaith();
             Death();
         }
