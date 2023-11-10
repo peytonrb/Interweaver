@@ -256,9 +256,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             }
         }
 
-        if (collision.gameObject.GetComponent<Rigidbody>() != null && canCombine && weaveableScript.ID == ID)
+        // both parent and non parent weaveables - DOES NOT AFFECT CRYSTALS
+        if (gameObject.tag != "Breakable" && collision.gameObject.GetComponent<Rigidbody>() != null && canCombine && weaveableScript.ID == ID)
         {
-            if (collision.gameObject != parentWeaveable.gameObject)
+            // only adds fixed joints to parent weaveable to be removed nicely in Uncombine()
+            if (collision.gameObject != parentWeaveable.gameObject && collision.gameObject.GetComponent<Rigidbody>() != null)
             {
                 var fixedJoint = parentWeaveable.gameObject.AddComponent<FixedJoint>();
                 fixedJoint.connectedBody = collision.rigidbody;
@@ -313,7 +315,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         // if objects are combined, vfx needs to show up for both
         if (this.isCombined)
         {
-            foreach (WeaveableNew weaveable in wovenObjects)
+            foreach (WeaveableNew weaveable in parentWeaveable.wovenObjects)
             {
                 player.weaveVisualizer.WeaveableSelected(weaveable.gameObject);
             }
@@ -402,6 +404,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         isCombined = false;
         Debug.Log("This is the Uncombine code");
 
+        // removes all instances of joints on the parent weaveable
         FixedJoint[] joints = GetComponents<FixedJoint>();
         foreach (FixedJoint joint in joints)
         {
@@ -447,7 +450,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     }
     //********************************************************************
 
-    //the snapping method
     void Snapping()
     {
         nearestDistance = Mathf.Infinity; //this is made the be infinite so that when it calculates the distance it wouldn't cap itself
@@ -467,7 +469,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             }
         }
 
-        weaveableScript.nearestPoint = closestPoint; //this two variables are stored outside of the for loop so it wouldn't reset and get the latest element
+        weaveableScript.nearestPoint = closestPoint;
         weaveableScript.nearestDistance = nearestDistance;
         weaveableScript.rb.velocity = weaveableScript.nearestPoint.transform.position - weaveableClosestPoint.transform.position;
 
