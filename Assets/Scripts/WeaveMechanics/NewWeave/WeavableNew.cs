@@ -28,7 +28,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [Header("Snapping feature")]
     public GameObject[] myTransformPoints;
     public GameObject nearestPoint;
-    private float snapDistance;
+    private float distance;
+    [SerializeField] private float snapDistance;
     [SerializeField] private float nearestDistance;
 
     [Header("Floating Islands + Crystals")]
@@ -199,22 +200,22 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 }
                 else
                 {
-                    
+
                     rb.velocity = Vector3.zero;
                     TargetingArrow.SetActive(false);
                 }
-                
+
 
                 rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
                 //this freezes the Y position so that the combined objects won't drag it down because of gravity and it freezes in all rotation so it won't droop because of the gravity  from the objects
-                
+
             }
         }
 
         if (inWeaveMode)
         {
             if (Physics.Raycast(arrowRay, out hitInfo, 100, layersToHit))
-            { 
+            {
                 ICombineable combineable = hitInfo.collider.GetComponent<ICombineable>();
                 canRotate = true;
 
@@ -226,8 +227,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 }
             }
         }
-
-
     }
 
     // this will need to be refactored later but for now when the weaveable collides with another 
@@ -354,7 +353,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     }
     //********************************************************************
 
-    public void OnCombineInput() 
+    public void OnCombineInput()
     {
         if (weaveableScript.ID == ID && !weaveableScript.isWoven && canCombine)
         {
@@ -419,18 +418,30 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         weaveableScript.nearestDistance = Mathf.Infinity; //this is made the be infinite so that when it calculates the distance it wouldn't cap itself
         GameObject closestPoint = null;
+        GameObject weaveableClosestPoint = null;
+        
         for (int i = 0; i < myTransformPoints.Length; i++)
         {
-            snapDistance = Vector3.Distance(weaveableScript.transform.position, myTransformPoints[i].transform.position);
-            if (snapDistance < nearestDistance)
+            distance = Vector3.Distance(weaveableScript.myTransformPoints[i].transform.position, myTransformPoints[i].transform.position);
+            if (distance < nearestDistance)
             {
                 closestPoint = myTransformPoints[i];
-                nearestDistance = snapDistance;
-                Debug.Log("this is the distance between points " + snapDistance + ",this is the closestpoint" + myTransformPoints[i]);
+                weaveableClosestPoint = weaveableScript.myTransformPoints[i];
+                nearestDistance = distance;
+                Debug.Log("this is the distance between points " + distance + ",this is the closestpoint" + myTransformPoints[i]);
             }
         }
+
         weaveableScript.nearestPoint = closestPoint; //this two variables are stored outside of the for loop so it wouldn't reset and get the latest element
         weaveableScript.nearestDistance = nearestDistance;
-        weaveableScript.rb.velocity = weaveableScript.nearestPoint.transform.position - weaveableScript.transform.position;
+        weaveableScript.rb.velocity = weaveableScript.nearestPoint.transform.position - weaveableClosestPoint.transform.position;
+
+        if (weaveableScript.nearestDistance < weaveableScript.snapDistance)
+        {
+            weaveableScript.rb.transform.position = new Vector3(weaveableScript.nearestPoint.transform.position.x, 
+                                                                weaveableScript.nearestPoint.transform.position.y - 
+                                                                weaveableClosestPoint.transform.position.y, 
+                                                                weaveableScript.nearestPoint.transform.position.z);
+        }
     }
 }
