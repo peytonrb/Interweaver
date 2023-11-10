@@ -71,8 +71,16 @@ public class WeaveFXScript : MonoBehaviour
         if (weaveable.gameObject.tag != "FloatingIsland")
         {
             weaveable.GetComponent<Renderer>().material = weaveable.GetComponent<WeaveableNew>().originalMat;
-            Transform child = weaveable.transform.Find("WeaveableObjectAura(Clone)");
-            Destroy(child.gameObject);
+
+            // kinda inefficient if we end up having hella children per GameObject
+            for (int i = 0; i < weaveable.transform.childCount; i++)
+            {
+                if (weaveable.transform.GetChild(i).name == "WeaveableObjectAura(Clone)")
+                {
+                    Transform child = weaveable.transform.GetChild(i);
+                    Destroy(child.gameObject);
+                }
+            }
         }
     }
 }

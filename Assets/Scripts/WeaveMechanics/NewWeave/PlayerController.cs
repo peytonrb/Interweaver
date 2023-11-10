@@ -220,8 +220,11 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Raycast hit");
             
             weaveableScript = hitInfo.collider.GetComponent<WeaveableNew>();
+            Debug.Log("weaveable script: " + weaveableScript);
             IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>();
+            Debug.Log("interactable: " + interactable);
             wovenObject = hitInfo.collider.gameObject;
+            Debug.Log("woven: " + wovenObject);
             return interactable;
         }
 
