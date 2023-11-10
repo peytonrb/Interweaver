@@ -66,7 +66,10 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         {
             TargetingArrow.SetActive(false);
         }
-        
+
+        // for respawnables
+        startPos = transform.position;
+        startRot = transform.rotation;
     }
 
     void Update()
@@ -170,8 +173,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     public void MovingWeaveController(Vector2 lookDir)
     {
-        
-
         //Add a raycast coming from directional arrow
         float targetAngle = Mathf.Atan2(lookDir.x, lookDir.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
 
@@ -187,9 +188,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         {
             if (canBeRelocated)
             {
-                
                 canRotate = true;
-
                 Debug.Log(lookDir);
 
                 //change this to send velocity in direction of (RS)
@@ -328,8 +327,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             {
                 player.weaveVisualizer.StopAura(weaveable.gameObject);
             }
-
-            wovenObjects.Clear();
         }
     }
 
@@ -374,6 +371,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     //********************************************************************
     public void Uncombine()
     {
+        weaveableScript = this.GetComponent<WeaveableNew>(); // hardcoded to prevent nulls
         isCombined = false;
         Debug.Log("This is the Uncombine code");
         Destroy(GetComponent<FixedJoint>());
@@ -385,7 +383,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         player.inRelocateMode = false;
         player.inCombineMode = false;
         player.uninteract = true;
-
+        wovenObjects.Clear();
     }
 
     public void Combine()

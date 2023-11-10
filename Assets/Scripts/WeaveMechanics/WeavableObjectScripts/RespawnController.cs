@@ -20,11 +20,8 @@ public class RespawnController : MonoBehaviour
                 for (int i = 0; i < weaveableObject.wovenObjects.Count; i++)
                 {
                     startPositions.Add(weaveableObject.wovenObjects[i].startPos);
-                    Debug.Log("start pos: " + startPositions[i]);
                     startRotations.Add(weaveableObject.wovenObjects[i].startRot);
-                    Debug.Log("start rot: " + startRotations[i]);
                     respawnObjects.Add(weaveableObject.wovenObjects[i].gameObject);
-                    Debug.Log("respawn objects: " + respawnObjects[i]);
                 }
             }
             else
@@ -61,6 +58,9 @@ public class RespawnController : MonoBehaviour
 
             respawnObjects[i].transform.position = startPositions[i];
             respawnObjects[i].transform.rotation = startRotations[i];
+
+            respawnObjects[i].GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
+            respawnObjects[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         }
 
         // clear all references once objects have been respawned
