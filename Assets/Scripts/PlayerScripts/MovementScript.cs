@@ -128,7 +128,7 @@ public class MovementScript : MonoBehaviour
             {
                 if (fallFile && !isPlayingFallSound)
                 {
-                    //AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, fallFile, 1f); //AUDIO WILL BE LOOKED AT LATER HERE
+                    AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, fallFile, 1f); //AUDIO WILL BE LOOKED AT LATER HERE
                     isPlayingFallSound = true;
                 }
                 
