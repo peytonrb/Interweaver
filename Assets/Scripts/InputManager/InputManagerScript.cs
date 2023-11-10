@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
+using UnityEngine.InputSystem.Layouts;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.TextCore.Text;
 
 public class InputManagerScript : MonoBehaviour
@@ -46,10 +48,21 @@ public class InputManagerScript : MonoBehaviour
         // Debug.Log(playerInput.currentControlScheme);
     }
 
-    public void Update()
+    public void ToggleControlScheme(bool isController)
     {
-        Debug.Log(playerInput.currentControlScheme);
+        if (isController)
+        {
+            isGamepad = true;
+            playerInput.SwitchCurrentControlScheme("Gamepad", Gamepad.current);
+
+        }
+        else
+        {
+            isGamepad = false;
+            playerInput.SwitchCurrentControlScheme("Keyboard&Mouse", Keyboard.current, Mouse.current);
+        }
     }
+
     #region//WEAVER ABILITIES
     //******************************************************
 
@@ -243,7 +256,18 @@ public class InputManagerScript : MonoBehaviour
     {
         if (input.isPressed)
         {
-            playerScript.Pausing();
+
+            if (!pauseScreen.activeSelf)
+            {
+                pauseScript = pauseScreen.GetComponent<PauseScript>();
+                pauseScreen.SetActive(true);
+                Time.timeScale = 0;
+            }
+            else
+            {
+                pauseScript.Resume();
+            }
+
         }
     }
     //******************************************************
@@ -292,13 +316,7 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
-    public void OnFamiliarPause(InputValue input)
-    {
-        if (input.isPressed) {
-            PlayerController playerController = player.GetComponent<PlayerController>();
-            playerController.Pausing();
-        }
-    }
+
    
     #endregion//******************************************************
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -9,10 +10,11 @@ public class PauseScript : MonoBehaviour
 {   
     public static bool usingController = false;
     private Toggle toggle;
-
+    private EventSystem eventSystem;
     public void Start()
     {
         toggle = GetComponentInChildren<Toggle>();
+        eventSystem = FindObjectOfType<EventSystem>();
     }
     //Resumes the game
     public void Resume() {
@@ -31,7 +33,7 @@ public class PauseScript : MonoBehaviour
             }
             else
             {
-                InputManagerScript.instance.isGamepad = true;
+                InputManagerScript.instance.ToggleControlScheme(true);
             }
         }
         else
@@ -42,8 +44,9 @@ public class PauseScript : MonoBehaviour
             }
             else
             {
-                InputManagerScript.instance.isGamepad = false;
+                InputManagerScript.instance.ToggleControlScheme(false);
             }
         }
+
     }
 }
