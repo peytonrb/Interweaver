@@ -31,6 +31,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [Header("Snapping feature")]
     public GameObject[] myTransformPoints;
     public GameObject nearestPoint;
+    public GameObject myNearestPoint;
     private float distance;
     [SerializeField] private float snapDistance;
     [SerializeField] private float nearestDistance;
@@ -458,27 +459,29 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
         for (int i = 0; i < myTransformPoints.Length; i++)
         {
-            distance = Vector3.Distance(weaveableScript.myTransformPoints[i].transform.position, myTransformPoints[i].transform.position);
-
-            if (distance < nearestDistance)
+            for (int t = 0; t < weaveableScript.myTransformPoints.Length; t++)
             {
-                closestPoint = myTransformPoints[i];
-                weaveableClosestPoint = weaveableScript.myTransformPoints[i];
-                nearestDistance = distance;
-                Debug.Log("this is the distance between points " + distance + ",this is the closestpoint" + myTransformPoints[i]);
+                distance = Vector3.Distance(weaveableScript.myTransformPoints[t].transform.position, myTransformPoints[i].transform.position);
+
+                if (distance < nearestDistance)
+                {
+                    closestPoint = myTransformPoints[i];
+                    weaveableClosestPoint = weaveableScript.myTransformPoints[t];
+                    nearestDistance = distance;
+                    Debug.Log("this is the distance between points " + distance + ",this is the closestpoint" + myTransformPoints[i]);
+                }
             }
+                
         }
 
         weaveableScript.nearestPoint = closestPoint;
+        weaveableScript.myNearestPoint = weaveableClosestPoint;
         weaveableScript.nearestDistance = nearestDistance;
-        weaveableScript.rb.velocity = weaveableScript.nearestPoint.transform.position - weaveableClosestPoint.transform.position;
+        weaveableScript.rb.velocity = weaveableScript.nearestPoint.transform.position - weaveableScript.myNearestPoint.transform.position;
 
         if (nearestDistance < weaveableScript.snapDistance)
         {
-            weaveableScript.rb.transform.position = new Vector3(weaveableScript.nearestPoint.transform.position.x,
-                                                                weaveableScript.nearestPoint.transform.position.y -
-                                                                weaveableClosestPoint.transform.position.y,
-                                                                weaveableScript.nearestPoint.transform.position.z);
+            weaveableScript.rb.transform.position =  weaveableScript.myNearestPoint.transform.position; //math is probably wrong
         }
     }
 }
