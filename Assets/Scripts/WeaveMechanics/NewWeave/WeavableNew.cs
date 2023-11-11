@@ -53,7 +53,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     private InputAction combineInput;
 
     [Header("References")]
-    public WeaveableNew weaveableScript; // has to be public for respawn / attempting to make this obsolete
+    public WeaveableNew weaveableScript; // attempting to make this obsolete
     public List<WeaveableNew> wovenObjects;
     [SerializeField] private PlayerController player;
     private GameObject wovenFloatingIsland;
@@ -496,9 +496,10 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
         if (nearestDistance < weaveableScript.snapDistance)
         {
-            weaveableScript.rb.transform.position = weaveableScript.nearestPoint.transform.position - 
-                                                    (weaveableScript.nearestPoint.transform.position - 
-                                                     weaveableScript.myNearestPoint.transform.position).normalized;
+            weaveableScript.rb.transform.position =  weaveableScript.myNearestPoint.transform.position;
+            // weaveableScript.rb.transform.position = weaveableScript.nearestPoint.transform.position - 
+            //                                         (weaveableScript.nearestPoint.transform.position - 
+            //                                          weaveableScript.myNearestPoint.transform.position).normalized;
         }
     }
 }
