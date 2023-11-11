@@ -325,6 +325,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         // if objects are combined, vfx needs to show up for both
         if (this.isCombined)
         {
+            Debug.Log("parent: " + parentWeaveable);
             foreach (WeaveableNew weaveable in parentWeaveable.wovenObjects)
             {
                 player.weaveVisualizer.WeaveableSelected(weaveable.gameObject);
@@ -357,16 +358,24 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             isWoven = false;
             startFloating = false;
             canRotate = false;
-            isParent = false;
-            parentWeaveable = null;
+
             rb.constraints = RigidbodyConstraints.None;
             player.weaveVisualizer.StopAura(gameObject);
             TargetingArrow.SetActive(false);
 
-            // disables vfx on all woven objects
-            foreach (WeaveableNew weaveable in wovenObjects)
+            if (parentWeaveable != null)
             {
-                player.weaveVisualizer.StopAura(weaveable.gameObject);
+                // disables vfx on all woven objects
+                foreach (WeaveableNew weaveable in parentWeaveable.wovenObjects)
+                {
+                    player.weaveVisualizer.StopAura(weaveable.gameObject);
+                }
+            }
+
+            if (!isCombined)
+            {
+                isParent = false;
+                parentWeaveable = null;
             }
         }
     }
@@ -422,7 +431,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         }
 
         // attempt to stop random movement after uncombine
-        foreach(WeaveableNew weaveable in wovenObjects)
+        foreach (WeaveableNew weaveable in wovenObjects)
         {
             weaveable.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
         }
@@ -486,7 +495,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                     Debug.Log("this is the distance between points " + distance + ",this is the closestpoint" + myTransformPoints[i]);
                 }
             }
-                
+
         }
 
         weaveableScript.nearestPoint = closestPoint;
@@ -496,7 +505,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
         if (nearestDistance < weaveableScript.snapDistance)
         {
-            weaveableScript.rb.transform.position =  weaveableScript.myNearestPoint.transform.position;
+            weaveableScript.rb.transform.position = weaveableScript.myNearestPoint.transform.position;
             // weaveableScript.rb.transform.position = weaveableScript.nearestPoint.transform.position - 
             //                                         (weaveableScript.nearestPoint.transform.position - 
             //                                          weaveableScript.myNearestPoint.transform.position).normalized;

@@ -78,6 +78,7 @@ public class WeaveFXScript : MonoBehaviour
                 if (weaveable.transform.GetChild(i).name == "WeaveableObjectAura(Clone)")
                 {
                     Transform child = weaveable.transform.GetChild(i);
+                    Debug.Log(child.gameObject);
                     Destroy(child.gameObject);
                 }
             }
