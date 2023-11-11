@@ -45,7 +45,6 @@ GameObject:
   - component: {fileID: 1710404920294912330}
   - component: {fileID: 4473131065183391954}
   - component: {fileID: 3584822575221554532}
-  - component: {fileID: 2225641640934858536}
   m_Layer: 6
   m_Name: Weavable_2x2Cube
   m_TagString: Weaveable
@@ -167,10 +166,13 @@ MonoBehaviour:
   weaveInteraction: {fileID: 0}
   ID: 1
   canRotate: 0
+  canCombine: 1
   isWoven: 0
   rotationSpeed: 0.5
   canBeRelocated: 1
   TargetingArrow: {fileID: 6300189191279475672}
+  isParent: 0
+  parentWeaveable: {fileID: 0}
   myTransformPoints:
   - {fileID: 3530342259758578474}
   - {fileID: 2136516095078513252}
@@ -179,6 +181,8 @@ MonoBehaviour:
   - {fileID: 1226181212704935624}
   - {fileID: 6903000194448017509}
   nearestPoint: {fileID: 0}
+  myNearestPoint: {fileID: 0}
+  snapDistance: 0
   nearestDistance: 50
   originalMat: {fileID: 0}
   isCombined: 0
@@ -215,20 +219,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2225641640934858536
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1182470488956426515}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a9c228c1fe8c8e4797bcc85adc3d873, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnPos: {x: 0, y: 0, z: 0}
-  spawnRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1226181212704935624
 GameObject:
   m_ObjectHideFlags: 0
