@@ -10,6 +10,11 @@ public class RespawnController : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
+        // clear past storage
+        startPositions.Clear();
+        startRotations.Clear();
+        respawnObjects.Clear();
+
         if (collider.gameObject.GetComponent<WeaveableNew>() != null)
         {
             WeaveableNew weaveableObject = collider.gameObject.GetComponent<WeaveableNew>();
@@ -56,17 +61,12 @@ public class RespawnController : MonoBehaviour
                 respawnObjects[i].GetComponent<WeaveableNew>().Uncombine();
             }
 
-            respawnObjects[i].transform.position = startPositions[i];
+            respawnObjects[i].transform.localPosition = startPositions[i];
             respawnObjects[i].transform.rotation = startRotations[i];
 
             respawnObjects[i].GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
             respawnObjects[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         }
-
-        // clear all references once objects have been respawned
-        startPositions.Clear();
-        startRotations.Clear();
-        respawnObjects.Clear();
     }
 
     // will commonnly be called on puzzles that require a full reset if failed
