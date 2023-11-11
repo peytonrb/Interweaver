@@ -325,7 +325,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         // if objects are combined, vfx needs to show up for both
         if (this.isCombined)
         {
-            Debug.Log("parent: " + parentWeaveable);
             foreach (WeaveableNew weaveable in parentWeaveable.wovenObjects)
             {
                 player.weaveVisualizer.WeaveableSelected(weaveable.gameObject);
