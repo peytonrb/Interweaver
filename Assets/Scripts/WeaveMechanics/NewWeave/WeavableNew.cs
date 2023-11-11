@@ -254,7 +254,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
             foreach (WeaveableNew weaveable in allWeaveables)
             {
-                if (weaveable.isParent == true)
+                if (weaveable.isParent)
                 {
                     parentWeaveable = weaveable;
                 }
@@ -419,6 +419,12 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         foreach (FixedJoint joint in joints)
         {
             Destroy(joint);
+        }
+
+        // attempt to stop random movement after uncombine
+        foreach(WeaveableNew weaveable in wovenObjects)
+        {
+            weaveable.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
         }
 
         canRotate = false;
