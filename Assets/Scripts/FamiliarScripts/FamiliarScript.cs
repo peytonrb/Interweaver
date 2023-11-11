@@ -115,6 +115,11 @@ public class FamiliarScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
+        if (collision.gameObject.TryGetComponent(out ITriggerable trigger))
+        {
+            trigger.OnTrigEnter(collision);
+        }
+
         if (collision.gameObject.CompareTag("Leap of Faith Trigger"))
         {
             CameraMasterScript.instance.StartLeapOfFaith();
@@ -122,6 +127,7 @@ public class FamiliarScript : MonoBehaviour
 
         else if (collision.gameObject.CompareTag("Kill Area"))
         {
+            Debug.Log("Death");
             CameraMasterScript.instance.EndLeapOfFaith();
             Death();
         }

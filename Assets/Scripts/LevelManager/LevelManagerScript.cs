@@ -10,6 +10,7 @@ public class LevelManagerScript : MonoBehaviour
     private GameObject[] cannons;
     private NetCannonScript netCannonScript;
     private LevelTriggerScript levelTriggerScript;
+    public GameObject spikeArea;
 
     void Awake() {
         if (instance == null)
@@ -64,6 +65,10 @@ public class LevelManagerScript : MonoBehaviour
 
                     levelTriggerScript.triggered = true;
                 }
+            break;
+            case 1:
+                spikeArea.SetActive(false);
+                
             break;
         }
     }

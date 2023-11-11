@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
+using UnityEngine.InputSystem.Layouts;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.TextCore.Text;
 
 public class InputManagerScript : MonoBehaviour
@@ -19,6 +22,7 @@ public class InputManagerScript : MonoBehaviour
 
     public static InputManagerScript instance;
 
+    public bool isGamepad = false;
 
     private PlayerController playerScript;
     private FamiliarScript familiarScript;
@@ -42,6 +46,21 @@ public class InputManagerScript : MonoBehaviour
 
         //usingController = pauseScript.GetUsingController(); //Checks if using the controller
         // Debug.Log(playerInput.currentControlScheme);
+    }
+
+    public void ToggleControlScheme(bool isController)
+    {
+        if (isController)
+        {
+            isGamepad = true;
+            playerInput.SwitchCurrentControlScheme("Gamepad", Gamepad.current);
+
+        }
+        else
+        {
+            isGamepad = false;
+            playerInput.SwitchCurrentControlScheme("Keyboard&Mouse", Keyboard.current, Mouse.current);
+        }
     }
 
     #region//WEAVER ABILITIES
@@ -109,7 +128,26 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnWeaverTargeting(InputValue input)
     {
-        weaveCursor = input.Get<Vector2>();
+
+        Vector2 inputVector = input.Get<Vector2>();
+
+            if (isGamepad)
+            {
+                if (playerScript.isCurrentlyWeaving)
+                {
+                    playerScript.weaveableScript.MovingWeaveController(inputVector);
+                }
+
+                if (inputVector != Vector2.zero)
+                {
+                    playerScript.ControllerAimTargetter(inputVector);
+                }
+            }
+            else
+            {
+                playerScript.MouseAimTargetter(inputVector);
+            }
+
     }
 
     public void OnWeaverNPCInteractions(InputValue input)
@@ -177,7 +215,7 @@ public class InputManagerScript : MonoBehaviour
 
     #endregion//******************************************************
 
-    //SWITCHING
+    #region//SWITCHING
     //******************************************************
     public void OnPossessFamiliar(InputValue input)
     {
@@ -210,16 +248,26 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
-    //******************************************************
+    #endregion//******************************************************
 
     //PAUSING
     //******************************************************
     public void OnPause(InputValue input)
     {
-        PlayerController playerController = player.GetComponent<PlayerController>();
         if (input.isPressed)
         {
-            playerController.Pausing();
+
+            if (!pauseScreen.activeSelf)
+            {
+                pauseScript = pauseScreen.GetComponent<PauseScript>();
+                pauseScreen.SetActive(true);
+                Time.timeScale = 0;
+            }
+            else
+            {
+                pauseScript.Resume();
+            }
+
         }
     }
     //******************************************************
@@ -268,13 +316,7 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
-    public void OnFamiliarPause(InputValue input)
-    {
-        if (input.isPressed) {
-            PlayerController playerController = player.GetComponent<PlayerController>();
-            playerController.Pausing();
-        }
-    }
+
    
     #endregion//******************************************************
 }
