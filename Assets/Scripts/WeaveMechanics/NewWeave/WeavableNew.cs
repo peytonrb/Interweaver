@@ -238,6 +238,15 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         weaveableScript = GetComponent<WeaveableNew>();
 
+        //Return if I'm a floating island and hitting my own crystal
+        if (TryGetComponent<FloatingIslandScript>(out FloatingIslandScript islandScript))
+        {
+            if (islandScript.myCrystal == collision.gameObject.TryGetComponent<CrystalScript>(out CrystalScript crystalScript))
+            {
+                return;
+            }
+        }
+
         // for objects that are being connected that are NOT the parent
         if (collision.gameObject.GetComponent<Rigidbody>() != null && canCombine && !isParent && weaveableScript.ID == ID)
         {

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7552672332987597148}
   m_Layer: 0
   m_Name: Targeting Arrow Parent
-  m_TagString: Untagged
+  m_TagString: Breakable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -240,12 +240,17 @@ MonoBehaviour:
   weaveInteraction: {fileID: 4158530418111038473}
   ID: 1
   canRotate: 0
+  canCombine: 1
   isWoven: 0
   rotationSpeed: 0.5
   canBeRelocated: 1
   TargetingArrow: {fileID: 877358721207564493}
+  isParent: 0
+  parentWeaveable: {fileID: 0}
   myTransformPoints: []
   nearestPoint: {fileID: 0}
+  myNearestPoint: {fileID: 0}
+  snapDistance: 0
   nearestDistance: 0
   originalMat: {fileID: 0}
   isCombined: 0

@@ -138,7 +138,7 @@ public class InputManagerScript : MonoBehaviour
                     playerScript.weaveableScript.MovingWeaveController(inputVector);
                 }
 
-            if (inputVector != Vector2.zero)
+                if (inputVector != Vector2.zero)
                 {
                     playerScript.ControllerAimTargetter(inputVector);
                 }
