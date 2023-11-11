@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,7 +12,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [CannotBeNullObjectField][SerializeField] private Camera mainCamera;
     [SerializeField] private LayerMask layersToHit;
     [SerializeField] public WeaveInteraction weaveInteraction;
-    public int ID;
+    public int ID; //THIS IS INDENTIFIER FOR DAYBLOCK COMBINING
     public bool canRotate;
     public bool canCombine = true;
     private bool startFloating;
@@ -57,14 +58,15 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public List<WeaveableNew> wovenObjects;
     [SerializeField] private PlayerController player;
     private GameObject wovenFloatingIsland;
-    private DayblockScript dayblockScript;
+    [SerializeField] private GameObject dayblockPuzzle;
+    private DayblockPuzzleManager dpm;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         weaveableScript = gameObject.GetComponent<WeaveableNew>();
-        dayblockScript = GetComponent<DayblockScript>();
+        dpm = dayblockPuzzle.GetComponent<DayblockPuzzleManager>();
         isCombined = false;
         onFloatingIsland = false;
         originalMat = gameObject.GetComponent<Renderer>().material;
@@ -259,6 +261,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 if (weaveable.isParent)
                 {
                     parentWeaveable = weaveable;
+                    dpm.FoundParent();
                 }
             }
 

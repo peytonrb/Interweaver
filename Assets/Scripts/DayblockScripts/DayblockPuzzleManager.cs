@@ -1,22 +1,65 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class DayblockPuzzleManager : MonoBehaviour
 {
-    public GameObject[] sunBlocks;
-    public GameObject[] sunsetBlocks;
-    public GameObject[] moonBlocks;
+    private int sunblocklength;
+    private int sunriseblocklength;
+    private int moonblocklength;
+    private int blockIdentity;
+    private bool parentFound;
+    private GameObject[] weaveables;
+    [Header ("Do Not Touch")]
+    public WeaveableNew sunblockweaveparent;
+    public WeaveableNew sunriseblockweaveparent;
+    public WeaveableNew moonblockweaveparent;
+    //private WeaveableNew[] weaveableScripts;
+    private WeaveableNew weaveableScript;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        weaveables = GameObject.FindGameObjectsWithTag("Weaveable");
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void FoundParent() {
+        foreach (GameObject weaveable in weaveables) {
+            weaveableScript = weaveable.GetComponent<WeaveableNew>();
+            //Finds the parent script
+            switch (weaveableScript.ID) {
+                //Sunblock
+                case 0:
+                    if (weaveableScript.isParent) {
+                        sunblockweaveparent = weaveableScript;
+                    }
+                break;
+
+                //Sunsetblock
+                case 1:
+                    if (weaveableScript.isParent) {
+                        sunriseblockweaveparent = weaveableScript;
+                    }
+                break;
+
+                //Moonblock
+                case 2:
+                    if (weaveableScript.isParent) {
+                        moonblockweaveparent = weaveableScript;
+                    }
+                break;
+            }
+            
+        }
+    }
+
+    public void RestartPuzzle() {
+        Debug.Log("Get Good!");
+    }
+
+    public void PuzzleComplete() {
+        Debug.Log("Ayy!");
     }
 }
