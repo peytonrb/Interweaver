@@ -29,8 +29,7 @@ public class DayblockScript : MonoBehaviour
                                 DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
                                 switch (dpm.combinationpart) {
                                     case 0:
-                                        dpm.combinationpart = 1;
-                                        Debug.Log("Combination part" + dpm.combinationpart);
+                                        dpm.GotCombination(1,weaveScript);
                                     break;
                                     case 1:
                                         dpm.RestartPuzzle();
@@ -51,8 +50,7 @@ public class DayblockScript : MonoBehaviour
                                         dpm.RestartPuzzle();
                                     break;
                                     case 1:
-                                        dpm.combinationpart = 2;
-                                        Debug.Log("Combination part" + dpm.combinationpart);
+                                        dpm.GotCombination(2,weaveScript);
                                     break;
                                     case 2:
                                         dpm.RestartPuzzle();
@@ -121,8 +119,7 @@ public class DayblockScript : MonoBehaviour
                             DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
                             switch (dpm.combinationpart) {
                                 case 0:
-                                    dpm.combinationpart = 1;
-                                    Debug.Log("Combination part" + dpm.combinationpart); 
+                                    dpm.GotCombination(1,weaveableScript);
                                 break;
                                 case 1:
                                     dpm.RestartPuzzle();
@@ -143,8 +140,8 @@ public class DayblockScript : MonoBehaviour
                                     dpm.RestartPuzzle();
                                 break;
                                 case 1:
-                                    dpm.combinationpart = 2;
-                                    Debug.Log("Combination part" + dpm.combinationpart);
+                                    dpm.GotCombination(2,weaveableScript);
+                                    
                                 break;
                                 case 2:
                                     dpm.RestartPuzzle();

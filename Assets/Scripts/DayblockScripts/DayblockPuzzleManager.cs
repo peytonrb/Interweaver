@@ -55,6 +55,12 @@ public class DayblockPuzzleManager : MonoBehaviour
             
         }
     }
+    
+    public void GotCombination(int combination, WeaveableNew weaveableScript) {
+        combinationpart = combination;
+        weaveableScript.Uninteract();
+        Debug.Log("Combination part" + combinationpart);
+    }
 
     public void RestartPuzzle() {
         Debug.Log("Get Good!");
