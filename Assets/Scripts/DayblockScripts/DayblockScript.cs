@@ -6,7 +6,7 @@ public class DayblockScript : MonoBehaviour
 {
     //Script will act as a trigger for objects in dayblock.
     public int shapeNeeded; //Identifies the shape of the blocks
-    private int combinationpart; //Which part of the combination has been done
+    
     public GameObject dayblockPuzzleManager;
 
     void OnCollisionEnter(Collision other) {
@@ -23,16 +23,17 @@ public class DayblockScript : MonoBehaviour
                     switch (weaveScript.ID) {
                         //Finds amount of blocks in the shape.
                         case 0:
-                            //Sun block
+                            //Sunrise block
                             if (weaveScript.wovenObjects.Count == 3) {
                                 //Finds if the puzzle has been done in the proper order.
                                 DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
-                                switch (combinationpart) {
+                                switch (dpm.combinationpart) {
                                     case 0:
-                                        dpm.RestartPuzzle();
+                                        dpm.combinationpart = 1;
+                                        Debug.Log("Combination part" + dpm.combinationpart);
                                     break;
                                     case 1:
-                                        combinationpart = 2;
+                                        dpm.RestartPuzzle();
                                     break;
                                     case 2:
                                         dpm.RestartPuzzle();
@@ -42,15 +43,16 @@ public class DayblockScript : MonoBehaviour
                         break;
 
                         case 1:
-                            //Sunrise block
+                            //Sun block
                             if (weaveScript.wovenObjects.Count == 3) {
                                 DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
-                                switch (combinationpart) {
+                                switch (dpm.combinationpart) {
                                     case 0:
-                                        combinationpart = 1;
+                                        dpm.RestartPuzzle();
                                     break;
                                     case 1:
-                                        dpm.RestartPuzzle();  
+                                        dpm.combinationpart = 2;
+                                        Debug.Log("Combination part" + dpm.combinationpart);
                                     break;
                                     case 2:
                                         dpm.RestartPuzzle();
@@ -64,7 +66,7 @@ public class DayblockScript : MonoBehaviour
                             //Moon block
                             if (weaveScript.wovenObjects.Count == 2) {
                                 DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
-                                switch (combinationpart) {
+                                switch (dpm.combinationpart) {
                                     case 0:
                                         dpm.RestartPuzzle();
                                     break;
@@ -79,6 +81,10 @@ public class DayblockScript : MonoBehaviour
                         break;
                     }
                 }
+                else {
+                    DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
+                    dpm.RestartPuzzle();
+                }
             }
         }
     }
@@ -89,16 +95,86 @@ public class DayblockScript : MonoBehaviour
         switch (blockID) {
             case 0:
                 //Found the sun
-                WeaveableNew weaveScript = dpm.sunblockweaveparent;
+                DoTheThing(dpm.sunblockweaveparent);
             break;
 
             case 1:
                 //Found the sunrise
+                DoTheThing(dpm.sunriseblockweaveparent);
             break;
 
             case 2:
                 //Found the moon
+                DoTheThing(dpm.moonblockweaveparent);
             break;
+        }
+    }
+
+    void DoTheThing(WeaveableNew weaveableScript) {
+        if (weaveableScript.ID == shapeNeeded) {
+                switch (weaveableScript.ID) {
+                    //Finds amount of blocks in the shape.
+                    case 0:
+                        //Sunrise block
+                        if (weaveableScript.wovenObjects.Count == 3) {
+                            //Finds if the puzzle has been done in the proper order.
+                            DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
+                            switch (dpm.combinationpart) {
+                                case 0:
+                                    dpm.combinationpart = 1;
+                                    Debug.Log("Combination part" + dpm.combinationpart); 
+                                break;
+                                case 1:
+                                    dpm.RestartPuzzle();
+                                break;
+                                case 2:
+                                    dpm.RestartPuzzle();
+                                break;
+                            }
+                        }
+                    break;
+
+                    case 1:
+                        //Sun block
+                        if (weaveableScript.wovenObjects.Count == 3) {
+                            DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
+                            switch (dpm.combinationpart) {
+                                case 0:
+                                    dpm.RestartPuzzle();
+                                break;
+                                case 1:
+                                    dpm.combinationpart = 2;
+                                    Debug.Log("Combination part" + dpm.combinationpart);
+                                break;
+                                case 2:
+                                    dpm.RestartPuzzle();
+                                break;
+                            }
+                        }
+                    break;
+
+                    case 2:
+                        //Moon block
+                        if (weaveableScript.wovenObjects.Count == 2) {
+                            DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
+                            switch (dpm.combinationpart) {
+                                case 0:
+                                    dpm.RestartPuzzle();
+                                break;
+                                case 1:
+                                    dpm.RestartPuzzle();
+                                break;
+                                case 2:
+                                    dpm.PuzzleComplete();
+                                break;
+                            }
+                        }
+                    break;
+                }
+        }
+        else {
+            DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
+            dpm.RestartPuzzle();
         }
     }
 

@@ -10,6 +10,7 @@ public class DayblockPuzzleManager : MonoBehaviour
     private int moonblocklength;
     private int blockIdentity;
     private bool parentFound;
+    public int combinationpart; //Which part of the combination has been done
     private GameObject[] weaveables;
     [Header ("Do Not Touch")]
     public WeaveableNew sunblockweaveparent;
@@ -57,6 +58,7 @@ public class DayblockPuzzleManager : MonoBehaviour
 
     public void RestartPuzzle() {
         Debug.Log("Get Good!");
+        combinationpart = 0;
     }
 
     public void PuzzleComplete() {
