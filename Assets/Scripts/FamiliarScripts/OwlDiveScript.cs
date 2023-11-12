@@ -54,7 +54,6 @@ public class OwlDiveScript : MonoBehaviour
     {
         if (isDiving)
         {
-
             EndDive();
         } 
     }

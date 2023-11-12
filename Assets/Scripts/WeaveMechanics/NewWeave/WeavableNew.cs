@@ -14,6 +14,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public int ID;
     public bool canRotate;
     public bool canCombine = true;
+    [SerializeField] private bool canBeTargetedForCombine = true;
     private bool startFloating;
     private bool relocate;
     private bool inWeaveMode;
@@ -35,7 +36,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     private float distance;
     [SerializeField] private float snapDistance;
     [SerializeField] private float nearestDistance;
-    [SerializeField] private List<GameObject> listOfCombinedObjects = new List<GameObject>(); 
 
     [Header("Floating Islands + Crystals")]
     private bool onFloatingIsland;
@@ -468,7 +468,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         Debug.Log("This is the combine code");
         canCombine = true;
 
-        if (weaveableScript.canBeRelocated)
+        if (weaveableScript.canBeRelocated && canBeTargetedForCombine)
         {
             weaveableScript.startFloating = true;
             Snapping();
