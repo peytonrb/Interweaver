@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -283,18 +284,45 @@ public class PlayerController : MonoBehaviour
         TargetingArrow.transform.LookAt(AdjustedVector);
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "CameraTrigger")
         {
             CameraIndexScript cameraIndexScript = other.GetComponent<CameraIndexScript>();
+            Transform otherTransform = other.GetComponent<Transform>();
+
+            if (!cameraIndexScript.isZaxisTrigger) {
+                if (otherTransform.position.x > transform.position.x) {
+                    //Enter from north
+                    cameraIndexScript.enteredFromNorth = false;
+                }
+                else {
+                    cameraIndexScript.enteredFromNorth = true;
+                }
+            }
+            else {
+                if (otherTransform.position.z > transform.position.z) {
+                    cameraIndexScript.enteredFromNorth = false;
+                }
+                else {
+                    cameraIndexScript.enteredFromNorth = true;
+                }
+            }
+            
             vCamRotationState = cameraIndexScript.cameraIndex;
 
-            CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+            if (!cameraIndexScript.triggered && !cameraIndexScript.enteredFromNorth) {
+                CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+            }
+            else if (cameraIndexScript.triggered && cameraIndexScript.enteredFromNorth) {
+                CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+            }
 
             //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAM ERMASTERSCRIPT~
         }
+    }
 
+    void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag == "CutsceneTrigger") {
             //Only the trigger that is a child of a certain cutscene manager will activate a cutscene.
             foreach (GameObject cm in cutsceneManager) {
@@ -310,7 +338,7 @@ public class PlayerController : MonoBehaviour
             LevelManagerScript.instance.TurnOnOffSection(section);
         }
     }
-
+    
     void OnCollisionEnter(Collision collision)
     {
         IInteractable interactable = collision.gameObject.GetComponent<IInteractable>();
