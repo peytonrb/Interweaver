@@ -17,6 +17,7 @@ public class FamiliarScript : MonoBehaviour
     public bool myTurn; //Responsible for determining if the familiar can move
     public bool leapOfFaith; //Determines if owl familiar is in a leap of faith 
     public bool familiarMovementAbility;//Only used for reading if familiar is using movemeny ability
+    private bool insideTrigger;
     
 
 
@@ -55,6 +56,7 @@ public class FamiliarScript : MonoBehaviour
         depossessing = false;
         leapOfFaith = false;
         familiarMovementAbility = false;
+        insideTrigger = false;
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>(); 
@@ -152,12 +154,21 @@ public class FamiliarScript : MonoBehaviour
         }
         else if (collision.gameObject.tag == "CameraTrigger")
         {
-            CameraIndexScript cameraIndexScript = collision.GetComponent<CameraIndexScript>();
-            vCamRotationState = cameraIndexScript.cameraIndex;
+            if (insideTrigger == false) {
+                CameraIndexScript cameraIndexScript = collision.GetComponent<CameraIndexScript>();
+                vCamRotationState = cameraIndexScript.cameraIndex;
 
-            CameraMasterScript.instance.SwitchFamiliarCameras(vCamRotationState);
+                CameraMasterScript.instance.SwitchFamiliarCameras(vCamRotationState);
+                insideTrigger = true;
 
-            //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAM ERMASTERSCRIPT~
+                //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAM ERMASTERSCRIPT~
+            }   
+        }
+    }
+
+    private void OnTriggerExit(Collider other) {
+        if (other.gameObject.tag == "CameraTrigger") {
+            insideTrigger = false;
         }
     }
 
