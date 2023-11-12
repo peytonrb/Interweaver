@@ -208,6 +208,7 @@ public class MovementScript : MonoBehaviour
 
     public void ChangeTerminalVelocity(float newTerminalVelocity) // changes terminal velocity to new value
     {
+        resettingTerminalVelocity = false;
         terminalVelocity = newTerminalVelocity;
     }
 
