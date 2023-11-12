@@ -92,10 +92,16 @@ public class InputManagerScript : MonoBehaviour
             else if (playerScript.inCombineMode)
             {
                 playerScript.weaveableScript.OnCombineInput();
-                playerScript.inRelocateMode = true;
-                playerScript.inCombineMode = false;
+                StartCoroutine(WeaveModeTimer());  //ayo peyton rework this                       
             }
         }
+    }
+
+    IEnumerator WeaveModeTimer() // and this
+    {
+        yield return new WaitForSeconds(1);
+        playerScript.inRelocateMode = true;
+        playerScript.inCombineMode = false;
     }
 
     public void OnDrop(InputValue input)

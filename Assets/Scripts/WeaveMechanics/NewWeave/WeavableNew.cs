@@ -384,6 +384,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     public void Relocate()
     {
+        Debug.Log("this is the relocate method");
         if (canBeRelocated)
         {
             isWoven = true;
