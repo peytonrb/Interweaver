@@ -26,6 +26,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public GameObject nearestPoint;
     private float snapDistance;
     [SerializeField] private float nearestDistance;
+    [SerializeField] private List<GameObject> listOfCombinedObjects = new List<GameObject>(); 
 
     [Header("Floating Islands + Crystals")]
     private bool onFloatingIsland;
@@ -297,6 +298,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         player.inRelocateMode = false;
         player.inCombineMode = false;
         player.uninteract = true;
+        weaveableScript.listOfCombinedObjects.Clear();
     }
 
     public void Combine()
@@ -345,5 +347,45 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         weaveableScript.nearestPoint = closestPoint; //this two variables are stored outside of the for loop so it wouldn't reset and get the latest element
         weaveableScript.nearestDistance = nearestDistance;
         weaveableScript.rb.velocity = weaveableScript.nearestPoint.transform.position - weaveableScript.transform.position;
+
+        if (GetParentOfSnappingPoint())
+        {
+            Debug.Log("ADDED TO LIST: " + GetParentOfSnappingPoint());
+            weaveableScript.listOfCombinedObjects.Add(GetParentOfSnappingPoint());
+            if (GetParentOfSnappingPoint().GetComponent<WeaveableNew>())
+            {
+                GameObject flumbus = GetParentOfSnappingPoint();
+                WeaveableNew webble;
+                webble = flumbus.GetComponent<WeaveableNew>();
+                Debug.Log("Flumbus: " + flumbus);
+                Debug.Log("Webble: " + webble);
+                webble.AddCombinedObject(gameObject);
+            }
+            
+        }
+    }
+
+    public List<GameObject> GetCombinedObjects()
+    {
+        return listOfCombinedObjects;
+    }
+
+    public void AddCombinedObject(GameObject newCombinedObject)
+    {
+        if (!weaveableScript.listOfCombinedObjects.Contains(newCombinedObject))
+        {
+            
+        }
+        weaveableScript.listOfCombinedObjects.Add(newCombinedObject);
+    }
+
+    public GameObject GetParentOfSnappingPoint()
+    {
+        if (weaveableScript.nearestPoint)
+        {
+            return weaveableScript.nearestPoint.transform.parent.gameObject;
+        }
+
+        return null;
     }
 }

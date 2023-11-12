@@ -10,12 +10,11 @@ public class HoverCrystalScript : MonoBehaviour
     private Rigidbody rigidBody;
     private WeaveableNew weaveable; // make sure to change when script name gets changed as well!!!
     private Vector3 pointToRiseTo = Vector3.up;
-    private float hoverDistance = 10f;
+    [SerializeField] private float hoverHeight = 10f;
     private float distance = -1f;
     private float TimeToShatter;
     [SerializeField] private float maxTimeToShatter = 5f; 
-    private Vector3 startPoint;
-    bool scrunk;
+    bool hoverBegan;
 
     void Start()
     {
@@ -27,34 +26,35 @@ public class HoverCrystalScript : MonoBehaviour
 
     IEnumerator Hover()
     {
-        Debug.Log("WEEEEEE");
         yield return new WaitUntil(CrystalIsCombined);
         distance = Vector3.Distance(transform.position, pointToRiseTo);
         
-        if (!scrunk)
+        if (!hoverBegan)
         {
-            pointToRiseTo = transform.position + (Vector3.up * hoverDistance);
+            pointToRiseTo = transform.position + (Vector3.up * hoverHeight);
             rigidBody.constraints = RigidbodyConstraints.FreezeAll;
+            gameObject.layer = LayerMask.NameToLayer("Default");
         }
         if (distance <= 0.1f)
         {
             TimeToShatter = maxTimeToShatter;
             StartCoroutine(ShatterCountdown());
+            hoverBegan = false;
             yield return null;
         }
         else
         {
-            scrunk = true;
+            hoverBegan = true;
             transform.position = Vector3.MoveTowards(transform.position, pointToRiseTo, 2f * Time.deltaTime);
             StartCoroutine(Hover());
         }
-        Debug.Log("WAHOOO");
     }
 
     IEnumerator ShatterCountdown()
     {
         yield return new WaitForSeconds(TimeToShatter);
         rigidBody.constraints = RigidbodyConstraints.None;
+        weaveable.Uncombine();
         yield return null;
     }
 
@@ -69,9 +69,9 @@ public class HoverCrystalScript : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        if (distance <= 0)
+        if (!hoverBegan)
         {
-            DrawArrow.ForGizmo(transform.position, Vector3.up * hoverDistance);
+            DrawArrow.ForGizmo(transform.position, Vector3.up * hoverHeight);
         }
         else
         {
