@@ -267,8 +267,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         }
 
         // both parent and non parent weaveables - DOES NOT AFFECT CRYSTALS
-        if (gameObject.tag != "Breakable" && collision.gameObject.GetComponent<Rigidbody>() != null && canCombine && weaveableScript.ID == ID)
+        if (gameObject.tag != "Breakable" && collision.gameObject.GetComponent<Rigidbody>() != null && parentWeaveable.inWeaveMode && canCombine && weaveableScript.ID == ID)
         {
+            Debug.Log("1st: " + collision.gameObject);
+            Debug.Log("2nd: " + collision.gameObject.GetComponent<Rigidbody>()); // having these debugs here.... fixes issues???????????????
+
             // only adds fixed joints to parent weaveable to be removed nicely in Uncombine()
             if (collision.gameObject != parentWeaveable.gameObject && collision.gameObject.GetComponent<Rigidbody>() != null)
             {
@@ -386,10 +389,21 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             isWoven = true;
             rb.useGravity = false;
             relocate = true;
-            inWeaveMode = false;
             rb.isKinematic = false;
             canRotate = true;
+            //inWeaveMode = false;
         }
+
+        if (inWeaveMode)
+        {
+            StartCoroutine(WeaveModeTimer());
+        }
+    }
+
+    IEnumerator WeaveModeTimer() // sets variable after 1 second to account for combine - need this variable
+    {
+        yield return new WaitForSeconds(1);
+        inWeaveMode = false;
     }
 
     public void WeaveMode()
@@ -403,6 +417,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     public void OnCombineInput()
     {
+        inWeaveMode = true;
         if (weaveableScript.ID == ID && !weaveableScript.isWoven && canCombine)
         {
             Debug.Log("OnCombineInput");
