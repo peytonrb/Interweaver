@@ -120,7 +120,7 @@ public class MainMenu : MonoBehaviour
     {
         // Start Game!
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startFile, 1f);
-        SceneHandler.instance.LoadLevel("sc_Prototype");
+        SceneHandler.instance.LoadLevel("AlpineCombined");
     }
     public void PlayHoverSound()
     {
