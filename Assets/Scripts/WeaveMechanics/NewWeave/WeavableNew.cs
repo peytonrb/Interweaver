@@ -35,6 +35,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     private float distance;
     [SerializeField] private float snapDistance;
     [SerializeField] private float nearestDistance;
+    [SerializeField] private List<GameObject> listOfCombinedObjects = new List<GameObject>(); 
 
     [Header("Floating Islands + Crystals")]
     private bool onFloatingIsland;
