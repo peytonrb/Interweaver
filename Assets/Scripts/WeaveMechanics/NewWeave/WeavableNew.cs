@@ -475,7 +475,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
         if (weaveableScript.canBeRelocated)
         {
-            weaveableScript.startFloating = true;
+            //weaveableScript.startFloating = true; //this is commented out so that the snapping can actually work
             Snapping();
         }
         else
