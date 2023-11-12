@@ -5,10 +5,6 @@ using UnityEngine.Animations;
 
 public class DayblockPuzzleManager : MonoBehaviour
 {
-    private int sunblocklength;
-    private int sunriseblocklength;
-    private int moonblocklength;
-    private int blockIdentity;
     private bool parentFound;
     public int combinationpart; //Which part of the combination has been done
     private GameObject[] weaveables;
@@ -16,14 +12,18 @@ public class DayblockPuzzleManager : MonoBehaviour
     public WeaveableNew sunblockweaveparent;
     public WeaveableNew sunriseblockweaveparent;
     public WeaveableNew moonblockweaveparent;
-    //private WeaveableNew[] weaveableScripts;
     private WeaveableNew weaveableScript;
+    private DayblockScript[] dayblockScripts;
 
     // Start is called before the first frame update
     void Start()
     {
         weaveables = GameObject.FindGameObjectsWithTag("Weaveable");
+        dayblockScripts = GetComponentsInChildren<DayblockScript>();
 
+        foreach (DayblockScript ds in dayblockScripts) {
+            ds.gotShape = false;
+        }
     }
 
     public void FoundParent() {
@@ -58,12 +58,16 @@ public class DayblockPuzzleManager : MonoBehaviour
     
     public void GotCombination(int combination, WeaveableNew weaveableScript) {
         combinationpart = combination;
-        weaveableScript.Uninteract();
         Debug.Log("Combination part" + combinationpart);
     }
 
     public void RestartPuzzle() {
         Debug.Log("Get Good!");
+        dayblockScripts = GetComponentsInChildren<DayblockScript>();
+        
+        foreach (DayblockScript ds in dayblockScripts) {
+            ds.gotShape = false;
+        }
         combinationpart = 0;
     }
 

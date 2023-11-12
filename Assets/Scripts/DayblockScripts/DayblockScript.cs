@@ -8,6 +8,7 @@ public class DayblockScript : MonoBehaviour
     public int shapeNeeded; //Identifies the shape of the blocks
     
     public GameObject dayblockPuzzleManager;
+    public bool gotShape;
 
     void OnCollisionEnter(Collision other) {
         if (other.gameObject.tag == "Weaveable") {
@@ -27,17 +28,22 @@ public class DayblockScript : MonoBehaviour
                             if (weaveScript.wovenObjects.Count == 3) {
                                 //Finds if the puzzle has been done in the proper order.
                                 DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
-                                switch (dpm.combinationpart) {
-                                    case 0:
-                                        dpm.GotCombination(1,weaveScript);
-                                    break;
-                                    case 1:
-                                        dpm.RestartPuzzle();
-                                    break;
-                                    case 2:
-                                        dpm.RestartPuzzle();
-                                    break;
+                                if (!gotShape) {
+                                    //Finds if the part of the puzzle has recieved its shape yet.
+                                    switch (dpm.combinationpart) {
+                                        case 0:
+                                            dpm.GotCombination(1,weaveScript);
+                                            gotShape = true;
+                                        break;
+                                        case 1:
+                                            dpm.RestartPuzzle();
+                                        break;
+                                        case 2:
+                                            dpm.RestartPuzzle();
+                                        break;
+                                    }
                                 }
+                                
                             }
                         break;
 
@@ -45,16 +51,19 @@ public class DayblockScript : MonoBehaviour
                             //Sun block
                             if (weaveScript.wovenObjects.Count == 3) {
                                 DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
-                                switch (dpm.combinationpart) {
-                                    case 0:
-                                        dpm.RestartPuzzle();
-                                    break;
-                                    case 1:
-                                        dpm.GotCombination(2,weaveScript);
-                                    break;
-                                    case 2:
-                                        dpm.RestartPuzzle();
-                                    break;
+                                if (!gotShape) {
+                                    switch (dpm.combinationpart) {
+                                        case 0:
+                                            dpm.RestartPuzzle();
+                                        break;
+                                        case 1:
+                                            dpm.GotCombination(2,weaveScript);
+                                            gotShape = true;
+                                        break;
+                                        case 2:
+                                            dpm.RestartPuzzle();
+                                        break;
+                                    }
                                 }
                             }
 
@@ -64,17 +73,20 @@ public class DayblockScript : MonoBehaviour
                             //Moon block
                             if (weaveScript.wovenObjects.Count == 2) {
                                 DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
-                                switch (dpm.combinationpart) {
-                                    case 0:
-                                        dpm.RestartPuzzle();
-                                    break;
-                                    case 1:
-                                        dpm.RestartPuzzle();
-                                    break;
-                                    case 2:
-                                        dpm.PuzzleComplete();
-                                    break;
-                                }
+                                if (!gotShape) {
+                                    switch (dpm.combinationpart) {
+                                        case 0:
+                                            dpm.RestartPuzzle();
+                                        break;
+                                        case 1:
+                                            dpm.RestartPuzzle();
+                                        break;
+                                        case 2:
+                                            dpm.PuzzleComplete();
+                                            gotShape = true;
+                                        break;
+                                    }
+                                }    
                             }
                         break;
                     }
@@ -117,17 +129,20 @@ public class DayblockScript : MonoBehaviour
                         if (weaveableScript.wovenObjects.Count == 3) {
                             //Finds if the puzzle has been done in the proper order.
                             DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
-                            switch (dpm.combinationpart) {
-                                case 0:
-                                    dpm.GotCombination(1,weaveableScript);
-                                break;
-                                case 1:
-                                    dpm.RestartPuzzle();
-                                break;
-                                case 2:
-                                    dpm.RestartPuzzle();
-                                break;
-                            }
+                            if (!gotShape) {
+                                switch (dpm.combinationpart) {
+                                    case 0:
+                                        dpm.GotCombination(1,weaveableScript);
+                                        gotShape = true;
+                                    break;
+                                    case 1:
+                                        dpm.RestartPuzzle();
+                                    break;
+                                    case 2:
+                                        dpm.RestartPuzzle();
+                                    break;
+                                }
+                            }  
                         }
                     break;
 
@@ -135,18 +150,22 @@ public class DayblockScript : MonoBehaviour
                         //Sun block
                         if (weaveableScript.wovenObjects.Count == 3) {
                             DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
-                            switch (dpm.combinationpart) {
-                                case 0:
-                                    dpm.RestartPuzzle();
-                                break;
-                                case 1:
-                                    dpm.GotCombination(2,weaveableScript);
-                                    
-                                break;
-                                case 2:
-                                    dpm.RestartPuzzle();
-                                break;
+                            if (!gotShape) {
+                                switch (dpm.combinationpart) {
+                                    case 0:
+                                        dpm.RestartPuzzle();
+                                    break;
+                                    case 1:
+                                        dpm.GotCombination(2,weaveableScript);
+                                        gotShape = true;
+                                        
+                                    break;
+                                    case 2:
+                                        dpm.RestartPuzzle();
+                                    break;
+                                }
                             }
+                            
                         }
                     break;
 
@@ -154,17 +173,21 @@ public class DayblockScript : MonoBehaviour
                         //Moon block
                         if (weaveableScript.wovenObjects.Count == 2) {
                             DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
-                            switch (dpm.combinationpart) {
-                                case 0:
-                                    dpm.RestartPuzzle();
-                                break;
-                                case 1:
-                                    dpm.RestartPuzzle();
-                                break;
-                                case 2:
-                                    dpm.PuzzleComplete();
-                                break;
+                            if (!gotShape) {
+                                switch (dpm.combinationpart) {
+                                    case 0:
+                                        dpm.RestartPuzzle();
+                                    break;
+                                    case 1:
+                                        dpm.RestartPuzzle();
+                                    break;
+                                    case 2:
+                                        dpm.PuzzleComplete();
+                                        gotShape = true;
+                                    break;
+                                }
                             }
+                            
                         }
                     break;
                 }
