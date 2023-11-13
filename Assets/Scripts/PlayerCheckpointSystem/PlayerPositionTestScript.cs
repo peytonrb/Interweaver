@@ -10,7 +10,7 @@ public class PlayerPositionTestScript : MonoBehaviour
     void Start()
     {
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
-        transform.position = GM.LastCheckPointPos;
+        transform.position = GM.WeaverCheckPointPos;
     }
 
     void Update()

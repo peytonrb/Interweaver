@@ -17,6 +17,7 @@ public class FamiliarScript : MonoBehaviour
     public bool myTurn; //Responsible for determining if the familiar can move
     public bool leapOfFaith; //Determines if owl familiar is in a leap of faith 
     public bool familiarMovementAbility;//Only used for reading if familiar is using movemeny ability
+    private bool insideTrigger;
     
 
 
@@ -24,15 +25,12 @@ public class FamiliarScript : MonoBehaviour
     //Character Rotation values
     //**********************************************************
     public GameObject cameraMaster; //Camera manager reference
+    private int vCamRotationState;
     //public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
     //private Vector3 originalVirtualCamRotation; // Original rotation values for the virtual camera
     //private Vector3 originalVirtualCamTransposeOffset; //Virtual Camera original transpose offset values
     //**********************************************************
     private GameMasterScript GM; //This is refrencing the game master script
-
-    [Header ("Floating Island")]
-    public GameObject[] floatingIsland;
-
 
     [Header("Weave Variables")]
     public float WeaveDistance = 12f;
@@ -58,6 +56,7 @@ public class FamiliarScript : MonoBehaviour
         depossessing = false;
         leapOfFaith = false;
         familiarMovementAbility = false;
+        insideTrigger = false;
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>(); 
@@ -110,9 +109,7 @@ public class FamiliarScript : MonoBehaviour
             else
             {
                 CameraMasterScript.instance.EndLeapOfFaith();
-                characterController.enabled = false;
-                transform.position = GM.LastCheckPointPos;
-                characterController.enabled = true;
+                Death();
             }
         }
     }
@@ -120,6 +117,11 @@ public class FamiliarScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
+        if (collision.gameObject.TryGetComponent(out ITriggerable trigger))
+        {
+            trigger.OnTrigEnter(collision);
+        }
+
         if (collision.gameObject.CompareTag("Leap of Faith Trigger"))
         {
             CameraMasterScript.instance.StartLeapOfFaith();
@@ -127,18 +129,14 @@ public class FamiliarScript : MonoBehaviour
 
         else if (collision.gameObject.CompareTag("Kill Area"))
         {
+            Debug.Log("Death");
             CameraMasterScript.instance.EndLeapOfFaith();
-            characterController.enabled = false;
-            transform.position = GM.LastCheckPointPos;
-            characterController.enabled = true;
+            Death();
         }
 
         else if (collision.gameObject.CompareTag("Hazard"))
         {
-            Destroy(collision.gameObject);
-            characterController.enabled = false;
-            transform.position = GM.LastCheckPointPos;
-            characterController.enabled = true;
+            Death();
         }
 
         else if (collision.gameObject.CompareTag("Breakable")) // if familiar collides with breakable object while using movement ability
@@ -153,6 +151,24 @@ public class FamiliarScript : MonoBehaviour
                 }
             }
 
+        }
+        else if (collision.gameObject.tag == "CameraTrigger")
+        {
+            if (insideTrigger == false) {
+                CameraIndexScript cameraIndexScript = collision.GetComponent<CameraIndexScript>();
+                vCamRotationState = cameraIndexScript.cameraIndex;
+
+                CameraMasterScript.instance.SwitchFamiliarCameras(vCamRotationState);
+                insideTrigger = true;
+
+                //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAM ERMASTERSCRIPT~
+            }   
+        }
+    }
+
+    private void OnTriggerExit(Collider other) {
+        if (other.gameObject.tag == "CameraTrigger") {
+            insideTrigger = false;
         }
     }
 
@@ -177,4 +193,12 @@ public class FamiliarScript : MonoBehaviour
         myTurn = true;
         StopCoroutine(ForcedDelay());
     }
+
+    public void Death()
+    {
+        characterController.enabled = false;
+        transform.position = GM.FamiliarCheckPointPos;
+        characterController.enabled = true;
+    }
+
 }

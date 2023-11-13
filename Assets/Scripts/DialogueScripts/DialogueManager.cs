@@ -32,16 +32,6 @@ public class DialogueManager : MonoBehaviour
         sentences = new Queue<string>();
     }
 
-    void Update()
-    {
-
-        //NEEDS TO USE INPUT SYSTEM ALSO THE WRONG INPUT
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            DisplayNextSentence();
-        }
-    }
-
     // begins the dialogue
     public void StartDialogue(Dialogue dialogue, GameObject textBox)
     {

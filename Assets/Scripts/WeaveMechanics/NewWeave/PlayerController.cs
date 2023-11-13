@@ -36,6 +36,9 @@ public class PlayerController : MonoBehaviour
     public bool isCurrentlyWeaving; //For input manager to read if currently weaving
     private Vector3 raycastPosition;
     public WeaveableNew weaveableScript;
+    [SerializeField]
+    private GameObject TargetingArrow;
+    private Vector3 worldPosition;
 
     //new variables
     public bool inRelocateMode;
@@ -77,15 +80,16 @@ public class PlayerController : MonoBehaviour
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
         pauseScript = pauseMenu.GetComponent<PauseScript>();
-        weaveVisualizer = GetComponent<WeaveFXScript>(); // THIS WILL CAUSE A NULL IF THERE IS NO WEAVEFXSCRIPT ATTACHED TO PLAYER
+        weaveVisualizer = GetComponent<WeaveFXScript>();
         weaveVisualizer.DisableWeave();
         possessing = false;
         vCamRotationState = 0;
         pauseMenu.SetActive(false);
+        TargetingArrow.SetActive(false);
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
-        transform.position = GM.LastCheckPointPos;
+        transform.position = GM.WeaverCheckPointPos;
         characterController.enabled = true;
         Debug.Log("Active Current Position: " + transform.position);
 
@@ -199,18 +203,18 @@ public class PlayerController : MonoBehaviour
     private IInteractable determineInteractability()
     {
         playerPosition = new Vector3(transform.position.x, transform.position.y + raycastPosition.y, transform.position.z);
-        Vector3 rayDirection = transform.forward;
+        Vector3 rayDirection = TargetingArrow.transform.forward;
 
         // the actual raycast from the player, this can be used for the line render 
         //      but it takes the raycast origin and the direction of the raycast
         Ray rayPlayer = new Ray(playerPosition, rayDirection);
 
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        //Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
         Debug.DrawRay(rayPlayer.origin, rayPlayer.direction * weaveDistance, Color.red);
 
         // checks for a Weavable object within distance of Ray
-        if (Physics.Raycast(ray, out hitInfo, 100, weaveObject) || Physics.Raycast(rayPlayer, out hitInfo, weaveDistance, weaveObject))
+        if (Physics.Raycast(rayPlayer, out hitInfo, 100, weaveObject) || Physics.Raycast(rayPlayer, out hitInfo, weaveDistance, weaveObject))
         {
             Debug.Log("Raycast hit");
             
@@ -236,53 +240,146 @@ public class PlayerController : MonoBehaviour
             inRelocateMode = false;
             inCombineMode = false;
             isCurrentlyWeaving = false;
-        }
+        }        
     }
-
-    private void weaveController()
+    public void ControllerAimTargetter(Vector2 lookDir)
     {
-        cursor = InputManagerScript.instance.weaveCursor;
-        if (cursor.magnitude <= 0.1f)
+        if (lookDir.magnitude >= 0.1f)
         {
-            return;
-        }
+            float targetAngle = Mathf.Atan2(lookDir.x, lookDir.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
 
-        currentMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-        warpPosition = currentMousePosition + bias + overflow + sensitivity * Time.deltaTime * cursor;
-        warpPosition = new Vector2(Mathf.Clamp(warpPosition.x, 0, Screen.width), Mathf.Clamp(warpPosition.y, 0, Screen.height));
-        overflow = new Vector2(warpPosition.x % 1, warpPosition.y % 1);
-        Mouse.current.WarpCursorPosition(warpPosition);
-    }
+            TargetingArrow.transform.rotation = Quaternion.Euler(0, targetAngle, 0);
 
-    void DetectGamepad()
-    {
-        var gamepad = Gamepad.current;
-        if (gamepad != null)
-        {
-            weaveController();
-            pauseScript.TurnOnUsingController();
-            pauseScript.toggle.isOn = true;
+            if (isCurrentlyWeaving)
+            {              
+                TargetingArrow.SetActive(false);
+            }
+            else
+            {
+                TargetingArrow.SetActive(true);
+            }
         }
         else
         {
-            pauseScript.TurnOffUsingController();
-            pauseScript.toggle.isOn = false;
-            return;
+            TargetingArrow.SetActive(false);
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    public void MouseAimTargetter(Vector2 lookDir)
+    {
+        
+        TargetingArrow.SetActive(true);
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitData;
+        if (Physics.Raycast(ray, out hitData, 1000))
+        {
+            worldPosition = hitData.point;
+        }
+
+        Vector3 AdjustedVector = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
+
+        TargetingArrow.transform.LookAt(AdjustedVector);
+    }
+
+    void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "CameraTrigger")
         {
             CameraIndexScript cameraIndexScript = other.GetComponent<CameraIndexScript>();
+            Transform otherTransform = other.GetComponent<Transform>();
+
+            if (!cameraIndexScript.isZaxisTrigger) {
+                if (!cameraIndexScript.goingOppositeDirection) {
+                    if (otherTransform.position.x > transform.position.x) {
+                        //Enter from north
+                        cameraIndexScript.enteredFromNorth = true;
+                    }
+                    else {
+                        cameraIndexScript.enteredFromNorth = false;
+                    }
+                }
+                else {
+                    if (otherTransform.position.x > transform.position.x) {
+                        //Enter from north
+                        cameraIndexScript.enteredFromNorth = false;
+                    }
+                    else {
+                        cameraIndexScript.enteredFromNorth = true;
+                    }
+                }
+                
+            }
+            else {
+                if (!cameraIndexScript.goingOppositeDirection) {
+                    if (otherTransform.position.z > transform.position.z) {
+                        cameraIndexScript.enteredFromNorth = false;
+                    }
+                    else {
+                        cameraIndexScript.enteredFromNorth = true;
+                        //Debug.Log("Weaver transform" + transform.position.z);
+                        //Debug.Log("Camera trigger" + otherTransform.position.z);
+                    }
+                }
+                else {
+                    if (otherTransform.position.z > transform.position.z) {
+                        cameraIndexScript.enteredFromNorth = true;
+                    }
+                    else {
+                        cameraIndexScript.enteredFromNorth = false;
+                        //Debug.Log("Weaver transform" + transform.position.z);
+                        //Debug.Log("Camera trigger" + otherTransform.position.z);
+                    }
+                }
+                
+            }
+
             vCamRotationState = cameraIndexScript.cameraIndex;
 
-            CameraMasterScript.instance.SwitchCameras(vCamRotationState);
+            if (cameraIndexScript.isZaxisTrigger) {
+                if (!cameraIndexScript.goingOppositeDirection) {
+                    if (!cameraIndexScript.triggered && cameraIndexScript.enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+                    }
+                    else if (cameraIndexScript.triggered && !cameraIndexScript.enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+                    }
+                }
+                else {
+                    if (cameraIndexScript.triggered && !cameraIndexScript.enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+                    }
+                    else if (!cameraIndexScript.triggered && cameraIndexScript.enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+                    }
+                }
+                
+            }
+            else {
+                if (!cameraIndexScript.goingOppositeDirection) {
+                    if (!cameraIndexScript.triggered && cameraIndexScript.enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+                    }
+                    else if (cameraIndexScript.triggered && !cameraIndexScript.enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+                    }
+                }
+                else {
+                    if (cameraIndexScript.triggered && !cameraIndexScript.enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+                    }
+                    else if (!cameraIndexScript.triggered && cameraIndexScript.enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+                    }
+                }
+                
+            } 
 
-            //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAM ERMASTERSCRIPT~
+            //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
         }
+    }
 
+    void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag == "CutsceneTrigger") {
             //Only the trigger that is a child of a certain cutscene manager will activate a cutscene.
             foreach (GameObject cm in cutsceneManager) {
@@ -290,8 +387,15 @@ public class PlayerController : MonoBehaviour
                 cms.StartCutscene();
             }     
         }
-    }
 
+        if (other.gameObject.tag == "LevelTrigger") {
+            LevelTriggerScript levelTriggerScript = other.GetComponent<LevelTriggerScript>();
+            int section = levelTriggerScript.triggerType;
+            
+            LevelManagerScript.instance.TurnOnOffSection(section);
+        }
+    }
+    
     void OnCollisionEnter(Collision collision)
     {
         IInteractable interactable = collision.gameObject.GetComponent<IInteractable>();
@@ -324,9 +428,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void Pausing()
+    public void Death()
     {
-        pauseMenu.SetActive(true);
-        Time.timeScale = 0;
+        transform.position = GM.WeaverCheckPointPos;
     }
 }

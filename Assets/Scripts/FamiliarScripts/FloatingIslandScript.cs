@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
-using UnityEngine.Assertions.Must;
 
 public class FloatingIslandScript : MonoBehaviour
 {
@@ -22,6 +21,7 @@ public class FloatingIslandScript : MonoBehaviour
     [SerializeField] private Transform floatTransform;
     [CannotBeNullObjectField]
     [SerializeField] private Transform sitTransform;
+    [SerializeField] private bool isFloatingIslandInTheTube;
 
 
     [Header("Don't Touch!")]
@@ -88,7 +88,9 @@ public class FloatingIslandScript : MonoBehaviour
             anim.SetTrigger("Fall");
             StartCoroutine(TimerBeforeRespawn(true));
             cameraswitched = false;
-            myCrystal.GetComponent<WeaveableNew>().canBeRelocated = true;
+            if (!isFloatingIslandInTheTube) {
+                myCrystal.GetComponent<WeaveableNew>().canBeRelocated = true;
+            }
         }
     }
 
@@ -97,7 +99,7 @@ public class FloatingIslandScript : MonoBehaviour
     {
         yield return new WaitForSeconds(timerBeforeSwap / 2);
 
-        if (!isFalling)
+        if (!isFalling && !isFloatingIslandInTheTube)
         {
             CameraMasterScript.instance.FloatingIslandCameraReturn(myFloatCamera);
         }
@@ -111,6 +113,9 @@ public class FloatingIslandScript : MonoBehaviour
             verticalOffset = 0;
             transform.position = sitTransform.position;
             isFloating = false;
+            if (isFloatingIslandInTheTube) {
+                LevelManagerScript.instance.TurnOnOffSection(1);
+            }
         }
         else
         {

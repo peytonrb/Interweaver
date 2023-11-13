@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class NetCannonScript : MonoBehaviour
@@ -8,6 +9,7 @@ public class NetCannonScript : MonoBehaviour
     public float projectileSpeed; //Set to negative if shooting in the negative direction of an axis
 
     private bool fired = false;
+    public bool isOn;
 
     public GameObject projectile;
     private NetProjectileScript netProjectileScript;
@@ -21,14 +23,17 @@ public class NetCannonScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (fired == false) {
-            GameObject spawnedShot = Instantiate(projectile, transform.position, transform.rotation);
+        if (isOn) {
+            if (fired == false) {
+                GameObject spawnedShot = Instantiate(projectile, transform.position, transform.rotation);
 
-            spawnedShot.GetComponent<NetProjectileScript>().speed = projectileSpeed;
+                spawnedShot.GetComponent<NetProjectileScript>().speed = projectileSpeed;
 
-            StartCoroutine(Wait());
-            fired = true;
+                StartCoroutine(Wait());
+                fired = true;
+            }
         }
+        
     }
 
     IEnumerator Wait() {

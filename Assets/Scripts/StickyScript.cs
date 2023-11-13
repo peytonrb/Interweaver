@@ -6,7 +6,7 @@ public class StickyScript : MonoBehaviour
 {
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.CompareTag("Player"))
+        if (collider.CompareTag("Player") || collider.CompareTag("Familiar"))
         {
             collider.gameObject.transform.SetParent(transform);
         }
@@ -14,7 +14,7 @@ public class StickyScript : MonoBehaviour
 
     private void OnTriggerExit(Collider collider)
     {
-        if (collider.CompareTag("Player"))
+        if (collider.CompareTag("Player") || collider.CompareTag("Familiar"))
         {
             collider.gameObject.transform.SetParent(null);
         }
