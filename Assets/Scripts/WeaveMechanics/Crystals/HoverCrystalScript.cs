@@ -10,12 +10,15 @@ public class HoverCrystalScript : MonoBehaviour
     [Header("References")]
     private Rigidbody rigidBody;
     private WeaveableNew weaveable; // make sure to change when script name gets changed as well!!!
+    [Header("Variables")]
     private Vector3 pointToRiseTo = Vector3.up;
+    [SerializeField] private float maxTimeToShatter = 5f; 
     [SerializeField] private float hoverHeight = 10f;
+    //[SerializeField] private bool startShatterTimeBeforePeak;
     private float distance = -1f;
     private float TimeToShatter;
-    [SerializeField] private float maxTimeToShatter = 5f; 
-    bool hoverBegan;
+    private bool hoverBegan;
+    private bool isCombined;
 
     void Start()
     {
@@ -57,6 +60,7 @@ public class HoverCrystalScript : MonoBehaviour
         rigidBody.constraints = RigidbodyConstraints.None;
         RestoreLayerOfWovenObjects();
         weaveable.Uncombine();
+        isCombined = false;
         StartCoroutine(Hover());
         yield return null;
     }
@@ -65,6 +69,7 @@ public class HoverCrystalScript : MonoBehaviour
     {
         if (weaveable.isCombined && !weaveable.isWoven)
         {
+            isCombined = true;
             return true;
         }
         return false;
@@ -90,7 +95,7 @@ public class HoverCrystalScript : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        if (!hoverBegan && !weaveable.isCombined)
+        if (!hoverBegan && !isCombined)
         {
             DrawArrow.ForGizmo(transform.position, Vector3.up * hoverHeight);
         }
