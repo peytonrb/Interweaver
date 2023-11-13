@@ -19,6 +19,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     private bool relocate;
     private bool inWeaveMode;
     public bool isWoven;
+    public bool isHovering = false;
     public float rotationSpeed = 0.5f;
     public bool canBeRelocated = true;
     private Vector3 worldPosition;
@@ -67,7 +68,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         rb = GetComponent<Rigidbody>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         weaveableScript = gameObject.GetComponent<WeaveableNew>();
-        if (dayblockPuzzle != null) {
+        if (dayblockPuzzle != null)
+        {
             dpm = dayblockPuzzle.GetComponent<DayblockPuzzleManager>();
         }
         isCombined = false;
@@ -89,6 +91,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         if (startFloating)
         {
+            isHovering = true;
             if (gameObject.tag != "FloatingIsland")
             {
                 transform.position = transform.position + new Vector3(0, hoveringValue, 0);
@@ -97,10 +100,22 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             startFloating = false;
         }
 
+        if (isHovering)
+        {
+            RaycastHit hit;
+
+            if (Physics.Raycast(transform.position, new Vector3(0f, -90f, 0f), out hit, 2f))
+            {
+                Vector3 rayDirection = Vector3.down;
+                Debug.Log(-rayDirection * Physics.gravity.y * 2f);
+                rb.AddForce(-rayDirection * Physics.gravity.y * 2f);
+            }
+        }
+
         if (isWoven)
         {
             if (!InputManagerScript.instance.isGamepad)
-                MovingWeaveMouse(); // fix drag on object here  
+                MovingWeaveMouse();
         }
 
         if (onFloatingIsland && gameObject.tag == "Breakable")
@@ -150,7 +165,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                     TargetingArrow.SetActive(true);
                     canRotate = true;
                     rb.velocity = new Vector3(raycastHit.point.x - rb.position.x, transform.position.y - rb.position.y, raycastHit.point.z - rb.position.z);
-                    rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
                     //this freezes the Y position so that the combined objects won't drag it down because of gravity and it freezes in all rotation so it won't droop because of the gravity  from the objects
 
                     //Targeting Arrow
@@ -375,6 +390,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             player.inRelocateMode = false;
             player.inCombineMode = false;
             relocate = false;
+            isHovering = false;
             inWeaveMode = false;
             isWoven = false;
             startFloating = false;
