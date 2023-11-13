@@ -55,6 +55,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("References")]
     [CannotBeNullObjectField] public GameObject familiar;
+    [CannotBeNullObjectField] public RespawnController respawnController;
     private FamiliarScript familiarScript;
     private GameMasterScript GM;
 
@@ -431,5 +432,10 @@ public class PlayerController : MonoBehaviour
     public void Death()
     {
         transform.position = GM.WeaverCheckPointPos;
+
+        if (GM.WeaverCheckPointNum == 0) // first checkpoint - should also specify scene
+        {
+            respawnController.RespawnInShieldPuzzle();
+        }
     }
 }

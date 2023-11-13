@@ -5,6 +5,7 @@ using UnityEngine;
 public class CheckPointScript : MonoBehaviour
 {
     private GameMasterScript GM;
+    public int checkpointNum;
 
     void Start()
     {
@@ -16,10 +17,12 @@ public class CheckPointScript : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             GM.WeaverCheckPointPos = transform.position;
+            GM.WeaverCheckPointNum = checkpointNum;
         }
         else if (other.CompareTag("Familiar"))
         {
             GM.FamiliarCheckPointPos = transform.position;
+            GM.FamiliarCheckPointNum = checkpointNum;
         }
     }
 }

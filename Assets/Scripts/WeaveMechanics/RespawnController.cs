@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RespawnController : MonoBehaviour
 {
+    [CannotBeNullObjectField] public List<GameObject> shieldPuzzleWeaveables;
     [SerializeField] private List<Vector3> startPositions;
     [SerializeField] private List<Quaternion> startRotations;
     [SerializeField] private List<GameObject> respawnObjects;
@@ -73,5 +74,14 @@ public class RespawnController : MonoBehaviour
     private void InitializeObjects()
     {
         // populate once this case occurs, unsure how these will get initialized rn
+    }
+
+    public void RespawnInShieldPuzzle()
+    {
+        for (int i = 0; i < shieldPuzzleWeaveables.Count; i++)
+        {
+            shieldPuzzleWeaveables[i].transform.localPosition = shieldPuzzleWeaveables[i].GetComponent<WeaveableNew>().startPos;
+            shieldPuzzleWeaveables[i].transform.rotation = shieldPuzzleWeaveables[i].GetComponent<WeaveableNew>().startRot;
+        }
     }
 }
