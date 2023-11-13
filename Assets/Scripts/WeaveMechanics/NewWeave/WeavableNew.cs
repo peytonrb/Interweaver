@@ -67,7 +67,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         rb = GetComponent<Rigidbody>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         weaveableScript = gameObject.GetComponent<WeaveableNew>();
-        dpm = dayblockPuzzle.GetComponent<DayblockPuzzleManager>();
+        if (dayblockPuzzle != null) {
+            dpm = dayblockPuzzle.GetComponent<DayblockPuzzleManager>();
+        }
         isCombined = false;
         onFloatingIsland = false;
         originalMat = gameObject.GetComponent<Renderer>().material;
