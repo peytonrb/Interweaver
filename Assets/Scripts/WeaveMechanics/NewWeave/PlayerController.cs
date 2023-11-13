@@ -433,7 +433,7 @@ public class PlayerController : MonoBehaviour
     {
         transform.position = GM.WeaverCheckPointPos;
 
-        if (GM.WeaverCheckPointNum == 0) // first checkpoint - should also specify scene
+        if (GM.WeaverCheckPointNum == 0) // first checkpoint in shield puzzle - should also specify scene
         {
             respawnController.RespawnInShieldPuzzle();
         }
