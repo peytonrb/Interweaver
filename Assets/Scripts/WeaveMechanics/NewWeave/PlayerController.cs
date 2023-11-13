@@ -1,12 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
-using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class PlayerController : MonoBehaviour
 {
@@ -292,33 +290,92 @@ public class PlayerController : MonoBehaviour
             Transform otherTransform = other.GetComponent<Transform>();
 
             if (!cameraIndexScript.isZaxisTrigger) {
-                if (otherTransform.position.x > transform.position.x) {
-                    //Enter from north
-                    cameraIndexScript.enteredFromNorth = false;
+                if (!cameraIndexScript.goingOppositeDirection) {
+                    if (otherTransform.position.x > transform.position.x) {
+                        //Enter from north
+                        cameraIndexScript.enteredFromNorth = true;
+                    }
+                    else {
+                        cameraIndexScript.enteredFromNorth = false;
+                    }
                 }
                 else {
-                    cameraIndexScript.enteredFromNorth = true;
+                    if (otherTransform.position.x > transform.position.x) {
+                        //Enter from north
+                        cameraIndexScript.enteredFromNorth = false;
+                    }
+                    else {
+                        cameraIndexScript.enteredFromNorth = true;
+                    }
                 }
+                
             }
             else {
-                if (otherTransform.position.z > transform.position.z) {
-                    cameraIndexScript.enteredFromNorth = false;
+                if (!cameraIndexScript.goingOppositeDirection) {
+                    if (otherTransform.position.z > transform.position.z) {
+                        cameraIndexScript.enteredFromNorth = false;
+                    }
+                    else {
+                        cameraIndexScript.enteredFromNorth = true;
+                        //Debug.Log("Weaver transform" + transform.position.z);
+                        //Debug.Log("Camera trigger" + otherTransform.position.z);
+                    }
                 }
                 else {
-                    cameraIndexScript.enteredFromNorth = true;
+                    if (otherTransform.position.z > transform.position.z) {
+                        cameraIndexScript.enteredFromNorth = true;
+                    }
+                    else {
+                        cameraIndexScript.enteredFromNorth = false;
+                        //Debug.Log("Weaver transform" + transform.position.z);
+                        //Debug.Log("Camera trigger" + otherTransform.position.z);
+                    }
                 }
+                
             }
-            
+
             vCamRotationState = cameraIndexScript.cameraIndex;
 
-            if (!cameraIndexScript.triggered && !cameraIndexScript.enteredFromNorth) {
-                CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+            if (cameraIndexScript.isZaxisTrigger) {
+                if (!cameraIndexScript.goingOppositeDirection) {
+                    if (!cameraIndexScript.triggered && cameraIndexScript.enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+                    }
+                    else if (cameraIndexScript.triggered && !cameraIndexScript.enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+                    }
+                }
+                else {
+                    if (cameraIndexScript.triggered && !cameraIndexScript.enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+                    }
+                    else if (!cameraIndexScript.triggered && cameraIndexScript.enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+                    }
+                }
+                
             }
-            else if (cameraIndexScript.triggered && cameraIndexScript.enteredFromNorth) {
-                CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
-            }
+            else {
+                if (!cameraIndexScript.goingOppositeDirection) {
+                    if (!cameraIndexScript.triggered && cameraIndexScript.enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+                    }
+                    else if (cameraIndexScript.triggered && !cameraIndexScript.enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+                    }
+                }
+                else {
+                    if (cameraIndexScript.triggered && !cameraIndexScript.enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+                    }
+                    else if (!cameraIndexScript.triggered && cameraIndexScript.enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
+                    }
+                }
+                
+            } 
 
-            //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAM ERMASTERSCRIPT~
+            //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
         }
     }
 

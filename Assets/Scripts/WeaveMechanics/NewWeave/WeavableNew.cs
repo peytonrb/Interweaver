@@ -59,15 +59,17 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public List<WeaveableNew> wovenObjects;
     [SerializeField] private PlayerController player;
     private GameObject wovenFloatingIsland;
-    /*[SerializeField] private GameObject dayblockPuzzle;
-    private DayblockPuzzleManager dpm;*/
+    [SerializeField] private GameObject dayblockPuzzle;
+    private DayblockPuzzleManager dpm;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         weaveableScript = gameObject.GetComponent<WeaveableNew>();
-        //dpm = dayblockPuzzle.GetComponent<DayblockPuzzleManager>();
+        if (dayblockPuzzle != null) {
+            dpm = dayblockPuzzle.GetComponent<DayblockPuzzleManager>();
+        }
         isCombined = false;
         onFloatingIsland = false;
         originalMat = gameObject.GetComponent<Renderer>().material;
