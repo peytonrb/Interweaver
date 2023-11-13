@@ -14,7 +14,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public int ID;
     public bool canRotate;
     public bool canCombine = true;
-    [SerializeField] private bool canBeTargetedForCombine = true;
     private bool startFloating;
     private bool relocate;
     private bool inWeaveMode;
@@ -24,6 +23,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     private Vector3 worldPosition;
     [SerializeField] private GameObject TargetingArrow;
     private bool isRotating = false;
+    private LayerMask originalLayerMask;
 
     // for combining multiple objects
     public bool isParent;
@@ -75,6 +75,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         // for respawnables
         startPos = transform.localPosition;
         startRot = transform.rotation;
+
+        originalLayerMask = gameObject.layer;
     }
 
     void Update()
@@ -468,7 +470,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         Debug.Log("This is the combine code");
         canCombine = true;
 
-        if (weaveableScript.canBeRelocated && canBeTargetedForCombine)
+        if (weaveableScript.canBeRelocated)
         {
             weaveableScript.startFloating = true;
             Snapping();
@@ -526,5 +528,18 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             //                                         (weaveableScript.nearestPoint.transform.position - 
             //                                          weaveableScript.myNearestPoint.transform.position).normalized;
         }
+    }
+
+
+    //********************************************************************
+
+    public void RestoreOriginalLayer()
+    {
+        gameObject.layer = originalLayerMask;
+    }
+
+    public List<WeaveableNew> GetListOfWovenObjects()
+    {
+        return wovenObjects;
     }
 }

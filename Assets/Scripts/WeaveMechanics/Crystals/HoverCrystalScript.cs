@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -33,7 +34,7 @@ public class HoverCrystalScript : MonoBehaviour
         {
             pointToRiseTo = transform.position + (Vector3.up * hoverHeight);
             rigidBody.constraints = RigidbodyConstraints.FreezeAll;
-            gameObject.layer = LayerMask.NameToLayer("Default");
+            RemoveLayerOfWovenObjects();
         }
         if (distance <= 0.1f)
         {
@@ -54,7 +55,9 @@ public class HoverCrystalScript : MonoBehaviour
     {
         yield return new WaitForSeconds(TimeToShatter);
         rigidBody.constraints = RigidbodyConstraints.None;
+        RestoreLayerOfWovenObjects();
         weaveable.Uncombine();
+        StartCoroutine(Hover());
         yield return null;
     }
 
@@ -67,9 +70,27 @@ public class HoverCrystalScript : MonoBehaviour
         return false;
     }
 
+    private void RemoveLayerOfWovenObjects()
+    {
+        List<WeaveableNew> wovenObjects = weaveable.GetListOfWovenObjects();
+        foreach(WeaveableNew weaveable in wovenObjects)
+        {   
+            weaveable.gameObject.layer = LayerMask.NameToLayer("Default");
+        }
+    } 
+
+    private void RestoreLayerOfWovenObjects()
+    {
+        List<WeaveableNew> wovenObjects = weaveable.GetListOfWovenObjects();
+        foreach(WeaveableNew weaveable in wovenObjects)
+        {   
+            weaveable.RestoreOriginalLayer();
+        }
+    }
+
     void OnDrawGizmos()
     {
-        if (!hoverBegan)
+        if (!hoverBegan && !weaveable.isCombined)
         {
             DrawArrow.ForGizmo(transform.position, Vector3.up * hoverHeight);
         }
