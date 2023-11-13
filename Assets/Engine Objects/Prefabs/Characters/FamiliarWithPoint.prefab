@@ -39,7 +39,7 @@ Transform:
   - {fileID: 8812801818404771755}
   - {fileID: 6051683453882045260}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &2404717404260384247
 CharacterController:
@@ -101,6 +101,7 @@ MonoBehaviour:
   terminalVelocity: -5
   bounceVector: {x: 0, y: 1, z: 0}
   bounceValue: 3
+  weaverAnimationHandler: {fileID: 835227295556727057}
   cam: {fileID: 0}
   virtualCam: {fileID: 0}
   active: 0
@@ -227,6 +228,8 @@ GameObject:
   - component: {fileID: 2410289014596929605}
   - component: {fileID: 6398066163055934955}
   - component: {fileID: 8991612397143741595}
+  - component: {fileID: 1087394416962168114}
+  - component: {fileID: 835227295556727057}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Familiar
@@ -322,6 +325,39 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &1087394416962168114
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4790128978794148584}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4d127548fd1e4df44aeee85f80cc7a12, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &835227295556727057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4790128978794148584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890dd20412d5884438309ed20a9530ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5485622101613797852
 GameObject:
   m_ObjectHideFlags: 0

@@ -159,7 +159,16 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                     RaycastHit hitData;
                     if (Physics.Raycast(ray, out hitData, 1000))
                     {
-                        worldPosition = hitData.point;
+                        float rayDistance = Vector3.Distance(gameObject.transform.position, hitData.point);
+
+                        if (rayDistance > 50f) // drops object if you hover over the void
+                        {
+                            Uncombine();
+                        }
+                        else
+                        {
+                            worldPosition = hitData.point;
+                        }
                     }
 
                     Vector3 AdjustedVector = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
