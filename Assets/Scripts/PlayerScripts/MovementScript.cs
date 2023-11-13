@@ -39,6 +39,9 @@ public class MovementScript : MonoBehaviour
 
     //private bool bouncing = false;
 
+    [Header("Animation")]
+    [CannotBeNullObjectField] public WeaverAnimationHandler weaverAnimationHandler;
+
 
     [Header("character's camera")]
     //Character Rotation values
@@ -108,11 +111,12 @@ public class MovementScript : MonoBehaviour
                 //Debug.Log(currentSpeed);
                 //currentSpeed += acceleration * Time.deltaTime;
                 //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
-                //weaverAnimationHandler.ToggleMoveSpeedBlend(speed); // note: speed is static now, but this should work fine when variable speed is added
+                weaverAnimationHandler.ToggleMoveSpeedBlend(currentSpeed); // note: speed is static now, but this should work fine when variable speed is added
             }
             else
             {
                 currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
+                weaverAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
                 //Debug.Log(currentSpeed);
                 //currentSpeed -= deceleration * Time.deltaTime;
                 //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
