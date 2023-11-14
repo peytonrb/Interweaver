@@ -8,7 +8,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 {
     [Header("Weavables")]
     [CannotBeNullObjectField][SerializeField] private Rigidbody rb;
-    [SerializeField] private float hoveringValue = 1f;
+    [SerializeField] private float hoveringValue = 4f;
     [CannotBeNullObjectField][SerializeField] private Camera mainCamera;
     [SerializeField] private LayerMask layersToHit;
     [SerializeField] public WeaveInteraction weaveInteraction;
@@ -357,7 +357,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         Debug.Log("This is interactable");
         startFloating = true;
         transform.rotation = Quaternion.identity;
-        wovenObjects.Add(this.GetComponent<WeaveableNew>());
+        if (!wovenObjects.Contains(this.GetComponent<WeaveableNew>()))
+        {
+            wovenObjects.Add(this.GetComponent<WeaveableNew>());
+        }
+        
 
         // if objects are combined, vfx needs to show up for both
         if (this.isCombined)
@@ -573,5 +577,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public List<WeaveableNew> GetListOfWovenObjects()
     {
         return wovenObjects;
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        DrawArrow.ForGizmo(transform.position, Vector3.down * hoveringValue);
     }
 }

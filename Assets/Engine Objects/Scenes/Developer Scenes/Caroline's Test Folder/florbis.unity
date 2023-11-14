@@ -458,6 +458,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: hoveringValue
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
       propertyPath: nearestDistance
       value: 50
       objectReference: {fileID: 0}
@@ -669,6 +673,10 @@ PrefabInstance:
     - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
       propertyPath: snapDistance
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: hoveringValue
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
       propertyPath: nearestDistance
@@ -3856,6 +3864,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06fdb565b808d0345aae8ffb62659097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shieldPuzzleWeaveables: []
   startPositions: []
   startRotations: []
   respawnObjects: []
@@ -6044,6 +6053,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: hoveringValue
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
       propertyPath: nearestDistance
       value: 50
       objectReference: {fileID: 0}
@@ -6868,6 +6881,83 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1842204352}
   m_CullTransparentMesh: 1
+--- !u!1001 &1866762307
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1182470488956426515, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: m_Name
+      value: Weavable_2x2Cube
+      objectReference: {fileID: 0}
+    - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: m_RootOrder
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8.66
+      objectReference: {fileID: 0}
+    - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -12.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.96046394
+      objectReference: {fileID: 0}
+    - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.2784044
+      objectReference: {fileID: 0}
+    - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -32.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 823247043}
+    - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: hoveringValue
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bea7478cfa148934898144d1385794a4, type: 3}
 --- !u!1 &1903062311
 GameObject:
   m_ObjectHideFlags: 0
@@ -12992,6 +13082,10 @@ PrefabInstance:
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 823247043}
+    - target: {fileID: 3981644071107056459, guid: 947c0d86edcfb0142ad5658b2fc5abb8, type: 3}
+      propertyPath: hoveringValue
+      value: 1.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13116,6 +13210,10 @@ PrefabInstance:
     - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
       propertyPath: snapDistance
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      propertyPath: hoveringValue
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
       propertyPath: nearestDistance
