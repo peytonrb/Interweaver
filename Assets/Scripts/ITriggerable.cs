@@ -4,13 +4,7 @@ using UnityEngine;
 
 public interface ITriggerable
 {
-    void OnTrigEnter(Collider collider)
-    {
+    void OnTrigEnter(Collider collider);
 
-    }
-
-    void OnTrigExit(Collider collider)
-    { 
-    
-    }
+    void OnTrigExit(Collider collider);
 }
