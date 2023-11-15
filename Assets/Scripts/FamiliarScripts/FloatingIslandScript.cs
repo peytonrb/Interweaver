@@ -111,7 +111,7 @@ public class FloatingIslandScript : MonoBehaviour
         {
             anim.SetTrigger("Sit");
             verticalOffset = 0;
-            transform.position = sitTransform.position;
+            transform.position = sitTransform.localPosition;
             isFloating = false;
             if (isFloatingIslandInTheTube) {
                 LevelManagerScript.instance.TurnOnOffSection(1);
