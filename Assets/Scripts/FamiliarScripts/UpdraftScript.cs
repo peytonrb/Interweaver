@@ -1,24 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine.Utility;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class UpdraftScript : MonoBehaviour
 {
+    [Header("References")]
+    [SerializeField] OwlDiveScript owlDiveScript;
+    private MovementScript movementScript;
+
+    [Header("Updraft Curve")]
     public AnimationCurve animationCurve;
 
+    [Header("Variables")]
     private bool inUpdraft; // is character currently in an updraft?
     private bool upDraftEntered; // has a character entered an updraft this frame?
     private float currentBoost = 0;
     [SerializeField]private float maxBoost = 10f; // endpoint for lerp
     private float t = 1; // t for lerp
-    private MovementScript movementScript;
+    
+
+    private void Awake()
+    {
+        owlDiveScript = GetComponent<OwlDiveScript>();
+        movementScript = GetComponent<MovementScript>();
+    }
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.CompareTag("Updraft") && !upDraftEntered)
+        if (collider.CompareTag("Updraft") && !upDraftEntered && !owlDiveScript.isDiving)
         {
-            if (GetComponent<MovementScript>() != null)
+            if (movementScript)
             {  
                 upDraftEntered = true;
                 movementScript = GetComponent<MovementScript>();
@@ -39,7 +52,6 @@ public class UpdraftScript : MonoBehaviour
             t += 1f * Time.deltaTime;
             movementScript.ChangeGravity(currentBoost);
         }
-
     }
 
     private void OnTriggerExit(Collider collider)
@@ -48,7 +60,7 @@ public class UpdraftScript : MonoBehaviour
         {
             inUpdraft = false;
 
-            if (GetComponent<MovementScript>() != null)
+            if (movementScript)
             {
                 StartCoroutine(EndUpdraft());
             }
@@ -60,9 +72,9 @@ public class UpdraftScript : MonoBehaviour
         yield return new WaitForNextFrameUnit();
         if (!inUpdraft)
         {
+            float velocity = movementScript.GetVelocity().y;
             upDraftEntered = false;
-            movementScript = GetComponent<MovementScript>();
-            movementScript.ChangeVelocity(new Vector3 (movementScript.GetVelocity().x, currentBoost/(2*t), movementScript.GetVelocity().z));
+            movementScript.ChangeVelocity(new Vector3 (movementScript.GetVelocity().x, Mathf.Abs(velocity)/(t*10f), movementScript.GetVelocity().z));
             movementScript.ResetGravity();
             t = 1;
         }

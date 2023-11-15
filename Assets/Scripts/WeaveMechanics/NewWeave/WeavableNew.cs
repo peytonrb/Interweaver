@@ -8,7 +8,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 {
     [Header("Weavables")]
     [CannotBeNullObjectField][SerializeField] private Rigidbody rb;
-    [SerializeField] private float hoveringValue = 1f;
+    [SerializeField] private float hoveringValue = 4f;
     [CannotBeNullObjectField][SerializeField] private Camera mainCamera;
     [SerializeField] private LayerMask layersToHit;
     [SerializeField] public WeaveInteraction weaveInteraction;
@@ -42,8 +42,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [Header("Floating Islands + Crystals")]
     private bool onFloatingIsland;
     private GameObject snapPoint;
-    private bool beginHover = false; // for hover crystals
-    private bool hovering = false;
 
     [Header("VFX")]
     public Material originalMat; // accessed by WeaveFX
@@ -94,7 +92,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         if (startFloating)
         {
             isHovering = true;
-            if (gameObject.tag != "FloatingIsland" && gameObject.layer != 9)
+            if (gameObject.tag != "FloatingIsland")
             {
                 transform.position = transform.position + new Vector3(0, hoveringValue, 0);
             }
@@ -106,12 +104,12 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         {
             RaycastHit hit;
 
-            if (Physics.Raycast(transform.position, new Vector3(0f, -90f, 0f), out hit, 2f))
+            /*if (Physics.Raycast(transform.position, new Vector3(0f, -90f, 0f), out hit, 2f))
             {
                 Vector3 rayDirection = Vector3.down;
-                //Debug.Log(-rayDirection * Physics.gravity.y * 2f);
+                Debug.Log(-rayDirection * Physics.gravity.y * 2f);
                 rb.AddForce(-rayDirection * Physics.gravity.y * 2f);
-            }
+            }*/
         }
 
         if (isWoven)
@@ -129,7 +127,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             rb.velocity = new Vector3(snapPoint.transform.position.x - rb.position.x, rb.position.y, snapPoint.transform.position.z - rb.position.z);
             float distanceToSnap = Vector3.Distance(rb.position, snapPoint.transform.position);
 
-            if (distanceToSnap <= 2f) // if crystal is close enough to snap pointw
+            if (distanceToSnap <= 2f) // if crystal is close enough to snap point
             {
                 gameObject.transform.SetParent(wovenFloatingIsland.transform);
                 player.uninteract = true;
@@ -146,26 +144,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 canBeRelocated = false;
                 isWoven = true;
                 onFloatingIsland = false;
-            }
-        }
-
-        if (beginHover)
-        {
-            relocate = false;
-            rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-
-            Snapping();
-            GameObject snappingPoint = weaveableScript.myNearestPoint;
-
-            if (hovering)
-            {
-                float distanceToSnap = Vector3.Distance(rb.position, snappingPoint.transform.position);
-
-                if (distanceToSnap <= 1f) // not causing the jitter
-                {
-                    beginHover = false;
-                    hovering = false;
-                }
             }
         }
     }
@@ -200,7 +178,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
                         if (rayDistance > 50f) // drops object if you hover over the void
                         {
-                            Uncombine();
+                            //Uncombine();
                         }
                         else
                         {
@@ -248,7 +226,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             if (canBeRelocated)
             {
                 canRotate = true;
-                Debug.Log(lookDir);
+                //Debug.Log(lookDir);
 
                 //change this to send velocity in direction of (RS)
                 if (lookDir.magnitude >= 0.1f)
@@ -325,15 +303,20 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         // both parent and non parent weaveables - DOES NOT AFFECT CRYSTALS
         if (gameObject.tag != "Breakable" && collision.gameObject.GetComponent<Rigidbody>() != null && parentWeaveable.inWeaveMode && canCombine && weaveableScript.ID == ID)
         {
-            Debug.Log("1st: " + collision.gameObject);
-            Debug.Log("2nd: " + collision.gameObject.GetComponent<Rigidbody>()); // having these debugs here.... fixes issues???????????????
+            //Debug.Log("1st: " + collision.gameObject);
+            //Debug.Log("2nd: " + collision.gameObject.GetComponent<Rigidbody>()); // having these debugs here.... fixes issues???????????????
 
             // only adds fixed joints to parent weaveable to be removed nicely in Uncombine()
             if (collision.gameObject != parentWeaveable.gameObject && collision.gameObject.GetComponent<Rigidbody>() != null)
             {
                 var fixedJoint = parentWeaveable.gameObject.AddComponent<FixedJoint>();
                 fixedJoint.connectedBody = collision.rigidbody;
+                
                 collision.rigidbody.useGravity = true;
+                if (gameObject.layer == LayerMask.NameToLayer("Attachable Weave Object"))
+                {
+                    Uninteract();
+                }
             }
 
             if (weaveInteraction != null)
@@ -379,7 +362,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         Debug.Log("This is interactable");
         startFloating = true;
         transform.rotation = Quaternion.identity;
-        wovenObjects.Add(this.GetComponent<WeaveableNew>());
+        if (!wovenObjects.Contains(this.GetComponent<WeaveableNew>()))
+        {
+            wovenObjects.Add(this.GetComponent<WeaveableNew>());
+        }
+
 
         // if objects are combined, vfx needs to show up for both
         if (this.isCombined)
@@ -406,9 +393,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         if (isWoven)
         {
             player.floatingIslandCrystal = false;
-            Debug.Log("this is now not woven");
+            //Debug.Log("this is now not woven");
             rb.isKinematic = false;
             rb.useGravity = true;
+            player.isCurrentlyWeaving = false;
+            player.uninteract = true;
             player.inRelocateMode = false;
             player.inCombineMode = false;
             relocate = false;
@@ -441,7 +430,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     public void Relocate()
     {
-        Debug.Log("this is the relocate method");
+        //Debug.Log("this is the relocate method");
         if (canBeRelocated)
         {
             isWoven = true;
@@ -468,7 +457,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         relocate = false;
         inWeaveMode = true;
-        rb.isKinematic = true;
+        if (!isCombined)
+        {
+            rb.isKinematic = true;
+        }
+
         canRotate = true;
     }
     //********************************************************************
@@ -478,7 +471,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         inWeaveMode = true;
         if (weaveableScript.ID == ID && !weaveableScript.isWoven && canCombine)
         {
-            Debug.Log("OnCombineInput");
+            //Debug.Log("OnCombineInput");
             player.weaveVisualizer.WeaveableSelected(weaveableScript.gameObject);
 
             Combine();
@@ -493,7 +486,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         weaveableScript = this.GetComponent<WeaveableNew>(); // hardcoded to prevent nulls
         isCombined = false;
-        Debug.Log("This is the Uncombine code");
+        //Debug.Log("This is the Uncombine code");
 
         // removes all instances of joints on the parent weaveable
         FixedJoint[] joints = GetComponents<FixedJoint>();
@@ -521,13 +514,20 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     public void Combine()
     {
-        Debug.Log("This is the combine code");
+        //Debug.Log("This is the combine code");
         canCombine = true;
 
         if (weaveableScript.canBeRelocated)
         {
             //weaveableScript.startFloating = true; //this is commented out so that the snapping can actually work
-            Snapping();
+            if (gameObject.layer == LayerMask.NameToLayer("Attachable Weave Object"))
+            {
+                TargetedSnapping();
+            }
+            else
+            {
+                Snapping();
+            }
         }
         else
         {
@@ -537,13 +537,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 player.floatingIslandCrystal = true; // for input manager
 
                 wovenFloatingIsland = weaveableScript.gameObject;
-                snapPoint = weaveableScript.gameObject.transform.GetChild(0).gameObject;
             }
-            
-            else if (gameObject.layer == 9)
-            {
-                beginHover = true;
-            }
+
+            snapPoint = weaveableScript.gameObject.transform.GetChild(0).gameObject;
         }
 
         weaveableScript.rb.useGravity = false;
@@ -568,44 +564,50 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                     closestPoint = myTransformPoints[i];
                     weaveableClosestPoint = weaveableScript.myTransformPoints[t];
                     nearestDistance = distance;
-                    //Debug.Log("this is the distance between points " + distance + ",this is the closestpoint" + myTransformPoints[i]);
                 }
             }
-
         }
 
         weaveableScript.nearestPoint = closestPoint;
         weaveableScript.myNearestPoint = weaveableClosestPoint;
         weaveableScript.nearestDistance = nearestDistance;
-           
-        // move object unless its a hover crystal
-        if (gameObject.layer != 9)
-        {
-            weaveableScript.rb.velocity = weaveableScript.nearestPoint.transform.position - weaveableScript.myNearestPoint.transform.position;
+        weaveableScript.rb.velocity = weaveableScript.nearestPoint.transform.position - weaveableScript.myNearestPoint.transform.position;
 
-            if (nearestDistance < weaveableScript.snapDistance)
+        if (nearestDistance < weaveableScript.snapDistance)
+        {
+            weaveableScript.rb.transform.position = weaveableScript.myNearestPoint.transform.position;
+            // weaveableScript.rb.transform.position = weaveableScript.nearestPoint.transform.position - 
+            //                                         (weaveableScript.nearestPoint.transform.position - 
+            //                                          weaveableScript.myNearestPoint.transform.position).normalized;
+        }
+    }
+
+    void TargetedSnapping()
+    {
+        nearestDistance = Mathf.Infinity; //this is made the be infinite so that when it calculates the distance it wouldn't cap itself
+        GameObject closestPoint = null;
+        GameObject weaveableClosestPoint = null;
+
+        for (int i = 0; i < myTransformPoints.Length; i++)
+        {
+            for (int t = 0; t < weaveableScript.myTransformPoints.Length; t++)
             {
-                weaveableScript.rb.transform.position = weaveableScript.myNearestPoint.transform.position;
-                // weaveableScript.rb.transform.position = weaveableScript.nearestPoint.transform.position - 
-                //                                         (weaveableScript.nearestPoint.transform.position - 
-                //                                          weaveableScript.myNearestPoint.transform.position).normalized;
+                distance = Vector3.Distance(weaveableScript.myTransformPoints[t].transform.position, myTransformPoints[i].transform.position);
+
+                if (distance < nearestDistance)
+                {
+                    closestPoint = myTransformPoints[i];
+                    weaveableClosestPoint = weaveableScript.myTransformPoints[t];
+                    nearestDistance = distance;
+                }
             }
         }
-        else
-        {
-            rb.MovePosition(weaveableScript.myNearestPoint.transform.position); // moves very quickly
-            
-            //rb.velocity = weaveableScript.myNearestPoint.transform.position - weaveableScript.nearestPoint.transform.position;
 
-            /*
-            Debug.Log("nearest: " + nearestDistance);
-            if (nearestDistance < weaveableScript.snapDistance) // only reaches here once and objects very quickly snap together
-            {
-                hovering = true;
-                //rb.MovePosition(weaveableScript.myNearestPoint.transform.position);
-            }
-            */
-        }
+        nearestPoint = weaveableClosestPoint;
+        myNearestPoint = closestPoint;
+        nearestDistance = weaveableScript.nearestDistance;
+        rb.isKinematic = false;
+        rb.velocity = nearestPoint.transform.position - myNearestPoint.transform.position;
     }
 
 
@@ -619,5 +621,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public List<WeaveableNew> GetListOfWovenObjects()
     {
         return wovenObjects;
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        DrawArrow.ForGizmo(transform.position, Vector3.down * hoveringValue);
     }
 }
