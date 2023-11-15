@@ -9,16 +9,112 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
     public bool isLoop; //Reference only, set in inspector
     public bool isZaxisTrigger; //If false, then its an X axis trigger
     public bool goingOppositeDirection;
-    [Header ("Do Not Touch!")]
+    public Transform weaverTransform; //Put only the weaver's transform
+    [Header("Cutscene")]
+    [CannotBeNullObjectField] public GameObject[] cutsceneManager; //Set to 0 if there are no cutscenes
+    [HideInInspector]
     public bool enteredFromNorth; //Determines if the player entered from the south side or the north side of the collider
     
 
-    public void OnTrigEnter(Collider collision)
+    public void OnTrigEnter(Collider other)
     {
-        //CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+        if (other.gameObject.tag == "CutsceneTrigger") {
+            //Only the trigger that is a child of a certain cutscene manager will activate a cutscene.
+            foreach (GameObject cm in cutsceneManager) {
+                CutsceneManagerScript cms = cm.GetComponent<CutsceneManagerScript>();
+                cms.StartCutscene();
+            }     
+        }
+        if (other.gameObject.tag == "LevelTrigger") {
+            LevelTriggerScript levelTriggerScript = other.GetComponent<LevelTriggerScript>();
+            int section = levelTriggerScript.triggerType;
+            
+            LevelManagerScript.instance.TurnOnOffSection(section);
+        }
     }
-    public void OnTrigExit(Collider collision)
+    public void OnTrigExit(Collider other)
     {
-        //BEANS
+         if (other.gameObject.tag == "CameraTrigger")
+        {
+            if (!isZaxisTrigger) {
+                if (!goingOppositeDirection) {
+                    if (transform.position.x > weaverTransform.position.x) {
+                        //Enter from north
+                        enteredFromNorth = true;
+                    }
+                    else {
+                        enteredFromNorth = false;
+                    }
+                }
+                else {
+                    if (transform.position.x > weaverTransform.position.x) {
+                        //Enter from north
+                        enteredFromNorth = false;
+                    }
+                    else {
+                        enteredFromNorth = true;
+                    }
+                }   
+            }
+            else {
+                if (!goingOppositeDirection) {
+                    if (transform.position.z > weaverTransform.position.z) {
+                        enteredFromNorth = false;
+                    }
+                    else {
+                        enteredFromNorth = true;
+                    }
+                }
+                else {
+                    if (transform.position.z > weaverTransform.position.z) {
+                        enteredFromNorth = true;
+                    }
+                    else {
+                        enteredFromNorth = false;
+                    }
+                }
+                
+            }
+            if (isZaxisTrigger) {
+                if (!goingOppositeDirection) {
+                    if (!triggered && enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                    }
+                    else if (triggered && !enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                    }
+                }
+                else {
+                    if (triggered && !enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                    }
+                    else if (!triggered && enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                    }
+                }
+                
+            }
+            else {
+                if (!goingOppositeDirection) {
+                    if (!triggered && enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                    }
+                    else if (triggered && !enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                    }
+                }
+                else {
+                    if (triggered && !enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                    }
+                    else if (!triggered && enteredFromNorth) {
+                        CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                    }
+                }
+                
+            } 
+        }
+        
+       //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
     }
 }

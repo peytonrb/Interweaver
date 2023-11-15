@@ -66,10 +66,6 @@ public class PlayerController : MonoBehaviour
     [CannotBeNullObjectField] public GameObject relocateMode;
     [CannotBeNullObjectField] public GameObject combineMode;
 
-    [Header("Cutscene")]
-    [CannotBeNullObjectField] public GameObject[] cutsceneManager;
-    //private CutsceneManagerScript cms;
-
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -282,115 +278,19 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "CameraTrigger")
-        {
-            CameraIndexScript cameraIndexScript = other.GetComponent<CameraIndexScript>();
-            Transform otherTransform = other.GetComponent<Transform>();
-
-            if (!cameraIndexScript.isZaxisTrigger) {
-                if (!cameraIndexScript.goingOppositeDirection) {
-                    if (otherTransform.position.x > transform.position.x) {
-                        //Enter from north
-                        cameraIndexScript.enteredFromNorth = true;
-                    }
-                    else {
-                        cameraIndexScript.enteredFromNorth = false;
-                    }
-                }
-                else {
-                    if (otherTransform.position.x > transform.position.x) {
-                        //Enter from north
-                        cameraIndexScript.enteredFromNorth = false;
-                    }
-                    else {
-                        cameraIndexScript.enteredFromNorth = true;
-                    }
-                }
-                
-            }
-            else {
-                if (!cameraIndexScript.goingOppositeDirection) {
-                    if (otherTransform.position.z > transform.position.z) {
-                        cameraIndexScript.enteredFromNorth = false;
-                    }
-                    else {
-                        cameraIndexScript.enteredFromNorth = true;
-                        //Debug.Log("Weaver transform" + transform.position.z);
-                        //Debug.Log("Camera trigger" + otherTransform.position.z);
-                    }
-                }
-                else {
-                    if (otherTransform.position.z > transform.position.z) {
-                        cameraIndexScript.enteredFromNorth = true;
-                    }
-                    else {
-                        cameraIndexScript.enteredFromNorth = false;
-                        //Debug.Log("Weaver transform" + transform.position.z);
-                        //Debug.Log("Camera trigger" + otherTransform.position.z);
-                    }
-                }
-                
-            }
-
-            vCamRotationState = cameraIndexScript.cameraIndex;
-
-            if (cameraIndexScript.isZaxisTrigger) {
-                if (!cameraIndexScript.goingOppositeDirection) {
-                    if (!cameraIndexScript.triggered && cameraIndexScript.enteredFromNorth) {
-                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
-                    }
-                    else if (cameraIndexScript.triggered && !cameraIndexScript.enteredFromNorth) {
-                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
-                    }
-                }
-                else {
-                    if (cameraIndexScript.triggered && !cameraIndexScript.enteredFromNorth) {
-                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
-                    }
-                    else if (!cameraIndexScript.triggered && cameraIndexScript.enteredFromNorth) {
-                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
-                    }
-                }
-                
-            }
-            else {
-                if (!cameraIndexScript.goingOppositeDirection) {
-                    if (!cameraIndexScript.triggered && cameraIndexScript.enteredFromNorth) {
-                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
-                    }
-                    else if (cameraIndexScript.triggered && !cameraIndexScript.enteredFromNorth) {
-                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
-                    }
-                }
-                else {
-                    if (cameraIndexScript.triggered && !cameraIndexScript.enteredFromNorth) {
-                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
-                    }
-                    else if (!cameraIndexScript.triggered && cameraIndexScript.enteredFromNorth) {
-                        CameraMasterScript.instance.SwitchWeaverCameras(vCamRotationState);
-                    }
-                }
-                
-            } 
-
-            //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
+        //See CameraIndexScript for more information about this function
+        ITriggerable trigger = other.GetComponent<ITriggerable>();
+        if (trigger != null) {
+            trigger.OnTrigExit(other);
         }
     }
 
     void OnTriggerEnter(Collider other) {
-        if (other.gameObject.tag == "CutsceneTrigger") {
-            //Only the trigger that is a child of a certain cutscene manager will activate a cutscene.
-            foreach (GameObject cm in cutsceneManager) {
-                CutsceneManagerScript cms = cm.GetComponent<CutsceneManagerScript>();
-                cms.StartCutscene();
-            }     
-        }
-
-        if (other.gameObject.tag == "LevelTrigger") {
-            LevelTriggerScript levelTriggerScript = other.GetComponent<LevelTriggerScript>();
-            int section = levelTriggerScript.triggerType;
-            
-            LevelManagerScript.instance.TurnOnOffSection(section);
+        //See CameraIndexScript for more information about this function
+        ITriggerable trigger = other.GetComponent<ITriggerable>();
+        if (trigger != null) {
+            //Debug.Log("Hit?");
+            trigger.OnTrigEnter(other);
         }
     }
     
@@ -429,7 +329,7 @@ public class PlayerController : MonoBehaviour
     {
         transform.position = GM.WeaverCheckPointPos;
 
-        if (GM.WeaverCheckPointNum == 0) // first checkpoint - should also specify scene
+        if (GM.WeaverCheckPointNum == 0) // first checkpoint in shield puzzle - should also specify scene
         {
             respawnController.RespawnInShieldPuzzle();
         }

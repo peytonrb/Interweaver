@@ -117,9 +117,14 @@ public class FamiliarScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.TryGetComponent(out ITriggerable trigger))
+        ITriggerable trigger = collision.GetComponent<ITriggerable>();
+        if (trigger != null)
         {
             trigger.OnTrigEnter(collision);
+            CameraIndexScript cameraIndexScript = collision.GetComponent<CameraIndexScript>();
+            vCamRotationState = cameraIndexScript.cameraIndex;
+
+            CameraMasterScript.instance.SwitchFamiliarCameras(vCamRotationState);
         }
 
         if (collision.gameObject.CompareTag("Leap of Faith Trigger"))
@@ -152,23 +157,16 @@ public class FamiliarScript : MonoBehaviour
             }
 
         }
-        else if (collision.gameObject.tag == "CameraTrigger")
-        {
-            if (insideTrigger == false) {
-                CameraIndexScript cameraIndexScript = collision.GetComponent<CameraIndexScript>();
-                vCamRotationState = cameraIndexScript.cameraIndex;
 
-                CameraMasterScript.instance.SwitchFamiliarCameras(vCamRotationState);
-                insideTrigger = true;
-
-                //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAM ERMASTERSCRIPT~
-            }   
-        }
     }
 
-    private void OnTriggerExit(Collider other) {
-        if (other.gameObject.tag == "CameraTrigger") {
-            insideTrigger = false;
+    void OnTriggerExit(Collider other)
+    {
+        //See CameraIndexScript for more information about this function
+        ITriggerable trigger = other.GetComponent<ITriggerable>();
+        if (trigger != null)
+        {
+            trigger.OnTrigExit(other);
         }
     }
 
