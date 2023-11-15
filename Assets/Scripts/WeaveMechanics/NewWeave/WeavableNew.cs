@@ -104,12 +104,12 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         {
             RaycastHit hit;
 
-            if (Physics.Raycast(transform.position, new Vector3(0f, -90f, 0f), out hit, 2f))
+            /*if (Physics.Raycast(transform.position, new Vector3(0f, -90f, 0f), out hit, 2f))
             {
                 Vector3 rayDirection = Vector3.down;
                 Debug.Log(-rayDirection * Physics.gravity.y * 2f);
                 rb.AddForce(-rayDirection * Physics.gravity.y * 2f);
-            }
+            }*/
         }
 
         if (isWoven)
@@ -178,7 +178,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
                         if (rayDistance > 50f) // drops object if you hover over the void
                         {
-                            Uncombine();
+                            //Uncombine();
                         }
                         else
                         {
@@ -226,7 +226,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             if (canBeRelocated)
             {
                 canRotate = true;
-                Debug.Log(lookDir);
+                //Debug.Log(lookDir);
 
                 //change this to send velocity in direction of (RS)
                 if (lookDir.magnitude >= 0.1f)
@@ -303,15 +303,20 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         // both parent and non parent weaveables - DOES NOT AFFECT CRYSTALS
         if (gameObject.tag != "Breakable" && collision.gameObject.GetComponent<Rigidbody>() != null && parentWeaveable.inWeaveMode && canCombine && weaveableScript.ID == ID)
         {
-            Debug.Log("1st: " + collision.gameObject);
-            Debug.Log("2nd: " + collision.gameObject.GetComponent<Rigidbody>()); // having these debugs here.... fixes issues???????????????
+            //Debug.Log("1st: " + collision.gameObject);
+            //Debug.Log("2nd: " + collision.gameObject.GetComponent<Rigidbody>()); // having these debugs here.... fixes issues???????????????
 
             // only adds fixed joints to parent weaveable to be removed nicely in Uncombine()
             if (collision.gameObject != parentWeaveable.gameObject && collision.gameObject.GetComponent<Rigidbody>() != null)
             {
                 var fixedJoint = parentWeaveable.gameObject.AddComponent<FixedJoint>();
                 fixedJoint.connectedBody = collision.rigidbody;
+                
                 collision.rigidbody.useGravity = true;
+                if (gameObject.layer == LayerMask.NameToLayer("Attachable Weave Object"))
+                {
+                    Uninteract();
+                }
             }
 
             if (weaveInteraction != null)
@@ -361,7 +366,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         {
             wovenObjects.Add(this.GetComponent<WeaveableNew>());
         }
-        
+
 
         // if objects are combined, vfx needs to show up for both
         if (this.isCombined)
@@ -388,9 +393,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         if (isWoven)
         {
             player.floatingIslandCrystal = false;
-            Debug.Log("this is now not woven");
+            //Debug.Log("this is now not woven");
             rb.isKinematic = false;
             rb.useGravity = true;
+            player.isCurrentlyWeaving = false;
+            player.uninteract = true;
             player.inRelocateMode = false;
             player.inCombineMode = false;
             relocate = false;
@@ -423,7 +430,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     public void Relocate()
     {
-        Debug.Log("this is the relocate method");
+        //Debug.Log("this is the relocate method");
         if (canBeRelocated)
         {
             isWoven = true;
@@ -450,7 +457,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         relocate = false;
         inWeaveMode = true;
-        rb.isKinematic = true;
+        if (!isCombined)
+        {
+            rb.isKinematic = true;
+        }
+
         canRotate = true;
     }
     //********************************************************************
@@ -460,7 +471,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         inWeaveMode = true;
         if (weaveableScript.ID == ID && !weaveableScript.isWoven && canCombine)
         {
-            Debug.Log("OnCombineInput");
+            //Debug.Log("OnCombineInput");
             player.weaveVisualizer.WeaveableSelected(weaveableScript.gameObject);
 
             Combine();
@@ -475,7 +486,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         weaveableScript = this.GetComponent<WeaveableNew>(); // hardcoded to prevent nulls
         isCombined = false;
-        Debug.Log("This is the Uncombine code");
+        //Debug.Log("This is the Uncombine code");
 
         // removes all instances of joints on the parent weaveable
         FixedJoint[] joints = GetComponents<FixedJoint>();
@@ -503,13 +514,20 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     public void Combine()
     {
-        Debug.Log("This is the combine code");
+        //Debug.Log("This is the combine code");
         canCombine = true;
 
         if (weaveableScript.canBeRelocated)
         {
             //weaveableScript.startFloating = true; //this is commented out so that the snapping can actually work
-            Snapping();
+            if (gameObject.layer == LayerMask.NameToLayer("Attachable Weave Object"))
+            {
+                TargetedSnapping();
+            }
+            else
+            {
+                Snapping();
+            }
         }
         else
         {
@@ -546,10 +564,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                     closestPoint = myTransformPoints[i];
                     weaveableClosestPoint = weaveableScript.myTransformPoints[t];
                     nearestDistance = distance;
-                    Debug.Log("this is the distance between points " + distance + ",this is the closestpoint" + myTransformPoints[i]);
                 }
             }
-
         }
 
         weaveableScript.nearestPoint = closestPoint;
@@ -564,6 +580,34 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             //                                         (weaveableScript.nearestPoint.transform.position - 
             //                                          weaveableScript.myNearestPoint.transform.position).normalized;
         }
+    }
+
+    void TargetedSnapping()
+    {
+        nearestDistance = Mathf.Infinity; //this is made the be infinite so that when it calculates the distance it wouldn't cap itself
+        GameObject closestPoint = null;
+        GameObject weaveableClosestPoint = null;
+
+        for (int i = 0; i < myTransformPoints.Length; i++)
+        {
+            for (int t = 0; t < weaveableScript.myTransformPoints.Length; t++)
+            {
+                distance = Vector3.Distance(weaveableScript.myTransformPoints[t].transform.position, myTransformPoints[i].transform.position);
+
+                if (distance < nearestDistance)
+                {
+                    closestPoint = myTransformPoints[i];
+                    weaveableClosestPoint = weaveableScript.myTransformPoints[t];
+                    nearestDistance = distance;
+                }
+            }
+        }
+
+        nearestPoint = weaveableClosestPoint;
+        myNearestPoint = closestPoint;
+        nearestDistance = weaveableScript.nearestDistance;
+        rb.isKinematic = false;
+        rb.velocity = nearestPoint.transform.position - myNearestPoint.transform.position;
     }
 
 

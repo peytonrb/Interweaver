@@ -92,7 +92,6 @@ public class PlayerController : MonoBehaviour
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
         transform.position = GM.WeaverCheckPointPos;
         characterController.enabled = true;
-        Debug.Log("Active Current Position: " + transform.position);
 
         // Weaving variables
         inCombineMode = false;
@@ -183,7 +182,6 @@ public class PlayerController : MonoBehaviour
 
             if (distanceBetween < weaveDistance)
             {
-                Debug.Log("Object checked!");
                 isCurrentlyWeaving = true;
 
                 // vfx
@@ -212,7 +210,6 @@ public class PlayerController : MonoBehaviour
 
         //Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
-        Debug.DrawRay(rayPlayer.origin, rayPlayer.direction * weaveDistance, Color.red);
 
         // checks for a Weavable object within distance of Ray
         if (Physics.Raycast(rayPlayer, out hitInfo, 100, weaveObject) || Physics.Raycast(rayPlayer, out hitInfo, weaveDistance, weaveObject))
@@ -422,7 +419,6 @@ public class PlayerController : MonoBehaviour
                 //Switches to Familiar
                 CameraMasterScript.instance.SwitchToFamiliarCamera();
                 possessing = true;
-                Debug.Log("Possessing");
                 movementScript.active = false;
                 StartCoroutine(familiarScript.ForcedDelay());
             }
