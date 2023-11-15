@@ -5,13 +5,12 @@ using UnityEngine.Animations;
 
 public class DayblockPuzzleManager : MonoBehaviour
 {
-    private bool parentFound;
+    //private bool parentFound;
     public int combinationpart; //Which part of the combination has been done
     private GameObject[] weaveables;
-    [Header ("Do Not Touch")]
-    public WeaveableNew sunblockweaveparent;
-    public WeaveableNew sunriseblockweaveparent;
-    public WeaveableNew moonblockweaveparent;
+    [HideInInspector] public WeaveableNew sunblockweaveparent;
+    [HideInInspector] public WeaveableNew sunriseblockweaveparent;
+    [HideInInspector] public WeaveableNew moonblockweaveparent;
     private WeaveableNew weaveableScript;
     private DayblockScript[] dayblockScripts;
 
