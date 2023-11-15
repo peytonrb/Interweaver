@@ -86,7 +86,7 @@ public class HoverCrystalScript : MonoBehaviour
         List<WeaveableNew> wovenObjects = weaveable.GetListOfWovenObjects();
         foreach(WeaveableNew weaveable in wovenObjects)
         {   
-            weaveable.Uncombine();
+            //weaveable.Uncombine();
             weaveable.RestoreOriginalLayer();
         }
     }

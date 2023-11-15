@@ -18,7 +18,7 @@ public class OwlDiveScript : MonoBehaviour
     [SerializeField][Range(-50, -25)]private float terminalVelocity = -30f;
     [SerializeField][Range(0f, 20f)]private float aerialAcceleration = 4f;
     [SerializeField][Range(0f, 30f)]private float aerialDeceleration = 2f;
-    private bool isDiving;
+    [HideInInspector] public bool isDiving;
     private bool onCooldown = false;
 
     void Awake()
