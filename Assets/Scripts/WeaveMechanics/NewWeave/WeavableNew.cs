@@ -560,6 +560,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         nearestDistance = Mathf.Infinity; //this is made the be infinite so that when it calculates the distance it wouldn't cap itself
         GameObject closestPoint = null;
         GameObject weaveableClosestPoint = null;
+        transform.LookAt(new Vector3(weaveableScript.transform.position.x, this.transform.position.y, weaveableScript.transform.position.z));
+        weaveableScript.transform.LookAt(new Vector3(this.transform.position.x, weaveableScript.transform.position.y, this.transform.position.z));
 
         for (int i = 0; i < myTransformPoints.Length; i++)
         {
@@ -580,8 +582,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         weaveableScript.myNearestPoint = weaveableClosestPoint;
         weaveableScript.nearestDistance = nearestDistance;
         pain = weaveableScript.nearestPoint.transform;
-        //StartCoroutine(MoveToPoint(weaveableScript.nearestPoint.transform.position, weaveableScript));
-        weaveableScript.rb.transform.position = pain.position;       
+        StartCoroutine(MoveToPoint(weaveableScript.nearestPoint.transform.position, weaveableScript));
+        //weaveableScript.rb.transform.position = pain.position;       
 
         //Vector3 directionToLook = weaveableScript.transform.position - transform.position;
         //Quaternion directionVector = Quaternion.FromToRotation(weaveableScript.myNearestPoint.transform.forward, directionToLook);
@@ -595,6 +597,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         // }
     }
 
+    // these references are passed in so when weaveableScript changes with mouse position, it still holds correct 
+    //      reference
     IEnumerator MoveToPoint(Vector3 weaveablePos, WeaveableNew weaveableRef)
     {
         float timeSinceStarted = 0f;
@@ -603,8 +607,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             timeSinceStarted += Time.deltaTime;
             weaveableRef.transform.position = Vector3.Lerp(weaveableRef.transform.position, pain.position, timeSinceStarted);
 
-            if (weaveableRef.transform.position == pain.position)
+            if (Vector3.Distance(weaveableRef.transform.position, pain.position) < 1f)
             {
+                weaveableRef.rb.transform.position = pain.position;
                 yield break;
             }
 
