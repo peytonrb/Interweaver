@@ -580,8 +580,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         weaveableScript.myNearestPoint = weaveableClosestPoint;
         weaveableScript.nearestDistance = nearestDistance;
         pain = weaveableScript.nearestPoint.transform;
-        StartCoroutine(MoveToPoint(weaveableScript.nearestPoint.transform.position, weaveableScript));
-        //weaveableScript.rb.transform.position = pain.position;       
+        //StartCoroutine(MoveToPoint(weaveableScript.nearestPoint.transform.position, weaveableScript));
+        weaveableScript.rb.transform.position = pain.position;       
 
         //Vector3 directionToLook = weaveableScript.transform.position - transform.position;
         //Quaternion directionVector = Quaternion.FromToRotation(weaveableScript.myNearestPoint.transform.forward, directionToLook);
