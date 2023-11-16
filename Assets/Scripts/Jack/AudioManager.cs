@@ -7,6 +7,7 @@ public enum AudioManagerChannels
 {
     MusicChannel = 0,
     SoundEffectChannel,
+    weaveLoopingChannel
 }
 
 
@@ -20,6 +21,7 @@ public class AudioManager : MonoBehaviour
 
     public AudioSource musicChannel;
     public AudioSource soundeffectChannel;
+    public AudioSource weaveChannel;
 
     [Header("Music Audioclip List")]
     public AudioClip TitleMusic;
@@ -43,6 +45,7 @@ public class AudioManager : MonoBehaviour
     {
         musicChannel = GetComponents<AudioSource>()[0];
         soundeffectChannel = GetComponents<AudioSource>()[1];
+        weaveChannel = GetComponents<AudioSource>()[2];
 
         instance.PlaySound(AudioManagerChannels.MusicChannel, TitleMusic, 1f);
     }
@@ -115,6 +118,9 @@ public class AudioManager : MonoBehaviour
             case AudioManagerChannels.SoundEffectChannel:
                 soundeffectChannel.PlayOneShot(clip);
                 break;
+            case AudioManagerChannels.weaveLoopingChannel:
+                weaveChannel.PlayOneShot(clip);
+                break;
         }
     }
 
@@ -135,10 +141,11 @@ public class AudioManager : MonoBehaviour
                 musicChannel.Play();
                 break;
             case AudioManagerChannels.SoundEffectChannel:
-                //soundeffectChannel.Stop();
-                //soundeffectChannel.clip = clip;
                 soundeffectChannel.pitch = pitch;
                 soundeffectChannel.PlayOneShot(clip);
+                break;
+            case AudioManagerChannels.weaveLoopingChannel:
+                weaveChannel.PlayOneShot(clip);
                 break;
         }
     }
@@ -155,6 +162,9 @@ public class AudioManager : MonoBehaviour
                 break;
             case AudioManagerChannels.SoundEffectChannel:
                 soundeffectChannel.Stop();
+                break;
+            case AudioManagerChannels.weaveLoopingChannel:
+                weaveChannel.Stop();
                 break;
         }
     }

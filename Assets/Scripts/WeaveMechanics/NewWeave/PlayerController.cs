@@ -66,6 +66,10 @@ public class PlayerController : MonoBehaviour
     [CannotBeNullObjectField] public GameObject relocateMode;
     [CannotBeNullObjectField] public GameObject combineMode;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip startWeaveClip;
+    [SerializeField] private AudioClip weavingLoopClip;
+
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -93,7 +97,7 @@ public class PlayerController : MonoBehaviour
         inCombineMode = false;
         inRelocateMode = false;
         interactInput = false;
-
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startWeaveClip);
     }
 
     void Update()
@@ -182,6 +186,10 @@ public class PlayerController : MonoBehaviour
 
                 // vfx
                 weaveVisualizer.ActivateWeave();
+
+                // Audio
+                Debug.Log("play sound");
+                AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startWeaveClip);
 
                 interactableObject.Interact();
                 inRelocateMode = true;

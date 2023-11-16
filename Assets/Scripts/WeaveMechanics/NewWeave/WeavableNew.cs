@@ -101,7 +101,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             startFloating = false;
         }
 
-        Debug.Log(pain);
+        //Debug.Log(pain);
 
         if (isHovering)
         {
