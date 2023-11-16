@@ -14,7 +14,11 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
     [CannotBeNullObjectField] public GameObject[] cutsceneManager; //Set to 0 if there are no cutscenes
     [HideInInspector]
     public bool enteredFromNorth; //Determines if the player entered from the south side or the north side of the collider
-    
+
+    public void Awake()
+    {
+        weaverTransform = FindObjectOfType<PlayerController>().GetComponent<Transform>();
+    }
 
     public void OnTrigEnter(Collider other)
     {

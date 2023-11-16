@@ -143,7 +143,7 @@ public class MovementScript : MonoBehaviour
             else
             {
                 //weaverAnimationHandler.ToggleFallAnim(false);
-                AudioManager.instance.StopSound(AudioManagerChannels.SoundEffectChannel);
+                //AudioManager.instance.StopSound(AudioManagerChannels.SoundEffectChannel);
                 isPlayingFallSound = false;
                 velocity.y = -2f;
             }
