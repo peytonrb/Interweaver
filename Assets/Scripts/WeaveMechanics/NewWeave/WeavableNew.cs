@@ -38,6 +38,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     private float distance;
     [SerializeField] private float snapDistance;
     [SerializeField] private float nearestDistance;
+    public Transform pain;
 
     [Header("Floating Islands + Crystals")]
     private bool onFloatingIsland;
@@ -99,6 +100,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
             startFloating = false;
         }
+
+        Debug.Log(pain);
 
         if (isHovering)
         {
@@ -313,9 +316,10 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             // only adds fixed joints to parent weaveable to be removed nicely in Uncombine()
             if (collision.gameObject != parentWeaveable.gameObject && collision.gameObject.GetComponent<Rigidbody>() != null)
             {
+                //weaveableScript.rb.transform.position = pain.position;
+                Debug.Log("AAAAAAAAAAAAAA " + pain);
                 var fixedJoint = parentWeaveable.gameObject.AddComponent<FixedJoint>();
-                fixedJoint.connectedBody = collision.rigidbody;
-                
+                fixedJoint.connectedBody = collision.rigidbody;              
                 collision.rigidbody.useGravity = true;
                 if (gameObject.layer == LayerMask.NameToLayer("Attachable Weave Object"))
                 {
@@ -571,18 +575,24 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 }
             }
         }
-
+        
         weaveableScript.nearestPoint = closestPoint;
         weaveableScript.myNearestPoint = weaveableClosestPoint;
         weaveableScript.nearestDistance = nearestDistance;
-        weaveableScript.rb.velocity = weaveableScript.nearestPoint.transform.position - weaveableScript.myNearestPoint.transform.position;
+        pain = weaveableScript.nearestPoint.transform;
+        weaveableScript.rb.transform.position = pain.position;       
+        Debug.Log("snapping point " + weaveableScript.myNearestPoint);
+
+        //Vector3 directionToLook = weaveableScript.transform.position - transform.position;
+        //Quaternion directionVector = Quaternion.FromToRotation(weaveableScript.myNearestPoint.transform.forward, directionToLook);
+        //transform.rotation = directionVector;
 
         if (nearestDistance < weaveableScript.snapDistance)
         {
-            weaveableScript.rb.transform.position = weaveableScript.myNearestPoint.transform.position;
-            // weaveableScript.rb.transform.position = weaveableScript.nearestPoint.transform.position - 
-            //                                         (weaveableScript.nearestPoint.transform.position - 
-            //                                          weaveableScript.myNearestPoint.transform.position).normalized;
+           
+            //weaveableScript.rb.transform.position = weaveableScript.nearestPoint.transform.position -
+            //                                        (weaveableScript.nearestPoint.transform.position -
+            //                                         weaveableScript.myNearestPoint.transform.position).normalized;
         }
     }
 
