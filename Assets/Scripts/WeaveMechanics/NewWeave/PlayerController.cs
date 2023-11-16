@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour
         inCombineMode = false;
         inRelocateMode = false;
         interactInput = false;
-        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startWeaveClip);
+        //AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startWeaveClip);
     }
 
     void Update()
@@ -148,10 +148,12 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
+
             // snap weave - uninteract set by InputManager
             if (uninteract)
             {
                 Uninteract();
+                AudioManager.instance.StopSound(AudioManagerChannels.weaveLoopingChannel);
                 weaveVisualizer.DisableWeave();
             }
 
@@ -182,15 +184,8 @@ public class PlayerController : MonoBehaviour
 
             if (distanceBetween < weaveDistance)
             {
-                isCurrentlyWeaving = true;
-
-                // vfx
-                weaveVisualizer.ActivateWeave();
-
-                // Audio
-                Debug.Log("play sound");
-                AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startWeaveClip);
-
+                StartCoroutine(WeaveAesthetics());
+                isCurrentlyWeaving = true;               
                 interactableObject.Interact();
                 inRelocateMode = true;
                 weaverAnimationHandler.ToggleWeaveAnim(isWeaving);
@@ -201,6 +196,20 @@ public class PlayerController : MonoBehaviour
 
         // if too far apart & object is weavable
         interactInput = false;
+    }
+
+    public IEnumerator WeaveAesthetics()
+    {
+        // vfx
+        weaveVisualizer.ActivateWeave();
+        // Audio
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startWeaveClip);
+
+        yield return new WaitForSeconds(1f);
+
+        AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingLoopClip);
+        Debug.Log("SOUND PLAYED");
+        yield break;
     }
 
     private IInteractable determineInteractability()
