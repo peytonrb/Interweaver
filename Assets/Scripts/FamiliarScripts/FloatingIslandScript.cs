@@ -22,10 +22,7 @@ public class FloatingIslandScript : MonoBehaviour
     [CannotBeNullObjectField]
     [SerializeField] private Transform sitTransform;
     [SerializeField] private bool isFloatingIslandInTheTube;
-
-
-    [Header("Don't Touch!")]
-    public float verticalOffset = 0;
+    [HideInInspector] public float verticalOffset = 0;
 
     [CannotBeNullObjectField]
     public GameObject crystalPrefab;
@@ -35,16 +32,27 @@ public class FloatingIslandScript : MonoBehaviour
     public bool isislandfalling;
     public Rigidbody rb;
     private Animator anim;
+    private WeaveableNew weaveable;
+    public GameObject thisinstance;
 
     private void Awake()
     {
         //Assign Components
         anim = GetComponent<Animator>();
+        if (thisinstance != null) {
+            weaveable = GetComponent<WeaveableNew>();
+        }
+        
+        
+        
 
         //if it has a crystal, it'll auto assign the itself to the crystals variable
         if (myCrystal != null)
         {
             myCrystal.AssignFloatingIsland(this);
+            if (thisinstance != null) {
+                weaveable.enabled = false;
+            }
         }
 
         //Set Variables
@@ -111,8 +119,9 @@ public class FloatingIslandScript : MonoBehaviour
         {
             anim.SetTrigger("Sit");
             verticalOffset = 0;
-            transform.position = sitTransform.localPosition;
+            transform.position = sitTransform.position;
             isFloating = false;
+            //weaveable.enabled = true;
             if (isFloatingIslandInTheTube) {
                 LevelManagerScript.instance.TurnOnOffSection(1);
             }
