@@ -56,10 +56,16 @@ public class MovementScript : MonoBehaviour
     [SerializeField] AudioClip fallFile;
     private bool isPlayingFallSound;
 
+    [Header("Dive VFX")]
+    private ParticleSystem speedLinesVFX;
+    
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
         characterController.enabled = false;
+        TryGetComponent<ParticleSystem>(out ParticleSystem vfx);
+
+        speedLinesVFX = vfx;
     }
     
     // Start is called before the first frame update
@@ -148,6 +154,21 @@ public class MovementScript : MonoBehaviour
                 velocity.y = -2f;
             }
             velocity.y = Mathf.Clamp(velocity.y, terminalVelocity, 200f);
+
+            if (speedLinesVFX != null)
+            {
+
+                var em = speedLinesVFX.emission;
+                if (velocity.y < -15)
+                {
+                    em.rateOverTime = Mathf.Abs(velocity.y)*1.2f;
+                } else
+                {
+                    em.rateOverTime = 0;
+                }
+                
+            }
+            
         }
 
         if (resettingTerminalVelocity)
