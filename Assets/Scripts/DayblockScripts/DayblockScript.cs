@@ -6,6 +6,7 @@ public class DayblockScript : MonoBehaviour
 {
     //Script will act as a trigger for objects in dayblock.
     public int shapeNeeded; //Identifies the shape of the blocks
+    public int shapesCombined;
     
     public GameObject dayblockPuzzleManager;
     public bool gotShape;
@@ -25,7 +26,7 @@ public class DayblockScript : MonoBehaviour
                         //Finds amount of blocks in the shape.
                         case 0:
                             //Sunrise block
-                            if (weaveScript.wovenObjects.Count == 3) {
+                            if (weaveScript.wovenObjects.Count == shapesCombined) {
                                 //Finds if the puzzle has been done in the proper order.
                                 DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
                                 if (!gotShape) {
@@ -49,7 +50,7 @@ public class DayblockScript : MonoBehaviour
 
                         case 1:
                             //Sun block
-                            if (weaveScript.wovenObjects.Count == 3) {
+                            if (weaveScript.wovenObjects.Count == shapesCombined) {
                                 DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
                                 if (!gotShape) {
                                     switch (dpm.combinationpart) {
@@ -71,7 +72,7 @@ public class DayblockScript : MonoBehaviour
 
                         case 2:
                             //Moon block
-                            if (weaveScript.wovenObjects.Count == 2) {
+                            if (weaveScript.wovenObjects.Count == shapesCombined) {
                                 DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
                                 if (!gotShape) {
                                     switch (dpm.combinationpart) {
@@ -126,7 +127,7 @@ public class DayblockScript : MonoBehaviour
                     //Finds amount of blocks in the shape.
                     case 0:
                         //Sunrise block
-                        if (weaveableScript.wovenObjects.Count == 3) {
+                        if (weaveableScript.wovenObjects.Count == shapesCombined) {
                             //Finds if the puzzle has been done in the proper order.
                             DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
                             if (!gotShape) {
@@ -148,7 +149,7 @@ public class DayblockScript : MonoBehaviour
 
                     case 1:
                         //Sun block
-                        if (weaveableScript.wovenObjects.Count == 3) {
+                        if (weaveableScript.wovenObjects.Count == shapesCombined) {
                             DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
                             if (!gotShape) {
                                 switch (dpm.combinationpart) {
@@ -171,7 +172,7 @@ public class DayblockScript : MonoBehaviour
 
                     case 2:
                         //Moon block
-                        if (weaveableScript.wovenObjects.Count == 2) {
+                        if (weaveableScript.wovenObjects.Count == shapesCombined) {
                             DayblockPuzzleManager dpm = dayblockPuzzleManager.GetComponent<DayblockPuzzleManager>();
                             if (!gotShape) {
                                 switch (dpm.combinationpart) {
