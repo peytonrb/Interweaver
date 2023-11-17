@@ -7,7 +7,9 @@ public enum AudioManagerChannels
 {
     MusicChannel = 0,
     SoundEffectChannel,
-    weaveLoopingChannel
+    weaveLoopingChannel,
+    footStepsLoopChannel,
+    fallLoopChannel
 }
 
 
@@ -22,6 +24,8 @@ public class AudioManager : MonoBehaviour
     public AudioSource musicChannel;
     public AudioSource soundeffectChannel;
     public AudioSource weaveChannel;
+    public AudioSource footStepsChannel;
+    public AudioSource fallChannel;
 
     [Header("Music Audioclip List")]
     public AudioClip TitleMusic;
@@ -46,6 +50,8 @@ public class AudioManager : MonoBehaviour
         musicChannel = GetComponents<AudioSource>()[0];
         soundeffectChannel = GetComponents<AudioSource>()[1];
         weaveChannel = GetComponents<AudioSource>()[2];
+        footStepsChannel = GetComponents<AudioSource>()[3];
+        fallChannel = GetComponents<AudioSource>()[4];
 
         instance.PlaySound(AudioManagerChannels.MusicChannel, TitleMusic, 1f);
     }
@@ -119,7 +125,16 @@ public class AudioManager : MonoBehaviour
                 soundeffectChannel.PlayOneShot(clip);
                 break;
             case AudioManagerChannels.weaveLoopingChannel:
-                weaveChannel.PlayOneShot(clip);
+                weaveChannel.clip = clip;
+                weaveChannel.Play();
+                break;
+            case AudioManagerChannels.footStepsLoopChannel:
+                footStepsChannel.clip = clip;
+                footStepsChannel.Play();
+                break;
+            case AudioManagerChannels.fallLoopChannel:
+                fallChannel.clip = clip;
+                fallChannel.Play();
                 break;
         }
     }
@@ -145,7 +160,19 @@ public class AudioManager : MonoBehaviour
                 soundeffectChannel.PlayOneShot(clip);
                 break;
             case AudioManagerChannels.weaveLoopingChannel:
-                weaveChannel.PlayOneShot(clip);
+                weaveChannel.pitch = pitch;
+                weaveChannel.clip = clip;
+                weaveChannel.Play();
+                break;
+            case AudioManagerChannels.footStepsLoopChannel:
+                footStepsChannel.pitch = pitch;
+                footStepsChannel.clip = clip;
+                footStepsChannel.Play();
+                break;
+            case AudioManagerChannels.fallLoopChannel:
+                fallChannel.pitch = pitch;
+                fallChannel.clip = clip;
+                fallChannel.Play();
                 break;
         }
     }
@@ -165,6 +192,12 @@ public class AudioManager : MonoBehaviour
                 break;
             case AudioManagerChannels.weaveLoopingChannel:
                 weaveChannel.Stop();
+                break;
+            case AudioManagerChannels.footStepsLoopChannel:
+                footStepsChannel.Stop();
+                break;
+            case AudioManagerChannels.fallLoopChannel:
+                fallChannel.Stop();
                 break;
         }
     }

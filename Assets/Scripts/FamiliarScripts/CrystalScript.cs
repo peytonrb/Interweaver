@@ -8,6 +8,8 @@ public class CrystalScript : MonoBehaviour
 
     private bool inRange = false;
 
+    public GameObject vfxPrefab;
+
     public AudioClip shatterFile;
 
     public void AssignFloatingIsland(FloatingIslandScript myIsland)
@@ -23,7 +25,8 @@ public class CrystalScript : MonoBehaviour
         {
             myFloatingIsland.StartFalling();
         }
-        
+
+        Instantiate(vfxPrefab, transform.position, transform.rotation);
         Destroy(gameObject);
     }
 
