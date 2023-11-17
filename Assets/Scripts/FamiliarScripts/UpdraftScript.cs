@@ -19,7 +19,6 @@ public class UpdraftScript : MonoBehaviour
     private bool upDraftEntered; // has a character entered an updraft this frame?
     private float currentBoost = 0;
     [SerializeField] private float maxBoost = 10f; // endpoint for lerp
-    [SerializeField] private float maxDiveBoost = 2f; // endpoint for lerp
     private float t = 1; // t for lerp
 
 
@@ -51,11 +50,13 @@ public class UpdraftScript : MonoBehaviour
         {
             inUpdraft = true;
             if (!owlDiveScript.isDiving)
-            {
-                if (movementScript.GetGravity() < -0.1f)
+            { 
+                if (movementScript.GetVelocity().y < -0.1f)
                 {
-                    //movementScript.ChangeVelocity(Vector3.zero);
-                    currentBoost = Mathf.Lerp(movementScript.GetVelocity().y, 0, 2 * t);
+                    //movementScript.ChangeVelocity(Vector3.zero); // I'm not overly happy with this, it feels way too jerky, would much prefer a lerp but it feels eh
+                    float verticalVelocity = movementScript.GetVelocity().y;
+                    verticalVelocity = Mathf.Lerp(verticalVelocity, 0, t / 5f); // I genuinelly cannot explain with this feels better but it does so fuck it
+                    movementScript.ChangeVelocity(new Vector3(movementScript.GetVelocity().x, verticalVelocity, movementScript.GetVelocity().z));
                 }
                 else
                 {
@@ -64,7 +65,10 @@ public class UpdraftScript : MonoBehaviour
                 t += 1f * Time.deltaTime;
                 movementScript.ChangeGravity(currentBoost);
             }
-
+            else
+            {
+                t = 1f;
+            }
         }
     }
 
@@ -94,7 +98,7 @@ public class UpdraftScript : MonoBehaviour
                 movementScript.ResetGravity();
             }
 
-            t = 1;
+            t = 1f;
         }
     }
 }
