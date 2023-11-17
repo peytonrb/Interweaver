@@ -8,6 +8,7 @@ public class OwlDiveScript : MonoBehaviour
     [Header("References")]
     private CharacterController characterController; //references the character controller component
     private MovementScript movementScript; // reference for the movement script component
+    private UpdraftScript updraftScript;
     [Header("Inputs")]
     public bool divePressed; // defines the initial press of the dive
 
@@ -25,6 +26,7 @@ public class OwlDiveScript : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         movementScript = GetComponent<MovementScript>();
+        updraftScript = GetComponent<UpdraftScript>();
         //inputs = movementScript.inputs; // this feels wrong, find better way to reference later
     }
 
@@ -40,6 +42,13 @@ public class OwlDiveScript : MonoBehaviour
     public void DivePressed()
     {
         if (!characterController.isGrounded) {
+
+            if (!isDiving)
+            {
+                movementScript.ChangeVelocity(new Vector3(movementScript.GetVelocity().x, movementScript.GetVelocity().y, movementScript.GetVelocity().z));
+            }
+
+
             AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, diveFile, 1f);
             movementScript.ChangeGravity(diveAcceleration);
             movementScript.ChangeTerminalVelocity(terminalVelocity);

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine.Utility;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -17,9 +18,10 @@ public class UpdraftScript : MonoBehaviour
     private bool inUpdraft; // is character currently in an updraft?
     private bool upDraftEntered; // has a character entered an updraft this frame?
     private float currentBoost = 0;
-    [SerializeField]private float maxBoost = 10f; // endpoint for lerp
+    [SerializeField] private float maxBoost = 10f; // endpoint for lerp
+    [SerializeField] private float maxDiveBoost = 2f; // endpoint for lerp
     private float t = 1; // t for lerp
-    
+
 
     private void Awake()
     {
@@ -29,15 +31,15 @@ public class UpdraftScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.CompareTag("Updraft") && !upDraftEntered && !owlDiveScript.isDiving)
+        if (collider.CompareTag("Updraft") && !upDraftEntered)
         {
             if (movementScript)
-            {  
+            {
                 upDraftEntered = true;
                 movementScript = GetComponent<MovementScript>();
-                if (movementScript.GetVelocity().y < 0)
+                if (movementScript.GetVelocity().y < 0 && !owlDiveScript.isDiving)
                 {
-                    movementScript.ChangeVelocity(new Vector3 (movementScript.GetVelocity().x, 0, movementScript.GetVelocity().z));
+                    movementScript.ChangeVelocity(new Vector3(movementScript.GetVelocity().x, 0, movementScript.GetVelocity().z));
                 }
             }
         }
@@ -48,9 +50,21 @@ public class UpdraftScript : MonoBehaviour
         if (collider.CompareTag("Updraft"))
         {
             inUpdraft = true;
-            currentBoost = Mathf.Lerp(movementScript.GetVelocity().y, maxBoost, animationCurve.Evaluate(1/t));
-            t += 1f * Time.deltaTime;
-            movementScript.ChangeGravity(currentBoost);
+            if (!owlDiveScript.isDiving)
+            {
+                if (movementScript.GetGravity() < -0.1f)
+                {
+                    //movementScript.ChangeVelocity(Vector3.zero);
+                    currentBoost = Mathf.Lerp(movementScript.GetVelocity().y, 0, 2 * t);
+                }
+                else
+                {
+                    currentBoost = Mathf.Lerp(movementScript.GetVelocity().y, maxBoost, animationCurve.Evaluate(1 / t));
+                }
+                t += 1f * Time.deltaTime;
+                movementScript.ChangeGravity(currentBoost);
+            }
+
         }
     }
 
@@ -74,8 +88,12 @@ public class UpdraftScript : MonoBehaviour
         {
             float velocity = movementScript.GetVelocity().y;
             upDraftEntered = false;
-            movementScript.ChangeVelocity(new Vector3 (movementScript.GetVelocity().x, Mathf.Abs(velocity)/(t*10f), movementScript.GetVelocity().z));
-            movementScript.ResetGravity();
+            if (velocity > 0)
+            {
+                movementScript.ChangeVelocity(new Vector3(movementScript.GetVelocity().x, Mathf.Abs(velocity) / (t * 10f), movementScript.GetVelocity().z));
+                movementScript.ResetGravity();
+            }
+
             t = 1;
         }
     }
