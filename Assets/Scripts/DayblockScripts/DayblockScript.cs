@@ -11,7 +11,7 @@ public class DayblockScript : MonoBehaviour
     public GameObject dayblockPuzzleManager;
     public bool gotShape;
 
-    void OnCollisionEnter(Collision other) {
+    void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag == "Weaveable") {
             WeaveableNew weaveScript = other.gameObject.GetComponent<WeaveableNew>();
 
