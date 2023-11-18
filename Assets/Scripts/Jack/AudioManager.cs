@@ -202,4 +202,48 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void StopSoundAfterLoop(AudioManagerChannels target)
+    {
+        StartCoroutine(WaitTillAfterLoop(target));
+    }
+
+    public IEnumerator WaitTillAfterLoop(AudioManagerChannels target)
+    {
+        switch (target)
+        {
+            case AudioManagerChannels.MusicChannel:
+                musicChannel.loop = false;
+                yield return new WaitUntil(() => !musicChannel.isPlaying);
+                musicChannel.Stop();
+                musicChannel.loop = true;
+                break;
+            case AudioManagerChannels.SoundEffectChannel:
+                soundeffectChannel.loop = false;
+                yield return new WaitUntil(() => !soundeffectChannel.isPlaying);
+                soundeffectChannel.Stop();
+                soundeffectChannel.loop = true;
+                break;
+            case AudioManagerChannels.weaveLoopingChannel:
+                weaveChannel.loop = false;
+                yield return new WaitUntil(() => !weaveChannel.isPlaying);
+                weaveChannel.Stop();
+                weaveChannel.loop = true;
+                break;
+            case AudioManagerChannels.footStepsLoopChannel:
+                footStepsChannel.loop = false;
+                yield return new WaitUntil(() => !footStepsChannel.isPlaying);
+                footStepsChannel.Stop();
+                footStepsChannel.loop = true;
+                break;
+            case AudioManagerChannels.fallLoopChannel:
+                fallChannel.loop = false;
+                yield return new WaitUntil(() => !fallChannel.isPlaying);
+                fallChannel.Stop();
+                fallChannel.loop = true;
+                break;
+        }
+
+        yield break;
+    }
+
 }
