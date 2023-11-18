@@ -6948,6 +6948,14 @@ PrefabInstance:
       value: Moving Island (1)
       objectReference: {fileID: 0}
     - target: {fileID: 1991251805629816685, guid: 12c7927ec7ca3fc4e87bbf6ee342cf91, type: 3}
+      propertyPath: canReverse
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1991251805629816685, guid: 12c7927ec7ca3fc4e87bbf6ee342cf91, type: 3}
+      propertyPath: timeBeforeResuming
+      value: 4.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 1991251805629816685, guid: 12c7927ec7ca3fc4e87bbf6ee342cf91, type: 3}
       propertyPath: waypoints.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -6963,6 +6971,14 @@ PrefabInstance:
       propertyPath: waypoints.Array.data[2]
       value: 
       objectReference: {fileID: 1166941059}
+    - target: {fileID: 1991251805629816685, guid: 12c7927ec7ca3fc4e87bbf6ee342cf91, type: 3}
+      propertyPath: stickyGameObjectReference
+      value: 
+      objectReference: {fileID: 1611912691}
+    - target: {fileID: 1991251805629816685, guid: 12c7927ec7ca3fc4e87bbf6ee342cf91, type: 3}
+      propertyPath: movementBasedOnCharacterPresense
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7494187724415231808, guid: 12c7927ec7ca3fc4e87bbf6ee342cf91, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -8395,6 +8411,11 @@ RectTransform:
   m_AnchoredPosition: {x: -796, y: -462}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1611912691 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4464587213752083413, guid: 12c7927ec7ca3fc4e87bbf6ee342cf91, type: 3}
+  m_PrefabInstance: {fileID: 1320883832}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1623567625
 GameObject:
   m_ObjectHideFlags: 0
