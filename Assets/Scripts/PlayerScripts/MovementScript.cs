@@ -57,10 +57,12 @@ public class MovementScript : MonoBehaviour
     [SerializeField] private AudioClip weaverFallClip;
     [SerializeField] private AudioClip owlGlideClip;
     [SerializeField] private AudioClip owlDiveClip;
-    
+    private bool canPlayFallAudio = false;
+
     [Header("Dive VFX")]
     private ParticleSystem speedLinesVFX;
     
+
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -85,6 +87,8 @@ public class MovementScript : MonoBehaviour
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
         //transform.position = GM.LastCheckPointPos;
         characterController.enabled = true;
+
+        StartCoroutine(DelayBeforeFallAudio());
     }
 
     // Update is called once per frame
@@ -160,26 +164,28 @@ public class MovementScript : MonoBehaviour
             if (!characterController.isGrounded)
             {
                 characterAnimationHandler.ToggleFallAnim(true);
-                if (TryGetComponent<PlayerController>(out PlayerController playerCon) && !AudioManager.instance.fallChannel.isPlaying)
+                if (TryGetComponent<PlayerController>(out PlayerController playerCon) && !AudioManager.instance.fallChannel.isPlaying && canPlayFallAudio)
                 {
                     AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, weaverFallClip);
+                    Debug.Log("weaver fall");
                 }
                 else
                 {
                     
-                    if (TryGetComponent<OwlDiveScript>(out OwlDiveScript diveScript) && diveScript.isDiving)
+                    if (TryGetComponent<OwlDiveScript>(out OwlDiveScript diveScript) && diveScript.isDiving && canPlayFallAudio)
                     {
-                        if (!AudioManager.instance.fallChannel.isPlaying || AudioManager.instance.fallChannel.clip != owlDiveClip)
+                        if (!AudioManager.instance.fallChannel.isPlaying || AudioManager.instance.fallChannel.clip != owlDiveClip && canPlayFallAudio)
                         {
                             Debug.Log("Play Dive audio");
                             AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, owlDiveClip);
                         }
                     }
-                    else
+                    else if (canPlayFallAudio)
                     {
                         if (!AudioManager.instance.fallChannel.isPlaying || AudioManager.instance.fallChannel.clip != owlGlideClip)
                         {
                             AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, owlGlideClip);
+                            Debug.Log("owl glide");
                         }
                     }
                 }
@@ -333,5 +339,13 @@ public class MovementScript : MonoBehaviour
             familiarScript.Death();
         }
         
+    }
+
+    public IEnumerator DelayBeforeFallAudio()
+    {
+        yield return new WaitForSeconds(3);
+
+        canPlayFallAudio = true;
+        yield break;
     }
 }
