@@ -155,7 +155,7 @@ public class PlayerController : MonoBehaviour
             if (uninteract)
             {
                 Uninteract();
-                StartCoroutine(EndWeaveAudio());
+                
                 weaveVisualizer.DisableWeave();
             }
 
@@ -259,6 +259,7 @@ public class PlayerController : MonoBehaviour
             interactableObject.Uninteract();
             interactableObject = null;
             characterAnimationHandler.ToggleWeaveAnim(isWeaving);
+            StartCoroutine(EndWeaveAudio());
             relocateMode.SetActive(false); // on screen ui
             combineMode.SetActive(false); // on screen ui
             uninteract = false;
