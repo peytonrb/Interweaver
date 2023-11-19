@@ -142,7 +142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6002498103021238547, guid: 1c85ec236746d5347aa555e68f1c23d4, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7036191476178042492, guid: 1c85ec236746d5347aa555e68f1c23d4, type: 3}
       propertyPath: m_RootOrder
@@ -1362,7 +1362,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5402126169904835267, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.9
+      value: 1.555
       objectReference: {fileID: 0}
     - target: {fileID: 5402126169904835267, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2491,7 +2491,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 536686514}
   m_LocalRotation: {x: -0.115075044, y: 0.88111967, z: -0.2778159, w: -0.3649715}
-  m_LocalPosition: {x: 12.5, y: 17.9, z: 17}
+  m_LocalPosition: {x: 12.5, y: 16.555, z: 17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3546,7 +3546,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 823247042}
   m_LocalRotation: {x: -0.115075044, y: 0.88111967, z: -0.2778159, w: -0.3649715}
-  m_LocalPosition: {x: 12.5, y: 17.9, z: 17}
+  m_LocalPosition: {x: 12.5, y: 16.555, z: 17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4103,7 +4103,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shieldPuzzleWeaveables: []
-  startPositions: []
+  startPositions:
+  - {x: 0, y: 0, z: 0}
   startRotations: []
   respawnObjects: []
 --- !u!4 &1083726233 stripped
@@ -6451,10 +6452,6 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 823247042}
-    - target: {fileID: 1589125052728893389, guid: 3eecb22b409431840a7578addcb86c64, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1589125052728893389, guid: 3eecb22b409431840a7578addcb86c64, type: 3}
       propertyPath: virtualCam
       value: 
@@ -13451,6 +13448,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1561485318}
     m_Modifications:
+    - target: {fileID: 4333579782680604751, guid: e820144de59489c40ac58cba8d5f52f2, type: 3}
+      propertyPath: WeaverCheckPointPos.y
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 5712668628966328444, guid: e820144de59489c40ac58cba8d5f52f2, type: 3}
       propertyPath: m_RootOrder
       value: -1

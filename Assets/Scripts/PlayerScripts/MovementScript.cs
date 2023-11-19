@@ -53,9 +53,11 @@ public class MovementScript : MonoBehaviour
     public bool active; //Determines if movement controller is active
 
     [Header("Character's sounds")]
-    [SerializeField] AudioClip fallFile;
-    private bool isPlayingFallSound;
-
+    [SerializeField] private AudioClip footStepsClip;
+    [SerializeField] private AudioClip weaverFallClip;
+    [SerializeField] private AudioClip owlGlideClip;
+    [SerializeField] private AudioClip owlDiveClip;
+    
     [Header("Dive VFX")]
     private ParticleSystem speedLinesVFX;
     
@@ -116,11 +118,34 @@ public class MovementScript : MonoBehaviour
                 //currentSpeed += acceleration * Time.deltaTime;
                 //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
                 weaverAnimationHandler.ToggleMoveSpeedBlend(currentSpeed); // note: speed is static now, but this should work fine when variable speed is added
+
+                if (characterController.isGrounded)
+                {
+                    //Play footstep Audio!
+                    if (TryGetComponent<PlayerController>(out PlayerController playerCon))
+                    {
+                        if (!AudioManager.instance.footStepsChannel.isPlaying)
+                            AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.3f);
+                    }
+                    else
+                    {
+                        if (!AudioManager.instance.footStepsChannel.isPlaying)
+                            AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.7f);
+                    }
+                }
+                else
+                {
+                    if (AudioManager.instance.footStepsChannel.isPlaying)
+                    AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
+                }
+                
             }
             else
             {
                 currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
                 weaverAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
+                if (AudioManager.instance.footStepsChannel.isPlaying)
+                    AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
                 //Debug.Log(currentSpeed);
                 //currentSpeed -= deceleration * Time.deltaTime;
                 //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
@@ -134,21 +159,37 @@ public class MovementScript : MonoBehaviour
             //Character gravity
             if (!characterController.isGrounded)
             {
-                if (fallFile && !isPlayingFallSound)
+                if (TryGetComponent<PlayerController>(out PlayerController playerCon) && !AudioManager.instance.fallChannel.isPlaying)
                 {
-                    AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, fallFile, 1f); //AUDIO WILL BE LOOKED AT LATER HERE
-                    isPlayingFallSound = true;
+                    AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, weaverFallClip);
                 }
-                
+                else
+                {
+                    
+                    if (TryGetComponent<OwlDiveScript>(out OwlDiveScript diveScript) && diveScript.isDiving)
+                    {
+                        if (!AudioManager.instance.fallChannel.isPlaying || AudioManager.instance.fallChannel.clip != owlDiveClip)
+                        {
+                            Debug.Log("Play Dive audio");
+                            AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, owlDiveClip);
+                        }
+                    }
+                    else
+                    {
+                        if (!AudioManager.instance.fallChannel.isPlaying || AudioManager.instance.fallChannel.clip != owlGlideClip)
+                        {
+                            AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, owlGlideClip);
+                        }
+                    }
+                }
+
                 velocity.y += gravity * Time.deltaTime;
-                //Debug.Log(gravity);
                 //weaverAnimationHandler.ToggleFallAnim(true);
             }
             else
             {
                 //weaverAnimationHandler.ToggleFallAnim(false);
-                //AudioManager.instance.StopSound(AudioManagerChannels.SoundEffectChannel);
-                isPlayingFallSound = false;
+                AudioManager.instance.StopSound(AudioManagerChannels.fallLoopChannel);
                 velocity.y = -2f;
             }
             velocity.y = Mathf.Clamp(velocity.y, terminalVelocity, 200f);

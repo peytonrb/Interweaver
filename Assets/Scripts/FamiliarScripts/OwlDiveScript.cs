@@ -12,8 +12,6 @@ public class OwlDiveScript : MonoBehaviour
     [Header("Inputs")]
     public bool divePressed; // defines the initial press of the dive
 
-    public AudioClip diveFile;
-
     [Header("Variables")]
     [SerializeField][Range(-40, -3)]private float diveAcceleration = -20f;
     [SerializeField][Range(-50, -25)]private float terminalVelocity = -30f;
@@ -47,9 +45,6 @@ public class OwlDiveScript : MonoBehaviour
             {
                 movementScript.ChangeVelocity(new Vector3(movementScript.GetVelocity().x, movementScript.GetVelocity().y, movementScript.GetVelocity().z));
             }
-
-
-            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, diveFile, 1f);
             movementScript.ChangeGravity(diveAcceleration);
             movementScript.ChangeTerminalVelocity(terminalVelocity);
             movementScript.ChangeAerialAcceleration(aerialAcceleration);
