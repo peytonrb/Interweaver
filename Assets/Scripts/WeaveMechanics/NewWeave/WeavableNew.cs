@@ -322,11 +322,16 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 Debug.Log("AAAAAAAAAAAAAA " + pain);
                 var fixedJoint = parentWeaveable.gameObject.AddComponent<FixedJoint>();
                 fixedJoint.connectedBody = collision.rigidbody;
-                collision.rigidbody.useGravity = true;
+                collision.rigidbody.useGravity = false;
                 if (gameObject.layer == LayerMask.NameToLayer("Attachable Weave Object"))
                 {
                     Uninteract();
                 }
+            }
+
+            else
+            {
+                collision.rigidbody.useGravity = true;
             }
 
             if (weaveInteraction != null)
