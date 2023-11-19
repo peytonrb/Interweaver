@@ -296,7 +296,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 if (weaveable.isParent)
                 {
                     parentWeaveable = weaveable;
-
                     if (dayblockPuzzle != null)
                     {
                         dpm.FoundParent();
@@ -386,6 +385,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             foreach (WeaveableNew weaveable in parentWeaveable.wovenObjects)
             {
                 player.weaveVisualizer.WeaveableSelected(weaveable.gameObject);
+                weaveable.rb.useGravity = false;
             }
         }
         else
@@ -429,6 +429,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 foreach (WeaveableNew weaveable in parentWeaveable.wovenObjects)
                 {
                     player.weaveVisualizer.StopAura(weaveable.gameObject);
+                    weaveable.rb.useGravity = true;
                 }
             }
 
