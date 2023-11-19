@@ -64,7 +64,7 @@ Transform:
   - {fileID: 1192012582182303096}
   - {fileID: 2458801738560270661}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2022330651144531283
 GameObject:
@@ -313,8 +313,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3ffb8e4a62be0f42b665c19613d38b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
   waypoints:
   - {fileID: 2022330651144531283}
   - {fileID: 3472288607821874690}
+  speed: 2
   active: 1
+  canReverse: 0
+  movementBasedOnCharacterPresense: 0
+  _characterMissingBehavior: 0
+  maxTimeBeforeResuming: 0
+  stickyGameObjectReference: {fileID: 4464587213752083413}

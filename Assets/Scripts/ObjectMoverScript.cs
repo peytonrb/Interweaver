@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -13,9 +14,11 @@ public class ObjectMoverScript : MonoBehaviour
     private int nextWaypoint = 0; // the current target for the moving object
     [SerializeField][Range(1f, 10f)] private float speed = 2.0f; // speed of object
     [SerializeField] private bool active; // is the moving object active (currently moving)
+
     [Header("Reverse Settings")]
     [SerializeField] private bool canReverse;
     private bool reversing;
+
     [Header("Player Activation Settings")]
     [SerializeField][Tooltip("Check this if you want the movement to start when a character enters the")] private bool movementBasedOnCharacterPresense;
     private enum characterMissingBehavior
@@ -24,7 +27,8 @@ public class ObjectMoverScript : MonoBehaviour
         Return
     }
     [SerializeField][Tooltip("Will the platorm continue along the path or will it return to the start to wait for the player")] private characterMissingBehavior _characterMissingBehavior;
-    [SerializeField][Tooltip("The time the platform waits for the character before continuing on")][Range(0f, 15f)] private float timeBeforeResuming;
+    [SerializeField][Tooltip("The time the platform waits for the character before continuing on")][Range(0f, 30f)] private float maxTimeBeforeResuming;
+    private float timeBeforeResuming;
     [SerializeField] private GameObject stickyGameObjectReference;
 
     void Start()
@@ -36,6 +40,7 @@ public class ObjectMoverScript : MonoBehaviour
                 Debug.Log("Object movement based on character presense, turning off active at Start");
                 active = false;
             }
+            timeBeforeResuming = maxTimeBeforeResuming;
             StartCoroutine(WaitForCharacterOnObject());
         }
     }
@@ -44,11 +49,6 @@ public class ObjectMoverScript : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        
-
-
-
-
         if (active) // only iterate if object is active
         {
             if (nextWaypoint < waypoints.Length && nextWaypoint >= 0)
@@ -107,15 +107,40 @@ public class ObjectMoverScript : MonoBehaviour
         yield return new WaitUntil(StickyDoesntContainsCharacter);
         if (StickyDoesntContainsCharacter() && timeBeforeResuming > 0)
         {
+            Debug.Log(timeBeforeResuming);
             timeBeforeResuming -= Time.deltaTime;
+            active = false;
             StartCoroutine(WaitForCharacterOffObject());
         }
         else if (timeBeforeResuming <= 0)
         {
-            active = true;
-        }
+            timeBeforeResuming = maxTimeBeforeResuming;
 
-        
+            switch (_characterMissingBehavior)
+            {
+                case characterMissingBehavior.Continue:
+                    active = true;
+                    StartCoroutine(WaitForCharacterOnObject());
+                    break;
+                case characterMissingBehavior.Return:
+                    nextWaypoint = 0;
+                    active = true;
+                    StartCoroutine(StopWhenCloseToPoint());
+                    break;
+            }
+        }
+        else
+        {
+            timeBeforeResuming = maxTimeBeforeResuming;
+            active = true;
+            StartCoroutine(WaitForCharacterOffObject());
+        }
+    }
+
+    IEnumerator StopWhenCloseToPoint()
+    {
+        yield return new WaitUntil(AtStart);
+        active = false;
         StartCoroutine(WaitForCharacterOnObject());
     }
 
@@ -139,8 +164,23 @@ public class ObjectMoverScript : MonoBehaviour
         return true;
     }
 
+    private bool AtStart()
+    {
+        if (Vector3.Distance(transform.position, waypoints[0].transform.position) < 0.1f)
+        {
+            return true;
+        }
+        return false;
+    }
+
     void OnDrawGizmos()
     {
-        
+        if (waypoints.Length > 0)
+        {
+            for (int i = 0; i < waypoints.Length - 1; i++)
+            {
+                DrawArrow.ForGizmo(waypoints[i].transform.position, waypoints[i+1].transform.position - waypoints[i].transform.position, Color.red);
+            }
+        }
     }
 }
