@@ -64,6 +64,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [SerializeField] private GameObject dayblockPuzzle;
     private DayblockPuzzleManager dpm;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip rotateClip;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -340,6 +343,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         {
             isRotating = true;
             StartCoroutine(Rotate(dir, angle));
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, rotateClip);
         }
     }
 
