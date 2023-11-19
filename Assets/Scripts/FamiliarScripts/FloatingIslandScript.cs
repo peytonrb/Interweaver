@@ -35,6 +35,7 @@ public class FloatingIslandScript : MonoBehaviour
     private WeaveableNew weaveable;
     public GameObject thisinstance;
 
+    [SerializeField] private AudioClip fallClip;
     private void Awake()
     {
         //Assign Components
@@ -93,9 +94,10 @@ public class FloatingIslandScript : MonoBehaviour
     {
         if (isFloating)
         {
-            anim.SetTrigger("Fall");
+            
             StartCoroutine(TimerBeforeRespawn(true));
             cameraswitched = false;
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, fallClip);
             if (!isFloatingIslandInTheTube) {
                 myCrystal.GetComponent<WeaveableNew>().canBeRelocated = true;
             }
@@ -105,6 +107,14 @@ public class FloatingIslandScript : MonoBehaviour
     //Coroutine timer for respawning the object at the float and sit locations
     public IEnumerator TimerBeforeRespawn(bool isFalling)
     {
+        if (isFalling)
+        {
+            anim.SetTrigger("Fall");
+
+            yield return new WaitForSeconds(2f);
+        }
+        
+
         yield return new WaitForSeconds(timerBeforeSwap / 2);
 
         if (!isFalling && !isFloatingIslandInTheTube)
