@@ -8,6 +8,7 @@ public class OwlDiveScript : MonoBehaviour
     [Header("References")]
     private CharacterController characterController; //references the character controller component
     private MovementScript movementScript; // reference for the movement script component
+    [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
     private UpdraftScript updraftScript;
     [Header("Inputs")]
     public bool divePressed; // defines the initial press of the dive
@@ -43,6 +44,7 @@ public class OwlDiveScript : MonoBehaviour
 
             if (!isDiving)
             {
+                characterAnimationHandler.ToggleDiveAnim(true);
                 movementScript.ChangeVelocity(new Vector3(movementScript.GetVelocity().x, movementScript.GetVelocity().y, movementScript.GetVelocity().z));
             }
             movementScript.ChangeGravity(diveAcceleration);
@@ -58,6 +60,7 @@ public class OwlDiveScript : MonoBehaviour
     {
         if (isDiving)
         {
+            characterAnimationHandler.ToggleDiveAnim(false);
             EndDive();
         } 
     }
@@ -70,7 +73,8 @@ public class OwlDiveScript : MonoBehaviour
 
     public IEnumerator diveCooldown(float duration)
     {
-        
+        characterAnimationHandler.ToggleBounceAnim();
+
         onCooldown = true;
         
         movementScript.ChangeGravity(200);
@@ -84,7 +88,9 @@ public class OwlDiveScript : MonoBehaviour
         movementScript.ResetGravity();
 
         yield return new WaitForSeconds(2f);
+        
         onCooldown = false;
+        
         yield break;
     }
 

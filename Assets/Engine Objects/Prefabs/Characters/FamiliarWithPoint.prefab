@@ -40,7 +40,7 @@ Transform:
   m_Children:
   - {fileID: 1894812260599652014}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &2404717404260384247
 CharacterController:
@@ -102,7 +102,7 @@ MonoBehaviour:
   terminalVelocity: -5
   bounceVector: {x: 0, y: 1, z: 0}
   bounceValue: 3
-  weaverAnimationHandler: {fileID: 9173301895383922949}
+  characterAnimationHandler: {fileID: 9173301895383922949}
   cam: {fileID: 0}
   virtualCam: {fileID: 0}
   active: 0
@@ -128,6 +128,7 @@ MonoBehaviour:
   familiarMovementAbility: 0
   cameraMaster: {fileID: 0}
   WeaveDistance: 12
+  possessionClip: {fileID: 0}
   islandisfalling: 0
 --- !u!114 &2139394294988104313
 MonoBehaviour:
@@ -141,6 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b52fae56050b10042b692b632f17a0b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterAnimationHandler: {fileID: 9173301895383922949}
   divePressed: 0
   diveAcceleration: -20
   terminalVelocity: -30
