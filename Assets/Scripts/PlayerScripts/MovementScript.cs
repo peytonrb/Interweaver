@@ -36,6 +36,7 @@ public class MovementScript : MonoBehaviour
     private float originalTerminalVelocity; // original terminal velocity of the controller
     public Vector3 bounceVector; //max velocity for bounce
     public float bounceValue = 3;
+    private bool canPlayFallAudio = false;
 
     //private bool bouncing = false;
 
@@ -66,8 +67,10 @@ public class MovementScript : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         characterController.enabled = false;
         TryGetComponent<ParticleSystem>(out ParticleSystem vfx);
-
         speedLinesVFX = vfx;
+
+        StartCoroutine(CanPlayFallAudioTimer());
+
     }
     
     // Start is called before the first frame update
@@ -105,80 +108,104 @@ public class MovementScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (Time.timeScale != 0 && active) {
-            // changes what acceleration/deceleration type is being used based on if controller is grouunded or not
-            acceleration = characterController.isGrounded ? groundAcceleration : aerialAcceleration;
-            deceleration = characterController.isGrounded ? groundDeceleration : aerialDeceleration;
+        if (Time.timeScale != 0) {
 
-            //Character movement
-            if (direction.magnitude >= 0.1f)
+            if (active)
             {
-                currentSpeed = Mathf.Lerp(currentSpeed, speed, acceleration * Time.deltaTime);
-                //Debug.Log(currentSpeed);
-                //currentSpeed += acceleration * Time.deltaTime;
-                //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
-                weaverAnimationHandler.ToggleMoveSpeedBlend(currentSpeed); // note: speed is static now, but this should work fine when variable speed is added
+                // changes what acceleration/deceleration type is being used based on if controller is grouunded or not
+                acceleration = characterController.isGrounded ? groundAcceleration : aerialAcceleration;
+                deceleration = characterController.isGrounded ? groundDeceleration : aerialDeceleration;
 
-                if (characterController.isGrounded)
+                //Character movement
+                if (direction.magnitude >= 0.1f)
                 {
-                    //Play footstep Audio!
-                    if (TryGetComponent<PlayerController>(out PlayerController playerCon))
+                    currentSpeed = Mathf.Lerp(currentSpeed, speed, acceleration * Time.deltaTime);
+                    //Debug.Log(currentSpeed);
+                    //currentSpeed += acceleration * Time.deltaTime;
+                    //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
+                    weaverAnimationHandler.ToggleMoveSpeedBlend(currentSpeed); // note: speed is static now, but this should work fine when variable speed is added
+
+                    if (characterController.isGrounded)
                     {
-                        if (!AudioManager.instance.footStepsChannel.isPlaying)
-                            AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.3f);
+                        //Play footstep Audio!
+                        if (TryGetComponent<PlayerController>(out PlayerController playerCon))
+                        {
+                            if (!AudioManager.instance.footStepsChannel.isPlaying)
+                                AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.3f);
+                        }
+                        else
+                        {
+                            if (!AudioManager.instance.footStepsChannel.isPlaying)
+                                AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.7f);
+                        }
                     }
                     else
                     {
-                        if (!AudioManager.instance.footStepsChannel.isPlaying)
-                            AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.7f);
+                        if (AudioManager.instance.footStepsChannel.isPlaying)
+                            AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
                     }
+
                 }
                 else
                 {
+                    currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
+                    weaverAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
                     if (AudioManager.instance.footStepsChannel.isPlaying)
-                    AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
+                        AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
+                    //Debug.Log(currentSpeed);
+                    //currentSpeed -= deceleration * Time.deltaTime;
+                    //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
                 }
-                
-            }
-            else
-            {
-                currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
-                weaverAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
-                if (AudioManager.instance.footStepsChannel.isPlaying)
-                    AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
-                //Debug.Log(currentSpeed);
-                //currentSpeed -= deceleration * Time.deltaTime;
-                //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
-            }
 
-            velocity.x = currentSpeed * newDirection.x;
-            velocity.z = currentSpeed * newDirection.z;
+                velocity.x = currentSpeed * newDirection.x;
+                velocity.z = currentSpeed * newDirection.z;
 
-            characterController.Move(velocity * Time.deltaTime); // make move based on gravity
+                characterController.Move(velocity * Time.deltaTime); // make move based on gravity
+
+                velocity.y = Mathf.Clamp(velocity.y, terminalVelocity, 200f);
+
+                if (speedLinesVFX != null)
+                {
+
+                    var em = speedLinesVFX.emission;
+                    if (velocity.y < -15)
+                    {
+                        em.rateOverTime = Mathf.Abs(velocity.y) * 1.2f;
+                    }
+                    else
+                    {
+                        em.rateOverTime = 0;
+                    }
+
+                }
+
+            }
 
             //Character gravity
             if (!characterController.isGrounded)
             {
                 if (TryGetComponent<PlayerController>(out PlayerController playerCon) && !AudioManager.instance.fallChannel.isPlaying)
                 {
+                    if (canPlayFallAudio)
                     AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, weaverFallClip);
                 }
                 else
                 {
-                    
+
                     if (TryGetComponent<OwlDiveScript>(out OwlDiveScript diveScript) && diveScript.isDiving)
                     {
                         if (!AudioManager.instance.fallChannel.isPlaying || AudioManager.instance.fallChannel.clip != owlDiveClip)
                         {
-                            Debug.Log("Play Dive audio");
-                            AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, owlDiveClip);
+                            if (canPlayFallAudio)
+                                AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, owlDiveClip);
                         }
                     }
                     else
                     {
                         if (!AudioManager.instance.fallChannel.isPlaying || AudioManager.instance.fallChannel.clip != owlGlideClip)
                         {
-                            AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, owlGlideClip);
+                            if (canPlayFallAudio)
+                                AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, owlGlideClip);
                         }
                     }
                 }
@@ -192,28 +219,13 @@ public class MovementScript : MonoBehaviour
                 AudioManager.instance.StopSound(AudioManagerChannels.fallLoopChannel);
                 velocity.y = -2f;
             }
-            velocity.y = Mathf.Clamp(velocity.y, terminalVelocity, 200f);
 
-            if (speedLinesVFX != null)
+            if (resettingTerminalVelocity)
             {
-
-                var em = speedLinesVFX.emission;
-                if (velocity.y < -15)
-                {
-                    em.rateOverTime = Mathf.Abs(velocity.y)*1.2f;
-                } else
-                {
-                    em.rateOverTime = 0;
-                }
-                
+                ResetTerminalVelocity();
             }
+        }
             
-        }
-
-        if (resettingTerminalVelocity)
-        {
-            ResetTerminalVelocity();
-        }
     }
 
     public void LookAndMove()
@@ -334,4 +346,12 @@ public class MovementScript : MonoBehaviour
         }
         
     }
+
+    public IEnumerator CanPlayFallAudioTimer()
+    {
+        yield return new WaitForSeconds(4f);
+
+        canPlayFallAudio = true;
+    }
+
 }

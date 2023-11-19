@@ -35,7 +35,7 @@ public class FamiliarScript : MonoBehaviour
     [Header("Weave Variables")]
     public float WeaveDistance = 12f;
 
-    [SerializeField]
+    [SerializeField] private AudioClip possessionClip;
     //public InputAction NPCInteraction;
 
     public bool islandisfalling;
@@ -178,6 +178,7 @@ public class FamiliarScript : MonoBehaviour
                     Debug.Log("Depossessing");
                     depossessing = true;
                     movementScript.active = false;
+                    AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, possessionClip);
                 }
             }
         }   

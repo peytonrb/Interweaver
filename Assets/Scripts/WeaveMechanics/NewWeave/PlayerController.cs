@@ -69,7 +69,9 @@ public class PlayerController : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioClip startWeaveClip;
     [SerializeField] private AudioClip weavingLoopClip;
-
+    [SerializeField] private AudioClip weavingIntroClip;
+    [SerializeField] private AudioClip weavingOutroClip;
+    [SerializeField] private AudioClip possessionClip;
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -153,7 +155,7 @@ public class PlayerController : MonoBehaviour
             if (uninteract)
             {
                 Uninteract();
-                AudioManager.instance.StopSound(AudioManagerChannels.weaveLoopingChannel);
+                StartCoroutine(EndWeaveAudio());
                 weaveVisualizer.DisableWeave();
             }
 
@@ -173,6 +175,17 @@ public class PlayerController : MonoBehaviour
             Application.Quit();
         }
     }
+
+    public IEnumerator EndWeaveAudio()
+    {
+        AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingOutroClip);
+
+        yield return new WaitForSeconds(.732f);
+
+        AudioManager.instance.StopSound(AudioManagerChannels.weaveLoopingChannel);
+        yield break;
+    }
+
 
     public void WeaveActivated()
     {
@@ -205,8 +218,9 @@ public class PlayerController : MonoBehaviour
         // Audio
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startWeaveClip);
 
-        yield return new WaitForSeconds(1f);
-
+        yield return new WaitForSeconds(.1f);
+        AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingIntroClip);
+        yield return new WaitForSeconds(.732f);
         AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingLoopClip);
         Debug.Log("SOUND PLAYED");
         yield break;
@@ -338,6 +352,8 @@ public class PlayerController : MonoBehaviour
                 possessing = true;
                 movementScript.active = false;
                 StartCoroutine(familiarScript.ForcedDelay());
+
+                AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, possessionClip);
             }
         }
     }
