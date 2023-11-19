@@ -40,7 +40,7 @@ public class MovementScript : MonoBehaviour
     //private bool bouncing = false;
 
     [Header("Animation")]
-    [CannotBeNullObjectField] public WeaverAnimationHandler weaverAnimationHandler;
+    [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
 
 
     [Header("character's camera")]
@@ -117,7 +117,7 @@ public class MovementScript : MonoBehaviour
                 //Debug.Log(currentSpeed);
                 //currentSpeed += acceleration * Time.deltaTime;
                 //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
-                weaverAnimationHandler.ToggleMoveSpeedBlend(currentSpeed); // note: speed is static now, but this should work fine when variable speed is added
+                characterAnimationHandler.ToggleMoveSpeedBlend(currentSpeed); // note: speed is static now, but this should work fine when variable speed is added
 
                 if (characterController.isGrounded)
                 {
@@ -143,7 +143,7 @@ public class MovementScript : MonoBehaviour
             else
             {
                 currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
-                weaverAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
+                characterAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
                 if (AudioManager.instance.footStepsChannel.isPlaying)
                     AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
                 //Debug.Log(currentSpeed);

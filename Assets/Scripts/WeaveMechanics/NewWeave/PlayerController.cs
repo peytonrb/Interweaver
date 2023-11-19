@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
     private GameMasterScript GM;
 
     [Header("Animation")]
-    [CannotBeNullObjectField] public WeaverAnimationHandler weaverAnimationHandler;
+    [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
 
     [Header("Prototype")]
     [CannotBeNullObjectField] public GameObject relocateMode;
@@ -188,7 +188,7 @@ public class PlayerController : MonoBehaviour
                 isCurrentlyWeaving = true;               
                 interactableObject.Interact();
                 inRelocateMode = true;
-                weaverAnimationHandler.ToggleWeaveAnim(isWeaving);
+                characterAnimationHandler.ToggleWeaveAnim(isWeaving);
                 interactableObject.Relocate();
                 relocateMode.SetActive(true); // on-screen ui
             }
@@ -244,7 +244,7 @@ public class PlayerController : MonoBehaviour
         {
             interactableObject.Uninteract();
             interactableObject = null;
-            weaverAnimationHandler.ToggleWeaveAnim(isWeaving);
+            characterAnimationHandler.ToggleWeaveAnim(isWeaving);
             relocateMode.SetActive(false); // on screen ui
             combineMode.SetActive(false); // on screen ui
             uninteract = false;
