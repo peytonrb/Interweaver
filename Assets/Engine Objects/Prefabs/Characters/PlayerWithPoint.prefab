@@ -42,7 +42,7 @@ Transform:
   - {fileID: 46808667028420449}
   - {fileID: 5058674367002751257}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2864162376311042491
 MonoBehaviour:
@@ -78,11 +78,14 @@ MonoBehaviour:
   weaveVisualizer: {fileID: 0}
   familiar: {fileID: 0}
   respawnController: {fileID: 0}
-  weaverAnimationHandler: {fileID: 8235766567655218210}
+  characterAnimationHandler: {fileID: 8235766567655218210}
   relocateMode: {fileID: 0}
   combineMode: {fileID: 0}
   startWeaveClip: {fileID: 8300000, guid: 30957b1c3a859b1449acab7247fd318a, type: 3}
   weavingLoopClip: {fileID: 8300000, guid: 8e9d4ef38cb893947bb5b157af0c3f8e, type: 3}
+  weavingIntroClip: {fileID: 0}
+  weavingOutroClip: {fileID: 0}
+  possessionClip: {fileID: 0}
 --- !u!114 &20847522854274277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,7 +108,7 @@ MonoBehaviour:
   terminalVelocity: -50
   bounceVector: {x: 0, y: 0, z: 0}
   bounceValue: 3
-  weaverAnimationHandler: {fileID: 8235766567655218210}
+  characterAnimationHandler: {fileID: 8235766567655218210}
   cam: {fileID: 0}
   virtualCam: {fileID: 0}
   active: 1
@@ -953,7 +956,7 @@ Animator:
   m_GameObject: {fileID: 9214415196742565796}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4d127548fd1e4df44aeee85f80cc7a12, type: 2}
+  m_Controller: {fileID: 9100000, guid: e95605b19e0feab4c8c3c9b37ef97c55, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

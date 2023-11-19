@@ -159,6 +159,7 @@ public class MovementScript : MonoBehaviour
             //Character gravity
             if (!characterController.isGrounded)
             {
+                characterAnimationHandler.ToggleFallAnim(true);
                 if (TryGetComponent<PlayerController>(out PlayerController playerCon) && !AudioManager.instance.fallChannel.isPlaying)
                 {
                     AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, weaverFallClip);
@@ -184,11 +185,10 @@ public class MovementScript : MonoBehaviour
                 }
 
                 velocity.y += gravity * Time.deltaTime;
-                //weaverAnimationHandler.ToggleFallAnim(true);
             }
             else
             {
-                //weaverAnimationHandler.ToggleFallAnim(false);
+                characterAnimationHandler.ToggleFallAnim(false);
                 AudioManager.instance.StopSound(AudioManagerChannels.fallLoopChannel);
                 velocity.y = -2f;
             }
