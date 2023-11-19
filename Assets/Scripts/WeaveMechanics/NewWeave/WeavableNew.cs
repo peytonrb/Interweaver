@@ -435,6 +435,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 {
                     player.weaveVisualizer.StopAura(weaveable.gameObject);
                     weaveable.rb.useGravity = true;
+                    rb.isKinematic = false;
                 }
             }
 
@@ -474,12 +475,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public void WeaveMode()
     {
         relocate = false;
-        inWeaveMode = true;
-        if (!isCombined)
-        {
-            rb.isKinematic = true;
-        }
-
+        inWeaveMode = true;        
+        rb.isKinematic = true;       
         canRotate = true;
     }
     //********************************************************************
