@@ -47,7 +47,7 @@ public class MovementScript : MonoBehaviour
     //Character Rotation values
     private float rotationSpeed;
     private float rotationVelocity;
-    private Vector3 newDirection;
+    [HideInInspector] public Vector3 newDirection;
     public GameObject cam; //Camera object reference
     public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
     public bool active; //Determines if movement controller is active

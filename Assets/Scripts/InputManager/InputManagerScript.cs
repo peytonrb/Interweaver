@@ -26,7 +26,7 @@ public class InputManagerScript : MonoBehaviour
 
     private PlayerController playerScript;
     private FamiliarScript familiarScript;
-
+    private MovementScript movementScript;
     public PlayerInput playerInput;
     void Awake()
     {
@@ -40,6 +40,7 @@ public class InputManagerScript : MonoBehaviour
         }
 
         playerScript = player.GetComponent<PlayerController>();
+        movementScript = player.GetComponent<MovementScript>();
         familiarScript = familiar.GetComponent<FamiliarScript>();
         pauseScript = pauseScreen.GetComponent<PauseScript>();
         playerInput = GetComponent<PlayerInput>();
