@@ -70,6 +70,7 @@ public class WeaveFXScript : MonoBehaviour
 
         if (weaveable.gameObject.tag != "FloatingIsland")
         {
+            Debug.Log("this should print twice");
             weaveable.GetComponent<Renderer>().material = weaveable.GetComponent<WeaveableNew>().originalMat;
 
             // kinda inefficient if we end up having hella children per GameObject

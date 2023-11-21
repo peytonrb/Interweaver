@@ -59,7 +59,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [Header("References")]
     public WeaveableNew weaveableScript; // attempting to make this obsolete
     public List<WeaveableNew> wovenObjects;
-    [SerializeField] private PlayerController player;
+    public PlayerController player;
     private GameObject wovenFloatingIsland;
     [SerializeField] private GameObject dayblockPuzzle;
     private DayblockPuzzleManager dpm;
