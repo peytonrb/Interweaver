@@ -11,6 +11,9 @@ public class PauseScript : MonoBehaviour
     public static bool usingController = false;
     private Toggle toggle;
     private EventSystem eventSystem;
+
+    [SerializeField] private GameObject optionGroup;
+    [SerializeField] private GameObject defaultGroup;
     public void Start()
     {
         toggle = GetComponentInChildren<Toggle>();
@@ -48,5 +51,25 @@ public class PauseScript : MonoBehaviour
             }
         }
 
+    }
+
+    public void ToggleOptions()
+    {
+        if (optionGroup.activeSelf)
+        {
+            optionGroup.SetActive(false);
+            defaultGroup.SetActive(true);
+
+            optionGroup.GetComponent<CanvasGroup>().alpha = 0f;
+            defaultGroup.GetComponent<CanvasGroup>().alpha = 1f;
+        }
+        else
+        {
+            defaultGroup.SetActive(false);
+            optionGroup.SetActive(true);
+
+            optionGroup.GetComponent<CanvasGroup>().alpha = 1f;
+            defaultGroup.GetComponent<CanvasGroup>().alpha = 0f;
+        }
     }
 }

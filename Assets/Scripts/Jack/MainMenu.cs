@@ -25,6 +25,7 @@ public class MainMenu : MonoBehaviour
     {
         eventSystem = EventSystem.current;
         optionsMenu.gameObject.SetActive(false);
+        creditsMenu.gameObject.SetActive(false);
     }
 
     void Update()
@@ -43,6 +44,7 @@ public class MainMenu : MonoBehaviour
     //Function for turning off start screen and opening the main menu on by setting alpha to 1
     public void OpenMainMenu()
     {
+        Debug.Log("Open Main Menu");
         mainMenu.alpha = 1;
         mainMenu.blocksRaycasts = true;
         TitleLogo.SetActive(true);
@@ -86,6 +88,7 @@ public class MainMenu : MonoBehaviour
     public void OpenCredits()
     {
         PlayButtonSound();
+        creditsMenu.gameObject.SetActive(true);
         creditsMenu.alpha = 1;
         creditsMenu.blocksRaycasts = true;
         CloseMainMenu();
@@ -98,7 +101,7 @@ public class MainMenu : MonoBehaviour
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, cancelFile, 1f);
         creditsMenu.alpha = 0;
         creditsMenu.blocksRaycasts = false;
-
+        creditsMenu.gameObject.SetActive(false);
         EventSystem.current.SetSelectedGameObject(null);
         OpenMainMenu();
     }

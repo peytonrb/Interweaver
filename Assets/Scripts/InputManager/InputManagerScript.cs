@@ -277,6 +277,28 @@ public class InputManagerScript : MonoBehaviour
 
         }
     }
+
+    public void OnQuit(InputValue input)
+    {
+        if (input.isPressed)
+        {
+            Application.Quit();
+        }
+    }
+
+    public void ResetCurrentCharacter()
+    {
+        if (familiarScript.myTurn)
+        {
+            familiarScript.GetComponent<MovementScript>().GoToCheckPoint();
+        }
+        else
+        {
+            playerScript.GetComponent<MovementScript>().GoToCheckPoint();
+        }
+
+        pauseScript.Resume();
+    }
     //******************************************************
 
     #region //OWL FAMILIAR ABILITIES

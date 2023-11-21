@@ -99,7 +99,6 @@ public class PlayerController : MonoBehaviour
         inCombineMode = false;
         inRelocateMode = false;
         interactInput = false;
-        //AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startWeaveClip);
     }
 
     void Update()
@@ -159,20 +158,6 @@ public class PlayerController : MonoBehaviour
                 weaveVisualizer.DisableWeave();
             }
 
-            //DetectGamepad();
-
-            //this is purely for testing the checkpoint function if it's working properly
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
-            //Debug.Log("Using a controller = " + pauseScript.usingController);
-        }
-
-        // KILL SWITCH
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
         }
     }
 
