@@ -14,6 +14,10 @@ public class PauseScript : MonoBehaviour
 
     [SerializeField] private GameObject optionGroup;
     [SerializeField] private GameObject defaultGroup;
+
+    [SerializeField] private GameObject ControllerImage;
+    [SerializeField] private GameObject KeyboardImage;
+
     public void Start()
     {
         toggle = GetComponentInChildren<Toggle>();
@@ -37,6 +41,8 @@ public class PauseScript : MonoBehaviour
             else
             {
                 InputManagerScript.instance.ToggleControlScheme(true);
+                ControllerImage.SetActive(true);
+                KeyboardImage.SetActive(false);
             }
         }
         else
@@ -48,6 +54,8 @@ public class PauseScript : MonoBehaviour
             else
             {
                 InputManagerScript.instance.ToggleControlScheme(false);
+                ControllerImage.SetActive(false);
+                KeyboardImage.SetActive(true);
             }
         }
 
@@ -71,5 +79,15 @@ public class PauseScript : MonoBehaviour
             optionGroup.GetComponent<CanvasGroup>().alpha = 1f;
             defaultGroup.GetComponent<CanvasGroup>().alpha = 0f;
         }
+    }
+
+    public void ResetToCheckpoint()
+    {
+        InputManagerScript.instance.ResetCurrentCharacter();
+    }
+
+    public void QuitToMenu()
+    {
+        SceneHandler.instance.LoadLevel("Menu");
     }
 }
