@@ -7,9 +7,10 @@ public class NetCannonScript : MonoBehaviour
 {
     public float fireRate; //Amount of time in seconds to wait between firing
     public float projectileSpeed; //Set to negative if shooting in the negative direction of an axis
+    public float firstShotDelayTime = 0;
 
     private bool fired = false;
-    public bool isOn;
+    public bool isOn = false;
 
     public GameObject projectile;
     private NetProjectileScript netProjectileScript;
@@ -39,5 +40,13 @@ public class NetCannonScript : MonoBehaviour
     IEnumerator Wait() {
         yield return new WaitForSeconds(fireRate);
         fired = false;
+    }
+
+    IEnumerator StartOffset()
+    {
+        yield return new WaitForSeconds(firstShotDelayTime);
+
+        isOn = true;
+        yield break;
     }
 }
