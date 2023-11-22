@@ -23,6 +23,7 @@ public class CameraMasterScript : MonoBehaviour
     public int weaverCameraOnPriority;
     public int familiarCameraOnPriority;
 
+    public float LoFCameraYoffset = 0;
     void Awake()
     {
         if (instance == null)
@@ -245,7 +246,7 @@ public class CameraMasterScript : MonoBehaviour
 
         familiarScript.leapOfFaith = true;
         familiarVirtualCams[familiarCameraOnPriority].transform.eulerAngles = new Vector3(90f, familiarVirtualCams[familiarCameraOnPriority].transform.eulerAngles.y, familiarVirtualCams[familiarCameraOnPriority].transform.eulerAngles.z);
-        familiarVirtualCams[familiarCameraOnPriority].GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, originalFamiliarCamTransposeOffset.y, 0);
+        familiarVirtualCams[familiarCameraOnPriority].GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, originalFamiliarCamTransposeOffset.y + LoFCameraYoffset, 0);
     }
 
     public void EndLeapOfFaith() {
