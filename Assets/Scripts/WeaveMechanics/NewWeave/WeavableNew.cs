@@ -274,79 +274,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     // this will need to be refactored later but for now when the weaveable collides with another 
     //     weaveable it will make a fixed joint component and then add itself as the rigidbody to be connected
-    void OnTriggerEnter(Collider other)
-    {
-        weaveableScript = GetComponent<WeaveableNew>();
-
-        //Return if I'm a floating island and hitting my own crystal
-        if (TryGetComponent<FloatingIslandScript>(out FloatingIslandScript islandScript))
-        {
-            if (islandScript.myCrystal == other.gameObject.TryGetComponent<CrystalScript>(out CrystalScript crystalScript))
-            {
-                return;
-            }
-        }
-
-        // for objects that are being connected that are NOT the parent
-        if (other.gameObject.GetComponent<Rigidbody>() != null && canCombine && !isParent && weaveableScript.ID == ID)
-        {
-            WeaveableNew[] allWeaveables = FindObjectsOfType<WeaveableNew>();
-
-            foreach (WeaveableNew weaveable in allWeaveables)
-            {
-                if (weaveable.isParent)
-                {
-                    parentWeaveable = weaveable;
-                    if (dayblockPuzzle != null)
-                    {
-                        dpm.FoundParent();
-                    }
-                }
-            }
-
-            if (parentWeaveable != null && !parentWeaveable.wovenObjects.Contains(this.GetComponent<WeaveableNew>()))
-            {
-                parentWeaveable.wovenObjects.Add(this.GetComponent<WeaveableNew>());
-            }
-        }
-
-        // both parent and non parent weaveables - DOES NOT AFFECT CRYSTALS
-        if (gameObject.tag != "Breakable" && other.gameObject.GetComponent<Rigidbody>() != null && parentWeaveable.inWeaveMode && canCombine && weaveableScript.ID == ID)
-        {
-            //Debug.Log("1st: " + collision.gameObject);
-            //Debug.Log("2nd: " + collision.gameObject.GetComponent<Rigidbody>()); // having these debugs here.... fixes issues???????????????
-
-            // only adds fixed joints to parent weaveable to be removed nicely in Uncombine()
-            if (other.gameObject != parentWeaveable.gameObject && other.gameObject.GetComponent<Rigidbody>() != null)
-            {     
-                if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
-                {
-                    //weaveableScript.rb.transform.position = pain.position;
-                    Debug.Log("AAAAAAAAAAAAAA " + pain);
-                    var fixedJoint = parentWeaveable.gameObject.AddComponent<FixedJoint>();
-                    fixedJoint.connectedBody = other.GetComponent<Rigidbody>();
-                    Debug.Log("bruh");
-                    other.GetComponent<Rigidbody>().useGravity = false;
-                    if (gameObject.layer == LayerMask.NameToLayer("Attachable Weave Object"))
-                    {
-                        Uninteract();
-                    }
-                }
-               
-            }
-
-            else
-            {
-                other.GetComponent<Rigidbody>().useGravity = true;
-            }
-
-            if (weaveInteraction != null)
-            {
-                weaveInteraction.OnWeave(other.gameObject);
-            }
-        }
-    }
-
+   
     public void CallRotate(Vector3 dir, float angle)
     {
         if (!isRotating)
@@ -599,7 +527,78 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         StartCoroutine(BackUpForceSnap(weaveableScript));
        
     }
+    void WeaveTogether(GameObject other)
+    {
+        weaveableScript = GetComponent<WeaveableNew>();
 
+        //Return if I'm a floating island and hitting my own crystal
+        if (TryGetComponent<FloatingIslandScript>(out FloatingIslandScript islandScript))
+        {
+            if (islandScript.myCrystal == other.TryGetComponent<CrystalScript>(out CrystalScript crystalScript))
+            {
+                return;
+            }
+        }
+
+        // for objects that are being connected that are NOT the parent
+        if (other.GetComponent<Rigidbody>() != null && canCombine && !isParent && weaveableScript.ID == ID)
+        {
+            WeaveableNew[] allWeaveables = FindObjectsOfType<WeaveableNew>();
+
+            foreach (WeaveableNew weaveable in allWeaveables)
+            {
+                if (weaveable.isParent)
+                {
+                    parentWeaveable = weaveable;
+                    if (dayblockPuzzle != null)
+                    {
+                        dpm.FoundParent();
+                    }
+                }
+            }
+
+            if (parentWeaveable != null && !parentWeaveable.wovenObjects.Contains(this.GetComponent<WeaveableNew>()))
+            {
+                parentWeaveable.wovenObjects.Add(this.GetComponent<WeaveableNew>());
+            }
+        }
+
+        // both parent and non parent weaveables - DOES NOT AFFECT CRYSTALS
+        if (gameObject.tag != "Breakable" && other.GetComponent<Rigidbody>() != null && parentWeaveable.inWeaveMode && canCombine && weaveableScript.ID == ID)
+        {
+            //Debug.Log("1st: " + collision.gameObject);
+            //Debug.Log("2nd: " + collision.gameObject.GetComponent<Rigidbody>()); // having these debugs here.... fixes issues???????????????
+
+            // only adds fixed joints to parent weaveable to be removed nicely in Uncombine()
+            if (other != parentWeaveable.gameObject && other.GetComponent<Rigidbody>() != null)
+            {
+               
+                
+                    //weaveableScript.rb.transform.position = pain.position;
+                    Debug.Log("AAAAAAAAAAAAAA " + pain);
+                    var fixedJoint = parentWeaveable.gameObject.AddComponent<FixedJoint>();
+                    fixedJoint.connectedBody = other.GetComponent<Rigidbody>();
+                    Debug.Log("bruh");
+                    other.GetComponent<Rigidbody>().useGravity = false;
+                    if (gameObject.layer == LayerMask.NameToLayer("Attachable Weave Object"))
+                    {
+                        Uninteract();
+                    }
+                
+
+            }
+
+            else
+            {
+                other.GetComponent<Rigidbody>().useGravity = true;
+            }
+
+            if (weaveInteraction != null)
+            {
+                weaveInteraction.OnWeave(other);
+            }
+        }
+    }
     // these references are passed in so when weaveableScript changes with mouse position, it still holds correct 
     //      reference
     IEnumerator MoveToPoint(Vector3 weaveablePos, WeaveableNew weaveableRef)
@@ -612,8 +611,13 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
             if (Vector3.Distance(weaveableRef.transform.position, pain.position) < 1f)
             {
+                weaveableRef.rb.transform.rotation = transform.rotation;
                 weaveableRef.rb.transform.position = pain.position;
-                Debug.Log("fuck");
+                if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
+                {
+                    WeaveTogether(weaveableRef.gameObject);
+                }
+                    
                 yield break;
             }
 
@@ -624,6 +628,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         yield return new WaitForSeconds(2f);
         weaveableRef.rb.transform.position = pain.position;
+        weaveableRef.rb.transform.rotation = transform.rotation;
+        if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
+        {
+            WeaveTogether(weaveableRef.gameObject);
+        }
     }
 
     void TargetedSnapping()
