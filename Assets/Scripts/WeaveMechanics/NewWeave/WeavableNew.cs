@@ -318,16 +318,21 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
             // only adds fixed joints to parent weaveable to be removed nicely in Uncombine()
             if (other.gameObject != parentWeaveable.gameObject && other.gameObject.GetComponent<Rigidbody>() != null)
-            {
-                //weaveableScript.rb.transform.position = pain.position;
-                Debug.Log("AAAAAAAAAAAAAA " + pain);
-                var fixedJoint = parentWeaveable.gameObject.AddComponent<FixedJoint>();
-                fixedJoint.connectedBody = other.GetComponent<Rigidbody>();
-                other.GetComponent<Rigidbody>().useGravity = false;
-                if (gameObject.layer == LayerMask.NameToLayer("Attachable Weave Object"))
+            {     
+                if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
                 {
-                    Uninteract();
+                    //weaveableScript.rb.transform.position = pain.position;
+                    Debug.Log("AAAAAAAAAAAAAA " + pain);
+                    var fixedJoint = parentWeaveable.gameObject.AddComponent<FixedJoint>();
+                    fixedJoint.connectedBody = other.GetComponent<Rigidbody>();
+                    Debug.Log("bruh");
+                    other.GetComponent<Rigidbody>().useGravity = false;
+                    if (gameObject.layer == LayerMask.NameToLayer("Attachable Weave Object"))
+                    {
+                        Uninteract();
+                    }
                 }
+               
             }
 
             else
@@ -591,6 +596,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         weaveableScript.nearestDistance = nearestDistance;
         pain = weaveableScript.nearestPoint.transform;
         StartCoroutine(MoveToPoint(weaveableScript.nearestPoint.transform.position, weaveableScript));
+        StartCoroutine(BackUpForceSnap(weaveableScript));
        
     }
 
@@ -607,11 +613,17 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             if (Vector3.Distance(weaveableRef.transform.position, pain.position) < 1f)
             {
                 weaveableRef.rb.transform.position = pain.position;
+                Debug.Log("fuck");
                 yield break;
             }
 
             yield return null;
         }
+    }
+    IEnumerator BackUpForceSnap( WeaveableNew weaveableRef)
+    {
+        yield return new WaitForSeconds(2f);
+        weaveableRef.rb.transform.position = pain.position;
     }
 
     void TargetedSnapping()
