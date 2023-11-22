@@ -603,6 +603,16 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     //      reference
     IEnumerator MoveToPoint(Vector3 weaveablePos, WeaveableNew weaveableRef)
     {
+        Vector3 firstobjrotation = transform.rotation.eulerAngles;
+
+        float x = ((firstobjrotation.x) / 90) * 90;
+        float y = ((firstobjrotation.y) / 90) * 90;
+        float z = ((firstobjrotation.z) / 90) * 90;
+
+        Quaternion nearestangle = Quaternion.Euler(x, y, z);
+        Debug.Log("x nearest rotation: "+ x);
+        weaveableRef.rb.transform.rotation = nearestangle;
+
         float timeSinceStarted = 0f;
         while (true)
         {
@@ -611,7 +621,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
             if (Vector3.Distance(weaveableRef.transform.position, pain.position) < 1f)
             {
-                weaveableRef.rb.transform.rotation = transform.rotation;
                 weaveableRef.rb.transform.position = pain.position;
                 if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
                 {
@@ -628,7 +637,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         yield return new WaitForSeconds(2f);
         weaveableRef.rb.transform.position = pain.position;
-        weaveableRef.rb.transform.rotation = transform.rotation;
         if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
         {
             WeaveTogether(weaveableRef.gameObject);
