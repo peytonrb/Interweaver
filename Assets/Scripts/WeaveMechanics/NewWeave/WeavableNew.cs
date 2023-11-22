@@ -346,10 +346,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         if (!isRotating)
         {
-            if (resetQuaternion) {
-                transform.rotation = Quaternion.identity;
-                resetQuaternion = false;
-            }
             isRotating = true;
             StartCoroutine(Rotate(dir, angle));
             AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, rotateClip);
@@ -372,7 +368,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
         transform.rotation = to;
         isRotating = false;
-        resetQuaternion = true;
     }
     //**********************************************************************************
 
