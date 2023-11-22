@@ -107,8 +107,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             startFloating = false;
         }
 
-        //Debug.Log(pain);
-
         if (isHovering)
         {
             RaycastHit hit;
@@ -211,7 +209,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 if (combineable != null && !weaveableScript.canCombine)
                 {
                     canCombine = true;
-                    //inputs.FindActionMap("weaveableObject").FindAction("CombineAction").performed += OnCombineInput;
                 }
             }
         }
@@ -463,12 +460,10 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     public void Combine()
     {
-        //Debug.Log("This is the combine code");
         canCombine = true;
 
         if (weaveableScript.canBeRelocated)
         {
-            //weaveableScript.startFloating = true; //this is commented out so that the snapping can actually work
             if (gameObject.layer == LayerMask.NameToLayer("Attachable Weave Object"))
             {
                 TargetedSnapping();
@@ -501,8 +496,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         nearestDistance = Mathf.Infinity; //this is made the be infinite so that when it calculates the distance it wouldn't cap itself
         GameObject myClosestPoint = null;
         GameObject weaveableClosestPoint = null;
-        //transform.LookAt(new Vector3(weaveableScript.transform.position.x, this.transform.position.y, weaveableScript.transform.position.z));
-        //weaveableScript.transform.LookAt(new Vector3(this.transform.position.x, weaveableScript.transform.position.y, this.transform.position.z));
 
         for (int i = 0; i < myTransformPoints.Length; i++)
         {
@@ -566,8 +559,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         // both parent and non parent weaveables - DOES NOT AFFECT CRYSTALS
         if (gameObject.tag != "Breakable" && other.GetComponent<Rigidbody>() != null && parentWeaveable.inWeaveMode && canCombine && weaveableScript.ID == ID)
         {
-            //Debug.Log("1st: " + collision.gameObject);
-            //Debug.Log("2nd: " + collision.gameObject.GetComponent<Rigidbody>()); // having these debugs here.... fixes issues???????????????
 
             // only adds fixed joints to parent weaveable to be removed nicely in Uncombine()
             if (other != parentWeaveable.gameObject && other.GetComponent<Rigidbody>() != null)
