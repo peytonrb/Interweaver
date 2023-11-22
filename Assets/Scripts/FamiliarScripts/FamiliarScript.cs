@@ -100,7 +100,9 @@ public class FamiliarScript : MonoBehaviour
             if (familiarMovementAbility)
             {
                 movementScript.Bounce();
+
                 
+
                 if (other.gameObject.TryGetComponent<CrystalScript>(out CrystalScript crystal))
                 {
                     crystal.TriggerBreak();
@@ -146,8 +148,11 @@ public class FamiliarScript : MonoBehaviour
 
         else if (collision.gameObject.CompareTag("Breakable")) // if familiar collides with breakable object while using movement ability
         {
+
+            
             if (familiarMovementAbility && !characterController.isGrounded)
             {
+                
                 movementScript.Bounce();
 
                 if (collision.gameObject.TryGetComponent<CrystalScript>(out CrystalScript crystal))
