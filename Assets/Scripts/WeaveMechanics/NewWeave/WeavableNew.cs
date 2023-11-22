@@ -9,7 +9,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [Header("Weavables")]
     [CannotBeNullObjectField][SerializeField] private Rigidbody rb;
     [SerializeField] private float hoveringValue = 4f;
-    [CannotBeNullObjectField][SerializeField] private Camera mainCamera;
+     private Camera mainCamera;
     [SerializeField] private LayerMask layersToHit;
     [SerializeField] public WeaveInteraction weaveInteraction;
     public int ID; //THIS IS INDENTIFIER FOR DAYBLOCK COMBINING
@@ -90,6 +90,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         startRot = transform.rotation;
 
         originalLayerMask = gameObject.layer;
+
+        mainCamera = Camera.main;
     }
 
     void Update()
@@ -243,11 +245,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 }
                 else
                 {
-
                     rb.velocity = Vector3.zero;
                     TargetingArrow.SetActive(false);
                 }
-
 
                 rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
                 //this freezes the Y position so that the combined objects won't drag it down because of gravity and it freezes in all rotation so it won't droop because of the gravity  from the objects
@@ -274,21 +274,21 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     // this will need to be refactored later but for now when the weaveable collides with another 
     //     weaveable it will make a fixed joint component and then add itself as the rigidbody to be connected
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
         weaveableScript = GetComponent<WeaveableNew>();
 
         //Return if I'm a floating island and hitting my own crystal
         if (TryGetComponent<FloatingIslandScript>(out FloatingIslandScript islandScript))
         {
-            if (islandScript.myCrystal == collision.gameObject.TryGetComponent<CrystalScript>(out CrystalScript crystalScript))
+            if (islandScript.myCrystal == other.gameObject.TryGetComponent<CrystalScript>(out CrystalScript crystalScript))
             {
                 return;
             }
         }
 
         // for objects that are being connected that are NOT the parent
-        if (collision.gameObject.GetComponent<Rigidbody>() != null && canCombine && !isParent && weaveableScript.ID == ID)
+        if (other.gameObject.GetComponent<Rigidbody>() != null && canCombine && !isParent && weaveableScript.ID == ID)
         {
             WeaveableNew[] allWeaveables = FindObjectsOfType<WeaveableNew>();
 
@@ -311,19 +311,19 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         }
 
         // both parent and non parent weaveables - DOES NOT AFFECT CRYSTALS
-        if (gameObject.tag != "Breakable" && collision.gameObject.GetComponent<Rigidbody>() != null && parentWeaveable.inWeaveMode && canCombine && weaveableScript.ID == ID)
+        if (gameObject.tag != "Breakable" && other.gameObject.GetComponent<Rigidbody>() != null && parentWeaveable.inWeaveMode && canCombine && weaveableScript.ID == ID)
         {
             //Debug.Log("1st: " + collision.gameObject);
             //Debug.Log("2nd: " + collision.gameObject.GetComponent<Rigidbody>()); // having these debugs here.... fixes issues???????????????
 
             // only adds fixed joints to parent weaveable to be removed nicely in Uncombine()
-            if (collision.gameObject != parentWeaveable.gameObject && collision.gameObject.GetComponent<Rigidbody>() != null)
+            if (other.gameObject != parentWeaveable.gameObject && other.gameObject.GetComponent<Rigidbody>() != null)
             {
                 //weaveableScript.rb.transform.position = pain.position;
                 Debug.Log("AAAAAAAAAAAAAA " + pain);
                 var fixedJoint = parentWeaveable.gameObject.AddComponent<FixedJoint>();
-                fixedJoint.connectedBody = collision.rigidbody;
-                collision.rigidbody.useGravity = false;
+                fixedJoint.connectedBody = other.GetComponent<Rigidbody>();
+                other.GetComponent<Rigidbody>().useGravity = false;
                 if (gameObject.layer == LayerMask.NameToLayer("Attachable Weave Object"))
                 {
                     Uninteract();
@@ -332,12 +332,12 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
             else
             {
-                collision.rigidbody.useGravity = true;
+                other.GetComponent<Rigidbody>().useGravity = true;
             }
 
             if (weaveInteraction != null)
             {
-                weaveInteraction.OnWeave(collision.gameObject);
+                weaveInteraction.OnWeave(other.gameObject);
             }
         }
     }
@@ -566,7 +566,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     void Snapping()
     {
         nearestDistance = Mathf.Infinity; //this is made the be infinite so that when it calculates the distance it wouldn't cap itself
-        GameObject closestPoint = null;
+        GameObject myClosestPoint = null;
         GameObject weaveableClosestPoint = null;
         //transform.LookAt(new Vector3(weaveableScript.transform.position.x, this.transform.position.y, weaveableScript.transform.position.z));
         //weaveableScript.transform.LookAt(new Vector3(this.transform.position.x, weaveableScript.transform.position.y, this.transform.position.z));
@@ -579,30 +579,19 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
                 if (distance < nearestDistance)
                 {
-                    closestPoint = myTransformPoints[i];
+                    myClosestPoint = myTransformPoints[i];
                     weaveableClosestPoint = weaveableScript.myTransformPoints[t];
                     nearestDistance = distance;
                 }
             }
         }
 
-        weaveableScript.nearestPoint = closestPoint;
+        weaveableScript.nearestPoint = myClosestPoint;
         weaveableScript.myNearestPoint = weaveableClosestPoint;
         weaveableScript.nearestDistance = nearestDistance;
         pain = weaveableScript.nearestPoint.transform;
         StartCoroutine(MoveToPoint(weaveableScript.nearestPoint.transform.position, weaveableScript));
-        //weaveableScript.rb.transform.position = pain.position;       
-
-        //Vector3 directionToLook = weaveableScript.transform.position - transform.position;
-        //Quaternion directionVector = Quaternion.FromToRotation(weaveableScript.myNearestPoint.transform.forward, directionToLook);
-        //transform.rotation = directionVector;
-
-        // if (nearestDistance < weaveableScript.snapDistance)
-        // {
-        //      weaveableScript.rb.transform.position = weaveableScript.nearestPoint.transform.position -
-        //                                        (weaveableScript.nearestPoint.transform.position -
-        //                                         weaveableScript.myNearestPoint.transform.position).normalized;
-        // }
+       
     }
 
     // these references are passed in so when weaveableScript changes with mouse position, it still holds correct 

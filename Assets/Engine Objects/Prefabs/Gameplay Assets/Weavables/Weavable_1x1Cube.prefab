@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 1484482762789999798}
   - component: {fileID: 6182898371012024288}
   - component: {fileID: 9071114826641988776}
+  - component: {fileID: 4717289091673458066}
   - component: {fileID: 1710404920294912330}
   - component: {fileID: 4473131065183391954}
   - component: {fileID: 3584822575221554532}
@@ -72,7 +73,7 @@ Transform:
   - {fileID: 837506405334165369}
   - {fileID: 8882606406271639048}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6182898371012024288
 MeshFilter:
@@ -124,6 +125,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &4717289091673458066
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182470488956426515}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.05, y: 1.05, z: 1.05}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &1710404920294912330
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -541,7 +563,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8882606406271639048
 Transform:
   m_ObjectHideFlags: 0
