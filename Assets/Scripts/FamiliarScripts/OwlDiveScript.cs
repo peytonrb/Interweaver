@@ -8,6 +8,7 @@ public class OwlDiveScript : MonoBehaviour
     [Header("References")]
     private CharacterController characterController; //references the character controller component
     private MovementScript movementScript; // reference for the movement script component
+    private FamiliarScript familiarScript; // reference for the familiar script component
     [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
     private UpdraftScript updraftScript;
     [Header("Inputs")]
@@ -25,8 +26,8 @@ public class OwlDiveScript : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         movementScript = GetComponent<MovementScript>();
+        familiarScript = GetComponent<FamiliarScript>();
         updraftScript = GetComponent<UpdraftScript>();
-        //inputs = movementScript.inputs; // this feels wrong, find better way to reference later
     }
 
     // Update is called once per frame
@@ -53,7 +54,6 @@ public class OwlDiveScript : MonoBehaviour
             movementScript.ChangeAerialDeceleration(aerialDeceleration);
             isDiving = true;
         }
-        
     }
 
     public void DiveRelease()
@@ -97,10 +97,36 @@ public class OwlDiveScript : MonoBehaviour
     private void EndDive() // returns values to their original forms
     {
         isDiving = false;
+        characterAnimationHandler.ToggleDiveAnim(false);
         AudioManager.instance.StopSound(AudioManagerChannels.SoundEffectChannel);
         movementScript.ResetGravity();
         movementScript.ResetTerminalVelocity();
         movementScript.ResetAerialAcceleration();
         movementScript.ResetAerialDeceleration();
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject.CompareTag("Breakable")) // if familiar collides with breakable object while using movement ability
+        {
+            if (isDiving)
+            {
+                movementScript.Bounce();
+                
+                if (collision.gameObject.TryGetComponent<CrystalScript>(out CrystalScript crystal))
+                {
+                    crystal.TriggerBreak();
+                }
+                else
+                {
+                    Destroy(collision.gameObject);
+                }
+            }
+            else
+            {
+                CameraMasterScript.instance.EndLeapOfFaith();
+                familiarScript.Death();
+            }
+        }
     }
 }

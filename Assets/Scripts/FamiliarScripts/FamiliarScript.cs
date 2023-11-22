@@ -95,7 +95,7 @@ public class FamiliarScript : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit other) {
         
-        if (other.gameObject.CompareTag("Breakable")) // if familiar collides with breakable object while using movement ability
+        /*if (other.gameObject.CompareTag("Breakable")) // if familiar collides with breakable object while using movement ability
         {
             if (familiarMovementAbility)
             {
@@ -111,7 +111,7 @@ public class FamiliarScript : MonoBehaviour
                 CameraMasterScript.instance.EndLeapOfFaith();
                 Death();
             }
-        }
+        }*/
     }
 
 
@@ -143,21 +143,6 @@ public class FamiliarScript : MonoBehaviour
         {
             Death();
         }
-
-        else if (collision.gameObject.CompareTag("Breakable")) // if familiar collides with breakable object while using movement ability
-        {
-            if (familiarMovementAbility && !characterController.isGrounded)
-            {
-                movementScript.Bounce();
-
-                if (collision.gameObject.TryGetComponent<CrystalScript>(out CrystalScript crystal))
-                {
-                    crystal.TriggerBreak();
-                }
-            }
-
-        }
-
     }
 
     void OnTriggerExit(Collider other)
@@ -193,7 +178,7 @@ public class FamiliarScript : MonoBehaviour
         StopCoroutine(ForcedDelay());
     }
 
-    public void Death()
+    public void Death() // this should be an interface EVENTUALLY WAHOO
     {
         characterController.enabled = false;
         transform.position = GM.FamiliarCheckPointPos;

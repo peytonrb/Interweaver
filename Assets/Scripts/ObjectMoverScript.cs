@@ -107,7 +107,6 @@ public class ObjectMoverScript : MonoBehaviour
         yield return new WaitUntil(StickyDoesntContainsCharacter);
         if (StickyDoesntContainsCharacter() && timeBeforeResuming > 0)
         {
-            Debug.Log(timeBeforeResuming);
             timeBeforeResuming -= Time.deltaTime;
             active = false;
             StartCoroutine(WaitForCharacterOffObject());
