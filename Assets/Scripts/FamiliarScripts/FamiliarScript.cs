@@ -145,6 +145,11 @@ public class FamiliarScript : MonoBehaviour
         {
             Death();
         }
+        else if (collision.gameObject.CompareTag("CutsceneTrigger")) {
+            EndCutsceneTrigger ect = collision.GetComponent<EndCutsceneTrigger>();
+
+            ect.StartCutscene();
+        }
     }
 
     void OnTriggerExit(Collider other)

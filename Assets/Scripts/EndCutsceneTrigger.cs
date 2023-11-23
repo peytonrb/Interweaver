@@ -11,12 +11,12 @@ public class EndCutsceneTrigger : MonoBehaviour
     void Start() {
         amc = GetComponent<AnimaticCutsceneController>();
     }
-    void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.tag == "Familiar") {
-            amc.ChangeCutscene(1);
-            //Changes to end cutscene
-            SceneManager.LoadScene("AnimaticCutscenes");
-        }
+
+    public void StartCutscene() {
+        amc.ChangeCutscene(1);
+        //Debug.Log("Hit");
+        //Changes to end cutscene
+        SceneManager.LoadScene("AnimaticCutscenes");
     }
     
 }
