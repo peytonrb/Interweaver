@@ -79,6 +79,7 @@ public class DialogueManager : MonoBehaviour
     {
         textBoxUI.SetActive(false);
         currentTrigger.isInteracting = false;
+        currentTrigger.disableNPCDialogue();
     }
 
     // initializes the text objects for intended dialogue

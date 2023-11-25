@@ -159,12 +159,7 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnWeaverNPCInteractions(InputValue input)
     {
-        if (input.isPressed)
-        {
-            NPCInteractionScript npcInteractScript = player.GetComponent<NPCInteractionScript>();
-            npcInteractScript.Interact();
-            Debug.Log("Interacting");
-        }
+        
     }
 
     public void OnRotate(InputValue input)
@@ -257,7 +252,7 @@ public class InputManagerScript : MonoBehaviour
 
     #endregion//******************************************************
 
-    //PAUSING
+    //Both Characters
     //******************************************************
     public void OnPause(InputValue input)
     {
@@ -299,7 +294,32 @@ public class InputManagerScript : MonoBehaviour
 
         pauseScript.Resume();
     }
+
+    public void OnNPCInteraction(InputValue input)
+    {
+        if (input.isPressed)
+        {
+           
+            if (familiarScript.myTurn)
+            {
+                NPCInteractionScript npcInteractScript = familiar.GetComponent<NPCInteractionScript>();
+                npcInteractScript.Interact();
+                Debug.Log("Interacting");
+            }
+            else
+            {
+                NPCInteractionScript npcInteractScript = player.GetComponent<NPCInteractionScript>();
+                npcInteractScript.Interact();
+                Debug.Log("Interacting");
+            }
+        }
+       
+    }
+
     //******************************************************
+
+
+
 
     #region //OWL FAMILIAR ABILITIES
     //******************************************************
@@ -335,15 +355,7 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
-    public void OnFamiliarNPCInteraction(InputValue input)
-    {
-        if (input.isPressed)
-        {
-            NPCInteractionScript npcInteractScript = familiar.GetComponent<NPCInteractionScript>();
-            npcInteractScript.Interact();
-            Debug.Log("Interacting");
-        }
-    }
+   
 
 
    
