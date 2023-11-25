@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HoverCrystalScript : MonoBehaviour
@@ -14,81 +15,58 @@ public class HoverCrystalScript : MonoBehaviour
     //[SerializeField] private bool startShatterTimeBeforePeak;
     private float distance = -1f;
     private float TimeToShatter;
-    private bool hoverBegan;
+    public bool hoverBegan = false;
     private bool isCombined;
 
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
         weaveable = GetComponent<WeaveableNew>(); 
-        
+    }
+
+    public void StartHover(GameObject other)
+    {
+        other.GetComponent<WeaveableNew>().Uninteract();
+        weaveable.Uninteract();
+        pointToRiseTo = transform.position + (Vector3.up * hoverHeight);
+        rigidBody.constraints = RigidbodyConstraints.FreezeAll;
+        distance = Vector3.Distance(transform.position, pointToRiseTo);
+
         StartCoroutine(Hover());
     }
 
-    IEnumerator Hover()
+
+    public IEnumerator Hover()
     {
-        yield return new WaitUntil(CrystalIsCombined);
-        distance = Vector3.Distance(transform.position, pointToRiseTo);
         
-        if (!hoverBegan)
+        if (distance >= 0.1f)
         {
-            pointToRiseTo = transform.position + (Vector3.up * hoverHeight);
-            rigidBody.constraints = RigidbodyConstraints.FreezeAll;
-            RemoveLayerOfWovenObjects();
-        }
-        if (distance <= 0.1f)
-        {
-            TimeToShatter = maxTimeToShatter;
-            StartCoroutine(ShatterCountdown());
-            hoverBegan = false;
+            yield return new WaitForEndOfFrame();
+            // actually floats up
+            hoverBegan = true;
+            transform.position = Vector3.MoveTowards(transform.position, pointToRiseTo, 2f * Time.deltaTime);
+            distance = Vector3.Distance(transform.position, pointToRiseTo);
+            StartCoroutine(Hover());
             yield return null;
         }
         else
         {
-            hoverBegan = true;
-            transform.position = Vector3.MoveTowards(transform.position, pointToRiseTo, 2f * Time.deltaTime);
-            StartCoroutine(Hover());
+            //when its reached the top
+            TimeToShatter = maxTimeToShatter;
+            StartCoroutine(ShatterCountdown());
+            hoverBegan = false;
         }
+
+        yield break;
     }
 
     IEnumerator ShatterCountdown()
     {
         yield return new WaitForSeconds(TimeToShatter);
         rigidBody.constraints = RigidbodyConstraints.None;
-        RestoreLayerOfWovenObjects();
         weaveable.Uncombine();
         isCombined = false;
-        StartCoroutine(Hover());
         yield return null;
-    }
-
-    private bool CrystalIsCombined()
-    {
-        if (weaveable.isCombined && !weaveable.isWoven)
-        {
-            isCombined = true;
-            return true;
-        }
-        return false;
-    }
-
-    private void RemoveLayerOfWovenObjects()
-    {
-        List<WeaveableNew> wovenObjects = weaveable.GetListOfWovenObjects();
-        foreach(WeaveableNew weaveable in wovenObjects)
-        {   
-            weaveable.gameObject.layer = LayerMask.NameToLayer("Default");
-        }
-    } 
-
-    private void RestoreLayerOfWovenObjects()
-    {
-        List<WeaveableNew> wovenObjects = weaveable.GetListOfWovenObjects();
-        foreach(WeaveableNew weaveable in wovenObjects)
-        {   
-            //weaveable.Uncombine();
-            weaveable.RestoreOriginalLayer();
-        }
     }
 
     void OnDrawGizmos()
