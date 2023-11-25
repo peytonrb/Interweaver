@@ -23,6 +23,7 @@ public class CutsceneManagerScript : MonoBehaviour
     [Header("Player Objects")]
     public GameObject player;
     private MovementScript playerMovementScript;
+    public bool usingCutsceneWeaver;
     public GameObject cutsceneWeaver;
     public GameObject cutsceneTrigger;
 
@@ -30,7 +31,9 @@ public class CutsceneManagerScript : MonoBehaviour
     void Start()
     {
         cutsceneCanvas.SetActive(false);
-        cutsceneWeaver.SetActive(false);
+        if (usingCutsceneWeaver) {
+            cutsceneWeaver.SetActive(false);
+        }
         bpCanvasGroup = blackPanel.GetComponent<CanvasGroup>();
         playerMovementScript = player.GetComponent<MovementScript>();
         director = GetComponent<PlayableDirector>();
@@ -81,7 +84,7 @@ public class CutsceneManagerScript : MonoBehaviour
                     }
                 break;
                 case 2:
-                    if (director.time > 24f) {
+                    if (director.state == PlayState.Paused) {
                         cutscenePhase = 3;
                     }
                 break;
@@ -115,7 +118,8 @@ public class CutsceneManagerScript : MonoBehaviour
                 break;
                 
             }
-            Debug.Log(cutscenePhase);
+            //Debug.Log(cutscenePhase);
+            //Debug.Log(director.state);
         }
         
     }
@@ -125,13 +129,15 @@ public class CutsceneManagerScript : MonoBehaviour
             isCutscene = true;
             playerMovementScript.active = false;
             cutsceneCanvas.SetActive(true);
-            player.SetActive(false);
+            //player.SetActive(false);
         }
     }
 
     private void BeginTimeline() {
         director.Play();
-        cutsceneWeaver.SetActive(true); 
+        if (usingCutsceneWeaver) {
+            cutsceneWeaver.SetActive(true); 
+        }
         foreach (CinemachineVirtualCamera vcam in cutsceneCams) {
             vcam.Priority = 10;
         }
@@ -145,9 +151,10 @@ public class CutsceneManagerScript : MonoBehaviour
         foreach (CinemachineVirtualCamera vcam in cutsceneCams) {
             vcam.Priority = 0;  
         }
-        
-        cutsceneWeaver.SetActive(false);
-        player.SetActive(true);
+        if (usingCutsceneWeaver) {
+            cutsceneWeaver.SetActive(false);
+        }
+        //player.SetActive(true);
         playerMovementScript.active = true;
         cutscenePhase = 4;
     }
