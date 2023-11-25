@@ -80,15 +80,12 @@ public class CutsceneManagerScript : MonoBehaviour
                         }
                     }
                     else {
-                        cutscenePhase = 2;
+                        if (director.time >= director.duration - 2) {
+                            cutscenePhase = 2;
+                        }
                     }
                 break;
                 case 2:
-                    if (director.state == PlayState.Paused) {
-                        cutscenePhase = 3;
-                    }
-                break;
-                case 3:
                     if (!isTransitioning) {
                         isTransitioning = true;
                     }
@@ -102,7 +99,7 @@ public class CutsceneManagerScript : MonoBehaviour
                         }
                     }
                 break;
-                case 4:
+                case 3:
                     if (isTransitioning) {
                         bpCanvasGroup.alpha = Mathf.Lerp(bpCanvasGroup.alpha,0,lerpval);
                         lerpval += -transitionSpeed * Time.deltaTime;
@@ -116,10 +113,9 @@ public class CutsceneManagerScript : MonoBehaviour
                         }
                     }
                 break;
-                
             }
             //Debug.Log(cutscenePhase);
-            //Debug.Log(director.state);
+            Debug.Log(director.duration);
         }
         
     }
@@ -127,8 +123,9 @@ public class CutsceneManagerScript : MonoBehaviour
     public void StartCutscene() {
         if (bc.isTrigger) {
             isCutscene = true;
-            playerMovementScript.active = false;
+            playerMovementScript.inCutscene = true;
             cutsceneCanvas.SetActive(true);
+            
             //player.SetActive(false);
         }
     }
@@ -155,8 +152,8 @@ public class CutsceneManagerScript : MonoBehaviour
             cutsceneWeaver.SetActive(false);
         }
         //player.SetActive(true);
-        playerMovementScript.active = true;
-        cutscenePhase = 4;
+        playerMovementScript.inCutscene = false;
+        cutscenePhase = 3;
     }
 
 }

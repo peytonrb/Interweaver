@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviour
     private GameObject wovenObject;
     [SerializeField] private float distanceBetween;
     public bool floatingIslandCrystal = false; // used by input manager
+    [HideInInspector] public bool inCutscene;
 
     [Header("VFX")]
     [CannotBeNullObjectField] public GameObject weaveSpawn;   //  WILL BE ASSIGNED AT RUNTIME ONCE SCRIPTS ARE FINALIZED
@@ -99,6 +100,8 @@ public class PlayerController : MonoBehaviour
         inCombineMode = false;
         inRelocateMode = false;
         interactInput = false;
+
+        inCutscene = movementScript.inCutscene;
     }
 
     void Update()
@@ -157,6 +160,8 @@ public class PlayerController : MonoBehaviour
                 
                 weaveVisualizer.DisableWeave();
             }
+
+            inCutscene = movementScript.inCutscene;
 
         }
     }
@@ -329,7 +334,7 @@ public class PlayerController : MonoBehaviour
     public void Possession()
     {
         //Move character only if they are on the ground
-        if (characterController.isGrounded && Time.timeScale != 0)
+        if (characterController.isGrounded && Time.timeScale != 0 && !inCutscene)
         {
             if (possessing == false)
             {

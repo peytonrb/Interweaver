@@ -226,7 +226,7 @@ public class InputManagerScript : MonoBehaviour
 
         if (input.isPressed)
         {
-            if (!familiarScript.myTurn && !playerScript.isCurrentlyWeaving && playerCharacterController.isGrounded)
+            if (!familiarScript.myTurn && !playerScript.isCurrentlyWeaving && playerCharacterController.isGrounded && !playerScript.inCutscene)
             {
                 playerScript.Possession();
                 playerInput.SwitchCurrentActionMap("Familiar");

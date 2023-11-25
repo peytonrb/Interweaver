@@ -62,6 +62,8 @@ public class MovementScript : MonoBehaviour
 
     [Header("Dive VFX")]
     private ParticleSystem speedLinesVFX;
+
+    [HideInInspector] public bool inCutscene;
     
 
     void Awake()
@@ -88,6 +90,7 @@ public class MovementScript : MonoBehaviour
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
         //transform.position = GM.LastCheckPointPos;
         characterController.enabled = true;
+        inCutscene = false;
 
         StartCoroutine(DelayBeforeFallAudio());
     }
@@ -95,17 +98,20 @@ public class MovementScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Move character only if they are on the ground
-        if (characterController.isGrounded || aerialControl)
-        {
-            if (Time.timeScale != 0 && active)
+        if (!inCutscene) {
+            //Move character only if they are on the ground
+            if (characterController.isGrounded || aerialControl)
             {
-                //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad
-                movement = InputManagerScript.instance.movement;
-                LookAndMove();
-                
+                if (Time.timeScale != 0 && active)
+                {
+                    //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad
+                    movement = InputManagerScript.instance.movement;
+                    LookAndMove();
+                    
+                }
             }
         }
+        
     }
 
     public void ToggleCanMove(bool moves)
@@ -126,7 +132,7 @@ public class MovementScript : MonoBehaviour
     {
         if (canMove)
         {
-            if (Time.timeScale != 0 && active)
+            if (Time.timeScale != 0 && active && !inCutscene)
             {
                 // changes what acceleration/deceleration type is being used based on if controller is grouunded or not
                 acceleration = characterController.isGrounded ? groundAcceleration : aerialAcceleration;
@@ -238,6 +244,11 @@ public class MovementScript : MonoBehaviour
             if (resettingTerminalVelocity)
             {
                 ResetTerminalVelocity();
+            }
+
+            if (inCutscene) {
+                AudioManager.instance.StopSound(AudioManagerChannels.fallLoopChannel);
+                AudioManager.instance.StopSound(AudioManagerChannels.footStepsLoopChannel);
             }
         }
         
