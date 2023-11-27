@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -26,6 +29,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [SerializeField] private GameObject TargetingArrow;
     private bool isRotating = false;
     private LayerMask originalLayerMask;
+    private Collider hitCol = null;
+
 
     // for combining multiple objects
     public bool isParent;
@@ -68,6 +73,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [Header("Audio")]
     [SerializeField] private AudioClip rotateClip;
 
+    private Vector2 lastLookDir;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -197,7 +203,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 ICombineable combineable = raycastHit.collider.GetComponent<ICombineable>();
                 canRotate = true;
 
-                TargetingArrow.SetActive(false);
+                TargetingArrow.SetActive(true);
 
                 if (combineable != null && !weaveableScript.canCombine)
                 {
@@ -209,55 +215,77 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     public void MovingWeaveController(Vector2 lookDir)
     {
+        
         //Add a raycast coming from directional arrow
         float targetAngle = Mathf.Atan2(lookDir.x, lookDir.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
 
         TargetingArrow.transform.rotation = Quaternion.Euler(0, targetAngle, 0);
 
         Vector3 rayDirection = TargetingArrow.transform.forward;
+        ExtDebug.DrawBox(TargetingArrow.transform.GetChild(0).transform.position, new Vector3(1,3,12), TargetingArrow.transform.rotation, Color.green);
 
-        // the actual raycast from the player, this can be used for the line render 
-        //      but it takes the raycast origin and the direction of the raycast
-        Ray arrowRay = new Ray(transform.position, rayDirection);
-        RaycastHit hitInfo;
-        if (relocate)
+        if (lookDir.magnitude >= 0.1f)
         {
-            if (canBeRelocated)
+            TargetingArrow.SetActive(true);
+
+            // the actual raycast from the player, this can be used for the line render 
+            //      but it takes the raycast origin and the direction of the raycast
+            Ray arrowRay = new Ray(transform.position, rayDirection);
+           
+            if (relocate)
             {
-                canRotate = true;
-                //Debug.Log(lookDir);
-
-                //change this to send velocity in direction of (RS)
-                if (lookDir.magnitude >= 0.1f)
+                if (canBeRelocated)
                 {
+                    canRotate = true;
+                    //Debug.Log(lookDir);
+
+                    //change this to send velocity in direction of (RS)
                     rb.velocity = rayDirection * 6;
-                    TargetingArrow.SetActive(true);
+
+                    //this freezes the Y position so that the combined objects won't drag it down because of gravity and it freezes in all rotation so it won't droop because of the gravity  from the objects
+                    rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
                 }
-                else
+            }
+            if (inWeaveMode)
+            {
+                RaycastHit[] hits = Physics.BoxCastAll(TargetingArrow.transform.GetChild(0).transform.position, new Vector3(1, 3, 12), rayDirection, Quaternion.LookRotation(rayDirection), 12, 6);
+
+                float lastDistance = 100;
+
+                foreach (RaycastHit hit in hits)
                 {
-                    rb.velocity = Vector3.zero;
-                    TargetingArrow.SetActive(false);
+                    if (Vector3.Distance(hit.transform.position, transform.position) < lastDistance)
+                    {
+                        hitCol = hit.collider;
+                        lastDistance = Vector3.Distance(hit.transform.position, transform.position);
+                    }
                 }
 
-                rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-                //this freezes the Y position so that the combined objects won't drag it down because of gravity and it freezes in all rotation so it won't droop because of the gravity  from the objects
-
+                SetControllerCombineable(hitCol);
             }
         }
-
-        if (inWeaveMode)
+        else
         {
-            if (Physics.Raycast(arrowRay, out hitInfo, 100, layersToHit))
+            TargetingArrow.SetActive(false);
+            rb.velocity = Vector3.zero;
+        }
+    }
+
+
+    public void SetControllerCombineable(Collider col)
+    {
+        if (col != null)
+        {
+            Debug.Log(col.name);
+            ICombineable combineable = col.GetComponent<ICombineable>();
+            canRotate = true;
+            weaveableScript = col.GetComponent<WeaveableNew>();
+
+            TargetingArrow.SetActive(true);
+
+            if (combineable != null && !weaveableScript.canCombine)
             {
-                ICombineable combineable = hitInfo.collider.GetComponent<ICombineable>();
-                canRotate = true;
-
-                TargetingArrow.SetActive(false);
-
-                if (combineable != null && !weaveableScript.canCombine)
-                {
-                    canCombine = true;
-                }
+                canCombine = true;
             }
         }
     }
@@ -407,10 +435,12 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     public void OnCombineInput()
     {
+        
+        Debug.Log(weaveableScript.gameObject.name);
         inWeaveMode = true;
         if (weaveableScript.ID == ID && !weaveableScript.isWoven && canCombine)
         {
-            //Debug.Log("OnCombineInput");
+            Debug.Log("OnCombineInput");
             player.weaveVisualizer.WeaveableSelected(weaveableScript.gameObject);
             
 
