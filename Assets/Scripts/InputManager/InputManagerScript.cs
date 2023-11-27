@@ -93,6 +93,7 @@ public class InputManagerScript : MonoBehaviour
             else if (playerScript.inCombineMode)
             {
                 playerScript.weaveableScript.OnCombineInput();
+                Debug.Log("Combine mode called");
                 //StartCoroutine(WeaveModeTimer());  //ayo peyton rework this                       
             }
         }
