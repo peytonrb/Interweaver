@@ -14,6 +14,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [SerializeField] private float hoveringValue = 4f;
      private Camera mainCamera;
     [SerializeField] private LayerMask layersToHit;
+    [SerializeField] private LayerMask layersToHitController;
     [SerializeField] public WeaveInteraction weaveInteraction;
     public int ID; //THIS IS INDENTIFIER FOR DAYBLOCK COMBINING
     public bool canRotate;
@@ -248,14 +249,14 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             }
             if (inWeaveMode)
             {
-                RaycastHit[] hits = Physics.BoxCastAll(TargetingArrow.transform.GetChild(0).transform.position, new Vector3(1, 3, 12), rayDirection, Quaternion.LookRotation(rayDirection), 12, 6);
-
+                RaycastHit[] hits = Physics.BoxCastAll(TargetingArrow.transform.GetChild(0).transform.position, new Vector3(1, 3, 12), rayDirection, Quaternion.LookRotation(rayDirection), 12, layersToHitController);                
                 float lastDistance = 100;
 
                 foreach (RaycastHit hit in hits)
-                {
+                {                   
                     if (Vector3.Distance(hit.transform.position, transform.position) < lastDistance)
                     {
+                        Debug.Log("this is getting called inWeaveMode raycast stuff");
                         hitCol = hit.collider;
                         lastDistance = Vector3.Distance(hit.transform.position, transform.position);
                     }
