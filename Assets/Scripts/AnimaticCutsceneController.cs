@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class AnimaticCutsceneController : MonoBehaviour
 {
     public static int cutscene = 0;
+    [SerializeField] private bool isOnTrigger;
     public GameObject[] openingCutscenePanels;
     public GameObject[] closingCutscenePanels;
     private CanvasGroup panelsCG;
@@ -18,59 +19,65 @@ public class AnimaticCutsceneController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playingPanel = false;
-        transitioning = false;
-        currentPanel = 1;
+        if (!isOnTrigger) {
+            playingPanel = false;
+            transitioning = false;
+            currentPanel = 1;
 
-        switch (cutscene) {
-            case 0:
-                //Opening cutscene
-                for (int i = 0; i < openingCutscenePanels.Length; i++) {
-                    panelsCG = openingCutscenePanels[i].GetComponent<CanvasGroup>();
+            switch (cutscene) {
+                case 0:
+                    //Opening cutscene
+                    for (int i = 0; i < openingCutscenePanels.Length; i++) {
+                        panelsCG = openingCutscenePanels[i].GetComponent<CanvasGroup>();
 
-                    //Only sets visibility of the first panel
-                    if (i > 0) {
-                        panelsCG.alpha = 0;
+                        //Only sets visibility of the first panel
+                        if (i > 0) {
+                            panelsCG.alpha = 0;
+                        }
+                        else {
+                            panelsCG.alpha = 1;
+                        }
                     }
-                    else {
-                        panelsCG.alpha = 1;
-                    }
-                }
 
-                foreach (GameObject objects in closingCutscenePanels) {
-                    objects.SetActive(false);
-                }
-            break;
-            case 1:
-                //Closing cutscene
-                for (int i = 0; i < closingCutscenePanels.Length; i++) {
-                    panelsCG = closingCutscenePanels[i].GetComponent<CanvasGroup>();
-
-                    //Only sets visibility of the first panel
-                    if (i > 0) {
-                        panelsCG.alpha = 0;
+                    foreach (GameObject objects in closingCutscenePanels) {
+                        objects.SetActive(false);
                     }
-                    else {
-                        panelsCG.alpha = 1;
-                    }
-                }
+                break;
+                case 1:
+                    //Closing cutscene
+                    for (int i = 0; i < closingCutscenePanels.Length; i++) {
+                        panelsCG = closingCutscenePanels[i].GetComponent<CanvasGroup>();
 
-                foreach (GameObject objects in openingCutscenePanels) {
-                    objects.SetActive(false);
-                }
-            break;
-        } 
+                        //Only sets visibility of the first panel
+                        if (i > 0) {
+                            panelsCG.alpha = 0;
+                        }
+                        else {
+                            panelsCG.alpha = 1;
+                        }
+                    }
+
+                    foreach (GameObject objects in openingCutscenePanels) {
+                        objects.SetActive(false);
+                    }
+                break;
+            } 
+        }
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (playingPanel) {
-            PlayPanel();
+        if (!isOnTrigger) {
+            if (playingPanel) {
+                PlayPanel();
+            }
+            else {
+                Transition();
+            }
         }
-        else {
-            Transition();
-        }
+        
     }
 
     void Transition() {
