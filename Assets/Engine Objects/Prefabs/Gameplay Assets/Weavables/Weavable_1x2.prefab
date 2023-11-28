@@ -153,7 +153,12 @@ MonoBehaviour:
   layersToHit:
     serializedVersion: 2
     m_Bits: 8257
+  layersToHitController:
+    serializedVersion: 2
+    m_Bits: 64
   weaveInteraction: {fileID: 0}
+  alwaysMovesWhenWoven: 0
+  neverMovesWhenWoven: 0
   ID: 1
   canRotate: 0
   canCombine: 1
@@ -175,7 +180,7 @@ MonoBehaviour:
   myNearestPoint: {fileID: 0}
   snapDistance: 0
   nearestDistance: 50
-  pain: {fileID: 0}
+  targetTransform: {fileID: 0}
   originalMat: {fileID: 0}
   isCombined: 0
   startPos: {x: 0, y: 0, z: 0}
