@@ -191,7 +191,7 @@ public class PlayerController : MonoBehaviour
                 isCurrentlyWeaving = true;               
                 interactableObject.Interact();
                 inRelocateMode = true;
-                characterAnimationHandler.ToggleWeaveAnim(isWeaving);
+                //characterAnimationHandler.ToggleWeaveAnim(isWeaving);
                 interactableObject.Relocate();
                 relocateMode.SetActive(true); // on-screen ui
             }
@@ -248,7 +248,7 @@ public class PlayerController : MonoBehaviour
         {
             interactableObject.Uninteract();
             interactableObject = null;
-            characterAnimationHandler.ToggleWeaveAnim(isWeaving);
+            //characterAnimationHandler.ToggleWeaveAnim(isWeaving);
             StartCoroutine(EndWeaveAudio());
             relocateMode.SetActive(false); // on screen ui
             combineMode.SetActive(false); // on screen ui

@@ -16,6 +16,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [SerializeField] private LayerMask layersToHit;
     [SerializeField] private LayerMask layersToHitController;
     [SerializeField] public WeaveInteraction weaveInteraction;
+    public bool alwaysMovesWhenWoven = false;
+    public bool neverMovesWhenWoven = false;
     public int ID; //THIS IS INDENTIFIER FOR DAYBLOCK COMBINING
     public bool canRotate;
     public bool canCombine = true;
@@ -44,7 +46,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     private float distance;
     [SerializeField] private float snapDistance;
     [SerializeField] private float nearestDistance;
-    public Transform pain;
+    public Transform targetTransform;
     private bool resetQuaternion;
 
     [Header("Floating Islands + Crystals")]
@@ -534,11 +536,54 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         weaveableScript.nearestPoint = myClosestPoint;
         weaveableScript.myNearestPoint = weaveableClosestPoint;
         weaveableScript.nearestDistance = nearestDistance;
-        pain = weaveableScript.nearestPoint.transform;
-        StartCoroutine(MoveToPoint(weaveableScript.nearestPoint.transform.position, weaveableScript));
-        StartCoroutine(BackUpForceSnap(weaveableScript));
-       
+        targetTransform = weaveableScript.nearestPoint.transform;
+
+        //Check if always moves
+        if (alwaysMovesWhenWoven)
+        {
+            //if both objects have it, dont do anything
+            if (weaveableScript.alwaysMovesWhenWoven)
+            {
+                return;
+            }
+            else // move the first weavable 
+            {
+                targetTransform = weaveableScript.myNearestPoint.transform;
+
+                StartCoroutine(MoveToPoint(this, weaveableScript.transform, weaveableScript));
+                StartCoroutine(BackUpForceSnap(this));
+            }
+        } else if (neverMovesWhenWoven) //check if never moves
+        {
+            //if both objects have it, dont do anything
+            if (weaveableScript.neverMovesWhenWoven)
+            {
+                return;
+            } 
+            else // move the second weavable
+            {
+                StartCoroutine(MoveToPoint(weaveableScript, transform, weaveableScript));
+                StartCoroutine(BackUpForceSnap(weaveableScript));
+            }
+
+
+        } else if (weaveableScript.neverMovesWhenWoven) //if other object never moves
+        {
+            targetTransform = weaveableScript.myNearestPoint.transform;
+
+            StartCoroutine(MoveToPoint(this, weaveableScript.transform, weaveableScript));
+            StartCoroutine(BackUpForceSnap(this));
+        }
+        else// default case
+        {
+            //Call Move to Point
+            StartCoroutine(MoveToPoint(weaveableScript, transform, weaveableScript));
+            StartCoroutine(BackUpForceSnap(weaveableScript));
+        }
+        
     }
+
+    //Actually combines the objects and calls any additional logic
     void WeaveTogether(GameObject other)
     {
         weaveableScript = GetComponent<WeaveableNew>();
@@ -601,29 +646,31 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     }
     // these references are passed in so when weaveableScript changes with mouse position, it still holds correct 
     //      reference
-    IEnumerator MoveToPoint(Vector3 weaveablePos, WeaveableNew weaveableRef)
+
+    //Moves the weavable to the target transform then calls WeaveTogether()
+    IEnumerator MoveToPoint(WeaveableNew movingWeaveableRef, Transform firstObjTransform, WeaveableNew otherWeaveable)
     {
-        Vector3 firstobjrotation = transform.rotation.eulerAngles;
+        Vector3 firstobjrotation = firstObjTransform.rotation.eulerAngles;
 
         float x = ((firstobjrotation.x) / 90) * 90;
         float y = ((firstobjrotation.y) / 90) * 90;
         float z = ((firstobjrotation.z) / 90) * 90;
 
         Quaternion nearestangle = Quaternion.Euler(x, y, z);
-        weaveableRef.rb.transform.rotation = nearestangle;
+        movingWeaveableRef.rb.transform.rotation = nearestangle;
 
         float timeSinceStarted = 0f;
         while (true)
         {
             timeSinceStarted += Time.deltaTime;
-            weaveableRef.transform.position = Vector3.Lerp(weaveableRef.transform.position, pain.position, timeSinceStarted);
+            movingWeaveableRef.transform.position = Vector3.Lerp(movingWeaveableRef.transform.position, targetTransform.position, timeSinceStarted);
 
-            if (Vector3.Distance(weaveableRef.transform.position, pain.position) < 1f)
+            if (Vector3.Distance(movingWeaveableRef.transform.position, targetTransform.position) < 1f)
             {
-                weaveableRef.rb.transform.position = pain.position;
+                movingWeaveableRef.rb.transform.position = targetTransform.position;
                 if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
                 {
-                    WeaveTogether(weaveableRef.gameObject);
+                    WeaveTogether(otherWeaveable.gameObject);
                 }
                     
                 yield break;
@@ -635,7 +682,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     IEnumerator BackUpForceSnap( WeaveableNew weaveableRef)
     {
         yield return new WaitForSeconds(2f);
-        weaveableRef.rb.transform.position = pain.position;
+        weaveableRef.rb.transform.position = targetTransform.position;
         if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
         {
             Debug.Log("Backup called");
