@@ -212,7 +212,6 @@ public class PlayerController : MonoBehaviour
         AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingIntroClip);
         yield return new WaitForSeconds(.732f);
         AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingLoopClip);
-        Debug.Log("SOUND PLAYED");
         yield break;
     }
 

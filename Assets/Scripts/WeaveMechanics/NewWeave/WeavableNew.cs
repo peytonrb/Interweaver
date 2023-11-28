@@ -108,7 +108,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         if (startFloating)
         {
             isHovering = true;
-            if (gameObject.tag != "FloatingIsland")
+            if (!canBeRelocated)
             {
                 transform.position = transform.position + new Vector3(0, hoveringValue, 0);
             }
@@ -116,44 +116,10 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             startFloating = false;
         }
 
-        if (isHovering)
-        {
-            RaycastHit hit;
-        }
-
         if (isWoven)
         {
             if (!InputManagerScript.instance.isGamepad)
                 MovingWeaveMouse();
-        }
-
-        if (onFloatingIsland && gameObject.tag == "Breakable")
-        {
-            relocate = false;
-            rb.isKinematic = false;
-            rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-
-            rb.velocity = new Vector3(snapPoint.transform.position.x - rb.position.x, rb.position.y, snapPoint.transform.position.z - rb.position.z);
-            float distanceToSnap = Vector3.Distance(rb.position, snapPoint.transform.position);
-
-            if (distanceToSnap <= 2f) // if crystal is close enough to snap point
-            {
-                gameObject.transform.SetParent(wovenFloatingIsland.transform);
-                player.uninteract = true;
-
-                if (TryGetComponent<CrystalScript>(out CrystalScript crystal))
-                {
-                    if (onFloatingIsland)
-                    {
-                        weaveInteraction.OnWeave(wovenFloatingIsland, gameObject);
-                    }
-                }
-
-                rb.isKinematic = true;
-                canBeRelocated = false;
-                isWoven = true;
-                onFloatingIsland = false;
-            }
         }
     }
 
@@ -263,7 +229,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                         lastDistance = Vector3.Distance(hit.transform.position, transform.position);
                     }
                 }
-
                 SetControllerCombineable(hitCol);
             }
         }
@@ -293,9 +258,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         }
     }
 
-    // this will need to be refactored later but for now when the weaveable collides with another 
-    //     weaveable it will make a fixed joint component and then add itself as the rigidbody to be connected
-   
     public void CallRotate(Vector3 dir, float angle)
     {
         if (!isRotating)
@@ -330,7 +292,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     //********************************************************************
     public void Interact()
     {
-        Debug.Log("This is interactable");
         startFloating = true;
         transform.rotation = Quaternion.identity;
         if (!wovenObjects.Contains(this.GetComponent<WeaveableNew>()))
@@ -365,7 +326,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         if (isWoven)
         {
             player.floatingIslandCrystal = false;
-            Debug.Log("this is now not woven");
             rb.isKinematic = false;
             rb.useGravity = true;
             player.isCurrentlyWeaving = false;
@@ -423,7 +383,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     IEnumerator WeaveModeTimer() // sets variable after 1 second to account for combine - need this variable
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1.5f);
+        Debug.Log("timer sets false");
         inWeaveMode = false;
     }
 
@@ -489,22 +450,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         canCombine = true;
 
-        if (weaveableScript.canBeRelocated)
-        {
-            Snapping();
-        }
-        else
-        {
-            if (weaveableScript.gameObject.tag == "FloatingIsland")
-            {
-                onFloatingIsland = true;
-                player.floatingIslandCrystal = true; // for input manager
+        Snapping();
 
-                wovenFloatingIsland = weaveableScript.gameObject;
-            }
-
-            snapPoint = weaveableScript.gameObject.transform.GetChild(0).gameObject;
-        }
+        wovenObjects.Add(weaveableScript);
 
         weaveableScript.rb.useGravity = false;
         player.inRelocateMode = true;
@@ -576,7 +524,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         }
         else// default case
         {
-            //Call Move to Point
             StartCoroutine(MoveToPoint(weaveableScript, transform, weaveableScript));
             StartCoroutine(BackUpForceSnap(weaveableScript));
         }
@@ -586,20 +533,14 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     //Actually combines the objects and calls any additional logic
     void WeaveTogether(GameObject other)
     {
+
         weaveableScript = GetComponent<WeaveableNew>();
-
-        //Return if I'm a floating island and hitting my own crystal
-        if (TryGetComponent<FloatingIslandScript>(out FloatingIslandScript islandScript))
-        {
-            if (islandScript.myCrystal == other.TryGetComponent<CrystalScript>(out CrystalScript crystalScript))
-            {
-                return;
-            }
-        }
-
+        
         // for objects that are being connected that are NOT the parent
         if (other.GetComponent<Rigidbody>() != null && canCombine && !isParent && weaveableScript.ID == ID)
         {
+
+            Debug.Log("started parent weavable thing");
             WeaveableNew[] allWeaveables = FindObjectsOfType<WeaveableNew>();
 
             foreach (WeaveableNew weaveable in allWeaveables)
@@ -620,10 +561,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             }
         }
 
-        // both parent and non parent weaveables - DOES NOT AFFECT CRYSTALS
-        if (gameObject.tag != "Breakable" && other.GetComponent<Rigidbody>() != null && parentWeaveable.inWeaveMode && canCombine && weaveableScript.ID == ID)
+        if (other.GetComponent<Rigidbody>() != null && parentWeaveable.inWeaveMode && canCombine && weaveableScript.ID == ID)
         {
-
             // only adds fixed joints to parent weaveable to be removed nicely in Uncombine()
             if (other != parentWeaveable.gameObject && other.GetComponent<Rigidbody>() != null)
             {
@@ -631,7 +570,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                     fixedJoint.connectedBody = other.GetComponent<Rigidbody>();
                     other.GetComponent<Rigidbody>().useGravity = false;
             }
-
             else
             {
                 other.GetComponent<Rigidbody>().useGravity = true;
@@ -640,7 +578,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             if (weaveInteraction != null)
             {
                 weaveInteraction.OnWeave(other, gameObject);
-               
+            }
+
+            if (other.GetComponent<WeaveableNew>().weaveInteraction != null)
+            {
+                other.GetComponent<WeaveableNew>().weaveInteraction.OnWeave(gameObject, other);
             }
         }
     }
