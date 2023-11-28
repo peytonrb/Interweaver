@@ -492,9 +492,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         if (weaveableScript.canBeRelocated)
         {
             Snapping();
-            wovenObjects.Add(weaveableScript);
         }
-
         else
         {
             if (weaveableScript.gameObject.tag == "FloatingIsland")
