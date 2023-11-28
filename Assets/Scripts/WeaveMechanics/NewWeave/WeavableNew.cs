@@ -108,7 +108,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         if (startFloating)
         {
             isHovering = true;
-            if (!canBeRelocated)
+            if (canBeRelocated)
             {
                 transform.position = transform.position + new Vector3(0, hoveringValue, 0);
             }
