@@ -18,8 +18,7 @@ public class DummyWeaverScript : MonoBehaviour
         //cms = GetComponentInParent<CutsceneManagerScript>();
         director = GetComponentInParent<PlayableDirector>();
 
-        transform.position = player.transform.position;
-        transform.rotation = player.transform.rotation;
+        
 
         playerNotRelocated = true;
     }
