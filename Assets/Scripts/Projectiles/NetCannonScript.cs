@@ -12,6 +12,9 @@ public class NetCannonScript : MonoBehaviour
     private bool fired = false;
     public bool isOn = false;
 
+    //Set this in inspector
+    public Transform projectileSpawnPoint;
+
     public GameObject projectile;
     private NetProjectileScript netProjectileScript;
 
@@ -26,7 +29,7 @@ public class NetCannonScript : MonoBehaviour
     {
         if (isOn) {
             if (fired == false) {
-                GameObject spawnedShot = Instantiate(projectile, transform.position, transform.rotation);
+                GameObject spawnedShot = Instantiate(projectile, projectileSpawnPoint.position, transform.rotation);
 
                 spawnedShot.GetComponent<NetProjectileScript>().speed = projectileSpeed;
 
