@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -346,6 +347,11 @@ public class PlayerController : MonoBehaviour
                 AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, possessionClip);
             }
         }
+    }
+
+    public void SetNewPosition(Vector3 newposition, Quaternion newrotation) {
+        transform.position = newposition;
+        transform.rotation = newrotation;
     }
 
     public void Death()
