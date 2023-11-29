@@ -21,6 +21,7 @@ public class CutsceneManagerScript : MonoBehaviour
     private MovementScript playerMovementScript;
     public bool usingCutsceneWeaver;
     public GameObject cutsceneWeaver;
+    private DummyWeaverScript dummyScript;
 
     [Header ("Transitions")]
     [SerializeField] private bool useTransitions; //For using fade ins and fade outs
@@ -35,6 +36,7 @@ public class CutsceneManagerScript : MonoBehaviour
     {
         if (usingCutsceneWeaver) {
             cutsceneWeaver.SetActive(false);
+            dummyScript = cutsceneWeaver.GetComponent<DummyWeaverScript>();
         }
         if (useTransitions) {
             cutsceneCanvas.SetActive(false);
@@ -154,9 +156,13 @@ public class CutsceneManagerScript : MonoBehaviour
         if (bc.isTrigger) {
             isCutscene = true;
             playerMovementScript.inCutscene = true;
-            cutsceneCanvas.SetActive(true);
+            if (useTransitions) {
+                cutsceneCanvas.SetActive(true);
+            }
             
-            //player.SetActive(false);
+            if (usingCutsceneWeaver) {
+                cutsceneWeaver.SetActive(true);
+            }
         }
     }
 
