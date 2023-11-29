@@ -383,7 +383,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     IEnumerator WeaveModeTimer() // sets variable after 1 second to account for combine - need this variable
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
         Debug.Log("timer sets false");
         inWeaveMode = false;
     }

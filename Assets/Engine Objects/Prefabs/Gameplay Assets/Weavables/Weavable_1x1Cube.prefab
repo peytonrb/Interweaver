@@ -73,7 +73,7 @@ Transform:
   - {fileID: 837506405334165369}
   - {fileID: 8882606406271639048}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6182898371012024288
 MeshFilter:
@@ -183,11 +183,13 @@ MonoBehaviour:
   hoveringValue: 1
   layersToHit:
     serializedVersion: 2
-    m_Bits: 8257
+    m_Bits: 8384
   layersToHitController:
     serializedVersion: 2
     m_Bits: 64
   weaveInteraction: {fileID: 0}
+  alwaysMovesWhenWoven: 0
+  neverMovesWhenWoven: 0
   ID: 1
   canRotate: 0
   canCombine: 1
@@ -209,7 +211,7 @@ MonoBehaviour:
   myNearestPoint: {fileID: 0}
   snapDistance: 0
   nearestDistance: 50
-  pain: {fileID: 0}
+  targetTransform: {fileID: 0}
   originalMat: {fileID: 0}
   isCombined: 0
   startPos: {x: 0, y: 0, z: 0}
