@@ -101,7 +101,9 @@ public class FamiliarScript : MonoBehaviour
             if (familiarMovementAbility)
             {
                 movementScript.Bounce();
+
                 
+
                 if (other.gameObject.TryGetComponent<CrystalScript>(out CrystalScript crystal))
                 {
                     crystal.TriggerBreak();
