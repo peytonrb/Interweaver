@@ -49,7 +49,7 @@ public class WeaveFXScript : MonoBehaviour
         {
             // particles upon select
             var psShape = objectSelectPS.shape; // i hate var but unity requires it to be like this. idk man.
-            psShape.radius = weaveable.GetComponent<BoxCollider>().bounds.size.x; // will break if object doesn't have box collider. will fix when issue arises
+            psShape.radius = weaveable.GetComponent<BoxCollider>().bounds.size.x; // will break if object doesn't have box collider
             Instantiate(objectSelectPS, weaveable.transform.position, Quaternion.Euler(-90f, 0f, 0f));
 
             // aura effect
@@ -57,7 +57,6 @@ public class WeaveFXScript : MonoBehaviour
             StartCoroutine(StartAura(weaveable));
         }
     }
-
     IEnumerator StartAura(GameObject weaveable)
     {
         yield return new WaitForSeconds(0.4f);

@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
     //new variables
     public bool inRelocateMode;
     public bool inCombineMode;
-    public bool uninteract;
+    public bool uninteract = false;
     private IInteractable interactableObject;
     private GameObject wovenObject;
     [SerializeField] private float distanceBetween;
@@ -153,10 +153,10 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-
             // snap weave - uninteract set by InputManager
-            if (uninteract)
+            if (uninteract && isCurrentlyWeaving)
             {
+                Debug.Log("here");
                 Uninteract();
                 
                 weaveVisualizer.DisableWeave();
@@ -206,6 +206,7 @@ public class PlayerController : MonoBehaviour
     {
         // vfx
         weaveVisualizer.ActivateWeave();
+
         // Audio
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startWeaveClip);
 
@@ -242,7 +243,7 @@ public class PlayerController : MonoBehaviour
         return null;
     }
 
-    private void Uninteract()
+    public void Uninteract()
     {
         if (interactableObject != null)
         {
@@ -258,6 +259,7 @@ public class PlayerController : MonoBehaviour
             isCurrentlyWeaving = false;
         }        
     }
+
     public void ControllerAimTargetter(Vector2 lookDir)
     {
         if (lookDir.magnitude >= 0.1f)
@@ -324,6 +326,8 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Weaveable"))
         {
             interactable.Uninteract();
+            inCombineMode = false;
+            inCombineMode = false;
             inCombineMode = false;
             inRelocateMode = false;
             relocateMode.SetActive(false);// remember to delete this

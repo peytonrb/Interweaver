@@ -80,7 +80,6 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnWeaverInteract(InputValue input)
     {
-
         if (input.isPressed)
         {
             if (!playerScript.inRelocateMode && !playerScript.inCombineMode) // occasionally reads a hit during compile time???? NOT ANYMOREEEEEEE HEHEHEHEHE
@@ -108,7 +107,11 @@ public class InputManagerScript : MonoBehaviour
     {
         if (input.isPressed)
         {
-            playerScript.uninteract = true;
+            if (playerScript.isCurrentlyWeaving)
+            {
+                playerScript.uninteract = true;
+            }
+            
             playerScript.interactInput = false;
             playerScript.inRelocateMode = false;
             playerScript.inCombineMode = false;
@@ -134,7 +137,6 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnWeaverTargeting(InputValue input)
     {
-
         Vector2 inputVector = input.Get<Vector2>();
 
             if (isGamepad)
@@ -153,7 +155,6 @@ public class InputManagerScript : MonoBehaviour
             {
                 playerScript.MouseAimTargetter(inputVector);
             }
-
     }
 
     public void OnWeaverNPCInteractions(InputValue input)
@@ -163,7 +164,6 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnRotate(InputValue input)
     {
-
         Vector2 dir = input.Get<Vector2>();
 
         if (dir != Vector2.zero && playerScript.inRelocateMode)
@@ -353,10 +353,5 @@ public class InputManagerScript : MonoBehaviour
             owlDiveScript.DiveRelease();
         }
     }
-
-   
-
-
-   
     #endregion//******************************************************
 }

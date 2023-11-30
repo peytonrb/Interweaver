@@ -1,9 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,7 +8,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [Header("Weavables")]
     [CannotBeNullObjectField][SerializeField] private Rigidbody rb;
     [SerializeField] private float hoveringValue = 4f;
-     private Camera mainCamera;
+    private Camera mainCamera;
     [SerializeField] private LayerMask layersToHit;
     [SerializeField] private LayerMask layersToHitController;
     [SerializeField] public WeaveInteraction weaveInteraction;
@@ -102,6 +98,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         originalLayerMask = gameObject.layer;
 
         mainCamera = Camera.main;
+        Uncombine();
     }
 
     void Update()
@@ -331,7 +328,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             rb.isKinematic = false;
             rb.useGravity = true;
             player.isCurrentlyWeaving = false;
-            player.uninteract = true;
+            //player.uninteract = true;
             player.inRelocateMode = false;
             player.inCombineMode = false;
             relocate = false;
@@ -443,8 +440,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         weaveableScript.rb.freezeRotation = false;
         player.inRelocateMode = false;
         player.inCombineMode = false;
-        player.uninteract = true;
 
+        player.Uninteract();
+        player.weaveVisualizer.DisableWeave();
         wovenObjects.Clear();
     }
 
