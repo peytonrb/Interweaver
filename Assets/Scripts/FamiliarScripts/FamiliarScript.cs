@@ -13,6 +13,7 @@ public class FamiliarScript : MonoBehaviour
     [Header("Movement Variables")]
     private CharacterController characterController; //references the character controller component
     private MovementScript movementScript; // reference for the movement script component
+    public bool canSwitch = true; // is the familiar allowed to switch 
     public bool depossessing; //True if the familiar is being deposessed
     public bool myTurn; //Responsible for determining if the familiar can move
     public bool leapOfFaith; //Determines if owl familiar is in a leap of faith 

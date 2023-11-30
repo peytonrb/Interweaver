@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [Header("Movement Variables")]
     private CharacterController characterController;
     private MovementScript movementScript;
+    public bool canSwitch = true; // is the weaver allowed to switch 
     private bool possessing;
 
     [Header("Character's Camera")]
@@ -237,7 +238,7 @@ public class PlayerController : MonoBehaviour
         return null;
     }
 
-    private void Uninteract()
+    public void Uninteract()
     {
         if (interactableObject != null)
         {

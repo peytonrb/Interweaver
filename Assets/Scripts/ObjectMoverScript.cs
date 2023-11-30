@@ -12,7 +12,7 @@ public class ObjectMoverScript : MonoBehaviour
 
     [Header("Generic Variables")]
     private int nextWaypoint = 0; // the current target for the moving object
-    [SerializeField][Range(1f, 10f)] private float speed = 2.0f; // speed of object
+    [SerializeField][Range(1f, 50f)] private float speed = 2.0f; // speed of object
     [SerializeField] private bool active; // is the moving object active (currently moving)
 
     [Header("Reverse Settings")]
