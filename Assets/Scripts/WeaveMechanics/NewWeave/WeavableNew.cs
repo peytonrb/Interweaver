@@ -398,14 +398,12 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     public void OnCombineInput()
     {
-        
         Debug.Log(weaveableScript.gameObject.name);
         inWeaveMode = true;
         if (weaveableScript.ID == ID && !weaveableScript.isWoven && canCombine)
         {
             Debug.Log("OnCombineInput");
             player.weaveVisualizer.WeaveableSelected(weaveableScript.gameObject);
-            
 
             Combine();
             isCombined = true;
@@ -533,13 +531,12 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     //Actually combines the objects and calls any additional logic
     void WeaveTogether(GameObject other)
     {
-
         weaveableScript = GetComponent<WeaveableNew>();
+        Debug.Log("parent: " + parentWeaveable);
         
         // for objects that are being connected that are NOT the parent
         if (other.GetComponent<Rigidbody>() != null && canCombine && !isParent && weaveableScript.ID == ID)
         {
-
             Debug.Log("started parent weavable thing");
             WeaveableNew[] allWeaveables = FindObjectsOfType<WeaveableNew>();
 
@@ -566,9 +563,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             // only adds fixed joints to parent weaveable to be removed nicely in Uncombine()
             if (other != parentWeaveable.gameObject && other.GetComponent<Rigidbody>() != null)
             {
-                    var fixedJoint = parentWeaveable.gameObject.AddComponent<FixedJoint>();
-                    fixedJoint.connectedBody = other.GetComponent<Rigidbody>();
-                    other.GetComponent<Rigidbody>().useGravity = false;
+                var fixedJoint = parentWeaveable.gameObject.AddComponent<FixedJoint>();
+                fixedJoint.connectedBody = other.GetComponent<Rigidbody>();
+                other.GetComponent<Rigidbody>().useGravity = false;
             }
             else
             {
@@ -610,6 +607,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             if (Vector3.Distance(movingWeaveableRef.transform.position, targetTransform.position) < 1f)
             {
                 movingWeaveableRef.rb.transform.position = targetTransform.position;
+
                 if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
                 {
                     WeaveTogether(otherWeaveable.gameObject);
@@ -621,6 +619,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             yield return null;
         }
     }
+
     IEnumerator BackUpForceSnap( WeaveableNew weaveableRef)
     {
         yield return new WaitForSeconds(2f);
