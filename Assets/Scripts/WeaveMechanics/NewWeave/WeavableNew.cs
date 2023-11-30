@@ -338,8 +338,12 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             isWoven = false;
             startFloating = false;
             canRotate = false;
-
-            rb.constraints = RigidbodyConstraints.None;
+            
+            if (rb.gameObject.tag != "FloatingIsland")
+            {
+                rb.constraints = RigidbodyConstraints.None;
+            }
+            
             player.weaveVisualizer.StopAura(gameObject);
             TargetingArrow.SetActive(false);
             player.weaveVisualizer.DisableWeave();
@@ -436,7 +440,12 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
         canRotate = false;
         weaveableScript.rb.useGravity = true;
-        weaveableScript.rb.constraints = RigidbodyConstraints.None;
+
+        if (rb.gameObject.tag != "FloatingIsland")
+        {
+            rb.constraints = RigidbodyConstraints.None;
+        }
+
         weaveableScript.rb.freezeRotation = false;
         player.inRelocateMode = false;
         player.inCombineMode = false;

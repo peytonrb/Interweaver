@@ -156,7 +156,6 @@ public class PlayerController : MonoBehaviour
             // snap weave - uninteract set by InputManager
             if (uninteract && isCurrentlyWeaving)
             {
-                Debug.Log("here");
                 Uninteract();
                 
                 weaveVisualizer.DisableWeave();
