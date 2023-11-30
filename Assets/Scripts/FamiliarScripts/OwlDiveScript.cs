@@ -21,6 +21,7 @@ public class OwlDiveScript : MonoBehaviour
     [SerializeField][Range(0f, 30f)]private float aerialDeceleration = 2f;
     [HideInInspector] public bool isDiving;
     private bool onCooldown = false;
+    public AudioClip islandBreakFile;
 
     void Awake()
     {
@@ -119,6 +120,7 @@ public class OwlDiveScript : MonoBehaviour
                 }
                 else
                 {
+                    AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, islandBreakFile, 1f);
                     Destroy(collision.gameObject);
                 }
             }
