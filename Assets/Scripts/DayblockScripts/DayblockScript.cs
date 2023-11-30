@@ -25,17 +25,13 @@ public class DayblockScript : MonoBehaviour
             WeaveableNew weaveScript = other.gameObject.GetComponent<WeaveableNew>();
             if (weaveScript.wovenObjects.Count == shapesCombined)
             {
-                
-
                 //Finds if the part of the puzzle has recieved its shape yet.
                 if (!gotShape)
                 {
-
                     switch (shapeNeeded)
                     {
                         case 0:
                             {
-
                                 //Check sunrise
                                 switch (dpm.combinationpart)
                                 {
@@ -110,13 +106,8 @@ public class DayblockScript : MonoBehaviour
                                         }
                                 }
                                 break;
-
                             }
-
                     }
-
-
-
                 }
             }
         }
