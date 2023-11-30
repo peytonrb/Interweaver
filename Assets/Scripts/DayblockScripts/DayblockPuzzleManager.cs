@@ -13,7 +13,7 @@ public class DayblockPuzzleManager : MonoBehaviour
     [HideInInspector] public WeaveableNew moonblockweaveparent;
 
     public List<GameObject> setKeyObjects = new List<GameObject>();
-
+    private List<GameObject> fakeObjects = new List<GameObject>();
     public Transform[] failSpitPoint;
 
     private WeaveableNew weaveableScript;
@@ -36,7 +36,8 @@ public class DayblockPuzzleManager : MonoBehaviour
         }
     }
 
-    public void FoundParent() {
+    public void FoundParent() 
+    {
         foreach (GameObject weaveable in weaveables) {
             weaveableScript = weaveable.GetComponent<WeaveableNew>();
             //Finds the parent script
@@ -67,32 +68,57 @@ public class DayblockPuzzleManager : MonoBehaviour
     }
     
     public void GotCombination(int combination, WeaveableNew weaveableScript) {
-        combinationpart = combination;
-        Instantiate(fakeKeyObject, transform.GetChild(combination));
-        Debug.Log("Combination part" + combinationpart);
+        combinationpart += 1;
+
+        GameObject obj = Instantiate(fakeKeyObject, transform.GetChild(combination));
+        fakeObjects.Add(obj);
 
         setKeyObjects.Add(weaveableScript.gameObject);
     }
 
-    public void RestartPuzzle() {
-        Debug.Log("Get Good!");
+    public void FailPuzzle(int correctKey, WeaveableNew weaveable)
+    {
+        StartCoroutine(RestartPuzzle(correctKey, weaveable));
+    }
+
+    public IEnumerator RestartPuzzle(int correctKey, WeaveableNew weaveable) {
+        yield return new WaitForSeconds(1f);
+
+        //return original object
+        weaveable.transform.position = failSpitPoint[correctKey].position;
+        weaveable.Uninteract();
+
+        //reset other objects
         dayblockScripts = GetComponentsInChildren<DayblockScript>();
 
         int count = 0;
-        foreach (DayblockScript ds in dayblockScripts) {
-
-            ds.transform.position = failSpitPoint[count].position;
+        foreach (DayblockScript ds in dayblockScripts) 
+        {
             ds.gotShape = false;
-
             count++;
+        }
+
+        int count2 = 0;
+        foreach (GameObject obj in setKeyObjects)
+        {
+            count2++;
+            obj.transform.position = failSpitPoint[count2].position;
         }
         combinationpart = 0;
         setKeyObjects.Clear();
+
+        foreach(GameObject obj in fakeObjects)
+        {
+            Destroy(obj);
+        }
+
+        fakeObjects.Clear();
+
+        yield break;
     }
 
-    public void PuzzleComplete() {
-
-        Debug.Log("Ayy!");
+    public void PuzzleComplete() 
+    {
         Instantiate(vfxObject, transform.position, transform.rotation);
         Instantiate(orbObject, transform.position, transform.rotation);
     }

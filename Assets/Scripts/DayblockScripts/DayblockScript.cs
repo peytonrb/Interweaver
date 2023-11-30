@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ public class DayblockScript : MonoBehaviour
     public bool gotShape;
 
     public DayblockPuzzleManager dpm;
-    private enum managerCall{ 
+    public enum managerCall{ 
         correct,
         incorrect,
         complete
@@ -37,7 +38,8 @@ public class DayblockScript : MonoBehaviour
                                 {
                                     case 0:
                                         {
-                                            StartCoroutine(CallTheManager(managerCall.correct, weaveScript, 0));
+                                            Debug.Log("please");
+                                            CallTheManager(managerCall.correct, weaveScript, 0);
                                             gotShape = true;
                                             other.gameObject.GetComponent<WeaveableNew>().Uninteract();
                                             other.transform.position = new Vector3(99999f, -50, 0f);
@@ -45,12 +47,12 @@ public class DayblockScript : MonoBehaviour
                                         }
                                     case 1:
                                         {
-                                            StartCoroutine(CallTheManager(managerCall.incorrect, weaveScript, 0));
+                                            CallTheManager(managerCall.incorrect, weaveScript, 0);
                                             break;
                                         }
                                     case 2:
                                         {
-                                            StartCoroutine(CallTheManager(managerCall.incorrect, weaveScript, 0));
+                                            CallTheManager(managerCall.incorrect, weaveScript, 0);
                                             break;
                                         }
                                 }
@@ -63,12 +65,13 @@ public class DayblockScript : MonoBehaviour
                                 {
                                     case 0:
                                         {
-                                            StartCoroutine(CallTheManager(managerCall.incorrect, weaveScript, 1));
+                                            CallTheManager(managerCall.incorrect, weaveScript, 1);
+                                            Debug.Log("send help");
                                             break;
                                         }
                                     case 1:
                                         {
-                                            StartCoroutine(CallTheManager(managerCall.correct, weaveScript, 1));
+                                            CallTheManager(managerCall.correct, weaveScript, 1);
                                             gotShape = true;
                                             other.gameObject.GetComponent<WeaveableNew>().Uninteract();
                                             other.transform.position = new Vector3(99999f, -50, 0f);
@@ -76,7 +79,7 @@ public class DayblockScript : MonoBehaviour
                                         }
                                     case 2:
                                         {
-                                            StartCoroutine(CallTheManager(managerCall.incorrect, weaveScript, 1));
+                                            CallTheManager(managerCall.incorrect, weaveScript, 1);
                                             break;
                                         }
                                 }
@@ -89,17 +92,17 @@ public class DayblockScript : MonoBehaviour
                                 {
                                     case 0:
                                         {
-                                            StartCoroutine(CallTheManager(managerCall.incorrect, weaveScript, 2));
+                                            CallTheManager(managerCall.incorrect, weaveScript, 2);
                                             break;
                                         }
                                     case 1:
                                         {
-                                            StartCoroutine(CallTheManager(managerCall.incorrect, weaveScript, 2));
+                                            CallTheManager(managerCall.incorrect, weaveScript, 2);
                                             break;
                                         }
                                     case 2:
                                         {
-                                            StartCoroutine(CallTheManager(managerCall.complete, weaveScript, 2));
+                                            CallTheManager(managerCall.complete, weaveScript, 2);
                                             other.gameObject.GetComponent<WeaveableNew>().Uninteract();
                                             other.transform.position = new Vector3(99999f, -50, 0f);
                                             break;
@@ -112,35 +115,33 @@ public class DayblockScript : MonoBehaviour
             }
         }
 
+    }
 
-        IEnumerator CallTheManager(managerCall callType, WeaveableNew weaveScript, int correctKey = 0)
+    public void CallTheManager(managerCall callType, WeaveableNew weaveScript, int correctKey = 0)
+    {
+
+
+        switch (callType)
         {
-            //yield return new WaitForSeconds(1.5f);
+            case managerCall.correct:
+                {
+                    dpm.GotCombination(correctKey, weaveScript);
+                    break;
+                }
+            case managerCall.incorrect:
+                {
+                    dpm.FailPuzzle(correctKey, weaveScript);
+                    break;
+                }
+            case managerCall.complete:
+                {
 
-            switch(callType)
-            {
-                case managerCall.correct:
-                    {
-                        dpm.GotCombination(correctKey, weaveScript);
-                        break;
-                    }
-                case managerCall.incorrect: 
-                    {
-                        weaveScript.transform.position = dpm.failSpitPoint[correctKey].position;
-                        weaveScript.Uninteract();
-                        dpm.RestartPuzzle();
-                        break;
-                    }
-                case managerCall.complete:
-                    {
-                        dpm.GotCombination(correctKey, weaveScript);
-                        dpm.PuzzleComplete();
-                        break;
-                    }
-            }
-            yield break;
+                    dpm.GotCombination(correctKey, weaveScript);
+                    dpm.PuzzleComplete();
+                    break;
+                }
         }
-        
 
     }
+
 }
