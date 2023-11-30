@@ -324,6 +324,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         if (isWoven)
         {
+            Debug.Log("ahduiasbsayuffbslafyb");
             player.floatingIslandCrystal = false;
             rb.isKinematic = false;
             rb.useGravity = true;
@@ -341,6 +342,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             rb.constraints = RigidbodyConstraints.None;
             player.weaveVisualizer.StopAura(gameObject);
             TargetingArrow.SetActive(false);
+            player.weaveVisualizer.DisableWeave();
 
             if (parentWeaveable != null)
             {

@@ -68,7 +68,7 @@ public class DayblockPuzzleManager : MonoBehaviour
     
     public void GotCombination(int combination, WeaveableNew weaveableScript) {
         combinationpart = combination;
-        Instantiate(fakeKeyObject, transform.GetChild(combination-1));
+        Instantiate(fakeKeyObject, transform.GetChild(combination));
         Debug.Log("Combination part" + combinationpart);
 
         setKeyObjects.Add(weaveableScript.gameObject);
