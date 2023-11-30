@@ -81,6 +81,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         rb = GetComponent<Rigidbody>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        Debug.Log(GameObject.FindGameObjectWithTag("Player").name);
         weaveableScript = gameObject.GetComponent<WeaveableNew>();
         if (dayblockPuzzle != null)
         {
@@ -311,6 +312,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         }
         else
         {
+            Debug.Log(player);
             player.weaveVisualizer.WeaveableSelected(gameObject);
         }
 
