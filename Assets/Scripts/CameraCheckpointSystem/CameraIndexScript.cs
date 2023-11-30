@@ -154,119 +154,119 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
 
                 }
             }
-         }
-
-         //FAMILIAR
-         else
-         {
-            if (!isZaxisTrigger)
-            {
-                if (!goingOppositeDirection)
-                {
-                    if (transform.position.x > familiarTransform.position.x)
-                    {
-                        //Enter from north
-                        enteredFromNorth = true;
-                    }
-                    else
-                    {
-                        enteredFromNorth = false;
-                    }
-                }
-                else
-                {
-                    if (transform.position.x > familiarTransform.position.x)
-                    {
-                        //Enter from north
-                        enteredFromNorth = false;
-                    }
-                    else
-                    {
-                        enteredFromNorth = true;
-                    }
-                }
-            }
+            //FAMILIAR
             else
             {
-                if (!goingOppositeDirection)
+                if (!isZaxisTrigger)
                 {
-                    if (transform.position.z > familiarTransform.position.z)
+                    if (!goingOppositeDirection)
                     {
-                        enteredFromNorth = false;
+                        if (transform.position.x > familiarTransform.position.x)
+                        {
+                            //Enter from north
+                            enteredFromNorth = true;
+                        }
+                        else
+                        {
+                            enteredFromNorth = false;
+                        }
                     }
                     else
                     {
-                        enteredFromNorth = true;
+                        if (transform.position.x > familiarTransform.position.x)
+                        {
+                            //Enter from north
+                            enteredFromNorth = false;
+                        }
+                        else
+                        {
+                            enteredFromNorth = true;
+                        }
                     }
                 }
                 else
                 {
-                    if (transform.position.z > familiarTransform.position.z)
+                    if (!goingOppositeDirection)
                     {
-                        enteredFromNorth = true;
+                        if (transform.position.z > familiarTransform.position.z)
+                        {
+                            enteredFromNorth = false;
+                        }
+                        else
+                        {
+                            enteredFromNorth = true;
+                        }
                     }
                     else
                     {
-                        enteredFromNorth = false;
+                        if (transform.position.z > familiarTransform.position.z)
+                        {
+                            enteredFromNorth = true;
+                        }
+                        else
+                        {
+                            enteredFromNorth = false;
+                        }
                     }
-                }
 
-            }
-            if (isZaxisTrigger)
-            {
-                if (!goingOppositeDirection)
+                }
+                if (isZaxisTrigger)
                 {
-                    if (!triggered && enteredFromNorth)
+                    if (!goingOppositeDirection)
                     {
-                        CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        if (!triggered && enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        }
+                        else if (triggered && !enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        }
                     }
-                    else if (triggered && !enteredFromNorth)
+                    else
                     {
-                        CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        if (triggered && !enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        }
+                        else if (!triggered && enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        }
                     }
+
                 }
                 else
                 {
-                    if (triggered && !enteredFromNorth)
+                    if (!goingOppositeDirection)
                     {
-                        CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        if (!triggered && enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        }
+                        else if (triggered && !enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        }
                     }
-                    else if (!triggered && enteredFromNorth)
+                    else
                     {
-                        CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        if (triggered && !enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        }
+                        else if (!triggered && enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        }
                     }
-                }
 
+                }
             }
-            else
-            {
-                if (!goingOppositeDirection)
-                {
-                    if (!triggered && enteredFromNorth)
-                    {
-                        CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
-                    }
-                    else if (triggered && !enteredFromNorth)
-                    {
-                        CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
-                    }
-                }
-                else
-                {
-                    if (triggered && !enteredFromNorth)
-                    {
-                        CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
-                    }
-                    else if (!triggered && enteredFromNorth)
-                    {
-                        CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
-                    }
-                }
 
-            }
+            //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
          }
-            
-        
-       //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
     }
+
+         
 }

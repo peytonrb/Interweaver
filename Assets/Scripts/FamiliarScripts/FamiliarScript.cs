@@ -123,10 +123,6 @@ public class FamiliarScript : MonoBehaviour
         if (trigger != null)
         {
             trigger.OnTrigEnter(collision);
-            CameraIndexScript cameraIndexScript = collision.GetComponent<CameraIndexScript>();
-            vCamRotationState = cameraIndexScript.cameraIndex;
-
-            CameraMasterScript.instance.SwitchFamiliarCameras(vCamRotationState);
         }
 
         if (collision.gameObject.CompareTag("Leap of Faith Trigger"))
