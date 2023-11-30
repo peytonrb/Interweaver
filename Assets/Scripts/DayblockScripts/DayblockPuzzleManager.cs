@@ -11,8 +11,19 @@ public class DayblockPuzzleManager : MonoBehaviour
     [HideInInspector] public WeaveableNew sunblockweaveparent;
     [HideInInspector] public WeaveableNew sunriseblockweaveparent;
     [HideInInspector] public WeaveableNew moonblockweaveparent;
+
+    public List<GameObject> setKeyObjects = new List<GameObject>();
+
+    public Transform[] failSpitPoint;
+
     private WeaveableNew weaveableScript;
     private DayblockScript[] dayblockScripts;
+
+    public GameObject vfxObject;
+
+    public GameObject fakeKeyObject;
+
+    public GameObject orbObject;
 
     // Start is called before the first frame update
     void Start()
@@ -57,20 +68,32 @@ public class DayblockPuzzleManager : MonoBehaviour
     
     public void GotCombination(int combination, WeaveableNew weaveableScript) {
         combinationpart = combination;
+        Instantiate(fakeKeyObject, transform.GetChild(combination-1));
         Debug.Log("Combination part" + combinationpart);
+
+        setKeyObjects.Add(weaveableScript.gameObject);
     }
 
     public void RestartPuzzle() {
         Debug.Log("Get Good!");
         dayblockScripts = GetComponentsInChildren<DayblockScript>();
-        
+
+        int count = 0;
         foreach (DayblockScript ds in dayblockScripts) {
+
+            ds.transform.position = failSpitPoint[count].position;
             ds.gotShape = false;
+
+            count++;
         }
         combinationpart = 0;
+        setKeyObjects.Clear();
     }
 
     public void PuzzleComplete() {
+
         Debug.Log("Ayy!");
+        Instantiate(vfxObject, transform.position, transform.rotation);
+        Instantiate(orbObject, transform.position, transform.rotation);
     }
 }
