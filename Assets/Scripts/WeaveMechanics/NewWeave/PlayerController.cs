@@ -359,6 +359,7 @@ public class PlayerController : MonoBehaviour
     public void Death()
     {
         transform.position = GM.WeaverCheckPointPos;
+        CameraMasterScript.instance.WeaverCameraReturnOnDeath(CameraMasterScript.instance.lastWeaverCameraTriggered);
 
         if (GM.WeaverCheckPointNum == 0) // first checkpoint in shield puzzle - should also specify scene
         {
