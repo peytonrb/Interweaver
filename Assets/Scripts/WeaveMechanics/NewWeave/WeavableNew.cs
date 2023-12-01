@@ -343,7 +343,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             startFloating = false;
             canRotate = false;
             
-            if (rb.gameObject.tag != "FloatingIsland")
+            if (rb.gameObject.tag != "FloatingIsland" && rb.gameObject.tag != "Breakable")
             {
                 rb.constraints = RigidbodyConstraints.None;
             }
@@ -445,7 +445,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         canRotate = false;
         weaveableScript.rb.useGravity = true;
 
-        if (rb.gameObject.tag != "FloatingIsland")
+        if (rb.gameObject.tag != "FloatingIsland" && rb.gameObject.tag != "Breakable")
         {
             rb.constraints = RigidbodyConstraints.None;
             weaveableScript.rb.freezeRotation = false;
