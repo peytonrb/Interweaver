@@ -330,7 +330,7 @@ public class PlayerController : MonoBehaviour
     public void Possession()
     {
         //Move character only if they are on the ground
-        if (characterController.isGrounded && Time.timeScale != 0)
+        if (characterController.isGrounded && Time.timeScale != 0 && canSwitch)
         {
             if (possessing == false)
             {

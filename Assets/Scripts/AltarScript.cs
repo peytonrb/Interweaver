@@ -28,7 +28,7 @@ public class AltarScript : MonoBehaviour
 
         if (!cameraMasterScript || !familiarScript || !playerController)
         {
-            Debug.LogWarning("Required scripts for orb altar not present, disabling myself!");
+            Debug.LogWarning("Required scripts for Orb Altar not present and/or fucky, disabling myself!");
             gameObject.SetActive(false);
         }
     }
@@ -38,6 +38,8 @@ public class AltarScript : MonoBehaviour
     {
         if (collider.gameObject.CompareTag("Altar Orb"))
         {   
+            familiarScript.canSwitch = false;
+            playerController.canSwitch = false;
             playerController.Uninteract();
             if (collider.GetComponent<Rigidbody>())
             {
@@ -83,7 +85,22 @@ public class AltarScript : MonoBehaviour
         }
         else 
         {
+            orb.transform.position = orbSnapPoint.position;
+            OwlTeleport();
+            PlayCutscene();
             yield return null; 
         }
+    }
+
+    private void OwlTeleport()
+    {
+        familiarScript.gameObject.transform.position = owlTeleportPoint.transform.position;
+    }
+
+    private void PlayCutscene()
+    {
+        playerController.canSwitch = true;
+        playerController.Possession();
+        playerController.canSwitch = false;
     }
 }

@@ -159,7 +159,7 @@ public class FamiliarScript : MonoBehaviour
     }
 
     public void Depossess() {
-        if (myTurn && Time.timeScale != 0 && !islandisfalling) {
+        if (myTurn && Time.timeScale != 0 && !islandisfalling && canSwitch) {
             //Move character only if they are on the ground or in leapOfFaith
             if (characterController.isGrounded || leapOfFaith) {     
                 if (!leapOfFaith) {

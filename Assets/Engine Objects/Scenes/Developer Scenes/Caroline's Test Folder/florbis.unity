@@ -230,6 +230,7 @@ Transform:
   m_Children:
   - {fileID: 1973813179}
   - {fileID: 775263932}
+  - {fileID: 293643637}
   m_Father: {fileID: 0}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -301,6 +302,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  owlTeleportPoint: {fileID: 293643637}
+  teleportWaitTime: 0
 --- !u!65 &29891835
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1914,6 +1917,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 284850127}
   m_CullTransparentMesh: 1
+--- !u!1 &293643636
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 293643637}
+  m_Layer: 0
+  m_Name: Owl Teleport Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &293643637
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293643636}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -8.95, y: 0, z: 0.67}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 29891832}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &307079616
 GameObject:
   m_ObjectHideFlags: 0
@@ -6659,6 +6693,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae09286c26ef7bc459527ad0f24f5b04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1783837087 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5214822084340261175, guid: 3eecb22b409431840a7578addcb86c64, type: 3}
+  m_PrefabInstance: {fileID: 1753793498}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1793834078
 GameObject:
   m_ObjectHideFlags: 0
@@ -7074,7 +7113,7 @@ MonoBehaviour:
   m_Priority: 0
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 0}
+  m_Follow: {fileID: 1783837087}
   m_Lens:
     FieldOfView: 60.000004
     OrthographicSize: 5
