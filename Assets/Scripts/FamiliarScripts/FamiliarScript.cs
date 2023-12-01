@@ -13,6 +13,7 @@ public class FamiliarScript : MonoBehaviour
     [Header("Movement Variables")]
     private CharacterController characterController; //references the character controller component
     private MovementScript movementScript; // reference for the movement script component
+    public bool canSwitch = true; // is the familiar allowed to switch 
     public bool depossessing; //True if the familiar is being deposessed
     public bool myTurn; //Responsible for determining if the familiar can move
     public bool leapOfFaith; //Determines if owl familiar is in a leap of faith 
@@ -159,7 +160,7 @@ public class FamiliarScript : MonoBehaviour
     }
 
     public void Depossess() {
-        if (myTurn && Time.timeScale != 0 && !islandisfalling) {
+        if (myTurn && Time.timeScale != 0 && !islandisfalling && canSwitch) {
             //Move character only if they are on the ground or in leapOfFaith
             if (characterController.isGrounded || leapOfFaith) {     
                 if (!leapOfFaith) {

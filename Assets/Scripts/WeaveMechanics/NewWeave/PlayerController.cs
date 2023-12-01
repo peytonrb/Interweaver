@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [Header("Movement Variables")]
     private CharacterController characterController;
     private MovementScript movementScript;
+    public bool canSwitch = true; // is the weaver allowed to switch 
     private bool possessing;
 
     [Header("Character's Camera")]
@@ -335,7 +336,7 @@ public class PlayerController : MonoBehaviour
     public void Possession()
     {
         //Move character only if they are on the ground
-        if (characterController.isGrounded && Time.timeScale != 0 && !inCutscene)
+        if (characterController.isGrounded && Time.timeScale != 0 && !inCutscene && canSwitch)
         {
             if (possessing == false)
             {
