@@ -186,6 +186,7 @@ public class FamiliarScript : MonoBehaviour
     {
         characterController.enabled = false;
         transform.position = GM.FamiliarCheckPointPos;
+        CameraMasterScript.instance.FamiliarCameraReturnOnDeath(CameraMasterScript.instance.lastFamiliarCameraTriggered);
         characterController.enabled = true;
     }
 
