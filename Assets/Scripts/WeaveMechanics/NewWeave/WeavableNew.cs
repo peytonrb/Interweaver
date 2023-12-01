@@ -464,10 +464,27 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         wovenObjects.Add(weaveableScript);
 
         weaveableScript.rb.useGravity = false;
+
+        if (!alwaysMovesWhenWoven)
+        {
+            StartCoroutine(SwitchModes());
+        }
+
+        else if (alwaysMovesWhenWoven)
+        {
+            player.inRelocateMode = true;
+            player.inCombineMode = false;
+        }
+
+    }
+    //********************************************************************
+
+    IEnumerator SwitchModes()
+    {
+        yield return new WaitForSeconds(1);
         player.inRelocateMode = true;
         player.inCombineMode = false;
     }
-    //********************************************************************
 
     void Snapping()
     {

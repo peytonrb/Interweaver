@@ -326,8 +326,6 @@ public class PlayerController : MonoBehaviour
         {
             interactable.Uninteract();
             inCombineMode = false;
-            inCombineMode = false;
-            inCombineMode = false;
             inRelocateMode = false;
             relocateMode.SetActive(false);// remember to delete this
             combineMode.SetActive(false);// remember to delete this
