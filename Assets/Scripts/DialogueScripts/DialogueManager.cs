@@ -12,6 +12,7 @@ public class DialogueManager : MonoBehaviour
     private TextMeshProUGUI dialogueText;
     private GameObject textBoxUI;
     private AudioClip audioClip;
+    public DialogueTriggers currentTrigger;
     
     public static DialogueManager instance;
 
@@ -77,6 +78,8 @@ public class DialogueManager : MonoBehaviour
     public void EndDialogue()
     {
         textBoxUI.SetActive(false);
+        currentTrigger.isInteracting = false;
+        currentTrigger.disableNPCDialogue();
     }
 
     // initializes the text objects for intended dialogue

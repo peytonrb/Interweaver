@@ -44,9 +44,6 @@ public class FloatingIslandScript : MonoBehaviour
             weaveable = GetComponent<WeaveableNew>();
         }
         
-        
-        
-
         //if it has a crystal, it'll auto assign the itself to the crystals variable
         if (myCrystal != null)
         {
@@ -152,10 +149,12 @@ public class FloatingIslandScript : MonoBehaviour
     {
         if (!isFloating)
         {
+            
             //Camera is switched to a new view which watches the whole island rise. (Lasts about 2 seconds)
             if (cameraswitched == false)
             {
                 CameraMasterScript.instance.FloatingIslandCameraSwitch(myFloatCamera, this);
+                Debug.Log("swap to rise called");
             }
         }
     }

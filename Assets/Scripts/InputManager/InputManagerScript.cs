@@ -80,7 +80,6 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnWeaverInteract(InputValue input)
     {
-
         if (input.isPressed)
         {
             if (!playerScript.inRelocateMode && !playerScript.inCombineMode) // occasionally reads a hit during compile time???? NOT ANYMOREEEEEEE HEHEHEHEHE
@@ -88,12 +87,12 @@ public class InputManagerScript : MonoBehaviour
                 playerScript.interactInput = true;
                 playerScript.WeaveActivated();
 
-                //playerScript.inRelocateMode = true;
             }
             else if (playerScript.inCombineMode)
             {
                 playerScript.weaveableScript.OnCombineInput();
-                StartCoroutine(WeaveModeTimer());  //ayo peyton rework this                       
+
+                //StartCoroutine(WeaveModeTimer());  //ayo peyton rework this                       
             }
         }
     }
@@ -109,7 +108,11 @@ public class InputManagerScript : MonoBehaviour
     {
         if (input.isPressed)
         {
-            playerScript.uninteract = true;
+            if (playerScript.isCurrentlyWeaving)
+            {
+                playerScript.uninteract = true;
+            }
+            
             playerScript.interactInput = false;
             playerScript.inRelocateMode = false;
             playerScript.inCombineMode = false;
@@ -135,7 +138,6 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnWeaverTargeting(InputValue input)
     {
-
         Vector2 inputVector = input.Get<Vector2>();
 
             if (isGamepad)
@@ -154,22 +156,15 @@ public class InputManagerScript : MonoBehaviour
             {
                 playerScript.MouseAimTargetter(inputVector);
             }
-
     }
 
     public void OnWeaverNPCInteractions(InputValue input)
     {
-        if (input.isPressed)
-        {
-            NPCInteractionScript npcInteractScript = player.GetComponent<NPCInteractionScript>();
-            npcInteractScript.Interact();
-            Debug.Log("Interacting");
-        }
+        
     }
 
     public void OnRotate(InputValue input)
     {
-
         Vector2 dir = input.Get<Vector2>();
 
         if (dir != Vector2.zero && playerScript.inRelocateMode)
@@ -231,7 +226,7 @@ public class InputManagerScript : MonoBehaviour
 
         if (input.isPressed)
         {
-            if (!familiarScript.myTurn && !playerScript.isCurrentlyWeaving && playerCharacterController.isGrounded)
+            if (!familiarScript.myTurn && !playerScript.isCurrentlyWeaving && playerCharacterController.isGrounded && !playerScript.inCutscene)
             {
                 playerScript.Possession();
                 playerInput.SwitchCurrentActionMap("Familiar");
@@ -257,7 +252,7 @@ public class InputManagerScript : MonoBehaviour
 
     #endregion//******************************************************
 
-    //PAUSING
+    //Both Characters
     //******************************************************
     public void OnPause(InputValue input)
     {
@@ -299,7 +294,32 @@ public class InputManagerScript : MonoBehaviour
 
         pauseScript.Resume();
     }
+
+    public void OnNPCInteraction(InputValue input)
+    {
+        if (input.isPressed)
+        {
+           
+            if (familiarScript.myTurn)
+            {
+                NPCInteractionScript npcInteractScript = familiar.GetComponent<NPCInteractionScript>();
+                npcInteractScript.Interact();
+                Debug.Log("Interacting");
+            }
+            else
+            {
+                NPCInteractionScript npcInteractScript = player.GetComponent<NPCInteractionScript>();
+                npcInteractScript.Interact();
+                Debug.Log("Interacting");
+            }
+        }
+       
+    }
+
     //******************************************************
+
+
+
 
     #region //OWL FAMILIAR ABILITIES
     //******************************************************
@@ -334,18 +354,5 @@ public class InputManagerScript : MonoBehaviour
             owlDiveScript.DiveRelease();
         }
     }
-
-    public void OnFamiliarNPCInteraction(InputValue input)
-    {
-        if (input.isPressed)
-        {
-            NPCInteractionScript npcInteractScript = familiar.GetComponent<NPCInteractionScript>();
-            npcInteractScript.Interact();
-            Debug.Log("Interacting");
-        }
-    }
-
-
-   
     #endregion//******************************************************
 }

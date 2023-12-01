@@ -23,6 +23,7 @@ public class CameraMasterScript : MonoBehaviour
     public int weaverCameraOnPriority;
     public int familiarCameraOnPriority;
 
+    public CinemachineVirtualCamera leapOfFaithCamera;
     public float LoFCameraYoffset = 0;
     void Awake()
     {
@@ -245,8 +246,10 @@ public class CameraMasterScript : MonoBehaviour
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
 
         familiarScript.leapOfFaith = true;
-        familiarVirtualCams[familiarCameraOnPriority].transform.eulerAngles = new Vector3(90f, familiarVirtualCams[familiarCameraOnPriority].transform.eulerAngles.y, familiarVirtualCams[familiarCameraOnPriority].transform.eulerAngles.z);
-        familiarVirtualCams[familiarCameraOnPriority].GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, originalFamiliarCamTransposeOffset.y + LoFCameraYoffset, 0);
+        familiarVirtualCams[familiarCameraOnPriority].Priority = 0;
+        leapOfFaithCamera.Priority = 1;
+        //familiarVirtualCams[familiarCameraOnPriority].transform.eulerAngles = new Vector3(90f, familiarVirtualCams[familiarCameraOnPriority].transform.eulerAngles.y, familiarVirtualCams[familiarCameraOnPriority].transform.eulerAngles.z);
+        //familiarVirtualCams[familiarCameraOnPriority].GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, originalFamiliarCamTransposeOffset.y + LoFCameraYoffset, 0);
     }
 
     public void EndLeapOfFaith() {
@@ -254,8 +257,10 @@ public class CameraMasterScript : MonoBehaviour
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
 
         familiarScript.leapOfFaith = false;
-        familiarVirtualCams[familiarCameraOnPriority].transform.eulerAngles = originalFamiliarCamRotation;
-        familiarVirtualCams[familiarCameraOnPriority].GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = originalFamiliarCamTransposeOffset;
+        familiarVirtualCams[familiarCameraOnPriority].Priority = 1;
+        leapOfFaithCamera.Priority = 0;
+        //familiarVirtualCams[familiarCameraOnPriority].transform.eulerAngles = originalFamiliarCamRotation;
+        //familiarVirtualCams[familiarCameraOnPriority].GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = originalFamiliarCamTransposeOffset;
     }
 
     //**************************************************************************************

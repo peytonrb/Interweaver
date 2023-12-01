@@ -12,6 +12,7 @@ public class MovementScript : MonoBehaviour
     private GameMasterScript GM; //This is refrencing the game master script
 
     [Header("Movement Variables")]
+    public bool canMove = true;
     public float speed; //Base walk speed for player
     private float currentSpeed = 0; // the current speed for the player
     private CharacterController characterController; //references the character controller component
@@ -61,6 +62,8 @@ public class MovementScript : MonoBehaviour
 
     [Header("Dive VFX")]
     private ParticleSystem speedLinesVFX;
+
+    [HideInInspector] public bool inCutscene;
     
 
     void Awake()
@@ -87,6 +90,7 @@ public class MovementScript : MonoBehaviour
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
         //transform.position = GM.LastCheckPointPos;
         characterController.enabled = true;
+        inCutscene = false;
 
         StartCoroutine(DelayBeforeFallAudio());
     }
@@ -94,132 +98,160 @@ public class MovementScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Move character only if they are on the ground
-        if (characterController.isGrounded || aerialControl)
-        {
-            if (Time.timeScale != 0 && active)
+        if (!inCutscene) {
+            //Move character only if they are on the ground
+            if (characterController.isGrounded || aerialControl)
             {
-                //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad
-                movement = InputManagerScript.instance.movement;
-                LookAndMove();
-                
+                if (Time.timeScale != 0 && active)
+                {
+                    //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad
+                    movement = InputManagerScript.instance.movement;
+                    LookAndMove();
+                    
+                }
             }
+        }
+        
+    }
+
+    public void ToggleCanMove(bool moves)
+    {
+        if (moves)
+        {
+            canMove = true;
+            characterAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
+        }
+        else
+        {
+            canMove = false;
+            characterAnimationHandler.ToggleMoveSpeedBlend(0);
         }
     }
 
     void FixedUpdate()
     {
-        if (Time.timeScale != 0 && active) {
-            // changes what acceleration/deceleration type is being used based on if controller is grouunded or not
-            acceleration = characterController.isGrounded ? groundAcceleration : aerialAcceleration;
-            deceleration = characterController.isGrounded ? groundDeceleration : aerialDeceleration;
-
-            //Character movement
-            if (direction.magnitude >= 0.1f)
+        if (canMove)
+        {
+            if (Time.timeScale != 0 && active && !inCutscene)
             {
-                currentSpeed = Mathf.Lerp(currentSpeed, speed, acceleration * Time.deltaTime);
-                //Debug.Log(currentSpeed);
-                //currentSpeed += acceleration * Time.deltaTime;
-                //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
-                characterAnimationHandler.ToggleMoveSpeedBlend(currentSpeed); // note: speed is static now, but this should work fine when variable speed is added
+                // changes what acceleration/deceleration type is being used based on if controller is grouunded or not
+                acceleration = characterController.isGrounded ? groundAcceleration : aerialAcceleration;
+                deceleration = characterController.isGrounded ? groundDeceleration : aerialDeceleration;
 
-                if (characterController.isGrounded)
+                //Character movement
+                if (direction.magnitude >= 0.1f)
                 {
-                    //Play footstep Audio!
-                    if (TryGetComponent<PlayerController>(out PlayerController playerCon))
+                    currentSpeed = Mathf.Lerp(currentSpeed, speed, acceleration * Time.deltaTime);
+                    //Debug.Log(currentSpeed);
+                    //currentSpeed += acceleration * Time.deltaTime;
+                    //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
+                    characterAnimationHandler.ToggleMoveSpeedBlend(currentSpeed); // note: speed is static now, but this should work fine when variable speed is added
+
+                    if (characterController.isGrounded)
                     {
-                        if (!AudioManager.instance.footStepsChannel.isPlaying)
-                            AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.3f);
+                        //Play footstep Audio!
+                        if (TryGetComponent<PlayerController>(out PlayerController playerCon))
+                        {
+                            if (!AudioManager.instance.footStepsChannel.isPlaying)
+                                AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.3f);
+                        }
+                        else
+                        {
+                            if (!AudioManager.instance.footStepsChannel.isPlaying)
+                                AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.7f);
+                        }
                     }
                     else
                     {
-                        if (!AudioManager.instance.footStepsChannel.isPlaying)
-                            AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.7f);
+                        if (AudioManager.instance.footStepsChannel.isPlaying)
+                            AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
                     }
+
                 }
                 else
                 {
+                    currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
+                    characterAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
                     if (AudioManager.instance.footStepsChannel.isPlaying)
-                    AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
+                        AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
+                    //Debug.Log(currentSpeed);
+                    //currentSpeed -= deceleration * Time.deltaTime;
+                    //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
                 }
-                
-            }
-            else
-            {
-                currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
-                characterAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
-                if (AudioManager.instance.footStepsChannel.isPlaying)
-                    AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
-                //Debug.Log(currentSpeed);
-                //currentSpeed -= deceleration * Time.deltaTime;
-                //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
-            }
 
-            velocity.x = currentSpeed * newDirection.x;
-            velocity.z = currentSpeed * newDirection.z;
+                velocity.x = currentSpeed * newDirection.x;
+                velocity.z = currentSpeed * newDirection.z;
 
-            characterController.Move(velocity * Time.deltaTime); // make move based on gravity
+                characterController.Move(velocity * Time.deltaTime); // make move based on gravity
 
-            //Character gravity
-            if (!characterController.isGrounded)
-            {
-                characterAnimationHandler.ToggleFallAnim(true);
-                if (TryGetComponent<PlayerController>(out PlayerController playerCon) && !AudioManager.instance.fallChannel.isPlaying && canPlayFallAudio)
+                //Character gravity
+                if (!characterController.isGrounded)
                 {
-                    AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, weaverFallClip);
-                    Debug.Log("weaver fall");
+                    characterAnimationHandler.ToggleFallAnim(true);
+                    if (TryGetComponent<PlayerController>(out PlayerController playerCon) && !AudioManager.instance.fallChannel.isPlaying && canPlayFallAudio)
+                    {
+                        AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, weaverFallClip);
+                        Debug.Log("weaver fall");
+                    }
+                    else
+                    {
+
+                        if (TryGetComponent<OwlDiveScript>(out OwlDiveScript diveScript) && diveScript.isDiving && canPlayFallAudio)
+                        {
+                            if (!AudioManager.instance.fallChannel.isPlaying || AudioManager.instance.fallChannel.clip != owlDiveClip && canPlayFallAudio)
+                            {
+                                Debug.Log("Play Dive audio");
+                                AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, owlDiveClip);
+                            }
+                        }
+                        else if (canPlayFallAudio)
+                        {
+                            if (!AudioManager.instance.fallChannel.isPlaying || AudioManager.instance.fallChannel.clip != owlGlideClip)
+                            {
+                                AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, owlGlideClip);
+                                Debug.Log("owl glide");
+                            }
+                        }
+                    }
+
+                    velocity.y += gravity * Time.deltaTime;
                 }
                 else
                 {
-                    
-                    if (TryGetComponent<OwlDiveScript>(out OwlDiveScript diveScript) && diveScript.isDiving && canPlayFallAudio)
+                    characterAnimationHandler.ToggleFallAnim(false);
+                    AudioManager.instance.StopSound(AudioManagerChannels.fallLoopChannel);
+                    velocity.y = -2f;
+                }
+                velocity.y = Mathf.Clamp(velocity.y, terminalVelocity, 200f);
+
+                if (speedLinesVFX != null)
+                {
+
+                    var em = speedLinesVFX.emission;
+                    if (velocity.y < -15)
                     {
-                        if (!AudioManager.instance.fallChannel.isPlaying || AudioManager.instance.fallChannel.clip != owlDiveClip && canPlayFallAudio)
-                        {
-                            Debug.Log("Play Dive audio");
-                            AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, owlDiveClip);
-                        }
+                        em.rateOverTime = Mathf.Abs(velocity.y) * 1.2f;
                     }
-                    else if (canPlayFallAudio)
+                    else
                     {
-                        if (!AudioManager.instance.fallChannel.isPlaying || AudioManager.instance.fallChannel.clip != owlGlideClip)
-                        {
-                            AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, owlGlideClip);
-                            Debug.Log("owl glide");
-                        }
+                        em.rateOverTime = 0;
                     }
+
                 }
 
-                velocity.y += gravity * Time.deltaTime;
             }
-            else
+
+            if (resettingTerminalVelocity)
             {
-                characterAnimationHandler.ToggleFallAnim(false);
+                ResetTerminalVelocity();
+            }
+
+            if (inCutscene) {
                 AudioManager.instance.StopSound(AudioManagerChannels.fallLoopChannel);
-                velocity.y = -2f;
+                AudioManager.instance.StopSound(AudioManagerChannels.footStepsLoopChannel);
             }
-            velocity.y = Mathf.Clamp(velocity.y, terminalVelocity, 200f);
-
-            if (speedLinesVFX != null)
-            {
-
-                var em = speedLinesVFX.emission;
-                if (velocity.y < -15)
-                {
-                    em.rateOverTime = Mathf.Abs(velocity.y)*1.2f;
-                } else
-                {
-                    em.rateOverTime = 0;
-                }
-                
-            }
-            
         }
-
-        if (resettingTerminalVelocity)
-        {
-            ResetTerminalVelocity();
-        }
+        
     }
 
     public void LookAndMove()

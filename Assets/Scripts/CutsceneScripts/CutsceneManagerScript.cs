@@ -8,30 +8,41 @@ using UnityEngine.UI;
 
 public class CutsceneManagerScript : MonoBehaviour
 {
-    public GameObject cutsceneCanvas;
-    public GameObject blackPanel;
-    private CanvasGroup bpCanvasGroup;
     public CinemachineVirtualCamera[] cutsceneCams;
+    public GameObject cutsceneTrigger;
     private bool isCutscene;
-    private bool isTransitioning;
     private int cutscenePhase;
     private BoxCollider bc;
-    [SerializeField] private float transitionSpeed;
     private float lerpval;
     private PlayableDirector director;
 
     [Header("Player Objects")]
     public GameObject player;
     private MovementScript playerMovementScript;
+    public bool usingCutsceneWeaver;
     public GameObject cutsceneWeaver;
-    public GameObject cutsceneTrigger;
+    private DummyWeaverScript dummyScript;
+
+    [Header ("Transitions")]
+    [SerializeField] private bool useTransitions; //For using fade ins and fade outs
+    [SerializeField] private float transitionSpeed;
+    private bool isTransitioning;
+    public GameObject cutsceneCanvas;
+    public GameObject blackPanel;
+    private CanvasGroup bpCanvasGroup;
 
     // Start is called before the first frame update
     void Start()
     {
-        cutsceneCanvas.SetActive(false);
-        cutsceneWeaver.SetActive(false);
-        bpCanvasGroup = blackPanel.GetComponent<CanvasGroup>();
+        if (usingCutsceneWeaver) {
+            cutsceneWeaver.SetActive(false);
+            dummyScript = cutsceneWeaver.GetComponent<DummyWeaverScript>();
+        }
+        if (useTransitions) {
+            cutsceneCanvas.SetActive(false);
+            bpCanvasGroup = blackPanel.GetComponent<CanvasGroup>();
+        }
+        
         playerMovementScript = player.GetComponent<MovementScript>();
         director = GetComponent<PlayableDirector>();
         bc = GetComponentInChildren<BoxCollider>();
@@ -50,72 +61,93 @@ public class CutsceneManagerScript : MonoBehaviour
     void Update()
     {
         if (isCutscene) {
-            switch (cutscenePhase) {
-                case 0:
-                    if (!isTransitioning) {
-                        isTransitioning = true;
-                    }
-                    else {
-                        bpCanvasGroup.alpha = Mathf.Lerp(bpCanvasGroup.alpha,1,lerpval);
-                        lerpval += transitionSpeed * Time.deltaTime;
-                        
-                        if (lerpval >= 1) {
-                            BeginTimeline();
-                            bpCanvasGroup.alpha = 1;
+            if (useTransitions) {
+                switch (cutscenePhase) {
+                    case 0:
+                        if (!isTransitioning) {
+                            isTransitioning = true;
                         }
-                    }
-                break;
-                case 1:
-                    if (isTransitioning) {
-                        bpCanvasGroup.alpha = Mathf.Lerp(bpCanvasGroup.alpha,0,lerpval);
-                        lerpval += -transitionSpeed * Time.deltaTime;
+                        else {
+                            bpCanvasGroup.alpha = Mathf.Lerp(bpCanvasGroup.alpha,1,lerpval);
+                            lerpval += transitionSpeed * Time.deltaTime;
+                            
+                            if (lerpval >= 1) {
+                                BeginTimeline();
+                                bpCanvasGroup.alpha = 1;
+                            }
+                        }
+                    break;
+                    case 1:
+                        if (isTransitioning) {
+                            bpCanvasGroup.alpha = Mathf.Lerp(bpCanvasGroup.alpha,0,lerpval);
+                            lerpval += -transitionSpeed * Time.deltaTime;
 
-                        if (lerpval <= 0) {
-                            isTransitioning = false;
-                            bpCanvasGroup.alpha = 0;
-                            lerpval = 0;
+                            if (lerpval <= 0) {
+                                isTransitioning = false;
+                                bpCanvasGroup.alpha = 0;
+                                lerpval = 0;
+                            }
                         }
-                    }
-                    else {
-                        cutscenePhase = 2;
-                    }
-                break;
-                case 2:
-                    if (director.time > 24f) {
-                        cutscenePhase = 3;
-                    }
-                break;
-                case 3:
-                    if (!isTransitioning) {
-                        isTransitioning = true;
-                    }
-                    else {
-                        bpCanvasGroup.alpha = Mathf.Lerp(bpCanvasGroup.alpha,1,lerpval);
-                        lerpval += transitionSpeed * Time.deltaTime;
-                        
-                        if (lerpval >= 1) {
-                            bpCanvasGroup.alpha = 1;
-                            EndCutscene();
+                        else {
+                            if (director.time >= director.duration - 2) {
+                                cutscenePhase = 2;
+                            }
                         }
-                    }
-                break;
-                case 4:
-                    if (isTransitioning) {
-                        bpCanvasGroup.alpha = Mathf.Lerp(bpCanvasGroup.alpha,0,lerpval);
-                        lerpval += -transitionSpeed * Time.deltaTime;
-                        
-                        if (lerpval <= 0) {
-                            isTransitioning = false;
-                            bpCanvasGroup.alpha = 0;
-                            lerpval = 0;
-                            cutscenePhase = 0;
-                            isCutscene = false;
+                    break;
+                    case 2:
+                        if (!isTransitioning) {
+                            isTransitioning = true;
                         }
-                    }
-                break;
-                
+                        else {
+                            bpCanvasGroup.alpha = Mathf.Lerp(bpCanvasGroup.alpha,1,lerpval);
+                            lerpval += transitionSpeed * Time.deltaTime;
+                            
+                            if (lerpval >= 1) {
+                                bpCanvasGroup.alpha = 1;
+                                EndCutscene();
+                            }
+                        }
+                    break;
+                    case 3:
+                        if (isTransitioning) {
+                            bpCanvasGroup.alpha = Mathf.Lerp(bpCanvasGroup.alpha,0,lerpval);
+                            lerpval += -transitionSpeed * Time.deltaTime;
+                            
+                            if (lerpval <= 0) {
+                                isTransitioning = false;
+                                bpCanvasGroup.alpha = 0;
+                                lerpval = 0;
+                                cutscenePhase = 0;
+                                isCutscene = false;
+                            }
+                        }
+                    break;
+                }
             }
-            Debug.Log(cutscenePhase);
+
+            //For if not using transitions
+            else {
+                switch (cutscenePhase) {
+                    case 0:
+                        BeginTimeline();
+                    break;
+                    case 1:
+                        if (director.time >= director.duration - 2) {
+                            cutscenePhase = 2;
+                        }
+                    break;
+                    case 2:
+                        EndCutscene();
+                    break;
+                    case 3:
+                        cutscenePhase = 0;
+                        isCutscene = false;
+                    break;
+                }
+            }
+            
+            //Debug.Log(cutscenePhase);
+            //Debug.Log(director.duration);
         }
         
     }
@@ -123,20 +155,26 @@ public class CutsceneManagerScript : MonoBehaviour
     public void StartCutscene() {
         if (bc.isTrigger) {
             isCutscene = true;
-            playerMovementScript.active = false;
-            cutsceneCanvas.SetActive(true);
-            player.SetActive(false);
+            playerMovementScript.inCutscene = true;
+            if (useTransitions) {
+                cutsceneCanvas.SetActive(true);
+            }
+            
+            if (usingCutsceneWeaver) {
+                cutsceneWeaver.SetActive(true);
+            }
         }
     }
 
     private void BeginTimeline() {
         director.Play();
-        cutsceneWeaver.SetActive(true); 
+        if (usingCutsceneWeaver) {
+            cutsceneWeaver.SetActive(true); 
+        }
         foreach (CinemachineVirtualCamera vcam in cutsceneCams) {
             vcam.Priority = 10;
         }
-        cutscenePhase = 1;
-        
+        cutscenePhase += 1;
     }
 
     private void EndCutscene() {
@@ -145,11 +183,13 @@ public class CutsceneManagerScript : MonoBehaviour
         foreach (CinemachineVirtualCamera vcam in cutsceneCams) {
             vcam.Priority = 0;  
         }
-        
-        cutsceneWeaver.SetActive(false);
-        player.SetActive(true);
-        playerMovementScript.active = true;
-        cutscenePhase = 4;
+        if (usingCutsceneWeaver) {
+            cutsceneWeaver.SetActive(false);
+        }
+        //player.SetActive(true);
+        playerMovementScript.inCutscene = false;
+
+        cutscenePhase += 1;
     }
 
 }

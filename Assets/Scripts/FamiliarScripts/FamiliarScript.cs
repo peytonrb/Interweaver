@@ -124,10 +124,6 @@ public class FamiliarScript : MonoBehaviour
         if (trigger != null)
         {
             trigger.OnTrigEnter(collision);
-            CameraIndexScript cameraIndexScript = collision.GetComponent<CameraIndexScript>();
-            vCamRotationState = cameraIndexScript.cameraIndex;
-
-            CameraMasterScript.instance.SwitchFamiliarCameras(vCamRotationState);
         }
 
         if (collision.gameObject.CompareTag("Leap of Faith Trigger"))
@@ -145,6 +141,11 @@ public class FamiliarScript : MonoBehaviour
         else if (collision.gameObject.CompareTag("Hazard"))
         {
             Death();
+        }
+        else if (collision.gameObject.CompareTag("CutsceneTrigger")) {
+            EndCutsceneTrigger ect = collision.GetComponent<EndCutsceneTrigger>();
+
+            ect.StartCutscene();
         }
     }
 

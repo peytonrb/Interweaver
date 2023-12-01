@@ -23,9 +23,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 877358721207564493}
-  m_LocalRotation: {x: -0, y: -0.2784044, z: -0, w: 0.96046394}
-  m_LocalPosition: {x: -27.156, y: -14.879999, z: -29.335999}
-  m_LocalScale: {x: 1.54038, y: 1.54038, z: 1.54038}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 502626603879268057}
@@ -43,12 +43,11 @@ GameObject:
   - component: {fileID: 7021548954558197882}
   - component: {fileID: 6913367074132591515}
   - component: {fileID: 6996844180158300826}
-  - component: {fileID: 2908029168829144956}
   - component: {fileID: 3613315730579189555}
-  - component: {fileID: 6249517806523136731}
   - component: {fileID: 4158530418111038473}
   - component: {fileID: 1841184153702313467}
   - component: {fileID: 2412979489667069877}
+  - component: {fileID: 991882946246522297}
   m_Layer: 6
   m_Name: IslandCrystal
   m_TagString: Breakable
@@ -65,9 +64,10 @@ Transform:
   m_GameObject: {fileID: 3738485478540167410}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 11.07, y: 17.48, z: 31.466}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6225729104442961305}
   - {fileID: 7552672332987597148}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -122,29 +122,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &2908029168829144956
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3738485478540167410}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.4242201
-  m_Height: 1.8650913
-  m_Direction: 1
-  m_Center: {x: -0.016314507, y: 0.06259823, z: 0.0022058487}
 --- !u!114 &3613315730579189555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,27 +137,6 @@ MonoBehaviour:
   myFloatingIsland: {fileID: 0}
   vfxPrefab: {fileID: 595517454477082168, guid: f14bed05ed35ff44aa50e2a19404663e, type: 3}
   shatterFile: {fileID: 8300000, guid: fa5fcec46bff3b447ab20a4606f3cd68, type: 3}
---- !u!65 &6249517806523136731
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3738485478540167410}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2.2759094, y: 3.9252472, z: 2.3873062}
-  m_Center: {x: 0.12567139, y: 0.9626236, z: 0.073387146}
 --- !u!114 &4158530418111038473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,11 +190,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 1841184153702313467}
   hoveringValue: 1
-  mainCamera: {fileID: 0}
   layersToHit:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 8384
+  layersToHitController:
+    serializedVersion: 2
+    m_Bits: 0
   weaveInteraction: {fileID: 4158530418111038473}
+  alwaysMovesWhenWoven: 0
+  neverMovesWhenWoven: 0
   ID: 1
   canRotate: 0
   canCombine: 1
@@ -254,7 +214,7 @@ MonoBehaviour:
   myNearestPoint: {fileID: 0}
   snapDistance: 0
   nearestDistance: 0
-  pain: {fileID: 0}
+  targetTransform: {fileID: 0}
   originalMat: {fileID: 0}
   isCombined: 0
   startPos: {x: 0, y: 0, z: 0}
@@ -264,6 +224,59 @@ MonoBehaviour:
   wovenObjects: []
   player: {fileID: 0}
   dayblockPuzzle: {fileID: 0}
+  rotateClip: {fileID: 0}
+--- !u!65 &991882946246522297
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3738485478540167410}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.8043336, y: 1.781208, z: 0.83677024}
+  m_Center: {x: 0, y: 1.0004597, z: 0}
+--- !u!1 &4827204026659895905
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6225729104442961305}
+  m_Layer: 6
+  m_Name: SnapPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6225729104442961305
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4827204026659895905}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.23, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7021548954558197882}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8271021956226023786
 GameObject:
   m_ObjectHideFlags: 0

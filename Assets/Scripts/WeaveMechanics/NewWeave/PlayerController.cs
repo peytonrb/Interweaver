@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -44,11 +45,12 @@ public class PlayerController : MonoBehaviour
     //new variables
     public bool inRelocateMode;
     public bool inCombineMode;
-    public bool uninteract;
+    public bool uninteract = false;
     private IInteractable interactableObject;
     private GameObject wovenObject;
     [SerializeField] private float distanceBetween;
     public bool floatingIslandCrystal = false; // used by input manager
+    [HideInInspector] public bool inCutscene;
 
     [Header("VFX")]
     [CannotBeNullObjectField] public GameObject weaveSpawn;   //  WILL BE ASSIGNED AT RUNTIME ONCE SCRIPTS ARE FINALIZED
@@ -100,6 +102,8 @@ public class PlayerController : MonoBehaviour
         inCombineMode = false;
         inRelocateMode = false;
         interactInput = false;
+
+        inCutscene = movementScript.inCutscene;
     }
 
     void Update()
@@ -150,14 +154,15 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-
             // snap weave - uninteract set by InputManager
-            if (uninteract)
+            if (uninteract && isCurrentlyWeaving)
             {
                 Uninteract();
                 
                 weaveVisualizer.DisableWeave();
             }
+
+            inCutscene = movementScript.inCutscene;
 
         }
     }
@@ -187,7 +192,7 @@ public class PlayerController : MonoBehaviour
                 isCurrentlyWeaving = true;               
                 interactableObject.Interact();
                 inRelocateMode = true;
-                characterAnimationHandler.ToggleWeaveAnim(isWeaving);
+                //characterAnimationHandler.ToggleWeaveAnim(isWeaving);
                 interactableObject.Relocate();
                 relocateMode.SetActive(true); // on-screen ui
             }
@@ -201,6 +206,7 @@ public class PlayerController : MonoBehaviour
     {
         // vfx
         weaveVisualizer.ActivateWeave();
+
         // Audio
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startWeaveClip);
 
@@ -208,7 +214,6 @@ public class PlayerController : MonoBehaviour
         AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingIntroClip);
         yield return new WaitForSeconds(.732f);
         AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingLoopClip);
-        Debug.Log("SOUND PLAYED");
         yield break;
     }
 
@@ -244,7 +249,7 @@ public class PlayerController : MonoBehaviour
         {
             interactableObject.Uninteract();
             interactableObject = null;
-            characterAnimationHandler.ToggleWeaveAnim(isWeaving);
+            //characterAnimationHandler.ToggleWeaveAnim(isWeaving);
             StartCoroutine(EndWeaveAudio());
             relocateMode.SetActive(false); // on screen ui
             combineMode.SetActive(false); // on screen ui
@@ -254,6 +259,7 @@ public class PlayerController : MonoBehaviour
             isCurrentlyWeaving = false;
         }        
     }
+
     public void ControllerAimTargetter(Vector2 lookDir)
     {
         if (lookDir.magnitude >= 0.1f)
@@ -330,7 +336,7 @@ public class PlayerController : MonoBehaviour
     public void Possession()
     {
         //Move character only if they are on the ground
-        if (characterController.isGrounded && Time.timeScale != 0 && canSwitch)
+        if (characterController.isGrounded && Time.timeScale != 0 && !inCutscene && canSwitch)
         {
             if (possessing == false)
             {
@@ -343,6 +349,11 @@ public class PlayerController : MonoBehaviour
                 AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, possessionClip);
             }
         }
+    }
+
+    public void SetNewPosition(Vector3 newposition, Quaternion newrotation) {
+        transform.position = newposition;
+        transform.rotation = newrotation;
     }
 
     public void Death()

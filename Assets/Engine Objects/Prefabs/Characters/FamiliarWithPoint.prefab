@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d81c3474ba536648af37971310067f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canMove: 1
   speed: 10
   gravity: -3
   aerialControl: 1
@@ -107,10 +108,11 @@ MonoBehaviour:
   cam: {fileID: 0}
   virtualCam: {fileID: 0}
   active: 0
-  footStepsClip: {fileID: 8300000, guid: 663366ba68b83cb4a855b0d0f0386021, type: 3}
-  weaverFallClip: {fileID: 8300000, guid: 0c0ad9dab261f8b41aa585839053f8a9, type: 3}
-  owlGlideClip: {fileID: 8300000, guid: 0c0ad9dab261f8b41aa585839053f8a9, type: 3}
-  owlDiveClip: {fileID: 8300000, guid: 01ecb967191ca63479df2b7dff86f298, type: 3}
+  footStepsClip: {fileID: 8300000, guid: 6112a6d22da114246a8b5678954b8941, type: 3}
+  weaverFallClip: {fileID: 8300000, guid: 4d89867d6ad72cb45affd75ee71c73f8, type: 3}
+  owlGlideClip: {fileID: 8300000, guid: 4d89867d6ad72cb45affd75ee71c73f8, type: 3}
+  owlDiveClip: {fileID: 8300000, guid: 440835242e5e14f489812588da29266e, type: 3}
+  inCutscene: 0
 --- !u!114 &561915622479374034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5386,7 +5388,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1225094661847680020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 890dd20412d5884438309ed20a9530ca, type: 3}
+  m_Script: {fileID: 11500000, guid: a57eab0c7adfe05469eedb310755a0d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &1894812260599652014 stripped

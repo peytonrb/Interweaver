@@ -10,6 +10,8 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
     public bool isZaxisTrigger; //If false, then its an X axis trigger
     public bool goingOppositeDirection;
     public Transform weaverTransform; //Put only the weaver's transform
+    public Transform familiarTransform; //Put only the familiar's transform
+    private FamiliarScript familiarScript; 
     [Header("Cutscene")]
     [CannotBeNullObjectField] public GameObject[] cutsceneManager; //Set to 0 if there are no cutscenes
     [HideInInspector]
@@ -18,6 +20,9 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
     public void Awake()
     {
         weaverTransform = FindObjectOfType<PlayerController>().GetComponent<Transform>();
+        familiarTransform = FindObjectOfType<FamiliarScript>().GetComponent<Transform>();
+        familiarScript = FindObjectOfType<FamiliarScript>().GetComponent<FamiliarScript>();
+
     }
 
     public void OnTrigEnter(Collider other)
@@ -39,86 +44,229 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
     public void OnTrigExit(Collider other)
     {
          if (other.gameObject.tag == "CameraTrigger")
-        {
-            if (!isZaxisTrigger) {
-                if (!goingOppositeDirection) {
-                    if (transform.position.x > weaverTransform.position.x) {
-                        //Enter from north
-                        enteredFromNorth = true;
+         {
+            //WEAVER
+            if (!familiarScript.myTurn)
+            {
+                if (!isZaxisTrigger)
+                {
+                    if (!goingOppositeDirection)
+                    {
+                        if (transform.position.x > weaverTransform.position.x)
+                        {
+                            //Enter from north
+                            enteredFromNorth = true;
+                        }
+                        else
+                        {
+                            enteredFromNorth = false;
+                        }
                     }
-                    else {
-                        enteredFromNorth = false;
+                    else
+                    {
+                        if (transform.position.x > weaverTransform.position.x)
+                        {
+                            //Enter from north
+                            enteredFromNorth = false;
+                        }
+                        else
+                        {
+                            enteredFromNorth = true;
+                        }
                     }
                 }
-                else {
-                    if (transform.position.x > weaverTransform.position.x) {
-                        //Enter from north
-                        enteredFromNorth = false;
+                else
+                {
+                    if (!goingOppositeDirection)
+                    {
+                        if (transform.position.z > weaverTransform.position.z)
+                        {
+                            enteredFromNorth = false;
+                        }
+                        else
+                        {
+                            enteredFromNorth = true;
+                        }
                     }
-                    else {
-                        enteredFromNorth = true;
+                    else
+                    {
+                        if (transform.position.z > weaverTransform.position.z)
+                        {
+                            enteredFromNorth = true;
+                        }
+                        else
+                        {
+                            enteredFromNorth = false;
+                        }
                     }
-                }   
+
+                }
+                if (isZaxisTrigger)
+                {
+                    if (!goingOppositeDirection)
+                    {
+                        if (!triggered && enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                        }
+                        else if (triggered && !enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                        }
+                    }
+                    else
+                    {
+                        if (triggered && !enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                        }
+                        else if (!triggered && enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                        }
+                    }
+
+                }
+                else
+                {
+                    if (!goingOppositeDirection)
+                    {
+                        if (!triggered && enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                        }
+                        else if (triggered && !enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                        }
+                    }
+                    else
+                    {
+                        if (triggered && !enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                        }
+                        else if (!triggered && enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                        }
+                    }
+
+                }
             }
-            else {
-                if (!goingOppositeDirection) {
-                    if (transform.position.z > weaverTransform.position.z) {
-                        enteredFromNorth = false;
+            //FAMILIAR
+            else
+            {
+                if (!isZaxisTrigger)
+                {
+                    if (!goingOppositeDirection)
+                    {
+                        if (transform.position.x > familiarTransform.position.x)
+                        {
+                            //Enter from north
+                            enteredFromNorth = true;
+                        }
+                        else
+                        {
+                            enteredFromNorth = false;
+                        }
                     }
-                    else {
-                        enteredFromNorth = true;
+                    else
+                    {
+                        if (transform.position.x > familiarTransform.position.x)
+                        {
+                            //Enter from north
+                            enteredFromNorth = false;
+                        }
+                        else
+                        {
+                            enteredFromNorth = true;
+                        }
                     }
                 }
-                else {
-                    if (transform.position.z > weaverTransform.position.z) {
-                        enteredFromNorth = true;
+                else
+                {
+                    if (!goingOppositeDirection)
+                    {
+                        if (transform.position.z > familiarTransform.position.z)
+                        {
+                            enteredFromNorth = false;
+                        }
+                        else
+                        {
+                            enteredFromNorth = true;
+                        }
                     }
-                    else {
-                        enteredFromNorth = false;
+                    else
+                    {
+                        if (transform.position.z > familiarTransform.position.z)
+                        {
+                            enteredFromNorth = true;
+                        }
+                        else
+                        {
+                            enteredFromNorth = false;
+                        }
                     }
+
                 }
-                
+                if (isZaxisTrigger)
+                {
+                    if (!goingOppositeDirection)
+                    {
+                        if (!triggered && enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        }
+                        else if (triggered && !enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        }
+                    }
+                    else
+                    {
+                        if (triggered && !enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        }
+                        else if (!triggered && enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        }
+                    }
+
+                }
+                else
+                {
+                    if (!goingOppositeDirection)
+                    {
+                        if (!triggered && enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        }
+                        else if (triggered && !enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        }
+                    }
+                    else
+                    {
+                        if (triggered && !enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        }
+                        else if (!triggered && enteredFromNorth)
+                        {
+                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                        }
+                    }
+
+                }
             }
-            if (isZaxisTrigger) {
-                if (!goingOppositeDirection) {
-                    if (!triggered && enteredFromNorth) {
-                        CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
-                    }
-                    else if (triggered && !enteredFromNorth) {
-                        CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
-                    }
-                }
-                else {
-                    if (triggered && !enteredFromNorth) {
-                        CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
-                    }
-                    else if (!triggered && enteredFromNorth) {
-                        CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
-                    }
-                }
-                
-            }
-            else {
-                if (!goingOppositeDirection) {
-                    if (!triggered && enteredFromNorth) {
-                        CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
-                    }
-                    else if (triggered && !enteredFromNorth) {
-                        CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
-                    }
-                }
-                else {
-                    if (triggered && !enteredFromNorth) {
-                        CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
-                    }
-                    else if (!triggered && enteredFromNorth) {
-                        CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
-                    }
-                }
-                
-            } 
-        }
-        
-       //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
+
+            //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
+         }
     }
+
+         
 }
