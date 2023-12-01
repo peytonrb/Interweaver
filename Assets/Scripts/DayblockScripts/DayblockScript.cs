@@ -48,11 +48,15 @@ public class DayblockScript : MonoBehaviour
                                     case 1:
                                         {
                                             CallTheManager(managerCall.incorrect, weaveScript, 0);
+                                            other.gameObject.GetComponent<WeaveableNew>().Uninteract();
+                                            other.transform.position = new Vector3(99999f, -50, 0f);
                                             break;
                                         }
                                     case 2:
                                         {
                                             CallTheManager(managerCall.incorrect, weaveScript, 0);
+                                            other.gameObject.GetComponent<WeaveableNew>().Uninteract();
+                                            other.transform.position = new Vector3(99999f, -50, 0f);
                                             break;
                                         }
                                 }
@@ -66,7 +70,8 @@ public class DayblockScript : MonoBehaviour
                                     case 0:
                                         {
                                             CallTheManager(managerCall.incorrect, weaveScript, 1);
-                                            Debug.Log("send help");
+                                            other.gameObject.GetComponent<WeaveableNew>().Uninteract();
+                                            other.transform.position = new Vector3(99999f, -50, 0f);
                                             break;
                                         }
                                     case 1:
@@ -80,6 +85,8 @@ public class DayblockScript : MonoBehaviour
                                     case 2:
                                         {
                                             CallTheManager(managerCall.incorrect, weaveScript, 1);
+                                            other.gameObject.GetComponent<WeaveableNew>().Uninteract();
+                                            other.transform.position = new Vector3(99999f, -50, 0f);
                                             break;
                                         }
                                 }
@@ -93,11 +100,15 @@ public class DayblockScript : MonoBehaviour
                                     case 0:
                                         {
                                             CallTheManager(managerCall.incorrect, weaveScript, 2);
+                                            other.gameObject.GetComponent<WeaveableNew>().Uninteract();
+                                            other.transform.position = new Vector3(99999f, -50, 0f);
                                             break;
                                         }
                                     case 1:
                                         {
                                             CallTheManager(managerCall.incorrect, weaveScript, 2);
+                                            other.gameObject.GetComponent<WeaveableNew>().Uninteract();
+                                            other.transform.position = new Vector3(99999f, -50, 0f);
                                             break;
                                         }
                                     case 2:
@@ -119,8 +130,6 @@ public class DayblockScript : MonoBehaviour
 
     public void CallTheManager(managerCall callType, WeaveableNew weaveScript, int correctKey = 0)
     {
-
-
         switch (callType)
         {
             case managerCall.correct:
@@ -130,6 +139,7 @@ public class DayblockScript : MonoBehaviour
                 }
             case managerCall.incorrect:
                 {
+                    dpm.GotCombination(correctKey, weaveScript, false);
                     dpm.FailPuzzle(correctKey, weaveScript);
                     break;
                 }
