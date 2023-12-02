@@ -41,6 +41,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameObject TargetingArrow;
     private Vector3 worldPosition;
+    [SerializeField]
+    private LayerMask targetingLayerMask;
+
 
     //new variables
     public bool inRelocateMode;
@@ -290,7 +293,7 @@ public class PlayerController : MonoBehaviour
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitData;
-        if (Physics.Raycast(ray, out hitData, 1000))
+        if (Physics.Raycast(ray, out hitData, 1000, targetingLayerMask))
         {
             worldPosition = hitData.point;
         }

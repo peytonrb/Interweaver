@@ -9,7 +9,7 @@ public class RespawnController : MonoBehaviour
     [SerializeField] private List<Quaternion> startRotations;
     [SerializeField] private List<GameObject> respawnObjects;
 
-    private void OnTriggerEnter(Collider collider)
+    private void OnTriggerExit(Collider collider)
     {
         // clear past storage
         startPositions.Clear();
