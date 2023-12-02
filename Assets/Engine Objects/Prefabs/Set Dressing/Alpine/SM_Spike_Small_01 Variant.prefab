@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 184c7fe3ee443f642847568d2173bb14, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 184c7fe3ee443f642847568d2173bb14, type: 3}
       propertyPath: m_LocalPosition.x
@@ -52,9 +52,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 184c7fe3ee443f642847568d2173bb14, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 184c7fe3ee443f642847568d2173bb14, type: 3}
       propertyPath: m_Name
       value: SM_Spike_Small_01 Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 184c7fe3ee443f642847568d2173bb14, type: 3}
+      propertyPath: m_TagString
+      value: Kill Area
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -84,7 +92,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
