@@ -328,7 +328,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     {
         if (isWoven)
         {
-            Debug.Log("ahduiasbsayuffbslafyb");
             player.floatingIslandCrystal = false;
             rb.isKinematic = false;
             rb.useGravity = true;

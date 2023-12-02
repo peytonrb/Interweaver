@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour
     [Header("Movement Variables")]
     private CharacterController characterController;
     private MovementScript movementScript;
-    public bool canSwitch = true; // is the weaver allowed to switch 
     private bool possessing;
 
     [Header("Character's Camera")]
@@ -338,11 +337,14 @@ public class PlayerController : MonoBehaviour
 
     public void Possession()
     {
+        Debug.Log("Wahoo");
         //Move character only if they are on the ground
-        if (characterController.isGrounded && Time.timeScale != 0 && !inCutscene && canSwitch)
+        if (characterController.isGrounded && Time.timeScale != 0 && !inCutscene)
         {
+            Debug.Log("Yippeeee!");
             if (possessing == false)
             {
+                Debug.Log("Hotdog!");
                 //Switches to Familiar
                 CameraMasterScript.instance.SwitchToFamiliarCamera();
                 possessing = true;
