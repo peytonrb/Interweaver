@@ -13,13 +13,12 @@ public class InputManagerScript : MonoBehaviour
 {
     public GameObject player;
     public GameObject familiar;
+    public bool canSwitch = true; // bool which determines if possession can occur
     public Vector2 movement;
     public Vector2 weaveCursor;
     public bool switching;
     public GameObject pauseScreen;
     private PauseScript pauseScript;
-    //private bool usingController;
-
     public static InputManagerScript instance;
 
     public bool isGamepad = false;
@@ -71,7 +70,6 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnWeaverMove(InputValue input)
     {
-        //Debug.Log("why");
         movement = input.Get<Vector2>();
         MovementScript movementScript = player.GetComponent<MovementScript>();
         movementScript.LookAndMove();
@@ -221,17 +219,21 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnPossessFamiliar(InputValue input)
     {
+        if (input.isPressed)
+        {
+            PossessFamiliar();
+        }
+    }
+
+    public void PossessFamiliar()
+    {
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
         CharacterController playerCharacterController = player.GetComponent<CharacterController>();
 
-        if (input.isPressed)
+        if (!familiarScript.myTurn && !playerScript.isCurrentlyWeaving && playerCharacterController.isGrounded && !playerScript.inCutscene && canSwitch)
         {
-            if (!familiarScript.myTurn && !playerScript.isCurrentlyWeaving && playerCharacterController.isGrounded && !playerScript.inCutscene)
-            {
-                playerScript.Possession();
-                playerInput.SwitchCurrentActionMap("Familiar");
-                Debug.Log(playerInput.currentActionMap);
-            }
+            playerScript.Possession();
+            playerInput.SwitchCurrentActionMap("Familiar");
         }
     }
 
@@ -239,14 +241,18 @@ public class InputManagerScript : MonoBehaviour
     {
         if (input.isPressed)
         {
-            FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
-            CharacterController familiarCharacterController = familiar.GetComponent<CharacterController>();
-            if (familiarScript.myTurn && familiarCharacterController.isGrounded)
-            {
-                familiarScript.Depossess();
-                playerInput.SwitchCurrentActionMap("Weaver");
-                Debug.Log(playerInput.currentActionMap);
-            }
+            PossessWeaver();
+        }
+    }
+
+    public void PossessWeaver()
+    {
+        FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
+        CharacterController familiarCharacterController = familiar.GetComponent<CharacterController>();
+        if (familiarScript.myTurn && familiarCharacterController.isGrounded && canSwitch)
+        {
+            familiarScript.Depossess();
+            playerInput.SwitchCurrentActionMap("Weaver");
         }
     }
 

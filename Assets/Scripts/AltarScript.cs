@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class AltarScript : MonoBehaviour
 {
     [Header("References")]
-    private CameraMasterScript cameraMasterScript;
+    [SerializeField] private CutsceneManagerScript cutsceneManagerScript;
+    [SerializeField] private InputManagerScript inputManagerScript;
     private FamiliarScript familiarScript;
     private PlayerController playerController;
     
@@ -22,11 +24,10 @@ public class AltarScript : MonoBehaviour
 
     void Start()
     {
-        cameraMasterScript = GameObject.FindGameObjectWithTag("CameraMaster").GetComponent<CameraMasterScript>();
         familiarScript = GameObject.FindGameObjectWithTag("Familiar").GetComponent<FamiliarScript>();
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
-        if (!cameraMasterScript || !familiarScript || !playerController)
+        if (!cutsceneManagerScript || !familiarScript || !playerController || !inputManagerScript)
         {
             Debug.LogWarning("Required scripts for Orb Altar not present and/or fucky, disabling myself!");
             gameObject.SetActive(false);
@@ -36,11 +37,10 @@ public class AltarScript : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
+        playerController.Uninteract();
+        inputManagerScript.canSwitch = false;
         if (collider.gameObject.CompareTag("Altar Orb"))
         {   
-            familiarScript.canSwitch = false;
-            playerController.canSwitch = false;
-            playerController.Uninteract();
             if (collider.GetComponent<Rigidbody>())
             {
                 collider.GetComponent<Rigidbody>().isKinematic = true;
@@ -99,8 +99,9 @@ public class AltarScript : MonoBehaviour
 
     private void PlayCutscene()
     {
-        playerController.canSwitch = true;
-        playerController.Possession();
-        playerController.canSwitch = false;
+        inputManagerScript.canSwitch = true;
+        //cutsceneManagerScript.StartCutscene(); WE DO CUTSCENE STUFF HERE BUT I'M COMMENTING TO AVOID FUCKERY
+        inputManagerScript.PossessFamiliar();
+        inputManagerScript.canSwitch = false;
     }
 }
