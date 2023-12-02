@@ -31,78 +31,6 @@ Transform:
   m_Father: {fileID: 5922105363729870760}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2011340077047560329
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1198355447777704334}
-  - component: {fileID: 2979286356937992213}
-  - component: {fileID: 1036032917614983419}
-  m_Layer: 0
-  m_Name: Altar Cutscene Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1198355447777704334
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2011340077047560329}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5522689537635975375}
-  m_Father: {fileID: 5922105363729870760}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2979286356937992213
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2011340077047560329}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f7eaa7b428cc2840b15b87fca41f081, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cutsceneCams: []
-  cutsceneTrigger: {fileID: 8455461811030350940}
-  player: {fileID: 0}
-  usingCutsceneWeaver: 0
-  cutsceneWeaver: {fileID: 0}
-  useTransitions: 1
-  transitionSpeed: 0
-  cutsceneCanvas: {fileID: 0}
-  blackPanel: {fileID: 0}
---- !u!320 &1036032917614983419
-PlayableDirector:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2011340077047560329}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_PlayableAsset: {fileID: 0}
-  m_InitialState: 0
-  m_WrapMode: 2
-  m_DirectorUpdateMode: 1
-  m_InitialTime: 0
-  m_SceneBindings: []
-  m_ExposedReferences:
-    m_References: []
 --- !u!1 &3413727236856933992
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,12 +62,11 @@ Transform:
   m_LocalScale: {x: 2.1513398, y: 3.8984427, z: 2.1513398}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1198355447777704334}
   - {fileID: 347095629344969679}
   - {fileID: 4353588769158304307}
   - {fileID: 5635248511748192507}
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &7097219307413209165
 BoxCollider:
@@ -195,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c519b98c5365576419509936f4286437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cutsceneManagerScript: {fileID: 2979286356937992213}
+  cutsceneManager: {fileID: 0}
   inputManagerScript: {fileID: 0}
   orbSnapPoint: {fileID: 4353588769158304307}
   orbSnapSpeed: 10
@@ -234,59 +161,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   owlTeleportPoint: {fileID: 5635248511748192507}
   teleportWaitTime: 0
---- !u!1 &8455461811030350940
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5522689537635975375}
-  - component: {fileID: 6683445277346635454}
-  m_Layer: 0
-  m_Name: Cutscene Index
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5522689537635975375
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8455461811030350940}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1198355447777704334}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6683445277346635454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8455461811030350940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e72118ee275ae3d45b39a2e5b26bb3a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraIndex: 0
-  triggered: 0
-  isLoop: 0
-  isZaxisTrigger: 0
-  goingOppositeDirection: 0
-  weaverTransform: {fileID: 0}
-  familiarTransform: {fileID: 0}
-  cutsceneManager: []
-  enteredFromNorth: 0
 --- !u!1 &8778264859193373347
 GameObject:
   m_ObjectHideFlags: 0

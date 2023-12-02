@@ -7,7 +7,8 @@ using UnityEngine.InputSystem;
 public class AltarScript : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private CutsceneManagerScript cutsceneManagerScript;
+    public GameObject cutsceneManager;
+    private CutsceneManagerScript cutsceneManagerScript;
     [SerializeField] private InputManagerScript inputManagerScript;
     private FamiliarScript familiarScript;
     private PlayerController playerController;
@@ -26,6 +27,7 @@ public class AltarScript : MonoBehaviour
     {
         familiarScript = GameObject.FindGameObjectWithTag("Familiar").GetComponent<FamiliarScript>();
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        cutsceneManagerScript = cutsceneManager.GetComponent<CutsceneManagerScript>();
 
         if (!cutsceneManagerScript || !familiarScript || !playerController || !inputManagerScript)
         {
@@ -100,7 +102,7 @@ public class AltarScript : MonoBehaviour
     private void PlayCutscene()
     {
         inputManagerScript.canSwitch = true;
-        //cutsceneManagerScript.StartCutscene(); WE DO CUTSCENE STUFF HERE BUT I'M COMMENTING TO AVOID FUCKERY
+        cutsceneManagerScript.StartCutscene();
         inputManagerScript.PossessFamiliar();
         inputManagerScript.canSwitch = false;
     }

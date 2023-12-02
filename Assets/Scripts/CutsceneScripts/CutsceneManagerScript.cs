@@ -12,7 +12,6 @@ public class CutsceneManagerScript : MonoBehaviour
     public GameObject cutsceneTrigger;
     private bool isCutscene;
     private int cutscenePhase;
-    private BoxCollider bc;
     private float lerpval;
     private PlayableDirector director;
 
@@ -45,7 +44,6 @@ public class CutsceneManagerScript : MonoBehaviour
         
         playerMovementScript = player.GetComponent<MovementScript>();
         director = GetComponent<PlayableDirector>();
-        bc = GetComponentInChildren<BoxCollider>();
 
         isCutscene = false;
         isTransitioning = false;
@@ -153,16 +151,14 @@ public class CutsceneManagerScript : MonoBehaviour
     }
 
     public void StartCutscene() {
-        if (bc.isTrigger) {
-            isCutscene = true;
-            playerMovementScript.inCutscene = true;
-            if (useTransitions) {
-                cutsceneCanvas.SetActive(true);
-            }
+        isCutscene = true;
+        playerMovementScript.inCutscene = true;
+        if (useTransitions) {
+            cutsceneCanvas.SetActive(true);
+        }
             
-            if (usingCutsceneWeaver) {
-                cutsceneWeaver.SetActive(true);
-            }
+        if (usingCutsceneWeaver) {
+            cutsceneWeaver.SetActive(true);
         }
     }
 
@@ -186,7 +182,7 @@ public class CutsceneManagerScript : MonoBehaviour
         if (usingCutsceneWeaver) {
             cutsceneWeaver.SetActive(false);
         }
-        //player.SetActive(true);
+        
         playerMovementScript.inCutscene = false;
 
         cutscenePhase += 1;
