@@ -37,6 +37,7 @@ public class MovementScript : MonoBehaviour
     private float originalTerminalVelocity; // original terminal velocity of the controller
     public Vector3 bounceVector; //max velocity for bounce
     public float bounceValue = 3;
+    private bool isNearGround;
 
     //private bool bouncing = false;
 
@@ -195,7 +196,6 @@ public class MovementScript : MonoBehaviour
                     }
                     else
                     {
-
                         if (TryGetComponent<OwlDiveScript>(out OwlDiveScript diveScript) && diveScript.isDiving && canPlayFallAudio)
                         {
                             if (!AudioManager.instance.fallChannel.isPlaying || AudioManager.instance.fallChannel.clip != owlDiveClip && canPlayFallAudio)
@@ -222,6 +222,7 @@ public class MovementScript : MonoBehaviour
                     AudioManager.instance.StopSound(AudioManagerChannels.fallLoopChannel);
                     velocity.y = -2f;
                 }
+
                 velocity.y = Mathf.Clamp(velocity.y, terminalVelocity, 200f);
 
                 if (speedLinesVFX != null)

@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class NPCInteractionScript : MonoBehaviour
 {
+    public float proximity = 5f;
+
     public void Interact()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, 10f); // second number is radius of sphere
+        Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, proximity); // second number is radius of sphere
         foreach (var hitCollider in hitColliders)
         {
             if (hitCollider.gameObject.tag == "NPC")
