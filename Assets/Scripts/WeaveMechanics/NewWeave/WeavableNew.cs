@@ -79,13 +79,16 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         Debug.Log(GameObject.FindGameObjectWithTag("Player").name);
         weaveableScript = gameObject.GetComponent<WeaveableNew>();
+
         if (dayblockPuzzle != null)
         {
             dpm = dayblockPuzzle.GetComponent<DayblockPuzzleManager>();
         }
+
         isCombined = false;
         onFloatingIsland = false;
         originalMat = gameObject.GetComponent<Renderer>().material;
+
         if (canBeRelocated)
         {
             TargetingArrow.SetActive(false);
@@ -227,6 +230,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                         lastDistance = Vector3.Distance(hit.transform.position, transform.position);
                     }
                 }
+
                 SetControllerCombineable(hitCol);
             }
         }
@@ -338,7 +342,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             startFloating = false;
             canRotate = false;
             
-            if (rb.gameObject.tag != "FloatingIsland")
+            if (rb.gameObject.tag != "FloatingIsland" && rb.gameObject.tag != "Breakable")
             {
                 rb.constraints = RigidbodyConstraints.None;
             }
@@ -440,12 +444,12 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         canRotate = false;
         weaveableScript.rb.useGravity = true;
 
-        if (rb.gameObject.tag != "FloatingIsland")
+        if (rb.gameObject.tag != "FloatingIsland" && rb.gameObject.tag != "Breakable")
         {
             rb.constraints = RigidbodyConstraints.None;
+            weaveableScript.rb.freezeRotation = false;
         }
 
-        weaveableScript.rb.freezeRotation = false;
         player.inRelocateMode = false;
         player.inCombineMode = false;
 

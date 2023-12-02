@@ -40,6 +40,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameObject TargetingArrow;
     private Vector3 worldPosition;
+    [SerializeField]
+    private LayerMask targetingLayerMask;
+
 
     //new variables
     public bool inRelocateMode;
@@ -289,7 +292,7 @@ public class PlayerController : MonoBehaviour
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitData;
-        if (Physics.Raycast(ray, out hitData, 1000))
+        if (Physics.Raycast(ray, out hitData, 1000, targetingLayerMask))
         {
             worldPosition = hitData.point;
         }
@@ -361,6 +364,7 @@ public class PlayerController : MonoBehaviour
     public void Death()
     {
         transform.position = GM.WeaverCheckPointPos;
+        CameraMasterScript.instance.WeaverCameraReturnOnDeath(CameraMasterScript.instance.lastWeaverCameraTriggered);
 
         if (GM.WeaverCheckPointNum == 0) // first checkpoint in shield puzzle - should also specify scene
         {
