@@ -305,6 +305,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         // if objects are combined, vfx needs to show up for both
         if (this.isCombined)
         {
+            isParent = true;
+            parentWeaveable = this.GetComponent<WeaveableNew>();
+
             foreach (WeaveableNew weaveable in parentWeaveable.wovenObjects)
             {
                 player.weaveVisualizer.WeaveableSelected(weaveable.gameObject);
@@ -465,6 +468,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         Snapping();
 
         wovenObjects.Add(weaveableScript);
+        weaveableScript.wovenObjects.AddRange(parentWeaveable.wovenObjects);
 
         weaveableScript.rb.useGravity = false;
 
