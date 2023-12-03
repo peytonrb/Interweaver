@@ -27,7 +27,9 @@ public class MovementScript : MonoBehaviour
     private float acceleration;
     private float deceleration;
     [SerializeField][Range(1f, 20f)] private float groundAcceleration; // ground acceleration of the controller
+    private float originalGroundAcceleration;
     [SerializeField][Range(1f, 30f)] private float groundDeceleration; // ground deceleration of the controller
+    private float originalGroundDeceleration;
     [SerializeField][Range(0f, 20f)] private float aerialAcceleration; // aerial horizontal acceleration of the controller
     private float originalAerialAcceleration;
     [SerializeField][Range(0f, 30f)] private float aerialDeceleration; // aerial horizontal deceleration of the controller
@@ -80,6 +82,8 @@ public class MovementScript : MonoBehaviour
     void Start()
     {
         rotationSpeed = 0.1f;
+        originalGroundAcceleration = groundAcceleration;
+        originalGroundDeceleration = groundDeceleration;
         originalGravity = gravity; // get original gravity of controller
         originalTerminalVelocity = terminalVelocity; // get original terminal velocity of controller
         originalAerialAcceleration = aerialAcceleration;
@@ -269,6 +273,22 @@ public class MovementScript : MonoBehaviour
         }
     }
 
+    // CORE VARIABLE MODS--------------------------------------------------------
+
+    public void HardResetMovementStats()
+    {
+        //velocity
+        velocity = Vector3.zero;
+        //ground
+        groundAcceleration = originalGroundAcceleration;
+        groundDeceleration = originalGroundDeceleration;
+        // aerial
+        terminalVelocity = originalTerminalVelocity;
+        ResetAerialAcceleration();
+        ResetAerialDeceleration();
+        ResetGravity();
+    }
+
     public void ChangeAerialAcceleration(float newAerialAcceleration)
     {
         aerialAcceleration = newAerialAcceleration;
@@ -289,6 +309,11 @@ public class MovementScript : MonoBehaviour
         aerialDeceleration = originalAerialDeceleration;
     }
 
+    public float GetGravity()
+    {
+        return gravity;
+    }
+
     public void ChangeGravity(float newGravity) // changes gravity to new value
     {
         gravity = newGravity;
@@ -297,11 +322,6 @@ public class MovementScript : MonoBehaviour
     public void ResetGravity() // resets gravity to original value
     {
         gravity = originalGravity;
-    }
-
-    public float GetGravity()
-    {
-        return gravity;
     }
 
     public void ResetVelocityY()
@@ -324,18 +344,6 @@ public class MovementScript : MonoBehaviour
     {
         return velocity;
     }
-
-    public void Bounce()
-    {
-        ResetGravity();
-        ResetTerminalVelocity();
-        ResetAerialAcceleration();
-        ResetAerialDeceleration();
-        ResetVelocityY();
-        GetComponent<OwlDiveScript>().startDiveCooldown(.1f);
-        //characterController.Move(bounceVector);
-    }
-
 
     public void ResetTerminalVelocity() // resets terminal velocity to original value
     {
@@ -360,6 +368,19 @@ public class MovementScript : MonoBehaviour
         return terminalVelocity;
     }
 
+    // -------------------------------------------------------------------
+
+    public void Bounce()
+    {
+        ResetGravity();
+        ResetTerminalVelocity();
+        ResetAerialAcceleration();
+        ResetAerialDeceleration();
+        ResetVelocityY();
+        GetComponent<OwlDiveScript>().startDiveCooldown(.1f);
+        //characterController.Move(bounceVector);
+    }
+
     public void GoToCheckPoint()
     {
         if (TryGetComponent<PlayerController>(out PlayerController playerCon))
@@ -371,7 +392,6 @@ public class MovementScript : MonoBehaviour
         {
             familiarScript.Death();
         }
-        
     }
 
     public IEnumerator DelayBeforeFallAudio()

@@ -337,14 +337,11 @@ public class PlayerController : MonoBehaviour
 
     public void Possession()
     {
-        Debug.Log("Wahoo");
         //Move character only if they are on the ground
         if (characterController.isGrounded && Time.timeScale != 0 && !inCutscene)
         {
-            Debug.Log("Yippeeee!");
             if (possessing == false)
             {
-                Debug.Log("Hotdog!");
                 //Switches to Familiar
                 CameraMasterScript.instance.SwitchToFamiliarCamera();
                 possessing = true;
@@ -365,6 +362,7 @@ public class PlayerController : MonoBehaviour
     {
         transform.position = GM.WeaverCheckPointPos;
         CameraMasterScript.instance.WeaverCameraReturnOnDeath(CameraMasterScript.instance.lastWeaverCameraTriggered);
+        movementScript.HardResetMovementStats();
 
         if (GM.WeaverCheckPointNum == 0) // first checkpoint in shield puzzle - should also specify scene
         {

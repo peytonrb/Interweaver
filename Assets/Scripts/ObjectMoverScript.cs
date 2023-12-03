@@ -14,6 +14,7 @@ public class ObjectMoverScript : MonoBehaviour
     private int nextWaypoint = 0; // the current target for the moving object
     [SerializeField][Range(1f, 50f)] private float speed = 2.0f; // speed of object
     [SerializeField] private bool active; // is the moving object active (currently moving)
+    private bool drawGizmos = true;
 
     [Header("Reverse Settings")]
     [SerializeField] private bool canReverse;
@@ -43,13 +44,22 @@ public class ObjectMoverScript : MonoBehaviour
             timeBeforeResuming = maxTimeBeforeResuming;
             StartCoroutine(WaitForCharacterOnObject());
         }
+
+        foreach(GameObject waypoint in waypoints) 
+        {
+            if (!waypoint)
+            {
+                Debug.LogWarning("One or more waypoint in a ObjectMoverScript is empty, delete empty waypoints in array or suffer my wrath");
+                gameObject.SetActive(false);
+            }
+        }
     }
     
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (active) // only iterate if object is active
+        if (active && waypoints.Length > 0) // only iterate if object is active
         {
             if (nextWaypoint < waypoints.Length && nextWaypoint >= 0)
             {
@@ -174,11 +184,19 @@ public class ObjectMoverScript : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        if (waypoints.Length > 0)
+        if (waypoints.Length > 0 && drawGizmos)
         {
             for (int i = 0; i < waypoints.Length - 1; i++)
             {
-                DrawArrow.ForGizmo(waypoints[i].transform.position, waypoints[i+1].transform.position - waypoints[i].transform.position, Color.red);
+                if (waypoints[i] || waypoints[i+1])
+                {
+                    DrawArrow.ForGizmo(waypoints[i].transform.position, waypoints[i+1].transform.position - waypoints[i].transform.position, Color.red);
+                }
+                else
+                {
+                    Debug.LogWarning("One or more waypoint in a ObjectMoverScript is empty, delete empty waypoints in array or suffer my wrath");
+                    drawGizmos = false;
+                }
             }
         }
     }
