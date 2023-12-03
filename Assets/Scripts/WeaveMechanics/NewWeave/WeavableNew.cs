@@ -383,13 +383,13 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             relocate = true;
             rb.isKinematic = false;
             canRotate = true;
-            //inWeaveMode = false;
+            inWeaveMode = false;
         }
 
-        if (inWeaveMode)
-        {
-            StartCoroutine(WeaveModeTimer());
-        }
+        //if (inWeaveMode)
+        //{
+        //    StartCoroutine(WeaveModeTimer());
+        //}
     }
 
     IEnumerator WeaveModeTimer() // sets variable after 1 second to account for combine - need this variable
