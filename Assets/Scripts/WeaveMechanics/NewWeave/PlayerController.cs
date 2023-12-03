@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float distanceBetween;
     public bool floatingIslandCrystal = false; // used by input manager
     [HideInInspector] public bool inCutscene;
+    [HideInInspector] public bool talkingToNPC;
 
     [Header("VFX")]
     [CannotBeNullObjectField] public GameObject weaveSpawn;   //  WILL BE ASSIGNED AT RUNTIME ONCE SCRIPTS ARE FINALIZED
@@ -104,6 +105,7 @@ public class PlayerController : MonoBehaviour
         inCombineMode = false;
         inRelocateMode = false;
         interactInput = false;
+        talkingToNPC = false;
 
         inCutscene = movementScript.inCutscene;
     }
@@ -111,7 +113,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // If game is not paused, return to normal movement functions
-        if (Time.timeScale != 0)
+        if (Time.timeScale != 0 && !talkingToNPC)
         {
             if (familiarScript.depossessing)
             {
@@ -338,7 +340,7 @@ public class PlayerController : MonoBehaviour
     public void Possession()
     {
         //Move character only if they are on the ground
-        if (characterController.isGrounded && Time.timeScale != 0 && !inCutscene)
+        if (characterController.isGrounded && Time.timeScale != 0 && !inCutscene && !talkingToNPC)
         {
             if (possessing == false)
             {

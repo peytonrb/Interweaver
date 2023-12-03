@@ -18,7 +18,7 @@ public class FamiliarScript : MonoBehaviour
     public bool leapOfFaith; //Determines if owl familiar is in a leap of faith 
     public bool familiarMovementAbility;//Only used for reading if familiar is using movemeny ability
     private bool insideTrigger;
-    
+    [HideInInspector] public bool talkingToNPC;
 
 
     [Header("character's camera")]
@@ -57,6 +57,7 @@ public class FamiliarScript : MonoBehaviour
         leapOfFaith = false;
         familiarMovementAbility = false;
         insideTrigger = false;
+        talkingToNPC = false;
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>(); 
@@ -70,7 +71,7 @@ public class FamiliarScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (myTurn) {
+        if (myTurn && !talkingToNPC) {
             if (Time.timeScale != 0) { 
                 
                 if (Input.GetKeyDown(KeyCode.Space)) //this is purely for testing the checkpoint function if it's working properly
@@ -159,7 +160,7 @@ public class FamiliarScript : MonoBehaviour
     }
 
     public void Depossess() {
-        if (myTurn && Time.timeScale != 0 && !islandisfalling) {
+        if (myTurn && Time.timeScale != 0 && !islandisfalling && !talkingToNPC) {
             //Move character only if they are on the ground or in leapOfFaith
             if (characterController.isGrounded || leapOfFaith) {     
                 if (!leapOfFaith) {

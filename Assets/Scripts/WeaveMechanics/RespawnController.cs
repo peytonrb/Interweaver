@@ -1,80 +1,110 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RespawnController : MonoBehaviour
 {
     [CannotBeNullObjectField] public List<GameObject> shieldPuzzleWeaveables;
+    [SerializeField] private List<GameObject> myRespawnables;
     [SerializeField] private List<Vector3> startPositions;
     [SerializeField] private List<Quaternion> startRotations;
-    [SerializeField] private List<GameObject> respawnObjects;
 
-    private void OnTriggerExit(Collider collider)
+
+    [SerializeField] private LayerMask layersToCheck;
+    [SerializeField] private Vector3 boxCastHalfExtent;
+    
+
+    public List<GameObject> rayList;
+
+    private float timeBeforeCheck = 3;
+
+    public void Start()
     {
-        // clear past storage
-        startPositions.Clear();
-        startRotations.Clear();
-        respawnObjects.Clear();
+        rayList = new List<GameObject>();
+        myRespawnables = new List<GameObject>();
 
-        if (collider.gameObject.GetComponent<WeaveableNew>() != null)
+
+        RaycastHit[] hits = Physics.BoxCastAll(transform.position, boxCastHalfExtent, transform.up, transform.rotation, layersToCheck);
+
+        foreach(RaycastHit hit in hits) 
         {
-            WeaveableNew weaveableObject = collider.gameObject.GetComponent<WeaveableNew>();
-
-            if (weaveableObject.isCombined)
+            if (!hit.collider.CompareTag("FloatingIsland") && hit.collider.GetComponent<WeaveableNew>() != null)
             {
-                Debug.Log("object: " + weaveableObject + " count: " + weaveableObject.wovenObjects.Count);
-                for (int i = 0; i < weaveableObject.wovenObjects.Count; i++)
+                myRespawnables.Add(hit.collider.gameObject);
+                startPositions.Add(hit.collider.gameObject.transform.position);
+                startRotations.Add(hit.collider.gameObject.transform.rotation);
+            }
+        }
+    }
+
+    public void Update()
+    {
+        timeBeforeCheck -= Time.deltaTime;
+
+        if (timeBeforeCheck < 0)
+        {
+            //Check here
+            CheckAndRespawnWeaveables();
+            timeBeforeCheck = 3;
+        }
+    }
+
+    public void CheckAndRespawnWeaveables()
+    {
+        rayList.Clear();
+
+        Debug.Log("called");
+        RaycastHit[] hits = Physics.BoxCastAll(transform.position, boxCastHalfExtent, transform.up, transform.rotation, layersToCheck);
+
+        rayList = new List<GameObject>(myRespawnables);
+        
+        //remove elements that are still found in the box
+        foreach (RaycastHit hit in hits)
+        {
+            
+            foreach (GameObject obj in myRespawnables)
+            {
+                
+                if (hit.collider.gameObject == obj)
                 {
-                    startPositions.Add(weaveableObject.wovenObjects[i].startPos);
-                    startRotations.Add(weaveableObject.wovenObjects[i].startRot);
-                    respawnObjects.Add(weaveableObject.wovenObjects[i].gameObject);
+                    
+                    Debug.Log(hit.collider.gameObject);
+                    rayList.Remove(hit.collider.gameObject);
                 }
             }
-            else
+        }
+
+        //respawn other elements
+        foreach (GameObject obj in rayList)
+        {
+            //Call respawn
+            Debug.Log("call respawn: " + obj);
+            RespawnObject(obj);
+        }
+
+    }
+
+    //// can be called in puzzles and other events that require respawning objects
+    public void RespawnObject(GameObject objectToRespawn)
+    {
+        if(objectToRespawn.TryGetComponent<CrystalScript>(out CrystalScript crystal))
+        {
+            if(crystal.myFloatingIsland != null)
             {
-                // list will have max 1 element at this point
-                startPositions.Add(weaveableObject.startPos);
-                startRotations.Add(weaveableObject.startRot);
-                respawnObjects.Add(weaveableObject.gameObject);
+                return;
             }
         }
-        else
-        {
-            // other objects not set up to respawn yet
-        }
 
-        RespawnObject();
+        objectToRespawn.transform.position = startPositions[myRespawnables.IndexOf(objectToRespawn)];
+        objectToRespawn.transform.rotation = startRotations[myRespawnables.IndexOf(objectToRespawn)];
     }
 
-    // can be called in puzzles and other events that require respawning objects
-    public void RespawnObject()
-    {
-        // if respawn isn't caused by a collision
-        if (startPositions == null || startRotations == null || respawnObjects == null)
-        {
-            InitializeObjects();
-        }
-
-        for (int i = 0; i < respawnObjects.Count; i++)
-        {
-            if (respawnObjects[i].GetComponent<WeaveableNew>() != null)
-            {
-                respawnObjects[i].GetComponent<WeaveableNew>().Uncombine();
-            }
-
-            respawnObjects[i].transform.localPosition = startPositions[i];
-            respawnObjects[i].transform.rotation = startRotations[i];
-
-            respawnObjects[i].GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
-            respawnObjects[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-        }
-    }
-
-    // will commonnly be called on puzzles that require a full reset if failed
-    private void InitializeObjects()
-    {
-        // populate once this case occurs, unsure how these will get initialized rn
-    }
+    //// will commonnly be called on puzzles that require a full reset if failed
+    //private void InitializeObjects()
+    //{
+    //    // populate once this case occurs, unsure how these will get initialized rn
+    //}
 
     public void RespawnInShieldPuzzle()
     {
@@ -89,5 +119,12 @@ public class RespawnController : MonoBehaviour
             shieldPuzzleWeaveables[i].transform.localPosition = shieldPuzzleWeaveables[i].GetComponent<WeaveableNew>().startPos;
             shieldPuzzleWeaveables[i].transform.rotation = shieldPuzzleWeaveables[i].GetComponent<WeaveableNew>().startRot;
         }
+    }
+
+
+    void OnDrawGizmos()
+    {
+        ExtDebug.DrawBox(transform.position, boxCastHalfExtent, transform.rotation, Color.red);
+        
     }
 }

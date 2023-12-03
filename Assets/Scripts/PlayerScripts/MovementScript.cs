@@ -67,6 +67,8 @@ public class MovementScript : MonoBehaviour
     private ParticleSystem speedLinesVFX;
 
     [HideInInspector] public bool inCutscene;
+    private PlayerController playerController;
+    private FamiliarScript familiarScript;
     
 
     void Awake()
@@ -81,6 +83,9 @@ public class MovementScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        familiarScript = GameObject.FindGameObjectWithTag("Familiar").GetComponent<FamiliarScript>();
+
         rotationSpeed = 0.1f;
         originalGroundAcceleration = groundAcceleration;
         originalGroundDeceleration = groundDeceleration;
@@ -121,16 +126,35 @@ public class MovementScript : MonoBehaviour
 
     public void ToggleCanMove(bool moves)
     {
-        if (moves)
-        {
-            canMove = true;
-            characterAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
+        if (familiarScript.myTurn) {
+            if (moves)
+            {
+                canMove = true;
+                characterAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
+                familiarScript.talkingToNPC = false;
+            }
+            else
+            {
+                canMove = false;
+                characterAnimationHandler.ToggleMoveSpeedBlend(0);
+                familiarScript.talkingToNPC = true;
+            }
         }
-        else
-        {
-            canMove = false;
-            characterAnimationHandler.ToggleMoveSpeedBlend(0);
+        else {
+            if (moves)
+            {
+                canMove = true;
+                characterAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
+                playerController.talkingToNPC = false;
+            }
+            else
+            {
+                canMove = false;
+                characterAnimationHandler.ToggleMoveSpeedBlend(0);
+                playerController.talkingToNPC = true;
+            }
         }
+        
     }
 
     void FixedUpdate()

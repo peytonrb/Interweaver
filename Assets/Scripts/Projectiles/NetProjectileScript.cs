@@ -39,12 +39,8 @@ public class NetProjectileScript : MonoBehaviour
     //*************************************************************************
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Terrain") || other.gameObject.CompareTag("Default"))
-        {
-            Destroy(gameObject);
-        }
-
-        else if (other.gameObject.CompareTag("Player"))
+        
+        if (other.gameObject.CompareTag("Player"))
         {
             MS.GoToCheckPoint();
         }
@@ -52,6 +48,10 @@ public class NetProjectileScript : MonoBehaviour
         else if (other.gameObject.CompareTag("Familiar"))
         {
             MSF.GoToCheckPoint();
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
     //*************************************************************************************
