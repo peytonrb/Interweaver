@@ -394,17 +394,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             //inWeaveMode = false;
         }
 
-        if (inWeaveMode)
-        {
-            StartCoroutine(WeaveModeTimer());
-        }
-    }
-
-    IEnumerator WeaveModeTimer() // sets variable after 1 second to account for combine - need this variable
-    {
-        yield return new WaitForSeconds(1f);
-        Debug.Log("timer sets false");
-        inWeaveMode = false;
     }
 
     public void WeaveMode()
@@ -431,9 +420,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
             
         }
-
-
-
         inWeaveMode = true;
 
         Debug.Log("weavescript: " + weaveableScript.isWoven);
@@ -501,12 +487,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
         weaveableScript.rb.useGravity = false;
 
-        if (!alwaysMovesWhenWoven)
-        {
-            StartCoroutine(SwitchModes());
-        }
-
-        else if (alwaysMovesWhenWoven)
+        if (alwaysMovesWhenWoven)
         {
             player.inRelocateMode = true;
             player.inCombineMode = false;
@@ -592,64 +573,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         
     }
 
-    //Actually combines the objects and calls any additional logic
-    void WeaveTogether(GameObject other)
-    {
-        weaveableScript = GetComponent<WeaveableNew>();
-        Debug.Log("parent: " + parentWeaveable);
-        
-        // for objects that are being connected that are NOT the parent
-        if (other.GetComponent<Rigidbody>() != null && canCombine && !isParent && weaveableScript.ID == ID)
-        {
-            Debug.Log("started parent weavable thing");
-            WeaveableNew[] allWeaveables = FindObjectsOfType<WeaveableNew>();
-
-            foreach (WeaveableNew weaveable in allWeaveables)
-            {
-                if (weaveable.isParent)
-                {
-                    parentWeaveable = weaveable;
-                    if (dayblockPuzzle != null)
-                    {
-                        dpm.FoundParent();
-                    }
-                }
-            }
-
-            if (parentWeaveable != null && !parentWeaveable.wovenObjects.Contains(this.GetComponent<WeaveableNew>()))
-            {
-                parentWeaveable.wovenObjects.Add(this.GetComponent<WeaveableNew>());
-            }
-        }
-
-        if (other.GetComponent<Rigidbody>() != null && parentWeaveable.inWeaveMode && canCombine && weaveableScript.ID == ID)
-        {
-            // only adds fixed joints to parent weaveable to be removed nicely in Uncombine()
-            if (other != parentWeaveable.gameObject && other.GetComponent<Rigidbody>() != null)
-            {
-                var fixedJoint = parentWeaveable.gameObject.AddComponent<FixedJoint>();
-                fixedJoint.connectedBody = other.GetComponent<Rigidbody>();
-                other.GetComponent<Rigidbody>().useGravity = false;
-            }
-            else
-            {
-                other.GetComponent<Rigidbody>().useGravity = true;
-            }
-
-            if (weaveInteraction != null)
-            {
-                weaveInteraction.OnWeave(other, gameObject);
-            }
-
-            if (other.GetComponent<WeaveableNew>().weaveInteraction != null)
-            {
-                other.GetComponent<WeaveableNew>().weaveInteraction.OnWeave(gameObject, other);
-            }
-        }
-    }
-    // these references are passed in so when weaveableScript changes with mouse position, it still holds correct 
-    //      reference
-
     //Moves the weavable to the target transform then calls WeaveTogether()
     IEnumerator MoveToPoint(WeaveableNew movingWeaveableRef, Transform firstObjTransform, WeaveableNew otherWeaveable)
     {
@@ -694,17 +617,69 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             //WeaveTogether(weaveableRef.gameObject);
         }
     }
+
+
+    //Actually combines the objects and calls any additional logic
+    void WeaveTogether(GameObject other)
+    {
+        weaveableScript = GetComponent<WeaveableNew>();
+        Debug.Log("parent: " + parentWeaveable);
+
+        // for objects that are being connected that are NOT the parent
+        if (other.GetComponent<Rigidbody>() != null && canCombine && !isParent && weaveableScript.ID == ID)
+        {
+            Debug.Log("started parent weavable thing");
+            WeaveableNew[] allWeaveables = FindObjectsOfType<WeaveableNew>();
+
+            foreach (WeaveableNew weaveable in allWeaveables)
+            {
+                if (weaveable.isParent)
+                {
+                    parentWeaveable = weaveable;
+                    if (dayblockPuzzle != null)
+                    {
+                        dpm.FoundParent();
+                    }
+                }
+            }
+
+            if (parentWeaveable != null && !parentWeaveable.wovenObjects.Contains(this.GetComponent<WeaveableNew>()))
+            {
+                parentWeaveable.wovenObjects.Add(this.GetComponent<WeaveableNew>());
+            }
+        }
+
+        if (other.GetComponent<Rigidbody>() != null && parentWeaveable.inWeaveMode && canCombine && weaveableScript.ID == ID)
+        {
+            // only adds fixed joints to parent weaveable to be removed nicely in Uncombine()
+            if (other != parentWeaveable.gameObject && other.GetComponent<Rigidbody>() != null)
+            {
+                var fixedJoint = parentWeaveable.gameObject.AddComponent<FixedJoint>();
+                fixedJoint.connectedBody = other.GetComponent<Rigidbody>();
+                other.GetComponent<Rigidbody>().useGravity = false;
+                inWeaveMode = false;
+                player.inRelocateMode = true;
+                player.inCombineMode = false;
+            }
+            else
+            {
+                other.GetComponent<Rigidbody>().useGravity = true;
+            }
+
+            if (weaveInteraction != null)
+            {
+                weaveInteraction.OnWeave(other, gameObject);
+            }
+
+            if (other.GetComponent<WeaveableNew>().weaveInteraction != null)
+            {
+                other.GetComponent<WeaveableNew>().weaveInteraction.OnWeave(gameObject, other);
+            }
+        }
+    }
+    // these references are passed in so when weaveableScript changes with mouse position, it still holds correct 
+    //      reference
     //********************************************************************
-
-    public void RestoreOriginalLayer()
-    {
-        gameObject.layer = originalLayerMask;
-    }
-
-    public List<WeaveableNew> GetListOfWovenObjects()
-    {
-        return wovenObjects;
-    }
 
     void OnDrawGizmos()
     {
