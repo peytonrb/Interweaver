@@ -24,8 +24,6 @@ public class NetProjectileScript : MonoBehaviour
 
         StartCoroutine(TimerBeforeDestroy(lifetime));
 
-        MS = GameObject.FindWithTag("Player").GetComponent<MovementScript>();
-
         MSF = GameObject.FindWithTag("Familiar").GetComponent<MovementScript>();
     }
 
@@ -42,7 +40,7 @@ public class NetProjectileScript : MonoBehaviour
         
         if (other.gameObject.CompareTag("Player"))
         {
-            MS.GoToCheckPoint();
+            other.GetComponent<MovementScript>().GoToCheckPoint();
         }
 
         else if (other.gameObject.CompareTag("Familiar"))
