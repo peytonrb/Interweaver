@@ -39,7 +39,7 @@ public class NetProjectileScript : MonoBehaviour
     //*************************************************************************
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Terrain") || other.gameObject.CompareTag("Default"))
+        if (other.gameObject.CompareTag("Terrain") || other.gameObject.CompareTag("Default") || other.gameObject.CompareTag("Weaveable"))
         {
             Destroy(gameObject);
         }
