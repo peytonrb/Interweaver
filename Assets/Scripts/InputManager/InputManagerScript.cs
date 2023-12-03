@@ -231,7 +231,7 @@ public class InputManagerScript : MonoBehaviour
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
         CharacterController playerCharacterController = player.GetComponent<CharacterController>();
 
-        if (!familiarScript.myTurn && !playerScript.isCurrentlyWeaving && playerCharacterController.isGrounded && !playerScript.inCutscene && canSwitch)
+        if (!familiarScript.myTurn && !playerScript.isCurrentlyWeaving && playerCharacterController.isGrounded && !playerScript.inCutscene && canSwitch && !playerScript.talkingToNPC)
         {
             playerScript.Possession();
             playerInput.SwitchCurrentActionMap("Familiar");
@@ -250,7 +250,7 @@ public class InputManagerScript : MonoBehaviour
     {
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
         CharacterController familiarCharacterController = familiar.GetComponent<CharacterController>();
-        if (familiarScript.myTurn && familiarCharacterController.isGrounded && canSwitch)
+        if (familiarScript.myTurn && familiarCharacterController.isGrounded && canSwitch && !familiarScript.talkingToNPC)
         {
             familiarScript.Depossess();
             playerInput.SwitchCurrentActionMap("Weaver");
