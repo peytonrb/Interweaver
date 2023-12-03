@@ -120,7 +120,10 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         if (isWoven)
         {
             if (!InputManagerScript.instance.isGamepad)
+            {
                 MovingWeaveMouse();
+            }
+                
         }
     }
 
@@ -132,7 +135,12 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         // this shoots a raycast from the camera to the 3D plane to get the position of the mouse
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 100, layersToHit))
         {
-            weaveableScript = raycastHit.collider.GetComponent<WeaveableNew>();
+            if (raycastHit.collider.TryGetComponent<WeaveableNew>(out WeaveableNew newScript))
+            {
+                weaveableScript = newScript;
+                Debug.Log("this script is an endless cacophony of my suffering");
+            }
+                
 
             if (relocate)
             {
@@ -249,6 +257,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             Debug.Log(col.name);
             ICombineable combineable = col.GetComponent<ICombineable>();
             canRotate = true;
+            Debug.Log("haiushduiasdibasudasd");
             weaveableScript = col.GetComponent<WeaveableNew>();
 
             TargetingArrow.SetActive(true);
@@ -316,7 +325,6 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         }
         else
         {
-            Debug.Log(player);
             player.weaveVisualizer.WeaveableSelected(gameObject);
         }
 
@@ -410,11 +418,31 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     public void OnCombineInput()
     {
-        Debug.Log(weaveableScript.gameObject.name);
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 100, layersToHit))
+        {
+            Debug.Log(raycastHit.collider.name);
+            if (raycastHit.collider.TryGetComponent<WeaveableNew>(out WeaveableNew weaveScript))
+            {
+                Debug.Log(weaveScript);
+                weaveableScript = weaveScript;
+            }
+
+            
+        }
+
+
+
         inWeaveMode = true;
+
+        Debug.Log("weavescript: " + weaveableScript.isWoven);
+
+        Debug.Log("can combine: " + canCombine);
+
         if (weaveableScript.ID == ID && !weaveableScript.isWoven && canCombine)
         {
-            Debug.Log("OnCombineInput");
+            
             player.weaveVisualizer.WeaveableSelected(weaveableScript.gameObject);
 
             Combine();
@@ -427,6 +455,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     //********************************************************************
     public void Uncombine()
     {
+        Debug.Log("uncombine called");
         weaveableScript = this.GetComponent<WeaveableNew>(); // hardcoded to prevent nulls
         isCombined = false;
         //Debug.Log("This is the Uncombine code");
