@@ -181,10 +181,12 @@ public class FamiliarScript : MonoBehaviour
         StopCoroutine(ForcedDelay());
     }
 
-    public void Death() // this should be an interface EVENTUALLY WAHOO
+    public void Death() // this should be an interface EVENTUALLY WAHOO // I AGREE OMG OMG SAME BESTIE
     {
         characterController.enabled = false;
         transform.position = GM.FamiliarCheckPointPos;
+        movementScript.HardResetMovementStats();
+
         CameraMasterScript.instance.FamiliarCameraReturnOnDeath(CameraMasterScript.instance.lastFamiliarCameraTriggered);
         characterController.enabled = true;
     }
