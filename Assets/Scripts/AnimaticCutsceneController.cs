@@ -10,7 +10,8 @@ public class AnimaticCutsceneController : MonoBehaviour
     public GameObject[] openingCutscenePanels;
     public GameObject[] closingCutscenePanels;
     private CanvasGroup panelsCG;
-    public float[] panelTimes;
+    public float[] openingCutscenePanelTimes;
+    public float[] closingCutscenePanelTimes;
     public float transitionSpeed;
     private bool playingPanel;
     private int currentPanel;
@@ -129,13 +130,27 @@ public class AnimaticCutsceneController : MonoBehaviour
     }
 
     void PlayPanel() {
-        if (panelTimes[currentPanel] > 0) {
-            panelTimes[currentPanel] -= Time.deltaTime;
+        switch (cutscene) {
+            case 0:
+                if (openingCutscenePanelTimes[currentPanel] > 0) {
+                    openingCutscenePanelTimes[currentPanel] -= Time.deltaTime;
+                }
+                else {
+                    currentPanel += 1;
+                    playingPanel = false;
+                }
+            break;
+            case 1:
+                if (closingCutscenePanelTimes[currentPanel] > 0) {
+                    closingCutscenePanelTimes[currentPanel] -= Time.deltaTime;
+                }
+                else {
+                    currentPanel += 1;
+                    playingPanel = false;
+                }
+            break;
         }
-        else {
-            currentPanel += 1;
-            playingPanel = false;
-        }
+        
     }
 
     public void ChangeCutscene(int scene) {
