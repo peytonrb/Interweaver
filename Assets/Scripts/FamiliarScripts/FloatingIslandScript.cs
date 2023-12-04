@@ -98,6 +98,7 @@ public class FloatingIslandScript : MonoBehaviour
             if (!isFloatingIslandInTheTube) {
                 myCrystal.GetComponent<WeaveableNew>().canBeRelocated = true;
             }
+            myCrystal.GetComponent<BoxCollider>().isTrigger = false;
         }
     }
 
@@ -164,6 +165,7 @@ public class FloatingIslandScript : MonoBehaviour
     {
         StartCoroutine(TimerBeforeRespawn(false));
         cameraswitched = false;
+        myCrystal.GetComponent<BoxCollider>().isTrigger = true;
         anim.SetTrigger("Rise");
     }
 
