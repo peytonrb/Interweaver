@@ -27,7 +27,8 @@ public class DummyWeaverScript : MonoBehaviour
     void Update()
     {
         if (gameObject.activeSelf) {
-            if (director.time >= 7.25f && playerNotRelocated) {
+            if (director.time >= director.duration - 3f && playerNotRelocated) {
+
                 playerController.SetNewPosition(transform.position,transform.rotation);
             }
         }
