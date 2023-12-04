@@ -12,10 +12,14 @@ public class AnimaticCutsceneController : MonoBehaviour
     private CanvasGroup panelsCG;
     public float[] openingCutscenePanelTimes;
     public float[] closingCutscenePanelTimes;
+    public AudioClip[] openingCutsceneAudio;
+    public AudioClip[] closingCutsceneAudio;
+    private AudioSource audioSource;
     public float transitionSpeed;
     private bool playingPanel;
     private int currentPanel;
     private bool transitioning;
+    private bool playedAudio;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +27,9 @@ public class AnimaticCutsceneController : MonoBehaviour
         if (!isOnTrigger) {
             playingPanel = false;
             transitioning = false;
+            playedAudio = false;
             currentPanel = 1;
+            audioSource = GetComponent<AudioSource>();
 
             switch (cutscene) {
                 case 0:
@@ -134,19 +140,29 @@ public class AnimaticCutsceneController : MonoBehaviour
             case 0:
                 if (openingCutscenePanelTimes[currentPanel] > 0) {
                     openingCutscenePanelTimes[currentPanel] -= Time.deltaTime;
+                    if (!playedAudio) {
+                        PlayAudio(openingCutsceneAudio[currentPanel]);
+                        playedAudio = true;
+                    }
                 }
                 else {
                     currentPanel += 1;
                     playingPanel = false;
+                    playedAudio = false;
                 }
             break;
             case 1:
                 if (closingCutscenePanelTimes[currentPanel] > 0) {
                     closingCutscenePanelTimes[currentPanel] -= Time.deltaTime;
+                    if (!playedAudio) {
+                        PlayAudio(openingCutsceneAudio[currentPanel]);
+                        playedAudio = true;
+                    }
                 }
                 else {
                     currentPanel += 1;
                     playingPanel = false;
+                    playedAudio = false;
                 }
             break;
         }
@@ -155,5 +171,9 @@ public class AnimaticCutsceneController : MonoBehaviour
 
     public void ChangeCutscene(int scene) {
         cutscene = scene;
+    }
+
+    void PlayAudio(AudioClip audio) {
+        audioSource.PlayOneShot(audio);
     }
 }
