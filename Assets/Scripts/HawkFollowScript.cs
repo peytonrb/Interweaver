@@ -28,26 +28,6 @@ public class HawkFollowScript : MonoBehaviour
         {
             StartCoroutine(GoByTheRoute(routeToGo));
         }
-
-        //if (tParam < 0.25f)
-        //{
-        //    transform.LookAt(routes[routeToGo].GetChild(0).position);
-        //}
-        //else if (tParam < 0.5f)
-        //{
-        //    transform.LookAt(routes[routeToGo].GetChild(1).position);
-        //}
-        //else if (tParam < 0.75f)
-        //{
-        //    transform.LookAt(routes[routeToGo].GetChild(2).position);
-        //}
-        //else
-        //{
-        //    transform.LookAt(routes[routeToGo].GetChild(3).position);
-        //}
-        
-
-
     }
 
     private IEnumerator GoByTheRoute(int routeNum)
@@ -60,11 +40,12 @@ public class HawkFollowScript : MonoBehaviour
 
         while (tParam < 1)
         {
+
             tParam += Time.deltaTime * speedModifier;
             objectPosition = Mathf.Pow(1 - tParam, 3) * p0 + 3 * Mathf.Pow(1 - tParam, 2) * tParam * p1 + 3 * (1 - tParam) * Mathf.Pow(tParam, 2) * p2 + Mathf.Pow(tParam, 3) * p3;
             transform.LookAt(objectPosition);
             transform.position = objectPosition;
-            
+            Debug.Log("called!");
             yield return new WaitForEndOfFrame();
         }
 
