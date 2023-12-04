@@ -1,13 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using UnityEngine;
-using UnityEngine.Animations;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Interactions;
-using UnityEngine.InputSystem.Layouts;
-using UnityEngine.InputSystem.XR;
-using UnityEngine.TextCore.Text;
+
 
 public class InputManagerScript : MonoBehaviour
 {
@@ -321,6 +315,25 @@ public class InputManagerScript : MonoBehaviour
             }
         }
        
+    }
+
+    public void ControllerRumble(float duration, float leftMotorFreq = 0, float rightMotorFreq = 0)
+    {
+        if (isGamepad)
+        {
+            StartCoroutine(RumbleTheController(duration, leftMotorFreq, rightMotorFreq));
+        }
+    }
+
+    IEnumerator RumbleTheController(float dur, float leftMotorFreq, float rightMotorFreq)
+    {
+        Gamepad.current.SetMotorSpeeds(leftMotorFreq, rightMotorFreq);
+
+        yield return new WaitForSeconds(dur);
+
+        Gamepad.current.SetMotorSpeeds(0, 0);
+
+        yield break;
     }
 
     //******************************************************
