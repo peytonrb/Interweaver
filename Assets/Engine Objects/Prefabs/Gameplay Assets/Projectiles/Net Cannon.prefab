@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 112070392485278942}
   - component: {fileID: 3840465198966925109}
   - component: {fileID: 2063690704886449129}
+  - component: {fileID: 2935931824593599232}
   m_Layer: 0
   m_Name: Net Cannon
   m_TagString: Cannons
@@ -64,7 +65,7 @@ Transform:
   m_Children:
   - {fileID: 8006648823406174102}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &112070392485278942
 MeshFilter:
@@ -134,3 +135,24 @@ MonoBehaviour:
   isOn: 1
   projectileSpawnPoint: {fileID: 8006648823406174102}
   projectile: {fileID: 1141480937913417500, guid: 1b23ba6c7886d9c4ab53eeaf730f3a85, type: 3}
+--- !u!65 &2935931824593599232
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9007960878033610689}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.2565446, y: 2.3927987, z: 1.3607589}
+  m_Center: {x: 0.050319906, y: 1.1505224, z: -0.36915824}
