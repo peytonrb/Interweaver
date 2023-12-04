@@ -46,7 +46,8 @@ public class HawkFollowScript : MonoBehaviour
             transform.LookAt(objectPosition);
             transform.position = objectPosition;
             Debug.Log("called!");
-            yield return new WaitForEndOfFrame();
+            Debug.Log(objectPosition);
+            yield return new WaitForFixedUpdate();
         }
 
         tParam = 0;
