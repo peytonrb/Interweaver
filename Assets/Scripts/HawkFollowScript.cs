@@ -14,11 +14,17 @@ public class HawkFollowScript : MonoBehaviour
     [SerializeField] private float speedModifier = 0.1f;
     private bool coroutineAllowed;
 
+    private bool glide = false;
+
+    private Animator anim;
+
     void Start()
     {
         routeToGo = 0;
         tParam = 0f;
         coroutineAllowed = true;
+        
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -27,6 +33,16 @@ public class HawkFollowScript : MonoBehaviour
         if (coroutineAllowed)
         {
             StartCoroutine(GoByTheRoute(routeToGo));
+        }
+
+        if(Vector3.SignedAngle(Vector3.up, transform.forward, transform.right) >= 90f)
+        {
+            anim.SetBool("Glide", true);
+        }
+        
+        else
+        {
+            anim.SetBool("Glide", false);
         }
     }
 
@@ -46,7 +62,6 @@ public class HawkFollowScript : MonoBehaviour
             transform.LookAt(objectPosition);
             transform.position = objectPosition;
             Debug.Log("called!");
-            Debug.Log(objectPosition);
             yield return new WaitForFixedUpdate();
         }
 
