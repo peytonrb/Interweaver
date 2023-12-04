@@ -275,6 +275,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         {
             isRotating = true;
             StartCoroutine(Rotate(dir, angle));
+            InputManagerScript.instance.ControllerRumble(0.1f, 0f, 30f);
             AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, rotateClip);
         }
     }
@@ -292,7 +293,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             elapsed += Time.deltaTime;
             yield return null;
         }
-
+ 
         transform.rotation = to;
         isRotating = false;
     }
@@ -434,6 +435,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             Combine();
             isCombined = true;
             weaveableScript.isCombined = true;
+            
         }
     }
 
@@ -660,6 +662,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                 inWeaveMode = false;
                 player.inRelocateMode = true;
                 player.inCombineMode = false;
+                InputManagerScript.instance.ControllerRumble(0.4f, 8f, 0f);
             }
             else
             {

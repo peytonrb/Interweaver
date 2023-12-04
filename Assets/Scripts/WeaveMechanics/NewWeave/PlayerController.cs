@@ -199,6 +199,7 @@ public class PlayerController : MonoBehaviour
                 //characterAnimationHandler.ToggleWeaveAnim(isWeaving);
                 interactableObject.Relocate();
                 relocateMode.SetActive(true); // on-screen ui
+                InputManagerScript.instance.ControllerRumble(0.2f, 0f, 50f);
             }
         }
 
