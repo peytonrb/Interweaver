@@ -98,7 +98,7 @@ public class AnimaticCutsceneController : MonoBehaviour
                     } 
                     else {
                         if (panelsCG.alpha >= 1) {
-                            //SceneManager.LoadScene("AlpineCombined");
+                            SceneManager.LoadScene("AlpineCombined");
                             Debug.Log("Cutscene Completed");
                         }
                     }
@@ -119,7 +119,7 @@ public class AnimaticCutsceneController : MonoBehaviour
                     } 
                     else {
                         if (panelsCG.alpha >= 1) {
-                            //SceneManager.LoadScene("MainMenu");
+                            SceneManager.LoadScene("MainMenu");
                             Debug.Log("Cutscene Completed");
                         }
                     }
