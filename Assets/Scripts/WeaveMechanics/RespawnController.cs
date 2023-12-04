@@ -127,7 +127,7 @@ public class RespawnController : MonoBehaviour
             shieldPuzzleWeaveables[i].GetComponent<WeaveableNew>().Uninteract();
             shieldPuzzleWeaveables[i].GetComponent<WeaveableNew>().player.weaveVisualizer.StopAura(shieldPuzzleWeaveables[i]);
             shieldPuzzleWeaveables[i].GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
-            shieldPuzzleWeaveables[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
+            //shieldPuzzleWeaveables[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
             shieldPuzzleWeaveables[i].transform.localPosition = shieldPuzzleWeaveables[i].GetComponent<WeaveableNew>().startPos;
             shieldPuzzleWeaveables[i].transform.rotation = shieldPuzzleWeaveables[i].GetComponent<WeaveableNew>().startRot;
         }
