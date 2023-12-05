@@ -66,7 +66,6 @@ public class RespawnController : MonoBehaviour
     {
         rayList.Clear();
 
-        Debug.Log("called");
         RaycastHit[] hits = Physics.BoxCastAll(transform.position, boxCastHalfExtent, transform.up, transform.rotation, layersToCheck);
 
         rayList = new List<GameObject>(myRespawnables);
@@ -93,7 +92,7 @@ public class RespawnController : MonoBehaviour
             //Call respawn
             if (obj != null)
             {
-                Debug.Log("call respawn: " + obj);
+                Debug.Log("respawned");
                 RespawnObject(obj);
             }
         }
