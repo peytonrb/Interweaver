@@ -20,6 +20,7 @@ public class AnimaticCutsceneController : MonoBehaviour
     private int currentPanel;
     private bool transitioning;
     private bool playedAudio;
+    public bool debugCutsceneChanger;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +31,12 @@ public class AnimaticCutsceneController : MonoBehaviour
             playedAudio = false;
             currentPanel = 1;
             audioSource = GetComponent<AudioSource>();
+            if (debugCutsceneChanger == true) {
+                cutscene = 1;
+            }
+            else {
+                cutscene = 0;
+            }
 
             switch (cutscene) {
                 case 0:
@@ -155,7 +162,7 @@ public class AnimaticCutsceneController : MonoBehaviour
                 if (closingCutscenePanelTimes[currentPanel] > 0) {
                     closingCutscenePanelTimes[currentPanel] -= Time.deltaTime;
                     if (!playedAudio) {
-                        PlayAudio(openingCutsceneAudio[currentPanel]);
+                        PlayAudio(closingCutsceneAudio[currentPanel]);
                         playedAudio = true;
                     }
                 }
