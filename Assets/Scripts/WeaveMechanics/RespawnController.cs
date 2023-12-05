@@ -23,10 +23,10 @@ public class RespawnController : MonoBehaviour
     public void Start()
     {
         rayList = new List<GameObject>();
-        myRespawnables = new List<GameObject>();
 
         if (AutoAssignMyWeavables)
         {
+            myRespawnables = new List<GameObject>();
             RaycastHit[] hits = Physics.BoxCastAll(transform.position, boxCastHalfExtent, transform.up, transform.rotation, layersToCheck);
 
             foreach (RaycastHit hit in hits)
