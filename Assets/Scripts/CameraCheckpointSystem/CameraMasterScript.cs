@@ -342,7 +342,7 @@ public class CameraMasterScript : MonoBehaviour
         familiarVirtualCams[familiarCameraOnPriority].Priority = 0;
         cameraToSwitchTo.Priority = 1;
         floatingIsland.cameraswitched = true;
-        floatingIsland.RaiseIsland();
+        //floatingIsland.RaiseIsland();
     }
 
     public void FloatingIslandCameraReturn(CinemachineVirtualCamera cameraToSwitchFrom)

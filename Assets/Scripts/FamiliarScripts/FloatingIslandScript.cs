@@ -9,6 +9,7 @@ public class FloatingIslandScript : MonoBehaviour
     //Attachments
     [Header("Prereqs")]
     public CrystalScript myCrystal;
+    private CrystalScript staticCrystal;
     [CannotBeNullObjectField]
     public CinemachineVirtualCamera myFloatCamera;
 
@@ -66,6 +67,8 @@ public class FloatingIslandScript : MonoBehaviour
         {
             anim.SetTrigger("Sit");
         }
+
+        staticCrystal = myCrystal; // since myCrystal gets Destroyed, references in floating island functions are getting nulls. This saves the reference
     }
 
     void Update()
@@ -87,18 +90,18 @@ public class FloatingIslandScript : MonoBehaviour
     }
     
     //Called by the crystal, changes animation state, starts timer before respawning at sit location
-    public void StartFalling() 
+    public void StartFalling(CrystalScript thisCrystal) 
     {
         if (isFloating)
         {
-            
+            Debug.Log("my crystal: " + thisCrystal);
             StartCoroutine(TimerBeforeRespawn(true));
             cameraswitched = false;
             AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, fallClip);
             if (!isFloatingIslandInTheTube) {
-                myCrystal.GetComponent<WeaveableNew>().canBeRelocated = true;
+                thisCrystal.GetComponent<WeaveableNew>().canBeRelocated = true;
             }
-            myCrystal.GetComponent<BoxCollider>().isTrigger = false;
+            thisCrystal.GetComponent<BoxCollider>().isTrigger = false;
         }
     }
 
@@ -155,6 +158,7 @@ public class FloatingIslandScript : MonoBehaviour
             if (cameraswitched == false)
             {
                 CameraMasterScript.instance.FloatingIslandCameraSwitch(myFloatCamera, this);
+                RaiseIsland();
                 Debug.Log("swap to rise called");
             }
         }
@@ -165,7 +169,7 @@ public class FloatingIslandScript : MonoBehaviour
     {
         StartCoroutine(TimerBeforeRespawn(false));
         cameraswitched = false;
-        myCrystal.GetComponent<BoxCollider>().isTrigger = true;
+        staticCrystal.GetComponent<BoxCollider>().isTrigger = true;
         anim.SetTrigger("Rise");
     }
 

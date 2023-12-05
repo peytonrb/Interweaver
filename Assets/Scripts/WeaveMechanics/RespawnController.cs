@@ -91,8 +91,11 @@ public class RespawnController : MonoBehaviour
         foreach (GameObject obj in rayList)
         {
             //Call respawn
-            Debug.Log("call respawn: " + obj);
-            RespawnObject(obj);
+            if (obj != null)
+            {
+                Debug.Log("call respawn: " + obj);
+                RespawnObject(obj);
+            }
         }
 
     }

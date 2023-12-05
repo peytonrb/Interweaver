@@ -23,7 +23,7 @@ public class CrystalScript : MonoBehaviour
 
         if (myFloatingIsland != null)
         {
-            myFloatingIsland.StartFalling();
+            myFloatingIsland.StartFalling(this);
         }
 
         Instantiate(vfxPrefab, transform.position, transform.rotation);
