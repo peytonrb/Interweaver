@@ -9,6 +9,11 @@ public class DialogueTriggers : MonoBehaviour
     public bool isInteracting = false;
     public MovementScript myMoveScript;
 
+    public bool isAutoTrigger = false;
+
+    public GameObject ControllerIndicator;
+    public GameObject KeyboardIndicator;
+
     // is called if near an NPC 
     public void triggerDialogue(MovementScript movementScript)
     {
@@ -38,8 +43,23 @@ public class DialogueTriggers : MonoBehaviour
     {
         if (collider.gameObject.tag == "Player")
         {
-            Debug.Log("TRIGGERED");
-            DialogueManager.instance.StartDialogue(dialogue, textBox);
+            if (isAutoTrigger)
+            {
+                Debug.Log("TRIGGERED");
+                DialogueManager.instance.StartDialogue(dialogue, textBox);
+            }
+            else
+            {
+                if (InputManagerScript.instance.isGamepad)
+                {
+                    ControllerIndicator.SetActive(true);
+                }
+                else
+                {
+                    KeyboardIndicator.SetActive(true);
+                }
+            }
+            
         }
     }
 
@@ -47,8 +67,18 @@ public class DialogueTriggers : MonoBehaviour
     {
         if (collider.gameObject.tag == "Player")
         {
-            Debug.Log("TRIGGERED");
-            DialogueManager.instance.EndDialogue();
+
+            if (isAutoTrigger)
+            {
+                Debug.Log("TRIGGERED");
+                DialogueManager.instance.EndDialogue();
+            }
+            else
+            {
+                ControllerIndicator.SetActive(false);
+                KeyboardIndicator.SetActive(false);
+            }
+            
         }
     }
 }

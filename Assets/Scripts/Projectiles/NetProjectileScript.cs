@@ -15,6 +15,8 @@ public class NetProjectileScript : MonoBehaviour
     public float lifetime = 4;
     //*******************************
 
+    public GameObject impactVFX;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,15 +39,18 @@ public class NetProjectileScript : MonoBehaviour
     //*************************************************************************
     private void OnTriggerEnter(Collider other)
     {
-        
+        Instantiate(impactVFX, transform.position, Random.rotation);
+
         if (other.gameObject.CompareTag("Player"))
         {
             other.GetComponent<MovementScript>().GoToCheckPoint();
-        }
+            Destroy(gameObject);
 
+        }
         else if (other.gameObject.CompareTag("Familiar"))
         {
             MSF.GoToCheckPoint();
+            Destroy(gameObject);
         }
         else
         {
