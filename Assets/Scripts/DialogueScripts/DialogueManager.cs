@@ -12,6 +12,8 @@ public class DialogueManager : MonoBehaviour
     private TextMeshProUGUI dialogueText;
     private GameObject textBoxUI;
     private AudioClip audioClip;
+
+    public AudioClip speechFile;
     public DialogueTriggers currentTrigger;
     
     public static DialogueManager instance;
@@ -73,8 +75,11 @@ public class DialogueManager : MonoBehaviour
 
         foreach (char letter in sentence.ToCharArray()) // add array of clips w pitches to be randomly called from here
         {
+            
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, speechFile, 1f);
             dialogueText.text += letter;
             yield return null;
+            
         }
     }
 
