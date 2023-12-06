@@ -56,7 +56,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b18dace2dbb7604f839bc1ec5ff34f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canSwitch: 1
   mainCamera: {fileID: 0}
   pauseMenu: {fileID: 0}
   weaveDistance: 20
@@ -70,12 +69,16 @@ MonoBehaviour:
   isCurrentlyWeaving: 0
   weaveableScript: {fileID: 0}
   TargetingArrow: {fileID: 6321982546611138371}
+  targetingLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   inRelocateMode: 0
   inCombineMode: 0
   uninteract: 0
   distanceBetween: 0
   floatingIslandCrystal: 0
   inCutscene: 0
+  talkingToNPC: 0
   weaveSpawn: {fileID: 3156172625146419733}
   weaveVisualizer: {fileID: 0}
   familiar: {fileID: 0}
@@ -177,7 +180,7 @@ CharacterController:
   serializedVersion: 3
   m_Height: 1.65
   m_Radius: 0.34
-  m_SlopeLimit: 45
+  m_SlopeLimit: 90
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
@@ -194,6 +197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae09286c26ef7bc459527ad0f24f5b04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  proximity: 5
 --- !u!1 &3156172625146419733
 GameObject:
   m_ObjectHideFlags: 0
