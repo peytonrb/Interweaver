@@ -132,7 +132,7 @@ public class AnimaticCutsceneController : MonoBehaviour
                     } 
                     else {
                         if (panelsCG.alpha >= 1) {
-                            SceneManager.LoadScene("MainMenu");
+                            SceneManager.LoadScene("Menu");
                             Debug.Log("Cutscene Completed");
                         }
                     }

@@ -396,6 +396,7 @@ public class MovementScript : MonoBehaviour
 
     public void Bounce()
     {
+        Debug.Log("bounce called");
         ResetGravity();
         ResetTerminalVelocity();
         ResetAerialAcceleration();

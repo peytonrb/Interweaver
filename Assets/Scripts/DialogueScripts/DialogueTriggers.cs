@@ -21,6 +21,7 @@ public class DialogueTriggers : MonoBehaviour
 
         if (!isInteracting)
         {
+            Debug.Log("interacting");
             DialogueManager.instance.StartDialogue(dialogue, textBox);
             DialogueManager.instance.currentTrigger = this;
             isInteracting = true;
@@ -41,7 +42,7 @@ public class DialogueTriggers : MonoBehaviour
     // occurs only with Event Triggers
     public void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.tag == "Player")
+        if (collider.gameObject.tag == "Player" || collider.gameObject.tag == "Familiar")
         {
             if (isAutoTrigger)
             {
@@ -65,7 +66,7 @@ public class DialogueTriggers : MonoBehaviour
 
     public void OnTriggerExit(Collider collider)
     {
-        if (collider.gameObject.tag == "Player")
+        if (collider.gameObject.tag == "Player" || collider.gameObject.tag == "Familiar")
         {
 
             if (isAutoTrigger)
