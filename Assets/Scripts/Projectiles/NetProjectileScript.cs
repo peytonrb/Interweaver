@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class NetProjectileScript : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class NetProjectileScript : MonoBehaviour
     private MovementScript MS;
 
     private MovementScript MSF;
+
     //*******************************
     //These variables are set by NetCannonScript
     public float speed;
@@ -39,21 +42,23 @@ public class NetProjectileScript : MonoBehaviour
     //*************************************************************************
     private void OnTriggerEnter(Collider other)
     {
-        Instantiate(impactVFX, transform.position, Random.rotation);
+        GameObject clone = Instantiate(impactVFX, transform.position, Random.rotation);
 
         if (other.gameObject.CompareTag("Player"))
         {
             other.GetComponent<MovementScript>().GoToCheckPoint();
+            Destroy(clone.gameObject, 3f);
             Destroy(gameObject);
-
         }
         else if (other.gameObject.CompareTag("Familiar"))
         {
             MSF.GoToCheckPoint();
+            Destroy(clone.gameObject, 3f);
             Destroy(gameObject);
         }
         else
         {
+            Destroy(clone.gameObject, 3f);
             Destroy(gameObject);
         }
     }
