@@ -43,6 +43,7 @@ public class DialogueManager : MonoBehaviour
 
         foreach (string sentence in dialogue.sentences)
         {
+            // Debug.Log(sentence); -- okay here
             sentences.Enqueue(sentence);
         }
 
@@ -59,6 +60,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         string sentence = sentences.Dequeue();
+        Debug.Log(sentence);
         StopAllCoroutines();
         StartCoroutine(SentenceScroll(sentence));
     }
@@ -66,6 +68,7 @@ public class DialogueManager : MonoBehaviour
     // word scroll functionality
     IEnumerator SentenceScroll(string sentence)
     {
+        //Debug.Log(sentence); - prints 2 lines at a time
         dialogueText.text = "";
 
         foreach (char letter in sentence.ToCharArray()) // add array of clips w pitches to be randomly called from here

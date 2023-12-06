@@ -305,13 +305,13 @@ public class InputManagerScript : MonoBehaviour
             {
                 NPCInteractionScript npcInteractScript = familiar.GetComponent<NPCInteractionScript>();
                 npcInteractScript.Interact();
-                Debug.Log("Interacting");
+                Debug.Log("Interacting Familiar");
             }
             else
             {
                 NPCInteractionScript npcInteractScript = player.GetComponent<NPCInteractionScript>();
                 npcInteractScript.Interact();
-                Debug.Log("Interacting");
+                Debug.Log("Interacting Weaver");
             }
         }
        
