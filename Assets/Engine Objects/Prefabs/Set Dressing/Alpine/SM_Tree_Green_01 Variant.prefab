@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: d85a15a51c231614fb0612cdae9bf876, type: 2}
     - target: {fileID: 4704258239823766718, guid: d568dfd84e92bd440a163a7b61c8c7cd, type: 3}
       propertyPath: m_RootOrder
-      value: 26
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4704258239823766718, guid: d568dfd84e92bd440a163a7b61c8c7cd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -63,5 +63,43 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5333160661366488580, guid: d568dfd84e92bd440a163a7b61c8c7cd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8249223757037838545}
   m_SourcePrefab: {fileID: 100100000, guid: d568dfd84e92bd440a163a7b61c8c7cd, type: 3}
+--- !u!23 &245546766322748222 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4377077843363355309, guid: d568dfd84e92bd440a163a7b61c8c7cd, type: 3}
+  m_PrefabInstance: {fileID: 4600104176088650131}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &4309555961614372573 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 295060749988863822, guid: d568dfd84e92bd440a163a7b61c8c7cd, type: 3}
+  m_PrefabInstance: {fileID: 4600104176088650131}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8490951321033650071 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5333160661366488580, guid: d568dfd84e92bd440a163a7b61c8c7cd, type: 3}
+  m_PrefabInstance: {fileID: 4600104176088650131}
+  m_PrefabAsset: {fileID: 0}
+--- !u!205 &-8249223757037838545
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8490951321033650071}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: -0.06638527, y: 2.8300316, z: 0.17872095}
+  m_Size: 7.26086
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.35
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 4309555961614372573}
+    - renderer: {fileID: 245546766322748222}
+  m_Enabled: 1
