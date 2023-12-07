@@ -8,11 +8,14 @@ public class HawkLoFScript : MonoBehaviour
 
     public GameObject hawkToEnable;
 
+    public AudioClip cacawClip;
+
     public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Familiar"))
         {
             hawkToEnable.SetActive(true);
+            hawkToEnable.GetComponentInChildren<HawkFollowScript>().Start();
             StartCoroutine(DisableTheHawk());
 
         }
@@ -21,8 +24,11 @@ public class HawkLoFScript : MonoBehaviour
 
     public IEnumerator DisableTheHawk()
     {
+        yield return new WaitForSeconds(1);
 
-        yield return new WaitForSeconds(timeToDisable);
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, cacawClip);
+
+        yield return new WaitForSeconds(2);
 
         hawkToEnable.SetActive(false);
         yield break;
