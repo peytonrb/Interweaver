@@ -106,6 +106,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
     void Update()
     {
+       
         if (startFloating)
         {
             isHovering = true;
@@ -113,8 +114,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             {
                 transform.position = transform.position + new Vector3(0, hoveringValue, 0);
             }
-
             startFloating = false;
+
         }
 
         if (isWoven)
@@ -123,7 +124,13 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             {
                 MovingWeaveMouse();
             }
-                
+            RaycastHit hit;
+
+            if (Physics.Raycast(transform.position, new Vector3(0f, -90f, 0f), out hit, 2f))
+            {
+                Vector3 rayDirection = Vector3.down;
+                rb.AddForce(rayDirection * Physics.gravity.y * 2f);
+            }
         }
     }
 
@@ -221,7 +228,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                     rb.velocity = rayDirection * 6;
 
                     //this freezes the Y position so that the combined objects won't drag it down because of gravity and it freezes in all rotation so it won't droop because of the gravity  from the objects
-                    rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
                 }
             }
             if (inWeaveMode)
@@ -305,6 +312,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public void Interact()
     {
         startFloating = true;
+        isWoven = true;
         transform.rotation = Quaternion.identity;
         if (!wovenObjects.Contains(this.GetComponent<WeaveableNew>()))
         {
