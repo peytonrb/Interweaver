@@ -10,6 +10,7 @@ public class AltarScript : MonoBehaviour
     public GameObject cutsceneManager;
     private CutsceneManagerScript cutsceneManagerScript;
     [SerializeField] private InputManagerScript inputManagerScript;
+    [SerializeField] private GameObject hatch;
     private FamiliarScript familiarScript;
     private PlayerController playerController;
     
@@ -90,6 +91,10 @@ public class AltarScript : MonoBehaviour
             orb.transform.position = orbSnapPoint.position;
             OwlTeleport();
             PlayCutscene();
+            if (hatch)
+            {
+                Destroy(hatch);
+            }
             yield return null; 
         }
     }
