@@ -91,10 +91,11 @@ public class OwlDiveScript : MonoBehaviour
         onCooldown = true;
 
         yield return new WaitForFixedUpdate();
+
+        //movementScript.ChangeGravity(200);
+        movementScript.ChangeVelocity(new Vector3 (movementScript.GetVelocity().x, 20f, movementScript.GetVelocity().z));
         
-        movementScript.ChangeGravity(200);
-        
-        yield return new WaitForSecondsRealtime(duration);
+        yield return new WaitForSeconds(duration);
 
         movementScript.ChangeGravity(-50);
 
