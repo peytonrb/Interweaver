@@ -394,7 +394,7 @@ public class MovementScript : MonoBehaviour
 
     // -------------------------------------------------------------------
 
-    public void Bounce()
+    /*public void Bounce()
     {
         Debug.Log("bounce called");
         ResetGravity();
@@ -402,9 +402,9 @@ public class MovementScript : MonoBehaviour
         ResetAerialAcceleration();
         ResetAerialDeceleration();
         ResetVelocityY();
-        GetComponent<OwlDiveScript>().startDiveCooldown(.1f);
+        GetComponent<OwlDiveScript>().StartDiveCooldown(.1f);
         //characterController.Move(bounceVector);
-    }
+    }*/
 
     public void GoToCheckPoint()
     {
