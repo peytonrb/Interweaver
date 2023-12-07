@@ -21,7 +21,25 @@ public class NetCannonScript : MonoBehaviour
     void Start() {
         netProjectileScript = projectile.GetComponent<NetProjectileScript>();
         netProjectileScript.speed = projectileSpeed;
-        
+
+        isOn = false;
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player") || other.CompareTag("Familiar"))
+        {
+            isOn = true;
+        }
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player") || other.CompareTag("Familiar"))
+        {
+            isOn = false;
+        }
+
     }
 
     // Update is called once per frame
