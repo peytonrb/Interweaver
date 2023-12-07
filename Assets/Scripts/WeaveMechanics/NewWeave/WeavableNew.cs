@@ -124,13 +124,13 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             {
                 MovingWeaveMouse();
             }
-            RaycastHit hit;
+            //RaycastHit hit;
 
-            if (Physics.Raycast(transform.position, new Vector3(0f, -90f, 0f), out hit, 2f))
-            {
-                Vector3 rayDirection = Vector3.down;
-                rb.AddForce(rayDirection * Physics.gravity.y * 2f);
-            }
+            //if (Physics.Raycast(transform.position, new Vector3(0f, -90f, 0f), out hit, 2f))
+            //{
+            //    Vector3 rayDirection = Vector3.down;
+            //    rb.AddForce(rayDirection * Physics.gravity.y * 2f);
+            //}
         }
     }
 
