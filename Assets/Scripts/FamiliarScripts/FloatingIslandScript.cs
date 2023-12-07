@@ -35,6 +35,7 @@ public class FloatingIslandScript : MonoBehaviour
     private Animator anim;
     private WeaveableNew weaveable;
     public GameObject thisinstance;
+    public GameObject crystalWovenVFX;
 
     [SerializeField] private AudioClip fallClip;
     private void Awake()
@@ -118,13 +119,15 @@ public class FloatingIslandScript : MonoBehaviour
 
         yield return new WaitForSeconds(timerBeforeSwap / 2);
 
+        
+        
+
+        yield return new WaitForSeconds(timerBeforeSwap /2);
+
         if (!isFalling && !isFloatingIslandInTheTube)
         {
             CameraMasterScript.instance.FloatingIslandCameraReturn(myFloatCamera);
         }
-        
-
-        yield return new WaitForSeconds(timerBeforeSwap /2);
 
         if (isFalling)
         {
@@ -157,6 +160,7 @@ public class FloatingIslandScript : MonoBehaviour
             //Camera is switched to a new view which watches the whole island rise. (Lasts about 2 seconds)
             if (cameraswitched == false)
             {
+                Instantiate(crystalWovenVFX, transform.position + new Vector3(0, 9, 0), transform.rotation);
                 CameraMasterScript.instance.FloatingIslandCameraSwitch(myFloatCamera, this);
                 RaiseIsland();
                 Debug.Log("swap to rise called");
