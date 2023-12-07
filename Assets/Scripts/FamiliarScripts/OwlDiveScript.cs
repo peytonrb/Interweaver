@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
+using System.IO;
 
 public class OwlDiveScript : MonoBehaviour
 {
@@ -66,21 +67,34 @@ public class OwlDiveScript : MonoBehaviour
         } 
     }
 
-    public void startDiveCooldown(float duration)
+    public void StartDiveCooldown(float duration)
     {
         EndDive();
-        StartCoroutine(diveCooldown(duration));
+        StartCoroutine(DiveCooldown(duration));
     }
 
-    public IEnumerator diveCooldown(float duration)
+    public void Bounce()
+    {
+        Debug.Log("bounce called");
+        movementScript.ResetGravity();
+        movementScript.ResetTerminalVelocity();
+        movementScript.ResetAerialAcceleration();
+        movementScript.ResetAerialDeceleration();
+        movementScript.ResetVelocityY();
+        StartDiveCooldown(.1f);
+    }
+
+    public IEnumerator DiveCooldown(float duration)
     {
         characterAnimationHandler.ToggleBounceAnim();
 
         onCooldown = true;
+
+        yield return new WaitForFixedUpdate();
         
         movementScript.ChangeGravity(200);
         
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSecondsRealtime(duration);
 
         movementScript.ChangeGravity(-50);
 
@@ -112,7 +126,7 @@ public class OwlDiveScript : MonoBehaviour
         {
             if (isDiving)
             {
-                movementScript.Bounce();
+                Bounce();
                 
                 if (collision.gameObject.TryGetComponent<CrystalScript>(out CrystalScript crystal))
                 {
