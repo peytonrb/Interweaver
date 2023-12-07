@@ -18,7 +18,7 @@ public class HawkFollowScript : MonoBehaviour
 
     private Animator anim;
 
-    void Start()
+    public void Start()
     {
         routeToGo = 0;
         tParam = 0f;
