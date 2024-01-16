@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
@@ -42,7 +43,10 @@ public class PlayerController : MonoBehaviour
     private Vector3 worldPosition;
     [SerializeField]
     private LayerMask targetingLayerMask;
-
+    public bool isDead = false;
+    [SerializeField]
+    private float deathTimer = 3.0f
+;
 
     //new variables
     public bool inRelocateMode;
@@ -363,6 +367,19 @@ public class PlayerController : MonoBehaviour
 
     public void Death()
     {
+        if(!isDead)
+        {
+            isDead = true;
+            movementScript.active = false;
+            characterAnimationHandler.ToggleDeathAnim();
+            StartCoroutine(DeathTimer(deathTimer));
+        }
+    }
+
+    public IEnumerator DeathTimer(float deathTimer)
+    {
+        yield return new WaitForSeconds(deathTimer);
+
         transform.position = GM.WeaverCheckPointPos;
         CameraMasterScript.instance.WeaverCameraReturnOnDeath(CameraMasterScript.instance.lastWeaverCameraTriggered);
         movementScript.HardResetMovementStats();
@@ -371,5 +388,12 @@ public class PlayerController : MonoBehaviour
         {
             respawnController.RespawnInShieldPuzzle();
         }
+
+        characterAnimationHandler.ToggleRespawnAnim();
+
+        isDead = false;
+        movementScript.active = true;
+
+        yield break;
     }
 }
