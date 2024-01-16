@@ -43,7 +43,7 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
     }
     public void OnTrigExit(Collider other)
     {
-         if (other.gameObject.tag == "CameraTrigger")
+         if (other.gameObject.tag == "WeaverCameraTrigger" || other.gameObject.tag == "FamiliarCameraTrigger")
          {
             //WEAVER
             if (!familiarScript.myTurn)
