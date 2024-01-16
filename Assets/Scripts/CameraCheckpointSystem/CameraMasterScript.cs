@@ -26,16 +26,12 @@ public class CameraMasterScript : MonoBehaviour
     private int familiarCamerasTriggeredSinceLastCheckpoint;
     [HideInInspector] public int lastFamiliarCameraTriggered;
 
-    private Vector3 originalFamiliarCamRotation;
-    private Vector3 originalFamiliarCamTransposeOffset;
-    
     private int weaverVcamListLength;
     private int familiarVcamListLength;
     public int weaverCameraOnPriority;
     public int familiarCameraOnPriority;
 
     public CinemachineVirtualCamera leapOfFaithCamera;
-    public float LoFCameraYoffset = 0;
 
     //Screenshake
     private float shakeTimer;
@@ -78,8 +74,6 @@ public class CameraMasterScript : MonoBehaviour
             }
             else {
                 familiarvcam.Priority = 1;
-                originalFamiliarCamTransposeOffset = familiarvcam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
-                originalFamiliarCamRotation = familiarvcam.transform.eulerAngles;
             }
         }
 
@@ -91,6 +85,13 @@ public class CameraMasterScript : MonoBehaviour
         for (int i = 0; i < familiarCheckpoints.Length; i++) {
             CameraIndexScript cis = familiarCheckpoints[i].GetComponent<CameraIndexScript>();
             cis.cameraIndex = i;
+        }
+
+        if (weaverCheckpoints.Length != weaverCameras.Length) {
+            Debug.LogError("Weaver camera trigger amount does not equal amount of weaver cameras. Ensure that there is always one trigger per camera in the scene.");
+        }
+        if (familiarCheckpoints.Length != familiarCameras.Length) {
+            Debug.LogError("Familiar camera trigger amount does not equal amount of familiar cameras. Ensure that there is always one trigger per camera in the scene.");
         }
         
         weaverCamerasTriggeredSinceLastCheckpoint = 0;

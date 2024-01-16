@@ -5,17 +5,14 @@ using UnityEngine;
 public class CameraIndexScript : MonoBehaviour, ITriggerable
 {
     public int cameraIndex;
-    public bool triggered;
-    public bool isLoop; //Reference only, set in inspector
+    [HideInInspector] public bool triggered;
+    [HideInInspector] public bool isLoop; //Reference only, set in inspector
     public bool isZaxisTrigger; //If false, then its an X axis trigger
     public bool goingOppositeDirection;
-    public Transform weaverTransform; //Put only the weaver's transform
-    public Transform familiarTransform; //Put only the familiar's transform
+    private Transform weaverTransform; //Put only the weaver's transform
+    private Transform familiarTransform; //Put only the familiar's transform
     private FamiliarScript familiarScript; 
-    [Header("Cutscene")]
-    [CannotBeNullObjectField] public GameObject[] cutsceneManager; //Set to 0 if there are no cutscenes
-    [HideInInspector]
-    public bool enteredFromNorth; //Determines if the player entered from the south side or the north side of the collider
+    [HideInInspector] private bool enteredFromNorth; //Determines if the player entered from the south side or the north side of the collider
 
     public void Awake()
     {
@@ -27,13 +24,6 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
 
     public void OnTrigEnter(Collider other)
     {
-        if (other.gameObject.tag == "CutsceneTrigger") {
-            //Only the trigger that is a child of a certain cutscene manager will activate a cutscene.
-            foreach (GameObject cm in cutsceneManager) {
-                CutsceneManagerScript cms = cm.GetComponent<CutsceneManagerScript>();
-                cms.StartCutscene();
-            }     
-        }
         if (other.gameObject.tag == "LevelTrigger") {
             LevelTriggerScript levelTriggerScript = other.GetComponent<LevelTriggerScript>();
             int section = levelTriggerScript.triggerType;
