@@ -8,17 +8,21 @@ public class LightSourceScript : MonoBehaviour
     [CannotBeNullObjectField] public Transform playerTransform;
 
     public LayerMask obstructionView;
-
+    
     [System.Serializable]
     public struct LightData
     {
         public Light lightSource;
-       [Range (0,40)] public float maxDistance;
-       
+        [Range (0,40)] public float maxDistance;
+        public GameObject lightCollider;
     }
 
-    public LightData[] lightsData; 
+    public LightData[] lightsArray;
 
+    void Start()
+    {
+      
+    }
     void Update()
     {
         BatchRaycastForLights();
@@ -27,7 +31,7 @@ public class LightSourceScript : MonoBehaviour
     void BatchRaycastForLights()
     {
         
-        foreach (LightData lightData in lightsData)
+        foreach (LightData lightData in lightsArray)
         {
             Light lightSource = lightData.lightSource;
 
@@ -35,11 +39,15 @@ public class LightSourceScript : MonoBehaviour
             
             lightSource.range = maxDistance;
 
+            lightData.lightCollider.transform.localScale = new Vector3 (maxDistance,0,0);
+
             Vector3 directionToPlayer = playerTransform.position - lightSource.transform.position;
           
+
             RaycastHit[] hits = Physics.RaycastAll(lightSource.transform.position, directionToPlayer, maxDistance, obstructionView);
 
-            Debug.DrawRay(lightSource.transform.position, directionToPlayer, Color.green);
+            Debug.DrawRay(lightSource.transform.position, directionToPlayer * maxDistance /2, Color.green);
+
             foreach (RaycastHit hit in hits)
             {        
                 Debug.Log("Light source: " + lightSource.name + " - Obstruction by: " + hit.collider.gameObject.name);
