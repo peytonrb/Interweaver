@@ -15,14 +15,12 @@ public class CameraMasterScript : MonoBehaviour
     //Weaver Camera + Checkpoints
     [HideInInspector] public GameObject[] weaverCheckpoints;
     [HideInInspector] public GameObject[] weaverCameras;
-    //public CinemachineVirtualCamera[] weaverVirtualCams; //For all cameras that are around the weaver
     private int weaverCamerasTriggeredSinceLastCheckpoint;
     [HideInInspector] public int lastWeaverCameraTriggered;
     
     //Familiar Camera + Checkpoints
     [HideInInspector] public GameObject[] familiarCheckpoints;
     [HideInInspector] public GameObject[] familiarCameras;
-    //public CinemachineVirtualCamera[] familiarVirtualCams; //For all cameras that are around the familiar
     private int familiarCamerasTriggeredSinceLastCheckpoint;
     [HideInInspector] public int lastFamiliarCameraTriggered;
 
@@ -87,12 +85,20 @@ public class CameraMasterScript : MonoBehaviour
             cis.cameraIndex = i;
         }
 
-        if (weaverCheckpoints.Length != weaverCameras.Length) {
-            Debug.LogError("Weaver camera trigger amount does not equal amount of weaver cameras. Ensure that there is always one trigger per camera in the scene.");
+        //Error messages
+        if (weaverCheckpoints.Length < weaverCameras.Length - 1) {
+            Debug.LogError("ERROR: There isn't enough camera triggers on the weaver side. This may cause the incorrect camera to be on at certain sections of the level. Assure that there is exactly one camera more than the amount of camera triggers.");
         }
-        if (familiarCheckpoints.Length != familiarCameras.Length) {
-            Debug.LogError("Familiar camera trigger amount does not equal amount of familiar cameras. Ensure that there is always one trigger per camera in the scene.");
+        if (familiarCheckpoints.Length < familiarCameras.Length - 1) {
+            Debug.LogError("ERROR: There isn't enough camera triggers on the familiar side. This may cause the incorrect camera to be on at certain sections of the level. Assure that there is exactly one camera more than the amount of camera triggers.");
         }
+        if (weaverCheckpoints.Length > weaverCameras.Length - 1) {
+            Debug.LogError("ERROR: There are too many camera triggers on the weaver side. This may cause the incorrect camera to be on at certain sections of the level. Assure that there is exactly one camera more than the amount of camera triggers.");
+        }
+        if (familiarCheckpoints.Length > familiarCameras.Length - 1) {
+            Debug.LogError("ERROR: There are too many camera triggers on the familiar side. This may cause the incorrect camera to be on at certain sections of the level. Assure that there is exactly one camera more than the amount of camera triggers.");
+        }
+        
         
         weaverCamerasTriggeredSinceLastCheckpoint = 0;
         familiarCamerasTriggeredSinceLastCheckpoint = 0;

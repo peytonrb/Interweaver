@@ -146,6 +146,10 @@ public class CutsceneManagerScript : MonoBehaviour
             
             //Debug.Log(cutscenePhase);
             //Debug.Log(director.duration);
+
+            if (Input.GetKeyDown(KeyCode.F)) {
+                EndCutscene();
+            }
         }
         
     }
