@@ -7,11 +7,12 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
     public int cameraIndex;
     [HideInInspector] public bool triggered;
     [HideInInspector] public bool isLoop; //Reference only, set in inspector
-    public bool isZaxisTrigger; //If false, then its an X axis trigger
+    private bool isZaxisTrigger; //If false, then its an X axis trigger
     public bool goingOppositeDirection;
     private Transform weaverTransform; //Put only the weaver's transform
     private Transform familiarTransform; //Put only the familiar's transform
     private FamiliarScript familiarScript; 
+    private BoxCollider bc;
     [HideInInspector] private bool enteredFromNorth; //Determines if the player entered from the south side or the north side of the collider
 
     public void Awake()
@@ -19,7 +20,14 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
         weaverTransform = FindObjectOfType<PlayerController>().GetComponent<Transform>();
         familiarTransform = FindObjectOfType<FamiliarScript>().GetComponent<Transform>();
         familiarScript = FindObjectOfType<FamiliarScript>().GetComponent<FamiliarScript>();
+        bc = GetComponent<BoxCollider>();
 
+        if (bc.size.x > bc.size.z) {
+            isZaxisTrigger = true;
+        }
+        else {
+            isZaxisTrigger = false;
+        }
     }
 
     public void OnTrigEnter(Collider other)
