@@ -6,10 +6,9 @@ using UnityEngine.InputSystem.XR;
 
 public class DarknessMechanicScript : MonoBehaviour
 {
-    [Header("timer")]
-
-    [Range(0, 14)] public float countDown;
-
+    [Header("Timer")]
+    [Range(0, 14)] private float countDown;
+    public float deathTime = 5f;
     private bool isSafe;
 
     
@@ -27,13 +26,13 @@ public class DarknessMechanicScript : MonoBehaviour
 
     IEnumerator DarknessTimer()
     {
-        while ((countDown < 14f) && (!isSafe))
+        while ((countDown < deathTime) && (!isSafe))
         {
-            countDown += Time.deltaTime;            
+            countDown += Time.deltaTime;
             yield return null;
         }
 
-        if (countDown >= 14)
+        if (countDown >= deathTime)
         {
             Debug.Log("not funny bro");
         }
@@ -43,6 +42,7 @@ public class DarknessMechanicScript : MonoBehaviour
     {
         if (other.gameObject.tag == "LightObject")
         {
+            Debug.Log(other.gameObject);
             isSafe = true;
             countDown = 0f;
             StopCoroutine(DarknessTimer());

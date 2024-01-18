@@ -6,7 +6,6 @@ public class LightSourceScript : MonoBehaviour
 {
     [Header("variables")]
     [CannotBeNullObjectField] public Transform playerTransform;
-
     public LayerMask obstructionView;
     
     [System.Serializable]
@@ -14,15 +13,11 @@ public class LightSourceScript : MonoBehaviour
     {
         public Light lightSource;
         [Range (0,40)] public float maxDistance;
-        public GameObject lightCollider;
+        public SphereCollider lightCollider;
     }
 
     public LightData[] lightsArray;
 
-    void Start()
-    {
-      
-    }
     void Update()
     {
         BatchRaycastForLights(); 
@@ -39,7 +34,7 @@ public class LightSourceScript : MonoBehaviour
             
             lightSource.range = maxDistance;
 
-            lightData.lightCollider.transform.localScale = new Vector3 (maxDistance,0,0); //clickty clackty, this is from the public structy
+            //lightData.lightCollider.transform.localScale = new Vector3 (maxDistance,0,0); //clickty clackty, this is from the public structy
 
             Vector3 directionToPlayer = playerTransform.position - lightSource.transform.position;
 
