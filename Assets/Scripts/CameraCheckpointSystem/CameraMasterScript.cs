@@ -16,7 +16,8 @@ public class CameraMasterScript : MonoBehaviour
     [HideInInspector] public GameObject[] weaverCheckpoints;
     [HideInInspector] public GameObject[] weaverCameras;
     private int weaverCamerasTriggeredSinceLastCheckpoint;
-    [HideInInspector] public int lastWeaverCameraTriggered;
+    public int lastWeaverCameraTriggered; //This is the last camera that is triggered upon entering the next checkpoint.
+    //When the player dies, this camera index will be activated when the player is teleported back to the previous checkpoint.
     
     //Familiar Camera + Checkpoints
     [HideInInspector] public GameObject[] familiarCheckpoints;
@@ -171,6 +172,7 @@ public class CameraMasterScript : MonoBehaviour
     
     public void WeaverCameraReturnOnDeath(int rotationstate) {
         int cameraIndexTriggersToReset = rotationstate + weaverCamerasTriggeredSinceLastCheckpoint; 
+        weaverCameraOnPriority = rotationstate;
         
         for (int i = rotationstate; i < cameraIndexTriggersToReset; i++) {
             CameraIndexScript cis = weaverCheckpoints[i].GetComponent<CameraIndexScript>();
@@ -182,6 +184,8 @@ public class CameraMasterScript : MonoBehaviour
             }
             cis.triggered = false;
         }
+
+        weaverCamerasTriggeredSinceLastCheckpoint = 0;
     }
 
     public void SwitchToFamiliarCamera() {
@@ -241,6 +245,7 @@ public class CameraMasterScript : MonoBehaviour
         }
     }
 
+    //This function tells the checkpoint what camera will be active when the player dies.
     public void ResetWeaverCamerasTriggered() {
         weaverCamerasTriggeredSinceLastCheckpoint = 0;
         lastWeaverCameraTriggered = weaverCameraOnPriority;
@@ -312,7 +317,8 @@ public class CameraMasterScript : MonoBehaviour
     }
 
     public void FamiliarCameraReturnOnDeath(int rotationstate) {
-        int cameraIndexTriggersToReset = rotationstate + familiarCamerasTriggeredSinceLastCheckpoint; 
+        int cameraIndexTriggersToReset = rotationstate + familiarCamerasTriggeredSinceLastCheckpoint;
+        familiarCameraOnPriority = rotationstate;
         
         for (int i = rotationstate; i < cameraIndexTriggersToReset; i++) {
             CameraIndexScript cis = familiarCheckpoints[i].GetComponent<CameraIndexScript>();
@@ -325,6 +331,8 @@ public class CameraMasterScript : MonoBehaviour
             cis.triggered = false;
             
         }
+
+        familiarCamerasTriggeredSinceLastCheckpoint = 0;
     }
 
     public void ResetFamiliarCameras() {
@@ -364,6 +372,7 @@ public class CameraMasterScript : MonoBehaviour
         }
     }
 
+    //This function tells the checkpoint what camera will be active when the player dies.
     public void ResetFamiliarCamerasTriggered() {
         familiarCamerasTriggeredSinceLastCheckpoint = 0;
         lastFamiliarCameraTriggered = familiarCameraOnPriority;
