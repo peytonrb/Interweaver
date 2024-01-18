@@ -47,6 +47,7 @@ public class DialogueTriggers : MonoBehaviour
             if (isAutoTrigger)
             {
                 Debug.Log("TRIGGERED");
+                DialogueManager.instance.currentTrigger = this;
                 DialogueManager.instance.StartDialogue(dialogue, textBox);
             }
             else
