@@ -49,7 +49,6 @@ public class DialogueTriggers : MonoBehaviour
                 Debug.Log("TRIGGERED");
                 DialogueManager.instance.currentTrigger = this;
                 DialogueManager.instance.StartDialogue(dialogue, textBox);
-                isInteracting = true;
             }
             else
             {
@@ -62,6 +61,7 @@ public class DialogueTriggers : MonoBehaviour
                     KeyboardIndicator.SetActive(true);
                 }
             }
+            
         }
     }
 
@@ -80,18 +80,7 @@ public class DialogueTriggers : MonoBehaviour
                 ControllerIndicator.SetActive(false);
                 KeyboardIndicator.SetActive(false);
             }
-
-        }
-    }
-
-    void Update()
-    {
-        if (isAutoTrigger && isInteracting) // if actively within an event trigger
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                DialogueManager.instance.DisplayNextSentence();
-            }
+            
         }
     }
 }

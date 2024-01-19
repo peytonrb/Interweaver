@@ -15,9 +15,8 @@ public class DialogueManager : MonoBehaviour
 
     public AudioClip speechFile;
     public DialogueTriggers currentTrigger;
-
+    
     public static DialogueManager instance;
-    private MovementScript moveScript;
 
     void Awake()
     {
@@ -34,7 +33,6 @@ public class DialogueManager : MonoBehaviour
     void Start()
     {
         sentences = new Queue<string>();
-        moveScript = GameObject.FindWithTag("Player").GetComponent<MovementScript>();
     }
 
     // begins the dialogue
@@ -77,25 +75,19 @@ public class DialogueManager : MonoBehaviour
 
         foreach (char letter in sentence.ToCharArray()) // add array of clips w pitches to be randomly called from here
         {
-
+            
             AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, speechFile, 1f);
             dialogueText.text += letter;
             yield return null;
-
+            
         }
     }
 
     public void EndDialogue()
     {
         textBoxUI.SetActive(false);
-
-        if (currentTrigger != null)
-        {
-            currentTrigger.isInteracting = false;
-            currentTrigger.disableNPCDialogue();
-        }
-
-        moveScript.ToggleCanMove(true);
+        currentTrigger.isInteracting = false;
+        currentTrigger.disableNPCDialogue();
     }
 
     // initializes the text objects for intended dialogue
