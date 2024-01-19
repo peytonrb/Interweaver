@@ -7,13 +7,15 @@ public class LightSourceScript : MonoBehaviour
     [Header("variables")]
     [CannotBeNullObjectField] public Transform playerTransform;
     public LayerMask obstructionView;
-    
+    private bool lightsOn;
+
     [System.Serializable]
     public struct LightData
     {
         public Light lightSource;
         [Range (0,40)] public float maxDistance;
         public SphereCollider lightCollider;
+        public bool isOn;
     }
 
     public LightData[] lightsArray;
@@ -34,20 +36,23 @@ public class LightSourceScript : MonoBehaviour
             
             lightSource.range = maxDistance;
 
-            //lightData.lightCollider.transform.localScale = new Vector3 (maxDistance,0,0); //clickty clackty, this is from the public structy
+            lightsOn = lightData.isOn;
+            
+            if (lightsOn) 
+            {
+                Vector3 directionToPlayer = playerTransform.position - lightSource.transform.position;
+                //the batch raycast from all light sources in the array will point towards the player and will do somehing if the object between the player and the  light source if it has the layer
+                RaycastHit[] hits = Physics.RaycastAll(lightSource.transform.position, directionToPlayer, maxDistance, obstructionView);
 
-            Vector3 directionToPlayer = playerTransform.position - lightSource.transform.position;
+                Debug.DrawRay(lightSource.transform.position, directionToPlayer * maxDistance / 2f, Color.green);
 
-            //the batch raycast from all light sources in the array will point towards the player and will do somehing if the object between the player and the  light source if it has the layer
-            RaycastHit[] hits = Physics.RaycastAll(lightSource.transform.position, directionToPlayer, maxDistance, obstructionView); 
-
-            Debug.DrawRay(lightSource.transform.position, directionToPlayer * maxDistance /2f, Color.green);
-
-            foreach (RaycastHit hit in hits)
-            {   
-                //inside this logic this can be used for obstructing the view if there is an object with the obstruction layer
-                Debug.Log("Light source: " + lightSource.name + " - Obstruction by: " + hit.collider.gameObject.name);
+                foreach (RaycastHit hit in hits)
+                {
+                    //inside this logic this can be used for obstructing the view if there is an object with the obstruction layer
+                    Debug.Log("Light source: " + lightSource.name + " - Obstruction by: " + hit.collider.gameObject.name);
+                }
             }
+           
         }
     }
 }
