@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class RivalEventTrigger : MonoBehaviour
 {
@@ -8,12 +9,14 @@ public class RivalEventTrigger : MonoBehaviour
     private MovementScript moveScript;
     private GameObject rival;
     private bool hasPlayed; // only will play once. if player runs through trigger again, it would fail
+    public GameObject smokePrefab;
 
     [Header("Rival Dialogue")]
     public Dialogue dialogue;
     public GameObject textBox;
     [Range(0, 10)] public int secondsUntilDialogueAppears = 2;
     private bool isSpeaking = false;
+    private VisualEffect smoke;
 
     void Start()
     {
@@ -40,7 +43,8 @@ public class RivalEventTrigger : MonoBehaviour
         if (!hasPlayed)
         {
             rival.SetActive(true); // make more interesting w animation
-            // add vfx
+            smoke = Instantiate(smokePrefab, rival.transform.position - new Vector3(0, 1.5f, 0), Quaternion.identity).GetComponent<VisualEffect>();
+            smoke.Play();
             StartCoroutine(DialogueStart());
             hasPlayed = true;
         }
@@ -48,6 +52,7 @@ public class RivalEventTrigger : MonoBehaviour
 
     public void OnTriggerExit(Collider collider)
     {
+        smoke.Play();
         rival.SetActive(false);
     }
 
