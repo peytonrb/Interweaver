@@ -13,6 +13,7 @@ public class PauseScript : MonoBehaviour
 
     [SerializeField] private GameObject optionGroup;
     [SerializeField] private GameObject defaultGroup;
+    [SerializeField] private GameObject controlsPanel;
 
     [SerializeField] private GameObject ControllerImage;
     [SerializeField] private GameObject KeyboardImage;
@@ -159,6 +160,26 @@ public class PauseScript : MonoBehaviour
             optionGroup.SetActive(true);
 
             optionGroup.GetComponent<CanvasGroup>().alpha = 1f;
+            defaultGroup.GetComponent<CanvasGroup>().alpha = 0f;
+        }
+    }
+
+    public void ToggleControls() 
+    {
+        if (controlsPanel.activeSelf)
+        {
+            controlsPanel.SetActive(false);
+            defaultGroup.SetActive(true);
+
+            controlsPanel.GetComponent<CanvasGroup>().alpha = 0f;
+            defaultGroup.GetComponent<CanvasGroup>().alpha = 1f;
+        }
+        else 
+        {
+            controlsPanel.SetActive(true);
+            defaultGroup.SetActive(false);
+
+            controlsPanel.GetComponent<CanvasGroup>().alpha = 1f;
             defaultGroup.GetComponent<CanvasGroup>().alpha = 0f;
         }
     }
