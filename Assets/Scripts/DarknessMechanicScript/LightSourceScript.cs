@@ -8,7 +8,8 @@ public class LightSourceScript : MonoBehaviour
     [CannotBeNullObjectField] public Transform playerTransform;
     public LayerMask obstructionView;
     private bool lightsOn;
-
+    private float lightMaxDistance;
+    private Light lightStuff;
     [System.Serializable]
     public struct LightData
     {
@@ -22,10 +23,15 @@ public class LightSourceScript : MonoBehaviour
 
     void Update()
     {
-        BatchRaycastForLights(); 
+        BatchRaycastInfoForLights(); 
+
+        if(lightsOn) 
+        {
+            BatchRaycastForLights(lightMaxDistance, lightStuff);
+        }
     }
 
-    void BatchRaycastForLights() //will need to make this better so that it doesn't happen every frame, kind of cringe ngl
+    void BatchRaycastInfoForLights() //will need to make this better so that it doesn't happen every frame, kind of cringe ngl
     {
         
         foreach (LightData lightData in lightsArray)
@@ -37,22 +43,28 @@ public class LightSourceScript : MonoBehaviour
             lightSource.range = maxDistance;
 
             lightsOn = lightData.isOn;
-            
-            if (lightsOn) 
+
+
+            BatchRaycastForLights(maxDistance, lightSource);
+        }
+    }
+    void BatchRaycastForLights(float Distance, Light pointLight)
+    {
+        lightMaxDistance = Distance;
+        lightStuff = pointLight;
+        if (lightsOn)
+        {
+            Vector3 directionToPlayer = playerTransform.position - lightStuff.transform.position;
+            //the batch raycast from all light sources in the array will point towards the player and will do somehing if the object between the player and the  light source if it has the layer
+            RaycastHit[] hits = Physics.RaycastAll(lightStuff.transform.position, directionToPlayer, lightMaxDistance, obstructionView);
+
+            Debug.DrawRay(lightStuff.transform.position, directionToPlayer * lightMaxDistance / 2f, Color.green);
+
+            foreach (RaycastHit hit in hits)
             {
-                Vector3 directionToPlayer = playerTransform.position - lightSource.transform.position;
-                //the batch raycast from all light sources in the array will point towards the player and will do somehing if the object between the player and the  light source if it has the layer
-                RaycastHit[] hits = Physics.RaycastAll(lightSource.transform.position, directionToPlayer, maxDistance, obstructionView);
-
-                Debug.DrawRay(lightSource.transform.position, directionToPlayer * maxDistance / 2f, Color.green);
-
-                foreach (RaycastHit hit in hits)
-                {
-                    //inside this logic this can be used for obstructing the view if there is an object with the obstruction layer
-                    Debug.Log("Light source: " + lightSource.name + " - Obstruction by: " + hit.collider.gameObject.name);
-                }
+                //inside this logic this can be used for obstructing the view if there is an object with the obstruction layer
+                Debug.Log("Light source: " + lightStuff.name + " - Obstruction by: " + hit.collider.gameObject.name);
             }
-           
         }
     }
 }
