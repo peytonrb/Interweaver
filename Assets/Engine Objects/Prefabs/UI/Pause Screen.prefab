@@ -555,9 +555,9 @@ RectTransform:
   m_Father: {fileID: 9059504633206399567}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 225, y: -35}
   m_SizeDelta: {x: 450, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6209506003933578329
@@ -2473,9 +2473,9 @@ RectTransform:
   m_Father: {fileID: 9059504633206399567}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 225, y: -471.7}
   m_SizeDelta: {x: 450, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &881140787464258852
@@ -3812,9 +3812,9 @@ RectTransform:
   m_Father: {fileID: 9059504633206399567}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 225, y: -291.7}
   m_SizeDelta: {x: 450, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &537224654362971338
@@ -4159,9 +4159,9 @@ RectTransform:
   m_Father: {fileID: 9059504633206399567}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 224.55, y: -118.35}
   m_SizeDelta: {x: 449.1, y: 56.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7502184064509751623
@@ -4559,9 +4559,9 @@ RectTransform:
   m_Father: {fileID: 9059504633206399567}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 225, y: -201.7}
   m_SizeDelta: {x: 450, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5683908149576580227
@@ -5864,9 +5864,9 @@ RectTransform:
   m_Father: {fileID: 9059504633206399567}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 225, y: -381.7}
   m_SizeDelta: {x: 450, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5350825973574513668
@@ -6325,7 +6325,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4398531692910012815
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6366,6 +6366,8 @@ MonoBehaviour:
   optionGroup: {fileID: 2634108432572122918}
   defaultGroup: {fileID: 3885692551330952230}
   controlsPanel: {fileID: 849503135321329629}
+  keyboardGroup: {fileID: 3805112129046987792}
+  controllerGroup: {fileID: 6855111848330211690}
   ControllerImage: {fileID: 5593637702736037178}
   KeyboardImage: {fileID: 520898947115239341}
   theMixer: {fileID: 24100000, guid: 6ef25b075c35e0f42b7cfa01f6be174d, type: 2}
@@ -7240,6 +7242,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 3470854738439180325, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3731467227626854585, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.65
@@ -7401,6 +7407,16 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!1 &3805112129046987792 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3470854738439180325, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+  m_PrefabInstance: {fileID: 352559146102838325}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6855111848330211690 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6613172437079909727, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+  m_PrefabInstance: {fileID: 352559146102838325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7462213036512196612 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7163979700163800113, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}

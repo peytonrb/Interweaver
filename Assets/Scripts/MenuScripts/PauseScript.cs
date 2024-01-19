@@ -7,13 +7,16 @@ using UnityEngine.UI;
 
 public class PauseScript : MonoBehaviour
 {   
-    public static bool usingController = false;
+    private bool usingController = false;
     private Toggle toggle;
     private EventSystem eventSystem;
 
     [SerializeField] private GameObject optionGroup;
     [SerializeField] private GameObject defaultGroup;
     [SerializeField] private GameObject controlsPanel;
+
+    [SerializeField] private GameObject keyboardGroup;
+    [SerializeField] private GameObject controllerGroup;
 
     [SerializeField] private GameObject ControllerImage;
     [SerializeField] private GameObject KeyboardImage;
@@ -126,6 +129,7 @@ public class PauseScript : MonoBehaviour
                 InputManagerScript.instance.ToggleControlScheme(true);
                 ControllerImage.SetActive(true);
                 KeyboardImage.SetActive(false);
+                usingController = true;
             }
         }
         else
@@ -139,6 +143,7 @@ public class PauseScript : MonoBehaviour
                 InputManagerScript.instance.ToggleControlScheme(false);
                 ControllerImage.SetActive(false);
                 KeyboardImage.SetActive(true);
+                usingController = false;
             }
         }
 
@@ -181,6 +186,17 @@ public class PauseScript : MonoBehaviour
 
             controlsPanel.GetComponent<CanvasGroup>().alpha = 1f;
             defaultGroup.GetComponent<CanvasGroup>().alpha = 0f;
+
+            if (usingController)
+            {
+                controllerGroup.SetActive(true);
+                keyboardGroup.SetActive(false);
+            }
+            else 
+            {
+                controllerGroup.SetActive(false);
+                keyboardGroup.SetActive(true);
+            }
         }
     }
 
