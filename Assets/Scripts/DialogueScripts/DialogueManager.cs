@@ -17,6 +17,7 @@ public class DialogueManager : MonoBehaviour
     public DialogueTriggers currentTrigger;
     
     public static DialogueManager instance;
+    private MovementScript moveScript;
 
     void Awake()
     {
@@ -33,6 +34,7 @@ public class DialogueManager : MonoBehaviour
     void Start()
     {
         sentences = new Queue<string>();
+        moveScript = GameObject.FindWithTag("Player").GetComponent<MovementScript>();
     }
 
     // begins the dialogue
@@ -86,8 +88,14 @@ public class DialogueManager : MonoBehaviour
     public void EndDialogue()
     {
         textBoxUI.SetActive(false);
-        currentTrigger.isInteracting = false;
-        currentTrigger.disableNPCDialogue();
+
+        if (currentTrigger != null)
+        {
+            currentTrigger.isInteracting = false;
+            currentTrigger.disableNPCDialogue();
+        }
+
+        moveScript.ToggleCanMove(true);
     }
 
     // initializes the text objects for intended dialogue
