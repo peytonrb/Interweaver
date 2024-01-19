@@ -199,7 +199,14 @@ public class MovementScript : MonoBehaviour
                 }
                 else
                 {
-                    currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
+                    if (currentSpeed > 0.1)
+                    {
+                        currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
+                    }
+                    else
+                    {
+                        currentSpeed = 0;
+                    }
                     characterAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
                     if (AudioManager.instance.footStepsChannel.isPlaying)
                         AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
