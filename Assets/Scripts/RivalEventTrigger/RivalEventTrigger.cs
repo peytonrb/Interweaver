@@ -10,12 +10,12 @@ public class RivalEventTrigger : MonoBehaviour
     private MovementScript moveScript;
     private GameObject rival;
     private bool hasPlayed; // only will play once. if player runs through trigger again, it would fail
-    public GameObject smokePrefab;
-    [CannotBeNullObjectField] public CinemachineVirtualCamera myVirtualCam;
+    [CannotBeNullObjectField] public GameObject smokePrefab;
+    private CinemachineVirtualCamera myVirtualCam;
 
     [Header("Rival Dialogue")]
-    public Dialogue dialogue;
-    public GameObject textBox;
+    [CannotBeNullObjectField] public Dialogue dialogue;
+    [CannotBeNullObjectField] public GameObject textBox;
     [Range(0, 10)] public int secondsUntilDialogueAppears = 2;
     private bool isSpeaking = false;
     private VisualEffect smoke;
@@ -27,6 +27,7 @@ public class RivalEventTrigger : MonoBehaviour
         rival.SetActive(false);
         weaver = GameObject.FindWithTag("Player");
         moveScript = weaver.GetComponent<MovementScript>();
+        myVirtualCam = rival.transform.GetChild(0).GetComponent<CinemachineVirtualCamera>();
     }
 
     void Update()
