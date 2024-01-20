@@ -16,9 +16,10 @@ public class MoleDigScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.DrawRay(transform.position, -transform.up, Color.red);
+
         if (OnDigableLayer())
-        {
-            Debug.DrawRay(transform.position, -transform.up, Color.red);
+        {          
             Debug.Log("yooo this is digable?");
         }
     }
@@ -37,15 +38,16 @@ public class MoleDigScript : MonoBehaviour
 
     public void DigPressed()
     {
-        if (digThroughGround)
+        if (!digThroughGround && OnDigableLayer())
         {
             Debug.Log("we're digging bois");
-            digThroughGround = false;
+            digThroughGround = true;
         }
-        else if (!digThroughGround)
+
+        else if (digThroughGround && OnDigableLayer())
         {
             Debug.Log("we got out bois");
-            digThroughGround = true;
+            digThroughGround = false;
         }
     }
 
