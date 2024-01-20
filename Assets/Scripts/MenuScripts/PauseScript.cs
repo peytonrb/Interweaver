@@ -14,6 +14,7 @@ public class PauseScript : MonoBehaviour
     [SerializeField] private GameObject optionGroup;
     [SerializeField] private GameObject defaultGroup;
     [SerializeField] private GameObject controlsPanel;
+    [CannotBeNullObjectField] [SerializeField] private GameObject inputManager;
 
     [SerializeField] private GameObject keyboardGroup;
     [SerializeField] private GameObject controllerGroup;
@@ -175,6 +176,7 @@ public class PauseScript : MonoBehaviour
         {
             controlsPanel.SetActive(false);
             defaultGroup.SetActive(true);
+            inputManager.SetActive(true);
 
             controlsPanel.GetComponent<CanvasGroup>().alpha = 0f;
             defaultGroup.GetComponent<CanvasGroup>().alpha = 1f;
@@ -183,6 +185,7 @@ public class PauseScript : MonoBehaviour
         {
             controlsPanel.SetActive(true);
             defaultGroup.SetActive(false);
+            inputManager.SetActive(false);
 
             controlsPanel.GetComponent<CanvasGroup>().alpha = 1f;
             defaultGroup.GetComponent<CanvasGroup>().alpha = 0f;
