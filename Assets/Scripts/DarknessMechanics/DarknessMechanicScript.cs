@@ -42,7 +42,6 @@ public class DarknessMechanicScript : MonoBehaviour
     {
         if (other.gameObject.tag == "LightObject")
         {
-            Debug.Log(other.gameObject);
             isSafe = true;
             countDown = 0f;
             StopCoroutine(DarknessTimer());

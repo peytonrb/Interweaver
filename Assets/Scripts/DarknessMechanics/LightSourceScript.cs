@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class LightSourceScript : MonoBehaviour
 {
-    [Header("variables")]
+    public static LightSourceScript Instance;
+
+    [Header("Variables")]
     [CannotBeNullObjectField] public Transform playerTransform;
     public LayerMask obstructionView;
     private bool lightsOn;
     private float lightMaxDistance;
     private Light lightStuff;
-    [System.Serializable]
-    public struct LightData
+    [System.Serializable] public struct LightData
     {
         public Light lightSource;
         [Range (0,40)] public float maxDistance;
@@ -20,6 +21,18 @@ public class LightSourceScript : MonoBehaviour
     }
 
     public LightData[] lightsArray;
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Update()
     {
