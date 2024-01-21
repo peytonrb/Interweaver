@@ -9,6 +9,9 @@ public class JumpAndDashScript : MonoBehaviour
     private MovementScript movementScript;
     private CharacterController characterController;
 
+    [Header("Utility")]
+    [SerializeField] private bool showDistanceGizmo = true;
+
     [Header("Jumping")]
     [SerializeField][Range(1, 10)] private float jumpForce = 3f;
     [SerializeField] [Tooltip("Allows the weaver to jump forever instead of dash")] private bool infiniteJump;
@@ -56,7 +59,7 @@ public class JumpAndDashScript : MonoBehaviour
         {
             movementScript.ResetGravity();
         }
-        
+
         StartCoroutine(GroundCheck());
         movementScript.active = true;
     }
@@ -72,7 +75,10 @@ public class JumpAndDashScript : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position, transform.position + gameObject.transform.forward * dashSpeed * dashLength);
+        if (showDistanceGizmo)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(transform.position, transform.position + gameObject.transform.forward * dashSpeed * dashLength);
+        }
     }
 }
