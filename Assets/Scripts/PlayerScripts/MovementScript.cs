@@ -16,8 +16,6 @@ public class MovementScript : MonoBehaviour
     public float speed; //Base walk speed for player
     private float currentSpeed = 0; // the current speed for the player
     private CharacterController characterController; //references the character controller component
-    //public InputActionAsset inputs; //In inspector, make sure playerInputs is put in this field
-    //private InputAction moveInput; //Is the specific input action regarding arrow keys, WASD, and left stick
     private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
     private Vector3 direction; //A reference to the directional movement of the player in 3D space
     private Vector3 velocity; // velocity of the controller
@@ -41,8 +39,6 @@ public class MovementScript : MonoBehaviour
     public float bounceValue = 3;
     private bool isNearGround;
 
-    //private bool bouncing = false;
-
     [Header("Animation")]
     [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
 
@@ -65,7 +61,6 @@ public class MovementScript : MonoBehaviour
 
     [Header("Dive VFX")]
     private ParticleSystem speedLinesVFX;
-
     [HideInInspector] public bool inCutscene;
     private PlayerController playerController;
     private FamiliarScript familiarScript;
@@ -94,8 +89,6 @@ public class MovementScript : MonoBehaviour
         originalAerialAcceleration = aerialAcceleration;
         originalAerialDeceleration = aerialDeceleration;
 
-        //moveInput = inputs.FindAction("Player/Move");
-
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
         //transform.position = GM.LastCheckPointPos;
@@ -118,7 +111,6 @@ public class MovementScript : MonoBehaviour
                     //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad
                     movement = InputManagerScript.instance.movement;
                     LookAndMove();
-
                 }
             }
         }
@@ -180,10 +172,7 @@ public class MovementScript : MonoBehaviour
                 if (direction.magnitude >= 0.1f)
                 {
                     currentSpeed = Mathf.Lerp(currentSpeed, speed, acceleration * Time.deltaTime);
-                    //Debug.Log(currentSpeed);
-                    //currentSpeed += acceleration * Time.deltaTime;
-                    //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
-                    characterAnimationHandler.ToggleMoveSpeedBlend(currentSpeed); // note: speed is static now, but this should work fine when variable speed is added
+                    characterAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
 
                     if (characterController.isGrounded)
                     {
@@ -208,19 +197,23 @@ public class MovementScript : MonoBehaviour
                 }
                 else
                 {
-                    currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
+                    if (currentSpeed > 0.1)
+                    {
+                        currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
+                    }
+                    else
+                    {
+                        currentSpeed = 0;
+                    }
                     characterAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
                     if (AudioManager.instance.footStepsChannel.isPlaying)
                         AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
-                    //Debug.Log(currentSpeed);
-                    //currentSpeed -= deceleration * Time.deltaTime;
-                    //currentSpeed = Mathf.Clamp(currentSpeed, 0f, speed);
                 }
 
                 velocity.x = currentSpeed * newDirection.x;
                 velocity.z = currentSpeed * newDirection.z;
 
-                characterController.Move(velocity * Time.deltaTime); // make move based on gravity
+                characterController.Move(velocity * Time.deltaTime); // make move
 
                 //Character gravity
                 if (!characterController.isGrounded)
@@ -229,7 +222,6 @@ public class MovementScript : MonoBehaviour
                     if (TryGetComponent<PlayerController>(out PlayerController playerCon) && !AudioManager.instance.fallChannel.isPlaying && canPlayFallAudio)
                     {
                         AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, weaverFallClip);
-                        Debug.Log("weaver fall");
                     }
                     else
                     {
@@ -237,7 +229,6 @@ public class MovementScript : MonoBehaviour
                         {
                             if (!AudioManager.instance.fallChannel.isPlaying || AudioManager.instance.fallChannel.clip != owlDiveClip && canPlayFallAudio)
                             {
-                                Debug.Log("Play Dive audio");
                                 AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, owlDiveClip);
                             }
                         }
@@ -246,7 +237,6 @@ public class MovementScript : MonoBehaviour
                             if (!AudioManager.instance.fallChannel.isPlaying || AudioManager.instance.fallChannel.clip != owlGlideClip)
                             {
                                 AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, owlGlideClip);
-                                Debug.Log("owl glide");
                             }
                         }
                     }
@@ -277,6 +267,13 @@ public class MovementScript : MonoBehaviour
 
                 }
 
+            }
+            else if (!active)
+            {
+                velocity.x = 0f;
+                velocity.z = 0f;
+                velocity.y += gravity * Time.deltaTime;
+                characterController.Move(velocity * Time.deltaTime); // make move
             }
 
             if (resettingTerminalVelocity)
@@ -403,18 +400,6 @@ public class MovementScript : MonoBehaviour
     }
 
     // -------------------------------------------------------------------
-
-    /*public void Bounce()
-    {
-        Debug.Log("bounce called");
-        ResetGravity();
-        ResetTerminalVelocity();
-        ResetAerialAcceleration();
-        ResetAerialDeceleration();
-        ResetVelocityY();
-        GetComponent<OwlDiveScript>().StartDiveCooldown(.1f);
-        //characterController.Move(bounceVector);
-    }*/
 
     public void GoToCheckPoint()
     {
