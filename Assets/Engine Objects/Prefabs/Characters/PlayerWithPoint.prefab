@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5402126169904835267}
   - component: {fileID: 2864162376311042491}
   - component: {fileID: 20847522854274277}
+  - component: {fileID: 2871888646774845234}
   - component: {fileID: 4762601280886837014}
   - component: {fileID: 7571894926950752737}
   - component: {fileID: 591368551210576134}
@@ -108,7 +109,7 @@ MonoBehaviour:
   canMove: 1
   speed: 10
   gravity: -3
-  aerialControl: 0
+  aerialControl: 1
   groundAcceleration: 2.5
   groundDeceleration: 10.6
   aerialAcceleration: 0
@@ -116,10 +117,6 @@ MonoBehaviour:
   terminalVelocity: -50
   bounceVector: {x: 0, y: 0, z: 0}
   bounceValue: 3
-  canJump: 1
-  jumpForce: 3
-  canDash: 0
-  infiniteJump: 0
   characterAnimationHandler: {fileID: 9032169286115513460}
   newDirection: {x: 0, y: 0, z: 0}
   cam: {fileID: 0}
@@ -130,6 +127,24 @@ MonoBehaviour:
   owlGlideClip: {fileID: 8300000, guid: 01ecb967191ca63479df2b7dff86f298, type: 3}
   owlDiveClip: {fileID: 8300000, guid: 0c0ad9dab261f8b41aa585839053f8a9, type: 3}
   inCutscene: 0
+--- !u!114 &2871888646774845234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359264606954408796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ff6c79968a903842bd219a06650481e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpForce: 3
+  infiniteJump: 0
+  canDash: 1
+  dashLength: 0.1
+  dashSpeed: 50
+  zeroGravDash: 0
 --- !u!114 &4762601280886837014
 MonoBehaviour:
   m_ObjectHideFlags: 0
