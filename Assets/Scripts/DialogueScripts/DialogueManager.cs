@@ -18,6 +18,7 @@ public class DialogueManager : MonoBehaviour
     
     public static DialogueManager instance;
     private MovementScript moveScript;
+    public bool isActive;
 
     void Awake()
     {
@@ -34,6 +35,7 @@ public class DialogueManager : MonoBehaviour
     void Start()
     {
         sentences = new Queue<string>();
+        isActive = false;
         moveScript = GameObject.FindWithTag("Player").GetComponent<MovementScript>();
     }
 
@@ -44,6 +46,7 @@ public class DialogueManager : MonoBehaviour
         nameText.text = dialogue.name;
         sentences.Clear();
         textBoxUI.SetActive(true);
+        isActive = true;
 
         foreach (string sentence in dialogue.sentences)
         {
@@ -96,6 +99,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         moveScript.ToggleCanMove(true);
+        isActive = false;
     }
 
     // initializes the text objects for intended dialogue
