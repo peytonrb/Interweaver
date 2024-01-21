@@ -29,6 +29,8 @@ public class CutsceneManagerScript : MonoBehaviour
     public GameObject cutsceneCanvas;
     public GameObject blackPanel;
     private CanvasGroup bpCanvasGroup;
+    
+    private bool debugisOn;
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +46,8 @@ public class CutsceneManagerScript : MonoBehaviour
         
         playerMovementScript = player.GetComponent<MovementScript>();
         director = GetComponent<PlayableDirector>();
+        
+        debugisOn = DebugManager.instance.GetDebugOn(); //Gets if debug features are on
 
         isCutscene = false;
         isTransitioning = false;
@@ -143,13 +147,12 @@ public class CutsceneManagerScript : MonoBehaviour
                     break;
                 }
             }
-            
-            //Debug.Log(cutscenePhase);
-            //Debug.Log(director.duration);
 
-            if (Input.GetKeyDown(KeyCode.F)) {
-                EndCutscene();
-            }
+            if (debugisOn) {
+                if (Input.GetKeyDown(KeyCode.F)) {
+                    EndCutscene();
+                }
+            }   
         }
         
     }
