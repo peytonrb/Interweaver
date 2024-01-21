@@ -72,6 +72,8 @@ MonoBehaviour:
   targetingLayerMask:
     serializedVersion: 2
     m_Bits: 0
+  isDead: 0
+  deathTimer: 3
   inRelocateMode: 0
   inCombineMode: 0
   uninteract: 0
@@ -114,6 +116,10 @@ MonoBehaviour:
   terminalVelocity: -50
   bounceVector: {x: 0, y: 0, z: 0}
   bounceValue: 3
+  canJump: 1
+  jumpForce: 3
+  canDash: 0
+  infiniteJump: 0
   characterAnimationHandler: {fileID: 9032169286115513460}
   newDirection: {x: 0, y: 0, z: 0}
   cam: {fileID: 0}
@@ -1000,3 +1006,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a57eab0c7adfe05469eedb310755a0d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathTimer: 0
