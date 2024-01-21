@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -38,6 +39,9 @@ public class MovementScript : MonoBehaviour
     public Vector3 bounceVector; //max velocity for bounce
     public float bounceValue = 3;
     private bool isNearGround;
+    private bool debugisOn;
+
+    //private bool bouncing = false;
 
     [Header("Animation")]
     [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
@@ -94,6 +98,7 @@ public class MovementScript : MonoBehaviour
         //transform.position = GM.LastCheckPointPos;
         characterController.enabled = true;
         inCutscene = false;
+        debugisOn = DebugManager.instance.GetDebugOn();
 
         StartCoroutine(DelayBeforeFallAudio());
     }
@@ -111,6 +116,17 @@ public class MovementScript : MonoBehaviour
                     //Looks at the inputs coming from arrow keys, WASD, and left stick on gamepad
                     movement = InputManagerScript.instance.movement;
                     LookAndMove();
+
+                    //Skipping checkpoints only allowed when debug mode is on
+                    if (debugisOn) {
+                        if (Input.GetKeyDown(KeyCode.LeftBracket)) {
+                            GM.GoToPreviousCheckpoint();
+                        }
+
+                        if (Input.GetKeyDown(KeyCode.RightBracket)) {
+                            GM.GoToNextCheckpoint();
+                        }
+                    }
                 }
             }
         }
