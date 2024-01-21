@@ -572,17 +572,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 440835242e5e14f489812588da29266e, type: 3}
     - target: {fileID: 20847522854274277, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
-      propertyPath: aerialControl
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 20847522854274277, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: weaverFallClip
       value: 
       objectReference: {fileID: 8300000, guid: 4d89867d6ad72cb45affd75ee71c73f8, type: 3}
-    - target: {fileID: 20847522854274277, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
-      propertyPath: aerialDeceleration
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 46808667028420449, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
@@ -1434,10 +1426,7 @@ PrefabInstance:
     - {fileID: 1913745848674449468, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1359264606954408796, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2122026654}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
 --- !u!1001 &205022356
 PrefabInstance:
@@ -5226,24 +5215,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d5af4afbcc62e147901b758b75bacd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2122026654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2122026641}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ff6c79968a903842bd219a06650481e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jumpForce: 3
-  infiniteJump: 0
-  canDash: 1
-  dashLength: 0.1
-  dashSpeed: 50
-  zeroGravDash: 0
 --- !u!4 &2130449302 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6138786360273511931, guid: eaf1009e6c29a7c4fbb57b403d04e9fe, type: 3}
