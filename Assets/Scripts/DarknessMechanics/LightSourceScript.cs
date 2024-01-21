@@ -16,7 +16,7 @@ public class LightSourceScript : MonoBehaviour
     {
         public Light lightSource;
         [Range (0,40)] public float maxDistance;
-        public SphereCollider lightCollider;
+        public Collider lightCollider;
         public bool isOn;
     }
 
