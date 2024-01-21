@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class MovementScript : MonoBehaviour 
+public class MovementScript : MonoBehaviour
 {
     private GameMasterScript GM; //This is refrencing the game master script
 
@@ -64,7 +64,7 @@ public class MovementScript : MonoBehaviour
     [HideInInspector] public bool inCutscene;
     private PlayerController playerController;
     private FamiliarScript familiarScript;
-    
+
 
     void Awake()
     {
@@ -74,7 +74,7 @@ public class MovementScript : MonoBehaviour
 
         speedLinesVFX = vfx;
     }
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -101,7 +101,8 @@ public class MovementScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!inCutscene) {
+        if (!inCutscene)
+        {
             //Move character only if they are on the ground
             if (characterController.isGrounded || aerialControl)
             {
@@ -113,12 +114,13 @@ public class MovementScript : MonoBehaviour
                 }
             }
         }
-        
+
     }
 
     public void ToggleCanMove(bool moves)
     {
-        if (familiarScript.myTurn) {
+        if (familiarScript.myTurn)
+        {
             if (moves)
             {
                 canMove = true;
@@ -130,9 +132,13 @@ public class MovementScript : MonoBehaviour
                 canMove = false;
                 characterAnimationHandler.ToggleMoveSpeedBlend(0);
                 familiarScript.talkingToNPC = true;
+
+                if (AudioManager.instance.footStepsChannel.isPlaying)
+                    AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
             }
         }
-        else {
+        else
+        {
             if (moves)
             {
                 canMove = true;
@@ -144,9 +150,12 @@ public class MovementScript : MonoBehaviour
                 canMove = false;
                 characterAnimationHandler.ToggleMoveSpeedBlend(0);
                 playerController.talkingToNPC = true;
+
+                if (AudioManager.instance.footStepsChannel.isPlaying)
+                    AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
             }
         }
-        
+
     }
 
     void FixedUpdate()
@@ -272,12 +281,13 @@ public class MovementScript : MonoBehaviour
                 ResetTerminalVelocity();
             }
 
-            if (inCutscene) {
+            if (inCutscene)
+            {
                 AudioManager.instance.StopSound(AudioManagerChannels.fallLoopChannel);
                 AudioManager.instance.StopSound(AudioManagerChannels.footStepsLoopChannel);
             }
         }
-        
+
     }
 
     public void LookAndMove()
@@ -288,8 +298,8 @@ public class MovementScript : MonoBehaviour
         if (direction.magnitude >= 0.2f)
         {
             float targetangle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetangle, ref rotationVelocity, rotationSpeed);                     
-            transform.rotation = Quaternion.Euler(0, angle, 0);                     
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetangle, ref rotationVelocity, rotationSpeed);
+            transform.rotation = Quaternion.Euler(0, angle, 0);
             newDirection = Quaternion.Euler(0, targetangle, 0) * Vector3.forward;
         }
     }
@@ -324,7 +334,7 @@ public class MovementScript : MonoBehaviour
     {
         aerialDeceleration = newAerialDeceleration;
     }
-    
+
     public void ResetAerialDeceleration()
     {
         aerialDeceleration = originalAerialDeceleration;
