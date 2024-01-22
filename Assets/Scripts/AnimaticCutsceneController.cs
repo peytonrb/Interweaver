@@ -20,6 +20,7 @@ public class AnimaticCutsceneController : MonoBehaviour
     private int currentPanel;
     private bool transitioning;
     private bool playedAudio;
+    private bool debugisOn;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +31,7 @@ public class AnimaticCutsceneController : MonoBehaviour
             playedAudio = false;
             currentPanel = 1;
             audioSource = GetComponent<AudioSource>();
+            debugisOn = DebugManager.instance.GetDebugOn();
 
             switch (cutscene) {
                 case 0:
@@ -83,8 +85,13 @@ public class AnimaticCutsceneController : MonoBehaviour
             else {
                 Transition();
             }
-        }
-        
+
+            if (debugisOn) {
+                if (Input.GetKeyDown(KeyCode.F)) {
+                    SceneManager.LoadScene("AlpineCombined");
+                }
+            }
+        }   
     }
 
     void Transition() {
