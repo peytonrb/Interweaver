@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using UnityEngine.InputSystem;
-using System.Linq;
+using Unity.VisualScripting;
 
 public class CameraMasterScript : MonoBehaviour
 {
@@ -13,15 +13,15 @@ public class CameraMasterScript : MonoBehaviour
     private CinemachineVirtualCamera currentCam;
 
     //Weaver Camera + Checkpoints
-    [HideInInspector] public GameObject[] weaverCheckpoints;
-    [HideInInspector] public GameObject[] weaverCameras;
+    [HideInInspector] public List<GameObject> weaverCheckpoints = new List<GameObject>();
+    [HideInInspector] public List<GameObject> weaverCameras = new List<GameObject>();
     private int weaverCamerasTriggeredSinceLastCheckpoint;
-    public int lastWeaverCameraTriggered; //This is the last camera that is triggered upon entering the next checkpoint.
+    [HideInInspector] public int lastWeaverCameraTriggered; //This is the last camera that is triggered upon entering the next checkpoint.
     //When the player dies, this camera index will be activated when the player is teleported back to the previous checkpoint.
     
     //Familiar Camera + Checkpoints
-    [HideInInspector] public GameObject[] familiarCheckpoints;
-    [HideInInspector] public GameObject[] familiarCameras;
+    [HideInInspector] public List<GameObject> familiarCheckpoints = new List<GameObject>();
+    [HideInInspector] public List<GameObject> familiarCameras = new List<GameObject>();
     private int familiarCamerasTriggeredSinceLastCheckpoint;
     [HideInInspector] public int lastFamiliarCameraTriggered;
 
@@ -50,14 +50,8 @@ public class CameraMasterScript : MonoBehaviour
     }
 
     void Start() {
-        weaverCameras = GameObject.FindGameObjectsWithTag("WeaverCamera");
-        familiarCameras = GameObject.FindGameObjectsWithTag("FamiliarCamera");
-
-        weaverCheckpoints = GameObject.FindGameObjectsWithTag("WeaverCameraTrigger");
-        familiarCheckpoints = GameObject.FindGameObjectsWithTag("FamiliarCameraTrigger");
-        
         //Sets Camera Priorities
-        for (int i = 0; i < weaverCameras.Length; i++) {
+        for (int i = 0; i < weaverCameras.Count; i++) {
             CinemachineVirtualCamera weavervcam = weaverCameras[i].GetComponent<CinemachineVirtualCamera>();
             if (i > 0) {
                 weavervcam.Priority = 0;
@@ -66,52 +60,41 @@ public class CameraMasterScript : MonoBehaviour
                 weavervcam.Priority = 1;
             }
         }
-        for (int i = 0; i < familiarCameras.Length; i++) {
+        for (int i = 0; i < familiarCameras.Count; i++) {
             CinemachineVirtualCamera familiarvcam = familiarCameras[i].GetComponent<CinemachineVirtualCamera>();
-            if (i > 0) {
-                familiarvcam.Priority = 0;
-            }
-            else {
-                familiarvcam.Priority = 1;
-            }
+            familiarvcam.Priority = 0;
         }
 
-        //Sets index # for checkpoints
-        for (int i = 0; i < weaverCheckpoints.Length; i++) {
-            CameraIndexScript cis = weaverCheckpoints[i].GetComponent<CameraIndexScript>();
-            cis.cameraIndex = i;
-        }
-        for (int i = 0; i < familiarCheckpoints.Length; i++) {
-            CameraIndexScript cis = familiarCheckpoints[i].GetComponent<CameraIndexScript>();
-            cis.cameraIndex = i;
-        }
-
+        /*
         //Error messages
-        if (weaverCheckpoints.Length < weaverCameras.Length - 1) {
+        if (weaverCheckpoints.Count < weaverCameras.Count - 1) {
             Debug.LogError("ERROR: There isn't enough camera triggers on the weaver side. This may cause the incorrect camera to be on at certain sections of the level. Assure that there is exactly one camera more than the amount of camera triggers.");
         }
-        if (familiarCheckpoints.Length < familiarCameras.Length - 1) {
+        if (familiarCheckpoints.Count < familiarCameras.Count - 1) {
             Debug.LogError("ERROR: There isn't enough camera triggers on the familiar side. This may cause the incorrect camera to be on at certain sections of the level. Assure that there is exactly one camera more than the amount of camera triggers.");
         }
-        if (weaverCheckpoints.Length > weaverCameras.Length - 1) {
+        if (weaverCheckpoints.Count > weaverCameras.Count - 1) {
             Debug.LogError("ERROR: There are too many camera triggers on the weaver side. This may cause the incorrect camera to be on at certain sections of the level. Assure that there is exactly one camera more than the amount of camera triggers.");
         }
-        if (familiarCheckpoints.Length > familiarCameras.Length - 1) {
+        if (familiarCheckpoints.Count > familiarCameras.Count - 1) {
             Debug.LogError("ERROR: There are too many camera triggers on the familiar side. This may cause the incorrect camera to be on at certain sections of the level. Assure that there is exactly one camera more than the amount of camera triggers.");
         }
+        */
         
         
         weaverCamerasTriggeredSinceLastCheckpoint = 0;
         familiarCamerasTriggeredSinceLastCheckpoint = 0;
         lastWeaverCameraTriggered = 0;
         lastFamiliarCameraTriggered = 0;
+        weaverCameraOnPriority = 0;
+        familiarCameraOnPriority = 0;
 
     }
 
     //WEAVER CAMERAS
     //**************************************************************************************
     public void SwitchWeaverCameras(int rotationstate) {
-        weaverVcamListLength = weaverCameras.Length;
+        weaverVcamListLength = weaverCameras.Count;
         CameraIndexScript cis = weaverCheckpoints[rotationstate].GetComponent<CameraIndexScript>();
 
         for (int i = 0; i < weaverVcamListLength; i++) {
@@ -189,7 +172,7 @@ public class CameraMasterScript : MonoBehaviour
     }
 
     public void SwitchToFamiliarCamera() {
-       for(int i = 0; i < weaverCameras.Length; i++) {
+       for(int i = 0; i < weaverCameras.Count; i++) {
             CinemachineVirtualCamera vcams = weaverCameras[i].GetComponent<CinemachineVirtualCamera>();
             vcams.Priority = 0;
         }
@@ -198,18 +181,20 @@ public class CameraMasterScript : MonoBehaviour
     }
 
     public void SwitchToWeaverCamera() {
-        for(int i = 0; i < familiarCameras.Length; i++) {
+        for(int i = 0; i < familiarCameras.Count; i++) {
             CinemachineVirtualCamera vcams = familiarCameras[i].GetComponent<CinemachineVirtualCamera>();
             vcams.Priority = 0;
         }
         CinemachineVirtualCamera vcam = weaverCameras[weaverCameraOnPriority].GetComponent<CinemachineVirtualCamera>();
         vcam.Priority = 1;
         
+        Debug.Log("Switching");
         Debug.Log(weaverCameraOnPriority);
+        Debug.Log(weaverCameras[weaverCameraOnPriority].name);
     }
 
     public void ResetWeaverCameras() {
-        for (int i = 0; i < weaverCheckpoints.Length; i++) {
+        for (int i = 0; i < weaverCheckpoints.Count; i++) {
             CameraIndexScript cis = weaverCheckpoints[i].GetComponent<CameraIndexScript>();
             if (cis.isLoop == false) {
                 cis.triggered = false;
@@ -219,7 +204,7 @@ public class CameraMasterScript : MonoBehaviour
     }
 
     public void SetTriggersForWeaverCameras() {
-        for (int i = 0; i < weaverCheckpoints.Length; i++) {
+        for (int i = 0; i < weaverCheckpoints.Count; i++) {
             CameraIndexScript cis = weaverCheckpoints[i].GetComponent<CameraIndexScript>();
             if (cis.isLoop == false) {
                 cis.triggered = true;
@@ -228,7 +213,7 @@ public class CameraMasterScript : MonoBehaviour
     }
 
     public void SetTriggerForWeaverIsLoop() {
-        for (int i = 0; i < weaverCheckpoints.Length; i++) {
+        for (int i = 0; i < weaverCheckpoints.Count; i++) {
             CameraIndexScript cis = weaverCheckpoints[i].GetComponent<CameraIndexScript>();
             if (cis.isLoop == true) {
                 cis.triggered = true;
@@ -237,7 +222,7 @@ public class CameraMasterScript : MonoBehaviour
     }
 
     public void ResetWeaverIsLoop() {
-        for (int i = 0; i < weaverCheckpoints.Length; i++) {
+        for (int i = 0; i < weaverCheckpoints.Count; i++) {
             CameraIndexScript cis = weaverCheckpoints[i].GetComponent<CameraIndexScript>();
             if (cis.isLoop == true) {
                 cis.triggered = false;
@@ -256,7 +241,7 @@ public class CameraMasterScript : MonoBehaviour
     //FAMILIAR CAMERA
     //**************************************************************************************
     public void SwitchFamiliarCameras(int rotationstate) {
-        familiarVcamListLength = familiarCameras.Length;
+        familiarVcamListLength = familiarCameras.Count;
         CameraIndexScript cis = familiarCheckpoints[rotationstate].GetComponent<CameraIndexScript>();
 
         for (int i = 0; i < familiarVcamListLength; i++) {
@@ -336,7 +321,7 @@ public class CameraMasterScript : MonoBehaviour
     }
 
     public void ResetFamiliarCameras() {
-        for (int i = 0; i < familiarCheckpoints.Length; i++) {
+        for (int i = 0; i < familiarCheckpoints.Count; i++) {
             CameraIndexScript cis = familiarCheckpoints[i].GetComponent<CameraIndexScript>();
             if (cis.isLoop == false) {
                 cis.triggered = false;
@@ -346,7 +331,7 @@ public class CameraMasterScript : MonoBehaviour
     }
 
     public void SetTriggersForFamiliarCameras() {
-        for (int i = 0; i < familiarCheckpoints.Length; i++) {
+        for (int i = 0; i < familiarCheckpoints.Count; i++) {
             CameraIndexScript cis = familiarCheckpoints[i].GetComponent<CameraIndexScript>();
             if (cis.isLoop == false) {
                 cis.triggered = true;
@@ -355,7 +340,7 @@ public class CameraMasterScript : MonoBehaviour
     }
 
     public void SetTriggerForFamiliarIsLoop() {
-        for (int i = 0; i < familiarCheckpoints.Length; i++) {
+        for (int i = 0; i < familiarCheckpoints.Count; i++) {
             CameraIndexScript cis = familiarCheckpoints[i].GetComponent<CameraIndexScript>();
             if (cis.isLoop == true) {
                 cis.triggered = true;
@@ -364,7 +349,7 @@ public class CameraMasterScript : MonoBehaviour
     }
 
     public void ResetFamiliarIsLoop() {
-        for (int i = 0; i < familiarCheckpoints.Length; i++) {
+        for (int i = 0; i < familiarCheckpoints.Count; i++) {
             CameraIndexScript cis = familiarCheckpoints[i].GetComponent<CameraIndexScript>();
             if (cis.isLoop == true) {
                 cis.triggered = false;
@@ -448,4 +433,5 @@ public class CameraMasterScript : MonoBehaviour
             }
         }
     }
+
 }

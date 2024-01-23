@@ -5,8 +5,8 @@ using UnityEngine;
 public class GameMasterScript : MonoBehaviour
 {
     private static GameMasterScript instance;
-    [HideInInspector] public GameObject[] weaverCheckpoints;
-    [HideInInspector] public GameObject[] familiarCheckpoints;
+    public GameObject[] weaverCheckpoints;
+    public GameObject[] familiarCheckpoints;
     public int totalLostSouls;
     public Vector3 WeaverCheckPointPos;
     public int WeaverCheckPointNum;
@@ -23,20 +23,6 @@ public class GameMasterScript : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        }
-    }
-
-    void Start() {
-        weaverCheckpoints = GameObject.FindGameObjectsWithTag("WeaverCheckpoint");
-        familiarCheckpoints = GameObject.FindGameObjectsWithTag("FamiliarCheckpoint");
-
-        for (int i = 0; i < weaverCheckpoints.Length; i++) {
-            CheckPointScript cps = weaverCheckpoints[i].GetComponent<CheckPointScript>();
-            cps.checkpointNum = i;
-        }
-        for (int i = 0; i < familiarCheckpoints.Length; i++) {
-            CheckPointScript cps = familiarCheckpoints[i].GetComponent<CheckPointScript>();
-            cps.checkpointNum = i;
         }
     }
 

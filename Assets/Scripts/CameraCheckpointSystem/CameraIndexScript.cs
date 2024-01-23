@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraIndexScript : MonoBehaviour, ITriggerable
 {
-    public int cameraIndex;
+    public int triggerIndex;
     [HideInInspector] public bool triggered;
     [HideInInspector] public bool isLoop; //Reference only, set in inspector
     private bool isZaxisTrigger; //If false, then its an X axis trigger
@@ -13,6 +13,7 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
     private Transform familiarTransform; //Put only the familiar's transform
     private FamiliarScript familiarScript; 
     private BoxCollider bc;
+    private bool addedToList;
     [HideInInspector] private bool enteredFromNorth; //Determines if the player entered from the south side or the north side of the collider
 
     public void Awake()
@@ -21,6 +22,7 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
         familiarTransform = FindObjectOfType<FamiliarScript>().GetComponent<Transform>();
         familiarScript = FindObjectOfType<FamiliarScript>().GetComponent<FamiliarScript>();
         bc = GetComponent<BoxCollider>();
+        addedToList = false;
 
         if (bc.size.x > bc.size.z) {
             isZaxisTrigger = true;
@@ -105,22 +107,22 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
                     {
                         if (!triggered && enteredFromNorth)
                         {
-                            CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                            CameraMasterScript.instance.SwitchWeaverCameras(triggerIndex);
                         }
                         else if (triggered && !enteredFromNorth)
                         {
-                            CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                            CameraMasterScript.instance.SwitchWeaverCameras(triggerIndex);
                         }
                     }
                     else
                     {
                         if (triggered && !enteredFromNorth)
                         {
-                            CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                            CameraMasterScript.instance.SwitchWeaverCameras(triggerIndex);
                         }
                         else if (!triggered && enteredFromNorth)
                         {
-                            CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                            CameraMasterScript.instance.SwitchWeaverCameras(triggerIndex);
                         }
                     }
 
@@ -131,22 +133,22 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
                     {
                         if (!triggered && enteredFromNorth)
                         {
-                            CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                            CameraMasterScript.instance.SwitchWeaverCameras(triggerIndex);
                         }
                         else if (triggered && !enteredFromNorth)
                         {
-                            CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                            CameraMasterScript.instance.SwitchWeaverCameras(triggerIndex);
                         }
                     }
                     else
                     {
                         if (triggered && !enteredFromNorth)
                         {
-                            CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                            CameraMasterScript.instance.SwitchWeaverCameras(triggerIndex);
                         }
                         else if (!triggered && enteredFromNorth)
                         {
-                            CameraMasterScript.instance.SwitchWeaverCameras(cameraIndex);
+                            CameraMasterScript.instance.SwitchWeaverCameras(triggerIndex);
                         }
                     }
 
@@ -214,22 +216,22 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
                     {
                         if (!triggered && enteredFromNorth)
                         {
-                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                            CameraMasterScript.instance.SwitchFamiliarCameras(triggerIndex);
                         }
                         else if (triggered && !enteredFromNorth)
                         {
-                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                            CameraMasterScript.instance.SwitchFamiliarCameras(triggerIndex);
                         }
                     }
                     else
                     {
                         if (triggered && !enteredFromNorth)
                         {
-                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                            CameraMasterScript.instance.SwitchFamiliarCameras(triggerIndex);
                         }
                         else if (!triggered && enteredFromNorth)
                         {
-                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                            CameraMasterScript.instance.SwitchFamiliarCameras(triggerIndex);
                         }
                     }
 
@@ -240,22 +242,22 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
                     {
                         if (!triggered && enteredFromNorth)
                         {
-                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                            CameraMasterScript.instance.SwitchFamiliarCameras(triggerIndex);
                         }
                         else if (triggered && !enteredFromNorth)
                         {
-                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                            CameraMasterScript.instance.SwitchFamiliarCameras(triggerIndex);
                         }
                     }
                     else
                     {
                         if (triggered && !enteredFromNorth)
                         {
-                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                            CameraMasterScript.instance.SwitchFamiliarCameras(triggerIndex);
                         }
                         else if (!triggered && enteredFromNorth)
                         {
-                            CameraMasterScript.instance.SwitchFamiliarCameras(cameraIndex);
+                            CameraMasterScript.instance.SwitchFamiliarCameras(triggerIndex);
                         }
                     }
 
@@ -265,6 +267,37 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
             //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
          }
     }
+    
+    void Update() {
+        if (!addedToList) {
+            AddToCameraMaster();
+        }
+    }
+    
+    public void AddToCameraMaster() {
+        if (gameObject.CompareTag("WeaverCameraTrigger")) {
+            //Adds element to the very end of the list and makes the trigger index match its spot in the list.
+            if (!addedToList) {
+                if (CameraMasterScript.instance.weaverCheckpoints.Count == triggerIndex) {
+                    GameObject camerachild = gameObject.transform.GetChild(0).gameObject;
+                    
+                    CameraMasterScript.instance.weaverCheckpoints.Add(gameObject);
+                    CameraMasterScript.instance.weaverCameras.Add(camerachild);
+                    addedToList = true;
+                }
+            }
+        }
+        else if (gameObject.CompareTag("FamiliarCameraTrigger")) {
+            if (!addedToList) {
+                if (CameraMasterScript.instance.familiarCheckpoints.Count == triggerIndex) {
+                    GameObject camerachild = gameObject.transform.GetChild(0).gameObject;
 
+                    CameraMasterScript.instance.familiarCheckpoints.Add(gameObject);
+                    CameraMasterScript.instance.familiarCameras.Add(camerachild);
+                    addedToList = true;
+                }
+            }
+        }
+    }
          
 }
