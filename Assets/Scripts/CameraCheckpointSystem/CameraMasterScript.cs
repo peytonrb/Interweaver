@@ -32,11 +32,6 @@ public class CameraMasterScript : MonoBehaviour
 
     public CinemachineVirtualCamera leapOfFaithCamera;
 
-    //Screenshake
-    private float shakeTimer;
-    private float shakeTimerTotal;
-    private float startingIntensity;
-
     void Awake()
     {
         if (instance == null)
@@ -49,6 +44,17 @@ public class CameraMasterScript : MonoBehaviour
         }
     }
 
+    public void ShakeCurrentCamera(float intensity, float freq, float time)
+    {
+        Debug.Log(currentCam);
+
+        if (currentCam.TryGetComponent<CinemachineShake>(out CinemachineShake shaker))
+        {
+            shaker.ShakeCamera(intensity, freq, time);
+        }
+        
+    }
+
     void Start() {
         //Sets Camera Priorities
         for (int i = 0; i < weaverCameras.Count; i++) {
@@ -58,6 +64,7 @@ public class CameraMasterScript : MonoBehaviour
             }
             else {
                 weavervcam.Priority = 1;
+                currentCam = weavervcam;
             }
         }
         for (int i = 0; i < familiarCameras.Count; i++) {
@@ -107,10 +114,12 @@ public class CameraMasterScript : MonoBehaviour
                         CinemachineVirtualCamera nextvcam = weaverCameras[i+1].GetComponent<CinemachineVirtualCamera>();
                         nextvcam.Priority = 1;
                         weaverCameraOnPriority = i+1;
+                        currentCam = nextvcam;
                     }
                     else {
                         CinemachineVirtualCamera firstvcam = weaverCameras[0].GetComponent<CinemachineVirtualCamera>();
                         firstvcam.Priority = 1;
+                        currentCam = firstvcam;
                         weaverCameraOnPriority = 0;
                     }
                     
@@ -127,6 +136,7 @@ public class CameraMasterScript : MonoBehaviour
                 else {
                     CinemachineVirtualCamera previousvcam = weaverCameras[i].GetComponent<CinemachineVirtualCamera>();
                     previousvcam.Priority = 1;
+                    currentCam = previousvcam;
                     if (i < weaverVcamListLength - 1) {
                         CinemachineVirtualCamera nextvcam = weaverCameras[i+1].GetComponent<CinemachineVirtualCamera>();
                         nextvcam.Priority = 0;
@@ -162,6 +172,7 @@ public class CameraMasterScript : MonoBehaviour
             CinemachineVirtualCamera returnvcam = weaverCameras[rotationstate].GetComponent<CinemachineVirtualCamera>();
             CinemachineVirtualCamera othervcams = weaverCameras[i].GetComponent<CinemachineVirtualCamera>();
             returnvcam.Priority = 1;
+            currentCam = returnvcam;
             if (i > rotationstate) {
                 othervcams.Priority = 0;
             }
@@ -178,6 +189,7 @@ public class CameraMasterScript : MonoBehaviour
         }
         CinemachineVirtualCamera familiarvcam = familiarCameras[familiarCameraOnPriority].GetComponent<CinemachineVirtualCamera>();
         familiarvcam.Priority = 1;
+        currentCam = familiarvcam;
     }
 
     public void SwitchToWeaverCamera() {
@@ -187,7 +199,8 @@ public class CameraMasterScript : MonoBehaviour
         }
         CinemachineVirtualCamera vcam = weaverCameras[weaverCameraOnPriority].GetComponent<CinemachineVirtualCamera>();
         vcam.Priority = 1;
-        
+        currentCam = vcam;
+
         Debug.Log("Switching");
         Debug.Log(weaverCameraOnPriority);
         Debug.Log(weaverCameras[weaverCameraOnPriority].name);
@@ -401,37 +414,6 @@ public class CameraMasterScript : MonoBehaviour
         CinemachineVirtualCamera vcam = weaverCameras[weaverCameraOnPriority].GetComponent<CinemachineVirtualCamera>();
         vcam.Priority = 1;
         cameraToSwitchFrom.Priority = 0;
-    }
-
-    public void ShakeCameraWeaver(float intensity, float freq, float time)
-    {
-        CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin =
-        currentCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-        cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = intensity;
-        cinemachineBasicMultiChannelPerlin.m_FrequencyGain = freq;
-        startingIntensity = intensity;
-        shakeTimer = time;
-        shakeTimerTotal = time;
-        Gamepad.current.SetMotorSpeeds(intensity, 0f);
-    }
-
-    private void Update()
-    {
-        if (shakeTimer > 0)
-        {
-            shakeTimer -= Time.deltaTime;
-            if (shakeTimer <= 0f)
-            {
-                // Timer Over!
-                CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin =
-                currentCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-
-                Gamepad.current.SetMotorSpeeds(0f, 0f);
-
-                cinemachineBasicMultiChannelPerlin.m_AmplitudeGain =
-                    Mathf.Lerp(startingIntensity, 0f, 1 - (shakeTimer / shakeTimerTotal));
-            }
-        }
     }
 
 }

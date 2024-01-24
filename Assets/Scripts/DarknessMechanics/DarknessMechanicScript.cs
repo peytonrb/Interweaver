@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
+using UnityEngine.Rendering;
 
 public class DarknessMechanicScript : MonoBehaviour
 {
@@ -11,17 +13,37 @@ public class DarknessMechanicScript : MonoBehaviour
     public float deathTime = 5f;
     private bool isSafe;
 
-    
+
+    private float lastCount;
+    float t = 0;
+
+    [SerializeField] private AnimationCurve shakeCurve;
+
+    [SerializeField] private AnimationCurve vignetteCurve;
+
+    UnityEngine.Rendering.Universal.Vignette vignette;
+
     void Start()
     {
         isSafe = false;
         countDown = 0f;
         StartCoroutine(DarknessTimer());
+
+        UnityEngine.Rendering.VolumeProfile volumeProfile = GameObject.Find("CavernPostProcessing").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
+        if (!volumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
+
+        if (!volumeProfile.TryGet(out vignette)) throw new System.NullReferenceException(nameof(vignette));
     }
 
     void Update()
     {
-       
+        vignette.intensity.Override(vignetteCurve.Evaluate(countDown/5));
+
+        if (isSafe) 
+        {
+            countDown = Mathf.SmoothStep(lastCount, 0, t);
+            t += 0.5f * Time.deltaTime;
+        }
     }
 
     IEnumerator DarknessTimer()
@@ -29,21 +51,35 @@ public class DarknessMechanicScript : MonoBehaviour
         while ((countDown < deathTime) && (!isSafe))
         {
             countDown += Time.deltaTime;
+
+            if (countDown > 1)
+            {
+                Debug.Log(countDown);
+                float shakeIntensity = shakeCurve.Evaluate(countDown/5);
+
+                CameraMasterScript.instance.ShakeCurrentCamera(shakeIntensity, .2f, 0.1f);
+
+            }
+
             yield return null;
         }
 
         if (countDown >= deathTime)
         {
-            Debug.Log("not funny bro");
+            GetComponent<MovementScript>().GoToCheckPoint();
         }
     }
+
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "LightObject")
         {
             isSafe = true;
-            countDown = 0f;
+
+            lastCount = countDown;
+            t = 0;
+
             StopCoroutine(DarknessTimer());
             Debug.Log("funny");
         }

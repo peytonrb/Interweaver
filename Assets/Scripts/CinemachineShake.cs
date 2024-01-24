@@ -10,11 +10,9 @@ public class CinemachineShake : MonoBehaviour
     private float shakeTimer;
     private float shakeTimerTotal;
     private float startingIntensity;
-    public static CinemachineShake instance { get; private set; }
 
     public void Awake()
     {
-        instance = this;
         cinemachineVirtualCamera = GetComponent<CinemachineVirtualCamera>();
     }
 
@@ -27,7 +25,7 @@ public class CinemachineShake : MonoBehaviour
         startingIntensity = intensity;
         shakeTimer = time;
         shakeTimerTotal = time;
-        Gamepad.current.SetMotorSpeeds(intensity, 0f);
+        //Gamepad.current.SetMotorSpeeds(intensity, 0f);
     }
 
     private void Update()
@@ -41,7 +39,7 @@ public class CinemachineShake : MonoBehaviour
                 CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin =
                 cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
 
-                Gamepad.current.SetMotorSpeeds(0f, 0f);
+                //Gamepad.current.SetMotorSpeeds(0f, 0f);
 
                 cinemachineBasicMultiChannelPerlin.m_AmplitudeGain =
                     Mathf.Lerp(startingIntensity, 0f, 1 - (shakeTimer / shakeTimerTotal));
