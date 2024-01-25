@@ -10,6 +10,8 @@ public class MoleDigScript : MonoBehaviour
     public float castDistance;
     public bool digThroughGround;
     private Collider boxCollider;
+    [CannotBeNullObjectField] public GameObject moleWalkingHolder;
+    [CannotBeNullObjectField] public GameObject moleDiggingHolder;
 
     void Start()
     {
@@ -38,16 +40,32 @@ public class MoleDigScript : MonoBehaviour
             Debug.Log("we're digging bois");
             digThroughGround = true;
             DigAction(hitLayer.collider);
+           StartCoroutine(StartDigging());
         }
 
         else if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLyer) && digThroughGround)
         {
             Debug.Log("we got out bois");
             digThroughGround = false;
+            StartCoroutine(DiggingOut());
         }
 
     }
+    IEnumerator StartDigging()
+    {
+        yield return new WaitForSeconds(2);
+        moleWalkingHolder.SetActive(false);
+        moleDiggingHolder.SetActive(true);
+        Debug.Log("waited for 2 seconds");
+    }
 
+    IEnumerator DiggingOut()
+    {
+        yield return new WaitForSeconds(2);
+        moleWalkingHolder.SetActive(true);
+        moleDiggingHolder.SetActive(false);
+        Debug.Log("waited for 2 more seconds");
+    }
     public void DigAction(Collider funnyBox)
     {
         boxCollider = funnyBox;
