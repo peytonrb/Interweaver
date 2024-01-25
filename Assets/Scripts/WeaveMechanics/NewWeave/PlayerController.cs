@@ -340,6 +340,10 @@ public class PlayerController : MonoBehaviour
             relocateMode.SetActive(false);// remember to delete this
             combineMode.SetActive(false);// remember to delete this
         }
+
+        if (collision.gameObject.CompareTag("PressurePlate")) {
+            Debug.Log("Hit");
+        }
     }
 
     public void Possession()
