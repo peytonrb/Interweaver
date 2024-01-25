@@ -4,10 +4,20 @@ using UnityEngine;
 
 public class PressurePlateScript : MonoBehaviour
 {
-    void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.CompareTag("Player")) {
+    /*
+    void OnControllerColliderHit(ControllerColliderHit hit) {
+        if (hit.gameObject.CompareTag("Player")) {
             Debug.Log("Yes");
         }
        
+    }
+    */
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("Yes");
+        }
     }
 }
