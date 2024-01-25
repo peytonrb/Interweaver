@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class LightCrystalScript : MonoBehaviour
 {
@@ -8,18 +9,35 @@ public class LightCrystalScript : MonoBehaviour
     public int arrayIndex;
     public float brightness = 4f;
     public bool isWeaveable = true;
-    [TextArea] [SerializeField] private string Notes = "Array Index should be the INDEX of the light in LIGHTARRAY "
+    [TextArea]
+    [SerializeField]
+    private string Notes = "Array Index should be the INDEX of the light in LIGHTARRAY "
                                                     + "in the LIGHTSOURCE OBJECT (is probably called LightsManager)";
+    [Header("Focusing Crystals")]
+    public bool isFocusingCrystal;
+    private VisualEffect beamEffect;
+    private FocusingCrystalScript focusingCrystalScript;
+
     private Light crystalLight;
     private float currentBrightness;
 
+    [Header("FOR SCRIPTS ONLY")]
+    public bool isActiveDefault;
+
     void Start()
     {
+        isActiveDefault = isActive;
         crystalLight = this.gameObject.transform.GetChild(0).GetComponent<Light>();
 
         if (!isWeaveable)
         {
             this.GetComponent<WeaveableNew>().enabled = false;
+        }
+
+        if (isFocusingCrystal)
+        {
+            beamEffect = this.gameObject.transform.GetChild(1).GetComponent<VisualEffect>();
+            focusingCrystalScript = beamEffect.gameObject.GetComponent<FocusingCrystalScript>();
         }
     }
 
@@ -40,6 +58,14 @@ public class LightCrystalScript : MonoBehaviour
 
     IEnumerator TurnLightOn()
     {
+        // turns on beam - add better vfx
+        if (isFocusingCrystal)
+        {
+            beamEffect.enabled = true;
+            beamEffect.Play();
+            focusingCrystalScript.isActive = true;
+        }
+
         float start = Time.time;
         float end = start + 2f;
 
@@ -55,6 +81,14 @@ public class LightCrystalScript : MonoBehaviour
 
     IEnumerator TurnLightOff()
     {
+        // turns off beam - add better vfx
+        if (isFocusingCrystal)
+        {
+            beamEffect.Stop();
+            beamEffect.enabled = false;
+            focusingCrystalScript.isActive = false;
+        }
+
         float start = Time.time;
         float end = start + 2f;
 

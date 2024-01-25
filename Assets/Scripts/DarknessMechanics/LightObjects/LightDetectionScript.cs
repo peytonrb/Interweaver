@@ -36,7 +36,7 @@ public class LightDetectionScript : MonoBehaviour
         if (collider.gameObject.tag == "Weaveable" && collider.GetComponent<LightCrystalScript>() != null)
         {
             // if for some reason the light that was powering the crystal is turned off
-            if (!wasCrystalOn && !LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn)
+            if (!wasCrystalOn && !crystalScript.isFocusingCrystal && !LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn)
             {
                 crystalScript.isActive = false;
             }
@@ -48,7 +48,7 @@ public class LightDetectionScript : MonoBehaviour
         // same thing as above but when powered crystal is leaving trigger
         if (collision.gameObject.tag == "Weaveable" && collision.GetComponent<LightCrystalScript>() != null)
         {
-            if (!wasCrystalOn && LightSourceScript.Instance.lightsArray[collision.GetComponent<LightCrystalScript>().arrayIndex].isOn)
+            if (!wasCrystalOn && !crystalScript.isFocusingCrystal && LightSourceScript.Instance.lightsArray[collision.GetComponent<LightCrystalScript>().arrayIndex].isOn)
             {
                 // if crystal wasn't originally on and object in trigger was powering it, turn off once out of trigger
                 crystalScript.isActive = false;
