@@ -77,6 +77,13 @@ public class InputManagerScript : MonoBehaviour
         jumpAndDashScript.DoJumpDash();
     }
 
+    // DASH
+    //******************************************************
+    public void OnDash(InputValue input)
+    {
+        JumpAndDashScript jumpAndDashScript = player.GetComponent<JumpAndDashScript>();
+        jumpAndDashScript.DoDash();
+    }
     //******************************************************
     public void OnWeaverInteract(InputValue input)
     {

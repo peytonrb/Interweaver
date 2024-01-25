@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class JumpAndDashScript : MonoBehaviour
@@ -18,9 +19,13 @@ public class JumpAndDashScript : MonoBehaviour
 
     [Header("Dashing")]
     [SerializeField] private bool canDash;
+    [SerializeField] [Range(0f, 10f)] private float dashCooldown = 0.4f;
     [SerializeField] [Range(0.1f, 10f)] private float dashLength = 0.1f;
     [SerializeField] [Range(1f, 100f)] private float dashSpeed = 50f;
     [SerializeField] [Tooltip("Determines if gravity will affect weaver while dashing")] private bool zeroGravDash;
+    [SerializeField] [Tooltip("If in air at the end of a dash, increase affect of gravity by the heavyDashEffect variable when dash ends until touching ground")] private bool heavyDash;
+    [SerializeField] [Range(1f, 25f)] private float heavyDashEffect = 3f;
+    private float t = 0;
 
     void Start()
     {
@@ -34,7 +39,11 @@ public class JumpAndDashScript : MonoBehaviour
         {
             movementScript.ChangeVelocity(new UnityEngine.Vector3(movementScript.GetVelocity().x, jumpForce, movementScript.GetVelocity().z));
         }
-        if (canDash && !characterController.isGrounded && !infiniteJump)
+    }
+
+    public void DoDash()
+    {
+        if (canDash)
         {
             if (zeroGravDash)
             {
@@ -50,27 +59,52 @@ public class JumpAndDashScript : MonoBehaviour
     IEnumerator Dash()
     {
         float startTime = Time.time;
+        float currentDashSpeed;
         while (Time.time < startTime + dashLength)
         {
-            characterController.Move(gameObject.transform.forward * dashSpeed * Time.deltaTime);
+            t += Time.deltaTime/dashLength;
+            currentDashSpeed = Mathf.Lerp(dashSpeed, 0, t);
+            characterController.Move(gameObject.transform.forward * currentDashSpeed * Time.deltaTime);
+
             yield return null;
         }
+        t = 0;
         if (zeroGravDash)
         {
             movementScript.ResetGravity();
         }
 
-        StartCoroutine(GroundCheck());
+        if (heavyDash && !characterController.isGrounded)
+        {
+            movementScript.ChangeGravity(-heavyDashEffect);
+            StartCoroutine(HeavyDash());
+        }
+
+        StartCoroutine(DashCooldown());
         movementScript.active = true;
     }
 
-    IEnumerator GroundCheck()
+    IEnumerator DashCooldown()
+    {
+        float time = dashCooldown;
+        while (time > 0)
+        {
+            if (characterController.isGrounded) // pauses timer whilst in air
+            {
+                time -= Time.deltaTime;
+            }
+            yield return null;
+        }
+        canDash = true;
+    }
+
+    IEnumerator HeavyDash()
     {
         while (!characterController.isGrounded)
         {
             yield return null;
         }
-        canDash = true;
+        movementScript.ResetGravity();
     }
 
     void OnDrawGizmos()
@@ -78,7 +112,7 @@ public class JumpAndDashScript : MonoBehaviour
         if (showDistanceGizmo)
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawLine(transform.position, transform.position + gameObject.transform.forward * dashSpeed * dashLength);
+            Gizmos.DrawLine(transform.position, transform.position + gameObject.transform.forward * (dashSpeed/2 * dashLength));
         }
     }
 }
