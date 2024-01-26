@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class LightDetectionScript : MonoBehaviour
 {
-    private LightCrystalScript crystalScript; 
+    private LightCrystalScript crystalScript;
     private bool wasCrystalOn;
-    
+
     void Start()
     {
         crystalScript = this.gameObject.transform.parent.GetComponent<LightCrystalScript>();
@@ -40,6 +40,13 @@ public class LightDetectionScript : MonoBehaviour
             {
                 crystalScript.isActive = false;
             }
+
+            float distance = Vector3.Distance(this.gameObject.transform.position, collider.gameObject.transform.position);
+
+            if (LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn && distance < 4.5f)
+            {
+                crystalScript.isActive = true;
+            }
         }
     }
 
@@ -48,10 +55,15 @@ public class LightDetectionScript : MonoBehaviour
         // same thing as above but when powered crystal is leaving trigger
         if (collision.gameObject.tag == "Weaveable" && collision.GetComponent<LightCrystalScript>() != null)
         {
-            if (!wasCrystalOn && !crystalScript.isFocusingCrystal && LightSourceScript.Instance.lightsArray[collision.GetComponent<LightCrystalScript>().arrayIndex].isOn)
+            // if crystal wasn't originally on and object in trigger was powering it, turn off once out of trigger
+            if (!wasCrystalOn && LightSourceScript.Instance.lightsArray[collision.GetComponent<LightCrystalScript>().arrayIndex].isOn)
             {
-                // if crystal wasn't originally on and object in trigger was powering it, turn off once out of trigger
-                crystalScript.isActive = false;
+                float distance = Vector3.Distance(this.gameObject.transform.position, collision.gameObject.transform.position);
+
+                if (distance > 4.5f) // 4.5f is based on calculation for dynamic collider in FocusingCrystalScript
+                {
+                    crystalScript.isActive = false;
+                }
             }
         }
     }
