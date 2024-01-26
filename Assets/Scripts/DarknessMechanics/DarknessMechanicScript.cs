@@ -81,7 +81,6 @@ public class DarknessMechanicScript : MonoBehaviour
             t = 0;
 
             StopCoroutine(DarknessTimer());
-            Debug.Log("funny");
         }
     }
 
@@ -91,7 +90,6 @@ public class DarknessMechanicScript : MonoBehaviour
         {
             isSafe = false;
             StartCoroutine(DarknessTimer());
-            Debug.Log("really not funny");
         }
     }
 }

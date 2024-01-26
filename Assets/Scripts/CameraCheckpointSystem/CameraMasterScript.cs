@@ -10,7 +10,8 @@ public class CameraMasterScript : MonoBehaviour
     //Singleton
     public static CameraMasterScript instance;
 
-    private CinemachineVirtualCamera currentCam;
+    [HideInInspector]
+    public CinemachineVirtualCamera currentCam;
 
     //Weaver Camera + Checkpoints
     [HideInInspector] public List<GameObject> weaverCheckpoints = new List<GameObject>();
@@ -46,7 +47,12 @@ public class CameraMasterScript : MonoBehaviour
 
     public void ShakeCurrentCamera(float intensity, float freq, float time)
     {
-        Debug.Log(currentCam);
+        foreach(GameObject weaverCamera in weaverCameras)
+        {
+            Debug.Log(weaverCamera);
+
+        }
+        //Debug.Log(currentCam);
 
         if (currentCam.TryGetComponent<CinemachineShake>(out CinemachineShake shaker))
         {
