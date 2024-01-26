@@ -13,8 +13,8 @@ public class PressurePlateScript : MonoBehaviour
     private float toptargetposition;
 
     void Start() {
-        bottomtargetposition = 0.1f;
-        toptargetposition = 0.3f;
+        bottomtargetposition = transform.position.y - 0.2f;
+        toptargetposition = transform.position.y;
         bottomedOut = false;
         toppedOut = true;
         activated = false;
