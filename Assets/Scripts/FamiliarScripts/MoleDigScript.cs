@@ -6,9 +6,9 @@ using UnityEngine.UIElements;
 public class MoleDigScript : MonoBehaviour
 {
     [Header("variables")]
-    public LayerMask digableLyer;
-    public float castDistance;
-    public bool digThroughGround;
+    public LayerMask digableLayer;
+    [HideInInspector] public float castDistance;
+    [HideInInspector] public bool digThroughGround;
     private Collider boxCollider;
     [CannotBeNullObjectField] public GameObject moleWalkingHolder;
     [CannotBeNullObjectField] public GameObject moleDiggingHolder;
@@ -35,7 +35,7 @@ public class MoleDigScript : MonoBehaviour
     {
         RaycastHit hitLayer;
 
-        if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLyer) && !digThroughGround)
+        if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && !digThroughGround)
         {
             Debug.Log("we're digging bois");
             digThroughGround = true;
@@ -43,7 +43,7 @@ public class MoleDigScript : MonoBehaviour
            StartCoroutine(StartDigging());
         }
 
-        else if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLyer) && digThroughGround)
+        else if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && digThroughGround)
         {
             Debug.Log("we got out bois");
             digThroughGround = false;
