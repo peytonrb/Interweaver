@@ -394,24 +394,24 @@ public class InputManagerScript : MonoBehaviour
     #region //MOLE FAMILIAR ABILITIES
     //this is hot garbo because the button for the owl dive ability and the mole ability are the same (not sure if they're supposed) but it works if you uncomment
     //******************************************************
-    //public void OnMoleFamiliarInteract(InputValue input)
-    //{
-    //    MoleDigScript moleDigScript = familiar.GetComponent<MoleDigScript>();
-    //    bool isDigging = input.isPressed;
-    //    if (isDigging)
-    //    {
-    //        Debug.Log("Dig button is pressed");
-    //        familiarScript.familiarMovementAbility = true;
-    //        moleDigScript.DigPressed();
+    public void OnMoleFamiliarInteract(InputValue input)
+    {
+        MoleDigScript moleDigScript = familiar.GetComponent<MoleDigScript>();
+        bool isDigging = input.isPressed;
+        if (isDigging)
+        {
+            Debug.Log("Dig button is pressed");
+            familiarScript.familiarMovementAbility = true;
+            moleDigScript.DigPressed();
 
-    //    }
+        }
 
-    //    else
-    //    {
-    //        Debug.Log("digging out");
-    //        familiarScript.familiarMovementAbility = false;
-    //        moleDigScript.DigPressed();
-    //    }
-    //}
+        else
+        {
+            Debug.Log("digging out");
+            familiarScript.familiarMovementAbility = false;
+            moleDigScript.DigPressed();
+        }
+    }
     #endregion//******************************************************
 }
