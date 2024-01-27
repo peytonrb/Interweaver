@@ -1675,7 +1675,7 @@ GameObject:
   - component: {fileID: 257846453}
   - component: {fileID: 257846452}
   m_Layer: 18
-  m_Name: pillar of dirt
+  m_Name: pillar of dirt electric bogaloo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9629,6 +9629,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2915298869422515000, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
   m_PrefabInstance: {fileID: 6038261398495771034}
   m_PrefabAsset: {fileID: 0}
+--- !u!143 &2120289432 stripped
+CharacterController:
+  m_CorrespondingSourceObject: {fileID: 8861850875384461316, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
+  m_PrefabInstance: {fileID: 6038261398495771034}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2122026641 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1359264606954408796, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
@@ -10158,6 +10163,14 @@ PrefabInstance:
     - target: {fileID: 2915298869422515000, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3688034466893937994, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
+      propertyPath: controller
+      value: 
+      objectReference: {fileID: 2120289432}
+    - target: {fileID: 3688034466893937994, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
+      propertyPath: layerToIgnore
+      value: DigableLayer
       objectReference: {fileID: 0}
     - target: {fileID: 4727347459261568905, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
       propertyPath: m_Name
