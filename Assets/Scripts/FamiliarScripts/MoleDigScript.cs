@@ -10,12 +10,16 @@ public class MoleDigScript : MonoBehaviour
     [HideInInspector] public float castDistance;
     [HideInInspector] public bool digThroughGround;
     private Collider boxCollider;
+    private bool coolDown;
     [CannotBeNullObjectField] public GameObject moleWalkingHolder;
     [CannotBeNullObjectField] public GameObject moleDiggingHolder;
 
+    [Header("Animation")]
+    [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
     void Start()
     {
         digThroughGround = false;
+        coolDown = false;
 
     }
 
@@ -35,23 +39,29 @@ public class MoleDigScript : MonoBehaviour
     {
         RaycastHit hitLayer;
 
-        if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && !digThroughGround)
+        if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && !digThroughGround && !coolDown)
         {
             Debug.Log("we're digging bois");
             digThroughGround = true;
             DigAction(hitLayer.collider);
            StartCoroutine(StartDigging());
+            //animation here
+            coolDown = true;
+            Invoke("ResetCooldown", 2.0f);         
         }
 
-        else if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && digThroughGround)
+        else if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && digThroughGround && !coolDown)
         {
             Debug.Log("we got out bois");
             digThroughGround = false;
             StartCoroutine(DiggingOut());
+            //animation here
+            coolDown = true;
+            Invoke("ResetCooldown", 2.0f);         
         }
 
     }
-    IEnumerator StartDigging()
+    IEnumerator StartDigging() 
     {
         yield return new WaitForSeconds(2);
         moleWalkingHolder.SetActive(false);
@@ -78,5 +88,10 @@ public class MoleDigScript : MonoBehaviour
         Mathf.Clamp(transform.position.x,clampBounds.min.x, clampBounds.max.x),
         transform.position.y,
         Mathf.Clamp(transform.position.z, clampBounds.min.z, clampBounds.max.z));
+    }
+
+    void ResetCooldown()
+    {
+        coolDown = false;
     }
 }
