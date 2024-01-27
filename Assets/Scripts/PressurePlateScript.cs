@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PressurePlateScript : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class PressurePlateScript : MonoBehaviour
     private bool activated;
     private float bottomtargetposition;
     private float toptargetposition;
+
+    public UnityEvent pressEvent;
 
     void Start() {
         bottomtargetposition = transform.position.y - 0.2f;
@@ -72,6 +75,6 @@ public class PressurePlateScript : MonoBehaviour
     }
 
     void Activation() {
-        Debug.Log("Do whatever you want");
+        pressEvent.Invoke();
     }
 }
