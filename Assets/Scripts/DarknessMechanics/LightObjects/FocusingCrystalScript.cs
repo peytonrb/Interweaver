@@ -28,7 +28,8 @@ public class FocusingCrystalScript : MonoBehaviour
             // calculates hit position & object
             if (Physics.Raycast(spawnPoint, transform.TransformDirection(Vector3.forward), out hit, 1000f))
             {
-                Debug.DrawRay(this.gameObject.transform.position, transform.TransformDirection(Vector3.forward) * 100, Color.red);
+                Debug.DrawRay(this.gameObject.transform.position, transform.TransformDirection(Vector3.forward) * 100, 
+                              Color.red);
                 Vector3 hitPosition = hit.collider.gameObject.transform.position;
                 beamHitObj = hit.collider.gameObject;
                 float distance = Vector3.Distance(spawnPoint, hitPosition);
@@ -77,13 +78,27 @@ public class FocusingCrystalScript : MonoBehaviour
                 collider.GetComponent<LightCrystalScript>().isActive = true;
             }
         }
+
+        // for sensors if beam is moved by rotating or moving the focusing crystal itself
+        if (collider.GetComponent<SensorController>() != null && beamHitObj.GetComponent<SensorController>() == null 
+            && collider.GetComponent<SensorController>().isActive)
+        {
+            collider.GetComponent<SensorController>().isActive = false;
+        }
+
+        if (collider.GetComponent<SensorController>() != null && beamHitObj.GetComponent<SensorController>() != null 
+            && !collider.GetComponent<SensorController>().isActive)
+        {
+            collider.GetComponent<SensorController>().isActive = true;
+        }
     }
 
     public void OnTriggerExit(Collider collider)
     {
         if (collider.gameObject.tag == "Weaveable" && collider.GetComponent<LightCrystalScript>() != null)
         {
-            if (!collider.GetComponent<LightCrystalScript>().isActiveDefault && LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn)
+            if (!collider.GetComponent<LightCrystalScript>().isActiveDefault 
+                && LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn)
             {
                 collider.GetComponent<LightCrystalScript>().isActive = false;
             }

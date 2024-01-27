@@ -28,6 +28,20 @@ public class LightDetectionScript : MonoBehaviour
                 crystalScript.isActive = true; // turn this light on
             }
         }
+
+        // if collision is with a sensor
+        if (collision.GetComponent<SensorController>() != null)
+        {
+            if (!collision.GetComponent<SensorController>().isActive)
+            {
+                collision.GetComponent<SensorController>().isActive = true;
+            }
+
+            if (collision.GetComponent<SensorController>().sensorEvent != null)
+            {
+                collision.GetComponent<SensorController>().StartEvent();
+            }
+        }
     }
 
     public void OnTriggerStay(Collider collider)
@@ -36,14 +50,16 @@ public class LightDetectionScript : MonoBehaviour
         if (collider.gameObject.tag == "Weaveable" && collider.GetComponent<LightCrystalScript>() != null)
         {
             // if for some reason the light that was powering the crystal is turned off
-            if (!wasCrystalOn && !crystalScript.isFocusingCrystal && !LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn)
+            if (!wasCrystalOn && !crystalScript.isFocusingCrystal &&
+                !LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn)
             {
                 crystalScript.isActive = false;
             }
 
             float distance = Vector3.Distance(this.gameObject.transform.position, collider.gameObject.transform.position);
 
-            if (LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn && distance < 4.5f)
+            if (LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn
+                && distance < 4.5f)
             {
                 crystalScript.isActive = true;
             }
@@ -56,14 +72,25 @@ public class LightDetectionScript : MonoBehaviour
         if (collision.gameObject.tag == "Weaveable" && collision.GetComponent<LightCrystalScript>() != null)
         {
             // if crystal wasn't originally on and object in trigger was powering it, turn off once out of trigger
-            if (!wasCrystalOn && LightSourceScript.Instance.lightsArray[collision.GetComponent<LightCrystalScript>().arrayIndex].isOn)
+            if (!wasCrystalOn &&
+                LightSourceScript.Instance.lightsArray[collision.GetComponent<LightCrystalScript>().arrayIndex].isOn)
             {
-                float distance = Vector3.Distance(this.gameObject.transform.position, collision.gameObject.transform.position);
+                float distance = Vector3.Distance(this.gameObject.transform.position,
+                                                  collision.gameObject.transform.position);
 
                 if (distance > 4.5f) // 4.5f is based on calculation for dynamic collider in FocusingCrystalScript
                 {
                     crystalScript.isActive = false;
                 }
+            }
+        }
+
+        // if collision is with a sensor
+        if (collision.GetComponent<SensorController>() != null)
+        {
+            if (collision.GetComponent<SensorController>().isActive)
+            {
+                collision.GetComponent<SensorController>().isActive = false;
             }
         }
     }

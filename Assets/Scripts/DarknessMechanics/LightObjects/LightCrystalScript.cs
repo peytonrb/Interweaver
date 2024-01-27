@@ -40,12 +40,12 @@ public class LightCrystalScript : MonoBehaviour
             focusingCrystalScript = beamEffect.gameObject.GetComponent<FocusingCrystalScript>();
         }
 
-        if (!isActive)
+        if (!isActive && isFocusingCrystal)
         {
             beamEffect.Stop();
             crystalLight.intensity = 0f;
         }
-        else
+        else if (isActive && isFocusingCrystal)
         {
             beamEffect.Play();
             crystalLight.intensity = brightness;
