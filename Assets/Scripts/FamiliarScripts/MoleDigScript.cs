@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 public class MoleDigScript : MonoBehaviour
 {
     [Header("variables")]
+    [CannotBeNullObjectField] public GameObject familiar;
     public LayerMask digableLayer;
     [HideInInspector] public float castDistance;
     [HideInInspector] public bool digThroughGround;
@@ -14,14 +15,16 @@ public class MoleDigScript : MonoBehaviour
     private float initialYPosition;
     private string layerToIgnore = "DigableLayer";
     private CharacterController characterController;
+    private MovementScript movementScript;
     [CannotBeNullObjectField] public GameObject moleWalkingHolder;
     [CannotBeNullObjectField] public GameObject moleDiggingHolder;
 
-    [Header("Animation")]
-    [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
+    //[Header("Animation")]
+    //[CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        movementScript = familiar.GetComponent<MovementScript>();
         digThroughGround = false;
         coolDown = false;
     }
@@ -54,6 +57,9 @@ public class MoleDigScript : MonoBehaviour
             //animation here
             coolDown = true;          
             Physics.IgnoreLayerCollision(gameObject.layer, layerToIgnoreIndex, true);
+            AudioManager.instance.footStepsChannel.Stop();
+            //add the digging sound here if it was added to the audio manager
+            movementScript.enabled = false;
             Invoke("ResetCooldown", 2.0f);         
         }
 
@@ -65,7 +71,7 @@ public class MoleDigScript : MonoBehaviour
             foreach (Collider hitCollider in hitColliders)
             {
                 Debug.Log("we're in the dirt pillar baby WOOOOOOOOO" + hitCollider.bounds);
-                transform.position= new Vector3 (transform.position.x,hitCollider.bounds.max.y,transform.position.z);
+                transform.position = new Vector3 (transform.position.x,hitCollider.bounds.max.y,transform.position.z);
             }
 
             digThroughGround = false;
@@ -73,6 +79,8 @@ public class MoleDigScript : MonoBehaviour
             //animation here
             coolDown = true;
             Physics.IgnoreLayerCollision(gameObject.layer, layerToIgnoreIndex, false);
+            //add the digging sound here if it was added to the audio manager
+            movementScript.enabled = false;
             Invoke("ResetCooldown", 2.0f);         
         }
 
@@ -104,11 +112,12 @@ public class MoleDigScript : MonoBehaviour
         transform.position = new Vector3(
         Mathf.Clamp(transform.position.x,clampBounds.min.x, clampBounds.max.x),
         initialYPosition,
-        Mathf.Clamp(transform.position.z, clampBounds.min.z, clampBounds.max.z));
+        Mathf.Clamp(transform.position.z,clampBounds.min.z, clampBounds.max.z));
     }
 
     void ResetCooldown()
     {
+        movementScript.enabled = true;
         coolDown = false;
     }
 }
