@@ -9,6 +9,7 @@ public class FocusingCrystalScript : MonoBehaviour
     public bool isActive;
     private VisualEffect beamEffect;
     private CapsuleCollider lightCollider;
+    private GameObject beamHitObj;
 
     void Start()
     {
@@ -22,13 +23,15 @@ public class FocusingCrystalScript : MonoBehaviour
         if (beamEffect.GetBool("Hit") && isActive) // if beam is hitting something
         {
             RaycastHit hit;
-            Vector3 spawnPoint = this.gameObject.transform.position + new Vector3(0f, 1.5f, 0f);
+            Vector3 spawnPoint = this.gameObject.transform.position;
 
             // calculates hit position & object
             if (Physics.Raycast(spawnPoint, transform.TransformDirection(Vector3.forward), out hit, 1000f))
             {
-                // Debug.DrawRay(this.gameObject.transform.position + new Vector3(0f, 1.5f, 0f), transform.TransformDirection(Vector3.forward) * 100, Color.red);
+                Debug.DrawRay(this.gameObject.transform.position, transform.TransformDirection(Vector3.forward) * 100, 
+                              Color.red);
                 Vector3 hitPosition = hit.collider.gameObject.transform.position;
+                beamHitObj = hit.collider.gameObject;
                 float distance = Vector3.Distance(spawnPoint, hitPosition);
                 distance /= 2;
 
@@ -37,7 +40,7 @@ public class FocusingCrystalScript : MonoBehaviour
                     Vector3 center = lightCollider.center;
                     center.z = distance;
                     lightCollider.center = center;
-                    lightCollider.height = (distance * 2) + 6f;
+                    lightCollider.height = (distance * 2) + 8f;
                 }
             }
         }
@@ -57,8 +60,36 @@ public class FocusingCrystalScript : MonoBehaviour
         {
             if (!LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn)
             {
+                // is beam actually hitting crystal
+                if (beamHitObj.GetComponent<LightCrystalScript>() != null)
+                {
+                    collider.GetComponent<LightCrystalScript>().isActive = true;
+                }
+            }
+        }
+    }
+
+    public void OnTriggerStay(Collider collider)
+    {
+        if (collider.gameObject.tag == "Weaveable" && collider.GetComponent<LightCrystalScript>() != null)
+        {
+            if (LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn)
+            {
                 collider.GetComponent<LightCrystalScript>().isActive = true;
             }
+        }
+
+        // for sensors if beam is moved by rotating or moving the focusing crystal itself
+        if (collider.GetComponent<SensorController>() != null && beamHitObj.GetComponent<SensorController>() == null 
+            && collider.GetComponent<SensorController>().isActive)
+        {
+            collider.GetComponent<SensorController>().isActive = false;
+        }
+
+        if (collider.GetComponent<SensorController>() != null && beamHitObj.GetComponent<SensorController>() != null 
+            && !collider.GetComponent<SensorController>().isActive)
+        {
+            collider.GetComponent<SensorController>().isActive = true;
         }
     }
 
@@ -66,7 +97,8 @@ public class FocusingCrystalScript : MonoBehaviour
     {
         if (collider.gameObject.tag == "Weaveable" && collider.GetComponent<LightCrystalScript>() != null)
         {
-            if (!collider.GetComponent<LightCrystalScript>().isActiveDefault && LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn)
+            if (!collider.GetComponent<LightCrystalScript>().isActiveDefault 
+                && LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn)
             {
                 collider.GetComponent<LightCrystalScript>().isActive = false;
             }

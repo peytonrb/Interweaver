@@ -26,6 +26,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource weaveChannel;
     public AudioSource footStepsChannel;
     public AudioSource fallChannel;
+    //AudioSource for the digging sound
 
     [Header("Music Audioclip List")]
     public AudioClip TitleMusic;

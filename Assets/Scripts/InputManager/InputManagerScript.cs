@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 
 public class InputManagerScript : MonoBehaviour
@@ -21,6 +22,15 @@ public class InputManagerScript : MonoBehaviour
     private FamiliarScript familiarScript;
     private MovementScript movementScript;
     public PlayerInput playerInput;
+
+    private bool isMole, isOwl, isStag;
+    public enum myEnums 
+    {
+        Owl,
+        Mole,
+        Stag
+    }
+    public myEnums familiarEnums;
     void Awake()
     {
         if (instance == null)
@@ -40,6 +50,25 @@ public class InputManagerScript : MonoBehaviour
 
         //usingController = pauseScript.GetUsingController(); //Checks if using the controller
         // Debug.Log(playerInput.currentControlScheme);
+
+        switch (familiarEnums)
+        {
+            case myEnums.Owl:
+                isMole = false;
+                isStag = false;
+                isOwl = true;
+                break;
+            case myEnums.Mole:
+                isMole = true;
+                isStag = false;
+                isOwl = false;
+                break;
+            case myEnums.Stag:
+                isMole = false;
+                isStag = true;
+                isOwl = false;
+                break;
+        }
     }
 
     public void ToggleControlScheme(bool isController)
@@ -368,50 +397,58 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnFamiliarInteract(InputValue input)
     {
-        OwlDiveScript owlDiveScript = familiar.GetComponent<OwlDiveScript>();
-        bool check = input.isPressed;
-
-        if (check)
+        if (isOwl) 
         {
-            Debug.Log("Pressed");
-            //This has to be performed through a bool since this particular method is only activated through collisions
-            familiarScript.familiarMovementAbility = true;
+            OwlDiveScript owlDiveScript = familiar.GetComponent<OwlDiveScript>();
+            bool check = input.isPressed;
 
-            // Add a check per familiar for later
-            owlDiveScript.DivePressed();
-        }
-        else
-        {
-            Debug.Log("Released");
-            familiarScript.familiarMovementAbility = false;
+            if (check)
+            {
+                Debug.Log("Pressed");
+                //This has to be performed through a bool since this particular method is only activated through collisions
+                familiarScript.familiarMovementAbility = true;
 
-            //Add a check per familiar for later
-            owlDiveScript.DiveRelease();
+                // Add a check per familiar for later
+                owlDiveScript.DivePressed();
+            }
+            else
+            {
+                Debug.Log("Released");
+                familiarScript.familiarMovementAbility = false;
+
+                //Add a check per familiar for later
+                owlDiveScript.DiveRelease();
+            }
         }
+       
     }
     #endregion//******************************************************
 
     #region //MOLE FAMILIAR ABILITIES
     //this is hot garbo because the button for the owl dive ability and the mole ability are the same (not sure if they're supposed) but it works if you uncomment
     //******************************************************
-    //public void OnMoleFamiliarInteract(InputValue input)
-    //{
-    //    MoleDigScript moleDigScript = familiar.GetComponent<MoleDigScript>();
-    //    bool isDigging = input.isPressed;
-    //    if (isDigging)
-    //    {
-    //        Debug.Log("Dig button is pressed");
-    //        familiarScript.familiarMovementAbility = true;
-    //        moleDigScript.DigPressed();
+    public void OnMoleFamiliarInteract(InputValue input)
+    {
+        if (isMole) 
+        {
+            MoleDigScript moleDigScript = familiar.GetComponent<MoleDigScript>();
+            bool isDigging = input.isPressed;
+            if (isDigging)
+            {
+                Debug.Log("Dig button is pressed");
+                familiarScript.familiarMovementAbility = true;
+                moleDigScript.DigPressed();
 
-    //    }
+            }
 
-    //    else
-    //    {
-    //        Debug.Log("digging out");
-    //        familiarScript.familiarMovementAbility = false;
-    //        moleDigScript.DigPressed();
-    //    }
-    //}
+            else
+            {
+                Debug.Log("digging out");
+                familiarScript.familiarMovementAbility = false;
+                moleDigScript.DigPressed();
+            }
+        }
+        
+    }
     #endregion//******************************************************
 }

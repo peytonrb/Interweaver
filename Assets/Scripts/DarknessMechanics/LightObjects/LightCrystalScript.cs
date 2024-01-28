@@ -12,7 +12,7 @@ public class LightCrystalScript : MonoBehaviour
     [TextArea]
     [SerializeField]
     private string Notes = "Array Index should be the INDEX of the light in LIGHTARRAY "
-                                                    + "in the LIGHTSOURCE OBJECT (is probably called LightsManager)";
+                         + "in the LightsManager";
     [Header("Focusing Crystals")]
     public bool isFocusingCrystal;
     private VisualEffect beamEffect;
@@ -38,6 +38,17 @@ public class LightCrystalScript : MonoBehaviour
         {
             beamEffect = this.gameObject.transform.GetChild(1).GetComponent<VisualEffect>();
             focusingCrystalScript = beamEffect.gameObject.GetComponent<FocusingCrystalScript>();
+        }
+
+        if (!isActive && isFocusingCrystal)
+        {
+            beamEffect.Stop();
+            crystalLight.intensity = 0f;
+        }
+        else if (isActive && isFocusingCrystal)
+        {
+            beamEffect.Play();
+            crystalLight.intensity = brightness;
         }
     }
 

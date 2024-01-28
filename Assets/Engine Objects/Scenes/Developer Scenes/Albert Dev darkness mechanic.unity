@@ -492,8 +492,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 122763037}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16.59687, y: 80.39753, z: -30.15329}
-  m_LocalScale: {x: 23.89687, y: 5.597322, z: 30.05329}
+  m_LocalPosition: {x: -9.907419, y: 80.39753, z: -22.968449}
+  m_LocalScale: {x: 10.517968, y: 5.597322, z: 15.68361}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1662,6 +1662,111 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 682a0569e636c9d4fb3abc5e070723ea, type: 3}
+--- !u!1 &257846451
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 257846455}
+  - component: {fileID: 257846454}
+  - component: {fileID: 257846453}
+  - component: {fileID: 257846452}
+  m_Layer: 18
+  m_Name: pillar of dirt electric bogaloo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &257846452
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257846451}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &257846453
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257846451}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: ac1ca7eb7f791144bbeae3e70d35bb4a, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &257846454
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257846451}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &257846455
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257846451}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10.18, y: 100.01, z: -23.12}
+  m_LocalScale: {x: 6.306679, y: 33.3119, z: 6.596213}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 30
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &284850127
 GameObject:
   m_ObjectHideFlags: 0
@@ -1986,6 +2091,10 @@ PrefabInstance:
       propertyPath: playerInput
       value: 
       objectReference: {fileID: 409886853}
+    - target: {fileID: 8977571022788081958, guid: e6bf1b4f874e350498836e091dded2fe, type: 3}
+      propertyPath: familiarEnums
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8977571022788081958, guid: e6bf1b4f874e350498836e091dded2fe, type: 3}
       propertyPath: inputActions.m_Id
       value: a4a50806-23d6-4ab7-9c07-2f4fb4e35936
@@ -9520,6 +9629,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2915298869422515000, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
   m_PrefabInstance: {fileID: 6038261398495771034}
   m_PrefabAsset: {fileID: 0}
+--- !u!143 &2120289432 stripped
+CharacterController:
+  m_CorrespondingSourceObject: {fileID: 8861850875384461316, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
+  m_PrefabInstance: {fileID: 6038261398495771034}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2122026641 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1359264606954408796, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
@@ -10049,6 +10163,18 @@ PrefabInstance:
     - target: {fileID: 2915298869422515000, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3688034466893937994, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
+      propertyPath: familiar
+      value: 
+      objectReference: {fileID: 2120289422}
+    - target: {fileID: 3688034466893937994, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
+      propertyPath: controller
+      value: 
+      objectReference: {fileID: 2120289432}
+    - target: {fileID: 3688034466893937994, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
+      propertyPath: layerToIgnore
+      value: DigableLayer
       objectReference: {fileID: 0}
     - target: {fileID: 4727347459261568905, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
       propertyPath: m_Name
