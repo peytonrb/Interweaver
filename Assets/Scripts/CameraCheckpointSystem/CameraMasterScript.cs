@@ -49,7 +49,7 @@ public class CameraMasterScript : MonoBehaviour
     {
         foreach(GameObject weaverCamera in weaverCameras)
         {
-            Debug.Log(weaverCamera);
+            //Debug.Log(weaverCamera);
 
         }
         //Debug.Log(currentCam);

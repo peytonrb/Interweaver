@@ -5,8 +5,7 @@ using UnityEngine.VFX;
 
 public class FocusingCrystalScript : MonoBehaviour
 {
-    [Header("FOR SCRIPTS ONLY")]
-    public bool isActive;
+    [HideInInspector] public bool isActive;
     private VisualEffect beamEffect;
     private CapsuleCollider lightCollider;
     private GameObject beamHitObj;

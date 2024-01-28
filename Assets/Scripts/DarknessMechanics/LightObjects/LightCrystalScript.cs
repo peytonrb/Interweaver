@@ -20,9 +20,7 @@ public class LightCrystalScript : MonoBehaviour
 
     private Light crystalLight;
     private float currentBrightness;
-
-    [Header("FOR SCRIPTS ONLY")]
-    public bool isActiveDefault;
+    [HideInInspector] public bool isActiveDefault;
 
     void Start()
     {

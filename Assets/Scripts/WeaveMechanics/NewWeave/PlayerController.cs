@@ -384,7 +384,7 @@ public class PlayerController : MonoBehaviour
         CameraMasterScript.instance.WeaverCameraReturnOnDeath(CameraMasterScript.instance.lastWeaverCameraTriggered);
         movementScript.HardResetMovementStats();
 
-        if (GM.WeaverCheckPointNum == 0) // first checkpoint in shield puzzle - should also specify scene
+        if (GM.WeaverCheckPointNum == 0 && respawnController != null) // first checkpoint in shield puzzle - should also specify scene
         {
             respawnController.RespawnInShieldPuzzle();
         }

@@ -20,6 +20,7 @@ public class DarknessMechanicScript : MonoBehaviour
     [SerializeField] private AnimationCurve shakeCurve;
 
     [SerializeField] private AnimationCurve vignetteCurve;
+    private bool isLightOn = true;
 
     UnityEngine.Rendering.Universal.Vignette vignette;
 
@@ -37,9 +38,9 @@ public class DarknessMechanicScript : MonoBehaviour
 
     void Update()
     {
-        vignette.intensity.Override(vignetteCurve.Evaluate(countDown/5));
+        vignette.intensity.Override(vignetteCurve.Evaluate(countDown / 5));
 
-        if (isSafe) 
+        if (isSafe)
         {
             countDown = Mathf.SmoothStep(lastCount, 0, t);
             t += 0.5f * Time.deltaTime;
@@ -54,8 +55,8 @@ public class DarknessMechanicScript : MonoBehaviour
 
             if (countDown > 1)
             {
-                Debug.Log(countDown);
-                float shakeIntensity = shakeCurve.Evaluate(countDown/5);
+                //Debug.Log(countDown);
+                float shakeIntensity = shakeCurve.Evaluate(countDown / 5);
 
                 CameraMasterScript.instance.ShakeCurrentCamera(shakeIntensity, .2f, 0.1f);
 
@@ -81,6 +82,54 @@ public class DarknessMechanicScript : MonoBehaviour
             t = 0;
 
             StopCoroutine(DarknessTimer());
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "LightObject")
+        {
+            // is light crystal or mushroom
+            if (other.transform.parent.GetComponent<LightCrystalScript>() != null)
+            {
+                LightCrystalScript lcScript = other.transform.parent.GetComponent<LightCrystalScript>();
+                if (!LightSourceScript.Instance.lightsArray[lcScript.arrayIndex].isOn && isLightOn)
+                {
+                    isLightOn = false;
+                    isSafe = false;
+                    StartCoroutine(DarknessTimer());
+                }
+                else if (LightSourceScript.Instance.lightsArray[lcScript.arrayIndex].isOn && !isLightOn)
+                {
+                    isLightOn = true;
+                    isSafe = true;
+
+                    lastCount = countDown;
+                    t = 0;
+
+                    StopCoroutine(DarknessTimer());
+                }
+            }
+            else if (other.transform.parent.GetComponent<TimedGlowMushroomsScript>() != null)
+            {
+                TimedGlowMushroomsScript tmScript = other.transform.parent.GetComponent<TimedGlowMushroomsScript>();
+                if (!LightSourceScript.Instance.lightsArray[tmScript.arrayIndex].isOn && isLightOn)
+                {
+                    isLightOn = false;
+                    isSafe = false;
+                    StartCoroutine(DarknessTimer());
+                }
+                else if (LightSourceScript.Instance.lightsArray[tmScript.arrayIndex].isOn && !isLightOn)
+                {
+                    isLightOn = true;
+                    isSafe = true;
+
+                    lastCount = countDown;
+                    t = 0;
+
+                    StopCoroutine(DarknessTimer());
+                }
+            }
         }
     }
 
