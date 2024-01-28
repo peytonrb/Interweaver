@@ -27,7 +27,7 @@ public class RivalEventTrigger : MonoBehaviour
         rival.SetActive(false);
         weaver = GameObject.FindWithTag("Player");
         moveScript = weaver.GetComponent<MovementScript>();
-        myVirtualCam = rival.transform.GetChild(0).GetComponent<CinemachineVirtualCamera>();
+        myVirtualCam = transform.GetChild(1).GetComponent<CinemachineVirtualCamera>();
     }
 
     void Update()
@@ -48,7 +48,7 @@ public class RivalEventTrigger : MonoBehaviour
 
     public void OnTriggerEnter(Collider collider)
     {
-        if (!hasPlayed)
+        if (!hasPlayed && collider.CompareTag("Player"))
         {
             myVirtualCam.Priority = 2;
             rival.SetActive(true); // make more interesting w animation
@@ -61,8 +61,13 @@ public class RivalEventTrigger : MonoBehaviour
 
     public void OnTriggerExit(Collider collider)
     {
-        smoke.Play();
-        rival.SetActive(false);
+        if (collider.CompareTag("Player") && !hasPlayed)
+        {
+            smoke.Play();
+            rival.SetActive(false);
+            hasPlayed = true;
+        }
+        
     }
 
     IEnumerator DialogueStart()
@@ -71,6 +76,6 @@ public class RivalEventTrigger : MonoBehaviour
         DialogueManager.instance.StartDialogue(dialogue, textBox);
         moveScript.ToggleCanMove(false);
         isSpeaking = true;
-        hasPlayed = true;
+        
     }
 }

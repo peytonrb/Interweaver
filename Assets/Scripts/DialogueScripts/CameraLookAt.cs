@@ -4,8 +4,16 @@ using UnityEngine;
 
 public class CameraLookAt : MonoBehaviour
 {
+
+    public Transform lookAtObject;
+
     void Update()
     {
-        transform.LookAt(Camera.main.transform);
+        if (lookAtObject == null)
+            transform.LookAt(Camera.main.transform);
+        else
+        {
+            transform.LookAt(new Vector3(transform.position.x, lookAtObject.position.y, transform.position.z));
+        }
     }
 }
