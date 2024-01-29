@@ -107,16 +107,18 @@ public class MoleDoggyDoorScript : MonoBehaviour
                 }
             break;
             case 1:
-                mddmanager.MoveMoleInDirection(rotationState,finalposition, GetComponent<MoleDoggyDoorScript>());
+                mddmanager.MoveMoleInDirection(rotationState, finalposition, GetComponent<MoleDoggyDoorScript>());
             break;
         }
             
     }
-
     public void ResetThisDoor() {
+        BoxCollider[] bc = GetComponents<BoxCollider>();
+        for (int i = 0; i < bc.Length; i++) {
+            bc[i].enabled = true;
+        }
         enterdoor = false;
         phase = 0;
     }
         
-
 }
