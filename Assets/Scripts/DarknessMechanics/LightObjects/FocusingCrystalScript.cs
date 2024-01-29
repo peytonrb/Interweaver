@@ -16,7 +16,7 @@ public class FocusingCrystalScript : MonoBehaviour
         lightCollider = this.gameObject.GetComponent<CapsuleCollider>();
     }
 
-    void Update() // needs to be refactored + optimized :)
+    void Update()
     {
         // changes collider size
         if (beamEffect.GetBool("Hit") && isActive) // if beam is hitting something

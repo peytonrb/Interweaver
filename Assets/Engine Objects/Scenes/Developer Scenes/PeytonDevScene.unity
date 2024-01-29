@@ -138,7 +138,7 @@ GameObject:
   m_Component:
   - component: {fileID: 53770354}
   m_Layer: 0
-  m_Name: Test
+  m_Name: DashVFXSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,13 +151,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 53770353}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1102.3848, y: 10.424944, z: -153.17}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: 0.050201174, z: -0, w: -0.9987391}
+  m_LocalPosition: {x: 0, y: 0.644, z: 0}
+  m_LocalScale: {x: 0.6769106, y: 0.6769106, z: 0.6769106}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_Father: {fileID: 1110753558}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &64480379
 GameObject:
@@ -233,7 +233,6 @@ Transform:
   - {fileID: 2027651362}
   - {fileID: 423139222}
   - {fileID: 1706405813}
-  - {fileID: 1623577627}
   m_Father: {fileID: 315643461}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4417,7 +4416,13 @@ PrefabInstance:
     - {fileID: 7154158912224162450, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
     - {fileID: 1913745848674449468, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5402126169904835267, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1623577627}
+    - targetCorrespondingSourceObject: {fileID: 5402126169904835267, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 53770354}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1359264606954408796, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       insertIndex: 2
@@ -6319,12 +6324,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1623577626}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.954712, y: 4.9952483, z: 1.9286499}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: 0.050201174, z: -0, w: -0.9987391}
+  m_LocalPosition: {x: -0.12647524, y: 0.55600154, z: -0.16242222}
+  m_LocalScale: {x: 0.6769106, y: 0.6769106, z: 0.6769106}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 70964215}
+  m_Father: {fileID: 1110753558}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1623577628
@@ -6420,13 +6425,13 @@ VisualEffect:
       m_Array: []
     m_Vector3f:
       m_Array:
-      - m_Value: {x: -0, y: 0, z: 0}
+      - m_Value: {x: -0, y: -0, z: -0}
         m_Name: Target_angles
         m_Overridden: 1
-      - m_Value: {x: 1102.3848, y: 10.424944, z: -153.17}
+      - m_Value: {x: 1101.7, y: 5.951381, z: -152.4}
         m_Name: Target_position
         m_Overridden: 1
-      - m_Value: {x: 1, y: 1, z: 1}
+      - m_Value: {x: 0.6769106, y: 0.6769106, z: 0.6769106}
         m_Name: Target_scale
         m_Overridden: 1
     m_Vector4f:
