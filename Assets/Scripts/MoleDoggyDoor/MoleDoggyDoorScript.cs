@@ -65,6 +65,7 @@ public class MoleDoggyDoorScript : MonoBehaviour
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.CompareTag("Familiar")) {
             moleMovementScript.ToggleCanMove(false);
+            moleMovementScript.ToggleCanLook(false);
             enterdoor = true;
         }
     }
@@ -83,25 +84,29 @@ public class MoleDoggyDoorScript : MonoBehaviour
                     case 1:
                         //X Positive
                         mole.transform.position = new Vector3(mole.transform.position.x, mole.transform.position.y, transform.position.z);
-                        finalposition = mole.transform.position.x + 2f;
+                        mole.transform.rotation = Quaternion.Euler(new Vector3(0,90,0));
+                        finalposition = mole.transform.position.x + 3f;
                         phase += 1;
                     break;
                     case 2:
                         //X Negative
                         mole.transform.position = new Vector3(mole.transform.position.x, mole.transform.position.y, transform.position.z);
-                        finalposition = mole.transform.position.x - 2f;
+                        mole.transform.rotation = Quaternion.Euler(new Vector3(0,-90,0));
+                        finalposition = mole.transform.position.x - 3f;
                         phase += 1;
                     break;
                     case 3:
                         //Z Positive
                         mole.transform.position = new Vector3(transform.position.x, mole.transform.position.y, mole.transform.position.z);
-                        finalposition = mole.transform.position.z + 2f;
+                        mole.transform.rotation = Quaternion.Euler(Vector3.zero);
+                        finalposition = mole.transform.position.z + 3f;
                         phase += 1;
                     break;
                     case 4:
                         //Z Negative
                         mole.transform.position = new Vector3(transform.position.x, mole.transform.position.y, mole.transform.position.z);
-                        finalposition = mole.transform.position.z - 2f;
+                        mole.transform.rotation = Quaternion.Euler(new Vector3(0,180,0));
+                        finalposition = mole.transform.position.z - 3f;
                         phase += 1;
                     break;
                 }

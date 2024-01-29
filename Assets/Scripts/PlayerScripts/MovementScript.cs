@@ -14,6 +14,7 @@ public class MovementScript : MonoBehaviour
 
     [Header("Movement Variables")]
     public bool canMove = true;
+    public bool canLook = true;
     public float speed; //Base walk speed for player
     private float currentSpeed = 0; // the current speed for the player
     private CharacterController characterController; //references the character controller component
@@ -174,6 +175,17 @@ public class MovementScript : MonoBehaviour
 
     }
 
+    public void ToggleCanLook(bool look) {
+        if (familiarScript.myTurn) {
+            if (look) {
+                canLook = true;
+            }
+            else {
+                canLook = false;
+            }
+        }
+    }
+
     void FixedUpdate()
     {
         if (canMove)
@@ -311,7 +323,7 @@ public class MovementScript : MonoBehaviour
         direction = new Vector3(movement.x, 0, movement.y).normalized; //direction of movement
 
         //Character rotations
-        if (direction.magnitude >= 0.2f)
+        if (direction.magnitude >= 0.2f && canLook)
         {
             float targetangle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetangle, ref rotationVelocity, rotationSpeed);

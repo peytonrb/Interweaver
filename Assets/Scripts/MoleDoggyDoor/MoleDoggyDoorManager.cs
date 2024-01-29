@@ -92,9 +92,11 @@ public class MoleDoggyDoorManager : MonoBehaviour
                     case 1:
                         float newposition = Mathf.MoveTowards(mole.transform.position.x,finalposition, enterExitSpeed * Time.deltaTime);
                         mole.transform.position = new Vector3(newposition,mole.transform.position.y,mole.transform.position.z);
+                        mole.transform.rotation = Quaternion.Euler(new Vector3(0,-90,0));
                         if (mole.transform.position.x <= finalposition) {
                             //End mole enter exit transition
                             moleMovementScript.ToggleCanMove(true);
+                            moleMovementScript.ToggleCanLook(true);
                             thismoledoorscript.ResetThisDoor();
                             phase = 0;
                             foundexitdoor = false;
@@ -103,9 +105,11 @@ public class MoleDoggyDoorManager : MonoBehaviour
                     case 2:
                         newposition = Mathf.MoveTowards(mole.transform.position.x,finalposition, enterExitSpeed * Time.deltaTime);
                         mole.transform.position = new Vector3(newposition,mole.transform.position.y,mole.transform.position.z);
+                        mole.transform.rotation = Quaternion.Euler(new Vector3(0,90,0));
                         if (mole.transform.position.x >= finalposition) {
                             //End mole enter exit transition
                             moleMovementScript.ToggleCanMove(true);
+                            moleMovementScript.ToggleCanLook(true);
                             thismoledoorscript.ResetThisDoor();
                             phase = 0;
                             foundexitdoor = false;
@@ -114,9 +118,11 @@ public class MoleDoggyDoorManager : MonoBehaviour
                     case 3:
                         newposition = Mathf.MoveTowards(mole.transform.position.z, finalposition, enterExitSpeed * Time.deltaTime);
                         mole.transform.position = new Vector3(mole.transform.position.x,mole.transform.position.y,newposition);
+                        mole.transform.rotation = Quaternion.Euler(new Vector3(0,180,0));
                         if (mole.transform.position.z <= finalposition) {
                             //End mole enter exit transition
                             moleMovementScript.ToggleCanMove(true);
+                            moleMovementScript.ToggleCanLook(true);
                             thismoledoorscript.ResetThisDoor();
                             phase = 0;
                             foundexitdoor = false;
@@ -125,9 +131,11 @@ public class MoleDoggyDoorManager : MonoBehaviour
                     case 4:
                         newposition = Mathf.MoveTowards(mole.transform.position.z, finalposition, enterExitSpeed * Time.deltaTime);
                         mole.transform.position = new Vector3(mole.transform.position.x,mole.transform.position.y,newposition);
+                        mole.transform.rotation = Quaternion.Euler(Vector3.zero);
                         if (mole.transform.position.z >= finalposition) {
                             //End mole enter exit transition
                             moleMovementScript.ToggleCanMove(true);
+                            moleMovementScript.ToggleCanLook(true);
                             thismoledoorscript.ResetThisDoor();
                             phase = 0;
                             foundexitdoor = false;
@@ -150,23 +158,27 @@ public class MoleDoggyDoorManager : MonoBehaviour
                     switch (mdds[i].rotationState) {
                         case 1:
                             mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y,mdds[i].gameObject.transform.position.z);
+                            
                             phase = 1;
                             thismoledoorscript.ResetThisDoor();
                         break;
                         case 2:
                             mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y,mdds[i].gameObject.transform.position.z);
+                            
                             phase = 1;
                             thismoledoorscript.ResetThisDoor();
                         break;
 
                         case 3:
                             mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y,mdds[i].gameObject.transform.position.z);
+                            
                             phase = 1;
                             thismoledoorscript.ResetThisDoor();
                         break;
 
                         case 4:
                             mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y,mdds[i].gameObject.transform.position.z);
+                            
                             phase = 1;
                             thismoledoorscript.ResetThisDoor();
                         break;
