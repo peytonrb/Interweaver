@@ -157,27 +157,27 @@ public class MoleDoggyDoorManager : MonoBehaviour
                     //This moves the mole to the new door.
                     switch (mdds[i].rotationState) {
                         case 1:
-                            mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y,mdds[i].gameObject.transform.position.z);
+                            mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y-1.5f,mdds[i].gameObject.transform.position.z);
                             
                             phase = 1;
                             thismoledoorscript.ResetThisDoor();
                         break;
                         case 2:
-                            mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y,mdds[i].gameObject.transform.position.z);
+                            mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y-1.5f,mdds[i].gameObject.transform.position.z);
                             
                             phase = 1;
                             thismoledoorscript.ResetThisDoor();
                         break;
 
                         case 3:
-                            mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y,mdds[i].gameObject.transform.position.z);
+                            mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y-1.5f,mdds[i].gameObject.transform.position.z);
                             
                             phase = 1;
                             thismoledoorscript.ResetThisDoor();
                         break;
 
                         case 4:
-                            mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y,mdds[i].gameObject.transform.position.z);
+                            mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y-1.5f,mdds[i].gameObject.transform.position.z);
                             
                             phase = 1;
                             thismoledoorscript.ResetThisDoor();
@@ -202,19 +202,19 @@ public class MoleDoggyDoorManager : MonoBehaviour
 
                         switch (mdds[i].rotationState) {
                             case 1:
-                                exitfinalposition = mole.transform.position.x - 2f;
+                                exitfinalposition = mole.transform.position.x - 3f;
                                 phase += 1;
                             break;
                             case 2:
-                                exitfinalposition = mole.transform.position.x + 2f;
+                                exitfinalposition = mole.transform.position.x + 3f;
                                 phase += 1;
                             break;
                             case 3:
-                                exitfinalposition = mole.transform.position.z - 2f;
+                                exitfinalposition = mole.transform.position.z - 3f;
                                 phase += 1;
                             break;
                             case 4:
-                                exitfinalposition = mole.transform.position.z + 2f;
+                                exitfinalposition = mole.transform.position.z + 3f;
                                 phase += 1;
                             break;
                         }
