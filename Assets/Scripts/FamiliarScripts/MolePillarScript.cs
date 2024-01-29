@@ -16,8 +16,7 @@ public class MolePillarScript : MonoBehaviour
     private bool pillarBuilding;
     private Vector3 pointToRiseTo = Vector3.up;
     private float distance = -1f;
-    public bool deploy;
-    public bool scronk;
+    [HideInInspector] public bool build;
 
     void Start()
     {
@@ -27,15 +26,10 @@ public class MolePillarScript : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (scronk)
+        if (build)
         {
             //movementScript.active = false;
             RaisePillar();
-        }
-        if (deploy)
-        {
-            DeployPillar();
-            deploy = false;
         }
     }
 
@@ -43,8 +37,7 @@ public class MolePillarScript : MonoBehaviour
     {
         if (pillarList.Count() >= maxPillarCount)
         {
-            Destroy(pillarList[0]);
-            pillarList.RemoveAt(0);
+            DestroyPillar();
         }
 
         GameObject newPillar = Instantiate(dirtPillar);
@@ -54,7 +47,8 @@ public class MolePillarScript : MonoBehaviour
 
     private void DestroyPillar()
     {
-
+        Destroy(pillarList[0]);
+        pillarList.RemoveAt(0);
     }
 
     public void RaisePillar()
@@ -62,18 +56,25 @@ public class MolePillarScript : MonoBehaviour
         distance = Vector3.Distance(pillarList[pillarList.Count-1].transform.position, pointToRiseTo);
         if (!pillarBuilding)
         {
+            movementScript.active = false;
             pointToRiseTo = transform.position + (Vector3.up * maxPillarHeight);
             pillarBuilding = true;
         }
-        else if (distance > 0.1f)
+        else if (distance > 0.1f && pillarBuilding)
         {
             pillarList[pillarList.Count-1].transform.position = Vector3.MoveTowards(pillarList[pillarList.Count-1].transform.position, pointToRiseTo, pillarBuildSpeed * Time.deltaTime);
         }
         else
         {
-            scronk = false; // auto stop input
-            pillarBuilding = false;
+            PillarBuildEnd();
         }
+    }
+
+    public void PillarBuildEnd()
+    {
+        movementScript.active = true;
+        build = false;
+        pillarBuilding = false;
     }
 
     void OnDrawGizmos()

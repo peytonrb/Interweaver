@@ -404,7 +404,6 @@ public class InputManagerScript : MonoBehaviour
 
             if (check)
             {
-                Debug.Log("Pressed");
                 //This has to be performed through a bool since this particular method is only activated through collisions
                 familiarScript.familiarMovementAbility = true;
 
@@ -413,7 +412,6 @@ public class InputManagerScript : MonoBehaviour
             }
             else
             {
-                Debug.Log("Released");
                 familiarScript.familiarMovementAbility = false;
 
                 //Add a check per familiar for later
@@ -432,23 +430,24 @@ public class InputManagerScript : MonoBehaviour
         if (isMole) 
         {
             MoleDigScript moleDigScript = familiar.GetComponent<MoleDigScript>();
+            MolePillarScript molePillarScript = familiar.GetComponent<MolePillarScript>();
             bool isDigging = input.isPressed;
+
             if (isDigging)
             {
-                Debug.Log("Dig button is pressed");
+                Debug.Log("Pressed");
                 familiarScript.familiarMovementAbility = true;
                 moleDigScript.DigPressed();
-
             }
-
             else
             {
-                Debug.Log("digging out");
+                Debug.Log("Release");
                 familiarScript.familiarMovementAbility = false;
-                moleDigScript.DigPressed();
+                molePillarScript.PillarBuildEnd();
             }
         }
-        
     }
+
+
     #endregion//******************************************************
 }

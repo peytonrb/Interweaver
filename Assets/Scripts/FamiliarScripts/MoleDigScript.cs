@@ -5,6 +5,8 @@ using UnityEngine.UIElements;
 
 public class MoleDigScript : MonoBehaviour
 {
+    [Header("References")]
+    MolePillarScript molePillarScript;
     [Header("variables")]
     [CannotBeNullObjectField] public GameObject familiar;
     public LayerMask digableLayer;
@@ -25,6 +27,7 @@ public class MoleDigScript : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         movementScript = familiar.GetComponent<MovementScript>();
+        molePillarScript = GetComponent<MolePillarScript>();
         digThroughGround = false;
         coolDown = false;
     }
@@ -95,9 +98,11 @@ public class MoleDigScript : MonoBehaviour
 
     IEnumerator DiggingOut()
     {
+        molePillarScript.DeployPillar();
         yield return new WaitForSeconds(2);
         moleWalkingHolder.SetActive(true);
         moleDiggingHolder.SetActive(false);
+        //molePillarScript.build = true;
         Debug.Log("waited for 2 more seconds");
     }
     public void DigAction(Collider funnyBox)

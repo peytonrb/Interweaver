@@ -130,7 +130,6 @@ public class MovementScript : MonoBehaviour
                 }
             }
         }
-
     }
 
     public void ToggleCanMove(bool moves)
