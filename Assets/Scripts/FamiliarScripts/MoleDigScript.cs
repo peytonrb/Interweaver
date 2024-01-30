@@ -13,8 +13,10 @@ public class MoleDigScript : MonoBehaviour
     [HideInInspector] public float castDistance;
     [HideInInspector] public bool digThroughGround;
     private Collider boxCollider;
+    private RaycastHit hitLayer;
     private bool coolDown;
     private float initialYPosition;
+    private Vector3 targetPosition;
     private string layerToIgnore = "DigableLayer";
     private CharacterController characterController;
     private MovementScript movementScript;
@@ -37,28 +39,36 @@ public class MoleDigScript : MonoBehaviour
     void Update()
     {
         Debug.DrawRay(transform.position, -transform.up, Color.red);
-       if (digThroughGround)
-       {
-            ClampPosition(boxCollider.bounds);          
-       }
+        if (digThroughGround)
+        {
+            if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer))
+            {
+                transform.position = new Vector3(transform.position.x, initialYPosition, transform.position.z);
+            }
+            else
+            {
+                transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 5.0f);
+            }
+        }
     }
 
 
 
     public void DigPressed()
     {
-        RaycastHit hitLayer;
+
         int layerToIgnoreIndex = LayerMask.NameToLayer(layerToIgnore);
 
         //casts a raycast from the player to the ground to check if they are on a digable layer and then ignores the collision
         //of that specific layer so then it can walk through the pillar of dirt
-        if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && !digThroughGround && !coolDown) 
+        if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && !digThroughGround && !coolDown)
         {
             if (!hitLayer.collider.gameObject.CompareTag("Dirt Pillar")) // cannae allow diggin' when we're ontop a dirt pillar
             {
                 Debug.Log("we're digging bois");
                 digThroughGround = true;
-                DigAction(hitLayer.collider);
+                initialYPosition = transform.position.y;
+                targetPosition = new Vector3(hitLayer.point.x, initialYPosition, hitLayer.point.z);
                 StartCoroutine(StartDigging());
                 //animation here
                 coolDown = true;
@@ -66,7 +76,7 @@ public class MoleDigScript : MonoBehaviour
                 AudioManager.instance.footStepsChannel.Stop();
                 //add the digging sound here if it was added to the audio manager
                 movementScript.enabled = false;
-                Invoke("ResetCooldown", 2.0f);                
+                Invoke("ResetCooldown", 2.0f);
             }
         }
 
@@ -79,7 +89,7 @@ public class MoleDigScript : MonoBehaviour
             {
                 canBuildPillar = true;
                 Debug.Log("we're in the dirt pillar baby WOOOOOOOOO" + hitCollider.bounds);
-                transform.position = new Vector3 (transform.position.x,hitCollider.bounds.max.y,transform.position.z);
+                transform.position = new Vector3(transform.position.x, hitCollider.bounds.max.y, transform.position.z);
             }
 
             digThroughGround = false;
@@ -89,11 +99,11 @@ public class MoleDigScript : MonoBehaviour
             Physics.IgnoreLayerCollision(gameObject.layer, layerToIgnoreIndex, false);
             //add the digging sound here if it was added to the audio manager
             movementScript.enabled = false;
-            Invoke("ResetCooldown", 2.0f);         
+            Invoke("ResetCooldown", 2.0f);
         }
 
     }
-    IEnumerator StartDigging() 
+    IEnumerator StartDigging()
     {
         yield return new WaitForSeconds(2);
         moleWalkingHolder.SetActive(false);
@@ -105,7 +115,7 @@ public class MoleDigScript : MonoBehaviour
     {
         if (!canBuildPillar)
         {
-           molePillarScript.DeployPillar();
+            molePillarScript.DeployPillar();
         }
 
         yield return new WaitForSeconds(2);
@@ -115,24 +125,11 @@ public class MoleDigScript : MonoBehaviour
         {
             molePillarScript.build = true;
         }
-        
+
         canBuildPillar = false;
         Debug.Log("waited for 2 more seconds");
     }
-    public void DigAction(Collider funnyBox)
-    {
-        initialYPosition = transform.position.y;
-        boxCollider = funnyBox;
-        ClampPosition(boxCollider.bounds);
-    }
 
-    public void ClampPosition(Bounds clampBounds)
-    {
-        transform.position = new Vector3(
-        Mathf.Clamp(transform.position.x,clampBounds.min.x, clampBounds.max.x),
-        initialYPosition,
-        Mathf.Clamp(transform.position.z,clampBounds.min.z, clampBounds.max.z));
-    }
 
     void ResetCooldown()
     {
