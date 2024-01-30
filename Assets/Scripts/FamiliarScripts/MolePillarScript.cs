@@ -16,6 +16,7 @@ public class MolePillarScript : MonoBehaviour
     private bool pillarBuilding;
     private Vector3 pointToRiseTo = Vector3.up;
     private float distance = -1f;
+    [HideInInspector] public bool digInputPressed;
     [HideInInspector] public bool build;
 
     void Start()
@@ -26,9 +27,8 @@ public class MolePillarScript : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (build)
+        if (build) // this is bad. I know this is bad. Sorry.
         {
-            //movementScript.active = false;
             RaisePillar();
         }
     }
@@ -53,20 +53,27 @@ public class MolePillarScript : MonoBehaviour
 
     public void RaisePillar()
     {
-        distance = Vector3.Distance(pillarList[pillarList.Count-1].transform.position, pointToRiseTo);
-        if (!pillarBuilding)
+        if (!digInputPressed)
         {
-            movementScript.active = false;
-            pointToRiseTo = transform.position + (Vector3.up * maxPillarHeight);
-            pillarBuilding = true;
-        }
-        else if (distance > 0.1f && pillarBuilding)
-        {
-            pillarList[pillarList.Count-1].transform.position = Vector3.MoveTowards(pillarList[pillarList.Count-1].transform.position, pointToRiseTo, pillarBuildSpeed * Time.deltaTime);
+            PillarBuildEnd();
         }
         else
         {
-            PillarBuildEnd();
+            distance = Vector3.Distance(pillarList[pillarList.Count-1].transform.position, pointToRiseTo);
+            if (!pillarBuilding)
+            {
+                movementScript.active = false;
+                pointToRiseTo = transform.position + (Vector3.up * maxPillarHeight);
+                pillarBuilding = true;
+            }
+            else if (distance > 0.1f && pillarBuilding)
+            {
+                pillarList[pillarList.Count-1].transform.position = Vector3.MoveTowards(pillarList[pillarList.Count-1].transform.position, pointToRiseTo, pillarBuildSpeed * Time.deltaTime);
+            }
+            else
+            {
+                PillarBuildEnd();
+            }
         }
     }
 

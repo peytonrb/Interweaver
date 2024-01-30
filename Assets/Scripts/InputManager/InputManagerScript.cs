@@ -435,13 +435,13 @@ public class InputManagerScript : MonoBehaviour
 
             if (isDigging)
             {
-                Debug.Log("Pressed");
+                molePillarScript.digInputPressed = true;
                 familiarScript.familiarMovementAbility = true;
                 moleDigScript.DigPressed();
             }
             else
             {
-                Debug.Log("Release");
+                molePillarScript.digInputPressed = false;
                 familiarScript.familiarMovementAbility = false;
                 molePillarScript.PillarBuildEnd();
             }

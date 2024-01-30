@@ -81,25 +81,6 @@ public class FamiliarScript : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit other) {
         
-        /*if (other.gameObject.CompareTag("Breakable")) // if familiar collides with breakable object while using movement ability
-        {
-            if (familiarMovementAbility)
-            {
-                movementScript.Bounce();
-
-                
-
-                if (other.gameObject.TryGetComponent<CrystalScript>(out CrystalScript crystal))
-                {
-                    crystal.TriggerBreak();
-                }
-            }
-            else
-            {
-                CameraMasterScript.instance.EndLeapOfFaith();
-                Death();
-            }
-        }*/
     }
 
 
@@ -145,7 +126,7 @@ public class FamiliarScript : MonoBehaviour
     }
 
     public void Depossess() {
-        if (myTurn && Time.timeScale != 0 && !islandisfalling && !talkingToNPC) {
+        if (myTurn && Time.timeScale != 0 && !islandisfalling && !talkingToNPC && movementScript.active) {
             //Move character only if they are on the ground or in leapOfFaith
             if (characterController.isGrounded || leapOfFaith) {     
                 if (!leapOfFaith) {

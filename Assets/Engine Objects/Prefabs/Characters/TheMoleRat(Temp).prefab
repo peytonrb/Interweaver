@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 758329149717841849}
   - component: {fileID: 6526200761262720696}
   - component: {fileID: 3688034466893937994}
+  - component: {fileID: 6699170393875146026}
   m_Layer: 11
   m_Name: TheMoleRat(Temp)
   m_TagString: Familiar
@@ -211,6 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11d0e9030a181b7439b8c213e37fadfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  familiar: {fileID: 0}
   digableLayer:
     serializedVersion: 2
     m_Bits: 262144
@@ -218,6 +220,25 @@ MonoBehaviour:
   digThroughGround: 0
   moleWalkingHolder: {fileID: 8253808243786585975}
   moleDiggingHolder: {fileID: 8701862733424527093}
+--- !u!114 &6699170393875146026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4727347459261568905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33a665620e45d444fb684a3de48389cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dirtPillar: {fileID: 7186821099891325063, guid: db362c1952d25ad478ab811619542944, type: 3}
+  pillarList: []
+  maxPillarCount: 1
+  maxPillarHeight: 18.2
+  pillarBuildSpeed: 3
+  digInputPressed: 0
+  build: 0
 --- !u!1 &8701862733424527093
 GameObject:
   m_ObjectHideFlags: 0
