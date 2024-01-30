@@ -5,6 +5,8 @@ using UnityEngine.UIElements;
 
 public class MoleDigScript : MonoBehaviour
 {
+    [Header("References")]
+    MolePillarScript molePillarScript;
     [Header("variables")]
     [CannotBeNullObjectField] public GameObject familiar;
     public LayerMask digableLayer;
@@ -18,6 +20,7 @@ public class MoleDigScript : MonoBehaviour
     private MovementScript movementScript;
     [CannotBeNullObjectField] public GameObject moleWalkingHolder;
     [CannotBeNullObjectField] public GameObject moleDiggingHolder;
+    private bool canBuildPillar; // a bool that flags as true when mole is moving up a dirt pillar
 
     //[Header("Animation")]
     //[CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
@@ -25,6 +28,7 @@ public class MoleDigScript : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         movementScript = familiar.GetComponent<MovementScript>();
+        molePillarScript = GetComponent<MolePillarScript>();
         digThroughGround = false;
         coolDown = false;
     }
@@ -50,17 +54,20 @@ public class MoleDigScript : MonoBehaviour
         //of that specific layer so then it can walk through the pillar of dirt
         if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && !digThroughGround && !coolDown) 
         {
-            Debug.Log("we're digging bois");
-            digThroughGround = true;
-            DigAction(hitLayer.collider);
-           StartCoroutine(StartDigging());
-            //animation here
-            coolDown = true;          
-            Physics.IgnoreLayerCollision(gameObject.layer, layerToIgnoreIndex, true);
-            AudioManager.instance.footStepsChannel.Stop();
-            //add the digging sound here if it was added to the audio manager
-            movementScript.enabled = false;
-            Invoke("ResetCooldown", 2.0f);         
+            if (!hitLayer.collider.gameObject.CompareTag("Dirt Pillar")) // cannae allow diggin' when we're ontop a dirt pillar
+            {
+                Debug.Log("we're digging bois");
+                digThroughGround = true;
+                DigAction(hitLayer.collider);
+                StartCoroutine(StartDigging());
+                //animation here
+                coolDown = true;
+                Physics.IgnoreLayerCollision(gameObject.layer, layerToIgnoreIndex, true);
+                AudioManager.instance.footStepsChannel.Stop();
+                //add the digging sound here if it was added to the audio manager
+                movementScript.enabled = false;
+                Invoke("ResetCooldown", 2.0f);                
+            }
         }
 
         else if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && digThroughGround && !coolDown)
@@ -70,6 +77,7 @@ public class MoleDigScript : MonoBehaviour
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, 0f, digableLayer);
             foreach (Collider hitCollider in hitColliders)
             {
+                canBuildPillar = true;
                 Debug.Log("we're in the dirt pillar baby WOOOOOOOOO" + hitCollider.bounds);
                 transform.position = new Vector3 (transform.position.x,hitCollider.bounds.max.y,transform.position.z);
             }
@@ -95,9 +103,20 @@ public class MoleDigScript : MonoBehaviour
 
     IEnumerator DiggingOut()
     {
+        if (!canBuildPillar)
+        {
+           molePillarScript.DeployPillar();
+        }
+
         yield return new WaitForSeconds(2);
         moleWalkingHolder.SetActive(true);
         moleDiggingHolder.SetActive(false);
+        if (!canBuildPillar)
+        {
+            molePillarScript.build = true;
+        }
+        
+        canBuildPillar = false;
         Debug.Log("waited for 2 more seconds");
     }
     public void DigAction(Collider funnyBox)
