@@ -19,22 +19,7 @@ public class FamiliarScript : MonoBehaviour
     public bool familiarMovementAbility;//Only used for reading if familiar is using movemeny ability
     private bool insideTrigger;
     [HideInInspector] public bool talkingToNPC;
-
-
-    [Header("character's camera")]
-    //Character Rotation values
-    //**********************************************************
-    public GameObject cameraMaster; //Camera manager reference
-    private int vCamRotationState;
-    //public CinemachineVirtualCamera virtualCam; //Virtual Camera reference
-    //private Vector3 originalVirtualCamRotation; // Original rotation values for the virtual camera
-    //private Vector3 originalVirtualCamTransposeOffset; //Virtual Camera original transpose offset values
-    //**********************************************************
     private GameMasterScript GM; //This is refrencing the game master script
-
-    [Header("Weave Variables")]
-    public float WeaveDistance = 12f;
-
     [SerializeField] private AudioClip possessionClip;
     //public InputAction NPCInteraction;
 
@@ -61,9 +46,6 @@ public class FamiliarScript : MonoBehaviour
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>(); 
-        //originalVirtualCamTransposeOffset = virtualCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
-        //originalVirtualCamRotation = virtualCam.transform.eulerAngles;
-        //transform.position = GM.LastCheckPointPos;
         characterController.enabled = true;
         Debug.Log("Active Current Position: " + transform.position);
     }
@@ -78,11 +60,6 @@ public class FamiliarScript : MonoBehaviour
             }
         }
     }
-
-    private void OnControllerColliderHit(ControllerColliderHit other) {
-        
-    }
-
 
     private void OnTriggerEnter(Collider collision)
     {
