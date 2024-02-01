@@ -17,7 +17,7 @@ public class MoleDigScript : MonoBehaviour
     private bool coolDown;
     private float initialYPosition;
     private Vector3 targetPosition;
-    public string tagToIgnore; 
+    public List<string> tagToIgnore = new List<string>(); 
     private CharacterController characterController;
     private MovementScript movementScript;
     [CannotBeNullObjectField] public GameObject moleWalkingHolder;
@@ -127,25 +127,63 @@ public class MoleDigScript : MonoBehaviour
         Debug.Log("waited for 2 more seconds");
     }
 
-    void IgnoreCollisionsWithTag(string tag)
+    void IgnoreCollisionsWithTag(List<string> tag)
     {
-        GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag(tag);
+        List<Collider> collidersToIgnore = new List<Collider>();
 
-        foreach (var obj in objectsWithTag)
+        // Find all GameObjects with the specified tags
+        foreach (var t in tag)
         {
-            Physics.IgnoreCollision(GetComponent<Collider>(), obj.GetComponent<Collider>(), true);
+            GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag(t);
+
+            // Add colliders from each object to the list
+            foreach (var obj in objectsWithTag)
+            {
+                Collider collider = obj.GetComponent<Collider>();
+
+                if (collider != null)
+                {
+                    collidersToIgnore.Add(collider);
+                }
+            }
+        }
+
+        // Ignore collisions with each collider in the list
+        foreach (var colliderToIgnore in collidersToIgnore)
+        {
+            Physics.IgnoreCollision(GetComponent<Collider>(), colliderToIgnore, true);
         }
     }
 
-    void ResetCollisionsWithTag(string tag)
+    void ResetCollisionsWithTag(List<string> tag)
     {
-        GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag(tag);
+        List<Collider> collidersToIgnore = new List<Collider>();
 
-        foreach (var obj in objectsWithTag)
+        // Find all GameObjects with the specified tags
+        foreach (var t in tag)
         {
-            Physics.IgnoreCollision(GetComponent<Collider>(), obj.GetComponent<Collider>(), false);
+            GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag(t);
+
+            // Add colliders from each object to the list
+            foreach (var obj in objectsWithTag)
+            {
+                Collider collider = obj.GetComponent<Collider>();
+
+                if (collider != null)
+                {
+                    collidersToIgnore.Add(collider);
+                }
+            }
+        }
+
+        // Ignore collisions with each collider in the list
+        foreach (var colliderToIgnore in collidersToIgnore)
+        {
+            Physics.IgnoreCollision(GetComponent<Collider>(), colliderToIgnore, false);
         }
     }
+
+    
     void ResetCooldown()
     {
         movementScript.enabled = true;
