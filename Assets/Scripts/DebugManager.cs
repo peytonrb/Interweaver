@@ -11,6 +11,8 @@ public class DebugManager : MonoBehaviour
     private bool debugUIison;
     [SerializeField] private GameObject debugUI;
     private FamiliarScript familiarScript;
+    private GameObject cameraMaster;
+    private GameObject gameMaster;
     private CameraMasterScript cms;
     private GameMasterScript gms;
     public TextMeshProUGUI whosturn;
@@ -26,6 +28,11 @@ public class DebugManager : MonoBehaviour
     private GameObject familiar;
     private int framerate;
     public TextMeshProUGUI fps;
+    private bool familiarfound;
+    private bool gamemasterfound;
+    private bool cameramasterfound;
+    private bool allfound;
+
 
     private void Awake() {
         if (instance == null) {
@@ -39,17 +46,32 @@ public class DebugManager : MonoBehaviour
     void Start() {
         weaver = GameObject.FindGameObjectWithTag("Player");
         familiar = GameObject.FindGameObjectWithTag("Familiar");
-        familiarScript = familiar.GetComponent<FamiliarScript>();
-        cms = GameObject.FindGameObjectWithTag("CameraMaster").GetComponent<CameraMasterScript>();
-        gms = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
+        gameMaster = GameObject.FindGameObjectWithTag("GM");
+        cameraMaster = GameObject.FindGameObjectWithTag("CameraMaster");
+        if (familiar != null) {
+            familiarScript = familiar.GetComponent<FamiliarScript>();
+            familiarfound = true;
+        }
+        if (gameMaster != null) {
+            gms = gameMaster.GetComponent<GameMasterScript>();
+            gamemasterfound = true;
+        }
+        if (cameraMaster != null) {
+            cms = cameraMaster.GetComponent<CameraMasterScript>();
+            cameramasterfound = true;
+        }
 
-        totalweavercheckpoints.text = "Total Weaver Checkpoints: " + gms.weaverCheckpoints.Length.ToString();
-        totalfamiliarcheckpoints.text = "Total Familiar Checkpoints: " + gms.familiarCheckpoints.Length.ToString();
+        if (familiarfound && gamemasterfound && cameramasterfound) {
+            totalweavercheckpoints.text = "Total Weaver Checkpoints: " + gms.weaverCheckpoints.Length.ToString();
+            totalfamiliarcheckpoints.text = "Total Familiar Checkpoints: " + gms.familiarCheckpoints.Length.ToString();
 
-        UpdateFamiliarTurn(familiarScript.myTurn);
-        UpdateCameraOnPriority(cms.weaverCameraOnPriority,cms.familiarCameraOnPriority);
-        UpdateCurrentCheckpoint(gms.WeaverCheckPointNum,gms.FamiliarCheckPointNum);
-        UpdatePositions(weaver.transform,familiar.transform);
+            UpdateFamiliarTurn(familiarScript.myTurn);
+            UpdateCameraOnPriority(cms.weaverCameraOnPriority,cms.familiarCameraOnPriority);
+            UpdateCurrentCheckpoint(gms.WeaverCheckPointNum,gms.FamiliarCheckPointNum);
+            UpdatePositions(weaver.transform,familiar.transform);
+            allfound = true;
+        }
+        
         StartCoroutine(ForcedDelay());
 
         if (debugUIison) {
@@ -67,7 +89,7 @@ public class DebugManager : MonoBehaviour
 
     void Update() {
         if (debugIsOn) {
-            if (debugUIison) {
+            if (debugUIison && allfound) {
                 UpdateFamiliarTurn(familiarScript.myTurn);
                 UpdateCameraOnPriority(cms.weaverCameraOnPriority,cms.familiarCameraOnPriority);
                 UpdateCurrentCheckpoint(gms.WeaverCheckPointNum,gms.FamiliarCheckPointNum);
@@ -120,7 +142,7 @@ public class DebugManager : MonoBehaviour
     }
 
     IEnumerator ForcedDelay() {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
         UpdateFPS();
     }
 }

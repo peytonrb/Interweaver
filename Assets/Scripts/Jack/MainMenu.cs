@@ -28,11 +28,6 @@ public class MainMenu : MonoBehaviour
         creditsMenu.gameObject.SetActive(false);
     }
 
-    void Update()
-    {
-
-    }
-
     //Function for switching the active button using the eventsystem using a parameter
     public void ChangeActiveButtons(int buttonToChoose)
     {
@@ -124,6 +119,12 @@ public class MainMenu : MonoBehaviour
         // Start Game!
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startFile, 1f);
         SceneHandler.instance.LoadLevel("AnimaticCutscenes");
+    }
+
+    public void PlayCavern() {
+        //Starts game from cavern
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startFile, 1f);
+        SceneHandler.instance.LoadLevel("Cavern");
     }
     public void PlayHoverSound()
     {
