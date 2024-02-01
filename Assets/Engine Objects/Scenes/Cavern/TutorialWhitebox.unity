@@ -141,7 +141,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7036191476178042492, guid: 1c85ec236746d5347aa555e68f1c23d4, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7036191476178042492, guid: 1c85ec236746d5347aa555e68f1c23d4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3143,7 +3143,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &696770719
 GameObject:
@@ -4220,7 +4220,7 @@ PrefabInstance:
       objectReference: {fileID: 2088714810}
     - target: {fileID: 8724631116917645502, guid: 5dd65775d35933348a6e77af51431535, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8724631116917645502, guid: 5dd65775d35933348a6e77af51431535, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6294,92 +6294,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &1289138903
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1289138907}
-  - component: {fileID: 1289138906}
-  - component: {fileID: 1289138905}
-  - component: {fileID: 1289138904}
-  m_Layer: 0
-  m_Name: RespawnPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1289138904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1289138903}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06fdb565b808d0345aae8ffb62659097, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shieldPuzzleWeaveables: []
-  myRespawnables: []
-  startPositions:
-  - {x: 0, y: 225, z: 0}
-  startRotations: []
-  AutoAssignMyWeavables: 1
-  layersToCheck:
-    serializedVersion: 2
-    m_Bits: 0
-  boxCastHalfExtent: {x: 0, y: 0, z: 0}
-  rayList: []
---- !u!65 &1289138905
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1289138903}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!33 &1289138906
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1289138903}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &1289138907
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1289138903}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.16, y: -30.2, z: -0.1}
-  m_LocalScale: {x: 554.10583, y: 4.7646885, z: 364.93707}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &1292811769
 Mesh:
   m_ObjectHideFlags: 0
@@ -7088,7 +7002,7 @@ PrefabInstance:
     - target: {fileID: 2864162376311042491, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: respawnController
       value: 
-      objectReference: {fileID: 1289138904}
+      objectReference: {fileID: 0}
     - target: {fileID: 2864162376311042491, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: characterAnimationHandler
       value: 

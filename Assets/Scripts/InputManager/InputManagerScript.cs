@@ -430,24 +430,38 @@ public class InputManagerScript : MonoBehaviour
         if (isMole) 
         {
             MoleDigScript moleDigScript = familiar.GetComponent<MoleDigScript>();
-            MolePillarScript molePillarScript = familiar.GetComponent<MolePillarScript>();
+            
             bool isDigging = input.isPressed;
 
             if (isDigging)
             {
-                molePillarScript.digInputPressed = true;
                 familiarScript.familiarMovementAbility = true;
                 moleDigScript.DigPressed();
             }
             else
             {
-                molePillarScript.digInputPressed = false;
                 familiarScript.familiarMovementAbility = false;
-                molePillarScript.PillarBuildEnd();
             }
         }
     }
 
+    public void OnMolePillar(InputValue input)
+    {
+        MolePillarScript molePillarScript = familiar.GetComponent<MolePillarScript>();
 
+        if (isMole) 
+        {
+            if (input.isPressed)
+            {
+                molePillarScript.digInputPressed = true;
+            }
+            else
+            {
+                molePillarScript.digInputPressed = false;
+                molePillarScript.PillarBuildEnd();
+            }
+            
+        }
+    }
     #endregion//******************************************************
 }

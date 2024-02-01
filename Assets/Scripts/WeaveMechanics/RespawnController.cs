@@ -80,7 +80,7 @@ public class RespawnController : MonoBehaviour
                 if (hit.collider.gameObject == obj)
                 {
                     
-                    Debug.Log(hit.collider.gameObject);
+                    //Debug.Log(hit.collider.gameObject);
                     rayList.Remove(hit.collider.gameObject);
                 }
             }

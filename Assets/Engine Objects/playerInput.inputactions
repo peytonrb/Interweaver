@@ -884,6 +884,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "MolePillar",
+                    "type": "Button",
+                    "id": "bbd46e48-769b-47eb-95c3-ffa0ac0beab1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1055,7 +1064,7 @@
                 {
                     "name": "",
                     "id": "278ab1a9-cac4-4e79-9317-7ff2f1211c2a",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -1071,6 +1080,28 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "MoleFamiliarInteract",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "24543a52-19cb-497b-aba8-cf1f0f7f3dfb",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "MolePillar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "721d845e-8ccb-4fa5-81a7-baed0264a705",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "MolePillar",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
