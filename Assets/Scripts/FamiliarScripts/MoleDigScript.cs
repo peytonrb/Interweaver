@@ -17,7 +17,7 @@ public class MoleDigScript : MonoBehaviour
     private bool coolDown;
     private float initialYPosition;
     private Vector3 targetPosition;
-    private string layerToIgnore = "DigableLayer";
+    public string tagToIgnore; 
     private CharacterController characterController;
     private MovementScript movementScript;
     [CannotBeNullObjectField] public GameObject moleWalkingHolder;
@@ -56,9 +56,6 @@ public class MoleDigScript : MonoBehaviour
 
     public void DigPressed()
     {
-
-        int layerToIgnoreIndex = LayerMask.NameToLayer(layerToIgnore);
-
         //casts a raycast from the player to the ground to check if they are on a digable layer and then ignores the collision
         //of that specific layer so then it can walk through the pillar of dirt
         if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && !digThroughGround && !coolDown)
@@ -72,7 +69,7 @@ public class MoleDigScript : MonoBehaviour
                 StartCoroutine(StartDigging());
                 //animation here
                 coolDown = true;
-                Physics.IgnoreLayerCollision(gameObject.layer, layerToIgnoreIndex, true);
+                IgnoreCollisionsWithTag(tagToIgnore);
                 AudioManager.instance.footStepsChannel.Stop();
                 //add the digging sound here if it was added to the audio manager
                 movementScript.enabled = false;
@@ -96,7 +93,7 @@ public class MoleDigScript : MonoBehaviour
             StartCoroutine(DiggingOut());
             //animation here
             coolDown = true;
-            Physics.IgnoreLayerCollision(gameObject.layer, layerToIgnoreIndex, false);
+            ResetCollisionsWithTag(tagToIgnore);
             //add the digging sound here if it was added to the audio manager
             movementScript.enabled = false;
             Invoke("ResetCooldown", 2.0f);
@@ -130,7 +127,25 @@ public class MoleDigScript : MonoBehaviour
         Debug.Log("waited for 2 more seconds");
     }
 
+    void IgnoreCollisionsWithTag(string tag)
+    {
+        GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag(tag);
 
+        foreach (var obj in objectsWithTag)
+        {
+            Physics.IgnoreCollision(GetComponent<Collider>(), obj.GetComponent<Collider>(), true);
+        }
+    }
+
+    void ResetCollisionsWithTag(string tag)
+    {
+        GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag(tag);
+
+        foreach (var obj in objectsWithTag)
+        {
+            Physics.IgnoreCollision(GetComponent<Collider>(), obj.GetComponent<Collider>(), false);
+        }
+    }
     void ResetCooldown()
     {
         movementScript.enabled = true;
