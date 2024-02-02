@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4819536821983691010}
   - component: {fileID: 7549325288450014596}
   - component: {fileID: 4316409014812303782}
+  - component: {fileID: 2457492075167711666}
   m_Layer: 19
   m_Name: MushroomLight
   m_TagString: LightObject
@@ -140,6 +141,19 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 3.54
   m_Center: {x: 0, y: -0.01, z: 0}
+--- !u!114 &2457492075167711666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4781615422072505299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cba16a25ce66e1146b53bd3d4655b1a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTimedMushroom: 1
 --- !u!1001 &8064631962466328952
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -166,7 +180,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 57eab13bf66a66e41a28a0ef15336d2e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.6347656
+      value: -3.79
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 57eab13bf66a66e41a28a0ef15336d2e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -174,7 +188,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 57eab13bf66a66e41a28a0ef15336d2e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 7.4086456
+      value: 7.85
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 57eab13bf66a66e41a28a0ef15336d2e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -248,6 +262,7 @@ MonoBehaviour:
   lightOnDelay: 1
   lightOffDelay: 2
   arrayIndex: 0
+  isActive: 0
   Notes: Array Index should be the INDEX of the light in LIGHTARRAY in the LIGHTSOURCE
     OBJECT (is probably called LightsManager)
 --- !u!64 &5678369422608693632

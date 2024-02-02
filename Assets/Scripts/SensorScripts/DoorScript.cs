@@ -135,8 +135,8 @@ public class DoorScript : MonoBehaviour
         {
             yield return new WaitForEndOfFrame();
             doorClosing = true;
-            transform.position = Vector3.MoveTowards(transform.position, targetPoint, doorSpeed * Time.deltaTime);
-            distance = Vector3.Distance(transform.position, targetPoint);
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, originalPosition, (doorSpeed / 2) * Time.deltaTime);
+            distance = Vector3.Distance(transform.position, originalPosition);
             StartCoroutine(MoveBack());
             yield return null;
         }
