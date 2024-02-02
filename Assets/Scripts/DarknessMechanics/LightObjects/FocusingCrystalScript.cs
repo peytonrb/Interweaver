@@ -85,10 +85,17 @@ public class FocusingCrystalScript : MonoBehaviour
             collider.GetComponent<SensorController>().isActive = false;
         }
 
+        // if beam hits sensor
         if (collider.GetComponent<SensorController>() != null && beamHitObj.GetComponent<SensorController>() != null 
             && !collider.GetComponent<SensorController>().isActive)
         {
             collider.GetComponent<SensorController>().isActive = true;
+        }
+
+        // if beam hits player
+        if (collider.gameObject.tag == "Player")
+        {
+            collider.GetComponent<DarknessMechanicScript>().isSafe = true;
         }
     }
 
@@ -101,6 +108,12 @@ public class FocusingCrystalScript : MonoBehaviour
             {
                 collider.GetComponent<LightCrystalScript>().isActive = false;
             }
+        }
+
+        if (collider.GetComponent<SensorController>() != null && beamHitObj.GetComponent<SensorController>() != null 
+            && collider.GetComponent<SensorController>().isActive)
+        {
+            collider.GetComponent<SensorController>().isActive = false;
         }
     }
 }

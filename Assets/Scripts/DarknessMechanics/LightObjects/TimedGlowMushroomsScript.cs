@@ -9,6 +9,7 @@ public class TimedGlowMushroomsScript : MonoBehaviour
     public float lightOnDelay;
     public float lightOffDelay;
     public int arrayIndex; // add the INDEX of the light in LIGHTARRAY in the LIGHTSOURCE OBJECT
+    [HideInInspector] public bool isActive;
     private Light pointLight;
     private float currentBrightness;
     [TextArea][SerializeField] private string Notes = "Array Index should be the INDEX of the light in LIGHTARRAY " 
@@ -24,6 +25,7 @@ public class TimedGlowMushroomsScript : MonoBehaviour
     {
         float start = Time.time;
         float end = start + glowTime;
+        isActive = true;
         LightSourceScript.Instance.lightsArray[arrayIndex].isOn = true;
 
         while (end >= Time.time)
@@ -50,6 +52,7 @@ public class TimedGlowMushroomsScript : MonoBehaviour
         }
 
         LightSourceScript.Instance.lightsArray[arrayIndex].isOn = false;
+        isActive = false;
         pointLight.intensity = 0f;
         yield return new WaitForSeconds(lightOffDelay);
         StartCoroutine(PulseLightOn());

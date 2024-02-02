@@ -9,7 +9,7 @@ public class PressurePlateScript : MonoBehaviour
     private bool bottomedOut; //If its bottomed out, stop moving it
     private bool toppedOut; //Same thing as bottomed out except in reverse
     public float weight; //Player and familiar will have the same weight
-    private bool activated;
+    [HideInInspector] public bool activated;
     private float bottomtargetposition;
     private float toptargetposition;
 
