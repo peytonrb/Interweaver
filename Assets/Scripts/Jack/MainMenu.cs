@@ -26,6 +26,7 @@ public class MainMenu : MonoBehaviour
         eventSystem = EventSystem.current;
         optionsMenu.gameObject.SetActive(false);
         creditsMenu.gameObject.SetActive(false);
+        Time.timeScale = 1;
     }
 
     //Function for switching the active button using the eventsystem using a parameter
