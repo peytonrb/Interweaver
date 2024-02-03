@@ -17,6 +17,7 @@ public class DoorScript : MonoBehaviour
     public bool doesDoorClose;
     public float openingSize;
     public float doorSpeed = 2f;
+
     private bool doNotOpenDoor;
     private Vector3 targetPoint;
     private Vector3 originalPosition;
@@ -29,7 +30,7 @@ public class DoorScript : MonoBehaviour
 
     void Start()
     {
-        originalPosition = transform.localPosition;
+        originalPosition = transform.position;
     }
 
     void Update()
@@ -119,12 +120,15 @@ public class DoorScript : MonoBehaviour
 
     public void MoveDoor()
     {
+        Debug.Log("2");
         if (opensVertically)
         {
+            Debug.Log("here");
             MoveUpwards();
         }
         else if (opensForward || opensRight || opensLeft)
         {
+            Debug.Log("1");
             MoveSideways();
         }
     }
@@ -151,21 +155,23 @@ public class DoorScript : MonoBehaviour
                 }
             }
         }
+        Debug.Log("or here");
 
         doorIsOpen = false;
 
         // pressure plates continuously call their events. this event should only be called once. 
         if (pressurePlates != null && !pplateTriggered && !doorIsOpen && !doNotOpenDoor)
         {
-            targetPoint = transform.position + (Vector3.up * openingSize);
-            distance = Vector3.Distance(transform.position, targetPoint);
+            Debug.Log("here");
+            targetPoint = originalPosition + (Vector3.up * openingSize);
+            distance = Vector3.Distance(originalPosition, targetPoint);
             StartCoroutine(OpenDoor());
             pplateTriggered = true;
         }
         else if (pressurePlates == null && !doorIsOpen)
         {
-            targetPoint = transform.position + (Vector3.up * openingSize);
-            distance = Vector3.Distance(transform.position, targetPoint);
+            targetPoint = originalPosition + (Vector3.up * openingSize);
+            distance = Vector3.Distance(originalPosition, targetPoint);
             StartCoroutine(OpenDoor());
         }
     }
@@ -198,28 +204,29 @@ public class DoorScript : MonoBehaviour
         }
 
         doorOpening = true;
+        doorIsOpen = false;
 
         // all relevant sensors/pplates need to be active at this point
         if (!doorIsOpen && !doNotOpenDoor && doorOpening && !pplateTriggered)
         {
             if (opensRight)
             {
-                targetPoint = transform.position + (Vector3.right * openingSize);
+                targetPoint = originalPosition + (Vector3.right * openingSize);
             }
             else if (opensLeft)
             {
-                targetPoint = transform.position + (Vector3.left * openingSize);
+                targetPoint = originalPosition + (Vector3.left * openingSize);
             }
             else if (opensForward)
             {
-                targetPoint = transform.position + (Vector3.forward * openingSize);
+                targetPoint = originalPosition + (Vector3.forward * openingSize);
             }
             else if (!opensRight && !opensLeft && !opensForward)
             {
-                targetPoint = transform.position + (Vector3.back * openingSize);
+                targetPoint = originalPosition + (Vector3.back * openingSize);
             }
 
-            distance = Vector3.Distance(transform.position, targetPoint);
+            distance = Vector3.Distance(originalPosition, targetPoint);
 
             // pressure plates continuously call their events. this event should only be called once. 
             if (pressurePlates != null && !pplateTriggered && !doorIsOpen)
@@ -302,8 +309,8 @@ public class DoorScript : MonoBehaviour
         {
             yield return new WaitForEndOfFrame();
             doorClosing = true;
-            transform.localPosition = Vector3.MoveTowards(transform.localPosition, originalPosition, doorSpeed * Time.deltaTime);
-            distance = Vector3.Distance(transform.localPosition, originalPosition);
+            transform.position = Vector3.MoveTowards(transform.position, originalPosition, doorSpeed * Time.deltaTime);
+            distance = Vector3.Distance(transform.position, originalPosition);
 
             // stop coroutine only works at a yield break, which would not happen until too late otherwise
             if (stopCoroutine)
