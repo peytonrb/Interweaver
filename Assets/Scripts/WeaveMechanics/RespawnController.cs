@@ -6,14 +6,14 @@ using UnityEngine;
 public class RespawnController : MonoBehaviour
 {
     [CannotBeNullObjectField] public List<GameObject> shieldPuzzleWeaveables;
-    [SerializeField] private List<GameObject> myRespawnables;
-    [SerializeField] private List<Vector3> startPositions;
-    [SerializeField] private List<Quaternion> startRotations;
+    public List<GameObject> myRespawnables;
+     private List<Vector3> startPositions;
+     private List<Quaternion> startRotations;
 
-    [SerializeField] private bool AutoAssignMyWeavables = true;
+     private bool AutoAssignMyWeavables = true;
 
-    [SerializeField] private LayerMask layersToCheck;
-    [SerializeField] private Vector3 boxCastHalfExtent;
+    public LayerMask layersToCheck;
+    public Vector3 boxCastHalfExtent;
     
 
     public List<GameObject> rayList;
