@@ -12,6 +12,8 @@ public class SpiderTimerUI : MonoBehaviour
     private GameObject weaver;
     private PlayerController playercontroller;
     private bool playerdied;
+    public AnimationCurve screenShake;
+    private float intensitytime;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +36,13 @@ public class SpiderTimerUI : MonoBehaviour
             if (timer <= 0f) {
                 KillPlayer();
             }
+            if (timer <= 15f) {
+                intensitytime += Time.deltaTime;
+                float screenshakeintensity = screenShake.Evaluate(intensitytime/15);
+                CameraMasterScript.instance.ShakeCurrentCamera(screenshakeintensity,0.2f,0.1f);
+                timer -= Time.deltaTime;
+                UpdateTime();
+            }
             else {
                 timer -= Time.deltaTime;
                 UpdateTime();
@@ -47,6 +56,7 @@ public class SpiderTimerUI : MonoBehaviour
             playerdied = true;
         }
         if (playercontroller.isDead == false) {
+            intensitytime = 0;
             timer = timerMaxValue;
             playerdied = false;
         }
@@ -61,6 +71,7 @@ public class SpiderTimerUI : MonoBehaviour
     }
 
     public void AddTime(float time) {
+        intensitytime = 0;
         timer += time;
         UpdateTime();
     }
