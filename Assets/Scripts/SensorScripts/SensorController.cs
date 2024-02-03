@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class SensorController : MonoBehaviour
 {
     public UnityEvent sensorEvent;
-    [HideInInspector] public bool isActive;
+    public bool isActive;
 
     public void StartEvent()
     {

@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class PressurePlateScript : MonoBehaviour
 {
-    private bool standingOnPlate; //If player is standing on plate, this is true
+    [HideInInspector] public bool standingOnPlate; //If player is standing on plate, this is true
     private bool bottomedOut; //If its bottomed out, stop moving it
     private bool toppedOut; //Same thing as bottomed out except in reverse
     public float weight; //Player and familiar will have the same weight

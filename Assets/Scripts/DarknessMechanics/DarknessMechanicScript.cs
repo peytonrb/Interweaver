@@ -11,8 +11,7 @@ public class DarknessMechanicScript : MonoBehaviour
     [Header("Timer")]
     [Range(0, 14)] private float countDown;
     public float deathTime = 5f;
-    //[HideInInspector] 
-    public bool isSafe;
+    [HideInInspector] public bool isSafe;
 
 
     private float lastCount;

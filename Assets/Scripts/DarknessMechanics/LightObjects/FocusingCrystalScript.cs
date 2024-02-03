@@ -79,15 +79,15 @@ public class FocusingCrystalScript : MonoBehaviour
         }
 
         // for sensors if beam is moved by rotating or moving the focusing crystal itself
-        if (collider.GetComponent<SensorController>() != null && beamHitObj.GetComponent<SensorController>() == null 
-            && collider.GetComponent<SensorController>().isActive)
+        if (collider.GetComponent<SensorController>() != null && beamHitObj != null && 
+            beamHitObj.GetComponent<SensorController>() == null && collider.GetComponent<SensorController>().isActive)
         {
             collider.GetComponent<SensorController>().isActive = false;
         }
 
         // if beam hits sensor
-        if (collider.GetComponent<SensorController>() != null && beamHitObj.GetComponent<SensorController>() != null 
-            && !collider.GetComponent<SensorController>().isActive)
+        if (collider.GetComponent<SensorController>() != null && beamHitObj != null &&
+            beamHitObj.GetComponent<SensorController>() != null && !collider.GetComponent<SensorController>().isActive)
         {
             collider.GetComponent<SensorController>().isActive = true;
         }
@@ -110,7 +110,8 @@ public class FocusingCrystalScript : MonoBehaviour
             }
         }
 
-        if (collider.GetComponent<SensorController>() != null && beamHitObj.GetComponent<SensorController>() != null 
+        if (collider.GetComponent<SensorController>() != null && 
+            beamHitObj != null && beamHitObj.GetComponent<SensorController>() != null 
             && collider.GetComponent<SensorController>().isActive)
         {
             collider.GetComponent<SensorController>().isActive = false;
