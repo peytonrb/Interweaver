@@ -73,11 +73,17 @@ public class SpiderTimerUI : MonoBehaviour
     public void AddTime(float time) {
         intensitytime = 0;
         timer += time;
+        if (timer > timerMaxValue) {
+            timer = timerMaxValue;
+        }
         UpdateTime();
     }
 
     public void SubtractTime(float time) {
         timer -= time;
+        if (timer < 0) {
+            timer = 0;
+        }
         UpdateTime();
     }
 }
