@@ -20,14 +20,9 @@ public class SpiderLightsMechanic : MonoBehaviour
 
     [SerializeField] private bool isBossSpider;
 
-    private enum mySections
-    {
-        Section1,
-        Section2,
-        Section3
-    }
+    [SerializeField] private int mySections = 1;
 
-    [SerializeField] private mySections currentMySections;
+
 
     void Start()
     {
@@ -57,7 +52,7 @@ public class SpiderLightsMechanic : MonoBehaviour
 
         pointLight.intensity = brightness;
         currentBrightness = pointLight.intensity;
-        yield return new WaitForSeconds(lightOnDelay);                  
+        yield return new WaitForSeconds(lightOnDelay);
         StartCoroutine(RepeatEverySetIntervals());
     }
 
@@ -79,26 +74,31 @@ public class SpiderLightsMechanic : MonoBehaviour
         StartCoroutine(PulseLightOn());
     }
 
+    public void GoUpSections()
+    {
+        mySections++;
+    }
+
     IEnumerator RepeatEverySetIntervals()
     {
-       
-            switch (currentMySections)
-            {
-                case mySections.Section1:
-                    intervalSpiders = 30f;
-                    break;
 
-                case mySections.Section2:
-                    intervalSpiders = 25f;
-                    break;
+        switch (mySections)
+        {
+            case 1:
+                intervalSpiders = 30f;
+                break;
 
-                case mySections.Section3:
-                    intervalSpiders = 20f;
-                    break;
-            }
-            yield return new WaitForSeconds(intervalSpiders);
-            StartCoroutine(PulseLightOff());
-            Debug.Log("breh " + intervalSpiders + " seconds");
-        
+            case 2:
+                intervalSpiders = 25f;
+                break;
+
+            case 3:
+                intervalSpiders = 20f;
+                break;
+        }
+        yield return new WaitForSeconds(intervalSpiders);
+        StartCoroutine(PulseLightOff());
+        Debug.Log("breh " + intervalSpiders + " seconds");
+
     }
 }
