@@ -35,38 +35,38 @@ public class DoorScript : MonoBehaviour
 
     void Update()
     {
-        // if multiple sensors/pressure plates need to be active
+        // if the player unpowers any of the sensors while the door is open/opening
         if (sensors != null && sensors.Length > 0 && doesDoorClose)
         {
             foreach (SensorController sensor in sensors)
             {
-                // if the player unpowers sensor in middle of opening
                 if (!sensor.isActive && doorOpening || !sensor.isActive && doorIsOpen)
                 {
-                    if (doorOpening)
+                    if (doorOpening && !doorIsOpen)
                     {
-                        StopCoroutine(OpenDoor());
+                        doorOpening = false;
                         stopCoroutine = true;
+                        StopCoroutine(OpenDoor());
                     }
 
                     CloseDoor();
                     doorIsOpen = false;
-                    doorOpening = false;
                 }
             }
         }
+        // if the player unpowers any of the pressure plates while the door is open/opening
         else if (pressurePlates != null && pressurePlates.Length > 0 && doesDoorClose)
         {
             foreach (PressurePlateScript pplate in pressurePlates)
             {
-                // if player gets off pressure plate in middle of opening
                 if (!pplate.standingOnPlate && doorOpening || !pplate.standingOnPlate && doorIsOpen)
                 {
-                    if (doorOpening)
+                    if (doorOpening && !doorIsOpen)
                     {
                         doorOpening = false;
-                        StopCoroutine(OpenDoor());
                         stopCoroutine = true;
+                        pplateTriggered = false;
+                        StopCoroutine(OpenDoor());
                     }
 
                     CloseDoor();
@@ -75,11 +75,11 @@ public class DoorScript : MonoBehaviour
             }
         }
 
-        // if sensors are turned off by above function but all are active, turn back on
+        bool allActive = true;
+
+        // if the sensors are all active but the door is closing...
         if (sensors != null && sensors.Length > 0)
         {
-            bool allActive = true;
-
             foreach (SensorController sensor in sensors)
             {
                 if (!sensor.isActive)
@@ -88,15 +88,15 @@ public class DoorScript : MonoBehaviour
                 }
             }
 
-            if (allActive && !stopCoroutine)
+            if (allActive && !stopCoroutine && !doorIsOpen && !doorOpening)
             {
+                doorClosing = false;
                 StartCoroutine(OpenDoor());
             }
         }
+        // if the pressure plates are all active but the door is closing...
         else if (pressurePlates != null && pressurePlates.Length > 0)
         {
-            bool allActive = true;
-
             foreach (PressurePlateScript pplate in pressurePlates)
             {
                 if (!pplate.standingOnPlate)
@@ -105,78 +105,28 @@ public class DoorScript : MonoBehaviour
                 }
             }
 
-            if (allActive && !stopCoroutine)
+            if (allActive && !stopCoroutine && !doorIsOpen && !doorOpening)
             {
+                doorClosing = false;
                 StartCoroutine(OpenDoor());
             }
         }
 
-        // catch-all
-        if (doorIsOpen && doorOpening)
+        // catch-all: if the door is opening and the door is close to mark (in case of weird bugs)
+        if (doorOpening && distance < 0.3f)
         {
             doorOpening = false;
+            doorIsOpen = true;
         }
+
+        // catch-all: if the door is neither opening nor is open already, it cannot be closed
+        // if (!doorOpening)
+        // {
+        //     stopCoroutine = false;
+        // }
     }
 
     public void MoveDoor()
-    {
-        Debug.Log("2");
-        if (opensVertically)
-        {
-            Debug.Log("here");
-            MoveUpwards();
-        }
-        else if (opensForward || opensRight || opensLeft)
-        {
-            Debug.Log("1");
-            MoveSideways();
-        }
-    }
-
-    private void MoveUpwards()
-    {
-        if (sensors != null && sensors.Length > 1)
-        {
-            foreach (SensorController sensor in sensors)
-            {
-                if (!sensor.isActive)
-                {
-                    doNotOpenDoor = true;
-                }
-            }
-        }
-        else if (pressurePlates != null && pressurePlates.Length > 1)
-        {
-            foreach (PressurePlateScript pplate in pressurePlates)
-            {
-                if (!pplate.activated)
-                {
-                    doNotOpenDoor = true;
-                }
-            }
-        }
-        Debug.Log("or here");
-
-        doorIsOpen = false;
-
-        // pressure plates continuously call their events. this event should only be called once. 
-        if (pressurePlates != null && !pplateTriggered && !doorIsOpen && !doNotOpenDoor)
-        {
-            Debug.Log("here");
-            targetPoint = originalPosition + (Vector3.up * openingSize);
-            distance = Vector3.Distance(originalPosition, targetPoint);
-            StartCoroutine(OpenDoor());
-            pplateTriggered = true;
-        }
-        else if (pressurePlates == null && !doorIsOpen)
-        {
-            targetPoint = originalPosition + (Vector3.up * openingSize);
-            distance = Vector3.Distance(originalPosition, targetPoint);
-            StartCoroutine(OpenDoor());
-        }
-    }
-
-    private void MoveSideways()
     {
         doNotOpenDoor = false;
 
@@ -221,7 +171,11 @@ public class DoorScript : MonoBehaviour
             {
                 targetPoint = originalPosition + (Vector3.forward * openingSize);
             }
-            else if (!opensRight && !opensLeft && !opensForward)
+            else if (opensVertically)
+            {
+                targetPoint = originalPosition + (Vector3.up * openingSize);
+            }
+            else if (!opensRight && !opensLeft && !opensForward && !opensVertically)
             {
                 targetPoint = originalPosition + (Vector3.back * openingSize);
             }
@@ -245,28 +199,25 @@ public class DoorScript : MonoBehaviour
     {
         if (doorIsOpen && doesDoorClose)
         {
-            if (opensVertically)
+            if (opensRight)
+            {
+                targetPoint = transform.position + (Vector3.left * openingSize);
+            }
+            else if (opensLeft)
+            {
+                targetPoint = transform.position + (Vector3.right * openingSize);
+            }
+            else if (opensForward)
+            {
+                targetPoint = transform.position + (Vector3.back * openingSize);
+            }
+            else if (opensVertically)
             {
                 targetPoint = transform.position + (Vector3.down * openingSize);
             }
-            else
+            else if (!opensRight && !opensLeft && !opensForward && !opensVertically)
             {
-                if (opensRight)
-                {
-                    targetPoint = transform.position + (Vector3.left * openingSize);
-                }
-                else if (opensLeft)
-                {
-                    targetPoint = transform.position + (Vector3.right * openingSize);
-                }
-                else if (opensForward)
-                {
-                    targetPoint = transform.position + (Vector3.back * openingSize);
-                }
-                else if (!opensRight && !opensLeft && !opensForward)
-                {
-                    targetPoint = transform.position + (Vector3.forward * openingSize);
-                }
+                targetPoint = transform.position + (Vector3.forward * openingSize);
             }
 
             distance = Vector3.Distance(transform.position, targetPoint);
@@ -277,7 +228,7 @@ public class DoorScript : MonoBehaviour
 
     IEnumerator OpenDoor()
     {
-        if (distance >= 0.5f)
+        if (distance >= 0.3f)
         {
             yield return new WaitForEndOfFrame();
             transform.position = Vector3.MoveTowards(transform.position, targetPoint, doorSpeed * Time.deltaTime);
@@ -305,20 +256,18 @@ public class DoorScript : MonoBehaviour
 
     IEnumerator MoveBack()
     {
-        if (distance >= 0.5f)
+        // door can be triggered again by pressure plate event
+        if (pressurePlates != null && pplateTriggered)
+        {
+            pplateTriggered = false;
+        }
+
+        if (distance >= 0.3f)
         {
             yield return new WaitForEndOfFrame();
             doorClosing = true;
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, doorSpeed * Time.deltaTime);
-            distance = Vector3.Distance(transform.position, originalPosition);
-
-            // stop coroutine only works at a yield break, which would not happen until too late otherwise
-            if (stopCoroutine)
-            {
-                stopCoroutine = false;
-                yield break;
-            }
-
+            distance = Vector3.Distance(transform.position, originalPosition);            
             StartCoroutine(MoveBack());
             yield return null;
         }
@@ -327,12 +276,6 @@ public class DoorScript : MonoBehaviour
             //when its fully closed
             doorClosing = false;
             doorIsOpen = false;
-
-            // door can be triggered again by pressure plate event
-            if (pressurePlates != null)
-            {
-                pplateTriggered = false;
-            }
         }
 
         yield break;
