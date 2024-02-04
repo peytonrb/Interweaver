@@ -40,7 +40,7 @@ Transform:
   - {fileID: 8773217070317260237}
   - {fileID: 4436924065817071555}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8924501136612602740
 MeshFilter:
@@ -211,12 +211,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11d0e9030a181b7439b8c213e37fadfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  familiar: {fileID: 0}
+  familiar: {fileID: 4727347459261568905}
   digableLayer:
     serializedVersion: 2
     m_Bits: 262144
   castDistance: 3
   digThroughGround: 0
+  borrowed: 0
   tagToIgnore:
   - Dirt Pillar
   moleWalkingHolder: {fileID: 8253808243786585975}
@@ -238,8 +239,13 @@ MonoBehaviour:
   maxPillarCount: 1
   maxPillarHeight: 18.2
   pillarBuildSpeed: 3
-  digInputPressed: 0
+  pillarInteractionRadius: 0.8
+  riseInputPressed: 0
+  lowerInputPressed: 0
   build: 0
+  lower: 0
+  showHeightGizmo: 1
+  showInteractionRadiusGizmo: 1
 --- !u!1 &8701862733424527093
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,7 +257,6 @@ GameObject:
   - component: {fileID: 4436924065817071555}
   - component: {fileID: 208894005174070080}
   - component: {fileID: 7577835172990252935}
-  - component: {fileID: 9012314292285657093}
   m_Layer: 0
   m_Name: DiggingHolder (temp)
   m_TagString: Untagged
@@ -324,27 +329,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &9012314292285657093
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8701862733424527093}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2262088726284199059
 PrefabInstance:
   m_ObjectHideFlags: 0
