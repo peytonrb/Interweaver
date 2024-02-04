@@ -8,6 +8,7 @@ public class MoleDigScript : MonoBehaviour
     [Header("References")]
     private CharacterController characterController;
     private MovementScript movementScript;
+    private float originalHeight;
     [Header("Variables")]
     [CannotBeNullObjectField] public GameObject familiar;
     public LayerMask digableLayer;
@@ -29,6 +30,8 @@ public class MoleDigScript : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         movementScript = familiar.GetComponent<MovementScript>();
+
+        originalHeight = characterController.height;
         digThroughGround = false;
         coolDown = false;
     }
@@ -62,7 +65,8 @@ public class MoleDigScript : MonoBehaviour
             {
                 Debug.Log("we're digging bois");
                 digThroughGround = true;
-                initialYPosition = transform.position.y;
+                characterController.height = originalHeight/2;
+                initialYPosition = transform.position.y - (originalHeight/4);
                 targetPosition = new Vector3(hitLayer.point.x, initialYPosition, hitLayer.point.z);
                 StartCoroutine(StartDigging());
                 //animation here
@@ -106,6 +110,7 @@ public class MoleDigScript : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         borrowed = true;
+        //characterController.height = originalHeight/2;
         moleWalkingHolder.SetActive(false);
         moleDiggingHolder.SetActive(true);
         Debug.Log("waited for 2 seconds");
@@ -115,6 +120,7 @@ public class MoleDigScript : MonoBehaviour
     {
         borrowed = false;
         yield return new WaitForSeconds(2);
+        characterController.height = originalHeight;
         moleWalkingHolder.SetActive(true);
         moleDiggingHolder.SetActive(false);
         Debug.Log("waited for 2 more seconds");
