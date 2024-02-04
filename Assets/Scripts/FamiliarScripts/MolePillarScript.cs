@@ -21,7 +21,7 @@ public class MolePillarScript : MonoBehaviour
     private bool pillarLowering;
     [HideInInspector] public bool riseInputPressed;
     [HideInInspector] public bool lowerInputPressed;
-    [HideInInspector] public bool build;
+    [HideInInspector] public bool rise;
     [HideInInspector] public bool lower;
     [Header("Utility")]
     [SerializeField] private bool showHeightGizmo = true;
@@ -36,14 +36,14 @@ public class MolePillarScript : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (build) // this is bad. I know this is bad. Sorry.
+        if (rise) // this is bad. I know this is bad. Sorry.
         {
             RaisePillar();
         }
 
         if (lower) // I knooooow. I'm sorryyyyy
         {
-            build = false; // lowering should override building methinks
+            rise = false; // lowering should override building methinks
             LowerPillar();
         }
     }
@@ -74,64 +74,87 @@ public class MolePillarScript : MonoBehaviour
     {
         if (!riseInputPressed || !moleDigScript.borrowed) // if input isn't currently being pressed or we've stopped digging for whatever reason
         {
-            PillarBuildEnd();
+            PillarRiseEnd();
         }
         else if (pillarList.Count > 0)
         {
-            distance = Vector3.Distance(pillarList[pillarList.Count-1].transform.position, pointToRiseTo);
-            if (!pillarRising) // right as we start things off
+            GameObject pillarToRaise = SearchForNearbyPillars();
+
+            if (pillarToRaise != null)
             {
-                movementScript.enabled = false; // disable player movement
-                pointToRiseTo = pillarList[pillarList.Count-1].transform.position + (Vector3.up * maxPillarHeight); // set a destination for the pillar to rise
-                pillarRising = true; // mark that pillar has started rising
-            }
-            else if (distance > 0.1f && pillarRising) // if pillar hasn't quite reached destination, and we're still meant to be rising
-            {
-                pillarList[pillarList.Count-1].transform.position = Vector3.MoveTowards(pillarList[pillarList.Count-1].transform.position, pointToRiseTo, pillarBuildSpeed * Time.deltaTime);
-            }
-            else // once pillar has reached its destination or we've decided it needs to stop rising through other means
-            {
-                PillarBuildEnd();
+                if (pillarToRaise.transform.parent != null)
+                {
+                    pillarToRaise = pillarToRaise.transform.parent.gameObject; // if we have a top, get it
+                }
+                distance = Vector3.Distance(pillarToRaise.transform.position, pointToRiseTo);
+                if (!pillarRising) // right as we start things off
+                {
+                    movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
+                    movementScript.enabled = false; // disable player movement
+                    pointToRiseTo = transform.position + (Vector3.up * maxPillarHeight); // set a destination for the pillar to rise
+                    pillarRising = true; // mark that pillar has started rising
+                }
+                else if (distance > 0.1f && pillarRising) // if pillar hasn't quite reached destination, and we're still meant to be rising
+                {
+                    pillarToRaise.transform.position = Vector3.MoveTowards(pillarToRaise.transform.position, pointToRiseTo, pillarBuildSpeed * Time.deltaTime);
+                }
+                else // once pillar has reached its destination or we've decided it needs to stop rising through other means
+                {
+                    PillarRiseEnd();
+                }
             }
         }
     }
 
     public void LowerPillar()
     {
-        if (!lowerInputPressed)
+        if (!lowerInputPressed || !moleDigScript.borrowed)
         {
-            PillarBuildEnd();
+            PillarLowerEnd();
         }
         else
         {
-            if (!pillarLowering) // right as we start things off
+            GameObject pillarToLower = SearchForNearbyPillars();
+            
+            if (pillarToLower != null)
             {
-                movementScript.enabled = false; // disable player movement
-                pillarLowering = true;
+                if (pillarToLower.transform.parent != null)
+                {
+                    pillarToLower = pillarToLower.transform.parent.gameObject; // if we have a top, get it
+                }
+                if (!pillarLowering) // right as we start things off
+                {
+                    movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
+                    movementScript.enabled = false; // disable player movement
+                    pillarLowering = true;
+                }
+                pillarToLower.transform.position = Vector3.MoveTowards(pillarToLower.transform.position, pillarToLower.transform.position - transform.up, pillarBuildSpeed * Time.deltaTime);
             }
             else
             {
-                GameObject pillarToLower = SearchForNearbyPillars();
-                if (pillarToLower != null)
-                {
-                    pillarToLower.transform.position = Vector3.MoveTowards(pillarToLower.transform.position, pillarToLower.transform.position - transform.up, pillarBuildSpeed * Time.deltaTime);
-                }
-                else
-                {
-                    PillarBuildEnd();
-                }
+                PillarLowerEnd();
             }
         }
     }
 
-    public void PillarBuildEnd()
+    public void PillarRiseEnd()
     {
-        if (moleDigScript.digThroughGround)
+        if (moleDigScript.startedToDig)
         {
             movementScript.enabled = true;
         }
-        build = false;
+        rise = false;
         pillarRising = false;
+    }
+
+    public void PillarLowerEnd()
+    {
+        if (moleDigScript.startedToDig)
+        {
+            movementScript.enabled = true;
+        }
+        lower = false;
+        pillarLowering = false;
     }
 
     public GameObject SearchForNearbyPillars()

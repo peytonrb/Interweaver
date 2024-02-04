@@ -473,7 +473,7 @@ public class InputManagerScript : MonoBehaviour
                     molePillarScript.riseInputPressed = true; 
                     molePillarScript.lowerInputPressed = false;
                     molePillarScript.DeployPillar();
-                    molePillarScript.build = true;
+                    molePillarScript.rise = true;
                     molePillarScript.lower = false;
                 }
                 else
@@ -502,7 +502,7 @@ public class InputManagerScript : MonoBehaviour
                 {
                     molePillarScript.riseInputPressed = false;
                     molePillarScript.lowerInputPressed = true;
-                    molePillarScript.build = false;
+                    molePillarScript.rise = false;
                     molePillarScript.lower = true;
                 }
                 else
