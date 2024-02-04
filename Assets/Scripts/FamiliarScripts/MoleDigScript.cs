@@ -6,23 +6,22 @@ using UnityEngine.UIElements;
 public class MoleDigScript : MonoBehaviour
 {
     [Header("References")]
-    MolePillarScript molePillarScript;
-    [Header("variables")]
+    private CharacterController characterController;
+    private MovementScript movementScript;
+    [Header("Variables")]
     [CannotBeNullObjectField] public GameObject familiar;
     public LayerMask digableLayer;
     [HideInInspector] public float castDistance;
     [HideInInspector] public bool digThroughGround;
+    [HideInInspector] public bool borrowed; // different from dig through ground, this means the most is full submerged
     private Collider boxCollider;
     private RaycastHit hitLayer;
     private bool coolDown;
     private float initialYPosition;
     private Vector3 targetPosition;
     public List<string> tagToIgnore = new List<string>(); 
-    private CharacterController characterController;
-    private MovementScript movementScript;
     [CannotBeNullObjectField] public GameObject moleWalkingHolder;
     [CannotBeNullObjectField] public GameObject moleDiggingHolder;
-    private bool canBuildPillar; // a bool that flags as true when mole is moving up a dirt pillar
 
     //[Header("Animation")]
     //[CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
@@ -30,7 +29,6 @@ public class MoleDigScript : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         movementScript = familiar.GetComponent<MovementScript>();
-        molePillarScript = GetComponent<MolePillarScript>();
         digThroughGround = false;
         coolDown = false;
     }
@@ -69,7 +67,7 @@ public class MoleDigScript : MonoBehaviour
                 StartCoroutine(StartDigging());
                 //animation here
                 coolDown = true;
-                IgnoreCollisionsWithTag(tagToIgnore);
+                MakePillarsDiggable();
                 AudioManager.instance.footStepsChannel.Stop();
                 //add the digging sound here if it was added to the audio manager
                 movementScript.enabled = false;
@@ -84,8 +82,6 @@ public class MoleDigScript : MonoBehaviour
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, 0f, digableLayer);
             foreach (Collider hitCollider in hitColliders)
             {
-                canBuildPillar = true;
-                Debug.Log("we're in the dirt pillar baby WOOOOOOOOO" + hitCollider.bounds);
                 transform.position = new Vector3(transform.position.x, hitCollider.bounds.max.y, transform.position.z);
             }
 
@@ -98,11 +94,18 @@ public class MoleDigScript : MonoBehaviour
             movementScript.enabled = false;
             Invoke("ResetCooldown", 2.0f);
         }
-
     }
+
+    public void MakePillarsDiggable()
+    {
+        IgnoreCollisionsWithTag(tagToIgnore);
+    }
+
+
     IEnumerator StartDigging()
     {
         yield return new WaitForSeconds(2);
+        borrowed = true;
         moleWalkingHolder.SetActive(false);
         moleDiggingHolder.SetActive(true);
         Debug.Log("waited for 2 seconds");
@@ -110,20 +113,10 @@ public class MoleDigScript : MonoBehaviour
 
     IEnumerator DiggingOut()
     {
-        if (!canBuildPillar)
-        {
-            molePillarScript.DeployPillar();
-        }
-
+        borrowed = false;
         yield return new WaitForSeconds(2);
         moleWalkingHolder.SetActive(true);
         moleDiggingHolder.SetActive(false);
-        if (!canBuildPillar)
-        {
-            molePillarScript.build = true;
-        }
-
-        canBuildPillar = false;
         Debug.Log("waited for 2 more seconds");
     }
 

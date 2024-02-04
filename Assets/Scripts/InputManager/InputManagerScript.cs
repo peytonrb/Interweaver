@@ -389,7 +389,7 @@ public class InputManagerScript : MonoBehaviour
 
 
 
-    #region //OWL FAMILIAR ABILITIES
+    #region //FAMILIAR ABILITIES
     //******************************************************
     public void OnFamiliarMove(InputValue input)
     {
@@ -401,70 +401,117 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnFamiliarInteract(InputValue input)
     {
-        if (isOwl) 
+        bool isPressed = input.isPressed;
+
+        switch (familiarEnums)
         {
-            OwlDiveScript owlDiveScript = familiar.GetComponent<OwlDiveScript>();
-            bool check = input.isPressed;
+            case myEnums.Owl: // owl jazz here
+                OwlDiveScript owlDiveScript = familiar.GetComponent<OwlDiveScript>();
 
-            if (check)
-            {
-                //This has to be performed through a bool since this particular method is only activated through collisions
-                familiarScript.familiarMovementAbility = true;
-
-                // Add a check per familiar for later
-                owlDiveScript.DivePressed();
-            }
-            else
-            {
-                familiarScript.familiarMovementAbility = false;
-
-                //Add a check per familiar for later
-                owlDiveScript.DiveRelease();
-            }
+                if (isPressed)
+                {
+                    familiarScript.familiarMovementAbility = true;
+                    owlDiveScript.DivePressed();
+                }
+                else
+                {
+                    familiarScript.familiarMovementAbility = false;
+                    owlDiveScript.DiveRelease();
+                }
+                break;
+            case myEnums.Mole:
+                break;
+            case myEnums.Stag:
+                break;
         }
-       
     }
     #endregion//******************************************************
 
     #region //MOLE FAMILIAR ABILITIES
     //this is hot garbo because the button for the owl dive ability and the mole ability are the same (not sure if they're supposed) but it works if you uncomment
     //******************************************************
-    public void OnMoleFamiliarInteract(InputValue input)
+    public void OnMoleFamiliarInteract(InputValue input) // burrowing and surfacing
     {
-        if (isMole) 
-        {
-            MoleDigScript moleDigScript = familiar.GetComponent<MoleDigScript>();
-            
-            bool isDigging = input.isPressed;
+        bool isPressed = input.isPressed;
 
-            if (isDigging)
-            {
-                familiarScript.familiarMovementAbility = true;
-                moleDigScript.DigPressed();
-            }
-            else
-            {
-                familiarScript.familiarMovementAbility = false;
-            }
+        switch (familiarEnums)
+        {
+            case myEnums.Owl: // owl jazz here
+                break;
+            case myEnums.Mole:
+                MoleDigScript moleDigScript = familiar.GetComponent<MoleDigScript>();
+
+                if (isPressed)
+                {
+                    familiarScript.familiarMovementAbility = true;
+                    moleDigScript.DigPressed();
+                }
+                else
+                {
+                    familiarScript.familiarMovementAbility = false;
+                }
+                break;
+            case myEnums.Stag:
+                break;
         }
     }
 
-    public void OnMolePillar(InputValue input)
+    public void OnMoleAltFamiliarInteract(InputValue input) // building pillars
     {
-        MolePillarScript molePillarScript = familiar.GetComponent<MolePillarScript>();
+        bool isPressed = input.isPressed;
 
-        if (isMole) 
+        switch (familiarEnums)
         {
-            if (input.isPressed)
-            {
-                molePillarScript.digInputPressed = true;
-            }
-            else
-            {
-                molePillarScript.digInputPressed = false;
-                molePillarScript.PillarBuildEnd();
-            }
-            
+            case myEnums.Owl: 
+                break;
+            case myEnums.Mole:
+                MolePillarScript molePillarScript = familiar.GetComponent<MolePillarScript>();
+                MoleDigScript moleDigScript = familiar.GetComponent<MoleDigScript>();
+
+                if (isPressed && moleDigScript.borrowed && Time.timeScale != 0)
+                {
+                    molePillarScript.riseInputPressed = true; 
+                    molePillarScript.lowerInputPressed = false;
+                    molePillarScript.DeployPillar();
+                    molePillarScript.build = true;
+                    molePillarScript.lower = false;
+                }
+                else
+                {
+                    molePillarScript.riseInputPressed = false;
+                }
+                break;
+            case myEnums.Stag:
+                break;
+        }
+    }
+
+    public void OnMoleAltAltFamiliarInteract (InputValue input)
+    {
+        bool isPressed = input.isPressed;
+
+        switch (familiarEnums)
+        {
+            case myEnums.Owl: 
+                break;
+            case myEnums.Mole:
+                MolePillarScript molePillarScript = familiar.GetComponent<MolePillarScript>();
+                MoleDigScript moleDigScript = familiar.GetComponent<MoleDigScript>();
+
+                if (isPressed && moleDigScript.borrowed && Time.timeScale != 0)
+                {
+                    molePillarScript.riseInputPressed = false;
+                    molePillarScript.lowerInputPressed = true;
+                    molePillarScript.build = false;
+                    molePillarScript.lower = true;
+                }
+                else
+                {
+                    molePillarScript.lowerInputPressed = false; 
+                }
+                break;
+            case myEnums.Stag:
+                break;
         }
     }
     #endregion//******************************************************

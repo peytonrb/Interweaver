@@ -7,21 +7,30 @@ public class MolePillarScript : MonoBehaviour
 {
     [Header("References")]
     private MovementScript movementScript;
+    private MoleDigScript moleDigScript;
     [SerializeField] private GameObject dirtPillar;
     public List<GameObject> pillarList = new List<GameObject>();
     [Header("Variables")]
     [SerializeField] [Range (1, 10)] private int maxPillarCount = 1;
     [SerializeField] [Range (10f, 50)] private float maxPillarHeight = 25f;
     [SerializeField] private float pillarBuildSpeed = 1.5f;
-    private bool pillarBuilding;
     private Vector3 pointToRiseTo = Vector3.up;
     private float distance = -1f;
-    [HideInInspector] public bool digInputPressed;
+    [SerializeField] [Range (0.1f, 4f)] private float pillarInteractionRadius = 1f; // the radius at which the mole can affect pillars around them
+    private bool pillarRising;
+    private bool pillarLowering;
+    [HideInInspector] public bool riseInputPressed;
+    [HideInInspector] public bool lowerInputPressed;
     [HideInInspector] public bool build;
+    [HideInInspector] public bool lower;
+    [Header("Utility")]
+    [SerializeField] private bool showHeightGizmo = true;
+    [SerializeField] private bool showInteractionRadiusGizmo = true;
 
     void Start()
     {
         movementScript = GetComponent<MovementScript>();
+        moleDigScript = GetComponent<MoleDigScript>();
     }
 
     // Update is called once per frame
@@ -31,18 +40,28 @@ public class MolePillarScript : MonoBehaviour
         {
             RaisePillar();
         }
+
+        if (lower) // I knooooow. I'm sorryyyyy
+        {
+            build = false; // lowering should override building methinks
+            LowerPillar();
+        }
     }
 
     public void DeployPillar()
     {
-        if (pillarList.Count() >= maxPillarCount)
+        if (moleDigScript.borrowed && SearchForNearbyPillars() == null) // can only deploy while burrowing
         {
-            DestroyPillar();
-        }
+            if (pillarList.Count() >= maxPillarCount) // destroy earliest pillar if we're at cap
+            {
+                DestroyPillar();
+            }
 
-        GameObject newPillar = Instantiate(dirtPillar);
-        newPillar.transform.position = transform.position;
-        pillarList.Add(newPillar);
+            GameObject newPillar = Instantiate(dirtPillar);
+            newPillar.transform.position = transform.position;
+            pillarList.Add(newPillar);
+            moleDigScript.MakePillarsDiggable();
+        }
     }
 
     private void DestroyPillar()
@@ -53,46 +72,97 @@ public class MolePillarScript : MonoBehaviour
 
     public void RaisePillar()
     {
-        if (!digInputPressed)
+        if (!riseInputPressed || !moleDigScript.borrowed) // if input isn't currently being pressed or we've stopped digging for whatever reason
         {
             PillarBuildEnd();
         }
-        else
+        else if (pillarList.Count > 0)
         {
             distance = Vector3.Distance(pillarList[pillarList.Count-1].transform.position, pointToRiseTo);
-            if (!pillarBuilding)
+            if (!pillarRising) // right as we start things off
             {
-                movementScript.active = false;
-                pointToRiseTo = transform.position + (Vector3.up * maxPillarHeight);
-                pillarBuilding = true;
+                movementScript.enabled = false; // disable player movement
+                pointToRiseTo = pillarList[pillarList.Count-1].transform.position + (Vector3.up * maxPillarHeight); // set a destination for the pillar to rise
+                pillarRising = true; // mark that pillar has started rising
             }
-            else if (distance > 0.1f && pillarBuilding)
+            else if (distance > 0.1f && pillarRising) // if pillar hasn't quite reached destination, and we're still meant to be rising
             {
                 pillarList[pillarList.Count-1].transform.position = Vector3.MoveTowards(pillarList[pillarList.Count-1].transform.position, pointToRiseTo, pillarBuildSpeed * Time.deltaTime);
             }
-            else
+            else // once pillar has reached its destination or we've decided it needs to stop rising through other means
             {
                 PillarBuildEnd();
             }
         }
     }
 
+    public void LowerPillar()
+    {
+        if (!lowerInputPressed)
+        {
+            PillarBuildEnd();
+        }
+        else
+        {
+            if (!pillarLowering) // right as we start things off
+            {
+                movementScript.enabled = false; // disable player movement
+                pillarLowering = true;
+            }
+            else
+            {
+                GameObject pillarToLower = SearchForNearbyPillars();
+                if (pillarToLower != null)
+                {
+                    pillarToLower.transform.position = Vector3.MoveTowards(pillarToLower.transform.position, pillarToLower.transform.position - transform.up, pillarBuildSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    PillarBuildEnd();
+                }
+            }
+        }
+    }
+
     public void PillarBuildEnd()
     {
-        movementScript.active = true;
+        if (moleDigScript.digThroughGround)
+        {
+            movementScript.enabled = true;
+        }
         build = false;
-        pillarBuilding = false;
+        pillarRising = false;
+    }
+
+    public GameObject SearchForNearbyPillars()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, pillarInteractionRadius);
+        foreach (var hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("Dirt Pillar"))
+            {
+               return hitCollider.gameObject;
+            }
+        }
+        return null;
     }
 
     void OnDrawGizmos()
     {
-        if (!pillarBuilding)
+        if (showHeightGizmo)
         {
-            DrawArrow.ForGizmo(transform.position, Vector3.up * maxPillarHeight);
+            if (!pillarRising)
+            {
+                DrawArrow.ForGizmo(transform.position, Vector3.up * maxPillarHeight);
+            }
+            else
+            {
+                DrawArrow.ForGizmo(transform.position, Vector3.up * distance);
+            }
         }
-        else
+        if (showInteractionRadiusGizmo)
         {
-            DrawArrow.ForGizmo(transform.position, Vector3.up * distance);
+            Gizmos.DrawWireSphere(transform.position, pillarInteractionRadius);
         }
     }
 }
