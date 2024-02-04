@@ -347,6 +347,11 @@ public class MovementScript : MonoBehaviour
         ResetGravity();
     }
 
+    public void ZeroCurrentSpeed()
+    {
+        currentSpeed = 0;
+    }
+
     public void ChangeAerialAcceleration(float newAerialAcceleration)
     {
         aerialAcceleration = newAerialAcceleration;
