@@ -73,6 +73,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [SerializeField] private AudioClip rotateClip;
 
     private Vector2 lastLookDir;
+
+    [HideInInspector]
+    public enum rotateDir { forward, back, left, right }
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -273,6 +276,49 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
             {
                 canCombine = true;
             }
+        }
+    }
+
+    public void RotateObject(rotateDir r)
+    {
+        switch (r)
+        {
+            case rotateDir.forward:
+                {
+                    // get the x axis
+                    float xRotation = transform.eulerAngles.x;
+
+                    transform.eulerAngles = new Vector3(xRotation - 45, transform.eulerAngles.y, transform.eulerAngles.z);
+                    //subtract 45 degrees
+                    //transform.Rotate(-45, 0, 0, Space.World);
+
+                    break;
+                }
+            case rotateDir.back:
+                {
+                    float xRotation = transform.eulerAngles.x;
+
+                    transform.eulerAngles = new Vector3(xRotation + 45, transform.eulerAngles.y, transform.eulerAngles.z);
+                    //transform.Rotate(45, 0, 0, Space.World);
+                    break;
+                }
+            case rotateDir.right:
+                {
+                    float zRotation = transform.localRotation.eulerAngles.z;
+
+                    transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, zRotation + 45 );
+                    // get the y axis
+                    //transform.Rotate(0, 45, 0, Space.World);
+                    break;
+                }
+            case rotateDir.left:
+                {
+                    float zRotation = transform.eulerAngles.z;
+
+                    transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, zRotation - 45);
+                    //transform.Rotate(0, -45, 0, Space.World);
+                    break;
+                }
         }
     }
 
