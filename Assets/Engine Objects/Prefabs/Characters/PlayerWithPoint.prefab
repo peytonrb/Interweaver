@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7571894926950752737}
   - component: {fileID: 591368551210576134}
   - component: {fileID: 442774223985790754}
+  - component: {fileID: 2627319276482462347}
   m_Layer: 11
   m_Name: PlayerWithPoint
   m_TagString: Player
@@ -43,7 +44,7 @@ Transform:
   - {fileID: 5058674367002751257}
   - {fileID: 7245456222628254320}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2864162376311042491
 MonoBehaviour:
@@ -72,7 +73,7 @@ MonoBehaviour:
   TargetingArrow: {fileID: 6321982546611138371}
   targetingLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 704
   isDead: 0
   deathTimer: 3
   inRelocateMode: 0
@@ -83,7 +84,7 @@ MonoBehaviour:
   inCutscene: 0
   talkingToNPC: 0
   weaveSpawn: {fileID: 3156172625146419733}
-  weaveVisualizer: {fileID: 0}
+  weaveVisualizer: {fileID: 7571894926950752737}
   familiar: {fileID: 0}
   respawnController: {fileID: 0}
   characterAnimationHandler: {fileID: 0}
@@ -107,6 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canMove: 1
+  canLook: 1
   speed: 12
   gravity: -20
   aerialControl: 1
@@ -223,6 +225,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   proximity: 5
+--- !u!114 &2627319276482462347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359264606954408796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 282966e3ba2dc7e4ab8c0698033b69e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deathTime: 5
+  isSafe: 0
+  shakeCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  vignetteCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &3156172625146419733
 GameObject:
   m_ObjectHideFlags: 0
@@ -767,7 +795,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6233117130331406942, guid: 6d9c9e203e1d97148a172dae3671945b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.373
+      value: -3.72
       objectReference: {fileID: 0}
     - target: {fileID: 6233117130331406942, guid: 6d9c9e203e1d97148a172dae3671945b, type: 3}
       propertyPath: m_LocalPosition.z
