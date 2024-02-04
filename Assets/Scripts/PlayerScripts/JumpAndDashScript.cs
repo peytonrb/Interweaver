@@ -9,10 +9,6 @@ public class JumpAndDashScript : MonoBehaviour
     [Header("References")]
     private MovementScript movementScript;
     private CharacterController characterController;
-
-    [Header("Utility")]
-    [SerializeField] private bool showDistanceGizmo = true;
-
     [Header("Jumping")]
     [SerializeField][Range(1, 10)] private float jumpForce = 3f;
     [SerializeField] [Tooltip("Allows the weaver to jump forever instead of dash")] private bool infiniteJump;
@@ -26,6 +22,8 @@ public class JumpAndDashScript : MonoBehaviour
     [SerializeField] [Tooltip("If in air at the end of a dash, increase affect of gravity by the heavyDashEffect variable when dash ends until touching ground")] private bool heavyDash;
     [SerializeField] [Range(1f, 25f)] private float heavyDashEffect = 3f;
     private float t = 0;
+    [Header("Utility")]
+    [SerializeField] private bool showDistanceGizmo = true;
 
     void Start()
     {
@@ -76,7 +74,8 @@ public class JumpAndDashScript : MonoBehaviour
 
         if (heavyDash && !characterController.isGrounded)
         {
-            movementScript.ChangeGravity(-heavyDashEffect);
+            float gravityMod = movementScript.GetGravity() - heavyDashEffect;
+            movementScript.ChangeGravity(gravityMod);
             StartCoroutine(HeavyDash());
         }
 
