@@ -496,7 +496,7 @@ public class InputManagerScript : MonoBehaviour
 
                 if (isPressed && moleDigScript.borrowed && Time.timeScale != 0)
                 {
-                    molePillarScript.lowerInputPressed = false;
+                    molePillarScript.riseInputPressed = false;
                     molePillarScript.lowerInputPressed = true;
                     molePillarScript.build = false;
                     molePillarScript.lower = true;
@@ -504,7 +504,6 @@ public class InputManagerScript : MonoBehaviour
                 else
                 {
                     molePillarScript.lowerInputPressed = false; 
-                    molePillarScript.lower = false;
                 }
                 break;
             case myEnums.Stag:
