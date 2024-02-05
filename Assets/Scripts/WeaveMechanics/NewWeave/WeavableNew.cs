@@ -279,7 +279,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         }
     }
 
-    public void RotateObject(rotateDir r)
+    //Old rotation
+    /*public void RotateObject(rotateDir r)
     {
         switch (r)
         {
@@ -317,6 +318,38 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
                     transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, zRotation - 45);
                     //transform.Rotate(0, -45, 0, Space.World);
+                    break;
+                }
+        }
+    }*/
+
+    //New rotation please jack dont kill me if this is bad i am but a simple artist - max
+    public void RotateObject(rotateDir r)
+    {
+        switch (r)
+        {
+            case rotateDir.forward:
+                {
+                    transform.Rotate(0f, 0f, 45f, Space.Self);
+
+                    break;
+                }
+            case rotateDir.back:
+                {
+                    transform.Rotate(0f, 0f, -45f, Space.Self);
+                    
+                    break;
+                }
+            case rotateDir.right:
+                {
+                    transform.Rotate(0f, 45f, 0f, Space.World);
+                    
+                    break;
+                }
+            case rotateDir.left:
+                {
+                    transform.Rotate(0f, -45f, 0f, Space.World);
+                    
                     break;
                 }
         }
