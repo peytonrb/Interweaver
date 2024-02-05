@@ -53,9 +53,9 @@ public class DarknessMechanicScript : MonoBehaviour
         {
             countDown += Time.deltaTime;
 
-            if (countDown > 5)
+            if (countDown > 1)
             {
-                //Debug.Log(countDown);
+                Debug.Log(countDown);
                 float shakeIntensity = shakeCurve.Evaluate(countDown / 5);
 
                 CameraMasterScript.instance.ShakeCurrentCamera(shakeIntensity, .2f, 0.1f);
