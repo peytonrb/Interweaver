@@ -53,7 +53,7 @@ public class DarknessMechanicScript : MonoBehaviour
         {
             countDown += Time.deltaTime;
 
-            if (countDown > 1)
+            if (countDown > 5)
             {
                 //Debug.Log(countDown);
                 float shakeIntensity = shakeCurve.Evaluate(countDown / 5);
