@@ -24,6 +24,9 @@ public class MoleDigScript : MonoBehaviour
     [CannotBeNullObjectField] public GameObject moleWalkingHolder;
     [CannotBeNullObjectField] public GameObject moleDiggingHolder;
 
+    [Header("Animation")]
+    [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
+
     //[Header("Animation")]
     //[CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
     void Start()
@@ -68,8 +71,14 @@ public class MoleDigScript : MonoBehaviour
                 characterController.height = originalHeight/2;
                 initialYPosition = transform.position.y - (originalHeight/4);
                 targetPosition = new Vector3(hitLayer.point.x, initialYPosition, hitLayer.point.z);
-                StartCoroutine(StartDigging());
+                
                 //animation here
+                characterAnimationHandler.ToggleBurrowAnim();
+                float animLength = characterAnimationHandler.animator.GetCurrentAnimatorStateInfo(0).length;
+                Debug.Log("Dug in " + animLength);
+                
+                StartCoroutine(StartDigging(animLength));
+                
                 coolDown = true;
                 MakePillarsDiggable();
                 AudioManager.instance.footStepsChannel.Stop();
@@ -96,9 +105,14 @@ public class MoleDigScript : MonoBehaviour
                 transform.position = new Vector3(transform.position.x, hitCollider.bounds.max.y, transform.position.z);
             }
 
-            startedToDig = false;
-            StartCoroutine(DiggingOut());
             //animation here
+            characterAnimationHandler.ToggleSurfaceAnim();
+            float animLength = characterAnimationHandler.animator.GetCurrentAnimatorStateInfo(0).length;
+            Debug.Log("Dug out " + animLength);
+            
+            startedToDig = false;
+            StartCoroutine(DiggingOut(animLength));
+
             coolDown = true;
             ResetCollisionsWithTag(tagToIgnore);
             //add the digging sound here if it was added to the audio manager
@@ -114,24 +128,24 @@ public class MoleDigScript : MonoBehaviour
     }
 
 
-    IEnumerator StartDigging()
+    IEnumerator StartDigging(float animLength)
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(animLength);
         borrowed = true;
         //characterController.height = originalHeight/2;
         moleWalkingHolder.SetActive(false);
         moleDiggingHolder.SetActive(true);
-        Debug.Log("waited for 2 seconds");
+        Debug.Log("waited for " + animLength);
     }
 
-    IEnumerator DiggingOut()
+    IEnumerator DiggingOut(float animLength)
     {
         borrowed = false;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(animLength);
         characterController.height = originalHeight;
         moleWalkingHolder.SetActive(true);
         moleDiggingHolder.SetActive(false);
-        Debug.Log("waited for 2 more seconds");
+        Debug.Log("waited for " + animLength);
     }
 
     void IgnoreCollisionsWithTag(List<string> tag)

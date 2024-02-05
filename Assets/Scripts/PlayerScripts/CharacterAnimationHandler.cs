@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class CharacterAnimationHandler : MonoBehaviour
 {
-    private Animator animator;
-    public float deathTimer;
+    [HideInInspector] public Animator animator;
 
     // Start is called before the first frame update
     void Start()
@@ -34,11 +33,20 @@ public class CharacterAnimationHandler : MonoBehaviour
         animator.SetBool("Diving", diving);
     }
 
-    
     public void ToggleBounceAnim()
     {
         animator.SetTrigger("Crashing");
         animator.SetBool("Diving", false);
+    }
+
+    public void ToggleBurrowAnim()
+    {
+        animator.SetTrigger("Burrow");
+    }
+
+    public void ToggleSurfaceAnim()
+    {
+        animator.SetTrigger("Surface");
     }
 
     public void ToggleDeathAnim()
