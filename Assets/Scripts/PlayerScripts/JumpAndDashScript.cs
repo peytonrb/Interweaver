@@ -27,7 +27,7 @@ public class JumpAndDashScript : MonoBehaviour
     [SerializeField] private bool showDistanceGizmo = true;
 
     [Header("VFX")]
-    public TrailRenderer dashTrail;
+    private TrailRenderer dashTrail;
     public Material glowMaterial;
     private GameObject skinnedMeshWeaver;
     private Material originalMaterial;
@@ -38,6 +38,7 @@ public class JumpAndDashScript : MonoBehaviour
         characterController = GetComponent<CharacterController>();
 
         // vfx
+        dashTrail = this.transform.Find("DashTrail").GetComponent<TrailRenderer>();
         DisableDashVFX();
         skinnedMeshWeaver = this.transform.Find("SK_Weaver/SM_Weaver").gameObject;
         originalMaterial = skinnedMeshWeaver.GetComponent<Renderer>().material;
