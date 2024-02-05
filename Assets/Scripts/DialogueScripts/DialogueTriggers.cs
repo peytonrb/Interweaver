@@ -44,23 +44,23 @@ public class DialogueTriggers : MonoBehaviour
     {
         if (collider.gameObject.tag == "Player" || collider.gameObject.tag == "Familiar")
         {
+            if (InputManagerScript.instance.isGamepad)
+            {
+                ControllerIndicator.SetActive(true);
+            }
+            else
+            {
+                KeyboardIndicator.SetActive(true);
+            }
+
             if (isAutoTrigger)
             {
+                myMoveScript = collider.GetComponent<MovementScript>();
                 Debug.Log("TRIGGERED");
                 DialogueManager.instance.currentTrigger = this;
                 DialogueManager.instance.StartDialogue(dialogue, textBox);
                 isInteracting = true;
-            }
-            else
-            {
-                if (InputManagerScript.instance.isGamepad)
-                {
-                    ControllerIndicator.SetActive(true);
-                }
-                else
-                {
-                    KeyboardIndicator.SetActive(true);
-                }
+                myMoveScript.ToggleCanMove(false);
             }
 
         }

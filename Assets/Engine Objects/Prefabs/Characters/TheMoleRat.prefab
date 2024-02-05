@@ -1057,7 +1057,7 @@ MonoBehaviour:
   canMove: 1
   canLook: 1
   speed: 10
-  gravity: -25
+  gravity: -12
   aerialControl: 1
   groundAcceleration: 2.5
   groundDeceleration: 5.2
@@ -1144,7 +1144,8 @@ MonoBehaviour:
   borrowed: 0
   tagToIgnore:
   - Dirt Pillar
-  moleWalkingHolder: {fileID: 0}
+  - Weaveable
+  moleWalkingHolder: {fileID: 919132149155446097, guid: 3d457191b9528894c902b373da5f1787, type: 3}
   moleDiggingHolder: {fileID: 8701862733424527093}
   characterAnimationHandler: {fileID: 5698960169409605435}
 --- !u!114 &6699170393875146026
@@ -1161,10 +1162,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dirtPillar: {fileID: 4081753522894572039, guid: 05105aa15e91c6b4f968ef8a3649e8c2, type: 3}
   pillarList: []
-  maxPillarCount: 1
-  maxPillarHeight: 10
-  pillarBuildSpeed: 3
-  pillarInteractionRadius: 0.8
+  maxPillarCount: 2
+  maxPillarHeight: 19.1
+  pillarBuildSpeed: 4
+  pillarInteractionRadius: 1.01
   riseInputPressed: 0
   lowerInputPressed: 0
   rise: 0

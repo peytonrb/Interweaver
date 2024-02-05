@@ -24,29 +24,29 @@ public class RespawnController : MonoBehaviour
     {
         rayList = new List<GameObject>();
 
-        if (AutoAssignMyWeavables)
-        {
-            myRespawnables = new List<GameObject>();
-            RaycastHit[] hits = Physics.BoxCastAll(transform.position, boxCastHalfExtent, transform.up, transform.rotation, layersToCheck);
+        //if (AutoAssignMyWeavables)
+        //{
+        //    myRespawnables = new List<GameObject>();
+        //    RaycastHit[] hits = Physics.BoxCastAll(transform.position, boxCastHalfExtent, transform.up, transform.rotation, layersToCheck);
 
-            foreach (RaycastHit hit in hits)
-            {
-                if (!hit.collider.CompareTag("FloatingIsland") && hit.collider.GetComponent<WeaveableNew>() != null)
-                {
-                    myRespawnables.Add(hit.collider.gameObject);
-                    startPositions.Add(hit.collider.gameObject.transform.position);
-                    startRotations.Add(hit.collider.gameObject.transform.rotation);
-                }
-            }
-        }
-        else
-        {
+        //    foreach (RaycastHit hit in hits)
+        //    {
+        //        if (!hit.collider.CompareTag("FloatingIsland") && hit.collider.GetComponent<WeaveableNew>() != null)
+        //        {
+        //            myRespawnables.Add(hit.collider.gameObject);
+        //            startPositions.Add(hit.collider.gameObject.transform.position);
+        //            startRotations.Add(hit.collider.gameObject.transform.rotation);
+        //        }
+        //    }
+        //}
+        //else
+        //{
             foreach(GameObject obj in myRespawnables)
             {
                 startPositions.Add(obj.transform.position);
                 startRotations.Add(obj.transform.rotation);
             }
-        }
+        //}
         
     }
 

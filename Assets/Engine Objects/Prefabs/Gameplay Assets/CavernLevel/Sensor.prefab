@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5183054396021013778}
-  - component: {fileID: 2859369198090031463}
   - component: {fileID: 6305924890672889126}
   - component: {fileID: 1627441158541918295}
   - component: {fileID: 8271317320740537212}
+  - component: {fileID: 6452227186916423628}
   m_Layer: 0
   m_Name: Sensor
   m_TagString: Untagged
@@ -29,20 +29,12 @@ Transform:
   m_GameObject: {fileID: 3454643504017874535}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1097.65, y: 5.45, z: -124.4}
-  m_LocalScale: {x: 3.010201, y: 3.010201, z: 0.5549648}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &2859369198090031463
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3454643504017874535}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &6305924890672889126
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -63,7 +55,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4313cd13277228843b2fac67e4aca231, type: 2}
+  - {fileID: 2100000, guid: 8afff9270c1d8ca4b84a4ed50ff6e963, type: 2}
+  - {fileID: 2100000, guid: 483968250c4a7dd448cd16b2e4075405, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -134,3 +127,11 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   isActive: 0
+--- !u!33 &6452227186916423628
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3454643504017874535}
+  m_Mesh: {fileID: 4732937762076777578, guid: d28248b798f6095428bdbb6afceb76ab, type: 3}

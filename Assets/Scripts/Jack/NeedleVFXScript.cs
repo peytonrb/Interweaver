@@ -6,7 +6,7 @@ public class NeedleVFXScript : MonoBehaviour
 {
 
     public VisualEffect vfx;
-
+    public GameObject impactEffect;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,5 +28,14 @@ public class NeedleVFXScript : MonoBehaviour
     void Update()
     {
         GetComponent<Rigidbody>().AddForce(transform.up * 10, ForceMode.Force);
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("weaveObject"))
+        {
+            Instantiate(impactEffect);
+            Destroy(gameObject);
+        }
     }
 }
