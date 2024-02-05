@@ -93,9 +93,13 @@ public class FocusingCrystalScript : MonoBehaviour
         }
 
         // if beam hits player
-        if (collider.gameObject.tag == "Player")
+        if (collider.gameObject.tag == "Player" && isActive)
         {
             collider.GetComponent<DarknessMechanicScript>().isSafe = true;
+        }
+        else if (collider.gameObject.tag == "Player" && !isActive)
+        {
+            collider.GetComponent<DarknessMechanicScript>().isSafe = false;
         }
     }
 
