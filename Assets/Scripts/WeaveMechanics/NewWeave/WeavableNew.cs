@@ -45,6 +45,10 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     public Transform targetTransform;
     private bool resetQuaternion;
 
+    [Header("Rotation Controls")]
+    [SerializeField] private float xAngle = 22.5f;
+    [SerializeField] private float yAngle = 22.5f;
+
     [Header("Floating Islands + Crystals")]
     private bool onFloatingIsland;
     private GameObject snapPoint;
@@ -326,29 +330,41 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     //New rotation please jack dont kill me if this is bad i am but a simple artist - max
     public void RotateObject(rotateDir r)
     {
+        /*float cameraAngle = Camera.main.transform.eulerAngles.y;
+        
+        if(cameraAngle >= 0 && cameraAngle <= 180)
+        {
+            xAngle ;
+
+        }
+        else if (cameraAngle > 180 && cameraAngle < 360)
+        {
+            
+        }*/
+
         switch (r)
         {
             case rotateDir.forward:
                 {
-                    transform.Rotate(0f, 0f, 45f, Space.Self);
+                    transform.Rotate(-xAngle, 0f, 0f, Space.Self);
 
                     break;
                 }
             case rotateDir.back:
                 {
-                    transform.Rotate(0f, 0f, -45f, Space.Self);
+                    transform.Rotate(xAngle, 0f, 0f, Space.Self);
                     
                     break;
                 }
             case rotateDir.right:
                 {
-                    transform.Rotate(0f, 45f, 0f, Space.World);
+                    transform.Rotate(0f, yAngle, 0f, Space.World);
                     
                     break;
                 }
             case rotateDir.left:
                 {
-                    transform.Rotate(0f, -45f, 0f, Space.World);
+                    transform.Rotate(0f, -yAngle, 0f, Space.World);
                     
                     break;
                 }
