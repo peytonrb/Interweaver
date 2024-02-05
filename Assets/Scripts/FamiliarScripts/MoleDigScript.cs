@@ -81,9 +81,8 @@ public class MoleDigScript : MonoBehaviour
             else
             {
                 MakePillarsDiggable();
-                RaycastHit hit;
-                if (Physics.Raycast(transform.position, -transform.up))
-                DigPressed();
+                movementScript.active = false;
+                StartCoroutine(BurrowDownPillar());
             }
         }
 
@@ -189,6 +188,17 @@ public class MoleDigScript : MonoBehaviour
         {
             Physics.IgnoreCollision(GetComponent<Collider>(), colliderToIgnore, false);
         }
+    }
+
+    IEnumerator BurrowDownPillar()
+    {
+        yield return new WaitForFixedUpdate();
+        while (!characterController.isGrounded)
+        {
+            yield return null;
+        }
+        movementScript.active = true;
+        DigPressed();
     }
 
     
