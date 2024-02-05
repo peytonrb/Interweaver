@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 609329302992237282}
   m_Layer: 0
   m_Name: stalactite
-  m_TagString: Untagged
+  m_TagString: Stalactite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -33,10 +33,9 @@ Transform:
   m_LocalPosition: {x: -6.86, y: 35.85, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6392695623178756383}
+  m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 21
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7835197556052736121
 MeshFilter:
@@ -107,7 +106,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 0, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &8957906312850208777
 Rigidbody:
@@ -244,73 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ca7aaeb3d9f5a24eb95961e00b87362, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 3
-  stalactite: {fileID: 432694233626164131}
-  childtrigger: {fileID: 603269551288028255}
---- !u!1 &942599859024601626
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6392695623178756383}
-  - component: {fileID: 603269551288028255}
-  - component: {fileID: 4276256876065948388}
-  m_Layer: 0
-  m_Name: Trigger
-  m_TagString: Stalactite
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6392695623178756383
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 942599859024601626}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 167022583132191157}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &603269551288028255
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 942599859024601626}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 50, z: 1}
-  m_Center: {x: 0, y: -25, z: 0}
---- !u!114 &4276256876065948388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 942599859024601626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71299f67b167bcc4981af3ed01b5fe33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  stalactiteFallingParticle: {fileID: 1501149824775350266, guid: 47707564537066a4da124fd921a0b160, type: 3}
+  stalactiteCrashingParticle: {fileID: 1567348818445919337, guid: 156c52d46e1e09a42b25f842ae55096c, type: 3}
   timer: 3
+  cooldown: 3
