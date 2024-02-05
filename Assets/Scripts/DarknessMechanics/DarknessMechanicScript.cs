@@ -49,6 +49,7 @@ public class DarknessMechanicScript : MonoBehaviour
 
     IEnumerator DarknessTimer()
     {
+        countDown = 0;
         while ((countDown < deathTime) && (!isSafe))
         {
             countDown += Time.deltaTime;
