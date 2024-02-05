@@ -91,7 +91,7 @@ public class MolePillarScript : MonoBehaviour
                 {
                     movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
                     movementScript.enabled = false; // disable player movement
-                    pointToRiseTo = transform.position + (Vector3.up * maxPillarHeight); // set a destination for the pillar to rise
+                    pointToRiseTo = new Vector3 (pillarToRaise.transform.position.x, transform.position.y, pillarToRaise.transform.position.z) + (Vector3.up * maxPillarHeight); // set a destination for the pillar to rise
                     pillarRising = true; // mark that pillar has started rising
                 }
                 else if (distance > 0.1f && pillarRising) // if pillar hasn't quite reached destination, and we're still meant to be rising

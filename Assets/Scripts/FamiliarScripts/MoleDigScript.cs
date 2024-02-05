@@ -78,6 +78,13 @@ public class MoleDigScript : MonoBehaviour
                 movementScript.enabled = false;
                 Invoke("ResetCooldown", 2.0f);
             }
+            else
+            {
+                MakePillarsDiggable();
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position, -transform.up))
+                DigPressed();
+            }
         }
 
         else if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && startedToDig && !coolDown)
