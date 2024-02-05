@@ -13,8 +13,8 @@ public class MoleDigScript : MonoBehaviour
     [CannotBeNullObjectField] public GameObject familiar;
     public LayerMask digableLayer;
     [HideInInspector] public float castDistance;
-    [HideInInspector] public bool digThroughGround;
-    [HideInInspector] public bool borrowed; // different from dig through ground, this means the most is full submerged
+    [HideInInspector] public bool startedToDig; // true when digging begins, false when digging has stopped  
+    [HideInInspector] public bool borrowed; // different from startedToDig, this means the most is full submerged
     private Collider boxCollider;
     private RaycastHit hitLayer;
     private bool coolDown;
@@ -32,7 +32,7 @@ public class MoleDigScript : MonoBehaviour
         movementScript = familiar.GetComponent<MovementScript>();
 
         originalHeight = characterController.height;
-        digThroughGround = false;
+        startedToDig = false;
         coolDown = false;
     }
 
@@ -40,7 +40,7 @@ public class MoleDigScript : MonoBehaviour
     void Update()
     {
         Debug.DrawRay(transform.position, -transform.up, Color.red);
-        if (digThroughGround)
+        if (startedToDig)
         {
             if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer))
             {
@@ -59,12 +59,12 @@ public class MoleDigScript : MonoBehaviour
     {
         //casts a raycast from the player to the ground to check if they are on a digable layer and then ignores the collision
         //of that specific layer so then it can walk through the pillar of dirt
-        if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && !digThroughGround && !coolDown)
+        if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && !startedToDig && !coolDown)
         {
             if (!hitLayer.collider.gameObject.CompareTag("Dirt Pillar")) // cannae allow diggin' when we're ontop a dirt pillar
             {
                 Debug.Log("we're digging bois");
-                digThroughGround = true;
+                startedToDig = true;
                 characterController.height = originalHeight/2;
                 initialYPosition = transform.position.y - (originalHeight/4);
                 targetPosition = new Vector3(hitLayer.point.x, initialYPosition, hitLayer.point.z);
@@ -74,12 +74,13 @@ public class MoleDigScript : MonoBehaviour
                 MakePillarsDiggable();
                 AudioManager.instance.footStepsChannel.Stop();
                 //add the digging sound here if it was added to the audio manager
+                movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
                 movementScript.enabled = false;
                 Invoke("ResetCooldown", 2.0f);
             }
         }
 
-        else if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && digThroughGround && !coolDown)
+        else if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && startedToDig && !coolDown)
         {
             Debug.Log("we got out bois");
 
@@ -89,12 +90,13 @@ public class MoleDigScript : MonoBehaviour
                 transform.position = new Vector3(transform.position.x, hitCollider.bounds.max.y, transform.position.z);
             }
 
-            digThroughGround = false;
+            startedToDig = false;
             StartCoroutine(DiggingOut());
             //animation here
             coolDown = true;
             ResetCollisionsWithTag(tagToIgnore);
             //add the digging sound here if it was added to the audio manager
+            movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
             movementScript.enabled = false;
             Invoke("ResetCooldown", 2.0f);
         }
