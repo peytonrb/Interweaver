@@ -14,6 +14,9 @@ public class StalactiteScript : MonoBehaviour, ITriggerable
     [SerializeField] private float cooldown;
     private bool timerOn;
     private BoxCollider bc;
+    private AudioSource audioSource;
+    public AudioClip fallingAudio;
+    public AudioClip crashAudio;
 
     void Start()
     {
@@ -45,14 +48,21 @@ public class StalactiteScript : MonoBehaviour, ITriggerable
 
     void OnCollisionEnter(Collision collision) {
         if (isFalling == true) {
-            if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Familiar")) {
-                Debug.Log("Death");
+            if (collision.gameObject.CompareTag("Player")) {
+                PlayerController pc = collision.gameObject.GetComponent<PlayerController>();
+                pc.Death();
+                sss.SpawnStalactite();
+                Instantiate(stalactiteCrashingParticle,transform.position,Quaternion.identity);
+                Destroy(gameObject);
+            }
+            else if (collision.gameObject.CompareTag("Familiar")) {
+                FamiliarScript fs = collision.gameObject.GetComponent<FamiliarScript>();
+                fs.Death();
                 sss.SpawnStalactite();
                 Instantiate(stalactiteCrashingParticle,transform.position,Quaternion.identity);
                 Destroy(gameObject);
             }
             else {
-                Debug.Log("Miss");
                 sss.SpawnStalactite();
                 Instantiate(stalactiteCrashingParticle,transform.position,Quaternion.identity);
                 Destroy(gameObject);
