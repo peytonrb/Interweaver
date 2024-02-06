@@ -7,35 +7,44 @@ public class NeedleVFXScript : MonoBehaviour
 
     public VisualEffect vfx;
     public GameObject impactEffect;
+    private GameObject myWeaveable;
     // Start is called before the first frame update
     void Start()
     {
         vfx.SendEvent("OnPlay");
-        StartCoroutine(DestroyDelay());
+        
     }
 
-    public IEnumerator DestroyDelay()
+    public void SetDestroyTimer(float time, GameObject weaveable)
     {
-        yield return new WaitForSeconds(4f);
+        myWeaveable = weaveable;
+        StartCoroutine(DestroyDelay(time));
+    }
 
+    public IEnumerator DestroyDelay(float time)
+    {
+        yield return new WaitForSeconds(time);
 
+        Instantiate(impactEffect, myWeaveable.transform.position, transform.rotation);
         Destroy(gameObject);
 
         yield break;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        GetComponent<Rigidbody>().AddForce(transform.up * 10, ForceMode.Force);
-    }
-
     public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("weaveObject"))
+        if (other.CompareTag("Weaveable"))
         {
-            Instantiate(impactEffect);
+            Instantiate(impactEffect, myWeaveable.transform.position, transform.rotation);
             Destroy(gameObject);
         }
     }
+
+    // Update is called once per frame
+    void Update()
+    {
+        GetComponent<Rigidbody>().AddForce(transform.up * 50, ForceMode.Force);
+    }
+
+    
 }

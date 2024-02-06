@@ -214,7 +214,7 @@ public class PlayerController : MonoBehaviour
     public IEnumerator WeaveAesthetics()
     {
         // vfx
-        weaveVisualizer.ActivateWeave();
+        weaveVisualizer.ActivateWeave(weaveableScript.transform);
 
         // Audio
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startWeaveClip);

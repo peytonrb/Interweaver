@@ -16,7 +16,9 @@ public class WeaveFXScript : MonoBehaviour
     private Volume postProcessingVolume;
     [CannotBeNullObjectField] public VolumeProfile defaultProfile;
     [CannotBeNullObjectField] public VolumeProfile weavingProfile;
+    [CannotBeNullObjectField] public GameObject weaveEffect;
 
+    public int needleVel = 60;
     void Start()
     {
         postProcessingVolume = postProcessing.GetComponent<Volume>();
@@ -38,9 +40,17 @@ public class WeaveFXScript : MonoBehaviour
         weaveRenderer.gameObject.SetActive(false);
     }
 
-    public void ActivateWeave()
+    public void ActivateWeave(Transform weaveablePos)
     {
         weaveActivation.Play();
+
+        Debug.Log(weaveablePos);
+        Debug.Log(Quaternion.LookRotation(weaveablePos.position - transform.position, Vector3.up));
+        GameObject spawnedEffect = Instantiate(weaveEffect, transform.position, Quaternion.LookRotation(Vector3.up, weaveablePos.position - transform.position));
+
+        
+
+        spawnedEffect.GetComponent<NeedleVFXScript>().SetDestroyTimer(Vector3.Distance(weaveablePos.position, transform.position)/needleVel, weaveablePos.gameObject);
     }
 
     public void WeaveableSelected(GameObject weaveable)

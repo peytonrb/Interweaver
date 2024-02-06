@@ -158,6 +158,7 @@ GameObject:
   - component: {fileID: 5721854042503267292}
   - component: {fileID: 3104782167985280240}
   - component: {fileID: 7877458466233144205}
+  - component: {fileID: 7623390385253894255}
   m_Layer: 0
   m_Name: NeedleTrail
   m_TagString: Untagged
@@ -181,7 +182,7 @@ Transform:
   - {fileID: 5562439285410509520}
   - {fileID: 7069102018850572268}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 85.593}
 --- !u!108 &2885196593629744487
 Light:
@@ -281,6 +282,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vfx: {fileID: 7547385044998135962}
+  impactEffect: {fileID: 3009992779293729007, guid: 33abd340f21fadf44800700542a18f5c, type: 3}
 --- !u!54 &7877458466233144205
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -308,6 +310,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &7623390385253894255
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5315373175481847782}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 2.375465}
+  m_Center: {x: 0, y: 0, z: 0.68773204}
 --- !u!1 &5743922396090616628
 GameObject:
   m_ObjectHideFlags: 0

@@ -45,7 +45,7 @@ Transform:
   - {fileID: 7245456222628254320}
   - {fileID: 4027824553272679605}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2864162376311042491
 MonoBehaviour:
@@ -188,6 +188,8 @@ MonoBehaviour:
   postProcessing: {fileID: 0}
   defaultProfile: {fileID: 11400000, guid: dce3c41d70ea2d048ab279152b1a81fc, type: 2}
   weavingProfile: {fileID: 11400000, guid: 16ffad5ce05431641a6ee8a46be091c1, type: 2}
+  weaveEffect: {fileID: 5315373175481847782, guid: 5a97d9b07b59ed9458e15b0388c0d38d, type: 3}
+  needleVel: 25
 --- !u!143 &591368551210576134
 CharacterController:
   m_ObjectHideFlags: 0
@@ -787,6 +789,54 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 4637955739307890111, guid: 6d9c9e203e1d97148a172dae3671945b, type: 3}
+      propertyPath: m_Parameters.widthMultiplier
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637955739307890111, guid: 6d9c9e203e1d97148a172dae3671945b, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637955739307890111, guid: 6d9c9e203e1d97148a172dae3671945b, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637955739307890111, guid: 6d9c9e203e1d97148a172dae3671945b, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[2].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637955739307890111, guid: 6d9c9e203e1d97148a172dae3671945b, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637955739307890111, guid: 6d9c9e203e1d97148a172dae3671945b, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[2].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637955739307890111, guid: 6d9c9e203e1d97148a172dae3671945b, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].inSlope
+      value: 2.699502
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637955739307890111, guid: 6d9c9e203e1d97148a172dae3671945b, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].inSlope
+      value: 0.18054281
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637955739307890111, guid: 6d9c9e203e1d97148a172dae3671945b, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].outSlope
+      value: 2.699502
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637955739307890111, guid: 6d9c9e203e1d97148a172dae3671945b, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].inWeight
+      value: 0.11722493
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637955739307890111, guid: 6d9c9e203e1d97148a172dae3671945b, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].outSlope
+      value: 0.18054281
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637955739307890111, guid: 6d9c9e203e1d97148a172dae3671945b, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].outWeight
+      value: 0.08133971
+      objectReference: {fileID: 0}
     - target: {fileID: 6233117130331406942, guid: 6d9c9e203e1d97148a172dae3671945b, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -1121,4 +1171,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a57eab0c7adfe05469eedb310755a0d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathTimer: 0
+  animator: {fileID: 0}
