@@ -131,6 +131,17 @@ public class DarknessMechanicScript : MonoBehaviour
                     StopCoroutine(DarknessTimer());
                 }
             }
+            // HAS to be a point light lantern
+            else
+            {
+                isLightOn = true;
+                isSafe = true;
+
+                lastCount = countDown;
+                t = 0;
+
+                StopCoroutine(DarknessTimer());
+            }
         }
     }
 
