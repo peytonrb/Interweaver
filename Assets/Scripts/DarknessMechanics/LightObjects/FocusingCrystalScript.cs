@@ -78,6 +78,12 @@ public class FocusingCrystalScript : MonoBehaviour
             }
         }
 
+        if (collider.GetComponent<LightCrystalScript>() && collider.GetComponent<LightCrystalScript>().isFocusingCrystal 
+            && !collider.GetComponent<LightCrystalScript>().isActive)
+        {
+            collider.GetComponent<LightCrystalScript>().isActive = true;
+        }
+
         // for sensors if beam is moved by rotating or moving the focusing crystal itself
         if (collider.GetComponent<SensorController>() != null && beamHitObj != null && 
             beamHitObj.GetComponent<SensorController>() == null && collider.GetComponent<SensorController>().isActive)
