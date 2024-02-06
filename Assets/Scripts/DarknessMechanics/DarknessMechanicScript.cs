@@ -132,7 +132,7 @@ public class DarknessMechanicScript : MonoBehaviour
                 }
             }
             // HAS to be a point light lantern
-            else
+            else if (!isLightOn)
             {
                 isLightOn = true;
                 isSafe = true;
