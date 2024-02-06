@@ -22,7 +22,7 @@ public class SpiderLightsMechanic : MonoBehaviour
 
     [SerializeField] private int mySections = 1;
 
-
+    //sounds here
 
     void Start()
     {
@@ -49,10 +49,11 @@ public class SpiderLightsMechanic : MonoBehaviour
             pointLight.intensity = Mathf.Lerp(0f, brightness, (Time.time - start) / glowTime);
             yield return null;
         }
-
+        //sounds here? will have to test
         pointLight.intensity = brightness;
         currentBrightness = pointLight.intensity;
         yield return new WaitForSeconds(lightOnDelay);
+        //sounds here? will have to test
         StartCoroutine(RepeatEverySetIntervals());
     }
 
@@ -66,11 +67,12 @@ public class SpiderLightsMechanic : MonoBehaviour
             pointLight.intensity = Mathf.Lerp(currentBrightness, 0f, (Time.time - start) / glowTime);
             yield return null;
         }
-
+        //sounds here? will have to test
         LightSourceScript.Instance.lightsArray[arrayIndex].isOn = false;
         isActive = false;
         pointLight.intensity = 0f;
         yield return new WaitForSeconds(lightOffDelay);
+        //sounds here? will have to test
         StartCoroutine(PulseLightOn());
     }
 
