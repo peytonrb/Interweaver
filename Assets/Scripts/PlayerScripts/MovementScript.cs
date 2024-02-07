@@ -183,6 +183,14 @@ public class MovementScript : MonoBehaviour
                 canLook = false;
             }
         }
+        else {
+           if (look) {
+                canLook = true;
+            }
+            else {
+                canLook = false;
+            } 
+        }
     }
 
     void FixedUpdate()
@@ -314,13 +322,22 @@ public class MovementScript : MonoBehaviour
                 AudioManager.instance.StopSound(AudioManagerChannels.footStepsLoopChannel);
             }
         }
-
+        else {
+            velocity.x = 0f;
+            velocity.z = 0f;
+            velocity.y += gravity * Time.deltaTime;
+            characterController.Move(velocity * Time.deltaTime);
+            if (characterController.isGrounded) {
+                characterAnimationHandler.ToggleFallAnim(false);
+            }
+        }
+        
     }
 
     public void LookAndMove()
     {
         direction = new Vector3(movement.x, 0, movement.y).normalized; //direction of movement
-
+        
         //Character rotations
         if (direction.magnitude >= 0.2f && canLook)
         {

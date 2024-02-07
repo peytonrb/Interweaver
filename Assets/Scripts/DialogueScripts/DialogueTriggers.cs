@@ -26,6 +26,7 @@ public class DialogueTriggers : MonoBehaviour
             DialogueManager.instance.currentTrigger = this;
             isInteracting = true;
             myMoveScript.ToggleCanMove(false);
+            myMoveScript.ToggleCanLook(false);
         }
         else
         {
@@ -37,6 +38,7 @@ public class DialogueTriggers : MonoBehaviour
     public void disableNPCDialogue()
     {
         myMoveScript.ToggleCanMove(true);
+        myMoveScript.ToggleCanLook(true);
     }
 
     // occurs only with Event Triggers
@@ -61,6 +63,7 @@ public class DialogueTriggers : MonoBehaviour
                 DialogueManager.instance.StartDialogue(dialogue, textBox);
                 isInteracting = true;
                 myMoveScript.ToggleCanMove(false);
+                myMoveScript.ToggleCanLook(false);
             }
 
         }

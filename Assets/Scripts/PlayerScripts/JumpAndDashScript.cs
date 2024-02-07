@@ -47,13 +47,15 @@ public class JumpAndDashScript : MonoBehaviour
     {
         if (characterController.isGrounded || infiniteJump)
         {
-            movementScript.ChangeVelocity(new UnityEngine.Vector3(movementScript.GetVelocity().x, jumpForce, movementScript.GetVelocity().z));
+            if (movementScript.canMove) {
+                movementScript.ChangeVelocity(new UnityEngine.Vector3(movementScript.GetVelocity().x, jumpForce, movementScript.GetVelocity().z));
+            }
         }
     }
 
     public void DoDash()
     {
-        if (canDash)
+        if (canDash && movementScript.canMove)
         {
             if (zeroGravDash)
             {
