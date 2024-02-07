@@ -16,9 +16,11 @@ public class SpiderLightsMechanic : MonoBehaviour
     [SerializeField]
     private string Notes = "Array Index should be the INDEX of the light in LIGHTARRAY "
                                                     + "in the LIGHTSOURCE OBJECT (is probably called LightsManager)";
+    [SerializeField] private float intervalSpiders1, intervalSpiders2, intervalSpiders3;
+
     private float intervalSpiders;
 
-    [SerializeField] private bool isBossSpider;
+     private bool isBossSpider;
 
     [SerializeField] private int mySections = 1;
 
@@ -26,6 +28,7 @@ public class SpiderLightsMechanic : MonoBehaviour
 
     void Start()
     {
+        isBossSpider = true;
         if (isBossSpider)
         {
             StartCoroutine(RepeatEverySetIntervals());
@@ -35,6 +38,8 @@ public class SpiderLightsMechanic : MonoBehaviour
         pointLight = this.gameObject.transform.GetChild(0).GetComponent<Light>();
         pointLight.intensity = brightness;
         currentBrightness = pointLight.intensity;
+
+       
     }
 
     IEnumerator PulseLightOn()
@@ -87,17 +92,18 @@ public class SpiderLightsMechanic : MonoBehaviour
         switch (mySections)
         {
             case 1:
-                intervalSpiders = 30f;
+                intervalSpiders = intervalSpiders1;
                 break;
 
             case 2:
-                intervalSpiders = 25f;
+                intervalSpiders = intervalSpiders2;
                 break;
 
             case 3:
-                intervalSpiders = 20f;
+                intervalSpiders = intervalSpiders3;
                 break;
         }
+        
         yield return new WaitForSeconds(intervalSpiders);
         StartCoroutine(PulseLightOff());
         Debug.Log("breh " + intervalSpiders + " seconds");
