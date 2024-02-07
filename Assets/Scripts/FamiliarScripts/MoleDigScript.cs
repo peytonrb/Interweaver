@@ -68,8 +68,7 @@ public class MoleDigScript : MonoBehaviour
             {
                 Debug.Log("we're digging bois");
                 startedToDig = true;
-                characterController.height = originalHeight/2;
-                initialYPosition = transform.position.y - (originalHeight/4);
+                initialYPosition = transform.position.y;
                 targetPosition = new Vector3(hitLayer.point.x, initialYPosition, hitLayer.point.z);
                 
                 //animation here
@@ -132,7 +131,6 @@ public class MoleDigScript : MonoBehaviour
     {
         yield return new WaitForSeconds(animLength);
         borrowed = true;
-        //characterController.height = originalHeight/2;
         moleWalkingHolder.SetActive(false);
         moleDiggingHolder.SetActive(true);
         Debug.Log("waited for " + animLength);
@@ -142,7 +140,6 @@ public class MoleDigScript : MonoBehaviour
     {
         borrowed = false;
         yield return new WaitForSeconds(animLength);
-        characterController.height = originalHeight;
         moleWalkingHolder.SetActive(true);
         moleDiggingHolder.SetActive(false);
         Debug.Log("waited for " + animLength);
