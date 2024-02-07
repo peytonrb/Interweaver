@@ -71,20 +71,7 @@ public class DarknessMechanicScript : MonoBehaviour
             GetComponent<MovementScript>().GoToCheckPoint();
         }
     }
-
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "LightObject")
-        {
-            isSafe = true;
-
-            lastCount = countDown;
-            t = 0;
-
-            StopCoroutine(DarknessTimer());
-        }
-    }
+   
 
     private void OnTriggerStay(Collider other)
     {
@@ -147,7 +134,7 @@ public class DarknessMechanicScript : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "LightObject")
+        if ((other.gameObject.tag == "LightObject") && (other.gameObject.tag == "Weaveable"))
         {
             isSafe = false;
             StartCoroutine(DarknessTimer());
