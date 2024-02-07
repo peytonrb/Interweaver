@@ -327,41 +327,44 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     }*/
 
     //New rotation please jack dont kill me if this is bad i am but a simple artist - max
-    public void RotateObject(rotateDir r, Vector2 dir)
+    public void RotateObject(rotateDir r)
     {
         float xAngle = rotAmount;
         float yAngle = rotAmount;
-
-        /*bool yAngleChanged = false;
         
         Vector3 cameraForward = Camera.main.transform.forward;
-        Vector3 objectForward = transform.forward;
-        float lookAngle = Vector3.Angle(Vector3.ProjectOnPlane(cameraForward, Vector3.up).normalized, Vector3.ProjectOnPlane(objectForward, Vector3.up).normalized);
-        Debug.Log("lookAngle = " + lookAngle);*/
+        Vector3 parentForward = transform.parent.forward;
+        float lookAngle = Vector3.Angle(Vector3.ProjectOnPlane(cameraForward, Vector3.up).normalized, Vector3.ProjectOnPlane(parentForward, Vector3.up).normalized);
+        Debug.Log("lookAngle = " + lookAngle);
+
+        if(lookAngle >= 90f && lookAngle <= 180f)
+        {
+            xAngle = -xAngle;
+        }
 
         switch (r)
         {
             case rotateDir.forward:
                 {            
-                    transform.Rotate(xAngle, 0f, 0f, Space.Self);
+                    transform.Rotate(Vector3.right, xAngle, Space.Self);
                     
                     break;
                 }
             case rotateDir.back:
                 {     
-                    transform.Rotate(-xAngle, 0f, 0f, Space.Self);
+                    transform.Rotate(Vector3.right, -xAngle, Space.Self);
                     
                     break;
                 }
             case rotateDir.right:
                 {
-                    transform.Rotate(0f, yAngle, 0f, Space.World);
+                    transform.parent.Rotate(Vector3.up, yAngle, Space.World);
                     
                     break;
                 }
             case rotateDir.left:
                 {
-                    transform.Rotate(0f, -yAngle, 0f, Space.World);
+                    transform.parent.Rotate(Vector3.up, -yAngle, Space.World);
                     
                     break;
                 }

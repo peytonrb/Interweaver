@@ -213,25 +213,25 @@ public class InputManagerScript : MonoBehaviour
                     case Vector2 v when v.Equals(Vector2.up):
                     {
                             //playerScript.weaveableScript.CallRotate(Vector3.forward, 45);
-                           playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.forward, dir);
+                           playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.forward);
                             break;
                     }
                     case Vector2 v when v.Equals(Vector2.down): 
                     {
                             //playerScript.weaveableScript.CallRotate(Vector3.forward, -45);
-                            playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.back, dir);
+                            playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.back);
                             break; 
                     }
                     case Vector2 v when v.Equals(Vector2.right):
                     {
                             //playerScript.weaveableScript.CallRotate(Vector3.up, 45);
-                            playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.right, dir);
+                            playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.right);
                             break;
                     }
                     case Vector2 v when v.Equals(Vector2.left):
                     {
                             //playerScript.weaveableScript.CallRotate(Vector3.up, -45);
-                            playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.left, dir);
+                            playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.left);
                             break;
                     }
                 }
