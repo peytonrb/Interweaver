@@ -109,6 +109,7 @@ public class FamiliarScript : MonoBehaviour
                 if (!leapOfFaith) {
                     Debug.Log("Depossessing");
                     depossessing = true;
+                    movementScript.ZeroCurrentSpeed();
                     movementScript.active = false;
                     AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, possessionClip);
                 }
