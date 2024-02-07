@@ -71,7 +71,15 @@ public class DarknessMechanicScript : MonoBehaviour
             GetComponent<MovementScript>().GoToCheckPoint();
         }
     }
-   
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "LightObject")
+        {
+            isSafe = true;
+            StopCoroutine(DarknessTimer());
+        }
+    }
 
     private void OnTriggerStay(Collider other)
     {

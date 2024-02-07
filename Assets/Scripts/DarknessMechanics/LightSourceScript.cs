@@ -71,7 +71,7 @@ public class LightSourceScript : MonoBehaviour
             //the batch raycast from all light sources in the array will point towards the player and will do somehing if the object between the player and the  light source if it has the layer
             RaycastHit[] hits = Physics.RaycastAll(lightStuff.transform.position, directionToPlayer, lightMaxDistance, obstructionView);
 
-            Debug.DrawRay(lightStuff.transform.position, directionToPlayer * lightMaxDistance / 2f, Color.green);
+            //Debug.DrawRay(lightStuff.transform.position, directionToPlayer * lightMaxDistance / 2f, Color.green);
 
             foreach (RaycastHit hit in hits)
             {
