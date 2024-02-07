@@ -46,8 +46,8 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     private bool resetQuaternion;
 
     [Header("Rotation Controls")]
-    [SerializeField] private float xAngle = 22.5f;
-    [SerializeField] private float yAngle = 22.5f;
+    [Tooltip("Angle of rotation in degrees. Default is 22.5.")]
+    [SerializeField] [Range(0f, 90f)] private float rotAmount = 22.5f;
 
     [Header("Floating Islands + Crystals")]
     private bool onFloatingIsland;
@@ -112,8 +112,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     }
 
     void Update()
-    {
-       
+    { 
         if (startFloating)
         {
             isHovering = true;
@@ -328,31 +327,29 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     }*/
 
     //New rotation please jack dont kill me if this is bad i am but a simple artist - max
-    public void RotateObject(rotateDir r)
+    public void RotateObject(rotateDir r, Vector2 dir)
     {
-        /*float cameraAngle = Camera.main.transform.eulerAngles.y;
-        
-        if(cameraAngle >= 0 && cameraAngle <= 180)
-        {
-            xAngle ;
+        float xAngle = rotAmount;
+        float yAngle = rotAmount;
 
-        }
-        else if (cameraAngle > 180 && cameraAngle < 360)
-        {
-            
-        }*/
+        /*bool yAngleChanged = false;
+        
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 objectForward = transform.forward;
+        float lookAngle = Vector3.Angle(Vector3.ProjectOnPlane(cameraForward, Vector3.up).normalized, Vector3.ProjectOnPlane(objectForward, Vector3.up).normalized);
+        Debug.Log("lookAngle = " + lookAngle);*/
 
         switch (r)
         {
             case rotateDir.forward:
-                {
-                    transform.Rotate(-xAngle, 0f, 0f, Space.Self);
-
+                {            
+                    transform.Rotate(xAngle, 0f, 0f, Space.Self);
+                    
                     break;
                 }
             case rotateDir.back:
-                {
-                    transform.Rotate(xAngle, 0f, 0f, Space.Self);
+                {     
+                    transform.Rotate(-xAngle, 0f, 0f, Space.Self);
                     
                     break;
                 }
