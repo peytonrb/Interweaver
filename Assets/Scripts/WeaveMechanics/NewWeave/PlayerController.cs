@@ -352,6 +352,7 @@ public class PlayerController : MonoBehaviour
                 //Switches to Familiar
                 CameraMasterScript.instance.SwitchToFamiliarCamera();
                 possessing = true;
+                movementScript.ZeroCurrentSpeed();
                 movementScript.active = false;
                 StartCoroutine(familiarScript.ForcedDelay());
 

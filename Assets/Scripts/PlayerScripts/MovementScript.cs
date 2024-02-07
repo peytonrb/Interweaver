@@ -350,6 +350,7 @@ public class MovementScript : MonoBehaviour
     public void ZeroCurrentSpeed()
     {
         currentSpeed = 0;
+        characterAnimationHandler.ToggleMoveSpeedBlend(0);
     }
 
     public void ChangeAerialAcceleration(float newAerialAcceleration)
