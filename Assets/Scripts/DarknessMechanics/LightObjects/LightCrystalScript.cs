@@ -28,7 +28,7 @@ public class LightCrystalScript : MonoBehaviour
         isActiveDefault = isActive;
         crystalLight = this.gameObject.transform.GetChild(0).GetComponent<Light>();
         Transform vfx = this.transform.Find("LightBeamBurstVFX");
-        
+
         if (vfx != null)
         {
             startEffect = vfx.GetComponent<VisualEffect>();
@@ -78,9 +78,11 @@ public class LightCrystalScript : MonoBehaviour
         // turns on beam - add better vfx
         if (isFocusingCrystal)
         {
+            // temp vfx code for testing
             if (startEffect != null)
             {
                 startEffect.Play();
+                startEffect.gameObject.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
                 StartCoroutine(BeamFlashes());
             }
             else
@@ -109,9 +111,20 @@ public class LightCrystalScript : MonoBehaviour
         // turns off beam - add better vfx
         if (isFocusingCrystal)
         {
-            beamEffect.Stop();
-            beamEffect.enabled = false;
-            focusingCrystalScript.isActive = false;
+            if (startEffect != null)
+            {
+                startEffect.Play();
+                startEffect.gameObject.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+                beamEffect.Stop();
+                beamEffect.enabled = false;
+                focusingCrystalScript.isActive = false;
+            }
+            else
+            {
+                beamEffect.Stop();
+                beamEffect.enabled = false;
+                focusingCrystalScript.isActive = false;
+            }
         }
 
         float start = Time.time;
@@ -131,6 +144,7 @@ public class LightCrystalScript : MonoBehaviour
         float waitTime = Random.Range(0.1f, 0.5f);
         yield return new WaitForSeconds(waitTime);
         startEffect.Play();
+        startEffect.gameObject.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
         beamEffect.enabled = true;
         beamEffect.Play();
         focusingCrystalScript.isActive = true;
