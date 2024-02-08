@@ -16,6 +16,8 @@ public class DestroyAfterTimer : MonoBehaviour
     {
         yield return new WaitForSeconds(timer);
 
+        Destroy(gameObject);
+
         yield break;
     }
    
