@@ -49,7 +49,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [Header("Rotation Controls")]
     [Tooltip("Angle of rotation in degrees. Default is 22.5.")]
     [SerializeField] [Range(0f, 90f)] private float rotAmount = 22.5f;
-    [SerializeField] private GameObject yAxis;
+    //[SerializeField] private GameObject yAxis;
 
     [Header("Floating Islands + Crystals")]
     private bool onFloatingIsland;
