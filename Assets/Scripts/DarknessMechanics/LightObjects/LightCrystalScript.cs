@@ -17,6 +17,7 @@ public class LightCrystalScript : MonoBehaviour
     public bool isFocusingCrystal;
     private VisualEffect beamEffect;
     private FocusingCrystalScript focusingCrystalScript;
+    private VisualEffect startEffect;
 
     private Light crystalLight;
     private float currentBrightness;
@@ -26,6 +27,13 @@ public class LightCrystalScript : MonoBehaviour
     {
         isActiveDefault = isActive;
         crystalLight = this.gameObject.transform.GetChild(0).GetComponent<Light>();
+        Transform vfx = this.transform.Find("LightBeamBurstVFX");
+        
+        if (vfx != null)
+        {
+            startEffect = vfx.GetComponent<VisualEffect>();
+            startEffect.Stop();
+        }
 
         if (!isWeaveable)
         {
@@ -70,9 +78,17 @@ public class LightCrystalScript : MonoBehaviour
         // turns on beam - add better vfx
         if (isFocusingCrystal)
         {
-            beamEffect.enabled = true;
-            beamEffect.Play();
-            focusingCrystalScript.isActive = true;
+            if (startEffect != null)
+            {
+                startEffect.Play();
+                StartCoroutine(BeamFlashes());
+            }
+            else
+            {
+                beamEffect.enabled = true;
+                beamEffect.Play();
+                focusingCrystalScript.isActive = true;
+            }
         }
 
         float start = Time.time;
@@ -108,5 +124,15 @@ public class LightCrystalScript : MonoBehaviour
         }
 
         crystalLight.intensity = 0f;
+    }
+
+    IEnumerator BeamFlashes()
+    {
+        float waitTime = Random.Range(0.1f, 0.5f);
+        yield return new WaitForSeconds(waitTime);
+        startEffect.Play();
+        beamEffect.enabled = true;
+        beamEffect.Play();
+        focusingCrystalScript.isActive = true;
     }
 }
