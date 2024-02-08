@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -48,6 +49,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [Header("Rotation Controls")]
     [Tooltip("Angle of rotation in degrees. Default is 22.5.")]
     [SerializeField] [Range(0f, 90f)] private float rotAmount = 22.5f;
+    [SerializeField] private GameObject yAxis;
 
     [Header("Floating Islands + Crystals")]
     private bool onFloatingIsland;
@@ -327,15 +329,17 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     }*/
 
     //New rotation please jack dont kill me if this is bad i am but a simple artist - max
-    public void RotateObject(rotateDir r)
+    /*public void RotateObject(rotateDir r)
     {
         float xAngle = rotAmount;
         float yAngle = rotAmount;
         
         Vector3 cameraForward = Camera.main.transform.forward;
-        Vector3 parentForward = transform.parent.forward;
-        float lookAngle = Vector3.Angle(Vector3.ProjectOnPlane(cameraForward, Vector3.up).normalized, Vector3.ProjectOnPlane(parentForward, Vector3.up).normalized);
+        Vector3 axisForward = yAxis.transform.forward;
+        float lookAngle = Vector3.Angle(Vector3.ProjectOnPlane(cameraForward, Vector3.up).normalized, Vector3.ProjectOnPlane(axisForward, Vector3.up).normalized);
         Debug.Log("lookAngle = " + lookAngle);
+
+
 
         if(lookAngle >= 90f && lookAngle <= 180f)
         {
@@ -346,25 +350,63 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         {
             case rotateDir.forward:
                 {            
-                    transform.Rotate(Vector3.right, xAngle, Space.Self);
+                    transform.Rotate(xAngle, 0f, 0f, Space.Self);
+                    yAxis.transform.up = Vector3.up;
                     
                     break;
                 }
             case rotateDir.back:
                 {     
-                    transform.Rotate(Vector3.right, -xAngle, Space.Self);
+                    transform.Rotate(-xAngle, 0f, 0f, Space.Self);
+                    yAxis.transform.up = Vector3.up;
                     
                     break;
                 }
             case rotateDir.right:
                 {
-                    transform.parent.Rotate(Vector3.up, yAngle, Space.World);
+                    yAxis.transform.Rotate(Vector3.up, yAngle, Space.World);
+                    transform.Rotate(Vector3.up, yAngle, Space.World);
                     
                     break;
                 }
             case rotateDir.left:
                 {
-                    transform.parent.Rotate(Vector3.up, -yAngle, Space.World);
+                    yAxis.transform.Rotate(Vector3.up, -yAngle, Space.World);
+                    transform.Rotate(Vector3.up, -yAngle, Space.World);
+                    
+                    break;
+                }
+        }
+    }*/
+
+    //Temp rotation
+    public void RotateObject(rotateDir r)
+    {
+        float xAngle = rotAmount;
+        float yAngle = rotAmount;
+        switch (r)
+        {
+            case rotateDir.forward:
+                {            
+                    transform.Rotate(xAngle, 0f, 0f, Space.Self);
+                    
+                    break;
+                }
+            case rotateDir.back:
+                {     
+                    transform.Rotate(-xAngle, 0f, 0f, Space.Self);
+                    
+                    break;
+                }
+            case rotateDir.right:
+                {
+                    transform.Rotate(Vector3.up, yAngle, Space.World);
+                    
+                    break;
+                }
+            case rotateDir.left:
+                {
+                    transform.Rotate(Vector3.up, -yAngle, Space.World);
                     
                     break;
                 }
