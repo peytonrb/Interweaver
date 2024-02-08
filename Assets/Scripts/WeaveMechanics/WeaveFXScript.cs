@@ -44,8 +44,7 @@ public class WeaveFXScript : MonoBehaviour
     {
         weaveActivation.Play();
 
-        Debug.Log(weaveablePos);
-        Debug.Log(Quaternion.LookRotation(weaveablePos.position - transform.position, Vector3.up));
+     
         GameObject spawnedEffect = Instantiate(weaveEffect, transform.position, Quaternion.LookRotation(Vector3.up, weaveablePos.position - transform.position));
 
         
