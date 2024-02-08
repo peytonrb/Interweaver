@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
@@ -22,6 +23,8 @@ public class PauseScript : MonoBehaviour
     [SerializeField] private GameObject ControllerImage;
     [SerializeField] private GameObject KeyboardImage;
 
+    [SerializeField] private GameObject spiderBoss;
+
     [Header("Audio Variables")]
     public AudioMixer theMixer;
     public Slider masterSlider, musicSlider, sfxSlider;
@@ -37,10 +40,35 @@ public class PauseScript : MonoBehaviour
     public Toggle vSyncToggle;
     [HideInInspector] public int vsyncInt;
 
+    [Header("Arachnophobia Setting")]
+    public Toggle arachnophobiaToggle;
+    [HideInInspector] public int arachnophobiaInt;
+
     public void Start()
     {
         toggle = GetComponentInChildren<Toggle>();
         eventSystem = FindObjectOfType<EventSystem>();
+
+        if (spiderBoss != null) {
+            if (PlayerPrefs.HasKey("ArachnophobiaToggleState")) {
+                arachnophobiaInt = PlayerPrefs.GetInt("ArachnophobiaToggleState");
+            }
+            else {
+                //Arachnophobia setting stays off by default
+                arachnophobiaInt = 0;
+            }
+
+            if (arachnophobiaInt == 0) {
+                SpiderBossScript spiderscript = spiderBoss.GetComponent<SpiderBossScript>();
+                spiderscript.ToggleArachnophobia(false);
+                arachnophobiaToggle.isOn = false;
+            }
+            else {
+                SpiderBossScript spiderscript = spiderBoss.GetComponent<SpiderBossScript>();
+                spiderscript.ToggleArachnophobia(true);
+                arachnophobiaToggle.isOn = true;
+            }
+        }
 
         //Check if there is a key for the playerprefs for the fullscreen and set the int depending on it
         if (PlayerPrefs.HasKey("FullscreenToggleState"))
@@ -248,6 +276,24 @@ public class PauseScript : MonoBehaviour
         {
             PlayerPrefs.SetInt("VsyncToggleState", 1);
             QualitySettings.vSyncCount = 1;
+        }
+    }
+
+    public void AdjustArachnophobia(bool settingOn) {
+        if (settingOn == false) {
+            PlayerPrefs.SetInt("ArachnophobiaToggleState",0);
+            if (spiderBoss != null) {
+                SpiderBossScript spiderboss = spiderBoss.GetComponent<SpiderBossScript>();
+                spiderboss.ToggleArachnophobia(false);
+                Debug.Log("Arachnophobia turned off");
+            }
+        }
+        else {
+            PlayerPrefs.SetInt("ArachnophobiaToggleState",1);
+            if (spiderBoss != null) {
+                SpiderBossScript spiderboss = spiderBoss.GetComponent<SpiderBossScript>();
+                spiderboss.ToggleArachnophobia(true);
+            }
         }
     }
 
