@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
-public enum AudioManagerChannels 
+public enum AudioManagerChannels
 {
     MusicChannel = 0,
     SoundEffectChannel,
@@ -12,15 +13,14 @@ public enum AudioManagerChannels
     fallLoopChannel
 }
 
-
 public class AudioManager : MonoBehaviour
 {
+    [Header("References")]
+    private List<AudioSource> musicLayers = new List<AudioSource>();
     [Header("Variables")]
     public static AudioManager instance;
-
     public static float musicChannelVol = 1f;
     public static float soundeffectChannelVol = 1f;
-
     public AudioSource musicChannel;
     public AudioSource soundeffectChannel;
     public AudioSource weaveChannel;
@@ -29,8 +29,9 @@ public class AudioManager : MonoBehaviour
     //AudioSource for the digging sound
 
     [Header("Music Audioclip List")]
-    public AudioClip TitleMusic;
-    public AudioClip alpineMusic;
+    [SerializeField] private AudioClip titleMusic;
+    [SerializeField] private AudioClip alpineMusic;
+    [SerializeField] private AudioClip cavernMusic;
    
 
     void Awake()
@@ -54,8 +55,9 @@ public class AudioManager : MonoBehaviour
         footStepsChannel = GetComponents<AudioSource>()[3];
         fallChannel = GetComponents<AudioSource>()[4];
 
-        instance.PlaySound(AudioManagerChannels.MusicChannel, TitleMusic, 1f);
+        instance.PlaySound(AudioManagerChannels.MusicChannel, titleMusic, 1f);
     }
+
     /// <summary>
     /// Plays the set music based on the scene passed
     /// </summary>
@@ -68,10 +70,15 @@ public class AudioManager : MonoBehaviour
         {
             case "Menu":
                 {
-                    PlaySound(AudioManagerChannels.MusicChannel, TitleMusic);
+                    PlaySound(AudioManagerChannels.MusicChannel, titleMusic);
                     break;
                 }
             case "AlpineCombined":
+                {
+                    PlaySound(AudioManagerChannels.MusicChannel, alpineMusic);
+                    break;
+                }
+            case "Cavern":
                 {
                     PlaySound(AudioManagerChannels.MusicChannel, alpineMusic);
                     break;
@@ -247,4 +254,54 @@ public class AudioManager : MonoBehaviour
         yield break;
     }
 
+    public IEnumerator StartMusicFadeOut(AudioClip musicToTransitionTo, float fadeOutTransitionDuration, float fadeInTransitionDuration)
+    {
+        float time = 0;
+        float start = musicChannel.volume;
+        while (time < fadeOutTransitionDuration)
+        {
+            time += Time.deltaTime;
+            musicChannel.volume = Mathf.Lerp(start, 0, time / fadeOutTransitionDuration);
+            yield return null;
+        }
+        musicChannel.clip = musicToTransitionTo;
+        StartCoroutine(StartMusicFadeIn(fadeInTransitionDuration, start));
+        musicChannel.Play();
+        yield break;
+    }
+
+    public IEnumerator StartMusicFadeIn(float transitionDuration, float originalMusicVolume)
+    {
+        float time = 0;
+        float start = musicChannel.volume;
+        while (time < transitionDuration)
+        {
+            time += Time.deltaTime;
+            musicChannel.volume = Mathf.Lerp(start, originalMusicVolume, time / transitionDuration);
+            yield return null;
+        }
+        yield break;
+    }
+
+    public void ClearMusicLayers()
+    {
+        musicLayers.Clear();
+    }
+
+    public void AddMusicLayer(AudioClip newLayer, bool loop)
+    {
+        if (newLayer != null)
+        {
+            AudioSource musicLayer = gameObject.AddComponent(typeof (AudioSource)) as AudioSource;
+            musicLayer.clip = newLayer;
+            musicLayer.Play();
+            musicLayer.outputAudioMixerGroup = musicChannel.outputAudioMixerGroup;
+
+            if (loop)
+            {
+                musicLayer.loop = loop;
+            }
+            musicLayers.Add(musicLayer);
+        }
+    }
 }
