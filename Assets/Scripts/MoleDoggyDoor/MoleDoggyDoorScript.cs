@@ -9,6 +9,7 @@ public class MoleDoggyDoorScript : MonoBehaviour
     private MoleDoggyDoorManager mddmanager;
     private GameObject mole;
     private MovementScript moleMovementScript;
+    private MoleDigScript moleDigScript;
     private int phase;
     private float finalposition;
 
@@ -18,19 +19,24 @@ public class MoleDoggyDoorScript : MonoBehaviour
         mddmanager = GetComponentInParent<MoleDoggyDoorManager>();
         mole = GameObject.FindGameObjectWithTag("Familiar");
         moleMovementScript = mole.GetComponent<MovementScript>();
+        moleDigScript = mole.GetComponent<MoleDigScript>();
 
         enterdoor = false;
         phase = 0;
 
-        if (transform.localScale.x < transform.localScale.z) {
+        if (transform.localScale.x < transform.localScale.z)
+        {
             BoxCollider[] bc = GetComponents<BoxCollider>();
-            for (int i = 0; i < bc.Length; i++) {
-                if (bc[i].center.x > 0) {
+            for (int i = 0; i < bc.Length; i++)
+            {
+                if (bc[i].center.x > 0)
+                {
                     //X Negative Direction
                     rotationState = 2;
                     Debug.Log(rotationState);
                 }
-                else if (bc[i].center.x < 0) {
+                else if (bc[i].center.x < 0)
+                {
                     //X Positive Direction
                     rotationState = 1;
                     Debug.Log(rotationState);
@@ -38,92 +44,107 @@ public class MoleDoggyDoorScript : MonoBehaviour
             }
         }
 
-        else if (transform.localScale.z < transform.localScale.x) {
+        else if (transform.localScale.z < transform.localScale.x)
+        {
             BoxCollider[] bc = GetComponents<BoxCollider>();
-            for (int i = 0; i < bc.Length; i++) {
-                if (bc[i].center.z > 0) {
+            for (int i = 0; i < bc.Length; i++)
+            {
+                if (bc[i].center.z > 0)
+                {
                     //Z Negative Direction
                     rotationState = 4;
                     Debug.Log(rotationState);
                 }
-                else if (bc[i].center.z < 0) {
+                else if (bc[i].center.z < 0)
+                {
                     //Z Positive Direction
                     rotationState = 3;
                     Debug.Log(rotationState);
                 }
-                
+
             }
         }
     }
 
-    void Update() {
-        if (enterdoor) {
+    void Update()
+    {
+        if (enterdoor)
+        {
             EnterDoggyDoor();
         }
     }
 
-    void OnTriggerEnter(Collider other) {
-        if (other.gameObject.CompareTag("Familiar")) {
+    void OnTriggerEnter(Collider other)
+    {
+        if ((other.gameObject.CompareTag("Familiar")) && (!moleDigScript.startedToDig))
+        {
             moleMovementScript.ToggleCanMove(false);
             moleMovementScript.ToggleCanLook(false);
             enterdoor = true;
+            Debug.Log("this is getting triggered by the mole");
         }
     }
 
-    void EnterDoggyDoor() {
-        switch (phase) {
+    void EnterDoggyDoor()
+    {
+        switch (phase)
+        {
             case 0:
                 //Disables the colliders so the mole can go through the door.
                 BoxCollider[] bc = GetComponents<BoxCollider>();
-                for (int i = 0; i < bc.Length; i++) {
+                for (int i = 0; i < bc.Length; i++)
+                {
                     bc[i].enabled = false;
                 }
 
                 //Puts mole directly in front of the door before entering.
-                switch (rotationState) {
+                switch (rotationState)
+                {
                     case 1:
                         //X Positive
                         mole.transform.position = new Vector3(mole.transform.position.x, mole.transform.position.y, transform.position.z);
-                        mole.transform.rotation = Quaternion.Euler(new Vector3(0,90,0));
+                        mole.transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
                         finalposition = mole.transform.position.x + 2f;
                         phase += 1;
-                    break;
+                        break;
                     case 2:
                         //X Negative
                         mole.transform.position = new Vector3(mole.transform.position.x, mole.transform.position.y, transform.position.z);
-                        mole.transform.rotation = Quaternion.Euler(new Vector3(0,-90,0));
+                        mole.transform.rotation = Quaternion.Euler(new Vector3(0, -90, 0));
                         finalposition = mole.transform.position.x - 2f;
                         phase += 1;
-                    break;
+                        break;
                     case 3:
                         //Z Positive
                         mole.transform.position = new Vector3(transform.position.x, mole.transform.position.y, mole.transform.position.z);
                         mole.transform.rotation = Quaternion.Euler(Vector3.zero);
                         finalposition = mole.transform.position.z + 2f;
                         phase += 1;
-                    break;
+                        break;
                     case 4:
                         //Z Negative
                         mole.transform.position = new Vector3(transform.position.x, mole.transform.position.y, mole.transform.position.z);
-                        mole.transform.rotation = Quaternion.Euler(new Vector3(0,180,0));
+                        mole.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
                         finalposition = mole.transform.position.z - 2f;
                         phase += 1;
-                    break;
+                        break;
                 }
-            break;
+                break;
             case 1:
                 mddmanager.MoveMoleInDirection(rotationState, finalposition, GetComponent<MoleDoggyDoorScript>());
-            break;
+                break;
         }
-            
+
     }
-    public void ResetThisDoor() {
+    public void ResetThisDoor()
+    {
         BoxCollider[] bc = GetComponents<BoxCollider>();
-        for (int i = 0; i < bc.Length; i++) {
+        for (int i = 0; i < bc.Length; i++)
+        {
             bc[i].enabled = true;
         }
         enterdoor = false;
         phase = 0;
     }
-        
+
 }
