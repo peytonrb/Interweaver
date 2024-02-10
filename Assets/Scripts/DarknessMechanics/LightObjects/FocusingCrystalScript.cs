@@ -18,6 +18,15 @@ public class FocusingCrystalScript : MonoBehaviour
 
     void Update()
     {
+        if (this.gameObject.transform.parent.GetComponent<LightCrystalScript>().isActive && !isActive)
+        {
+            isActive = true;
+        }
+        else if (!this.gameObject.transform.parent.GetComponent<LightCrystalScript>().isActive && isActive)
+        {
+            isActive = false;
+        }
+
         // changes collider size
         if (beamEffect.GetBool("Hit") && isActive) // if beam is hitting something
         {
@@ -25,14 +34,14 @@ public class FocusingCrystalScript : MonoBehaviour
             Vector3 spawnPoint = this.gameObject.transform.position;
 
             // calculates hit position & object
-            if (Physics.Raycast(spawnPoint, transform.TransformDirection(Vector3.forward), out hit, 1000f))
+            if (Physics.Raycast(spawnPoint, transform.TransformDirection(Vector3.forward), out hit, 100000f))
             {
                 Debug.DrawRay(this.gameObject.transform.position, transform.TransformDirection(Vector3.forward) * 100, 
                               Color.red);
-                Vector3 hitPosition = hit.collider.gameObject.transform.position;
+                Vector3 hitPosition = hit.point;
                 beamHitObj = hit.collider.gameObject;
                 float distance = Vector3.Distance(spawnPoint, hitPosition);
-                distance /= 2;
+                distance /= 1.35f; // man idk. it works tho.
 
                 if (distance > 1f)
                 {
