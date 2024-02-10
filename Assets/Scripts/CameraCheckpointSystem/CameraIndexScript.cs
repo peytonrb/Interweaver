@@ -43,7 +43,7 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
     }
     public void OnTrigExit(Collider other)
     {
-         if (other.gameObject.tag == "WeaverCameraTrigger" || other.gameObject.tag == "FamiliarCameraTrigger")
+         if (other.gameObject.tag == "WeaverCameraTrigger")
          {
             //WEAVER
             if (!familiarScript.myTurn)
@@ -154,8 +154,11 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
 
                 }
             }
+        }
+
+        if (other.gameObject.tag == "FamiliarCameraTrigger") {
             //FAMILIAR
-            else
+            if (familiarScript.myTurn)
             {
                 if (!isZaxisTrigger)
                 {
@@ -264,8 +267,8 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
                 }
             }
 
-            //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~
-         }
+            //ROTATION STATE CHANGES HAVE BEEN MOVED TO CAMERMASTERSCRIPT~   
+        }
     }
     
     void Update() {
