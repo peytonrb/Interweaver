@@ -17,11 +17,6 @@ public class InputManagerScript : MonoBehaviour
     public static InputManagerScript instance;
 
     public bool isGamepad = false;
-
-    [Header("Temp - For Weave Rework")]
-    public bool isNewWeave = false;
-    public WeaveController weaveController;
-
     private PlayerController playerScript;
     private FamiliarScript familiarScript;
     private MovementScript movementScript;
@@ -35,6 +30,12 @@ public class InputManagerScript : MonoBehaviour
         Stag
     }
     public myEnums familiarEnums;
+
+    [Header("Temp - For Weave Rework")]
+    public bool isNewWeave = false;
+    public WeaveController weaveController;
+
+
     void Awake()
     {
         if (instance == null)
@@ -180,19 +181,22 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
-    public void OnToggleWeaveMode(InputValue input)
+    public void OnToggleWeaveMode(InputValue input) // no longer exists in reworked weave
     {
         if (input.isPressed)
         {
-            if (playerScript.inRelocateMode)
+            if (!isNewWeave) // old weave functionality
             {
-                playerScript.inCombineMode = true;
-                playerScript.inRelocateMode = false;
-            }
-            else if (playerScript.inCombineMode && !playerScript.floatingIslandCrystal)
-            {
-                playerScript.inCombineMode = false;
-                playerScript.inRelocateMode = true;
+                if (playerScript.inRelocateMode)
+                {
+                    playerScript.inCombineMode = true;
+                    playerScript.inRelocateMode = false;
+                }
+                else if (playerScript.inCombineMode && !playerScript.floatingIslandCrystal)
+                {
+                    playerScript.inCombineMode = false;
+                    playerScript.inRelocateMode = true;
+                }
             }
         }
     }
