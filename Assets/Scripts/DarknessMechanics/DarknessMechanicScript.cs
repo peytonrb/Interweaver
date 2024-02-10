@@ -11,8 +11,8 @@ public class DarknessMechanicScript : MonoBehaviour
     [Header("Timer")]
     [Range(0, 14)] private float countDown;
     public float deathTime = 5f;
-    [HideInInspector] public bool isSafe;
-
+    public bool isSafe;
+    private bool hasInvoked;
 
     private float lastCount;
     float t = 0;
@@ -27,6 +27,7 @@ public class DarknessMechanicScript : MonoBehaviour
     void Start()
     {
         isSafe = false;
+        hasInvoked = false;
         countDown = 0f;
         StartCoroutine(DarknessTimer());
 
@@ -72,13 +73,28 @@ public class DarknessMechanicScript : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void PlayerIsSafe()
     {
-        if (other.gameObject.tag == "LightObject")
+        isSafe = true;
+        if ((isSafe) && (!hasInvoked))
         {
-            isSafe = true;
             StopCoroutine(DarknessTimer());
+            hasInvoked = true;
+            Debug.Log("player is now safe");
         }
+       
+    }
+
+    public void PlayerIsNotSafe()
+    {
+        isSafe = false;
+        if ((!isSafe) && (hasInvoked))
+        {
+            StartCoroutine(DarknessTimer());
+            hasInvoked = false;
+            Debug.Log("player is now not safe");
+        }
+        
     }
 
     private void OnTriggerStay(Collider other)
@@ -140,12 +156,5 @@ public class DarknessMechanicScript : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if ((other.gameObject.tag == "LightObject") && (other.gameObject.tag == "Weaveable"))
-        {
-            isSafe = false;
-            StartCoroutine(DarknessTimer());
-        }
-    }
+
 }
