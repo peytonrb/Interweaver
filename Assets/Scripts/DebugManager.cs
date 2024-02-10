@@ -96,7 +96,7 @@ public class DebugManager : MonoBehaviour
                 UpdatePositions(weaver.transform,familiar.transform);
             }
             //Toggle Debug UI
-            if (Input.GetKeyDown(KeyCode.R)) {
+            if (Input.GetKeyDown(KeyCode.BackQuote)) {
                 if (debugUIison) {
                     debugUI.SetActive(false);
                     StopAllCoroutines();
