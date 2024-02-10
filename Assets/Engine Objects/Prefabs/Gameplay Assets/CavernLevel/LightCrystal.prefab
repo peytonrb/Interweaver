@@ -27,8 +27,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 584506469926618032}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.84, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.84000015, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -153,6 +153,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cba16a25ce66e1146b53bd3d4655b1a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTimedMushroom: 0
+--- !u!1 &987410943757886431
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 222611454536291495}
+  m_Layer: 6
+  m_Name: Y Axis
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &222611454536291495
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 987410943757886431}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3543903632883375546}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1323638361247059100
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,9 +324,10 @@ Transform:
   m_Children:
   - {fileID: 768643954330677955}
   - {fileID: 3920245833118296906}
+  - {fileID: 222611454536291495}
   - {fileID: 484159244690442496}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6491673692456568111
 MeshFilter:
@@ -433,6 +466,8 @@ MonoBehaviour:
   snapDistance: 0
   nearestDistance: 0
   targetTransform: {fileID: 0}
+  rotAmount: 22.5
+  yAxis: {fileID: 987410943757886431}
   originalMat: {fileID: 0}
   isCombined: 0
   startPos: {x: 0, y: 0, z: 0}

@@ -63,10 +63,10 @@ VisualEffect:
       m_Array: []
     m_Vector3f:
       m_Array:
-      - m_Value: {x: 0, y: 0, z: 0}
+      - m_Value: {x: 0.79040563, y: 0, z: -0.6125838}
         m_Name: Direction_direction
         m_Overridden: 1
-      - m_Value: {x: 0, y: 0, z: 0}
+      - m_Value: {x: -0.049860954, y: 0.98710275, z: 2.805551}
         m_Name: Position_position
         m_Overridden: 1
     m_Vector4f:
@@ -126,7 +126,7 @@ VisualEffect:
         m_Overridden: 1
     m_Bool:
       m_Array:
-      - m_Value: 0
+      - m_Value: 1
         m_Name: Hit
         m_Overridden: 1
 --- !u!73398921 &7340079165944138703
@@ -5145,6 +5145,37 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &922796420609722869
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5342613410635042176}
+  m_Layer: 6
+  m_Name: Y Axis
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5342613410635042176
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 922796420609722869}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3823119512652617908}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2944589280221675294
 GameObject:
   m_ObjectHideFlags: 0
@@ -5543,6 +5574,7 @@ Transform:
   - {fileID: 2194616736613385160}
   - {fileID: 2269939377717890288}
   - {fileID: 6778551817224661008}
+  - {fileID: 5342613410635042176}
   - {fileID: 9050052290626768535}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -5685,6 +5717,7 @@ MonoBehaviour:
   nearestDistance: 0
   targetTransform: {fileID: 0}
   rotAmount: 22.5
+  yAxis: {fileID: 922796420609722869}
   originalMat: {fileID: 0}
   isCombined: 0
   startPos: {x: 0, y: 0, z: 0}
