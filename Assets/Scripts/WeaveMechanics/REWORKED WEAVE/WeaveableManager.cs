@@ -11,6 +11,22 @@ public class WeaveableManager : MonoBehaviour
         combinedWeaveables = new List<weaveableGroup>();
     }
 
+    // destroys the fixed joints, resets weaveables to original state, clears the weaveables from the list,
+    //      deletes the list from parent list
+    // <param> the index of the list to be deleted in the parent list
+    public void DestroyJoints(int listIndex)
+    {
+        // destroy all fixed joints on all objects in list
+
+        for (int i = 0; i < combinedWeaveables[listIndex].weaveableObjectGroup.Count; i++)
+        {
+            combinedWeaveables[listIndex].weaveableObjectGroup[i].ResetWeaveable();
+        }
+
+        combinedWeaveables[listIndex].weaveableObjectGroup.Clear();
+        RemoveList(listIndex);
+    }
+
     // adds weaveable to new or existing list depending on combined status (wip)
     // <param> the index of the list in parent list and the weaveable itself
     // <returns> the current length of the internal list
@@ -47,7 +63,8 @@ public class WeaveableManager : MonoBehaviour
 
 // this class defines the nested ArrayList to be Serializable, which would otherwise prevent it from
 //      being shown in the inspector
-[System.Serializable] public class weaveableGroup
+[System.Serializable]
+public class weaveableGroup
 {
     public List<WeaveableObject> weaveableObjectGroup;
 }

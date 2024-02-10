@@ -18,13 +18,17 @@ public class InputManagerScript : MonoBehaviour
 
     public bool isGamepad = false;
 
+    [Header("Temp - For Weave Rework")]
+    public bool isNewWeave = false;
+    public WeaveController weaveController;
+
     private PlayerController playerScript;
     private FamiliarScript familiarScript;
     private MovementScript movementScript;
     public PlayerInput playerInput;
 
     private bool isMole, isOwl, isStag;
-    public enum myEnums 
+    public enum myEnums
     {
         Owl,
         Mole,
@@ -118,18 +122,31 @@ public class InputManagerScript : MonoBehaviour
     {
         if (input.isPressed)
         {
-            if (!playerScript.inRelocateMode && !playerScript.inCombineMode) // occasionally reads a hit during compile time???? NOT ANYMOREEEEEEE HEHEHEHEHE
+            if (!isNewWeave) // FOR OLD WEAVE
             {
-                playerScript.interactInput = true;
-                playerScript.WeaveActivated();
+                if (!playerScript.inRelocateMode && !playerScript.inCombineMode) // occasionally reads a hit during compile time???? NOT ANYMOREEEEEEE HEHEHEHEHE
+                {
+                    playerScript.interactInput = true;
+                    playerScript.WeaveActivated();
 
+                }
+                else if (playerScript.inCombineMode)
+                {
+                    playerScript.weaveableScript.OnCombineInput();
+
+                    //StartCoroutine(WeaveModeTimer());  //ayo peyton rework this                       
+                }
             }
-            else if (playerScript.inCombineMode)
+            else // FOR REWORKED WEAVE
             {
-                Debug.Log("fuck this");
-                playerScript.weaveableScript.OnCombineInput();
-
-                //StartCoroutine(WeaveModeTimer());  //ayo peyton rework this                       
+                if (weaveController.isWeaving)
+                {
+                    weaveController.currentWeaveable.AddToWovenObjects();
+                }
+                else
+                {
+                    weaveController.WeaveObject();
+                }
             }
         }
     }
@@ -145,14 +162,21 @@ public class InputManagerScript : MonoBehaviour
     {
         if (input.isPressed)
         {
-            if (playerScript.isCurrentlyWeaving)
+            if (!isNewWeave) // for old weave
             {
-                playerScript.uninteract = true;
+                if (playerScript.isCurrentlyWeaving)
+                {
+                    playerScript.uninteract = true;
+                }
+
+                playerScript.interactInput = false;
+                playerScript.inRelocateMode = false;
+                playerScript.inCombineMode = false;
             }
-            
-            playerScript.interactInput = false;
-            playerScript.inRelocateMode = false;
-            playerScript.inCombineMode = false;
+            else // for reworked weave
+            {
+                weaveController.OnDrop();
+            }
         }
     }
 
@@ -177,6 +201,8 @@ public class InputManagerScript : MonoBehaviour
     {
         Vector2 inputVector = input.Get<Vector2>();
 
+        if (!isNewWeave) // OLD WEAVE FUNCTIONALITY
+        {
             if (isGamepad)
             {
                 if (playerScript.isCurrentlyWeaving)
@@ -193,11 +219,37 @@ public class InputManagerScript : MonoBehaviour
             {
                 playerScript.MouseAimTargetter(inputVector);
             }
+        }
+        else // REWORKED WEAVE FUNCTIONALITY
+        {
+            if (isGamepad)
+            {
+                if (weaveController.isWeaving)
+                {
+                    weaveController.currentWeaveable.MoveWeaveableToTarget(inputVector);
+                }
+                else
+                {
+                    weaveController.GamepadTargetingArrow(inputVector);
+                }
+            }
+            else
+            {
+                if (weaveController.isWeaving)
+                {
+                    weaveController.currentWeaveable.MoveWeaveableToMouse();
+                }
+                else
+                {
+                    weaveController.MouseTargetingArrow(inputVector);
+                }
+            }
+        }
     }
 
     public void OnWeaverNPCInteractions(InputValue input)
     {
-        
+
     }
 
     public void OnRotate(InputValue input)
@@ -208,32 +260,32 @@ public class InputManagerScript : MonoBehaviour
         {
             if (playerScript.weaveableScript != null)
             {
-                switch(dir)
+                switch (dir)
                 {
                     case Vector2 v when v.Equals(Vector2.up):
-                    {
+                        {
                             //playerScript.weaveableScript.CallRotate(Vector3.forward, 45);
-                           playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.forward);
+                            playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.forward);
                             break;
-                    }
-                    case Vector2 v when v.Equals(Vector2.down): 
-                    {
+                        }
+                    case Vector2 v when v.Equals(Vector2.down):
+                        {
                             //playerScript.weaveableScript.CallRotate(Vector3.forward, -45);
                             playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.back);
-                            break; 
-                    }
+                            break;
+                        }
                     case Vector2 v when v.Equals(Vector2.right):
-                    {
+                        {
                             //playerScript.weaveableScript.CallRotate(Vector3.up, 45);
                             playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.right);
                             break;
-                    }
+                        }
                     case Vector2 v when v.Equals(Vector2.left):
-                    {
+                        {
                             //playerScript.weaveableScript.CallRotate(Vector3.up, -45);
                             playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.left);
                             break;
-                    }
+                        }
                 }
             }
         }
@@ -243,15 +295,22 @@ public class InputManagerScript : MonoBehaviour
     {
         if (input.isPressed)
         {
-            WeaveableNew[] weaveableArray = FindObjectsOfType<WeaveableNew>();
-
-            foreach (WeaveableNew weaveable in weaveableArray)
+            if (!isNewWeave) // FOR OLD WEAVE
             {
-                if (weaveable.isCombined)
+                WeaveableNew[] weaveableArray = FindObjectsOfType<WeaveableNew>();
+
+                foreach (WeaveableNew weaveable in weaveableArray)
                 {
-                    weaveable.Uncombine();
-                    playerScript.weaveVisualizer.StopAura(weaveable.gameObject);
+                    if (weaveable.isCombined)
+                    {
+                        weaveable.Uncombine();
+                        playerScript.weaveVisualizer.StopAura(weaveable.gameObject);
+                    }
                 }
+            }
+            else // FOR REWORKED WEAVE
+            {
+                weaveController.weaveableManager.DestroyJoints(weaveController.currentWeaveable.listIndex);
             }
         }
     }
@@ -348,7 +407,7 @@ public class InputManagerScript : MonoBehaviour
     {
         if (input.isPressed)
         {
-           
+
             if (familiarScript.myTurn)
             {
                 NPCInteractionScript npcInteractScript = familiar.GetComponent<NPCInteractionScript>();
@@ -362,7 +421,7 @@ public class InputManagerScript : MonoBehaviour
                 Debug.Log("Interacting Weaver");
             }
         }
-       
+
     }
 
     public void ControllerRumble(float duration, float leftMotorFreq = 0, float rightMotorFreq = 0)
@@ -394,7 +453,7 @@ public class InputManagerScript : MonoBehaviour
     public void OnFamiliarMove(InputValue input)
     {
         movement = input.Get<Vector2>();
-        MovementScript movementScript = familiar.GetComponent<MovementScript>();    
+        MovementScript movementScript = familiar.GetComponent<MovementScript>();
         movementScript.LookAndMove();
         //Note: There wont need to be a check if its the familiar's turn as the weaver and familiar are on seperate input action maps.
     }
@@ -462,7 +521,7 @@ public class InputManagerScript : MonoBehaviour
 
         switch (familiarEnums)
         {
-            case myEnums.Owl: 
+            case myEnums.Owl:
                 break;
             case myEnums.Mole:
                 MolePillarScript molePillarScript = familiar.GetComponent<MolePillarScript>();
@@ -470,7 +529,7 @@ public class InputManagerScript : MonoBehaviour
 
                 if (isPressed && moleDigScript.borrowed && Time.timeScale != 0)
                 {
-                    molePillarScript.riseInputPressed = true; 
+                    molePillarScript.riseInputPressed = true;
                     molePillarScript.lowerInputPressed = false;
                     molePillarScript.DeployPillar();
                     molePillarScript.rise = true;
@@ -486,13 +545,13 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
-    public void OnMoleAltAltFamiliarInteract (InputValue input)
+    public void OnMoleAltAltFamiliarInteract(InputValue input)
     {
         bool isPressed = input.isPressed;
 
         switch (familiarEnums)
         {
-            case myEnums.Owl: 
+            case myEnums.Owl:
                 break;
             case myEnums.Mole:
                 MolePillarScript molePillarScript = familiar.GetComponent<MolePillarScript>();
@@ -507,7 +566,7 @@ public class InputManagerScript : MonoBehaviour
                 }
                 else
                 {
-                    molePillarScript.lowerInputPressed = false; 
+                    molePillarScript.lowerInputPressed = false;
                 }
                 break;
             case myEnums.Stag:

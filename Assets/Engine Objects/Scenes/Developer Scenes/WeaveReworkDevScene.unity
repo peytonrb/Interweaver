@@ -1863,6 +1863,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8977571022788081958, guid: e6bf1b4f874e350498836e091dded2fe, type: 3}
+      propertyPath: isNewWeave
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8977571022788081958, guid: e6bf1b4f874e350498836e091dded2fe, type: 3}
       propertyPath: inputAction
       value: 
       objectReference: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
@@ -5253,7 +5257,7 @@ GameObject:
   - component: {fileID: 1359496096}
   m_Layer: 0
   m_Name: WeaveableManager
-  m_TagString: Untagged
+  m_TagString: WeaveableManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8592,6 +8596,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0da983b286f933469896c0c67a0cc43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  listIndex: 0
+  ID: 0
 --- !u!1 &2122026641 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1359264606954408796, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
@@ -8625,6 +8631,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8adc7d03870712049bd0ffaff1a69678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isWeaving: 0
+  currentWeaveable: {fileID: 0}
+  weaveableManager: {fileID: 0}
 --- !u!1 &2129858510
 GameObject:
   m_ObjectHideFlags: 0
