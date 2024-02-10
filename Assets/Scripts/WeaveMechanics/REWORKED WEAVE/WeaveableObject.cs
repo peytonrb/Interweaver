@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class WeaveableObject : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    // for WeaveableManager - protected so they can be accessed and visible in Inspector in Debug Mode 
+    //      but hidden otherwise
+    protected int listIndex { get; set; }
+    protected int ID { get; set; }
 }
