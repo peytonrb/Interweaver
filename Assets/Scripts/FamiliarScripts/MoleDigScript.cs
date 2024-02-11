@@ -134,9 +134,9 @@ public class MoleDigScript : MonoBehaviour
     }
 
     IEnumerator DiggingOut(float animLength)
-    {       
-        yield return new WaitForSeconds(animLength);
+    {
         borrowed = false;
+        yield return new WaitForSeconds(animLength);     
         Debug.Log("waited for " + animLength);
     }
 
