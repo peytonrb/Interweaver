@@ -136,7 +136,8 @@ public class MoleDigScript : MonoBehaviour
     IEnumerator DiggingOut(float animLength)
     {
         borrowed = false;
-        yield return new WaitForSeconds(animLength);     
+        yield return new WaitForSeconds(animLength); 
+        //animation here so then it can play after it's on top of a pillar
         Debug.Log("waited for " + animLength);
     }
 
@@ -204,7 +205,8 @@ public class MoleDigScript : MonoBehaviour
             yield return null;
         }
         movementScript.active = true;
-        DigPressed();
+        DigPressed(); //do thing here
+
     }
 
     
