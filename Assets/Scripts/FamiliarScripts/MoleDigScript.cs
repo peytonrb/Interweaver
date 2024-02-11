@@ -20,10 +20,8 @@ public class MoleDigScript : MonoBehaviour
     private bool coolDown;
     private float initialYPosition;
     private Vector3 targetPosition;
-    public List<string> tagToIgnore = new List<string>(); 
-    [CannotBeNullObjectField] public GameObject moleWalkingHolder;
-    [CannotBeNullObjectField] public GameObject moleDiggingHolder;
-
+    public List<string> tagToIgnore = new List<string>();
+    private float animLength;
     [Header("Animation")]
     [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
 
@@ -33,7 +31,7 @@ public class MoleDigScript : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         movementScript = familiar.GetComponent<MovementScript>();
-
+        animLength = characterAnimationHandler.animator.GetCurrentAnimatorStateInfo(0).length;
         originalHeight = characterController.height;
         startedToDig = false;
         coolDown = false;
@@ -73,7 +71,7 @@ public class MoleDigScript : MonoBehaviour
                 
                 //animation here
                 characterAnimationHandler.ToggleBurrowAnim();
-                float animLength = characterAnimationHandler.animator.GetCurrentAnimatorStateInfo(0).length;
+
                 Debug.Log("Dug in " + animLength);
                 
                 StartCoroutine(StartDigging(animLength));
@@ -84,12 +82,13 @@ public class MoleDigScript : MonoBehaviour
                 //add the digging sound here if it was added to the audio manager
                 movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
                 movementScript.enabled = false;
-                Invoke("ResetCooldown", 2.0f);
+                Invoke("ResetCooldown", 3.0f);
             }
             else
             {
                 MakePillarsDiggable();
                 movementScript.active = false;
+                Invoke("ResetCooldown", 3.0f);
                 StartCoroutine(BurrowDownPillar());
             }
         }
@@ -106,7 +105,7 @@ public class MoleDigScript : MonoBehaviour
 
             //animation here
             characterAnimationHandler.ToggleSurfaceAnim();
-            float animLength = characterAnimationHandler.animator.GetCurrentAnimatorStateInfo(0).length;
+            
             Debug.Log("Dug out " + animLength);
             
             startedToDig = false;
@@ -117,7 +116,7 @@ public class MoleDigScript : MonoBehaviour
             //add the digging sound here if it was added to the audio manager
             movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
             movementScript.enabled = false;
-            Invoke("ResetCooldown", 2.0f);
+            Invoke("ResetCooldown", 3.0f);
         }
     }
 
@@ -131,17 +130,13 @@ public class MoleDigScript : MonoBehaviour
     {
         yield return new WaitForSeconds(animLength);
         borrowed = true;
-        moleWalkingHolder.SetActive(false);
-        moleDiggingHolder.SetActive(true);
         Debug.Log("waited for " + animLength);
     }
 
     IEnumerator DiggingOut(float animLength)
-    {
-        borrowed = false;
+    {       
         yield return new WaitForSeconds(animLength);
-        moleWalkingHolder.SetActive(true);
-        moleDiggingHolder.SetActive(false);
+        borrowed = false;
         Debug.Log("waited for " + animLength);
     }
 
