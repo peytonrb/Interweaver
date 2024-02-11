@@ -515,4 +515,31 @@ public class InputManagerScript : MonoBehaviour
         }
     }
     #endregion//******************************************************
+
+    #region //MOLE FAMILIAR ABILITIES
+    //******************************************************
+
+    public void OnStagFamiliarInteract(InputValue input)
+    {
+        bool isPressed = input.isPressed;
+        switch (familiarEnums)
+        {
+            case myEnums.Owl: 
+                break;
+            case myEnums.Mole:
+                break;
+            case myEnums.Stag:
+                StagLeapScript stagLeapScript = familiar.GetComponent<StagLeapScript>();
+                if (isPressed && Time.timeScale != 0)
+                {
+                    StartCoroutine(stagLeapScript.ChargeJump());
+                }
+                else
+                {
+                    stagLeapScript.EndCharging();
+                }
+                break;
+        }
+    }
+    #endregion//******************************************************
 }

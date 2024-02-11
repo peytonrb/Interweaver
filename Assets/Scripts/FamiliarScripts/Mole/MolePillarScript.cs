@@ -31,6 +31,7 @@ public class MolePillarScript : MonoBehaviour
     {
         movementScript = GetComponent<MovementScript>();
         moleDigScript = GetComponent<MoleDigScript>();
+        
     }
 
     // Update is called once per frame
@@ -72,7 +73,7 @@ public class MolePillarScript : MonoBehaviour
 
     public void RaisePillar()
     {
-        if (!riseInputPressed || !moleDigScript.borrowed) // if input isn't currently being pressed or we've stopped digging for whatever reason
+        if ((!riseInputPressed || !moleDigScript.borrowed) && !movementScript.active) // if input isn't currently being pressed or we've stopped digging for whatever reason
         {
             PillarRiseEnd();
         }
@@ -108,7 +109,7 @@ public class MolePillarScript : MonoBehaviour
 
     public void LowerPillar()
     {
-        if (!lowerInputPressed || !moleDigScript.borrowed)
+        if ((!lowerInputPressed || !moleDigScript.borrowed) && !movementScript.active)
         {
             PillarLowerEnd();
         }
