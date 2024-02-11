@@ -9,6 +9,7 @@ public class MoleDoggyDoorScript : MonoBehaviour
     private MoleDoggyDoorManager mddmanager;
     private GameObject mole;
     private MovementScript moleMovementScript;
+    private CharacterController moleCharacterController;
     private MoleDigScript moleDigScript;
     private int phase;
     private float finalposition;
@@ -19,6 +20,7 @@ public class MoleDoggyDoorScript : MonoBehaviour
         mddmanager = GetComponentInParent<MoleDoggyDoorManager>();
         mole = GameObject.FindGameObjectWithTag("Familiar");
         moleMovementScript = mole.GetComponent<MovementScript>();
+        moleCharacterController = mole.GetComponent<CharacterController>();
         moleDigScript = mole.GetComponent<MoleDigScript>();
 
         enterdoor = false;
@@ -76,10 +78,11 @@ public class MoleDoggyDoorScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if ((other.gameObject.CompareTag("Familiar")) && (!moleDigScript.startedToDig))
+        if (other.gameObject.CompareTag("Familiar") && !moleDigScript.startedToDig)
         {
             moleMovementScript.ToggleCanMove(false);
             moleMovementScript.ToggleCanLook(false);
+            moleCharacterController.enabled = false;
             enterdoor = true;
             Debug.Log("this is getting triggered by the mole");
         }
@@ -138,6 +141,7 @@ public class MoleDoggyDoorScript : MonoBehaviour
     }
     public void ResetThisDoor()
     {
+        Debug.Log("resetting door");
         BoxCollider[] bc = GetComponents<BoxCollider>();
         for (int i = 0; i < bc.Length; i++)
         {
