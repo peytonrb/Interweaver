@@ -108,7 +108,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
 
         originalLayerMask = gameObject.layer;
 
-        mainCamera = Camera.main;
+        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         Uncombine();
     }
 
@@ -148,6 +148,11 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     // this method is for using the mouse to move around the object
     private void MovingWeaveMouse()
     {
+        if (mainCamera == null)
+        {
+            mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        }
+
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
         // this shoots a raycast from the camera to the 3D plane to get the position of the mouse

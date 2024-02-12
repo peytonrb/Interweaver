@@ -62,7 +62,15 @@ public class WeaveFXScript : MonoBehaviour
             Instantiate(objectSelectPS, weaveable.transform.position, Quaternion.Euler(-90f, 0f, 0f));
 
             // aura effect
-            weaveable.GetComponent<Renderer>().material = emissiveMat;
+            if (weaveable.GetComponent<Renderer>() != null) // this whole if block is here for the weaveable prefab change 
+            {
+                weaveable.GetComponent<Renderer>().material = emissiveMat;
+            }
+            else
+            {
+                weaveable.transform.GetChild(0).GetComponent<Renderer>().material = emissiveMat;
+            }
+
             StartCoroutine(StartAura(weaveable));
         }
     }
