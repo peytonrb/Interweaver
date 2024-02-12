@@ -18,9 +18,19 @@ public class CharacterAnimationHandler : MonoBehaviour
         animator.SetFloat("Speed", speed);
     }
 
+    public void ToggleJumpAnim()
+    {
+        animator.SetTrigger("Jump");
+    }
+
     public void ToggleFallAnim(bool falling)
     {
         animator.SetBool("Falling", falling);
+    }
+
+    public void ToggleDashAnim(bool dashing)
+    {
+        animator.SetBool("Dash", dashing);
     }
 
     public void ToggleWeaveAnim(bool weaving) 
