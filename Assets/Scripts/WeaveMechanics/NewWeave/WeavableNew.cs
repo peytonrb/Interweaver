@@ -48,7 +48,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
     [Header("Rotation Controls")]
     [Tooltip("Angle of rotation in degrees. Default is 22.5.")]
     [SerializeField] [Range(0f, 90f)] private float rotAmount = 22.5f;
-    [CannotBeNullObjectField] [SerializeField] private GameObject weaveableObject;
+    [CannotBeNullObjectField] [SerializeField] private GameObject yAxis;
 
     [Header("Floating Islands + Crystals")]
     private bool onFloatingIsland;
@@ -117,6 +117,9 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         if (startFloating)
         {
             isHovering = true;
+            
+            //Resets the orientation of the Y Axis object.
+            yAxis.transform.up = Vector3.up;
 
             if (canBeRelocated)
             {
@@ -338,16 +341,21 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         
         //Gets the forward vector of the camera and the forward and right vectors of the Y Axis child object to check the angle between them.
         Vector3 cameraForward = Camera.main.transform.forward;
-        Vector3 objectForward = weaveableObject.transform.forward;
-        Vector3 objectRight = weaveableObject.transform.right;
+        Vector3 axisForward = yAxis.transform.forward;
+        Vector3 axisRight = yAxis.transform.right;
 
-        float forwardAngle = Vector3.Angle(Vector3.ProjectOnPlane(cameraForward, Vector3.up).normalized, Vector3.ProjectOnPlane(objectForward, Vector3.up).normalized);
-        float rightAngle = Vector3.Angle(Vector3.ProjectOnPlane(cameraForward, Vector3.up).normalized, Vector3.ProjectOnPlane(objectRight, Vector3.up).normalized);
+        float forwardAngle = Vector3.Angle(Vector3.ProjectOnPlane(cameraForward, Vector3.up).normalized, Vector3.ProjectOnPlane(axisForward, Vector3.up).normalized);
+        float rightAngle = Vector3.Angle(Vector3.ProjectOnPlane(cameraForward, Vector3.up).normalized, Vector3.ProjectOnPlane(axisRight, Vector3.up).normalized);
         //Debug.Log("forwardAngle = " + forwardAngle);
         //Debug.Log("rightAngle = " + rightAngle);
 
+        if(forwardAngle >= 90f && forwardAngle <= 180f)
+        {
+            xAmount = -xAmount;
+        }
+
         //Assigns x and z amounts based on the angle of the camera forward along the xz plane of the Y Axis object.
-        if(forwardAngle >= 0f && forwardAngle <= 45f && rightAngle >= 45f && rightAngle <= 135f)
+        /*if(forwardAngle >= 0f && forwardAngle <= 45f && rightAngle >= 45f && rightAngle <= 135f)
         {
             xAmount = rotAmount;
             zAmount = 0f;
@@ -366,7 +374,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         {
             xAmount = 0f;
             zAmount = rotAmount;
-        }
+        }*/
 
         Debug.Log("xAmount: " + xAmount);
         Debug.Log("zAmount: " + zAmount);
@@ -375,15 +383,25 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         {
             case rotateDir.forward:
                 {            
-                    weaveableObject.transform.Rotate(Vector3.right, xAmount, Space.Self);
-                    weaveableObject.transform.Rotate(Vector3.forward, zAmount, Space.Self);
+                    /*transform.Rotate(Vector3.right, xAmount, Space.Self);
+                    yAxis.transform.Rotate(yAxis.transform.right, -xAmount, Space.Self);
+                    transform.Rotate(Vector3.forward, zAmount, Space.Self);
+                    yAxis.transform.Rotate(yAxis.transform.forward, -zAmount, Space.Self);*/
+
+                    transform.Rotate(Vector3.right, xAmount, Space.Self);
+                    yAxis.transform.Rotate(Vector3.right, -xAmount, Space.Self);
 
                     break;
                 }
             case rotateDir.back:
                 {     
-                    weaveableObject.transform.Rotate(Vector3.right, -xAmount, Space.Self);
-                    weaveableObject.transform.Rotate(Vector3.forward, -zAmount, Space.Self);
+                    /*transform.Rotate(Vector3.right, -xAmount, Space.Self);
+                    yAxis.transform.Rotate(yAxis.transform.right, xAmount, Space.Self);
+                    transform.Rotate(Vector3.forward, -zAmount, Space.Self);
+                    yAxis.transform.Rotate(yAxis.transform.forward, zAmount, Space.Self);*/
+
+                    transform.Rotate(Vector3.right, -xAmount, Space.Self);
+                    yAxis.transform.Rotate(Vector3.right, xAmount, Space.Self);
                     
                     break;
                 }
