@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7549325288450014596}
   - component: {fileID: 4316409014812303782}
   - component: {fileID: 2457492075167711666}
+  - component: {fileID: 7784708129252056408}
   m_Layer: 19
   m_Name: MushroomLight
   m_TagString: LightObject
@@ -31,7 +32,8 @@ Transform:
   m_LocalPosition: {x: -0.025971282, y: 0.42464697, z: -0.043327346}
   m_LocalScale: {x: 0.43331313, y: 0.43331313, z: 0.43331313}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1504379519167142258}
   m_Father: {fileID: 7521553951694276243}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -46,7 +48,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.6367924, b: 0.93642145, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -154,6 +156,124 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTimedMushroom: 1
+--- !u!114 &7784708129252056408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4781615422072505299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fe6c5b28bf24781891514944f8e86cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spotAngleWeight: 1
+  overrideSpotAngle: 0
+  newSpotAngle: 90
+  profile: {fileID: 11400000, guid: c50eaaa71e0ac9f45a1e3a3e0fadcdac, type: 2}
+  lightVolume: {fileID: 3445358515784314827}
+  lightSource: {fileID: 4819536821983691010}
+--- !u!1 &8296620742465533717
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1504379519167142258}
+  - component: {fileID: 5781730625963467602}
+  - component: {fileID: 212919505875171084}
+  - component: {fileID: 3445358515784314827}
+  m_Layer: 0
+  m_Name: LightVolume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1504379519167142258
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8296620742465533717}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1284092689794961375}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &5781730625963467602
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8296620742465533717}
+  m_Mesh: {fileID: 0}
+--- !u!23 &212919505875171084
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8296620742465533717}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a85525db5405df1409aeb9b67961f4d4, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3445358515784314827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8296620742465533717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e259777ea7642874b9a61d4a2b29dd81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Profile: {fileID: 11400000, guid: c50eaaa71e0ac9f45a1e3a3e0fadcdac, type: 2}
+  m_DefaultMaterialAlpha: {fileID: 2100000, guid: a85525db5405df1409aeb9b67961f4d4, type: 2}
+  m_DefaultMaterialAdditive: {fileID: 2100000, guid: bd0dcfca16497a747ab0a0d0a1996d19, type: 2}
+  volumetricLight: {fileID: 7784708129252056408}
 --- !u!1001 &8064631962466328952
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -263,6 +383,8 @@ MonoBehaviour:
   lightOffDelay: 2
   arrayIndex: 0
   isActive: 0
+  hasStartDelay: 0
+  startDelayTime: 2
   Notes: Array Index should be the INDEX of the light in LIGHTARRAY in the LIGHTSOURCE
     OBJECT (is probably called LightsManager)
 --- !u!64 &5678369422608693632
