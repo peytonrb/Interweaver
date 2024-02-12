@@ -11,7 +11,6 @@ public class JumpAndDashScript : MonoBehaviour
     [Header("Jumping")]
     [SerializeField][Range(1, 10)] private float jumpForce = 3f;
     [SerializeField][Tooltip("Allows the weaver to jump forever instead of dash")] private bool infiniteJump;
-
     [Header("Dashing")]
     [SerializeField] private bool canDash;
     [SerializeField][Range(0f, 10f)] private float dashCooldown = 0.4f;
