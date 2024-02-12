@@ -15,6 +15,8 @@ public class WeaveController : MonoBehaviour
     [SerializeField] private LayerMask targetingLayerMask; // should be WeaveObject, Terrain, and Attachable Weave Object
     public LayerMask weaveableLayerMask;
     private Vector3 worldPosition;
+    private WeaveFXScript weaveFXScript;
+    private GameObject weaveSpawn;
 
     [Header("Audio")]
     [SerializeField] private AudioClip startWeaveClip;
@@ -31,6 +33,17 @@ public class WeaveController : MonoBehaviour
     {
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         weaveableManager = GameObject.FindWithTag("WeaveableManager").GetComponent<WeaveableManager>();
+        weaveFXScript = this.GetComponent<WeaveFXScript>();
+        weaveSpawn = this.transform.Find("WeaveSpawn").gameObject;
+    }
+
+    void Update()
+    {
+        // // THIS IS TEMPORARY UNTIL THE REST OF THE CODE IS IN - draws weave
+        // if (currentWeaveable != null)
+        // {
+        //     weaveFXScript.DrawWeave(weaveSpawn.transform.position, currentWeaveable.transform.position);
+        // }
     }
 
     // adjusts targeting arrow based on gamepad
@@ -112,11 +125,29 @@ public class WeaveController : MonoBehaviour
         // if weaveable is within range and can be woven...
         if (isValidWeaveable)
         {
-            // trigger vfx
-            // trigger audio
-            // disable targeting arrow
-            // set weave variables
+            isWeaving = true;
+            StartCoroutine(StartWeaveVFX());
+            InputManagerScript.instance.ControllerRumble(0.2f, 0f, 50f);
+            targetingArrow.SetActive(false);
         }
+    }
+
+    // triggers weave vfx and audio
+    IEnumerator StartWeaveVFX()
+    {
+        // VFX
+        weaveFXScript.ActivateWeave(currentWeaveable.transform);
+
+        // Audio
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startWeaveClip);
+
+        yield return new WaitForSeconds(.1f);
+        AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingIntroClip);
+
+        yield return new WaitForSeconds(.732f);
+        AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingLoopClip);
+
+        yield break;
     }
 
     // drop objects. does not uncombine objects.
