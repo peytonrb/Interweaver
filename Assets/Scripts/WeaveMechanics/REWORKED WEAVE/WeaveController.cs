@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class WeaveController : MonoBehaviour
 {
     [Header("Camera")]
@@ -15,8 +14,6 @@ public class WeaveController : MonoBehaviour
     [SerializeField] private LayerMask targetingLayerMask; // should be WeaveObject, Terrain, and Attachable Weave Object
     public LayerMask weaveableLayerMask;
     private Vector3 worldPosition;
-    private WeaveFXScript weaveFXScript;
-    private GameObject weaveSpawn;
 
     [Header("Audio")]
     [SerializeField] private AudioClip startWeaveClip;
@@ -33,17 +30,6 @@ public class WeaveController : MonoBehaviour
     {
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         weaveableManager = GameObject.FindWithTag("WeaveableManager").GetComponent<WeaveableManager>();
-        weaveFXScript = this.GetComponent<WeaveFXScript>();
-        weaveSpawn = this.transform.Find("WeaveSpawn").gameObject;
-    }
-
-    void Update()
-    {
-        // // THIS IS TEMPORARY UNTIL THE REST OF THE CODE IS IN - draws weave
-        // if (currentWeaveable != null)
-        // {
-        //     weaveFXScript.DrawWeave(weaveSpawn.transform.position, currentWeaveable.transform.position);
-        // }
     }
 
     // adjusts targeting arrow based on gamepad
@@ -53,9 +39,7 @@ public class WeaveController : MonoBehaviour
         if (lookDir.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(lookDir.x, lookDir.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
-
             targetingArrow.transform.rotation = Quaternion.Euler(0, targetAngle, 0);
-
             if (isWeaving)
             {
                 targetingArrow.SetActive(false);
@@ -78,12 +62,10 @@ public class WeaveController : MonoBehaviour
         targetingArrow.SetActive(true);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitData;
-
         if (Physics.Raycast(ray, out hitData, 1000, targetingLayerMask))
         {
             worldPosition = hitData.point;
         }
-
         Vector3 AdjustedVector = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
         targetingArrow.transform.LookAt(AdjustedVector);
     }
@@ -100,7 +82,7 @@ public class WeaveController : MonoBehaviour
             RaycastHit hitInfo;
 
             // check for Weaveable object within range of BoxCast - adjust width of boxcast if necessary
-            if (Physics.BoxCast(transform.position, transform.localScale, targetingArrow.transform.forward, out hitInfo, 
+            if (Physics.BoxCast(transform.position, transform.localScale, targetingArrow.transform.forward, out hitInfo,
                                 transform.rotation, weaveDistance, weaveableLayerMask))
             {
                 currentWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
@@ -112,7 +94,6 @@ public class WeaveController : MonoBehaviour
             // screen to point raycast using mouse position
             Ray rayPlayer = new Ray(transform.position, targetingArrow.transform.forward);
             RaycastHit hitInfo;
-
             // checks for a Weavable object within distance of Ray
             if (Physics.Raycast(rayPlayer, out hitInfo, weaveDistance, weaveableLayerMask))
             {
@@ -125,29 +106,12 @@ public class WeaveController : MonoBehaviour
         // if weaveable is within range and can be woven...
         if (isValidWeaveable)
         {
-            isWeaving = true;
-            StartCoroutine(StartWeaveVFX());
-            InputManagerScript.instance.ControllerRumble(0.2f, 0f, 50f);
-            targetingArrow.SetActive(false);
+            Debug.Log("here");
+            // trigger vfx
+            // trigger audio
+            // disable targeting arrow
+            // set weave variables
         }
-    }
-
-    // triggers weave vfx and audio
-    IEnumerator StartWeaveVFX()
-    {
-        // VFX
-        weaveFXScript.ActivateWeave(currentWeaveable.transform);
-
-        // Audio
-        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startWeaveClip);
-
-        yield return new WaitForSeconds(.1f);
-        AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingIntroClip);
-
-        yield return new WaitForSeconds(.732f);
-        AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingLoopClip);
-
-        yield break;
     }
 
     // drop objects. does not uncombine objects.
