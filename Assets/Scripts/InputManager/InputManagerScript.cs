@@ -604,5 +604,28 @@ public class InputManagerScript : MonoBehaviour
                 break;
         }
     }
+
+    public void OnStagAltFamiliarInteract(InputValue input)
+    {
+        bool isPressed = input.isPressed;
+        switch (familiarEnums)
+        {
+            case myEnums.Owl: 
+                break;
+            case myEnums.Mole:
+                break;
+            case myEnums.Stag:
+                StagSwapScript stagSwapScript = familiar.GetComponent<StagSwapScript>();
+                if (isPressed && Time.timeScale != 0)
+                {
+                    StartCoroutine(stagSwapScript.ChargeSwap());
+                }
+                else
+                {
+                    stagSwapScript.DoSwap();
+                }
+                break;
+        }
+    }
     #endregion//******************************************************
 }
