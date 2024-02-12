@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
     private LayerMask targetingLayerMask;
     public bool isDead = false;
     [SerializeField]
-    private float deathTimer = 3.0f
+    private float deathTimer = 1.16f
 ;
 
     //new variables
