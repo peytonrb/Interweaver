@@ -83,14 +83,13 @@ public class WeaveController : MonoBehaviour
 
         if (isGamepad)
         {
-            // do boxcast in controller targeted direction
+            // boxcast in controller targeted direction
             RaycastHit hitInfo;
 
             // check for Weaveable object within range of BoxCast - adjust width of boxcast if necessary
             if (Physics.BoxCast(transform.position, transform.localScale, targetingArrow.transform.forward, out hitInfo, 
                                 transform.rotation, weaveDistance, weaveableLayerMask))
             {
-                //Debug.Log("Raycast hit");
                 currentWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
                 isValidWeaveable = true;
             }
@@ -104,12 +103,13 @@ public class WeaveController : MonoBehaviour
             // checks for a Weavable object within distance of Ray
             if (Physics.Raycast(rayPlayer, out hitInfo, weaveDistance, weaveableLayerMask))
             {
-                // Debug.Log("Raycast hit");
                 currentWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
                 isValidWeaveable = true;
             }
         }
 
+        // up to here is working for both k&m and controller
+        // if weaveable is within range and can be woven...
         if (isValidWeaveable)
         {
             // trigger vfx
