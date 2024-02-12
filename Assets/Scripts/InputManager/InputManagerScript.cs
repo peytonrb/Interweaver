@@ -146,7 +146,7 @@ public class InputManagerScript : MonoBehaviour
                 }
                 else
                 {
-                    weaveController.WeaveObject();
+                    weaveController.WeaveObject(isGamepad);
                 }
             }
         }
