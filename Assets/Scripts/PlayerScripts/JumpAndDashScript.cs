@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class JumpAndDashScript : MonoBehaviour
 {
+    [Header("Animation")]
+    [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
+
     [Header("References")]
     private MovementScript movementScript;
     private CharacterController characterController;
@@ -63,6 +66,8 @@ public class JumpAndDashScript : MonoBehaviour
             }
             movementScript.active = false;
             canDash = false;
+            characterAnimationHandler.ToggleDashAnim(true);
+            
             EnableDashVFX();
             StartCoroutine(Dash());
         }
@@ -95,6 +100,7 @@ public class JumpAndDashScript : MonoBehaviour
 
         StartCoroutine(DashCooldown());
         movementScript.active = true;
+        characterAnimationHandler.ToggleDashAnim(false);
         DisableDashVFX();
     }
 
