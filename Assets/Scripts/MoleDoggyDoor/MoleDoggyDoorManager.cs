@@ -9,6 +9,7 @@ public class MoleDoggyDoorManager : MonoBehaviour
     private MoleDoggyDoorScript exitdoor;
     private GameObject mole;
     private MovementScript moleMovementScript;
+    private CharacterController moleCharacterController;
     public float enterExitSpeed;
     private float exitfinalposition;
     private bool foundexitdoor;
@@ -22,6 +23,7 @@ public class MoleDoggyDoorManager : MonoBehaviour
         mdds = GetComponentsInChildren<MoleDoggyDoorScript>();
         mole = GameObject.FindGameObjectWithTag("Familiar");
         moleMovementScript = mole.GetComponent<MovementScript>();
+        moleCharacterController = mole.GetComponent<CharacterController>();
         foundexitdoor = false;
         phase = 0;
     }
@@ -32,6 +34,7 @@ public class MoleDoggyDoorManager : MonoBehaviour
         if (phase == 1 || phase == 2) {
             MoleExitDoor(entrancedoor);
         }
+        //Debug.Log("phase = " + phase);
     }
 
     public void MoveMoleInDirection(int direction, float finalposition, MoleDoggyDoorScript thismoledoorscript) {
@@ -97,6 +100,7 @@ public class MoleDoggyDoorManager : MonoBehaviour
                             //End mole enter exit transition
                             moleMovementScript.ToggleCanMove(true);
                             moleMovementScript.ToggleCanLook(true);
+                            moleCharacterController.enabled = true;
                             thismoledoorscript.ResetThisDoor();
                             phase = 0;
                             foundexitdoor = false;
@@ -110,6 +114,7 @@ public class MoleDoggyDoorManager : MonoBehaviour
                             //End mole enter exit transition
                             moleMovementScript.ToggleCanMove(true);
                             moleMovementScript.ToggleCanLook(true);
+                            moleCharacterController.enabled = true;
                             thismoledoorscript.ResetThisDoor();
                             phase = 0;
                             foundexitdoor = false;
@@ -123,6 +128,7 @@ public class MoleDoggyDoorManager : MonoBehaviour
                             //End mole enter exit transition
                             moleMovementScript.ToggleCanMove(true);
                             moleMovementScript.ToggleCanLook(true);
+                            moleCharacterController.enabled = true;
                             thismoledoorscript.ResetThisDoor();
                             phase = 0;
                             foundexitdoor = false;
@@ -136,6 +142,7 @@ public class MoleDoggyDoorManager : MonoBehaviour
                             //End mole enter exit transition
                             moleMovementScript.ToggleCanMove(true);
                             moleMovementScript.ToggleCanLook(true);
+                            moleCharacterController.enabled = true;
                             thismoledoorscript.ResetThisDoor();
                             phase = 0;
                             foundexitdoor = false;
@@ -157,28 +164,30 @@ public class MoleDoggyDoorManager : MonoBehaviour
                     //This moves the mole to the new door.
                     switch (mdds[i].rotationState) {
                         case 1:
-                            mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y-1.5f,mdds[i].gameObject.transform.position.z);
-                            
+                            mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y,mdds[i].gameObject.transform.position.z);
+                            Debug.Log(mole.transform.position);
                             phase = 1;
                             thismoledoorscript.ResetThisDoor();
                         break;
                         case 2:
-                            mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y-1.5f,mdds[i].gameObject.transform.position.z);
+                            mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y,mdds[i].gameObject.transform.position.z);
                             
                             phase = 1;
                             thismoledoorscript.ResetThisDoor();
                         break;
 
                         case 3:
-                            mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y-1.5f,mdds[i].gameObject.transform.position.z);
+                            mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y,mdds[i].gameObject.transform.position.z);
                             
                             phase = 1;
                             thismoledoorscript.ResetThisDoor();
                         break;
 
                         case 4:
-                            mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y-1.5f,mdds[i].gameObject.transform.position.z);
-                            
+                            mole.transform.position = new Vector3(mdds[i].gameObject.transform.position.x,mdds[i].gameObject.transform.position.y,mdds[i].gameObject.transform.position.z);
+                            Debug.Log("mole position = " + mole.transform.position);
+                            Debug.Log("MDD position = " + mdds[i].gameObject.transform.position);
+                            Debug.Log(mdds[i].gameObject.name);
                             phase = 1;
                             thismoledoorscript.ResetThisDoor();
                         break;
@@ -194,7 +203,7 @@ public class MoleDoggyDoorManager : MonoBehaviour
                 for (int i = 0; i < mdds.Length; i++) {
                     if (mdds[i] != entrancemoledoor) {
                         exitdoor = mdds[i];
-
+                        Debug.Log("exit door is " + exitdoor.gameObject.name);
                         BoxCollider[] bc = mdds[i].gameObject.GetComponents<BoxCollider>();
                         for (int x = 0; x < bc.Length; x++) {
                             bc[x].enabled = false;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LightSourceScript : MonoBehaviour
 {
@@ -8,22 +9,25 @@ public class LightSourceScript : MonoBehaviour
 
     [Header("Variables")]
     [CannotBeNullObjectField] public Transform playerTransform;
-    public LayerMask obstructionView;
     private bool lightsOn;
     private float lightMaxDistance;
-    private Light lightStuff;
-    [System.Serializable] public struct LightData
+    private Collider lightDataCollider;
+    private bool hasInvoked;
+    [System.Serializable]
+    public struct LightData
     {
         public Light lightSource;
-        [Range (0,40)] public float maxDistance;
+        [Range(0, 40)] public float maxDistance;
         public Collider lightCollider;
         public bool isOn;
     }
 
     public LightData[] lightsArray;
 
+    public UnityEvent triggerEvent, triggerEvent2;
     void Awake()
     {
+        hasInvoked = false;
         if (Instance == null)
         {
             Instance = this;
@@ -36,48 +40,56 @@ public class LightSourceScript : MonoBehaviour
 
     void Update()
     {
-        BatchRaycastInfoForLights(); 
-
-        if(lightsOn) 
-        {
-            BatchRaycastForLights(lightMaxDistance, lightStuff);
-        }
+        BatchCollisionDetection();
     }
 
-    void BatchRaycastInfoForLights() //will need to make this better so that it doesn't happen every frame, kind of cringe ngl
+    void BatchCollisionDetection() //will need to make this better so that it doesn't happen every frame, kind of cringe ngl
     {
-        
-        foreach (LightData lightData in lightsArray)
-        {
-            Light lightSource = lightData.lightSource; //this is from the public struct
+        bool playerIsNowSafe = false;
 
-            float maxDistance = lightData.maxDistance; //also from the public struct
-            
+        for (int i = 0; i < lightsArray.Length; i++)
+        {
+            Light lightSource = lightsArray[i].lightSource; //this is from the public struct
+
+            float maxDistance = lightsArray[i].maxDistance; //also from the public struct
+
+            lightDataCollider = lightsArray[i].lightCollider;
+
             lightSource.range = maxDistance;
 
-            lightsOn = lightData.isOn;
+            lightsOn = lightsArray[i].isOn;
 
+            if ((lightDataCollider.bounds.Contains(playerTransform.position)) && (lightDataCollider != null) && (lightsOn))
+            {
+                Debug.Log("this is the collider that yoinked it: " + lightDataCollider.gameObject.name);
+                playerIsNowSafe = true;
+                hasInvoked = false;
+                break;
+            }
+           
+        }
 
-            BatchRaycastForLights(maxDistance, lightSource);
+        if ((playerIsNowSafe) && (!hasInvoked))
+        {
+            MakePlayerSafe();
+            hasInvoked = true;
+        }
+
+        else if ((!playerIsNowSafe) && (hasInvoked))
+        {
+            MakePlayerDie();
+            hasInvoked = false;
         }
     }
-    void BatchRaycastForLights(float Distance, Light pointLight)
+
+
+    void MakePlayerSafe()
     {
-        lightMaxDistance = Distance;
-        lightStuff = pointLight;
-        if (lightsOn)
-        {
-            Vector3 directionToPlayer = playerTransform.position - lightStuff.transform.position;
-            //the batch raycast from all light sources in the array will point towards the player and will do somehing if the object between the player and the  light source if it has the layer
-            RaycastHit[] hits = Physics.RaycastAll(lightStuff.transform.position, directionToPlayer, lightMaxDistance, obstructionView);
+        triggerEvent.Invoke();
+    }
 
-            //Debug.DrawRay(lightStuff.transform.position, directionToPlayer * lightMaxDistance / 2f, Color.green);
-
-            foreach (RaycastHit hit in hits)
-            {
-                //inside this logic this can be used for obstructing the view if there is an object with the obstruction layer
-                Debug.Log("Light source: " + lightStuff.name + " - Obstruction by: " + hit.collider.gameObject.name);
-            }
-        }
+    void MakePlayerDie()
+    {
+        triggerEvent2.Invoke();
     }
 }

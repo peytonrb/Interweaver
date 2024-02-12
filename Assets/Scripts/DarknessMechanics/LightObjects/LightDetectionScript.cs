@@ -76,18 +76,18 @@ public class LightDetectionScript : MonoBehaviour
         }
 
         // if light hits player
-        if (collider.gameObject.tag == "Player")
-        {
-            if ((isTimedMushroom && this.gameObject.transform.parent.GetComponent<TimedGlowMushroomsScript>().isActive) 
-                 || !isTimedMushroom)
-            {
-                collider.GetComponent<DarknessMechanicScript>().isSafe = true;
-            }
-            else if (isTimedMushroom && !this.gameObject.transform.parent.GetComponent<TimedGlowMushroomsScript>().isActive)
-            {
-                collider.GetComponent<DarknessMechanicScript>().isSafe = false;
-            }
-        }
+        //if (collider.gameObject.tag == "Player")
+        //{
+        //    if ((isTimedMushroom && this.gameObject.transform.parent.GetComponent<TimedGlowMushroomsScript>().isActive) 
+        //         || !isTimedMushroom)
+        //    {
+        //        collider.GetComponent<DarknessMechanicScript>().isSafe = true;
+        //    }
+        //    else if (isTimedMushroom && !this.gameObject.transform.parent.GetComponent<TimedGlowMushroomsScript>().isActive)
+        //    {
+        //        collider.GetComponent<DarknessMechanicScript>().isSafe = false;
+        //    }
+        //}
     }
 
     public void OnTriggerExit(Collider collision)
