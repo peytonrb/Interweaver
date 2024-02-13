@@ -6,9 +6,9 @@ using UnityEngine;
 public class RespawnController : MonoBehaviour
 {
     [CannotBeNullObjectField] public List<GameObject> shieldPuzzleWeaveables;
-    public List<GameObject> myRespawnables;
-     private List<Vector3> startPositions;
-     private List<Quaternion> startRotations;
+     public List<GameObject> myRespawnables;
+    [HideInInspector] public List<Vector3> startPositions;
+    [HideInInspector] public List<Quaternion> startRotations;
 
      private bool AutoAssignMyWeavables = true;
 
@@ -45,6 +45,7 @@ public class RespawnController : MonoBehaviour
             {
                 startPositions.Add(obj.transform.position);
                 startRotations.Add(obj.transform.rotation);
+                Debug.Log("fuck Dean");
             }
         //}
         
