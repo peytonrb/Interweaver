@@ -40,16 +40,27 @@ public class MoleDigScript : MonoBehaviour
     void Update()
     {
         Debug.DrawRay(transform.position, -transform.up, Color.red);
-        if (startedToDig)
+
+        if ((startedToDig))
         {
             if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer))
             {
-                transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+                boxCollider = hitLayer.collider;
             }
-            else
+
+            if ((!boxCollider.gameObject.CompareTag("Dirt Pillar")))
             {
-                transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 5.0f);
+
+                if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer))
+                {
+                    transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+                }
+                else
+                {
+                    transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 5.0f);
+                }
             }
+
         }
     }
 
@@ -57,13 +68,16 @@ public class MoleDigScript : MonoBehaviour
 
     public void DigPressed()
     {
-        //casts a raycast from the player to the ground to check if they are on a digable layer and then ignores the collision
+        //casts a raycast from the player to the ground to check if they are on a digable layer and then ignores the collision,
+        //this also includes the dirt pillar tag
         //of that specific layer so then it can walk through the pillar of dirt
         if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && !startedToDig && !coolDown)
         {
+            boxCollider = hitLayer.collider;
             if (!hitLayer.collider.gameObject.CompareTag("Dirt Pillar")) // cannae allow diggin' when we're ontop a dirt pillar
             {
                 ActualDigging();
+                AnimationForDiggingDown();
             }
             else
             {
@@ -77,20 +91,14 @@ public class MoleDigScript : MonoBehaviour
         else if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && startedToDig && !coolDown)
         {
             Debug.Log("we got out bois");
-
+            //checking the mole in other colliders and if it's a dirt pillar tag, it goes up
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, 0f, digableLayer);
             foreach (Collider hitCollider in hitColliders)
             {
                 transform.position = new Vector3(transform.position.x, hitCollider.bounds.max.y, transform.position.z);
             }
 
-            //animation here
-            characterAnimationHandler.ToggleSurfaceAnim();
-            
-            Debug.Log("Dug out " + animLength);
-            
-            startedToDig = false;
-            StartCoroutine(DiggingOut(animLength));
+            AnimationForDiggingUp();
 
             coolDown = true;
             ResetCollisionsWithTag(tagToIgnore);
@@ -101,19 +109,22 @@ public class MoleDigScript : MonoBehaviour
         }
     }
 
-    public void ActualDigging()
+
+    public void MakePillarsDiggable()
+    {
+        IgnoreCollisionsWithTag(tagToIgnore);
+    }
+
+    #region//ANIMATION,ENUMS, AND METHOD FOR DIGGING
+    //******************************************
+    public void ActualDigging() //the actual digging and staying on the dirt layer
     {
         Debug.Log("we're digging bois");
         startedToDig = true;
-        
-        targetPosition = new Vector3(hitLayer.point.x, hitLayer.point.y, hitLayer.point.z);
-
-        //animation here
-        characterAnimationHandler.ToggleBurrowAnim();
-
-        Debug.Log("Dug in " + animLength);
-
-        StartCoroutine(StartDigging(animLength));
+        if ((!boxCollider.gameObject.CompareTag("Dirt Pillar")))
+        {
+            targetPosition = new Vector3(hitLayer.point.x, hitLayer.point.y, hitLayer.point.z);
+        }
 
         coolDown = true;
         MakePillarsDiggable();
@@ -123,13 +134,25 @@ public class MoleDigScript : MonoBehaviour
         movementScript.enabled = false;
         Invoke("ResetCooldown", 3.0f);
     }
-
-    public void MakePillarsDiggable()
+    public void AnimationForDiggingDown()
     {
-        IgnoreCollisionsWithTag(tagToIgnore);
+        //animation here
+        characterAnimationHandler.ToggleBurrowAnim();
+
+        Debug.Log("Dug in " + animLength);
+
+        StartCoroutine(StartDigging(animLength));
     }
+    public void AnimationForDiggingUp()
+    {
+        //animation here
+        characterAnimationHandler.ToggleSurfaceAnim();
 
+        Debug.Log("Dug out " + animLength);
 
+        startedToDig = false;
+        StartCoroutine(DiggingOut(animLength));
+    }
     IEnumerator StartDigging(float animLength)
     {
         yield return new WaitForSeconds(animLength);
@@ -140,11 +163,15 @@ public class MoleDigScript : MonoBehaviour
     IEnumerator DiggingOut(float animLength)
     {
         borrowed = false;
-        yield return new WaitForSeconds(animLength); 
+        yield return new WaitForSeconds(animLength);
         //animation here so then it can play after it's on top of a pillar
         Debug.Log("waited for " + animLength);
     }
+    //******************************************
+    #endregion
 
+    #region//METHOD FOR IGNORING COLLISION WITH TAG/ RESET COLLISION
+    //************************************
     void IgnoreCollisionsWithTag(List<string> tag)
     {
         List<Collider> collidersToIgnore = new List<Collider>();
@@ -200,20 +227,22 @@ public class MoleDigScript : MonoBehaviour
             Physics.IgnoreCollision(GetComponent<Collider>(), colliderToIgnore, false);
         }
     }
-
+    //************************************
+    #endregion
     IEnumerator BurrowDownPillar()
     {
+        AnimationForDiggingDown();
         yield return new WaitForFixedUpdate();
         while (!characterController.isGrounded)
         {
             yield return null;
         }
         movementScript.active = true;
-        ActualDigging(); 
+        ActualDigging();
 
     }
 
-    
+
     void ResetCooldown()
     {
         movementScript.enabled = true;
