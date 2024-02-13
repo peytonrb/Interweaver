@@ -7,6 +7,7 @@ public class MolePillarScript : MonoBehaviour
 {
     [Header("References")]
     private MovementScript movementScript;
+    private FamiliarScript familiarScript;
     private MoleDigScript moleDigScript;
     [SerializeField] private GameObject dirtPillar;
     public List<GameObject> pillarList = new List<GameObject>();
@@ -31,6 +32,7 @@ public class MolePillarScript : MonoBehaviour
     {
         movementScript = GetComponent<MovementScript>();
         moleDigScript = GetComponent<MoleDigScript>();
+        familiarScript = GetComponent<FamiliarScript>();
         
     }
 
@@ -73,7 +75,7 @@ public class MolePillarScript : MonoBehaviour
 
     public void RaisePillar()
     {
-        if ((!riseInputPressed || !moleDigScript.borrowed) && !movementScript.active) // if input isn't currently being pressed or we've stopped digging for whatever reason
+        if (!riseInputPressed || !moleDigScript.borrowed || !familiarScript.myTurn) // if input isn't currently being pressed or we've stopped digging for whatever reason
         {
             PillarRiseEnd();
         }
@@ -109,7 +111,7 @@ public class MolePillarScript : MonoBehaviour
 
     public void LowerPillar()
     {
-        if ((!lowerInputPressed || !moleDigScript.borrowed) && !movementScript.active)
+        if (!lowerInputPressed || !moleDigScript.borrowed || !familiarScript.myTurn)
         {
             PillarLowerEnd();
         }
