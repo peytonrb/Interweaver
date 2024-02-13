@@ -16,9 +16,13 @@ public class SpiderBossScript : MonoBehaviour
             toggleState = PlayerPrefs.GetInt("ArachnophobiaToggleState");
         }
         if (toggleState == 0) {
+            arachnophobiaBoss.SetActive(false);
+            defaultBoss.SetActive(true);
             arachnophobiaSetting = false;   
         }
         else {
+            arachnophobiaBoss.SetActive(true);
+            defaultBoss.SetActive(false);
             arachnophobiaSetting = true;
         }
     }
@@ -42,16 +46,14 @@ public class SpiderBossScript : MonoBehaviour
     public void ToggleArachnophobia(bool toggleOn) {
         //If true, changes game object to arachnophobia boss.
         if (toggleOn) {
-            Instantiate(arachnophobiaBoss,transform.position,Quaternion.identity);
-            //PlayerPrefs.SetInt("ArachnophobiaToggleState",1);
-            Debug.Log("Changed " + arachnophobiaSetting);
-            Destroy(gameObject);
+            arachnophobiaBoss.SetActive(true);
+            defaultBoss.SetActive(false);
+            arachnophobiaSetting = true;
         }
         else {
-            Instantiate(defaultBoss,transform.position,Quaternion.identity);
-            //PlayerPrefs.SetInt("ArachnophobiaToggleState",0);
-            Debug.Log("Changed " + arachnophobiaSetting);
-            Destroy(gameObject);
+            arachnophobiaBoss.SetActive(false);
+            defaultBoss.SetActive(true);
+            arachnophobiaSetting = false;
         }
     }
 }

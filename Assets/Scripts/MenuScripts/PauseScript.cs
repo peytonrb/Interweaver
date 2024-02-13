@@ -279,13 +279,12 @@ public class PauseScript : MonoBehaviour
         }
     }
 
-    public void AdjustArachnophobia(bool settingOn) {
-        if (settingOn == false) {
+    public void AdjustArachnophobia() {
+        if (arachnophobiaToggle.isOn == false) {
             PlayerPrefs.SetInt("ArachnophobiaToggleState",0);
             if (spiderBoss != null) {
                 SpiderBossScript spiderboss = spiderBoss.GetComponent<SpiderBossScript>();
                 spiderboss.ToggleArachnophobia(false);
-                Debug.Log("Arachnophobia turned off");
             }
         }
         else {
