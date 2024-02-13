@@ -12,7 +12,7 @@ public class MoleDigScript : MonoBehaviour
     [Header("Variables")]
     [CannotBeNullObjectField] public GameObject familiar;
     public LayerMask digableLayer;
-    [HideInInspector] public float castDistance;
+    public float castDistance;
     [HideInInspector] public bool startedToDig; // true when digging begins, false when digging has stopped  
     [HideInInspector] public bool borrowed; // different from startedToDig, this means the most is full submerged
     private Collider boxCollider;
