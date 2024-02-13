@@ -533,6 +533,7 @@ public class InputManagerScript : MonoBehaviour
 
                 if (isPressed && moleDigScript.borrowed && Time.timeScale != 0)
                 {
+                    Debug.Log("Pressed");
                     molePillarScript.riseInputPressed = true;
                     molePillarScript.lowerInputPressed = false;
                     molePillarScript.DeployPillar();
@@ -541,6 +542,7 @@ public class InputManagerScript : MonoBehaviour
                 }
                 else
                 {
+                    Debug.Log("Removed");
                     molePillarScript.riseInputPressed = false;
                 }
                 break;
