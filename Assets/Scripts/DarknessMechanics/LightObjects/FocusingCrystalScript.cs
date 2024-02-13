@@ -9,11 +9,14 @@ public class FocusingCrystalScript : MonoBehaviour
     private VisualEffect beamEffect;
     private CapsuleCollider lightCollider;
     private GameObject beamHitObj;
+    private Light spotLight;
 
     void Start()
     {
         beamEffect = this.gameObject.GetComponent<VisualEffect>();
         lightCollider = this.gameObject.GetComponent<CapsuleCollider>();
+        spotLight = this.transform.GetChild(0).GetComponent<Light>();
+        spotLight.range = 0f;
     }
 
     void Update()
@@ -36,11 +39,12 @@ public class FocusingCrystalScript : MonoBehaviour
             // calculates hit position & object
             if (Physics.Raycast(spawnPoint, transform.TransformDirection(Vector3.forward), out hit, 100000f))
             {
-                Debug.DrawRay(this.gameObject.transform.position, transform.TransformDirection(Vector3.forward) * 100, 
-                              Color.red);
+                //Debug.DrawRay(this.gameObject.transform.position, transform.TransformDirection(Vector3.forward) * 100, 
+                //              Color.red);
                 Vector3 hitPosition = hit.point;
                 beamHitObj = hit.collider.gameObject;
                 float distance = Vector3.Distance(spawnPoint, hitPosition);
+                spotLight.range = distance + 2f;
                 distance /= 1.35f; // man idk. it works tho.
 
                 if (distance > 1f)
@@ -58,6 +62,7 @@ public class FocusingCrystalScript : MonoBehaviour
             center.z = 0;
             lightCollider.center = center;
             lightCollider.height = 7f;
+            spotLight.range = 0f;
         }
     }
 

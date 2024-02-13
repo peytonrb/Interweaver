@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
+using Sparrow.VolumetricLight;
 
 public class LightCrystalScript : MonoBehaviour
 {
     public bool isActive;
     public int arrayIndex;
-    public float brightness = 4f;
+    public float brightness = 0.3f;
     public bool isWeaveable = true;
-    [TextArea]
-    [SerializeField]
-    private string Notes = "Array Index should be the INDEX of the light in LIGHTARRAY "
-                         + "in the LightsManager";
+    [TextArea] [SerializeField] private string Notes = "Array Index should be the INDEX of the light in LIGHTARRAY "
+                                                     + "in the LightsManager";
     [Header("Focusing Crystals")]
     public bool isFocusingCrystal;
     private VisualEffect beamEffect;
@@ -54,7 +53,7 @@ public class LightCrystalScript : MonoBehaviour
         else if (isActive && isFocusingCrystal)
         {
             beamEffect.Play();
-            crystalLight.intensity = brightness;
+            TurnLightOn();
         }
     }
 
@@ -75,11 +74,11 @@ public class LightCrystalScript : MonoBehaviour
 
     IEnumerator TurnLightOn()
     {
-        // turns on beam - add better vfx
+        // turns on beam
         if (isFocusingCrystal)
         {
             // temp vfx code for testing
-            if (startEffect != null)
+            if (startEffect != null) // keep this block after testing
             {
                 startEffect.Play();
                 startEffect.gameObject.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
@@ -108,10 +107,11 @@ public class LightCrystalScript : MonoBehaviour
 
     IEnumerator TurnLightOff()
     {
-        // turns off beam - add better vfx
+        // turns off beam
         if (isFocusingCrystal)
         {
-            if (startEffect != null)
+            // temp vfx code for testing
+            if (startEffect != null) // keep this block after testing
             {
                 startEffect.Play();
                 startEffect.gameObject.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
@@ -132,6 +132,7 @@ public class LightCrystalScript : MonoBehaviour
 
         while (end >= Time.time)
         {
+
             crystalLight.intensity = Mathf.Lerp(currentBrightness, 0f, (Time.time - start) / 2f);
             yield return null;
         }
