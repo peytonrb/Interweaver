@@ -9,6 +9,9 @@ public class WyvernBossManager : MonoBehaviour
     private GameObject stag;
     private FamiliarScript familiarScript;
     private Rigidbody rb;
+    public GameObject fireball;
+    [SerializeField] private float fireballtimer;
+    private float startingFireballTimer;
 
     // Start is called before the first frame update
     void Start()
@@ -17,6 +20,8 @@ public class WyvernBossManager : MonoBehaviour
         stag = GameObject.FindGameObjectWithTag("Familiar");
         familiarScript = stag.GetComponent<FamiliarScript>();
         rb = GetComponent<Rigidbody>();
+
+        startingFireballTimer = fireballtimer;
 
     }
 
@@ -28,7 +33,18 @@ public class WyvernBossManager : MonoBehaviour
         }
         else {
             transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
+            if (fireballtimer > 0) {
+                fireballtimer -= Time.deltaTime;
+            }
+            else {
+                ThrowFireball();
+                fireballtimer = startingFireballTimer;
+            }
         }
+    }
+
+    void ThrowFireball() {
+        Instantiate(fireball,transform.position,Quaternion.identity);
     }
 
     void OnCollisionEnter(Collision other) {
