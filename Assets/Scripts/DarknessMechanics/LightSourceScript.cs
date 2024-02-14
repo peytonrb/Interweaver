@@ -55,7 +55,7 @@ public class LightSourceScript : MonoBehaviour
 
             lightDataCollider = lightsArray[i].lightCollider;
 
-            lightSource.range = maxDistance;
+            //lightSource.range = maxDistance;
 
             lightsOn = lightsArray[i].isOn;
 
