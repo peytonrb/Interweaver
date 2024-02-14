@@ -6,6 +6,7 @@ using UnityEngine;
 public class WyvernBossManager : MonoBehaviour
 {
     private GameObject weaver;
+    private PlayerController playercontroller;
     private GameObject stag;
     private FamiliarScript familiarScript;
     private Rigidbody rb;
@@ -19,6 +20,7 @@ public class WyvernBossManager : MonoBehaviour
         weaver = GameObject.FindGameObjectWithTag("Player");
         stag = GameObject.FindGameObjectWithTag("Familiar");
         familiarScript = stag.GetComponent<FamiliarScript>();
+        playercontroller = weaver.GetComponent<PlayerController>();
         rb = GetComponent<Rigidbody>();
 
         startingFireballTimer = fireballtimer;
@@ -37,7 +39,9 @@ public class WyvernBossManager : MonoBehaviour
                 fireballtimer -= Time.deltaTime;
             }
             else {
-                ThrowFireball();
+                if (!playercontroller.isDead) {
+                    ThrowFireball();
+                }
                 fireballtimer = startingFireballTimer;
             }
         }
