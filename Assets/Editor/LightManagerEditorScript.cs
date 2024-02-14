@@ -32,5 +32,9 @@ public class LightManagerEditorScript : Editor
         {
             lightSourceScript.SearchSpiderLights();
         }
+        if (GUILayout.Button("This adds all the other lights that don't have scripts"))
+        {
+            lightSourceScript.SearchOtherLights();
+        }
     }
 }

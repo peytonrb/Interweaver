@@ -16,6 +16,7 @@ public class LightSourceScript : MonoBehaviour
     private string timedGlowMusroom = "TimedGlowMushroomsScript";
     private string lightCrystals = "LightCrystalScript";
     private string staticSpiderLights = "SpiderLightsMechanic";
+    private string prefabName = "TorchLight";
     [System.Serializable]
     public struct LightData
     {
@@ -84,6 +85,9 @@ public class LightSourceScript : MonoBehaviour
             hasInvoked = false;
         }
     }
+
+    #region// SEARCHES THE LIGHTS THAT HAS SCRIPTS AND THEN ADDS THEM TO THE LIST
+    //***********************************************************
     public void SearchLightCrystals()
     {
         MonoBehaviour[] scriptInstances = FindObjectsOfType<MonoBehaviour>();
@@ -154,6 +158,24 @@ public class LightSourceScript : MonoBehaviour
         }
     }
 
+    public void SearchOtherLights()
+    {
+        GameObject[] otherLights = FindObjectsOfType<GameObject>();
+        foreach (GameObject otherLight in otherLights) 
+        {
+            if (otherLight.name == prefabName)
+            {
+                LightData newLightdata = new LightData();
+                newLightdata.lightSource = otherLight.GetComponent<Light>();
+                newLightdata.lightCollider = otherLight.GetComponent<Collider>();
+                newLightdata.isOn = true;
+                lightsArray.Add(newLightdata);
+                Debug.Log("Found " + lightsArray.Count + " items with script '" + prefabName + "'.");
+            }
+        }
+    }
+    //***********************************************************
+    #endregion
     void MakePlayerSafe()
     {
         triggerEvent.Invoke();
