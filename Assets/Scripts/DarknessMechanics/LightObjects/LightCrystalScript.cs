@@ -62,12 +62,16 @@ public class LightCrystalScript : MonoBehaviour
         // sets value in darkness struct depending on isActive variable
         if (isActive && !LightSourceScript.Instance.lightsArray[arrayIndex].isOn)
         {
-            LightSourceScript.Instance.lightsArray[arrayIndex].isOn = true;
+            var lightData = LightSourceScript.Instance.lightsArray[arrayIndex];
+            lightData.isOn = true;
+            LightSourceScript.Instance.lightsArray[arrayIndex] = lightData;
             StartCoroutine(TurnLightOn());
         }
         else if (!isActive && LightSourceScript.Instance.lightsArray[arrayIndex].isOn)
         {
-            LightSourceScript.Instance.lightsArray[arrayIndex].isOn = false;
+            var lightData = LightSourceScript.Instance.lightsArray[arrayIndex];
+            lightData.isOn = false;
+            LightSourceScript.Instance.lightsArray[arrayIndex] = lightData;
             StartCoroutine(TurnLightOff());
         }
     }

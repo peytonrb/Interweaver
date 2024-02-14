@@ -22,7 +22,7 @@ public class LightSourceScript : MonoBehaviour
         public bool isOn;
     }
 
-    public LightData[] lightsArray;
+    public List <LightData> lightsArray = new List<LightData>();
 
     public UnityEvent triggerEvent, triggerEvent2;
     void Awake()
@@ -47,7 +47,7 @@ public class LightSourceScript : MonoBehaviour
     {
         bool playerIsNowSafe = false;
 
-        for (int i = 0; i < lightsArray.Length; i++)
+        for (int i = 0; i < lightsArray.Count; i++)
         {
             Light lightSource = lightsArray[i].lightSource; //this is from the public struct
 

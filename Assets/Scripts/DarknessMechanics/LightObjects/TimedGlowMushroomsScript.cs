@@ -36,7 +36,9 @@ public class TimedGlowMushroomsScript : MonoBehaviour
 
     IEnumerator WaitToStart()
     {
-        LightSourceScript.Instance.lightsArray[arrayIndex].isOn = false;
+       var lightData = LightSourceScript.Instance.lightsArray[arrayIndex];
+        lightData.isOn = false;
+        LightSourceScript.Instance.lightsArray[arrayIndex] = lightData;
         isActive = false;
         pointLight.intensity = 0f;
         yield return new WaitForSeconds(startDelayTime);
@@ -48,7 +50,9 @@ public class TimedGlowMushroomsScript : MonoBehaviour
         float start = Time.time;
         float end = start + glowTime;
         isActive = true;
-        LightSourceScript.Instance.lightsArray[arrayIndex].isOn = true;
+        var lightData = LightSourceScript.Instance.lightsArray[arrayIndex];
+        lightData.isOn = true;
+        LightSourceScript.Instance.lightsArray[arrayIndex] = lightData;
 
         while (end >= Time.time)
         {
@@ -73,8 +77,9 @@ public class TimedGlowMushroomsScript : MonoBehaviour
             yield return null;
         }
 
-        LightSourceScript.Instance.lightsArray[arrayIndex].isOn = false;
-        isActive = false;
+        var lightData = LightSourceScript.Instance.lightsArray[arrayIndex];
+        lightData.isOn = false;
+        LightSourceScript.Instance.lightsArray[arrayIndex] = lightData;
         pointLight.intensity = 0f;
         yield return new WaitForSeconds(lightOffDelay);
         StartCoroutine(PulseLightOn());
