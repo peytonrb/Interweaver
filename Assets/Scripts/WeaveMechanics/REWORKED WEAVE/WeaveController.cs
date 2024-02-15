@@ -26,10 +26,11 @@ public class WeaveController : MonoBehaviour
     [SerializeField] private AudioClip weavingIntroClip;
     [SerializeField] private AudioClip weavingOutroClip;
 
-    [Header("For Input Manager - DO NOT MODIFY")]
+    [Header("Other Script References - DO NOT MODIFY")]
     public bool isWeaving;
     public WeaveableObject currentWeaveable;
     public WeaveableManager weaveableManager;
+    public Vector2 lookDirection;
 
     void Start()
     {
@@ -52,6 +53,7 @@ public class WeaveController : MonoBehaviour
     // <param> the direction that the player is looking in
     public void GamepadTargetingArrow(Vector2 lookDir)
     {
+        lookDirection = lookDir;
         if (lookDir.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(lookDir.x, lookDir.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
@@ -75,6 +77,7 @@ public class WeaveController : MonoBehaviour
     // <param> the direction that the player is looking in
     public void MouseTargetingArrow(Vector2 lookDir)
     {
+        lookDirection = lookDir;
         targetingArrow.SetActive(true);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitData;
@@ -122,10 +125,15 @@ public class WeaveController : MonoBehaviour
         // if weaveable is within range and can be woven...
         if (isValidWeaveable)
         {
+            currentWeaveable.isBeingWoven = true;
             StartCoroutine(PlayWeaveVFX());
             StartCoroutine(WaitForVFX()); // sets isWeaving to true. is in Coroutine for aesthetic purposes.
             targetingArrow.SetActive(false);
             // toggle on animation here
+
+            // BEGINS WEAVEABLEOBEJCT'S INVOLVEMENT IN ALL THIS
+            currentWeaveable.MoveWeaveable(isGamepad, lookDirection);
+            currentWeaveable.AddToWovenObjects();
         }
     }
 
