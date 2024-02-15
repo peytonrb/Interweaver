@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 public class WeaveController : MonoBehaviour
 {
+    [Header("General")]
+    public bool usingAudio = true;
+
     [Header("Camera")]
     private Camera mainCamera;
 
@@ -14,6 +17,8 @@ public class WeaveController : MonoBehaviour
     [SerializeField] private LayerMask targetingLayerMask; // should be WeaveObject, Terrain, and Attachable Weave Object
     public LayerMask weaveableLayerMask;
     private Vector3 worldPosition;
+    private WeaveFXScript weaveFXScript;
+    private GameObject weaveSpawn;
 
     [Header("Audio")]
     [SerializeField] private AudioClip startWeaveClip;
@@ -30,6 +35,17 @@ public class WeaveController : MonoBehaviour
     {
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         weaveableManager = GameObject.FindWithTag("WeaveableManager").GetComponent<WeaveableManager>();
+        weaveFXScript = this.GetComponent<WeaveFXScript>();
+        weaveSpawn = this.transform.Find("WeaveSpawn").gameObject;
+    }
+
+    void Update()
+    {
+        // draws weave line. is in update due to dynamic positions of weaver and weaveable
+        if (isWeaving)
+        {
+            weaveFXScript.DrawWeave(weaveSpawn.transform.position, currentWeaveable.transform.position);
+        }
     }
 
     // adjusts targeting arrow based on gamepad
@@ -106,17 +122,60 @@ public class WeaveController : MonoBehaviour
         // if weaveable is within range and can be woven...
         if (isValidWeaveable)
         {
-            Debug.Log("here");
-            // trigger vfx
-            // trigger audio
-            // disable targeting arrow
-            // set weave variables
+            StartCoroutine(PlayWeaveVFX());
+            StartCoroutine(WaitForVFX()); // sets isWeaving to true. is in Coroutine for aesthetic purposes.
+            targetingArrow.SetActive(false);
+            // toggle on animation here
         }
+    }
+
+    // plays VFX and Audio at proper timings
+    IEnumerator PlayWeaveVFX()
+    {
+        // VFX
+        weaveFXScript.ActivateWeave(currentWeaveable.transform);
+
+        // Audio
+        if (usingAudio)
+        {
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startWeaveClip);
+            yield return new WaitForSeconds(.1f);
+            AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingIntroClip);
+            yield return new WaitForSeconds(.732f);
+            AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingLoopClip);
+        }
+        
+        yield break;
     }
 
     // drop objects. does not uncombine objects.
     public void OnDrop()
     {
+        isWeaving = false;
+        weaveFXScript.DisableWeave();
+        StartCoroutine(EndWeaveAudio());
+        // toggle off animation here
+        currentWeaveable.ResetWeaveable();
+        currentWeaveable = null;
+    }
 
+    // stops all audio if audio is enabled
+    IEnumerator EndWeaveAudio()
+    {
+        if (usingAudio)
+        {
+            AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingOutroClip);
+            yield return new WaitForSeconds(.732f);
+            AudioManager.instance.StopSound(AudioManagerChannels.weaveLoopingChannel);
+        }
+        
+        yield break;
+    }
+
+    // helper function that allows seconds to be dynamic to be used easily with VFX/Audio calls
+    private IEnumerator WaitForVFX()
+    {
+        yield return new WaitForSeconds(0.2f);
+        isWeaving = true;
     }
 }

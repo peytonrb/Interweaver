@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WeaveableObject : MonoBehaviour
 {
+    [Header("For Dev Purposes")]
     public int listIndex;
     public int ID;
     public enum ObjectMoveOverrides { Default, ThisAlwaysMoves, ThisNeverMoves }
@@ -31,7 +32,7 @@ public class WeaveableObject : MonoBehaviour
     // resets all variables of the object to default
     public void ResetWeaveable()
     {
-
+        
     }
 
     // call this method with either "position" or "rotation", or null in the parameter
