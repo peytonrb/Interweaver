@@ -314,7 +314,7 @@ public class InputManagerScript : MonoBehaviour
             }
             else // FOR REWORKED WEAVE
             {
-                weaveController.weaveableManager.DestroyJoints(weaveController.currentWeaveable.listIndex);
+                WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
             }
         }
     }

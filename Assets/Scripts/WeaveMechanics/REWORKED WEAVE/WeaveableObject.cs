@@ -22,25 +22,21 @@ public class WeaveableObject : MonoBehaviour
         // if objects can be moved and they are being woven, move objects based on joystick/mouse input.
         // variables set by MoveWeaveable(), which is called by WeaveController if object is deemed as a
         //      valid weaveable.
-        if (objectMoveOverride == ObjectMoveOverrides.ThisAlwaysMoves || 
-            objectMoveOverride == ObjectMoveOverrides.Default)
+        if (isBeingWoven)
         {
-            if (isBeingWoven)
+            // lifts weaveable immediately once woven. only runs once, altitude of weaveable determined by
+            //      MoveWeaveable()
+            if (!isHovering)
             {
-                // lifts weaveable immediately once woven. only runs once, altitude of weaveable determined by
-                //      MoveWeaveable()
-                if (!isHovering)
-                {
-                    isHovering = true;
-                    transform.position = transform.position + new Vector3(0, hoverHeight, 0);
-                }
-
-                // actually moves the weaveable with joystick or mouse
-                if (isWeavingWithMouse)
-                    MoveWeaveableToMouse();
-                else if (!isWeavingWithMouse)
-                    MoveWeaveableToTarget(lookDirection);
+                isHovering = true;
+                transform.position = transform.position + new Vector3(0, hoverHeight, 0);
             }
+
+            // actually moves the weaveable with joystick or mouse
+            if (isWeavingWithMouse)
+                MoveWeaveableToMouse();
+            else if (!isWeavingWithMouse)
+                MoveWeaveableToTarget(lookDirection);
         }
     }
 
@@ -76,12 +72,17 @@ public class WeaveableObject : MonoBehaviour
     // adds object to array of combined object
     public void AddToWovenObjects()
     {
+        Vector2 returnValue = WeaveableManager.Instance.AddWeaveableToList(this.gameObject, false);
 
+        // AddWeaveableToList() returns a Vector2 to get both ints from the return value
+        ID = (int) returnValue.x;
+        listIndex = (int) returnValue.y;
     }
 
     // resets all variables of the object to default
     public void ResetWeaveable()
     {
+        WeaveableManager.Instance.RemoveWeaveableFromList(listIndex, ID);
         isBeingWoven = false;
         isHovering = false;
     }

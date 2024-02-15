@@ -5,6 +5,15 @@ using UnityEngine;
 public class WeaveableManager : MonoBehaviour
 {
     public List<weaveableGroup> combinedWeaveables;
+    public static WeaveableManager Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
 
     void Start()
     {
@@ -29,20 +38,52 @@ public class WeaveableManager : MonoBehaviour
 
     // adds weaveable to new or existing list depending on combined status (wip)
     // <param> the index of the list in parent list and the weaveable itself
-    // <returns> the current length of the internal list
-    public int AddWeaveableToList(int listIndex, GameObject weaveable)
+    // <returns> the current length of the internal list, and whether or not this is happening in response to combining
+    public Vector2 AddWeaveableToList(GameObject weaveable, bool isBeingCombined)
     {
-        if (weaveable.GetComponent<WeaveableObject>() != null)
-            combinedWeaveables[listIndex].weaveableObjectGroup.Add(weaveable.GetComponent<WeaveableObject>());
+        int listIndex = 0;
 
-        return combinedWeaveables[listIndex].weaveableObjectGroup.Count;
+        // determines which list Weaveable should be inserted into
+        if (weaveable.GetComponent<WeaveableObject>() != null)
+        {
+            if (!isBeingCombined)
+            {
+                listIndex = combinedWeaveables.Count;
+
+                // ensures index does not go out of bounds
+                if (listIndex <= 0)
+                {
+                    listIndex = 0;
+                }
+
+                combinedWeaveables.Add(new weaveableGroup());
+                combinedWeaveables[listIndex].weaveableObjectGroup.Add(weaveable.GetComponent<WeaveableObject>());
+            }
+            else
+            {
+                // IF WEAVEABLES ARE BEING COMBINED, ADD TO INNER LIST + LIST INDEX IS DIFFERENT
+            }
+        }
+
+        return new Vector2(listIndex, combinedWeaveables[listIndex].weaveableObjectGroup.Count);
     }
 
     // removes a weaveable from a list
     // <param> the index of the list in parent list and the index of weaveable in internal list
     public void RemoveWeaveableFromList(int listIndex, int ID)
     {
-        combinedWeaveables[listIndex].weaveableObjectGroup.RemoveAt(ID);
+        listIndex--; // compensates for difference in index vs size of array
+
+        if (combinedWeaveables[listIndex] != null && combinedWeaveables[listIndex].weaveableObjectGroup[ID] != null)
+        {
+            combinedWeaveables[listIndex].weaveableObjectGroup.RemoveAt(ID);
+
+            // deletes array index as a whole if list is empty
+            if (combinedWeaveables[listIndex].weaveableObjectGroup.Count <= 0)
+            {
+                combinedWeaveables.RemoveAt(listIndex);
+            }
+        }
     }
 
     // helper function - adds a List to the combinedWeaveables List
@@ -66,5 +107,5 @@ public class WeaveableManager : MonoBehaviour
 [System.Serializable]
 public class weaveableGroup
 {
-    public List<WeaveableObject> weaveableObjectGroup;
+    public List<WeaveableObject> weaveableObjectGroup = new List<WeaveableObject>();
 }

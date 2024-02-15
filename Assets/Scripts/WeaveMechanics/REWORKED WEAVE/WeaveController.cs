@@ -29,13 +29,11 @@ public class WeaveController : MonoBehaviour
     [Header("Other Script References - DO NOT MODIFY")]
     public bool isWeaving;
     public WeaveableObject currentWeaveable;
-    public WeaveableManager weaveableManager;
     public Vector2 lookDirection;
 
     void Start()
     {
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        weaveableManager = GameObject.FindWithTag("WeaveableManager").GetComponent<WeaveableManager>();
         weaveFXScript = this.GetComponent<WeaveFXScript>();
         weaveSpawn = this.transform.Find("WeaveSpawn").gameObject;
     }
