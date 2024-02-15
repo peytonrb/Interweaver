@@ -97,7 +97,7 @@ public class LightSourceScript : MonoBehaviour
             if (scriptInstance.GetType().Name == lightCrystals)
             {
                 LightData newLightdata = new LightData();
-
+                LightCrystalScript lightCrystalScript = scriptInstance.GetComponent<LightCrystalScript>();
                 GameObject parentObj = scriptInstance.gameObject;
                 Transform lightComponents = parentObj.gameObject.transform.GetChild(0);
                 newLightdata.lightSource = lightComponents.GetComponent<Light>();
@@ -109,6 +109,7 @@ public class LightSourceScript : MonoBehaviour
                     Transform lightComponentsparent = parentObj.gameObject.transform.GetChild(1);
                     newLightdata.lightCollider = lightComponentsparent.GetComponent<Collider>();
                 }
+                lightCrystalScript.arrayIndex = lightsArray.Count;
                 lightsArray.Add(newLightdata);
                 Debug.Log("Found " + lightsArray.Count + " items with script '" + lightCrystals + "'.");
             }
@@ -124,12 +125,13 @@ public class LightSourceScript : MonoBehaviour
             if (scriptInstance.GetType().Name == timedGlowMusroom)
             {
                 LightData newLightdata = new LightData();
-
+                TimedGlowMushroomsScript timedGlowMushroomScript = scriptInstance.GetComponent<TimedGlowMushroomsScript>();
                 GameObject parentObj = scriptInstance.gameObject;
                 Transform lightComponents = parentObj.gameObject.transform.GetChild(0);
                 newLightdata.lightSource = lightComponents.GetComponent<Light>();
                 newLightdata.lightCollider = lightComponents.GetComponent<Collider>();
                 newLightdata.isOn = true;
+                timedGlowMushroomScript.arrayIndex = lightsArray.Count;
                 lightsArray.Add(newLightdata);
                 Debug.Log("Found " + lightsArray.Count + " items with script '" + timedGlowMusroom + "'.");
             }
@@ -144,13 +146,15 @@ public class LightSourceScript : MonoBehaviour
         {
             if (scriptInstance.GetType().Name == staticSpiderLights)
             {
-                LightData newLightdata = new LightData();
 
+                LightData newLightdata = new LightData();
+               SpiderLightsMechanic spiderLightsMechanics = scriptInstance.GetComponent<SpiderLightsMechanic>();
                 GameObject parentObj = scriptInstance.gameObject;
                 Transform lightComponents = parentObj.gameObject.transform.GetChild(0);
                 newLightdata.lightSource = lightComponents.GetComponent<Light>();
                 newLightdata.lightCollider = lightComponents.GetComponent<Collider>();
                 newLightdata.isOn = true;
+                spiderLightsMechanics.arrayIndex = lightsArray.Count;
                 lightsArray.Add(newLightdata);
                 Debug.Log("Found " + lightsArray.Count + " items with script '" + staticSpiderLights + "'.");
             }
