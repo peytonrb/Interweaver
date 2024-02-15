@@ -387,15 +387,15 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         {
             case rotateDir.forward:
                 {            
-                    weaveableObj.transform.Rotate(transform.right, xAmount, Space.World);
-                    weaveableObj.transform.Rotate(transform.forward, zAmount, Space.World);
+                    weaveableObj.transform.RotateAround(transform.position, transform.right, xAmount);
+                    weaveableObj.transform.RotateAround(transform.position, transform.forward, zAmount);
 
                     break;
                 }
             case rotateDir.back:
                 {     
-                    weaveableObj.transform.Rotate(transform.right, -xAmount, Space.World);
-                    weaveableObj.transform.Rotate(transform.forward, -zAmount, Space.World);
+                    weaveableObj.transform.RotateAround(transform.position, transform.right, -xAmount);
+                    weaveableObj.transform.RotateAround(transform.position, transform.forward, -zAmount);
                     
                     break;
                 }
