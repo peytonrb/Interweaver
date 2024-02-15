@@ -4,16 +4,56 @@ using UnityEngine;
 
 public class WeaveableObject : MonoBehaviour
 {
-    public int listIndex;
-    public int ID;
+    [Header("State Variables")]
+    public bool isBeingWoven; // accessed by WeaveController
+    [SerializeField] [Range(1, 10)] private float hoverHeight = 4f;
     public enum ObjectMoveOverrides { Default, ThisAlwaysMoves, ThisNeverMoves }
     public ObjectMoveOverrides objectMoveOverride;
+    private bool isHovering = false;
+    private bool isWeavingWithMouse;
 
-    // weaveable moves in direction of controller cursor
-    // <param> the direction that the player is looking in
-    public void MoveWeaveableToTarget(Vector2 lookDir)
+    [Header("For Dev Purposes")]
+    public int listIndex;
+    public int ID;
+    private Vector2 lookDirection;
+
+    void Update()
     {
+        // if objects can be moved and they are being woven, move objects based on joystick/mouse input.
+        // variables set by MoveWeaveable(), which is called by WeaveController if object is deemed as a
+        //      valid weaveable.
+        if (isBeingWoven)
+        {
+            // lifts weaveable immediately once woven. only runs once, altitude of weaveable determined by
+            //      MoveWeaveable()
+            if (!isHovering)
+            {
+                isHovering = true;
+                transform.position = transform.position + new Vector3(0, hoverHeight, 0);
+            }
 
+            // actually moves the weaveable with joystick or mouse
+            if (isWeavingWithMouse)
+                MoveWeaveableToMouse();
+            else if (!isWeavingWithMouse)
+                MoveWeaveableToTarget(lookDirection);
+        }
+    }
+
+    // triggers Update() if-blocks to run, allows player to move weaveable with either mouse or joystick
+    // <param> is the player using a controller or not
+    public void MoveWeaveable(bool isGamepad, Vector2 lookDir)
+    {
+        lookDirection = lookDir;
+
+        if (isGamepad)
+        {
+            isWeavingWithMouse = false;
+        }
+        else
+        {
+            isWeavingWithMouse = true;
+        }
     }
 
     // weaveable moves in the direction of mouse position
@@ -22,16 +62,29 @@ public class WeaveableObject : MonoBehaviour
 
     }
 
+    // weaveable moves in direction of controller cursor
+    // <param> the direction that the player is looking in
+    public void MoveWeaveableToTarget(Vector2 lookDir)
+    {
+
+    }
+
     // adds object to array of combined object
     public void AddToWovenObjects()
     {
+        Vector2 returnValue = WeaveableManager.Instance.AddWeaveableToList(this.gameObject, false);
 
+        // AddWeaveableToList() returns a Vector2 to get both ints from the return value
+        ID = (int) returnValue.x;
+        listIndex = (int) returnValue.y;
     }
 
     // resets all variables of the object to default
     public void ResetWeaveable()
     {
-
+        WeaveableManager.Instance.RemoveWeaveableFromList(listIndex, ID);
+        isBeingWoven = false;
+        isHovering = false;
     }
 
     // call this method with either "position" or "rotation", or null in the parameter

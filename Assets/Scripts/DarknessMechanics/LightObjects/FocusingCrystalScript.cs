@@ -44,7 +44,7 @@ public class FocusingCrystalScript : MonoBehaviour
                 Vector3 hitPosition = hit.point;
                 beamHitObj = hit.collider.gameObject;
                 float distance = Vector3.Distance(spawnPoint, hitPosition);
-                spotLight.range = distance + 2f;
+                spotLight.range = distance + 0.5f;
                 distance /= 1.35f; // man idk. it works tho.
 
                 if (distance > 1f)

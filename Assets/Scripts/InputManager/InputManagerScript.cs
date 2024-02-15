@@ -314,7 +314,7 @@ public class InputManagerScript : MonoBehaviour
             }
             else // FOR REWORKED WEAVE
             {
-                weaveController.weaveableManager.DestroyJoints(weaveController.currentWeaveable.listIndex);
+                WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
             }
         }
     }
@@ -533,6 +533,7 @@ public class InputManagerScript : MonoBehaviour
 
                 if (isPressed && moleDigScript.borrowed && Time.timeScale != 0)
                 {
+                    Debug.Log("Pressed");
                     molePillarScript.riseInputPressed = true;
                     molePillarScript.lowerInputPressed = false;
                     molePillarScript.DeployPillar();
@@ -541,6 +542,7 @@ public class InputManagerScript : MonoBehaviour
                 }
                 else
                 {
+                    Debug.Log("Removed");
                     molePillarScript.riseInputPressed = false;
                 }
                 break;

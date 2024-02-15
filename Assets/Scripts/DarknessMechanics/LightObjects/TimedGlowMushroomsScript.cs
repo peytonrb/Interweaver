@@ -5,7 +5,7 @@ using UnityEngine;
 public class TimedGlowMushroomsScript : MonoBehaviour
 {
     public float glowTime = 2f;
-    [Range(0, 10)] public float brightness;
+    [Range(0, 3)] public float brightness = 0.5f;
     public float lightOnDelay;
     public float lightOffDelay;
     public int arrayIndex; // add the INDEX of the light in LIGHTARRAY in the LIGHTSOURCE OBJECT
@@ -36,7 +36,9 @@ public class TimedGlowMushroomsScript : MonoBehaviour
 
     IEnumerator WaitToStart()
     {
-        LightSourceScript.Instance.lightsArray[arrayIndex].isOn = false;
+       var lightData = LightSourceScript.Instance.lightsArray[arrayIndex];
+        lightData.isOn = false;
+        LightSourceScript.Instance.lightsArray[arrayIndex] = lightData;
         isActive = false;
         pointLight.intensity = 0f;
         yield return new WaitForSeconds(startDelayTime);
@@ -48,11 +50,14 @@ public class TimedGlowMushroomsScript : MonoBehaviour
         float start = Time.time;
         float end = start + glowTime;
         isActive = true;
-        LightSourceScript.Instance.lightsArray[arrayIndex].isOn = true;
+        var lightData = LightSourceScript.Instance.lightsArray[arrayIndex];
+        lightData.isOn = true;
+        LightSourceScript.Instance.lightsArray[arrayIndex] = lightData;
 
         while (end >= Time.time)
         {
             pointLight.intensity = Mathf.Lerp(0f, brightness, (Time.time - start) / glowTime);
+            pointLight.range = ((3 * Vector3.Magnitude(pointLight.GetComponent<SphereCollider>().bounds.size)) / (4f * Mathf.PI)) * 1.2f; // matching volumetric light to sphere collider (trust)
             yield return null;
         }
 
@@ -73,8 +78,9 @@ public class TimedGlowMushroomsScript : MonoBehaviour
             yield return null;
         }
 
-        LightSourceScript.Instance.lightsArray[arrayIndex].isOn = false;
-        isActive = false;
+        var lightData = LightSourceScript.Instance.lightsArray[arrayIndex];
+        lightData.isOn = false;
+        LightSourceScript.Instance.lightsArray[arrayIndex] = lightData;
         pointLight.intensity = 0f;
         yield return new WaitForSeconds(lightOffDelay);
         StartCoroutine(PulseLightOn());

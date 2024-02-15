@@ -13,7 +13,7 @@ public class NPCInteractionScript : MonoBehaviour
         {
             if (hitCollider.gameObject.tag == "NPC")
             {
-                hitCollider.gameObject.GetComponent<DialogueTriggers>().triggerDialogue(GetComponent<MovementScript>());
+                hitCollider.gameObject.GetComponent<DialogueTriggers>().TriggerDialogue(GetComponent<MovementScript>());
                 break;
             }
         }

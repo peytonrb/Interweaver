@@ -228,8 +228,10 @@ public class DoorScript : MonoBehaviour
 
     IEnumerator OpenDoor()
     {
+        Debug.Log("Door called 1");
         if (distance >= 0.3f)
         {
+            Debug.Log("Door called");
             yield return new WaitForEndOfFrame();
             transform.position = Vector3.MoveTowards(transform.position, targetPoint, doorSpeed * Time.deltaTime);
             distance = Vector3.Distance(transform.position, targetPoint);
@@ -256,14 +258,19 @@ public class DoorScript : MonoBehaviour
 
     IEnumerator MoveBack()
     {
+
+        
         // door can be triggered again by pressure plate event
         if (pressurePlates != null && pplateTriggered)
         {
             pplateTriggered = false;
         }
 
+        distance = Vector3.Distance(transform.position, originalPosition);
+
         if (distance >= 0.3f)
         {
+            Debug.Log("Move back called");
             yield return new WaitForEndOfFrame();
             doorClosing = true;
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, doorSpeed * Time.deltaTime);
@@ -276,6 +283,7 @@ public class DoorScript : MonoBehaviour
             //when its fully closed
             doorClosing = false;
             doorIsOpen = false;
+            distance = -1;
         }
 
         yield break;

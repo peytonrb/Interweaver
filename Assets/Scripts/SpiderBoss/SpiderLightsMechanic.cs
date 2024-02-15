@@ -47,7 +47,9 @@ public class SpiderLightsMechanic : MonoBehaviour
         float start = Time.time;
         float end = start + glowTime;
         isActive = true;
-        LightSourceScript.Instance.lightsArray[arrayIndex].isOn = true;
+        var lightData = LightSourceScript.Instance.lightsArray[arrayIndex];
+        lightData.isOn = true;
+        LightSourceScript.Instance.lightsArray[arrayIndex] = lightData;
 
         while (end >= Time.time)
         {
@@ -73,7 +75,9 @@ public class SpiderLightsMechanic : MonoBehaviour
             yield return null;
         }
         //sounds here? will have to test
-        LightSourceScript.Instance.lightsArray[arrayIndex].isOn = false;
+        var lightData = LightSourceScript.Instance.lightsArray[arrayIndex];
+        lightData.isOn = false;
+        LightSourceScript.Instance.lightsArray[arrayIndex] = lightData;
         isActive = false;
         pointLight.intensity = 0f;
         yield return new WaitForSeconds(lightOffDelay);

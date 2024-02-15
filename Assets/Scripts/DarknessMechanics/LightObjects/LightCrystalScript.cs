@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 using Sparrow.VolumetricLight;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class LightCrystalScript : MonoBehaviour
 {
@@ -62,12 +63,16 @@ public class LightCrystalScript : MonoBehaviour
         // sets value in darkness struct depending on isActive variable
         if (isActive && !LightSourceScript.Instance.lightsArray[arrayIndex].isOn)
         {
-            LightSourceScript.Instance.lightsArray[arrayIndex].isOn = true;
+            var lightData = LightSourceScript.Instance.lightsArray[arrayIndex];
+            lightData.isOn = true;
+            LightSourceScript.Instance.lightsArray[arrayIndex] = lightData;
             StartCoroutine(TurnLightOn());
         }
         else if (!isActive && LightSourceScript.Instance.lightsArray[arrayIndex].isOn)
         {
-            LightSourceScript.Instance.lightsArray[arrayIndex].isOn = false;
+            var lightData = LightSourceScript.Instance.lightsArray[arrayIndex];
+            lightData.isOn = false;
+            LightSourceScript.Instance.lightsArray[arrayIndex] = lightData;
             StartCoroutine(TurnLightOff());
         }
     }
@@ -98,6 +103,13 @@ public class LightCrystalScript : MonoBehaviour
         while (end >= Time.time)
         {
             crystalLight.intensity = Mathf.Lerp(0f, brightness, (Time.time - start) / 2f);
+
+            // matching volumetric light to sphere collider (trust)
+            if (crystalLight.GetComponent<SphereCollider>() != null)
+                crystalLight.range = ((3 * Vector3.Magnitude(crystalLight.GetComponent<SphereCollider>().bounds.size)) / (4f * Mathf.PI)) * 1.2f; 
+            else if (isFocusingCrystal && beamEffect != null)
+                crystalLight.range = beamEffect.GetComponent<CapsuleCollider>().radius * 2f;
+
             yield return null;
         }
 

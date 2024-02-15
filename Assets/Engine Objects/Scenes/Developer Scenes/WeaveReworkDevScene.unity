@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -664,9 +664,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0da983b286f933469896c0c67a0cc43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isBeingWoven: 0
+  hoverHeight: 4
+  objectMoveOverride: 1
   listIndex: 0
   ID: 0
-  objectMoveOverride: 1
 --- !u!1001 &191710734
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2248,6 +2250,101 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 446589495}
   m_CullTransparentMesh: 1
+--- !u!1001 &522393576
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 655070895}
+    m_Modifications:
+    - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -26.627811
+      objectReference: {fileID: 0}
+    - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -16.399384
+      objectReference: {fileID: 0}
+    - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -12.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3107663957816731202, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4699961208595689080, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_Name
+      value: Weaveable_1x1CubeNEW (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4699961208595689080, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 522393579}
+  m_SourcePrefab: {fileID: 100100000, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+--- !u!4 &522393577 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+  m_PrefabInstance: {fileID: 522393576}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &522393578 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4699961208595689080, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+  m_PrefabInstance: {fileID: 522393576}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &522393579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 522393578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0da983b286f933469896c0c67a0cc43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isBeingWoven: 0
+  hoverHeight: 4
+  objectMoveOverride: 1
+  listIndex: 0
+  ID: 0
 --- !u!1 &536686514
 GameObject:
   m_ObjectHideFlags: 0
@@ -2519,6 +2616,7 @@ Transform:
   m_Children:
   - {fileID: 1941014658}
   - {fileID: 171769325}
+  - {fileID: 522393577}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3849,6 +3947,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shieldPuzzleWeaveables: []
   myRespawnables: []
+  startPositions: []
+  startRotations: []
   layersToCheck:
     serializedVersion: 2
     m_Bits: 0
@@ -7719,6 +7819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8adc7d03870712049bd0ffaff1a69678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  usingAudio: 0
   targetingArrow: {fileID: 2100883988}
   weaveDistance: 20
   targetingLayerMask:
@@ -7733,7 +7834,7 @@ MonoBehaviour:
   weavingOutroClip: {fileID: 0}
   isWeaving: 0
   currentWeaveable: {fileID: 0}
-  weaveableManager: {fileID: 0}
+  lookDirection: {x: 0, y: 0}
 --- !u!114 &2122026656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8151,6 +8252,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1561485318}
     m_Modifications:
+    - target: {fileID: 465573006086512369, guid: 387f8e8896d94c743a5639aea8a8c1ae, type: 3}
+      propertyPath: combinedWeaveables.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4448605534777931480, guid: 387f8e8896d94c743a5639aea8a8c1ae, type: 3}
       propertyPath: m_Name
       value: WeaveableManager

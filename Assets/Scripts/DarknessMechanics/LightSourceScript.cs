@@ -13,6 +13,10 @@ public class LightSourceScript : MonoBehaviour
     private float lightMaxDistance;
     private Collider lightDataCollider;
     private bool hasInvoked;
+    private string timedGlowMusroom = "TimedGlowMushroomsScript";
+    private string lightCrystals = "LightCrystalScript";
+    private string staticSpiderLights = "SpiderLightsMechanic";
+    private string prefabName = "TorchLight";
     [System.Serializable]
     public struct LightData
     {
@@ -22,7 +26,7 @@ public class LightSourceScript : MonoBehaviour
         public bool isOn;
     }
 
-    public LightData[] lightsArray;
+    public List <LightData> lightsArray = new List<LightData>();
 
     public UnityEvent triggerEvent, triggerEvent2;
     void Awake()
@@ -47,7 +51,7 @@ public class LightSourceScript : MonoBehaviour
     {
         bool playerIsNowSafe = false;
 
-        for (int i = 0; i < lightsArray.Length; i++)
+        for (int i = 0; i < lightsArray.Count; i++)
         {
             Light lightSource = lightsArray[i].lightSource; //this is from the public struct
 
@@ -55,7 +59,7 @@ public class LightSourceScript : MonoBehaviour
 
             lightDataCollider = lightsArray[i].lightCollider;
 
-            lightSource.range = maxDistance;
+            //lightSource.range = maxDistance;
 
             lightsOn = lightsArray[i].isOn;
 
@@ -68,7 +72,7 @@ public class LightSourceScript : MonoBehaviour
             }
            
         }
-
+       
         if ((playerIsNowSafe) && (!hasInvoked))
         {
             MakePlayerSafe();
@@ -82,7 +86,100 @@ public class LightSourceScript : MonoBehaviour
         }
     }
 
+    #region// SEARCHES THE LIGHTS THAT HAS SCRIPTS AND THEN ADDS THEM TO THE LIST
+    //***********************************************************
+    public void SearchLightCrystals()
+    {
+        MonoBehaviour[] scriptInstances = FindObjectsOfType<MonoBehaviour>();
 
+        foreach (MonoBehaviour scriptInstance in scriptInstances)
+        {
+            if (scriptInstance.GetType().Name == lightCrystals)
+            {
+                LightData newLightdata = new LightData();
+                LightCrystalScript lightCrystalScript = scriptInstance.GetComponent<LightCrystalScript>();
+                GameObject parentObj = scriptInstance.gameObject;
+                Transform lightComponents = parentObj.gameObject.transform.GetChild(0);
+                newLightdata.lightSource = lightComponents.GetComponent<Light>();
+                newLightdata.lightCollider = lightComponents.GetComponent<Collider>();
+                newLightdata.isOn = true;
+
+                if (newLightdata.lightCollider == null)
+                {
+                    Transform lightComponentsparent = parentObj.gameObject.transform.GetChild(1);
+                    newLightdata.lightCollider = lightComponentsparent.GetComponent<Collider>();
+                }
+                lightCrystalScript.arrayIndex = lightsArray.Count;
+                lightsArray.Add(newLightdata);
+                Debug.Log("Found " + lightsArray.Count + " items with script '" + lightCrystals + "'.");
+            }
+
+        }
+    }
+
+    public void SearchTimedMushrooms()
+    {
+        MonoBehaviour[] scriptInstances = FindObjectsOfType<MonoBehaviour>();
+        foreach (MonoBehaviour scriptInstance in scriptInstances)
+        {
+            if (scriptInstance.GetType().Name == timedGlowMusroom)
+            {
+                LightData newLightdata = new LightData();
+                TimedGlowMushroomsScript timedGlowMushroomScript = scriptInstance.GetComponent<TimedGlowMushroomsScript>();
+                GameObject parentObj = scriptInstance.gameObject;
+                Transform lightComponents = parentObj.gameObject.transform.GetChild(0);
+                newLightdata.lightSource = lightComponents.GetComponent<Light>();
+                newLightdata.lightCollider = lightComponents.GetComponent<Collider>();
+                newLightdata.isOn = true;
+                timedGlowMushroomScript.arrayIndex = lightsArray.Count;
+                lightsArray.Add(newLightdata);
+                Debug.Log("Found " + lightsArray.Count + " items with script '" + timedGlowMusroom + "'.");
+            }
+
+        }
+    }
+
+    public void SearchSpiderLights()
+    {
+        MonoBehaviour[] scriptInstances = FindObjectsOfType<MonoBehaviour>();
+        foreach (MonoBehaviour scriptInstance in scriptInstances)
+        {
+            if (scriptInstance.GetType().Name == staticSpiderLights)
+            {
+
+                LightData newLightdata = new LightData();
+               SpiderLightsMechanic spiderLightsMechanics = scriptInstance.GetComponent<SpiderLightsMechanic>();
+                GameObject parentObj = scriptInstance.gameObject;
+                Transform lightComponents = parentObj.gameObject.transform.GetChild(0);
+                newLightdata.lightSource = lightComponents.GetComponent<Light>();
+                newLightdata.lightCollider = lightComponents.GetComponent<Collider>();
+                newLightdata.isOn = true;
+                spiderLightsMechanics.arrayIndex = lightsArray.Count;
+                lightsArray.Add(newLightdata);
+                Debug.Log("Found " + lightsArray.Count + " items with script '" + staticSpiderLights + "'.");
+            }
+
+        }
+    }
+
+    public void SearchOtherLights()
+    {
+        GameObject[] otherLights = FindObjectsOfType<GameObject>();
+        foreach (GameObject otherLight in otherLights) 
+        {
+            if (otherLight.name == prefabName)
+            {
+                LightData newLightdata = new LightData();
+                newLightdata.lightSource = otherLight.GetComponent<Light>();
+                newLightdata.lightCollider = otherLight.GetComponent<Collider>();
+                newLightdata.isOn = true;
+                lightsArray.Add(newLightdata);
+                Debug.Log("Found " + lightsArray.Count + " items with script '" + prefabName + "'.");
+            }
+        }
+    }
+    //***********************************************************
+    #endregion
     void MakePlayerSafe()
     {
         triggerEvent.Invoke();
