@@ -4,34 +4,104 @@ using UnityEngine;
 
 public class DialogueTriggers : MonoBehaviour
 {
+    [Header("Required")]
     public Dialogue dialogue;
     public GameObject textBox;
-    public bool isInteracting = false;
-    public MovementScript myMoveScript;
-
-    public bool isAutoTrigger = false;
-
     public GameObject ControllerIndicator;
     public GameObject KeyboardIndicator;
 
-    // is called if near an NPC 
-    public void triggerDialogue(MovementScript movementScript)
+    [Header("Optional")]
+    public bool isAutoTrigger = false;
+    public bool triggerOnlyOnce = false;
+    enum CharacterTriggerType
     {
-        myMoveScript = movementScript;
+        bothChars,
+        Weaver,
+        Familiar
+    };
 
-        if (!isInteracting)
+    [SerializeField]
+    CharacterTriggerType type = new CharacterTriggerType();
+
+    [HideInInspector]
+    public bool isInteracting = false;
+    [HideInInspector]
+    public MovementScript myMoveScript;
+
+    private bool triggered = false;
+
+    // is called if near an NPC 
+    public void TriggerDialogue(MovementScript movementScript)
+    {
+        switch(type)
         {
-            Debug.Log("interacting");
-            DialogueManager.instance.StartDialogue(dialogue, textBox);
-            DialogueManager.instance.currentTrigger = this;
-            isInteracting = true;
-            myMoveScript.ToggleCanMove(false);
-            myMoveScript.ToggleCanLook(false);
+            case CharacterTriggerType.bothChars:
+                {
+                    StartDialogueFromInteraction(movementScript);
+                    break;
+                }
+            case CharacterTriggerType.Weaver:
+                {
+                    if (movementScript.gameObject.CompareTag("Player"))
+                    {
+                        StartDialogueFromInteraction(movementScript);
+                    }
+                        break;
+                }
+            case CharacterTriggerType.Familiar:
+                {
+                    if (movementScript.gameObject.CompareTag("Familiar"))
+                    {
+                        StartDialogueFromInteraction(movementScript);
+                    }
+                    break;
+                }
         }
-        else
+
+        
+        
+    }
+
+    private void StartDialogueFromInteraction(MovementScript movementScript)
+    {
+        if (triggerOnlyOnce && !triggered)
         {
-            DialogueManager.instance.DisplayNextSentence();
-            Debug.Log("advancing");
+
+            myMoveScript = movementScript;
+
+            if (!isInteracting)
+            {
+                DialogueManager.instance.StartDialogue(dialogue, textBox);
+                DialogueManager.instance.currentTrigger = this;
+                isInteracting = true;
+                myMoveScript.ToggleCanMove(false);
+                myMoveScript.ToggleCanLook(false);
+            }
+            else
+            {
+                DialogueManager.instance.DisplayNextSentence();
+            }
+
+            triggered = true;
+
+        }
+
+        if (!triggerOnlyOnce)
+        {
+            myMoveScript = movementScript;
+
+            if (!isInteracting)
+            {
+                DialogueManager.instance.StartDialogue(dialogue, textBox);
+                DialogueManager.instance.currentTrigger = this;
+                isInteracting = true;
+                myMoveScript.ToggleCanMove(false);
+                myMoveScript.ToggleCanLook(false);
+            }
+            else
+            {
+                DialogueManager.instance.DisplayNextSentence();
+            }
         }
     }
 
@@ -44,7 +114,56 @@ public class DialogueTriggers : MonoBehaviour
     // occurs only with Event Triggers
     public void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.tag == "Player" || collider.gameObject.tag == "Familiar")
+        switch(type)
+        {
+            case CharacterTriggerType.bothChars:
+                {
+                    if (collider.gameObject.tag == "Player" || collider.gameObject.tag == "Familiar")
+                        AutoTrigger(collider);
+                    break;
+                }
+            case CharacterTriggerType.Weaver:
+                {
+                    if (collider.gameObject.tag == "Player")
+                        AutoTrigger(collider);
+                    break;
+                }
+            case CharacterTriggerType.Familiar:
+                {
+                    if (collider.gameObject.tag == "Familiar")
+                        AutoTrigger(collider);
+                    break;
+                }
+        } 
+    }
+
+    private void AutoTrigger(Collider collider)
+    {
+        if (triggerOnlyOnce && !triggered)
+        {
+
+            if (InputManagerScript.instance.isGamepad)
+            {
+                ControllerIndicator.SetActive(true);
+            }
+            else
+            {
+                KeyboardIndicator.SetActive(true);
+            }
+
+            if (isAutoTrigger)
+            {
+                myMoveScript = collider.GetComponent<MovementScript>();
+                DialogueManager.instance.currentTrigger = this;
+                DialogueManager.instance.StartDialogue(dialogue, textBox);
+                isInteracting = true;
+                myMoveScript.ToggleCanMove(false);
+                myMoveScript.ToggleCanLook(false);
+                triggered = true;
+            }
+        }
+
+        if (!triggerOnlyOnce)
         {
             if (InputManagerScript.instance.isGamepad)
             {
@@ -58,14 +177,13 @@ public class DialogueTriggers : MonoBehaviour
             if (isAutoTrigger)
             {
                 myMoveScript = collider.GetComponent<MovementScript>();
-                Debug.Log("TRIGGERED");
                 DialogueManager.instance.currentTrigger = this;
                 DialogueManager.instance.StartDialogue(dialogue, textBox);
                 isInteracting = true;
                 myMoveScript.ToggleCanMove(false);
                 myMoveScript.ToggleCanLook(false);
+                triggered = true;
             }
-
         }
     }
 
@@ -76,7 +194,6 @@ public class DialogueTriggers : MonoBehaviour
 
             if (isAutoTrigger)
             {
-                Debug.Log("TRIGGERED");
                 DialogueManager.instance.EndDialogue();
             }
             else
