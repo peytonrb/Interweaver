@@ -676,6 +676,10 @@ PrefabInstance:
       propertyPath: inputManager
       value: 
       objectReference: {fileID: 409886852}
+    - target: {fileID: 20847522854274277, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      propertyPath: timeToRotate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 46808667028420449, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
@@ -1193,9 +1197,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1083616481}
     - target: {fileID: 2864162376311042491, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      propertyPath: characterAnimationHandler
+      value: 
+      objectReference: {fileID: 537994776}
+    - target: {fileID: 2864162376311042491, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: targetingLayerMask.m_Bits
       value: 704
       objectReference: {fileID: 0}
+    - target: {fileID: 2871888646774845234, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+      propertyPath: characterAnimationHandler
+      value: 
+      objectReference: {fileID: 537994776}
     - target: {fileID: 4708942470194313234, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
       propertyPath: postProcessing
       value: 
@@ -1548,7 +1560,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -13.47
+      value: -7.08
       objectReference: {fileID: 0}
     - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1556,7 +1568,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.87
+      value: -6.46
       objectReference: {fileID: 0}
     - target: {fileID: 1484482762789999798, guid: bea7478cfa148934898144d1385794a4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2562,6 +2574,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstWeaverCamera: 1
   firstFamiliarCamera: 0
+--- !u!114 &537994776 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9032169286115513460, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
+  m_PrefabInstance: {fileID: 191710734}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a57eab0c7adfe05469eedb310755a0d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &630311103
 GameObject:
   m_ObjectHideFlags: 0

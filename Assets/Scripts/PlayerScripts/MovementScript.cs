@@ -17,6 +17,7 @@ public class MovementScript : MonoBehaviour
     public bool canLook = true;
     public float speed; //Base walk speed for player
     private float currentSpeed = 0; // the current speed for the player
+    private bool turning;
     private CharacterController characterController; //references the character controller component
     private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
     private Vector3 direction; //A reference to the directional movement of the player in 3D space
@@ -50,7 +51,7 @@ public class MovementScript : MonoBehaviour
 
     [Header("character's camera")]
     //Character Rotation values
-    private float rotationSpeed;
+    [SerializeField] private float timeToTurn = 0.1f;
     private float rotationVelocity;
     [HideInInspector] public Vector3 newDirection;
     public GameObject cam; //Camera object reference
@@ -86,7 +87,6 @@ public class MovementScript : MonoBehaviour
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         familiarScript = GameObject.FindGameObjectWithTag("Familiar").GetComponent<FamiliarScript>();
 
-        rotationSpeed = 0.1f;
         originalGroundAcceleration = groundAcceleration;
         originalGroundDeceleration = groundDeceleration;
         originalGravity = gravity; // get original gravity of controller
@@ -204,7 +204,7 @@ public class MovementScript : MonoBehaviour
                 deceleration = characterController.isGrounded ? groundDeceleration : aerialDeceleration;
 
                 //Character movement
-                if (direction.magnitude >= 0.1f)
+                if (direction.magnitude >= 0.1f && !turning)
                 {
                     currentSpeed = Mathf.Lerp(currentSpeed, speed, acceleration * Time.deltaTime);
                     characterAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
@@ -245,8 +245,8 @@ public class MovementScript : MonoBehaviour
                         AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
                 }
 
-                velocity.x = currentSpeed * newDirection.x;
-                velocity.z = currentSpeed * newDirection.z;
+                velocity.x = currentSpeed * transform.forward.x;
+                velocity.z = currentSpeed * transform.forward.z;
 
                 characterController.Move(velocity * Time.deltaTime); // make move
 
@@ -341,10 +341,25 @@ public class MovementScript : MonoBehaviour
         //Character rotations
         if (direction.magnitude >= 0.2f && canLook)
         {
-            float targetangle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetangle, ref rotationVelocity, rotationSpeed);
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
+            if (targetAngle > 360)
+            {
+                targetAngle -= 360f;
+            }
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref rotationVelocity, timeToTurn);
             transform.rotation = Quaternion.Euler(0, angle, 0);
-            newDirection = Quaternion.Euler(0, targetangle, 0) * Vector3.forward;
+            newDirection = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
+            
+            if (Vector3.Distance(transform.forward, newDirection) > 0.8)
+            {
+                //currentSpeed = 0f; 
+                turning = true;
+                Debug.Log(Vector3.Distance(transform.forward, newDirection));
+            }
+            else
+            {
+                turning = false;
+            }
         }
     }
 
