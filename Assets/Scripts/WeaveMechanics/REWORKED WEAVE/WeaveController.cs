@@ -36,6 +36,7 @@ public class WeaveController : MonoBehaviour
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         weaveFXScript = this.GetComponent<WeaveFXScript>();
         weaveSpawn = this.transform.Find("WeaveSpawn").gameObject;
+        targetingArrow.SetActive(true);
     }
 
     void Update()

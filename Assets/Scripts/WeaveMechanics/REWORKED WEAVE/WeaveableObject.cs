@@ -10,9 +10,8 @@ public class WeaveableObject : MonoBehaviour
     public enum ObjectMoveOverrides { Default, ThisAlwaysMoves, ThisNeverMoves }
     public ObjectMoveOverrides objectMoveOverride;
     [SerializeField] private LayerMask weaveableLayers;
-    [SerializeField] private float maxWeaveDistance = 50f;
+    [SerializeField] private float maxWeaveDistance = 25f;
     private bool isHovering = false;
-    private bool isWeavingWithMouse;
 
     [Header("For Dev Purposes")]
     public int listIndex;
@@ -48,9 +47,9 @@ public class WeaveableObject : MonoBehaviour
             }
 
             // actually moves the weaveable with joystick or mouse
-            if (isWeavingWithMouse)
+            if (!InputManagerScript.instance.isGamepad)
                 MoveWeaveableToMouse();
-            else if (!isWeavingWithMouse)
+            else
                 MoveWeaveableToTarget(lookDirection);
         }
     }
@@ -71,16 +70,13 @@ public class WeaveableObject : MonoBehaviour
             weaveController.targetingArrow.SetActive(false);
             RaycastHit hitData;
 
-            if (Physics.Raycast(ray, out hitData, maxWeaveDistance))
+            if (Physics.Raycast(ray, out hitData, 100f))
                 worldPosition = hitData.point;
-            else // if object is past raycast distance (out of bounds)
+
+            // if object is past the max distance allowed from player, object is disconnected
+            if (Vector3.Distance(transform.position, weaveController.transform.position) > maxWeaveDistance)
             {
-                if (Vector3.Distance(transform.position, weaveController.transform.position) > maxWeaveDistance)
-                {
-                    weaveController.OnDrop();
-                    Debug.Log("here");
-                }
-    
+                weaveController.OnDrop();
                 return;
             }
 
@@ -93,7 +89,8 @@ public class WeaveableObject : MonoBehaviour
                                       transform.position.y - rb.position.y,
                                       hitData.point.z - rb.position.z);
 
-            FreezeContraints("rotation");
+            FreezeConstraints("rotation");
+            FreezeConstraints("position", 'y');
         }
     }
 
@@ -102,7 +99,47 @@ public class WeaveableObject : MonoBehaviour
     // <param> the direction that the player is looking in
     public void MoveWeaveableToTarget(Vector2 lookDir)
     {
+        // if this object does not have the most updated look direction saved...
+        if (lookDir != lookDirection)
+        {
+            lookDirection = lookDir;
+        }
 
+        // enables targeting arrow and determines direction to fire boxcast
+        targetingArrow.SetActive(true);
+        weaveController.targetingArrow.SetActive(false);
+        float targetAngle = Mathf.Atan2(lookDir.x, lookDir.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
+
+        if (lookDir == Vector2.zero) // if player releases RS, targeting arrow is hidden
+        {
+            targetingArrow.SetActive(false);
+        }
+        else // otherwise, it moves with RS's position
+        {
+            targetingArrow.transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+        }
+
+        Vector3 rayDirection = targetingArrow.transform.forward;
+
+        // need BOXCAST FOR COMBINING
+
+        // if object is past the max distance allowed from player, object is disconnected
+        if (Vector3.Distance(transform.position, weaveController.transform.position) > maxWeaveDistance)
+        {
+            weaveController.OnDrop();
+            return;
+        }
+
+        // move object with joystick movement
+        this.GetComponent<Rigidbody>().velocity = rayDirection * 10f;
+        FreezeConstraints("rotation");
+        FreezeConstraints("position", 'y');
+    }
+
+    // combines object with active group of weaveables
+    public void CombineObject()
+    {
+        Debug.Log("combine");
     }
 
     // adds object to array of combined object
@@ -126,25 +163,57 @@ public class WeaveableObject : MonoBehaviour
         isHovering = false;
         listIndex = 0;
         ID = 0;
+        targetingArrow.SetActive(false);
+        weaveController.targetingArrow.SetActive(true);
+        UnfreezeConstraints("all");
     }
+
+    /*******************************************************
+    *                                                      *
+    *                   HELPER FUNCTIONS                   *
+    *                                                      *
+    *******************************************************/
 
     // call this method with either "position" or "rotation", or null in the parameter
     // freezes Rigidbody constraints
-    private void FreezeContraints(string command)
+    private void FreezeConstraints(string command)
     {
         switch (command)
         {
             case "position":
-                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition;
+                this.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezePosition;
                 break;
             case "rotation":
-                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+                this.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezeRotation;
                 break;
             default:
-                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                this.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezeAll;
                 break;
         }
+    }
 
+    // overload of previous method, accepts a specific orientation to freeze
+    private void FreezeConstraints(string command, char orientation)
+    {
+        switch (command)
+        {
+            case "position":
+                if (orientation == 'x')
+                    this.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezePositionX;
+                else if (orientation == 'y')
+                    this.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezePositionY;
+                else if (orientation == 'z')
+                    this.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezePositionZ;
+                break;
+            case "rotation":
+                if (orientation == 'x')
+                    this.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezeRotationX;
+                else if (orientation == 'y')
+                    this.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezeRotationY;
+                else if (orientation == 'z')
+                    this.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezeRotationZ;
+                break;
+        }
     }
 
     // call this method with either "position", "rotation", or null in the parameter
@@ -154,16 +223,56 @@ public class WeaveableObject : MonoBehaviour
         switch (command)
         {
             case "position": // refreezes rotation if player only wants to unfreeze position
-                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+                this.GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezePosition;
                 break;
             case "rotation": // refreezes position if player only wants to unfreeze rotation
-                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition;
+                this.GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezeRotation;
                 break;
             default:
                 this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                 break;
         }
+    }
+
+    // overload of previous method, accepts a specific orientation to unfreeze
+    private void UnfreezeConstraints(string command, char orientation)
+    {
+        switch (command)
+        {
+            case "position":
+                if (orientation == 'x')
+                    this.GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezePositionX;
+                else if (orientation == 'y')
+                    this.GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezePositionY;
+                else if (orientation == 'z')
+                    this.GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezePositionZ;
+                break;
+            case "rotation":
+                if (orientation == 'x')
+                    this.GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezeRotationX;
+                else if (orientation == 'y')
+                    this.GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezeRotationY;
+                else if (orientation == 'z')
+                    this.GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezeRotationZ;
+                break;
+        }
+    }
+
+    // determines how far the ground is while hovering
+    // <returns> the minimum y position of the weaveable
+    private float DetermineGroundDistance()
+    {
+        Ray ray = new Ray(transform.position, Vector3.down);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 10f))
+        {
+            if (this.transform.GetChild(0).GetComponent<Renderer>().bounds.min.y - hit.transform.position.y < hoverHeight + 0.5f)
+            {
+                return this.transform.GetChild(0).GetComponent<Renderer>().bounds.min.y + hoverHeight + hit.transform.position.y;
+            }
+        }
+
+        return 100;
     }
 }
