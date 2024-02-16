@@ -38,6 +38,7 @@ public class WevebleRespawnEditor : Editor
             if (!hit.collider.CompareTag("FloatingIsland") && hit.collider.GetComponent<WeaveableNew>() != null)
             {
                 respawnController.myRespawnables.Add(hit.collider.gameObject);
+                EditorUtility.SetDirty(respawnController);
             }
         }
     }
