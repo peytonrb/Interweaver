@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -667,6 +667,10 @@ MonoBehaviour:
   isBeingWoven: 0
   hoverHeight: 4
   objectMoveOverride: 1
+  weaveableLayers:
+    serializedVersion: 2
+    m_Bits: 8384
+  maxWeaveDistance: 50
   listIndex: 0
   ID: 0
 --- !u!1001 &191710734
@@ -2264,11 +2268,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -26.627811
+      value: -26.66
       objectReference: {fileID: 0}
     - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -16.399384
+      value: -16.39
       objectReference: {fileID: 0}
     - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2343,6 +2347,10 @@ MonoBehaviour:
   isBeingWoven: 0
   hoverHeight: 4
   objectMoveOverride: 1
+  weaveableLayers:
+    serializedVersion: 2
+    m_Bits: 8384
+  maxWeaveDistance: 50
   listIndex: 0
   ID: 0
 --- !u!1 &536686514
@@ -5184,7 +5192,7 @@ Transform:
   m_GameObject: {fileID: 1423014229}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -24.43533, y: -18.399384, z: -16.343145}
-  m_LocalScale: {x: 45.63171, y: 0.3923815, z: 30.05329}
+  m_LocalScale: {x: 188.2571, y: 1.6187998, z: 123.98714}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1941014658}
@@ -7828,6 +7836,7 @@ MonoBehaviour:
   weaveableLayerMask:
     serializedVersion: 2
     m_Bits: 576
+  weaveFXScript: {fileID: 0}
   startWeaveClip: {fileID: 0}
   weavingLoopClip: {fileID: 0}
   weavingIntroClip: {fileID: 0}

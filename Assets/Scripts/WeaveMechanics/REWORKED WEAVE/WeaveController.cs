@@ -10,14 +10,14 @@ public class WeaveController : MonoBehaviour
     private Camera mainCamera;
 
     [Header("UI")]
-    [CannotBeNullObjectField][SerializeField] private GameObject targetingArrow;
+    [CannotBeNullObjectField] public GameObject targetingArrow;
 
     [Header("Weave Functionality")]
     public float weaveDistance = 20f;
     [SerializeField] private LayerMask targetingLayerMask; // should be WeaveObject, Terrain, and Attachable Weave Object
     public LayerMask weaveableLayerMask;
     private Vector3 worldPosition;
-    private WeaveFXScript weaveFXScript;
+    [HideInInspector] public WeaveFXScript weaveFXScript;
     private GameObject weaveSpawn;
 
     [Header("Audio")]
@@ -79,12 +79,14 @@ public class WeaveController : MonoBehaviour
         targetingArrow.SetActive(true);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitData;
+
         if (Physics.Raycast(ray, out hitData, 1000, targetingLayerMask))
         {
             worldPosition = hitData.point;
         }
-        Vector3 AdjustedVector = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
-        targetingArrow.transform.LookAt(AdjustedVector);
+        
+        Vector3 adjustedVector = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
+        targetingArrow.transform.LookAt(adjustedVector);
     }
 
     // no other objects are being woven. weave this object. 
@@ -126,12 +128,8 @@ public class WeaveController : MonoBehaviour
             currentWeaveable.isBeingWoven = true;
             StartCoroutine(PlayWeaveVFX());
             StartCoroutine(WaitForVFX()); // sets isWeaving to true. is in Coroutine for aesthetic purposes.
-            targetingArrow.SetActive(false);
+            currentWeaveable.AddToWovenObjects(); // BEGINS WEAVEABLEOBEJCT'S INVOLVEMENT IN ALL THIS
             // toggle on animation here
-
-            // BEGINS WEAVEABLEOBEJCT'S INVOLVEMENT IN ALL THIS
-            currentWeaveable.MoveWeaveable(isGamepad, lookDirection);
-            currentWeaveable.AddToWovenObjects();
         }
     }
 
@@ -158,6 +156,7 @@ public class WeaveController : MonoBehaviour
     public void OnDrop()
     {
         isWeaving = false;
+        currentWeaveable.GetComponent<Rigidbody>().velocity = Vector3.down * 2f;
         weaveFXScript.DisableWeave();
         StartCoroutine(EndWeaveAudio());
         // toggle off animation here

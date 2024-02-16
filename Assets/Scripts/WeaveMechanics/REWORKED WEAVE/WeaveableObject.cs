@@ -6,9 +6,11 @@ public class WeaveableObject : MonoBehaviour
 {
     [Header("State Variables")]
     public bool isBeingWoven; // accessed by WeaveController
-    [SerializeField] [Range(1, 10)] private float hoverHeight = 4f;
+    [SerializeField][Range(1, 5)] private float hoverHeight = 2f;
     public enum ObjectMoveOverrides { Default, ThisAlwaysMoves, ThisNeverMoves }
     public ObjectMoveOverrides objectMoveOverride;
+    [SerializeField] private LayerMask weaveableLayers;
+    [SerializeField] private float maxWeaveDistance = 50f;
     private bool isHovering = false;
     private bool isWeavingWithMouse;
 
@@ -16,6 +18,19 @@ public class WeaveableObject : MonoBehaviour
     public int listIndex;
     public int ID;
     private Vector2 lookDirection;
+    private Vector3 worldPosition;
+
+    [Header("References")]
+    private WeaveController weaveController;
+    private Camera mainCamera;
+    private GameObject targetingArrow;
+
+    void Start()
+    {
+        weaveController = GameObject.FindWithTag("Player").GetComponent<WeaveController>();
+        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        targetingArrow = this.transform.GetChild(0).Find("Targeting Arrow Parent").gameObject;
+    }
 
     void Update()
     {
@@ -40,29 +55,50 @@ public class WeaveableObject : MonoBehaviour
         }
     }
 
-    // triggers Update() if-blocks to run, allows player to move weaveable with either mouse or joystick
-    // <param> is the player using a controller or not
-    public void MoveWeaveable(bool isGamepad, Vector2 lookDir)
-    {
-        lookDirection = lookDir;
-
-        if (isGamepad)
-        {
-            isWeavingWithMouse = false;
-        }
-        else
-        {
-            isWeavingWithMouse = true;
-        }
-    }
-
     // weaveable moves in the direction of mouse position
+    // triggers Update() if-blocks to run, allows player to move weaveable with mouse
+    // drops object if player is too far or moving object too fast
     public void MoveWeaveableToMouse()
     {
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitInfo;
 
+        // if the mouse position is over weaveable terrain or any weaveable object -- WALLS NEED TO BE TAGGED AS RAYCASTONLYFLOOR
+        if (Physics.Raycast(ray, out hitInfo, 1000f, weaveableLayers))
+        {
+            // enables and sets object's targeting arrow
+            targetingArrow.SetActive(true);
+            weaveController.targetingArrow.SetActive(false);
+            RaycastHit hitData;
+
+            if (Physics.Raycast(ray, out hitData, maxWeaveDistance))
+                worldPosition = hitData.point;
+            else // if object is past raycast distance (out of bounds)
+            {
+                if (Vector3.Distance(transform.position, weaveController.transform.position) > maxWeaveDistance)
+                {
+                    weaveController.OnDrop();
+                    Debug.Log("here");
+                }
+    
+                return;
+            }
+
+            Vector3 adjustedVector = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
+            targetingArrow.transform.LookAt(adjustedVector);
+
+            // move object to mouse position
+            Rigidbody rb = this.GetComponent<Rigidbody>();
+            rb.velocity = new Vector3(hitData.point.x - rb.position.x,
+                                      transform.position.y - rb.position.y,
+                                      hitData.point.z - rb.position.z);
+
+            FreezeContraints("rotation");
+        }
     }
 
     // weaveable moves in direction of controller cursor
+    // triggers Update() if-blocks to run, allows player to move weaveable with joystick
     // <param> the direction that the player is looking in
     public void MoveWeaveableToTarget(Vector2 lookDir)
     {
@@ -75,8 +111,11 @@ public class WeaveableObject : MonoBehaviour
         Vector2 returnValue = WeaveableManager.Instance.AddWeaveableToList(this.gameObject, false);
 
         // AddWeaveableToList() returns a Vector2 to get both ints from the return value
-        ID = (int) returnValue.x;
-        listIndex = (int) returnValue.y;
+        ID = (int)returnValue.x;
+        listIndex = (int)returnValue.y;
+
+        // vfx/audio
+        weaveController.weaveFXScript.WeaveableSelected(this.gameObject); // not sure how this is going to go with the combined weaveables
     }
 
     // resets all variables of the object to default
@@ -85,6 +124,8 @@ public class WeaveableObject : MonoBehaviour
         WeaveableManager.Instance.RemoveWeaveableFromList(listIndex, ID);
         isBeingWoven = false;
         isHovering = false;
+        listIndex = 0;
+        ID = 0;
     }
 
     // call this method with either "position" or "rotation", or null in the parameter
@@ -103,7 +144,7 @@ public class WeaveableObject : MonoBehaviour
                 this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
                 break;
         }
-        
+
     }
 
     // call this method with either "position", "rotation", or null in the parameter
