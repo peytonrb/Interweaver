@@ -18,8 +18,10 @@ public class WyvernBossManager : MonoBehaviour
     [Header("Magic Circles")]
     public GameObject magicCircle;
     [SerializeField] private float spawnradius;
+    [SerializeField] private float magicCircleTimer;
 
     private float startingFireballTimer;
+    private float startingMagicCircleTimer;
     [SerializeField] private int phases; //0 = no phase, 1 = fireball, 2 = magic circle, 3 = flamethrower, 4 = flee
 
     // Start is called before the first frame update
@@ -32,6 +34,7 @@ public class WyvernBossManager : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         startingFireballTimer = fireballtimer;
+        startingMagicCircleTimer = magicCircleTimer;
     }
 
     // Update is called once per frame
@@ -62,14 +65,14 @@ public class WyvernBossManager : MonoBehaviour
             //MAGIC CIRCLE
             case 2:
                 if (!familiarScript.myTurn) {
-                    if (fireballtimer > 0) {
-                        fireballtimer -= Time.deltaTime;
+                    if (magicCircleTimer > 0) {
+                        magicCircleTimer -= Time.deltaTime;
                     }
                     else {
                         if (!playercontroller.isDead) {
                             SpawnMagicCircle();
                         }
-                        fireballtimer = startingFireballTimer;
+                        magicCircleTimer = startingMagicCircleTimer;
                     }
                 }
             break;
@@ -83,15 +86,17 @@ public class WyvernBossManager : MonoBehaviour
 
     void SpawnMagicCircle() {
         Vector3 randomposition = Random.insideUnitCircle * spawnradius;
-        Vector3 newposition = new Vector3(transform.position.x + randomposition.x,0,transform.position.z + randomposition.y);
+        Vector3 newposition = new Vector3(weaver.transform.position.x + randomposition.x, -5f, weaver.transform.position.z + randomposition.y);
         Instantiate(magicCircle,newposition,Quaternion.identity);
     }
 
     void OnCollisionEnter(Collision other) {
         if (other.gameObject.CompareTag("Player")) {
             PlayerController player = other.gameObject.GetComponent<PlayerController>();
-
-            player.Death();
+            if (player != null) {
+                player.Death();
+            }
+            
         }
     }
 }
