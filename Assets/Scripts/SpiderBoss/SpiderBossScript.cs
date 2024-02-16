@@ -40,7 +40,7 @@ public class SpiderBossScript : MonoBehaviour
             }
         }
         */
-        Debug.Log("A setting "+ arachnophobiaSetting);
+        //Debug.Log("A setting "+ arachnophobiaSetting);
     }
 
     public void ToggleArachnophobia(bool toggleOn) {

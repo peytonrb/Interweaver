@@ -20,6 +20,9 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
 
         pushUp = false;
         stayUp = false;
+        warning.SetActive(true);
+
+        StartCoroutine(Flashing());
     }
 
     // Update is called once per frame
@@ -36,6 +39,7 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
             else {
                 timer -= Time.deltaTime;
                 if (timer <= 0) {
+                    StopAllCoroutines();
                     Destroy(gameObject);
                 }
             }
@@ -43,10 +47,26 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
     }
 
     void Warning(float number) {
-        warning.SetActive(true);
         if (number <= 0) {
-            Destroy(warning);
             pushUp = true;
+        }
+    }
+
+    IEnumerator Flashing() {
+        while (warning.activeSelf) {
+            yield return new WaitForSeconds(0.2f);
+            warning.SetActive(false);
+        }
+        while (!warning.activeSelf) {
+            yield return new WaitForSeconds(0.2f);
+            warning.SetActive(true);
+        }
+        if (pushUp == false) {
+            StartCoroutine(Flashing());
+        }
+        else {
+            warning.SetActive(false);
+            yield break;
         }
     }
 
