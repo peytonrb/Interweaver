@@ -29,6 +29,7 @@ public class WeaveController : MonoBehaviour
     [Header("Other Script References - DO NOT MODIFY")]
     public bool isWeaving;
     public WeaveableObject currentWeaveable;
+    public WeaveableObject selectedWeaveable;
     public Vector2 lookDirection;
 
     void Start()
@@ -85,7 +86,7 @@ public class WeaveController : MonoBehaviour
         {
             worldPosition = hitData.point;
         }
-        
+
         Vector3 adjustedVector = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
         targetingArrow.transform.LookAt(adjustedVector);
     }
@@ -114,6 +115,7 @@ public class WeaveController : MonoBehaviour
             // screen to point raycast using mouse position
             Ray rayPlayer = new Ray(transform.position, targetingArrow.transform.forward);
             RaycastHit hitInfo;
+
             // checks for a Weavable object within distance of Ray
             if (Physics.Raycast(rayPlayer, out hitInfo, weaveDistance, weaveableLayerMask))
             {
@@ -149,7 +151,7 @@ public class WeaveController : MonoBehaviour
             yield return new WaitForSeconds(.732f);
             AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingLoopClip);
         }
-        
+
         yield break;
     }
 
@@ -163,6 +165,7 @@ public class WeaveController : MonoBehaviour
         // toggle off animation here
         currentWeaveable.ResetWeaveable();
         currentWeaveable = null;
+        selectedWeaveable = null;
     }
 
     // stops all audio if audio is enabled
@@ -174,7 +177,7 @@ public class WeaveController : MonoBehaviour
             yield return new WaitForSeconds(.732f);
             AudioManager.instance.StopSound(AudioManagerChannels.weaveLoopingChannel);
         }
-        
+
         yield break;
     }
 
@@ -183,5 +186,45 @@ public class WeaveController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
         isWeaving = true;
+    }
+
+    // is called by InputManager, is used to determine the weaveable actively being selected for COMBINING
+    // !! limit calls to this function
+    // <param> is player using a controller or k&m
+    public void CheckIfWeaveable(bool isGamepad)
+    {
+        if (isGamepad)
+        {
+            // boxcast in controller targeted direction
+            RaycastHit hitInfo;
+
+            // check for Weaveable object within range of BoxCast sent from CURRENTWEAVEABLE
+            if (Physics.BoxCast(currentWeaveable.transform.position, transform.localScale, 
+                                currentWeaveable.targetingArrow.transform.forward, out hitInfo,
+                                currentWeaveable.transform.rotation, weaveDistance, weaveableLayerMask))
+            {
+                if (hitInfo.collider.GetComponent<WeaveableObject>() != currentWeaveable)
+                {
+                    selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
+                    currentWeaveable.CombineObject();
+                }
+            }
+        }
+        else
+        {
+            // screen to point raycast using mouse position
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hitInfo;
+
+            // checks for a Weavable object within distance of Ray
+            if (Physics.Raycast(ray, out hitInfo, 100f, weaveableLayerMask))
+            {
+                if (hitInfo.collider.GetComponent<WeaveableObject>() != currentWeaveable)
+                {
+                    selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
+                    currentWeaveable.CombineObject();
+                }
+            }
+        }
     }
 }

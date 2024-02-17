@@ -142,7 +142,7 @@ public class InputManagerScript : MonoBehaviour
             {
                 if (weaveController.isWeaving)
                 {
-                    weaveController.currentWeaveable.CombineObject();
+                    weaveController.CheckIfWeaveable(isGamepad);
                 }
                 else
                 {
