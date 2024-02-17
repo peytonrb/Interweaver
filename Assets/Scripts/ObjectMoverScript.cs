@@ -32,8 +32,13 @@ public class ObjectMoverScript : MonoBehaviour
     private float timeBeforeResuming;
     [SerializeField] private GameObject stickyGameObjectReference;
 
+
+
+    private Rigidbody rigidBody;
+
     void Start()
     {
+        rigidBody = GetComponent<Rigidbody>();
         if (movementBasedOnCharacterPresense)
         {
             if (active)
@@ -79,7 +84,14 @@ public class ObjectMoverScript : MonoBehaviour
                 }
                 else
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, waypoints[nextWaypoint].transform.position, speed * Time.deltaTime);
+                    if (rigidBody != null)
+                    {
+                        rigidBody.MovePosition(Vector3.MoveTowards(transform.position, waypoints[nextWaypoint].transform.position, speed * Time.deltaTime));
+                    }
+                    else
+                    {
+                        transform.position = Vector3.MoveTowards(transform.position, waypoints[nextWaypoint].transform.position, speed * Time.deltaTime);
+                    }
                 }
             }
             else
