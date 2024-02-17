@@ -18,7 +18,7 @@ public class MovementScript : MonoBehaviour
     public float speed; //Base walk speed for player
     private float currentSpeed = 0; // the current speed for the player
     private bool turning;
-    public bool freeMove; // bases movement off input rather than direction 
+    [HideInInspector] public bool freeMove; // bases movement off input rather than direction 
     private CharacterController characterController; //references the character controller component
     private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
     private Vector3 direction; //A reference to the directional movement of the player in 3D space
@@ -361,10 +361,6 @@ public class MovementScript : MonoBehaviour
             if (Vector3.Distance(transform.forward, newDirection) > 0.8 && !freeMove)
             {
                 turning = true;
-<<<<<<< HEAD
-=======
-                //Debug.Log(Vector3.Distance(transform.forward, newDirection));
->>>>>>> 18018a46ffb53b826f1c75318585ce2597cf0301
             }
             else
             {
