@@ -375,6 +375,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 655070895}
     m_Modifications:
+    - target: {fileID: 148412308930217481, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_TagString
+      value: SnapPoint
+      objectReference: {fileID: 0}
     - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -385,7 +389,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -16.399384
+      value: -14.7
       objectReference: {fileID: 0}
     - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -423,6 +427,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3186787576018838860, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_TagString
+      value: SnapPoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 3431726753053853479, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_TagString
+      value: SnapPoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548864569842091407, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 4699961208595689080, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
       propertyPath: m_Name
       value: Weaveable_1x1CubeNEW (1)
@@ -431,9 +447,25 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5223925767578921055, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_TagString
+      value: SnapPoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 6174936221538638016, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_TagString
+      value: SnapPoint
+      objectReference: {fileID: 0}
     - target: {fileID: 6237989117769592163, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
       propertyPath: m_Constraints
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6559688654637796369, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_TagString
+      value: SnapPoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 8663604222460621955, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -669,15 +701,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -26.627811
+      value: -27.13
       objectReference: {fileID: 0}
     - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -16.399384
+      value: -15.26
       objectReference: {fileID: 0}
     - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -19.948116
+      value: -18
       objectReference: {fileID: 0}
     - target: {fileID: 2583984905814059342, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -711,6 +743,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3548864569842091407, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 4699961208595689080, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
       propertyPath: m_Name
       value: Weaveable_1x1CubeNEW
@@ -723,9 +759,9 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8726894183081665596, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 8663604222460621955, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -754,13 +790,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isBeingWoven: 0
   hoverHeight: 2
-  objectMoveOverride: 1
+  objectMoveOverride: 2
   weaveableLayers:
     serializedVersion: 2
     m_Bits: 8384
   maxWeaveDistance: 25
+  activeSnapPoint: {fileID: 0}
   listIndex: 0
   ID: 0
+  targetingArrow: {fileID: 0}
 --- !u!1001 &191710734
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2475,8 +2513,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8384
   maxWeaveDistance: 25
+  activeSnapPoint: {fileID: 0}
   listIndex: 0
   ID: 0
+  targetingArrow: {fileID: 0}
 --- !u!1 &630311103
 GameObject:
   m_ObjectHideFlags: 0
@@ -7973,6 +8013,7 @@ MonoBehaviour:
   weavingOutroClip: {fileID: 0}
   isWeaving: 0
   currentWeaveable: {fileID: 0}
+  selectedWeaveable: {fileID: 0}
   lookDirection: {x: 0, y: 0}
 --- !u!114 &2122026656
 MonoBehaviour:

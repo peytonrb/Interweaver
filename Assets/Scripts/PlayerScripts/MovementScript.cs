@@ -361,6 +361,10 @@ public class MovementScript : MonoBehaviour
             if (Vector3.Distance(transform.forward, newDirection) > 0.8 && !freeMove)
             {
                 turning = true;
+<<<<<<< HEAD
+=======
+                //Debug.Log(Vector3.Distance(transform.forward, newDirection));
+>>>>>>> 18018a46ffb53b826f1c75318585ce2597cf0301
             }
             else
             {

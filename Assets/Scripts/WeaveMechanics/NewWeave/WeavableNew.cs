@@ -414,34 +414,34 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
         }
     }
 
-    public void CallRotate(Vector3 dir, float angle)
-    {
-        if (!isRotating)
-        {
-            isRotating = true;
-            StartCoroutine(Rotate(dir, angle));
-            InputManagerScript.instance.ControllerRumble(0.1f, 0f, 30f);
-            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, rotateClip);
-        }
-    }
+    // public void CallRotate(Vector3 dir, float angle)
+    // {
+    //     if (!isRotating)
+    //     {
+    //         isRotating = true;
+    //         StartCoroutine(Rotate(dir, angle));
+    //         InputManagerScript.instance.ControllerRumble(0.1f, 0f, 30f);
+    //         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, rotateClip);
+    //     }
+    // }
 
-    IEnumerator Rotate(Vector3 axis, float angle)
-    {
-        Quaternion from = transform.rotation;
-        Quaternion to = transform.rotation;
-        to *= Quaternion.Euler(axis * angle);
-        float elapsed = 0.0f;
+    // IEnumerator Rotate(Vector3 axis, float angle)
+    // {
+    //     Quaternion from = transform.rotation;
+    //     Quaternion to = transform.rotation;
+    //     to *= Quaternion.Euler(axis * angle);
+    //     float elapsed = 0.0f;
 
-        while (elapsed < rotationSpeed && canRotate)
-        {
-            transform.rotation = Quaternion.Slerp(from, to, elapsed / rotationSpeed);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
+    //     while (elapsed < rotationSpeed && canRotate)
+    //     {
+    //         transform.rotation = Quaternion.Slerp(from, to, elapsed / rotationSpeed);
+    //         elapsed += Time.deltaTime;
+    //         yield return null;
+    //     }
  
-        transform.rotation = to;
-        isRotating = false;
-    }
+    //     transform.rotation = to;
+    //     isRotating = false;
+    // }
     //**********************************************************************************
 
 

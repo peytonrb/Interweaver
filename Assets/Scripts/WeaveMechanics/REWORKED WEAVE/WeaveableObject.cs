@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class WeaveableObject : MonoBehaviour
 {
@@ -13,7 +14,21 @@ public class WeaveableObject : MonoBehaviour
     [SerializeField] private float maxWeaveDistance = 25f;
     private bool isHovering = false;
 
-    [Header("For Dev Purposes")]
+    // rotation
+    [HideInInspector] public enum rotateDir { forward, back, left, right }
+    private float rotAmount = 45f;
+    private GameObject weaveableObj;
+
+    // snapping
+    private Transform[] myTransformPoints;
+    public GameObject activeSnapPoint; // hide in inspector
+    private GameObject otherActiveSnapPoint;
+    private WeaveableObject objectToSnapTo;
+    private Transform targetTransform;
+    private Vector3 targetPos;
+    private float nearestDistance = 50f;
+
+    [Header("For Dev Purposes - DO NOT EDIT")]
     public int listIndex;
     public int ID;
     private Vector2 lookDirection;
@@ -22,13 +37,19 @@ public class WeaveableObject : MonoBehaviour
     [Header("References")]
     private WeaveController weaveController;
     private Camera mainCamera;
-    private GameObject targetingArrow;
+    [HideInInspector] public GameObject targetingArrow;
 
     void Start()
     {
         weaveController = GameObject.FindWithTag("Player").GetComponent<WeaveController>();
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         targetingArrow = this.transform.GetChild(0).Find("Targeting Arrow Parent").gameObject;
+        weaveableObj = this.transform.GetChild(0).gameObject;
+
+        // set snap points
+        myTransformPoints = new Transform[6];
+        myTransformPoints = this.GetComponentsInChildren<Transform>();
+        myTransformPoints = myTransformPoints.Where(child => child.tag == "SnapPoint").ToArray();
     }
 
     void Update()
@@ -90,7 +111,6 @@ public class WeaveableObject : MonoBehaviour
                                       hitData.point.z - rb.position.z);
 
             FreezeConstraints("rotation");
-            FreezeConstraints("position", 'y');
         }
     }
 
@@ -131,15 +151,210 @@ public class WeaveableObject : MonoBehaviour
         }
 
         // move object with joystick movement
-        this.GetComponent<Rigidbody>().velocity = rayDirection * 10f;
+        this.GetComponent<Rigidbody>().velocity = rayDirection * 6f;
         FreezeConstraints("rotation");
-        FreezeConstraints("position", 'y');
+    }
+
+    // rotates the object after being called by InputManager
+    // <param> enum that determines direction to rotate
+    public void RotateObject(rotateDir r)
+    {
+        // Assigns the rotation amount to the original xyz values every time the input is called.
+        float xAmount = rotAmount;
+        float yAmount = rotAmount;
+        float zAmount = rotAmount;
+
+        // Gets the forward vector of the camera and the forward and right vectors of the parent 
+        //      object to check the angle between them.
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 objectForward = transform.forward;
+        Vector3 objectRight = transform.right;
+
+        float forwardAngle = Vector3.Angle(Vector3.ProjectOnPlane(cameraForward, Vector3.up).normalized,
+                                           Vector3.ProjectOnPlane(objectForward, Vector3.up).normalized);
+        float rightAngle = Vector3.Angle(Vector3.ProjectOnPlane(cameraForward, Vector3.up).normalized,
+                                         Vector3.ProjectOnPlane(objectRight, Vector3.up).normalized);
+
+        //Assigns x and z amounts based on the angle of the camera forward along the xz plane of the parent object.
+        if (forwardAngle >= 0f && forwardAngle <= 45f && rightAngle >= 45f && rightAngle <= 135f)
+        {
+            xAmount = rotAmount;
+            zAmount = 0f;
+        }
+        else if (forwardAngle >= 45f && forwardAngle <= 135f && rightAngle >= 0f && rightAngle <= 45f)
+        {
+            xAmount = 0f;
+            zAmount = -rotAmount;
+        }
+        else if (forwardAngle >= 135f && forwardAngle <= 180f && rightAngle >= 45f && rightAngle <= 135f)
+        {
+            xAmount = -rotAmount;
+            zAmount = 0f;
+        }
+        else if (forwardAngle >= 45f && forwardAngle <= 135f && rightAngle >= 135f && rightAngle <= 180f)
+        {
+            xAmount = 0f;
+            zAmount = rotAmount;
+        }
+
+        switch (r)
+        {
+            case rotateDir.forward:
+                weaveableObj.transform.RotateAround(transform.position, transform.right, xAmount);
+                weaveableObj.transform.RotateAround(transform.position, transform.forward, zAmount);
+                break;
+            case rotateDir.back:
+                weaveableObj.transform.RotateAround(transform.position, transform.right, -xAmount);
+                weaveableObj.transform.RotateAround(transform.position, transform.forward, -zAmount);
+                break;
+            case rotateDir.right:
+                transform.Rotate(0f, yAmount, 0f, Space.World);
+                break;
+            case rotateDir.left:
+                transform.Rotate(0f, -yAmount, 0f, Space.World);
+                break;
+        }
     }
 
     // combines object with active group of weaveables
     public void CombineObject()
     {
-        Debug.Log("combine");
+        // set variables
+        FindSnapPoints();
+
+        //check object move overrides to determine how the combined objects will move
+        switch (objectMoveOverride)
+        {
+            case ObjectMoveOverrides.ThisAlwaysMoves: // move this weavable 
+                StartCoroutine(MoveToPoint(this, objectToSnapTo));
+                StartCoroutine(BackUpForceSnap(this));
+                break;
+
+            case ObjectMoveOverrides.ThisNeverMoves:
+                StartCoroutine(MoveToPoint(objectToSnapTo, this));
+                StartCoroutine(BackUpForceSnap(objectToSnapTo));
+                break;
+
+            default: // move other weaveable
+                StartCoroutine(MoveToPoint(objectToSnapTo, this));
+                StartCoroutine(BackUpForceSnap(objectToSnapTo));
+                break;
+        }
+    }
+
+    private void FindSnapPoints()
+    {
+        float distance;
+        float nearestDistance = Mathf.Infinity;
+        objectToSnapTo = weaveController.selectedWeaveable; // needs to be set to null asap
+
+        // calculate nearest snap points
+        for (int i = 0; i < myTransformPoints.Length; i++)
+        {
+            for (int t = 0; t < objectToSnapTo.myTransformPoints.Length; t++)
+            {
+                distance = Vector3.Distance(objectToSnapTo.myTransformPoints[t].position, myTransformPoints[i].position);
+
+                if (distance < nearestDistance)
+                {
+                    activeSnapPoint = myTransformPoints[i].gameObject;
+                    otherActiveSnapPoint = objectToSnapTo.myTransformPoints[t].gameObject;
+                    nearestDistance = distance;
+                }
+            }
+        }
+
+        // sets other weaveable's variables for movement
+        objectToSnapTo.otherActiveSnapPoint = activeSnapPoint;
+        objectToSnapTo.activeSnapPoint = otherActiveSnapPoint;
+        objectToSnapTo.nearestDistance = nearestDistance;
+    }
+
+    // moves weaveable to desired location
+    // <param> the moving weaveable and the static weaveable
+    IEnumerator MoveToPoint(WeaveableObject movingObject, WeaveableObject staticObject)
+    {
+        movingObject.GetComponent<Rigidbody>().useGravity = false;
+        Vector3 targetRotation = staticObject.transform.rotation.eulerAngles;
+
+        float x = ((targetRotation.x) / 90) * 90;
+        float y = ((targetRotation.y) / 90) * 90;
+        float z = ((targetRotation.z) / 90) * 90;
+
+        // set constraints
+        if (movingObject == this)
+        {
+            UnfreezeConstraints("all");
+        }
+        else
+        {
+            FreezeConstraints("position");
+        }
+
+        // determines target position for combining movement
+        targetTransform = staticObject.activeSnapPoint.transform;
+        targetPos = staticObject.transform.localPosition + targetTransform.localPosition;
+
+        Quaternion nearestangle = Quaternion.Euler(x, y, z);
+        movingObject.transform.rotation = nearestangle;
+
+        float timeSinceStarted = 0f;
+        while (true)
+        {
+            timeSinceStarted += Time.deltaTime;
+            movingObject.transform.localPosition = Vector3.Lerp(movingObject.transform.localPosition,
+                                                          targetPos, timeSinceStarted);
+
+            if (Vector3.Distance(movingObject.transform.position, targetTransform.position) < 1f)
+            {
+                movingObject.transform.position = targetTransform.position;
+
+                if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
+                {
+                    Debug.Log("weave together");
+                    movingObject.GetComponent<Rigidbody>().useGravity = true;
+                    //WeaveTogether(staticObject.gameObject);
+
+                    // reset constraints
+                    if (movingObject == this)
+                    {
+                        FreezeConstraints("rotation");
+                    }
+                    else
+                    {
+                        UnfreezeConstraints("position");
+                    }
+                }
+
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
+    // forces object together if positions are off after 2 seconds
+    // <param> the moving weaveable
+    IEnumerator BackUpForceSnap(WeaveableObject movingObject)
+    {
+        yield return new WaitForSeconds(2f);
+        movingObject.transform.position = targetTransform.position;
+
+        if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
+        {
+            Debug.Log("backup called");
+
+            // reset constraints
+            movingObject.GetComponent<Rigidbody>().useGravity = true;
+            if (movingObject == this)
+            {
+                FreezeConstraints("rotation");
+            }
+            else
+            {
+                UnfreezeConstraints("position");
+            }
+        }
     }
 
     // adds object to array of combined object
@@ -165,6 +380,11 @@ public class WeaveableObject : MonoBehaviour
         ID = 0;
         targetingArrow.SetActive(false);
         weaveController.targetingArrow.SetActive(true);
+
+        // reset rotation
+        transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        weaveableObj.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+
         UnfreezeConstraints("all");
     }
 

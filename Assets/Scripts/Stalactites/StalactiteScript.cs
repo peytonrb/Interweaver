@@ -28,7 +28,6 @@ public class StalactiteScript : MonoBehaviour, ITriggerable
         bc.center = new Vector3(0,-25,0);
         bc.isTrigger = true;
         bc.enabled = false;
-        timerOn = false;
         isFalling = false;
 
         StartCoroutine(RegrowthCooldown());
@@ -94,6 +93,13 @@ public class StalactiteScript : MonoBehaviour, ITriggerable
 
     IEnumerator RegrowthCooldown() {
         yield return new WaitForSeconds(cooldown);
+        if (sss.constantFalling) {
+            Warning();
+            timerOn = true;
+        }
+        else if (sss.constantFalling == false) {
+            timerOn = false;
+        }
         bc.enabled = true;
     }
 }
