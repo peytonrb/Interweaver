@@ -52,6 +52,7 @@ public class MovementScript : MonoBehaviour
     [Header("character's camera")]
     //Character Rotation values
     [SerializeField] private float timeToTurn = 0.1f;
+    private float originalTimeToTurn;
     private float rotationVelocity;
     [HideInInspector] public Vector3 newDirection;
     public GameObject cam; //Camera object reference
@@ -89,6 +90,7 @@ public class MovementScript : MonoBehaviour
 
         originalGroundAcceleration = groundAcceleration;
         originalGroundDeceleration = groundDeceleration;
+        originalTimeToTurn = timeToTurn;
         originalGravity = gravity; // get original gravity of controller
         originalTerminalVelocity = terminalVelocity; // get original terminal velocity of controller
         originalAerialAcceleration = aerialAcceleration;
@@ -342,10 +344,6 @@ public class MovementScript : MonoBehaviour
         if (direction.magnitude >= 0.2f && canLook)
         {
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
-            if (targetAngle > 360)
-            {
-                targetAngle -= 360f;
-            }
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref rotationVelocity, timeToTurn);
             transform.rotation = Quaternion.Euler(0, angle, 0);
             newDirection = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
@@ -462,6 +460,16 @@ public class MovementScript : MonoBehaviour
     public float GetTerminalVelocity()
     {
         return terminalVelocity;
+    }
+
+    public void ChangeTimeToTurn(float newTimeToTurn)
+    {
+        timeToTurn = newTimeToTurn;
+    }
+
+    public void ResetTimeToTurn()
+    {
+        timeToTurn = originalTimeToTurn;
     }
 
     // -------------------------------------------------------------------

@@ -23,6 +23,8 @@ public class JumpAndDashScript : MonoBehaviour
     [SerializeField][Tooltip("If in air at the end of a dash, increase affect of gravity by the heavyDashEffect variable when dash ends until touching ground")] private bool heavyDash;
     [SerializeField][Range(1f, 25f)] private float heavyDashEffect = 3f;
     [SerializeField][Tooltip("Resets dash cooldown when you jump")] private bool freeJumpDash;
+    [SerializeField] private bool canTurnWhileDashing;
+    [SerializeField][Range(0.5f, 2f)] private float dashTimeToTurn = 1.0f;
     private float t = 0;
 
     [Header("Utility")]
@@ -70,7 +72,12 @@ public class JumpAndDashScript : MonoBehaviour
                 movementScript.ChangeVelocity(new UnityEngine.Vector3(movementScript.GetVelocity().x, 0f, movementScript.GetVelocity().z));
                 movementScript.ChangeGravity(0f);
             }
+            if (!canTurnWhileDashing)
+            {
+                movementScript.canLook = false;
+            }
             movementScript.canMove = false;
+            movementScript.ChangeTimeToTurn(dashTimeToTurn);
             canDash = false;
             characterAnimationHandler.ToggleDashAnim(true);
             
@@ -105,6 +112,11 @@ public class JumpAndDashScript : MonoBehaviour
         }
 
         StartCoroutine(DashCooldown());
+        movementScript.ResetTimeToTurn();
+        if (!canTurnWhileDashing)
+        {
+            movementScript.canLook = true;
+        }
         movementScript.canMove = true;
         characterAnimationHandler.ToggleDashAnim(false);
         DisableDashVFX();
