@@ -268,9 +268,6 @@ public class WeaveableObject : MonoBehaviour
         objectToSnapTo.otherActiveSnapPoint = activeSnapPoint;
         objectToSnapTo.activeSnapPoint = otherActiveSnapPoint;
         objectToSnapTo.nearestDistance = nearestDistance;
-
-        // determines target position for combining movement
-        targetTransform = otherActiveSnapPoint.transform;
     }
 
     // moves weaveable to desired location
@@ -294,7 +291,10 @@ public class WeaveableObject : MonoBehaviour
             FreezeConstraints("position");
         }
 
+        // determines target position for combining movement
+        targetTransform = staticObject.activeSnapPoint.transform;
         targetPos = staticObject.transform.localPosition + targetTransform.localPosition;
+
         Quaternion nearestangle = Quaternion.Euler(x, y, z);
         movingObject.transform.rotation = nearestangle;
 
