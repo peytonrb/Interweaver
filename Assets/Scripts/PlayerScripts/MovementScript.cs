@@ -352,7 +352,7 @@ public class MovementScript : MonoBehaviour
             {
                 //currentSpeed = 0f; 
                 turning = true;
-                Debug.Log(Vector3.Distance(transform.forward, newDirection));
+                //Debug.Log(Vector3.Distance(transform.forward, newDirection));
             }
             else
             {

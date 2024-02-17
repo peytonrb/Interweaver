@@ -260,34 +260,66 @@ public class InputManagerScript : MonoBehaviour
     {
         Vector2 dir = input.Get<Vector2>();
 
-        if (dir != Vector2.zero && playerScript.inRelocateMode)
+        if (!isNewWeave) // old weave
         {
-            if (playerScript.weaveableScript != null)
+            if (dir != Vector2.zero && playerScript.inRelocateMode)
+            {
+                if (playerScript.weaveableScript != null)
+                {
+                    switch (dir)
+                    {
+                        case Vector2 v when v.Equals(Vector2.up):
+                            {
+                                //playerScript.weaveableScript.CallRotate(Vector3.forward, 45);
+                                playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.forward);
+                                break;
+                            }
+                        case Vector2 v when v.Equals(Vector2.down):
+                            {
+                                //playerScript.weaveableScript.CallRotate(Vector3.forward, -45);
+                                playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.back);
+                                break;
+                            }
+                        case Vector2 v when v.Equals(Vector2.right):
+                            {
+                                //playerScript.weaveableScript.CallRotate(Vector3.up, 45);
+                                playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.right);
+                                break;
+                            }
+                        case Vector2 v when v.Equals(Vector2.left):
+                            {
+                                //playerScript.weaveableScript.CallRotate(Vector3.up, -45);
+                                playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.left);
+                                break;
+                            }
+                    }
+                }
+            }
+        }
+        else // reworked weave
+        {
+            if (weaveController.currentWeaveable != null && weaveController.currentWeaveable.isBeingWoven)
             {
                 switch (dir)
                 {
                     case Vector2 v when v.Equals(Vector2.up):
                         {
-                            //playerScript.weaveableScript.CallRotate(Vector3.forward, 45);
-                            playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.forward);
+                            weaveController.currentWeaveable.RotateObject(WeaveableObject.rotateDir.forward);
                             break;
                         }
                     case Vector2 v when v.Equals(Vector2.down):
                         {
-                            //playerScript.weaveableScript.CallRotate(Vector3.forward, -45);
-                            playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.back);
+                            weaveController.currentWeaveable.RotateObject(WeaveableObject.rotateDir.back);
                             break;
                         }
                     case Vector2 v when v.Equals(Vector2.right):
                         {
-                            //playerScript.weaveableScript.CallRotate(Vector3.up, 45);
-                            playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.right);
+                            weaveController.currentWeaveable.RotateObject(WeaveableObject.rotateDir.right);
                             break;
                         }
                     case Vector2 v when v.Equals(Vector2.left):
                         {
-                            //playerScript.weaveableScript.CallRotate(Vector3.up, -45);
-                            playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.left);
+                            weaveController.currentWeaveable.RotateObject(WeaveableObject.rotateDir.left);
                             break;
                         }
                 }
@@ -589,7 +621,7 @@ public class InputManagerScript : MonoBehaviour
         bool isPressed = input.isPressed;
         switch (familiarEnums)
         {
-            case myEnums.Owl: 
+            case myEnums.Owl:
                 break;
             case myEnums.Mole:
                 break;
@@ -612,7 +644,7 @@ public class InputManagerScript : MonoBehaviour
         bool isPressed = input.isPressed;
         switch (familiarEnums)
         {
-            case myEnums.Owl: 
+            case myEnums.Owl:
                 break;
             case myEnums.Mole:
                 break;

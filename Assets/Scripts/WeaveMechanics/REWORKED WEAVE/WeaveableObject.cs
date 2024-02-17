@@ -13,6 +13,11 @@ public class WeaveableObject : MonoBehaviour
     [SerializeField] private float maxWeaveDistance = 25f;
     private bool isHovering = false;
 
+    // rotation
+    [HideInInspector] public enum rotateDir { forward, back, left, right }
+    private float rotAmount = 45f;
+    private GameObject weaveableObj;
+
     [Header("For Dev Purposes")]
     public int listIndex;
     public int ID;
@@ -29,6 +34,7 @@ public class WeaveableObject : MonoBehaviour
         weaveController = GameObject.FindWithTag("Player").GetComponent<WeaveController>();
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         targetingArrow = this.transform.GetChild(0).Find("Targeting Arrow Parent").gameObject;
+        weaveableObj = this.transform.GetChild(0).gameObject;
     }
 
     void Update()
@@ -90,7 +96,6 @@ public class WeaveableObject : MonoBehaviour
                                       hitData.point.z - rb.position.z);
 
             FreezeConstraints("rotation");
-            FreezeConstraints("position", 'y');
         }
     }
 
@@ -133,13 +138,73 @@ public class WeaveableObject : MonoBehaviour
         // move object with joystick movement
         this.GetComponent<Rigidbody>().velocity = rayDirection * 10f;
         FreezeConstraints("rotation");
-        FreezeConstraints("position", 'y');
     }
 
     // combines object with active group of weaveables
     public void CombineObject()
     {
         Debug.Log("combine");
+    }
+
+    // rotates the object after being called by InputManager
+    // <param> enum that determines direction to rotate
+    public void RotateObject(rotateDir r)
+    {
+        // Assigns the rotation amount to the original xyz values every time the input is called.
+        float xAmount = rotAmount;
+        float yAmount = rotAmount;
+        float zAmount = rotAmount;
+
+        // Gets the forward vector of the camera and the forward and right vectors of the parent 
+        //      object to check the angle between them.
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 objectForward = transform.forward;
+        Vector3 objectRight = transform.right;
+
+        float forwardAngle = Vector3.Angle(Vector3.ProjectOnPlane(cameraForward, Vector3.up).normalized,
+                                           Vector3.ProjectOnPlane(objectForward, Vector3.up).normalized);
+        float rightAngle = Vector3.Angle(Vector3.ProjectOnPlane(cameraForward, Vector3.up).normalized,
+                                         Vector3.ProjectOnPlane(objectRight, Vector3.up).normalized);
+
+        //Assigns x and z amounts based on the angle of the camera forward along the xz plane of the parent object.
+        if (forwardAngle >= 0f && forwardAngle <= 45f && rightAngle >= 45f && rightAngle <= 135f)
+        {
+            xAmount = rotAmount;
+            zAmount = 0f;
+        }
+        else if (forwardAngle >= 45f && forwardAngle <= 135f && rightAngle >= 0f && rightAngle <= 45f)
+        {
+            xAmount = 0f;
+            zAmount = -rotAmount;
+        }
+        else if (forwardAngle >= 135f && forwardAngle <= 180f && rightAngle >= 45f && rightAngle <= 135f)
+        {
+            xAmount = -rotAmount;
+            zAmount = 0f;
+        }
+        else if (forwardAngle >= 45f && forwardAngle <= 135f && rightAngle >= 135f && rightAngle <= 180f)
+        {
+            xAmount = 0f;
+            zAmount = rotAmount;
+        }
+
+        switch (r)
+        {
+            case rotateDir.forward:
+                    weaveableObj.transform.RotateAround(transform.position, transform.right, xAmount);
+                    weaveableObj.transform.RotateAround(transform.position, transform.forward, zAmount);
+                    break;
+            case rotateDir.back:
+                    weaveableObj.transform.RotateAround(transform.position, transform.right, -xAmount);
+                    weaveableObj.transform.RotateAround(transform.position, transform.forward, -zAmount);
+                    break;
+            case rotateDir.right:
+                    transform.Rotate(0f, yAmount, 0f, Space.World);
+                    break;
+            case rotateDir.left:
+                    transform.Rotate(0f, -yAmount, 0f, Space.World);
+                    break;
+        }
     }
 
     // adds object to array of combined object
@@ -165,6 +230,11 @@ public class WeaveableObject : MonoBehaviour
         ID = 0;
         targetingArrow.SetActive(false);
         weaveController.targetingArrow.SetActive(true);
+
+        // reset rotation
+        transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        weaveableObj.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        
         UnfreezeConstraints("all");
     }
 
