@@ -108,7 +108,7 @@ public class InputManagerScript : MonoBehaviour
     public void OnJump(InputValue input)
     {
         JumpAndDashScript jumpAndDashScript = player.GetComponent<JumpAndDashScript>();
-        jumpAndDashScript.DoJumpDash();
+        jumpAndDashScript.DoJump();
     }
 
     // DASH

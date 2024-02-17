@@ -121,6 +121,7 @@ MonoBehaviour:
   bounceVector: {x: 0, y: 0, z: 0}
   bounceValue: 3
   characterAnimationHandler: {fileID: 9032169286115513460}
+  timeToTurn: 0.1
   newDirection: {x: 0, y: 0, z: 0}
   cam: {fileID: 0}
   virtualCam: {fileID: 0}
@@ -142,6 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ff6c79968a903842bd219a06650481e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterAnimationHandler: {fileID: 0}
   jumpForce: 8.99
   infiniteJump: 0
   canDash: 1
@@ -151,6 +153,9 @@ MonoBehaviour:
   zeroGravDash: 1
   heavyDash: 1
   heavyDashEffect: 3
+  freeJumpDash: 1
+  canTurnWhileDashing: 1
+  dashTimeToTurn: 1
   showDistanceGizmo: 1
   glowMaterial: {fileID: 0}
 --- !u!114 &4762601280886837014
