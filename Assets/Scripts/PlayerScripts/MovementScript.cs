@@ -18,6 +18,7 @@ public class MovementScript : MonoBehaviour
     public float speed; //Base walk speed for player
     private float currentSpeed = 0; // the current speed for the player
     private bool turning;
+    public bool freeMove; // bases movement off input rather than direction 
     private CharacterController characterController; //references the character controller component
     private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
     private Vector3 direction; //A reference to the directional movement of the player in 3D space
@@ -247,8 +248,17 @@ public class MovementScript : MonoBehaviour
                         AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
                 }
 
-                velocity.x = currentSpeed * transform.forward.x;
-                velocity.z = currentSpeed * transform.forward.z;
+                if (!freeMove)
+                {
+                    velocity.x = currentSpeed * transform.forward.x;
+                    velocity.z = currentSpeed * transform.forward.z;
+                }
+                else
+                {
+                    velocity.x = currentSpeed * newDirection.x;
+                    velocity.z = currentSpeed * newDirection.z;
+                }
+
 
                 characterController.Move(velocity * Time.deltaTime); // make move
 
@@ -348,11 +358,13 @@ public class MovementScript : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, angle, 0);
             newDirection = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
             
-            if (Vector3.Distance(transform.forward, newDirection) > 0.8)
+            if (Vector3.Distance(transform.forward, newDirection) > 0.8 && !freeMove)
             {
-                //currentSpeed = 0f; 
                 turning = true;
+<<<<<<< HEAD
+=======
                 //Debug.Log(Vector3.Distance(transform.forward, newDirection));
+>>>>>>> 18018a46ffb53b826f1c75318585ce2597cf0301
             }
             else
             {
