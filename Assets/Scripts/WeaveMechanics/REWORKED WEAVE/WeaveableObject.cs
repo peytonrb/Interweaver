@@ -25,6 +25,7 @@ public class WeaveableObject : MonoBehaviour
     private GameObject otherActiveSnapPoint;
     private WeaveableObject objectToSnapTo;
     private Transform targetTransform;
+    private Vector3 targetPos;
     private float nearestDistance = 50f;
 
     [Header("For Dev Purposes - DO NOT EDIT")]
@@ -219,31 +220,23 @@ public class WeaveableObject : MonoBehaviour
     public void CombineObject()
     {
         // set variables
-
         FindSnapPoints();
 
         //check object move overrides to determine how the combined objects will move
         switch (objectMoveOverride)
         {
             case ObjectMoveOverrides.ThisAlwaysMoves: // move this weavable 
-                targetTransform = objectToSnapTo.otherActiveSnapPoint.transform;
                 StartCoroutine(MoveToPoint(this, objectToSnapTo));
                 StartCoroutine(BackUpForceSnap(this));
                 break;
 
             case ObjectMoveOverrides.ThisNeverMoves:
-
-                if (objectToSnapTo.objectMoveOverride == ObjectMoveOverrides.ThisNeverMoves) //if both objects have it, dont do anything
-                    return;
-                else // move other weavable
-                {
-                    StartCoroutine(MoveToPoint(objectToSnapTo, objectToSnapTo));
-                    StartCoroutine(BackUpForceSnap(objectToSnapTo));
-                }
+                StartCoroutine(MoveToPoint(objectToSnapTo, this));
+                StartCoroutine(BackUpForceSnap(objectToSnapTo));
                 break;
 
             default: // move other weaveable
-                StartCoroutine(MoveToPoint(objectToSnapTo, objectToSnapTo));
+                StartCoroutine(MoveToPoint(objectToSnapTo, this));
                 StartCoroutine(BackUpForceSnap(objectToSnapTo));
                 break;
         }
@@ -275,20 +268,33 @@ public class WeaveableObject : MonoBehaviour
         objectToSnapTo.otherActiveSnapPoint = activeSnapPoint;
         objectToSnapTo.activeSnapPoint = otherActiveSnapPoint;
         objectToSnapTo.nearestDistance = nearestDistance;
+
+        // determines target position for combining movement
         targetTransform = otherActiveSnapPoint.transform;
-        Debug.Log("target: " + targetTransform.position);
     }
 
     // moves weaveable to desired location
     // <param> the moving weaveable and the static weaveable
     IEnumerator MoveToPoint(WeaveableObject movingObject, WeaveableObject staticObject)
     {
+        movingObject.GetComponent<Rigidbody>().useGravity = false;
         Vector3 targetRotation = staticObject.transform.rotation.eulerAngles;
 
         float x = ((targetRotation.x) / 90) * 90;
         float y = ((targetRotation.y) / 90) * 90;
         float z = ((targetRotation.z) / 90) * 90;
 
+        // set constraints
+        if (movingObject == this)
+        {
+            UnfreezeConstraints("all");
+        }
+        else
+        {
+            FreezeConstraints("position");
+        }
+
+        targetPos = staticObject.transform.localPosition + targetTransform.localPosition;
         Quaternion nearestangle = Quaternion.Euler(x, y, z);
         movingObject.transform.rotation = nearestangle;
 
@@ -296,10 +302,8 @@ public class WeaveableObject : MonoBehaviour
         while (true)
         {
             timeSinceStarted += Time.deltaTime;
-            Debug.Log(targetTransform.position);
-            movingObject.GetComponent<Rigidbody>().velocity = targetTransform.position;
-            // movingObject.transform.position = Vector3.Lerp(movingObject.transform.position,
-            //                                                targetTransform.position, timeSinceStarted);
+            movingObject.transform.localPosition = Vector3.Lerp(movingObject.transform.localPosition,
+                                                          targetPos, timeSinceStarted);
 
             if (Vector3.Distance(movingObject.transform.position, targetTransform.position) < 1f)
             {
@@ -308,7 +312,18 @@ public class WeaveableObject : MonoBehaviour
                 if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
                 {
                     Debug.Log("weave together");
+                    movingObject.GetComponent<Rigidbody>().useGravity = true;
                     //WeaveTogether(staticObject.gameObject);
+
+                    // reset constraints
+                    if (movingObject == this)
+                    {
+                        FreezeConstraints("rotation");
+                    }
+                    else
+                    {
+                        UnfreezeConstraints("position");
+                    }
                 }
 
                 yield break;
@@ -320,14 +335,25 @@ public class WeaveableObject : MonoBehaviour
 
     // forces object together if positions are off after 2 seconds
     // <param> the moving weaveable
-    IEnumerator BackUpForceSnap(WeaveableObject movingWeaveable)
+    IEnumerator BackUpForceSnap(WeaveableObject movingObject)
     {
         yield return new WaitForSeconds(2f);
-        movingWeaveable.transform.position = targetTransform.position;
+        movingObject.transform.position = targetTransform.position;
 
         if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
         {
             Debug.Log("backup called");
+
+            // reset constraints
+            movingObject.GetComponent<Rigidbody>().useGravity = true;
+            if (movingObject == this)
+            {
+                FreezeConstraints("rotation");
+            }
+            else
+            {
+                UnfreezeConstraints("position");
+            }
         }
     }
 
