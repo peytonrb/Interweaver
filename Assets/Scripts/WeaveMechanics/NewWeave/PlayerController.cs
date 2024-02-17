@@ -196,6 +196,7 @@ public class PlayerController : MonoBehaviour
 
             if (distanceBetween < weaveDistance)
             {
+                movementScript.freeMove = true; // lets weaver mover even when not facing where they're moving
                 StartCoroutine(WeaveAesthetics());
                 isCurrentlyWeaving = true;               
                 interactableObject.Interact();
@@ -260,6 +261,7 @@ public class PlayerController : MonoBehaviour
             interactableObject = null;
             //characterAnimationHandler.ToggleWeaveAnim(isWeaving);
             StartCoroutine(EndWeaveAudio());
+            movementScript.freeMove = false; // returns weaver to needing to be facing where they're moving
             relocateMode.SetActive(false); // on screen ui
             combineMode.SetActive(false); // on screen ui
             uninteract = false;

@@ -53,6 +53,7 @@ public class JumpAndDashScript : MonoBehaviour
         if (characterController.isGrounded || infiniteJump)
         {
             if (movementScript.canMove) {
+                characterAnimationHandler.ToggleJumpAnim();
                 movementScript.ChangeVelocity(new UnityEngine.Vector3(movementScript.GetVelocity().x, jumpForce, movementScript.GetVelocity().z));
                 if (freeJumpDash)
                 {
