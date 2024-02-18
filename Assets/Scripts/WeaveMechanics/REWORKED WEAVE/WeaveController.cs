@@ -27,16 +27,18 @@ public class WeaveController : MonoBehaviour
     [SerializeField] private AudioClip weavingOutroClip;
 
     [Header("Other Script References - DO NOT MODIFY")]
-    public bool isWeaving;
-    public WeaveableObject currentWeaveable;
-    public WeaveableObject selectedWeaveable;
-    public Vector2 lookDirection;
+    [HideInInspector] public bool isWeaving;
+    [HideInInspector] public WeaveableObject currentWeaveable;
+    [HideInInspector] public WeaveableObject selectedWeaveable;
+    [HideInInspector] public Vector2 lookDirection;
+    private MovementScript movementScript;
 
     void Start()
     {
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         weaveFXScript = this.GetComponent<WeaveFXScript>();
         weaveSpawn = this.transform.Find("WeaveSpawn").gameObject;
+        movementScript = this.GetComponent<MovementScript>();
         targetingArrow.SetActive(true);
     }
 
@@ -129,15 +131,17 @@ public class WeaveController : MonoBehaviour
         if (isValidWeaveable)
         {
             currentWeaveable.isBeingWoven = true;
+            movementScript.freeMove = true; // lets weaver move even when not facing where they're moving
             StartCoroutine(PlayWeaveVFX());
             StartCoroutine(WaitForVFX()); // sets isWeaving to true. is in Coroutine for aesthetic purposes.
-            currentWeaveable.AddToWovenObjects(); // BEGINS WEAVEABLEOBEJCT'S INVOLVEMENT IN ALL THIS
+            currentWeaveable.AddToWovenObjects();
             // toggle on animation here
         }
     }
 
     // plays VFX and Audio at proper timings
-    IEnumerator PlayWeaveVFX()
+    // accessed by WeaveableObject
+    public IEnumerator PlayWeaveVFX()
     {
         // VFX
         weaveFXScript.ActivateWeave(currentWeaveable.transform);
@@ -160,12 +164,30 @@ public class WeaveController : MonoBehaviour
     {
         isWeaving = false;
         currentWeaveable.GetComponent<Rigidbody>().velocity = Vector3.down * 2f;
+        movementScript.freeMove = false; // returns weaver to needing to be facing where they're moving
         weaveFXScript.DisableWeave();
         StartCoroutine(EndWeaveAudio());
-        // toggle off animation here
-        currentWeaveable.ResetWeaveable();
+
+        // if this is the only weaveable in the list (weaveables are added on combine)
+        if (!currentWeaveable.hasBeenCombined)
+        {
+            currentWeaveable.ResetWeaveable();
+            WeaveableManager.Instance.RemoveWeaveableFromList(0, 0);
+        }
+        else
+        {
+            if (WeaveableManager.Instance.combinedWeaveables[currentWeaveable.listIndex] != null)
+            {
+                for (int i = 0; i < WeaveableManager.Instance.combinedWeaveables[currentWeaveable.listIndex].weaveableObjectGroup.Count; i++)
+                {
+                    WeaveableManager.Instance.combinedWeaveables[currentWeaveable.listIndex].weaveableObjectGroup[i].ResetWeaveable();
+                }
+            }
+        }
+
         currentWeaveable = null;
         selectedWeaveable = null;
+        // toggle off animation here
     }
 
     // stops all audio if audio is enabled
@@ -199,7 +221,7 @@ public class WeaveController : MonoBehaviour
             RaycastHit hitInfo;
 
             // check for Weaveable object within range of BoxCast sent from CURRENTWEAVEABLE
-            if (Physics.BoxCast(currentWeaveable.transform.position, transform.localScale, 
+            if (Physics.BoxCast(currentWeaveable.transform.position, transform.localScale,
                                 currentWeaveable.targetingArrow.transform.forward, out hitInfo,
                                 currentWeaveable.transform.rotation, weaveDistance, weaveableLayerMask))
             {

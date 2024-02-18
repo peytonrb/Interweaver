@@ -31,8 +31,8 @@ public class WeaveableObject : MonoBehaviour
     private float nearestDistance = 50f;
 
     [Header("For Dev Purposes - DO NOT EDIT")]
-    [HideInInspector] public int listIndex;
-    [HideInInspector] public int ID;
+    public int listIndex;
+    public int ID;
     private Vector2 lookDirection;
     private Vector3 worldPosition;
 
@@ -70,6 +70,15 @@ public class WeaveableObject : MonoBehaviour
             {
                 isHovering = true;
                 transform.position = transform.position + new Vector3(0, hoverHeight, 0);
+                transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
+            }
+
+            // compensates for elevation if object is below hover height while being woven
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, new Vector3(0f, -90f, 0f), out hit, hoverHeight - 0.1f))
+            {
+                Vector3 rayDirection = Vector3.down;
+                this.GetComponent<Rigidbody>().AddForce(rayDirection * Physics.gravity.y * hoverHeight);
             }
 
             // actually moves the weaveable with joystick or mouse
@@ -85,37 +94,40 @@ public class WeaveableObject : MonoBehaviour
     // drops object if player is too far or moving object too fast
     public void MoveWeaveableToMouse()
     {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfo;
-
-        // if the mouse position is over weaveable terrain or any weaveable object -- WALLS NEED TO BE TAGGED AS RAYCASTONLYFLOOR
-        if (Physics.Raycast(ray, out hitInfo, 1000f, weaveableLayers))
+        if (isBeingWoven)
         {
-            // enables and sets object's targeting arrow
-            targetingArrow.SetActive(true);
-            weaveController.targetingArrow.SetActive(false);
-            RaycastHit hitData;
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hitInfo;
 
-            if (Physics.Raycast(ray, out hitData, 100f))
-                worldPosition = hitData.point;
-
-            // if object is past the max distance allowed from player, object is disconnected
-            if (Vector3.Distance(transform.position, weaveController.transform.position) > maxWeaveDistance)
+            // if the mouse position is over weaveable terrain or any weaveable object -- WALLS NEED TO BE TAGGED AS RAYCASTONLYFLOOR
+            if (Physics.Raycast(ray, out hitInfo, 1000f, weaveableLayers))
             {
-                weaveController.OnDrop();
-                return;
+                // enables and sets object's targeting arrow
+                targetingArrow.SetActive(true);
+                weaveController.targetingArrow.SetActive(false);
+                RaycastHit hitData;
+
+                if (Physics.Raycast(ray, out hitData, 100f))
+                    worldPosition = hitData.point;
+
+                // if object is past the max distance allowed from player, object is disconnected
+                if (Vector3.Distance(transform.position, weaveController.transform.position) > maxWeaveDistance)
+                {
+                    weaveController.OnDrop();
+                    return;
+                }
+
+                Vector3 adjustedVector = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
+                targetingArrow.transform.LookAt(adjustedVector);
+
+                // move object to mouse position
+                Rigidbody rb = this.GetComponent<Rigidbody>();
+                rb.velocity = new Vector3(hitData.point.x - rb.position.x,
+                                          transform.position.y - rb.position.y,
+                                          hitData.point.z - rb.position.z);
+
+                FreezeConstraints("rotation");
             }
-
-            Vector3 adjustedVector = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
-            targetingArrow.transform.LookAt(adjustedVector);
-
-            // move object to mouse position
-            Rigidbody rb = this.GetComponent<Rigidbody>();
-            rb.velocity = new Vector3(hitData.point.x - rb.position.x,
-                                      transform.position.y - rb.position.y,
-                                      hitData.point.z - rb.position.z);
-
-            FreezeConstraints("rotation");
         }
     }
 
@@ -124,38 +136,41 @@ public class WeaveableObject : MonoBehaviour
     // <param> the direction that the player is looking in
     public void MoveWeaveableToTarget(Vector2 lookDir)
     {
-        // if this object does not have the most updated look direction saved...
-        if (lookDir != lookDirection)
+        if (isBeingWoven)
         {
-            lookDirection = lookDir;
+            // if this object does not have the most updated look direction saved...
+            if (lookDir != lookDirection)
+            {
+                lookDirection = lookDir;
+            }
+
+            // enables targeting arrow and determines direction to fire boxcast
+            targetingArrow.SetActive(true);
+            weaveController.targetingArrow.SetActive(false);
+            float targetAngle = Mathf.Atan2(lookDir.x, lookDir.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
+
+            if (lookDir == Vector2.zero) // if player releases RS, targeting arrow is hidden
+            {
+                targetingArrow.SetActive(false);
+            }
+            else // otherwise, it moves with RS's position
+            {
+                targetingArrow.transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+            }
+
+            Vector3 rayDirection = targetingArrow.transform.forward;
+
+            // if object is past the max distance allowed from player, object is disconnected
+            if (Vector3.Distance(transform.position, weaveController.transform.position) > maxWeaveDistance)
+            {
+                weaveController.OnDrop();
+                return;
+            }
+
+            // move object with joystick movement
+            this.GetComponent<Rigidbody>().velocity = rayDirection * 6f;
+            FreezeConstraints("rotation");
         }
-
-        // enables targeting arrow and determines direction to fire boxcast
-        targetingArrow.SetActive(true);
-        weaveController.targetingArrow.SetActive(false);
-        float targetAngle = Mathf.Atan2(lookDir.x, lookDir.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
-
-        if (lookDir == Vector2.zero) // if player releases RS, targeting arrow is hidden
-        {
-            targetingArrow.SetActive(false);
-        }
-        else // otherwise, it moves with RS's position
-        {
-            targetingArrow.transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
-        }
-
-        Vector3 rayDirection = targetingArrow.transform.forward;
-
-        // if object is past the max distance allowed from player, object is disconnected
-        if (Vector3.Distance(transform.position, weaveController.transform.position) > maxWeaveDistance)
-        {
-            weaveController.OnDrop();
-            return;
-        }
-
-        // move object with joystick movement
-        this.GetComponent<Rigidbody>().velocity = rayDirection * 6f;
-        FreezeConstraints("rotation");
     }
 
     // rotates the object after being called by InputManager
@@ -253,8 +268,9 @@ public class WeaveableObject : MonoBehaviour
         float nearestDistance = Mathf.Infinity;
         objectToSnapTo = weaveController.selectedWeaveable;
         weaveController.selectedWeaveable = null;
+        List<Transform> totalTransformPoints = new List<Transform>();
 
-        // calculate nearest snap points
+        // calculate nearest snap points - inefficient
         for (int i = 0; i < myTransformPoints.Length; i++)
         {
             for (int t = 0; t < objectToSnapTo.myTransformPoints.Length; t++)
@@ -380,7 +396,11 @@ public class WeaveableObject : MonoBehaviour
         // adds to the end of the list
         Vector2 returnVal = WeaveableManager.Instance.AddWeaveableToList(objectToSnapTo, listIndex);
 
-        // is janky i think - needs playtesting
+        // vfx and audio for new block
+        weaveController.StartCoroutine(weaveController.PlayWeaveVFX());
+        weaveController.weaveFXScript.WeaveableSelected(objectToSnapTo.gameObject);
+
+        // needs playtesting
         // interaction overrides for special weaveable objects
         if (weaveInteraction != null)
         {
@@ -397,7 +417,7 @@ public class WeaveableObject : MonoBehaviour
     public void AddToWovenObjects()
     {
         Vector2 returnValue = new Vector2(0f, 0f);
-        
+
         if (!hasBeenCombined)
             returnValue = WeaveableManager.Instance.AddWeaveableToList(this);
 
@@ -405,8 +425,16 @@ public class WeaveableObject : MonoBehaviour
         ID = (int)returnValue.x;
         listIndex = (int)returnValue.y;
 
-        // vfx/audio
-        weaveController.weaveFXScript.WeaveableSelected(this.gameObject); // not sure how this is going to go with the combined weaveables
+        // vfx/audio - sets all objects being woven with correct vfx and audio
+        if (!hasBeenCombined)
+            weaveController.weaveFXScript.WeaveableSelected(this.gameObject);
+        else // if hasBeenCombined is true, object is guaranteed to have a valid list index
+        {
+            for (int i = 0; i < WeaveableManager.Instance.combinedWeaveables[listIndex].weaveableObjectGroup.Count; i++)
+            {
+                weaveController.weaveFXScript.WeaveableSelected(WeaveableManager.Instance.combinedWeaveables[listIndex].weaveableObjectGroup[i].gameObject);
+            }
+        }
     }
 
     // resets all variables of the object to default
@@ -414,12 +442,18 @@ public class WeaveableObject : MonoBehaviour
     {
         isBeingWoven = false;
         isHovering = false;
-        listIndex = 0;
-        ID = 0;
+
+        if (!hasBeenCombined)
+        {
+            listIndex = 0;
+            ID = 0;
+        }
 
         targetingArrow.SetActive(false);
         weaveController.targetingArrow.SetActive(true);
-        UnfreezeConstraints("all");
+
+        if (this.gameObject.tag != "FloatingIsland" && this.gameObject.tag != "Breakable")
+            UnfreezeConstraints("all");
 
         // vfx
         weaveController.weaveFXScript.StopAura(gameObject);
