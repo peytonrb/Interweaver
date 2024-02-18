@@ -7,6 +7,7 @@ public class TeleportationCrystalScript : MonoBehaviour
     public bool isWeaveable = true;
     public GameObject linkedCrystal;
     public bool isTeleportable = true;
+
     void Start()
     {
         if (!isWeaveable)
@@ -20,7 +21,7 @@ public class TeleportationCrystalScript : MonoBehaviour
         Debug.Log("This is the linked crystal's name " + linkedCrystal.name + " and this is it's position " + linkedCrystal.transform.position);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter (Collider collision)
     {
         if (collision.gameObject.CompareTag("Weaveable") && this.GetComponent<WeaveableNew>().isCombined)
         {          
@@ -28,7 +29,14 @@ public class TeleportationCrystalScript : MonoBehaviour
             this.GetComponent<WeaveableNew>().StopAllCoroutines();
             collision.gameObject.GetComponent<WeaveableNew>().Uncombine();
             collision.gameObject.GetComponent <WeaveableNew>().StopAllCoroutines();
-            collision.transform.position = linkedCrystal.transform.position;
+            collision.transform.position = new Vector3 (linkedCrystal.transform.position.x, 
+                linkedCrystal.transform.position.y, linkedCrystal.transform.position.z + 3);
         }
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        DrawArrow.ForGizmo(transform.position,Vector3.forward * 3);
     }
 }
