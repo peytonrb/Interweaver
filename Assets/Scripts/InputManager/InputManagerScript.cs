@@ -176,7 +176,12 @@ public class InputManagerScript : MonoBehaviour
             }
             else // for reworked weave
             {
+                bool wasCombined = weaveController.currentWeaveable.hasBeenCombined;
                 weaveController.OnDrop();
+
+                // if this is the only weaveable in the list (weaveables are added on combine)
+                if (!wasCombined)
+                    WeaveableManager.Instance.RemoveWeaveableFromList(0, 0);
             }
         }
     }
@@ -347,6 +352,7 @@ public class InputManagerScript : MonoBehaviour
             else // FOR REWORKED WEAVE
             {
                 WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
+                weaveController.OnDrop();
             }
         }
     }

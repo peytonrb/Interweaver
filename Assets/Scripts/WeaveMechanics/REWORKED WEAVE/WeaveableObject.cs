@@ -13,6 +13,8 @@ public class WeaveableObject : MonoBehaviour
     [SerializeField] private LayerMask weaveableLayers;
     [SerializeField] private float maxWeaveDistance = 25f;
     private bool isHovering = false;
+    [HideInInspector] public bool hasBeenCombined = false;
+    private bool combineFinished = false;
 
     // rotation
     [HideInInspector] public enum rotateDir { forward, back, left, right }
@@ -21,16 +23,16 @@ public class WeaveableObject : MonoBehaviour
 
     // snapping
     private Transform[] myTransformPoints;
-    public GameObject activeSnapPoint; // hide in inspector
+    [HideInInspector] public GameObject activeSnapPoint;
     private GameObject otherActiveSnapPoint;
-    private WeaveableObject objectToSnapTo;
+    [HideInInspector] public WeaveableObject objectToSnapTo;
     private Transform targetTransform;
     private Vector3 targetPos;
     private float nearestDistance = 50f;
 
     [Header("For Dev Purposes - DO NOT EDIT")]
-    public int listIndex;
-    public int ID;
+    [HideInInspector] public int listIndex;
+    [HideInInspector] public int ID;
     private Vector2 lookDirection;
     private Vector3 worldPosition;
 
@@ -38,6 +40,8 @@ public class WeaveableObject : MonoBehaviour
     private WeaveController weaveController;
     private Camera mainCamera;
     [HideInInspector] public GameObject targetingArrow;
+    [HideInInspector] public WeaveInteraction weaveInteraction;
+    [HideInInspector] public Material originalMat;
 
     void Start()
     {
@@ -45,6 +49,7 @@ public class WeaveableObject : MonoBehaviour
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         targetingArrow = this.transform.GetChild(0).Find("Targeting Arrow Parent").gameObject;
         weaveableObj = this.transform.GetChild(0).gameObject;
+        originalMat = this.transform.GetChild(0).GetComponent<Renderer>().material;
 
         // set snap points
         myTransformPoints = new Transform[6];
@@ -141,8 +146,6 @@ public class WeaveableObject : MonoBehaviour
 
         Vector3 rayDirection = targetingArrow.transform.forward;
 
-        // need BOXCAST FOR COMBINING
-
         // if object is past the max distance allowed from player, object is disconnected
         if (Vector3.Distance(transform.position, weaveController.transform.position) > maxWeaveDistance)
         {
@@ -220,7 +223,9 @@ public class WeaveableObject : MonoBehaviour
     public void CombineObject()
     {
         // set variables
+        hasBeenCombined = true;
         FindSnapPoints();
+        objectToSnapTo.hasBeenCombined = true;
 
         //check object move overrides to determine how the combined objects will move
         switch (objectMoveOverride)
@@ -246,7 +251,8 @@ public class WeaveableObject : MonoBehaviour
     {
         float distance;
         float nearestDistance = Mathf.Infinity;
-        objectToSnapTo = weaveController.selectedWeaveable; // needs to be set to null asap
+        objectToSnapTo = weaveController.selectedWeaveable;
+        weaveController.selectedWeaveable = null;
 
         // calculate nearest snap points
         for (int i = 0; i < myTransformPoints.Length; i++)
@@ -311,9 +317,9 @@ public class WeaveableObject : MonoBehaviour
 
                 if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
                 {
-                    Debug.Log("weave together");
                     movingObject.GetComponent<Rigidbody>().useGravity = true;
-                    //WeaveTogether(staticObject.gameObject);
+                    combineFinished = true;
+                    CombineTogether();
 
                     // reset constraints
                     if (movingObject == this)
@@ -338,29 +344,62 @@ public class WeaveableObject : MonoBehaviour
     IEnumerator BackUpForceSnap(WeaveableObject movingObject)
     {
         yield return new WaitForSeconds(2f);
-        movingObject.transform.position = targetTransform.position;
 
-        if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
+        if (!combineFinished)
         {
-            Debug.Log("backup called");
+            movingObject.transform.position = targetTransform.position;
 
-            // reset constraints
-            movingObject.GetComponent<Rigidbody>().useGravity = true;
-            if (movingObject == this)
+            if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
             {
-                FreezeConstraints("rotation");
+                CombineTogether();
+
+                // reset constraints
+                movingObject.GetComponent<Rigidbody>().useGravity = true;
+                if (movingObject == this)
+                {
+                    FreezeConstraints("rotation");
+                }
+                else
+                {
+                    UnfreezeConstraints("position");
+                }
             }
-            else
-            {
-                UnfreezeConstraints("position");
-            }
+        }
+
+        combineFinished = false;
+    }
+
+    // actually joins objects together. adds object to respective WeaveableManager list
+    private void CombineTogether()
+    {
+        // adds fixed joint
+        FixedJoint fixedJoint = this.gameObject.AddComponent<FixedJoint>();
+        fixedJoint.connectedBody = objectToSnapTo.GetComponent<Rigidbody>();
+        InputManagerScript.instance.ControllerRumble(0.4f, 8f, 0f);
+
+        // adds to the end of the list
+        Vector2 returnVal = WeaveableManager.Instance.AddWeaveableToList(objectToSnapTo, listIndex);
+
+        // is janky i think - needs playtesting
+        // interaction overrides for special weaveable objects
+        if (weaveInteraction != null)
+        {
+            weaveInteraction.OnWeave(objectToSnapTo.gameObject, gameObject);
+        }
+
+        if (objectToSnapTo.weaveInteraction != null)
+        {
+            objectToSnapTo.weaveInteraction.OnWeave(gameObject, objectToSnapTo.gameObject);
         }
     }
 
     // adds object to array of combined object
     public void AddToWovenObjects()
     {
-        Vector2 returnValue = WeaveableManager.Instance.AddWeaveableToList(this.gameObject, false);
+        Vector2 returnValue = new Vector2(0f, 0f);
+        
+        if (!hasBeenCombined)
+            returnValue = WeaveableManager.Instance.AddWeaveableToList(this);
 
         // AddWeaveableToList() returns a Vector2 to get both ints from the return value
         ID = (int)returnValue.x;
@@ -373,19 +412,18 @@ public class WeaveableObject : MonoBehaviour
     // resets all variables of the object to default
     public void ResetWeaveable()
     {
-        WeaveableManager.Instance.RemoveWeaveableFromList(listIndex, ID);
         isBeingWoven = false;
         isHovering = false;
         listIndex = 0;
         ID = 0;
+
         targetingArrow.SetActive(false);
         weaveController.targetingArrow.SetActive(true);
-
-        // reset rotation
-        transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        weaveableObj.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-
         UnfreezeConstraints("all");
+
+        // vfx
+        weaveController.weaveFXScript.StopAura(gameObject);
+        weaveController.weaveFXScript.DisableWeave();
     }
 
     /*******************************************************
