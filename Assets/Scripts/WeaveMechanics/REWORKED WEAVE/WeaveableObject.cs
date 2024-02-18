@@ -15,6 +15,7 @@ public class WeaveableObject : MonoBehaviour
     private bool isHovering = false;
     [HideInInspector] public bool hasBeenCombined = false;
     private bool combineFinished = false;
+    public bool canBeMoved = true;
 
     // rotation
     [HideInInspector] public enum rotateDir { forward, back, left, right }
@@ -41,7 +42,7 @@ public class WeaveableObject : MonoBehaviour
     private WeaveController weaveController;
     private Camera mainCamera;
     [HideInInspector] public GameObject targetingArrow;
-    [HideInInspector] public WeaveInteraction weaveInteraction;
+    [SerializeField] private WeaveInteraction weaveInteraction;
     [HideInInspector] public Material originalMat;
 
     void Start()
@@ -63,7 +64,7 @@ public class WeaveableObject : MonoBehaviour
         // if objects can be moved and they are being woven, move objects based on joystick/mouse input.
         // variables set by MoveWeaveable(), which is called by WeaveController if object is deemed as a
         //      valid weaveable.
-        if (isBeingWoven)
+        if (isBeingWoven && canBeMoved)
         {
             // lifts weaveable immediately once woven. only runs once, altitude of weaveable determined by
             //      MoveWeaveable()
@@ -87,6 +88,10 @@ public class WeaveableObject : MonoBehaviour
                 MoveWeaveableToMouse();
             else
                 MoveWeaveableToTarget(lookDirection);
+        }
+        else if (isBeingWoven && !canBeMoved)
+        {
+            FreezeConstraints("all");
         }
     }
 
