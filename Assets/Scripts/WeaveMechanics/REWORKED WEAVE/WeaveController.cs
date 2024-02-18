@@ -177,7 +177,7 @@ public class WeaveController : MonoBehaviour
         }
         else
         {
-            if (WeaveableManager.Instance.combinedWeaveables[currentWeaveable.listIndex] != null)
+            if (WeaveableManager.Instance.combinedWeaveables.Count > 0 && WeaveableManager.Instance.combinedWeaveables[currentWeaveable.listIndex] != null)
             {
                 for (int i = 0; i < WeaveableManager.Instance.combinedWeaveables[currentWeaveable.listIndex].weaveableObjectGroup.Count; i++)
                 {

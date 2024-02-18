@@ -31,6 +31,7 @@ public class WeaveableObject : MonoBehaviour
     private Transform targetTransform;
     private Vector3 targetPos;
     private float nearestDistance = 50f;
+    [SerializeField] private WeaveInteraction weaveInteraction;
 
     [Header("For Dev Purposes - DO NOT EDIT")]
     public int listIndex;
@@ -42,7 +43,6 @@ public class WeaveableObject : MonoBehaviour
     private WeaveController weaveController;
     private Camera mainCamera;
     [HideInInspector] public GameObject targetingArrow;
-    [SerializeField] private WeaveInteraction weaveInteraction;
     [HideInInspector] public Material originalMat;
 
     void Start()
@@ -454,9 +454,12 @@ public class WeaveableObject : MonoBehaviour
             weaveController.weaveFXScript.WeaveableSelected(this.gameObject);
         else // if hasBeenCombined is true, object is guaranteed to have a valid list index
         {
-            for (int i = 0; i < WeaveableManager.Instance.combinedWeaveables[listIndex].weaveableObjectGroup.Count; i++)
+            if (WeaveableManager.Instance.combinedWeaveables.Count > 0)
             {
-                weaveController.weaveFXScript.WeaveableSelected(WeaveableManager.Instance.combinedWeaveables[listIndex].weaveableObjectGroup[i].gameObject);
+                for (int i = 0; i < WeaveableManager.Instance.combinedWeaveables[listIndex].weaveableObjectGroup.Count; i++)
+                {
+                    weaveController.weaveFXScript.WeaveableSelected(WeaveableManager.Instance.combinedWeaveables[listIndex].weaveableObjectGroup[i].gameObject);
+                }
             }
         }
     }

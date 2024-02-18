@@ -47,7 +47,8 @@ public class WeaveableManager : MonoBehaviour
     IEnumerator WaitForFunction(int listIndex, int i)
     {
         yield return null;
-        combinedWeaveables[listIndex].weaveableObjectGroup[i].hasBeenCombined = false;
+        if (combinedWeaveables.Count > 0)
+            combinedWeaveables[listIndex].weaveableObjectGroup[i].hasBeenCombined = false;
     }
 
     // adds weaveable to new or existing list depending on combined status (wip)
