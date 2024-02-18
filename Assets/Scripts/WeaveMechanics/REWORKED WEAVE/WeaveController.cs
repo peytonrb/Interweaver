@@ -19,6 +19,7 @@ public class WeaveController : MonoBehaviour
     private Vector3 worldPosition;
     [HideInInspector] public WeaveFXScript weaveFXScript;
     private GameObject weaveSpawn;
+    public int maxCombinedObjects = 4;
 
     [Header("Audio")]
     [SerializeField] private AudioClip startWeaveClip;
@@ -215,36 +216,40 @@ public class WeaveController : MonoBehaviour
     // <param> is player using a controller or k&m
     public void CheckIfWeaveable(bool isGamepad)
     {
-        if (isGamepad)
+        // prevents you from combining more than the max amount of weaveables per group
+        if (WeaveableManager.Instance.combinedWeaveables[currentWeaveable.listIndex].weaveableObjectGroup.Count < maxCombinedObjects)
         {
-            // boxcast in controller targeted direction
-            RaycastHit hitInfo;
-
-            // check for Weaveable object within range of BoxCast sent from CURRENTWEAVEABLE
-            if (Physics.BoxCast(currentWeaveable.transform.position, transform.localScale,
-                                currentWeaveable.targetingArrow.transform.forward, out hitInfo,
-                                currentWeaveable.transform.rotation, weaveDistance, weaveableLayerMask))
+            if (isGamepad)
             {
-                if (hitInfo.collider.GetComponent<WeaveableObject>() != currentWeaveable)
+                // boxcast in controller targeted direction
+                RaycastHit hitInfo;
+
+                // check for Weaveable object within range of BoxCast sent from CURRENTWEAVEABLE
+                if (Physics.BoxCast(currentWeaveable.transform.position, transform.localScale,
+                                    currentWeaveable.targetingArrow.transform.forward, out hitInfo,
+                                    currentWeaveable.transform.rotation, weaveDistance, weaveableLayerMask))
                 {
-                    selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
-                    currentWeaveable.CombineObject();
+                    if (hitInfo.collider.GetComponent<WeaveableObject>() != currentWeaveable)
+                    {
+                        selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
+                        currentWeaveable.CombineObject();
+                    }
                 }
             }
-        }
-        else
-        {
-            // screen to point raycast using mouse position
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hitInfo;
-
-            // checks for a Weavable object within distance of Ray
-            if (Physics.Raycast(ray, out hitInfo, 100f, weaveableLayerMask))
+            else
             {
-                if (hitInfo.collider.GetComponent<WeaveableObject>() != currentWeaveable)
+                // screen to point raycast using mouse position
+                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hitInfo;
+
+                // checks for a Weavable object within distance of Ray
+                if (Physics.Raycast(ray, out hitInfo, 100f, weaveableLayerMask))
                 {
-                    selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
-                    currentWeaveable.CombineObject();
+                    if (hitInfo.collider.GetComponent<WeaveableObject>() != currentWeaveable)
+                    {
+                        selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
+                        currentWeaveable.CombineObject();
+                    }
                 }
             }
         }

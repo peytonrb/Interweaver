@@ -28,8 +28,13 @@ public class WeaveableManager : MonoBehaviour
     {
         for (int i = 0; i < combinedWeaveables[listIndex].weaveableObjectGroup.Count; i++)
         {
-            FixedJoint joint = combinedWeaveables[listIndex].weaveableObjectGroup[i].GetComponent<FixedJoint>();
-            Destroy(joint);            
+            // its possible that there may be multiple fixed joints per gameobject
+            FixedJoint[] joints = combinedWeaveables[listIndex].weaveableObjectGroup[i].GetComponents<FixedJoint>();
+            foreach (FixedJoint joint in joints)
+            {
+                Destroy(joint);
+            }
+
             combinedWeaveables[listIndex].weaveableObjectGroup[i].ResetWeaveable();
             StartCoroutine(WaitForFunction(listIndex, i));
         }
@@ -56,13 +61,6 @@ public class WeaveableManager : MonoBehaviour
         if (weaveable != null)
         {
             listIndex = combinedWeaveables.Count;
-
-            // ensures index does not go out of bounds
-            if (listIndex <= 0)
-            {
-                listIndex = 0;
-            }
-
             combinedWeaveables.Add(new weaveableGroup());
             combinedWeaveables[listIndex].weaveableObjectGroup.Add(weaveable);
         }
@@ -100,9 +98,9 @@ public class WeaveableManager : MonoBehaviour
             {
                 combinedWeaveables[listIndex].weaveableObjectGroup.RemoveAt(ID);
             }
-            
+
             // deletes array index as a whole if list is empty
-            if (combinedWeaveables[listIndex].weaveableObjectGroup.Count <= 0)  
+            if (combinedWeaveables[listIndex].weaveableObjectGroup.Count <= 0)
             {
                 combinedWeaveables.RemoveAt(listIndex);
             }

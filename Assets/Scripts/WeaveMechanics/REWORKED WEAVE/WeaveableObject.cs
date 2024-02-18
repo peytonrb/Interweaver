@@ -22,10 +22,11 @@ public class WeaveableObject : MonoBehaviour
     private GameObject weaveableObj;
 
     // snapping
-    private Transform[] myTransformPoints;
+    [HideInInspector] public Transform[] myTransformPoints;
     [HideInInspector] public GameObject activeSnapPoint;
     private GameObject otherActiveSnapPoint;
     [HideInInspector] public WeaveableObject objectToSnapTo;
+    private WeaveableObject closestObject;
     private Transform targetTransform;
     private Vector3 targetPos;
     private float nearestDistance = 50f;
@@ -262,6 +263,8 @@ public class WeaveableObject : MonoBehaviour
         }
     }
 
+    // finds snap points on parent and combining object
+    // handles combining an object to an existing group
     private void FindSnapPoints()
     {
         float distance;
@@ -270,16 +273,37 @@ public class WeaveableObject : MonoBehaviour
         weaveController.selectedWeaveable = null;
         List<Transform> totalTransformPoints = new List<Transform>();
 
+        // collects all snap points on all combined objects
+        if (hasBeenCombined)
+        {
+            for (int i = 0; i < WeaveableManager.Instance.combinedWeaveables[listIndex].weaveableObjectGroup.Count; i++)
+            {
+                foreach (Transform transformPoint in WeaveableManager.Instance.combinedWeaveables[listIndex].weaveableObjectGroup[i].myTransformPoints)
+                {
+                    totalTransformPoints.Add(transformPoint);
+                }
+            }
+        }
+        // if only one object is being woven, don't waste resources traversing above loop
+        else
+        {
+            foreach (Transform transformPoint in myTransformPoints)
+            {
+                totalTransformPoints.Add(transformPoint);
+            }
+        }
+
+
         // calculate nearest snap points - inefficient
-        for (int i = 0; i < myTransformPoints.Length; i++)
+        for (int i = 0; i < totalTransformPoints.Count; i++)
         {
             for (int t = 0; t < objectToSnapTo.myTransformPoints.Length; t++)
             {
-                distance = Vector3.Distance(objectToSnapTo.myTransformPoints[t].position, myTransformPoints[i].position);
+                distance = Vector3.Distance(objectToSnapTo.myTransformPoints[t].position, totalTransformPoints[i].position);
 
                 if (distance < nearestDistance)
                 {
-                    activeSnapPoint = myTransformPoints[i].gameObject;
+                    activeSnapPoint = totalTransformPoints[i].gameObject;
                     otherActiveSnapPoint = objectToSnapTo.myTransformPoints[t].gameObject;
                     nearestDistance = distance;
                 }
@@ -331,22 +355,20 @@ public class WeaveableObject : MonoBehaviour
             {
                 movingObject.transform.position = targetTransform.position;
 
-                if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
-                {
-                    movingObject.GetComponent<Rigidbody>().useGravity = true;
-                    combineFinished = true;
-                    CombineTogether();
+                movingObject.GetComponent<Rigidbody>().useGravity = true;
+                combineFinished = true;
+                CombineTogether();
 
-                    // reset constraints
-                    if (movingObject == this)
-                    {
-                        FreezeConstraints("rotation");
-                    }
-                    else
-                    {
-                        UnfreezeConstraints("position");
-                    }
+                // reset constraints
+                if (movingObject == this)
+                {
+                    FreezeConstraints("rotation");
                 }
+                else
+                {
+                    UnfreezeConstraints("position");
+                }
+
 
                 yield break;
             }
@@ -365,20 +387,17 @@ public class WeaveableObject : MonoBehaviour
         {
             movingObject.transform.position = targetTransform.position;
 
-            if (!TryGetComponent<FixedJoint>(out FixedJoint fJ))
-            {
-                CombineTogether();
+            CombineTogether();
 
-                // reset constraints
-                movingObject.GetComponent<Rigidbody>().useGravity = true;
-                if (movingObject == this)
-                {
-                    FreezeConstraints("rotation");
-                }
-                else
-                {
-                    UnfreezeConstraints("position");
-                }
+            // reset constraints
+            movingObject.GetComponent<Rigidbody>().useGravity = true;
+            if (movingObject == this)
+            {
+                FreezeConstraints("rotation");
+            }
+            else
+            {
+                UnfreezeConstraints("position");
             }
         }
 
@@ -422,8 +441,8 @@ public class WeaveableObject : MonoBehaviour
             returnValue = WeaveableManager.Instance.AddWeaveableToList(this);
 
         // AddWeaveableToList() returns a Vector2 to get both ints from the return value
-        ID = (int)returnValue.x;
-        listIndex = (int)returnValue.y;
+        listIndex = (int)returnValue.x;
+        ID = (int)returnValue.y;
 
         // vfx/audio - sets all objects being woven with correct vfx and audio
         if (!hasBeenCombined)
