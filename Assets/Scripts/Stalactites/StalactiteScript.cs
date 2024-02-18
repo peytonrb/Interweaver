@@ -56,12 +56,16 @@ public class StalactiteScript : MonoBehaviour, ITriggerable
             }
             else if (collision.gameObject.CompareTag("Familiar")) {
                 FamiliarScript fs = collision.gameObject.GetComponent<FamiliarScript>();
-                fs.Death();
+                MoleDigScript mds = collision.gameObject.GetComponent<MoleDigScript>();
+                if (mds.borrowed == false) {
+                    fs.Death();
+                }
                 sss.SpawnStalactite();
                 Instantiate(stalactiteCrashingParticle,transform.position,Quaternion.identity);
                 Destroy(gameObject);
             }
             else {
+                //Debug.Log(collision.gameObject.name);
                 sss.SpawnStalactite();
                 Instantiate(stalactiteCrashingParticle,transform.position,Quaternion.identity);
                 Destroy(gameObject);
@@ -101,5 +105,6 @@ public class StalactiteScript : MonoBehaviour, ITriggerable
             timerOn = false;
         }
         bc.enabled = true;
+        yield break;
     }
 }
