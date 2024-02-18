@@ -14,14 +14,7 @@ public class TeleportationCrystalScript : MonoBehaviour
             this.GetComponent<WeaveableNew>().enabled = false;
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-       
-    }
-
-     public void GetOtherCrystals()
+    public void GetOtherCrystals()
     {
         this.GetComponent<WeaveableNew>().Uncombine();
         Debug.Log("This is the linked crystal's name " + linkedCrystal.name + " and this is it's position " + linkedCrystal.transform.position);
@@ -29,9 +22,13 @@ public class TeleportationCrystalScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Weaveable"))
+        if (collision.gameObject.CompareTag("Weaveable") && this.GetComponent<WeaveableNew>().isCombined)
         {          
-            Debug.Log("this is the weaveable item that it collided with cause physics and shit " + collision.gameObject.name);           
+            Debug.Log("this is the weaveable item that it collided with cause physics and shit " + collision.gameObject.name);
+            this.GetComponent<WeaveableNew>().StopAllCoroutines();
+            collision.gameObject.GetComponent<WeaveableNew>().Uncombine();
+            collision.gameObject.GetComponent <WeaveableNew>().StopAllCoroutines();
+            collision.transform.position = linkedCrystal.transform.position;
         }
     }
 }
