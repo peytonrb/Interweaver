@@ -122,9 +122,12 @@ public class WeaveableObject : MonoBehaviour
                 if (Physics.Raycast(ray, out hitData, 100f))
                     worldPosition = hitData.point;
 
+                FreezeConstraints("rotation");
+                FreezeConstraints("position", 'y');
+
                 // if object is past the max distance allowed from player, object is disconnected
                 Rigidbody rb = this.GetComponent<Rigidbody>();
-                if (Vector3.Distance(transform.position, weaveController.transform.position) > maxWeaveDistance && 
+                if (Vector3.Distance(transform.position, weaveController.transform.position) > maxWeaveDistance &&
                     Vector3.Distance(hitData.point, weaveController.transform.position) > maxWeaveDistance + 15f)
                 {
                     // maintain distance from weaver - very not smooth
@@ -143,8 +146,9 @@ public class WeaveableObject : MonoBehaviour
 
                 Vector3 adjustedVector = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
                 targetingArrow.transform.LookAt(adjustedVector);
-                FreezeConstraints("rotation");
             }
+
+            UnfreezeConstraints("position", 'y');
         }
     }
 
@@ -176,17 +180,26 @@ public class WeaveableObject : MonoBehaviour
             }
 
             Vector3 rayDirection = targetingArrow.transform.forward;
+            Rigidbody rb = this.GetComponent<Rigidbody>();
+            FreezeConstraints("rotation");
+            FreezeConstraints("position", 'y');
 
             // if object is past the max distance allowed from player, object is disconnected
             if (Vector3.Distance(transform.position, weaveController.transform.position) > maxWeaveDistance)
             {
-                weaveController.OnDrop();
-                return;
+                // maintain distance from weaver - very not smooth
+                Vector3 radiusPos = weaveController.transform.position + (Vector3.forward * maxWeaveDistance);
+                rb.velocity = new Vector3(radiusPos.x - rb.position.x,
+                                          transform.position.y - rb.position.y,
+                                          radiusPos.z - rb.position.z);
+            }
+            else
+            {
+                // move object with joystick movement
+                rb.velocity = rayDirection * 6f;
             }
 
-            // move object with joystick movement
-            this.GetComponent<Rigidbody>().velocity = rayDirection * 6f;
-            FreezeConstraints("rotation");
+            UnfreezeConstraints("position", 'y');
         }
     }
 
