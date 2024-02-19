@@ -21,7 +21,7 @@ public class LightCrystalScript : MonoBehaviour
 
     private Light crystalLight;
     private float currentBrightness;
-    [HideInInspector] public bool isActiveDefault;
+    [HideInInspector] public bool isActiveDefault = false;
 
     void Start()
     {
@@ -161,5 +161,10 @@ public class LightCrystalScript : MonoBehaviour
         beamEffect.enabled = true;
         beamEffect.Play();
         focusingCrystalScript.isActive = true;
+    }
+
+    public void Test()
+    {
+        Debug.Log("testing");
     }
 }

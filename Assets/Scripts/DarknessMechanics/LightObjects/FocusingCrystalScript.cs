@@ -61,7 +61,7 @@ public class FocusingCrystalScript : MonoBehaviour
             Vector3 center = lightCollider.center;
             center.z = 0;
             lightCollider.center = center;
-            lightCollider.height = 7f;
+            lightCollider.height = 4f;
             spotLight.range = 0f;
         }
     }
