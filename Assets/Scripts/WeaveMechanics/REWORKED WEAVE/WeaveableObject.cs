@@ -82,6 +82,12 @@ public class WeaveableObject : MonoBehaviour
                 Vector3 rayDirection = Vector3.down;
                 this.GetComponent<Rigidbody>().AddForce(rayDirection * Physics.gravity.y * hoverHeight);
             }
+            // if object is too high, make sure it falls to the ground
+            else if (!Physics.Raycast(transform.position, new Vector3(0f, -90f, 0f), out hit, hoverHeight + 0.5f))
+            {
+                Vector3 rayDirection = Vector3.up; // i??? idk??
+                this.GetComponent<Rigidbody>().AddForce(rayDirection * Physics.gravity.y * 4f * hoverHeight);
+            }
 
             // actually moves the weaveable with joystick or mouse
             if (!InputManagerScript.instance.isGamepad)
@@ -117,21 +123,26 @@ public class WeaveableObject : MonoBehaviour
                     worldPosition = hitData.point;
 
                 // if object is past the max distance allowed from player, object is disconnected
-                if (Vector3.Distance(transform.position, weaveController.transform.position) > maxWeaveDistance)
+                Rigidbody rb = this.GetComponent<Rigidbody>();
+                if (Vector3.Distance(transform.position, weaveController.transform.position) > maxWeaveDistance && 
+                    Vector3.Distance(hitData.point, weaveController.transform.position) > maxWeaveDistance + 15f)
                 {
-                    weaveController.OnDrop();
-                    return;
+                    // maintain distance from weaver - very not smooth
+                    Vector3 radiusPos = weaveController.transform.position + (Vector3.forward * maxWeaveDistance);
+                    rb.velocity = new Vector3(radiusPos.x - rb.position.x,
+                                              transform.position.y - rb.position.y,
+                                              radiusPos.z - rb.position.z);
+                }
+                else
+                {
+                    // move object to mouse position
+                    rb.velocity = new Vector3(hitData.point.x - rb.position.x,
+                                              transform.position.y - rb.position.y,
+                                              hitData.point.z - rb.position.z);
                 }
 
                 Vector3 adjustedVector = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
                 targetingArrow.transform.LookAt(adjustedVector);
-
-                // move object to mouse position
-                Rigidbody rb = this.GetComponent<Rigidbody>();
-                rb.velocity = new Vector3(hitData.point.x - rb.position.x,
-                                          transform.position.y - rb.position.y,
-                                          hitData.point.z - rb.position.z);
-
                 FreezeConstraints("rotation");
             }
         }
