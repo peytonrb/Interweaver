@@ -73,6 +73,10 @@ public class MovementScript : MonoBehaviour
     private PlayerController playerController;
     private FamiliarScript familiarScript;
 
+    [Header("Materials")]
+    [SerializeField] private Material dissolveMat;
+    [SerializeField] private GameObject materialHolder;
+    private Material defaultMat;
 
     void Awake()
     {
@@ -105,6 +109,8 @@ public class MovementScript : MonoBehaviour
         debugisOn = DebugManager.instance.GetDebugOn();
 
         StartCoroutine(DelayBeforeFallAudio());
+
+        defaultMat = materialHolder.GetComponent<SkinnedMeshRenderer>().material;
     }
 
     // Update is called once per frame
@@ -484,6 +490,8 @@ public class MovementScript : MonoBehaviour
 
     public void GoToCheckPoint()
     {
+        StartCoroutine(ChangeMaterialOnDeath());
+
         if (TryGetComponent<PlayerController>(out PlayerController playerCon))
         {
             playerCon.Death();
@@ -493,6 +501,33 @@ public class MovementScript : MonoBehaviour
         {
             familiarScript.Death();
         }
+    }
+
+    public IEnumerator ChangeMaterialOnDeath()
+    {
+        materialHolder.GetComponent<SkinnedMeshRenderer>().material = dissolveMat;
+
+        float elapsedTime = 2;
+        float totalTime = 2;
+        float cutoffHeight = 4;
+
+        while (elapsedTime > 0)
+        {
+            elapsedTime -= Time.deltaTime * 1.5f;
+
+            cutoffHeight = Mathf.Lerp(-3, 4, elapsedTime / totalTime);
+            Debug.Log(elapsedTime);
+            dissolveMat.SetFloat("_Cutoff_Height", cutoffHeight);
+
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(2);
+        dissolveMat.SetFloat("_Cutoff_Height", 4);
+
+        materialHolder.GetComponent<SkinnedMeshRenderer>().material = defaultMat;
+
+        yield break;
     }
 
     public IEnumerator DelayBeforeFallAudio()
