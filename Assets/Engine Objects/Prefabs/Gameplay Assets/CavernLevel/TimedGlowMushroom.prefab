@@ -284,7 +284,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 57eab13bf66a66e41a28a0ef15336d2e, type: 3}
       propertyPath: m_RootOrder
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 57eab13bf66a66e41a28a0ef15336d2e, type: 3}
       propertyPath: m_LocalScale.x
@@ -300,15 +300,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 57eab13bf66a66e41a28a0ef15336d2e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.79
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 57eab13bf66a66e41a28a0ef15336d2e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.5547516
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 57eab13bf66a66e41a28a0ef15336d2e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 7.85
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 57eab13bf66a66e41a28a0ef15336d2e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -346,6 +346,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TimedGlowMushroom
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 57eab13bf66a66e41a28a0ef15336d2e, type: 3}
+      propertyPath: m_TagString
+      value: GlowMushrooms
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -358,7 +362,10 @@ PrefabInstance:
       addedObject: {fileID: 6704668426073539800}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 57eab13bf66a66e41a28a0ef15336d2e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5678369422608693632}
+      addedObject: {fileID: 3780102588846006834}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 57eab13bf66a66e41a28a0ef15336d2e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7759634033722177784}
   m_SourcePrefab: {fileID: 100100000, guid: 57eab13bf66a66e41a28a0ef15336d2e, type: 3}
 --- !u!1 &7145591770709761065 stripped
 GameObject:
@@ -387,8 +394,35 @@ MonoBehaviour:
   startDelayTime: 2
   Notes: Array Index should be the INDEX of the light in LIGHTARRAY in the LIGHTSOURCE
     OBJECT (is probably called LightsManager)
---- !u!64 &5678369422608693632
-MeshCollider:
+--- !u!54 &3780102588846006834
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7145591770709761065}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 122
+  m_CollisionDetection: 0
+--- !u!65 &7759634033722177784
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -405,10 +439,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 8643156512079803725, guid: 57eab13bf66a66e41a28a0ef15336d2e, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.46489042, y: 0.56508243, z: 0.4642742}
+  m_Center: {x: -0.066789396, y: 0.28086305, z: -0.052836977}
 --- !u!4 &7521553951694276243 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 57eab13bf66a66e41a28a0ef15336d2e, type: 3}
