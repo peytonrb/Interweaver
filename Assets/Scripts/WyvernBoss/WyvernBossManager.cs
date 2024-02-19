@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class WyvernBossManager : MonoBehaviour
@@ -9,33 +8,37 @@ public class WyvernBossManager : MonoBehaviour
     private PlayerController playercontroller;
     private GameObject stag;
     private FamiliarScript familiarScript;
-    [SerializeField] private int phases; //0 = no phase, 1 = fireball, 2 = magic circle, 3 = flamethrower, 4 = flee
-    private Rigidbody rb;
+    private int phases; //0 = no phase, 1 = fireball, 2 = magic circle, 3 = flamethrower, 4 = flee
+    //private Rigidbody rb;
 
     [Header("Fireballs")]
     public GameObject fireball;
-    [SerializeField] private float fireballtimer; //Wait time between fireballs
+    [SerializeField] [Tooltip("Wait time between throwing fireballs.")] private float fireballtimer; //Wait time between fireballs
+    [SerializeField] [Tooltip("Amount of fireballs in a single phase.")] private int fireballAmount; //Amount of fireballs in a single "phase"
 
     [Header("Magic Circles")]
     public GameObject magicCircle;
-    [SerializeField] private float spawnradius;
-    [SerializeField] private float magicCircleTimer; //Wait time between magic circles
+    [SerializeField] [Tooltip("Radius of randomized spawner.")] private float spawnradius;
+    [SerializeField] [Tooltip("Wait time between magic circle spawning.")] private float magicCircleTimer; //Wait time between magic circles
+    [SerializeField] [Tooltip("Amount of magic circles to spawn in a single phase.")] private float magicCircleAmount;
 
     [Header("Flamethrower")]
     public GameObject flamethrower;
     private bool windup;
     private bool blowFire;
-    [SerializeField] private float windupTimer; //The amount of time before the windup
-    [SerializeField] private float windupAngle; //The angle amount the wyvern turns before blowing fire
-    [SerializeField] private float windupRotationSpeed; //The speed of winding rotation
-    [SerializeField] private float blowFireAngle; //The angle amount the wyvern turns while blowing fire
-    [SerializeField] private float blowFireRotationSpeed; //The speed of blowing fire while rotating
+    [SerializeField] [Tooltip("Amount of time before the wyvern winds up to attack.")] private float windupTimer; //The amount of time before the windup
+    [SerializeField] [Tooltip("The amount of wind up before blowing fire.")] private float windupAngle; //The angle amount the wyvern turns before blowing fire
+    [SerializeField] [Tooltip("Rotation speed of the windup.")] private float windupRotationSpeed; //The speed of winding rotation
+    [SerializeField] [Tooltip("The total angle the wyvern blows fire.")] [Range (0f,45f)] private float blowFireAngle; //The angle amount the wyvern turns while blowing fire
+    [SerializeField] [Tooltip("Rotation speed of the blowing fire rotation.")] private float blowFireRotationSpeed; //The speed of blowing fire while rotating
     private float newrotation;
     private bool gotNewRotation;
     private bool reseting;
 
     private float startingFireballTimer;
+    private int startingFireballAmount;
     private float startingMagicCircleTimer;
+    private float startingMagicCircleAmount;
     private float startingWindupTimer;
 
     // Start is called before the first frame update
@@ -45,14 +48,17 @@ public class WyvernBossManager : MonoBehaviour
         stag = GameObject.FindGameObjectWithTag("Familiar");
         familiarScript = stag.GetComponent<FamiliarScript>();
         playercontroller = weaver.GetComponent<PlayerController>();
-        rb = GetComponent<Rigidbody>();
+        //rb = GetComponent<Rigidbody>();
 
         startingFireballTimer = fireballtimer;
+        startingFireballAmount = fireballAmount;
         startingMagicCircleTimer = magicCircleTimer;
+        startingMagicCircleAmount = magicCircleAmount;
         startingWindupTimer = windupTimer;
         windup = false;
         blowFire = false;
-        reseting = false;
+        reseting = true;
+        phases = 0;
 
         if (windupAngle > 0 && blowFireAngle > 0) {
             blowFireAngle = -blowFireAngle; 
@@ -68,7 +74,8 @@ public class WyvernBossManager : MonoBehaviour
         if (familiarScript.myTurn) {
             if (windup == false) {
                 if (reseting == true) {
-                    
+                    ChooseRandom(phases);
+                    reseting = false;
                 }
                 else {
                     transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
@@ -78,7 +85,8 @@ public class WyvernBossManager : MonoBehaviour
         else {
             if (windup == false) {
                 if (reseting == true) {
-                    
+                    ChooseRandom(phases);
+                    reseting = false;
                 }
                 else {
                     transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
@@ -138,19 +146,83 @@ public class WyvernBossManager : MonoBehaviour
         
     }
 
+    void ChooseRandom(int previousPhase) {
+        int newPhase = Random.Range(0,2);
+
+        switch (previousPhase) {
+            case 0:
+                newPhase = Random.Range(0,3);
+                if (newPhase == 0) {
+                    phases = 1;
+                }
+                else if (newPhase == 1) {
+                    phases = 2;
+                }
+                else if (newPhase == 2) {
+                    phases = 3;
+                }
+            break;
+
+            //FIREBALL | PHASE = 1
+            case 1:
+                if (newPhase == 0) {
+                    phases = 2;
+                }
+                else {
+                    phases = 3;
+                }
+            break;
+
+            //MAGIC CIRCLE | PHASE = 2
+            case 2:
+                if (newPhase == 0) {
+                    phases = 1;
+                }
+                else {
+                    phases = 3;
+                }
+            break;
+
+            //FLAMETHROWER | PHASE = 3
+            case 3:
+                if (newPhase == 0) {
+                    phases = 1;
+                }
+                else {
+                    phases = 2;
+                }
+            break;
+        }
+    }
+
     void ThrowFireball() {
-        Instantiate(fireball,transform.position,Quaternion.identity);
+        if (fireballAmount > 0) {
+            Instantiate(fireball,transform.position,Quaternion.identity);
+            fireballAmount -= 1;
+        }
+        else {
+            reseting = true;
+            fireballAmount = startingFireballAmount;
+        }
+        
     }
 
     void SpawnMagicCircle() {
-        Vector3 randomposition = Random.insideUnitCircle * spawnradius;
-        Vector3 newposition = new Vector3(weaver.transform.position.x + randomposition.x, -5f, weaver.transform.position.z + randomposition.y);
-        Instantiate(magicCircle,newposition,Quaternion.identity);
+        if (magicCircleAmount > 0) {
+            Vector3 randomposition = Random.insideUnitCircle * spawnradius;
+            Vector3 newposition = new Vector3(weaver.transform.position.x + randomposition.x, -5f, weaver.transform.position.z + randomposition.y);
+            Instantiate(magicCircle,newposition,Quaternion.identity);
+            magicCircleAmount -= 1;
+        }
+        else {
+            reseting = true;
+            magicCircleAmount = startingMagicCircleAmount;
+        }
+        
     }
 
     void SpawnFire() {
         Instantiate(flamethrower,transform,false);
-        
     }
 
     void WindingUp() {
