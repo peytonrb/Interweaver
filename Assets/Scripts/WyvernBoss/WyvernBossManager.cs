@@ -21,6 +21,8 @@ public class WyvernBossManager : MonoBehaviour
     [SerializeField] [Tooltip("Radius of randomized spawner.")] private float spawnradius;
     [SerializeField] [Tooltip("Wait time between magic circle spawning.")] private float magicCircleTimer; //Wait time between magic circles
     [SerializeField] [Tooltip("Amount of magic circles to spawn in a single phase.")] private float magicCircleAmount;
+    [Tooltip("If true, magic circles will spawn in predetermined arrangements")] public bool useConfigurations;
+    [SerializeField] private GameObject[] configurations;
 
     [Header("Flamethrower")]
     public GameObject flamethrower;
@@ -29,7 +31,7 @@ public class WyvernBossManager : MonoBehaviour
     [SerializeField] [Tooltip("Amount of time before the wyvern winds up to attack.")] private float windupTimer; //The amount of time before the windup
     [SerializeField] [Tooltip("The amount of wind up before blowing fire.")] private float windupAngle; //The angle amount the wyvern turns before blowing fire
     [SerializeField] [Tooltip("Rotation speed of the windup.")] private float windupRotationSpeed; //The speed of winding rotation
-    [SerializeField] [Tooltip("The total angle the wyvern blows fire.")] [Range (0f,45f)] private float blowFireAngle; //The angle amount the wyvern turns while blowing fire
+    [SerializeField] [Tooltip("The total angle the wyvern blows fire.")] private float blowFireAngle; //The angle amount the wyvern turns while blowing fire
     [SerializeField] [Tooltip("Rotation speed of the blowing fire rotation.")] private float blowFireRotationSpeed; //The speed of blowing fire while rotating
     private float newrotation;
     private bool gotNewRotation;
@@ -60,12 +62,6 @@ public class WyvernBossManager : MonoBehaviour
         reseting = true;
         phases = 0;
 
-        if (windupAngle > 0 && blowFireAngle > 0) {
-            blowFireAngle = -blowFireAngle; 
-        }
-        else if (windupAngle < 0 && blowFireAngle < 0) {
-            blowFireAngle = -blowFireAngle;
-        }
     }
 
     // Update is called once per frame
@@ -208,15 +204,25 @@ public class WyvernBossManager : MonoBehaviour
     }
 
     void SpawnMagicCircle() {
-        if (magicCircleAmount > 0) {
-            Vector3 randomposition = Random.insideUnitCircle * spawnradius;
-            Vector3 newposition = new Vector3(weaver.transform.position.x + randomposition.x, -5f, weaver.transform.position.z + randomposition.y);
-            Instantiate(magicCircle,newposition,Quaternion.identity);
-            magicCircleAmount -= 1;
+        if (useConfigurations == false) {
+            if (magicCircleAmount > 0) {
+                Vector3 randomposition = Random.insideUnitCircle * spawnradius;
+                Vector3 newposition = new Vector3(weaver.transform.position.x + randomposition.x, -5f, weaver.transform.position.z + randomposition.y);
+                Instantiate(magicCircle,newposition,Quaternion.identity);
+                magicCircleAmount -= 1;
+            }
+            else {
+                reseting = true;
+                magicCircleAmount = startingMagicCircleAmount;
+            }
         }
         else {
+            int randomConfig = Random.Range(0, configurations.Length);
+            Vector3 newposition = new Vector3(weaver.transform.position.x, 0, weaver.transform.position.z);
+            Instantiate(configurations[randomConfig],newposition,Quaternion.identity);
+            magicCircleAmount -= 1;
             reseting = true;
-            magicCircleAmount = startingMagicCircleAmount;
+            
         }
         
     }
@@ -241,7 +247,7 @@ public class WyvernBossManager : MonoBehaviour
 
     void BlowFire() {
         if (gotNewRotation == false) {
-            newrotation = transform.eulerAngles.y + blowFireAngle;
+            newrotation = transform.eulerAngles.y + -blowFireAngle;
             gotNewRotation = true;
         }
 

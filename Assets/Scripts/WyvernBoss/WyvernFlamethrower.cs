@@ -9,7 +9,8 @@ public class WyvernFlamethrower : MonoBehaviour, ITriggerable
     // Start is called before the first frame update
     void Start()
     {
-        transform.localPosition = new Vector3(0,-0.47f,1);
+        transform.localPosition = new Vector3(0,-0.47f,1.3f);
+        Debug.Log(transform.localPosition);
         transform.localScale = new Vector3(0.05f,0.05f,2f);
 
         weaver = GameObject.FindGameObjectWithTag("Player");
