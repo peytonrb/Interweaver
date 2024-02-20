@@ -23,6 +23,8 @@ public class WyvernBossManager : MonoBehaviour
     [SerializeField] [Tooltip("Amount of magic circles to spawn in a single phase.")] private float magicCircleAmount;
     [Tooltip("If true, magic circles will spawn in predetermined arrangements")] public bool useConfigurations;
     [SerializeField] private GameObject[] configurations;
+    [HideInInspector] public bool configurationIsActive;
+    private bool spawnedConfiguration;
 
     [Header("Flamethrower")]
     public GameObject flamethrower;
@@ -35,7 +37,7 @@ public class WyvernBossManager : MonoBehaviour
     [SerializeField] [Tooltip("Rotation speed of the blowing fire rotation.")] private float blowFireRotationSpeed; //The speed of blowing fire while rotating
     private float newrotation;
     private bool gotNewRotation;
-    private bool reseting;
+    [HideInInspector] public bool reseting;
 
     private float startingFireballTimer;
     private int startingFireballAmount;
@@ -60,6 +62,8 @@ public class WyvernBossManager : MonoBehaviour
         windup = false;
         blowFire = false;
         reseting = true;
+        configurationIsActive = false;
+        spawnedConfiguration = false;
         phases = 0;
 
     }
@@ -70,8 +74,10 @@ public class WyvernBossManager : MonoBehaviour
         if (familiarScript.myTurn) {
             if (windup == false) {
                 if (reseting == true) {
-                    ChooseRandom(phases);
-                    reseting = false;
+                    if (!configurationIsActive) {
+                        ChooseRandom(phases);
+                        reseting = false;
+                    }
                 }
                 else {
                     transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
@@ -81,8 +87,10 @@ public class WyvernBossManager : MonoBehaviour
         else {
             if (windup == false) {
                 if (reseting == true) {
-                    ChooseRandom(phases);
-                    reseting = false;
+                    if (!configurationIsActive) {
+                        ChooseRandom(phases);
+                        reseting = false;
+                    }
                 }
                 else {
                     transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
@@ -108,15 +116,25 @@ public class WyvernBossManager : MonoBehaviour
             //MAGIC CIRCLE
             case 2:
                 if (!familiarScript.myTurn) {
-                    if (magicCircleTimer > 0) {
-                        magicCircleTimer -= Time.deltaTime;
+                    if (useConfigurations) {
+                        if (spawnedConfiguration == false) {
+                            if (!playercontroller.isDead) {
+                                SpawnMagicCircle();
+                            } 
+                        }
                     }
                     else {
-                        if (!playercontroller.isDead) {
-                            SpawnMagicCircle();
+                        if (magicCircleTimer > 0) {
+                            magicCircleTimer -= Time.deltaTime;
                         }
-                        magicCircleTimer = startingMagicCircleTimer;
+                        else {
+                            if (!playercontroller.isDead) {
+                                SpawnMagicCircle();
+                            }
+                            magicCircleTimer = startingMagicCircleTimer;
+                        }
                     }
+                    
                 }
             break;
             //FLAMETHROWER
@@ -145,17 +163,18 @@ public class WyvernBossManager : MonoBehaviour
     void ChooseRandom(int previousPhase) {
         int newPhase = Random.Range(0,2);
 
+        if (spawnedConfiguration) {
+            spawnedConfiguration = false;
+        }
+
         switch (previousPhase) {
             case 0:
-                newPhase = Random.Range(0,3);
+                newPhase = Random.Range(0,2);
                 if (newPhase == 0) {
                     phases = 1;
                 }
                 else if (newPhase == 1) {
                     phases = 2;
-                }
-                else if (newPhase == 2) {
-                    phases = 3;
                 }
             break;
 
@@ -220,9 +239,7 @@ public class WyvernBossManager : MonoBehaviour
             int randomConfig = Random.Range(0, configurations.Length);
             Vector3 newposition = new Vector3(weaver.transform.position.x, 0, weaver.transform.position.z);
             Instantiate(configurations[randomConfig],newposition,Quaternion.identity);
-            magicCircleAmount -= 1;
-            reseting = true;
-            
+            spawnedConfiguration = true;
         }
         
     }

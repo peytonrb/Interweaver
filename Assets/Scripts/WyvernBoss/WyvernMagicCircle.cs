@@ -31,6 +31,7 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
         if (bossManager.useConfigurations) {
             hasParent = true;
             configurationParent = transform.parent.gameObject;
+            bossManager.configurationIsActive = true;
         }
 
         StartCoroutine(Flashing());
@@ -52,6 +53,8 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
                 if (timer <= 0) {
                     StopAllCoroutines();
                     if (hasParent && configurationParent != null) {
+                        bossManager.configurationIsActive = false;
+                        bossManager.reseting = true;
                         Destroy(configurationParent);
                     }
                     else {

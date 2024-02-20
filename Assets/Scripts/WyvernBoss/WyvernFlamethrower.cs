@@ -10,7 +10,6 @@ public class WyvernFlamethrower : MonoBehaviour, ITriggerable
     void Start()
     {
         transform.localPosition = new Vector3(0,-0.47f,1.3f);
-        Debug.Log(transform.localPosition);
         transform.localScale = new Vector3(0.05f,0.05f,2f);
 
         weaver = GameObject.FindGameObjectWithTag("Player");
