@@ -66,6 +66,8 @@ public class WyvernBossManager : MonoBehaviour
         spawnedConfiguration = false;
         phases = 0;
 
+        transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
+        
     }
 
     // Update is called once per frame
