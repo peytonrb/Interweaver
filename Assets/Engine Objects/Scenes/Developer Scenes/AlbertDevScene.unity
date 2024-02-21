@@ -4485,7 +4485,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5155745922658731114, guid: 56676917a93a58749a840e51b0211ab2, type: 3}
       propertyPath: boxCastHalfExtent.x
-      value: 20
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 5155745922658731114, guid: 56676917a93a58749a840e51b0211ab2, type: 3}
       propertyPath: boxCastHalfExtent.y
@@ -4493,7 +4493,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5155745922658731114, guid: 56676917a93a58749a840e51b0211ab2, type: 3}
       propertyPath: boxCastHalfExtent.z
-      value: 20
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 5155745922658731114, guid: 56676917a93a58749a840e51b0211ab2, type: 3}
       propertyPath: myRespawnables.Array.size
@@ -4522,11 +4522,15 @@ PrefabInstance:
     - target: {fileID: 5155745922658731114, guid: 56676917a93a58749a840e51b0211ab2, type: 3}
       propertyPath: myRespawnables.Array.data[5]
       value: 
-      objectReference: {fileID: 1614006876}
+      objectReference: {fileID: 1341432441}
     - target: {fileID: 5155745922658731114, guid: 56676917a93a58749a840e51b0211ab2, type: 3}
       propertyPath: myRespawnables.Array.data[6]
       value: 
-      objectReference: {fileID: 1341432441}
+      objectReference: {fileID: 1614006876}
+    - target: {fileID: 5155745922658731114, guid: 56676917a93a58749a840e51b0211ab2, type: 3}
+      propertyPath: myRespawnables.Array.data[7]
+      value: 
+      objectReference: {fileID: 1614006876}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6685,11 +6689,11 @@ PrefabInstance:
       insertIndex: 1
       addedObject: {fileID: 1614006880}
     - targetCorrespondingSourceObject: {fileID: 4699961208595689080, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
-      insertIndex: -1
+      insertIndex: 3
       addedObject: {fileID: 1614006879}
     - targetCorrespondingSourceObject: {fileID: 4699961208595689080, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1614006877}
+      addedObject: {fileID: 1614006881}
   m_SourcePrefab: {fileID: 100100000, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
 --- !u!4 &1614006875 stripped
 Transform:
@@ -6701,27 +6705,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4699961208595689080, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
   m_PrefabInstance: {fileID: 1614006874}
   m_PrefabAsset: {fileID: 0}
---- !u!135 &1614006877
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1614006876}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 2
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1614006879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6736,6 +6719,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linkedCrystal: {fileID: 2094231143}
   isTeleportable: 1
+  weaveController: {fileID: 2122026655}
 --- !u!114 &1614006880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6760,11 +6744,23 @@ MonoBehaviour:
   myTransformPoints: []
   activeSnapPoint: {fileID: 0}
   objectToSnapTo: {fileID: 0}
-  weaveInteraction: {fileID: 0}
+  weaveInteraction: {fileID: 1614006881}
   listIndex: 0
   ID: 0
   targetingArrow: {fileID: 0}
   originalMat: {fileID: 0}
+--- !u!114 &1614006881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614006876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d2e10edb961a3d409caebcae8e0adc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1618528802
 GameObject:
   m_ObjectHideFlags: 0
@@ -8932,7 +8928,7 @@ PrefabInstance:
       addedObject: {fileID: 2094231146}
     - targetCorrespondingSourceObject: {fileID: 4699961208595689080, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2094231144}
+      addedObject: {fileID: 2094231148}
   m_SourcePrefab: {fileID: 100100000, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
 --- !u!4 &2094231142 stripped
 Transform:
@@ -8944,27 +8940,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4699961208595689080, guid: 3a99c25802a5bdf4e98782cee5716bbb, type: 3}
   m_PrefabInstance: {fileID: 2094231141}
   m_PrefabAsset: {fileID: 0}
---- !u!135 &2094231144
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2094231143}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 2
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2094231146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8979,6 +8954,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linkedCrystal: {fileID: 1614006876}
   isTeleportable: 1
+  weaveController: {fileID: 2122026655}
 --- !u!114 &2094231147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9003,11 +8979,23 @@ MonoBehaviour:
   myTransformPoints: []
   activeSnapPoint: {fileID: 0}
   objectToSnapTo: {fileID: 0}
-  weaveInteraction: {fileID: 0}
+  weaveInteraction: {fileID: 2094231148}
   listIndex: 0
   ID: 0
   targetingArrow: {fileID: 0}
   originalMat: {fileID: 0}
+--- !u!114 &2094231148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094231143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d2e10edb961a3d409caebcae8e0adc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2100883988 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6321982546611138371, guid: 9fd9e321543b3ac4da577080101b53e0, type: 3}
