@@ -108,9 +108,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d81c3474ba536648af37971310067f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canMove: 1
   canLook: 1
+  <canMove>k__BackingField: 1
   speed: 12
+  freeMove: 0
   gravity: -20
   aerialControl: 1
   groundAcceleration: 2.5
@@ -143,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ff6c79968a903842bd219a06650481e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterAnimationHandler: {fileID: 0}
+  characterAnimationHandler: {fileID: 9032169286115513460}
   jumpForce: 8.99
   infiniteJump: 0
   canDash: 1
@@ -157,7 +158,7 @@ MonoBehaviour:
   canTurnWhileDashing: 1
   dashTimeToTurn: 1
   showDistanceGizmo: 1
-  glowMaterial: {fileID: 0}
+  glowMaterial: {fileID: 2100000, guid: c99e9e06db4ca7241b0457e3e6df72aa, type: 2}
 --- !u!114 &4762601280886837014
 MonoBehaviour:
   m_ObjectHideFlags: 0

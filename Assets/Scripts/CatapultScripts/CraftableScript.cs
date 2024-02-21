@@ -6,13 +6,14 @@ public class CraftableScript : MonoBehaviour
 {
     public enum Craftable
     {
-        CatapultBase,
+        CatapultBody,
         CatapultArm,
         CatapultBowl
     }
     [Header("References")]
     [Header("Variables")]
     [SerializeField] private Craftable craftableName;
+    [SerializeField] private List<Craftable> compatibleCraftables = new List<Craftable>();
     // Start is called before the first frame update
     void Start()
     {
