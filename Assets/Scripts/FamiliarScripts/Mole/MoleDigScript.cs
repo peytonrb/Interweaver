@@ -104,10 +104,17 @@ public class MoleDigScript : MonoBehaviour
         {
             Debug.Log("we got out bois");
             //checking the mole in other colliders and if it's a dirt pillar tag, it goes up
+            int weaveableLayer = LayerMask.NameToLayer("weaveObject"); 
+            int weaveableLayerMask = 1 << weaveableLayer;
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, 0f, digableLayer);
+            Collider[] hitWeaveableColliders = Physics.OverlapSphere(transform.position, 0f, weaveableLayerMask);
             foreach (Collider hitCollider in hitColliders)
             {
                 transform.position = new Vector3(transform.position.x, hitCollider.bounds.max.y, transform.position.z);
+            }
+            foreach (Collider hitWeaveableCollider in hitWeaveableColliders)
+            {
+                transform.position = new Vector3(transform.position.x, hitWeaveableCollider.bounds.max.y + 1, transform.position.z);
             }
 
             AnimationForDiggingUp();
