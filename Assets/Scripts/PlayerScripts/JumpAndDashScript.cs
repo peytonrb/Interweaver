@@ -77,7 +77,7 @@ public class JumpAndDashScript : MonoBehaviour
             {
                 movementScript.canLook = false;
             }
-            movementScript.canMove = false;
+            movementScript.ToggleCanMove(false);
             movementScript.ChangeTimeToTurn(dashTimeToTurn);
             canDash = false;
             characterAnimationHandler.ToggleDashAnim(true);
@@ -118,7 +118,7 @@ public class JumpAndDashScript : MonoBehaviour
         {
             movementScript.canLook = true;
         }
-        movementScript.canMove = true;
+        movementScript.ToggleCanMove(true);
         characterAnimationHandler.ToggleDashAnim(false);
         DisableDashVFX();
     }

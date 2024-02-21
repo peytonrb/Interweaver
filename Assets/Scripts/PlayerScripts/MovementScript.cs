@@ -13,8 +13,8 @@ public class MovementScript : MonoBehaviour
     private GameMasterScript GM; //This is refrencing the game master script
 
     [Header("Movement Variables")]
-    public bool canMove = true;
     public bool canLook = true;
+    [field: SerializeField] public bool canMove {get;  private set;} = true; 
     public float speed; //Base walk speed for player
     [HideInInspector] public float currentSpeed {get;  private set;} // the current speed for the player
     private bool turning;
@@ -154,6 +154,8 @@ public class MovementScript : MonoBehaviour
             }
             else
             {
+                velocity = Vector3.zero; // stop movements
+                Debug.Log(velocity);
                 canMove = false;
                 characterAnimationHandler.ToggleMoveSpeedBlend(0);
                 familiarScript.talkingToNPC = true;
@@ -172,6 +174,7 @@ public class MovementScript : MonoBehaviour
             }
             else
             {
+                velocity = Vector3.zero; // stop movements
                 canMove = false;
                 characterAnimationHandler.ToggleMoveSpeedBlend(0);
                 playerController.talkingToNPC = true;
@@ -341,8 +344,6 @@ public class MovementScript : MonoBehaviour
         }
         else 
         {
-            velocity.x = 0f;
-            velocity.z = 0f;
             velocity.y += gravity * Time.deltaTime;
             characterController.Move(velocity * Time.deltaTime);
             if (characterController.isGrounded) {
