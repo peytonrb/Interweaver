@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class WyvernBossManager : MonoBehaviour
 {
@@ -10,6 +11,11 @@ public class WyvernBossManager : MonoBehaviour
     private FamiliarScript familiarScript;
     private int phases; //0 = no phase, 1 = fireball, 2 = magic circle, 3 = flamethrower, 4 = flee
     //private Rigidbody rb;
+    private NavMeshAgent navMeshAgent;
+    private bool moveToNextRoom; //If moving to next room
+    private int currentRoom; //Gets current room
+    [SerializeField] private Transform[] roomDestinations; //Room destinations that the boss moves towards when changing rooms
+    private bool gotDestination;
 
     [Header("Fireballs")]
     public GameObject fireball;
@@ -52,6 +58,8 @@ public class WyvernBossManager : MonoBehaviour
         stag = GameObject.FindGameObjectWithTag("Familiar");
         familiarScript = stag.GetComponent<FamiliarScript>();
         playercontroller = weaver.GetComponent<PlayerController>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        //transform.position = new Vector3(roomDestinations[currentRoom].transform.position.x, transform.position.y, roomDestinations[currentRoom].transform.position.z);
         //rb = GetComponent<Rigidbody>();
 
         startingFireballTimer = fireballtimer;
@@ -64,6 +72,7 @@ public class WyvernBossManager : MonoBehaviour
         reseting = true;
         configurationIsActive = false;
         spawnedConfiguration = false;
+        moveToNextRoom = false;
         phases = 0;
 
         transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
@@ -73,93 +82,114 @@ public class WyvernBossManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (familiarScript.myTurn) {
-            if (windup == false) {
-                if (reseting == true) {
-                    if (!configurationIsActive) {
-                        ChooseRandom(phases);
-                        reseting = false;
+        if (moveToNextRoom == false) {
+            if (familiarScript.myTurn) {
+                if (windup == false) {
+                    if (reseting == true) {
+                        if (!configurationIsActive) {
+                            ChooseRandom(phases);
+                            reseting = false;
+                        }
+                    }
+                    else {
+                        transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
                     }
                 }
-                else {
-                    transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
+            }
+            else {
+                if (windup == false) {
+                    if (reseting == true) {
+                        if (!configurationIsActive) {
+                            ChooseRandom(phases);
+                            reseting = false;
+                        }
+                    }
+                    else {
+                        transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
+                    }
                 }
+            }
+
+            switch (phases) {
+                //FIREBALL
+                case 1:
+                    if (!familiarScript.myTurn) {
+                        if (fireballtimer > 0) {
+                            fireballtimer -= Time.deltaTime;
+                        }
+                        else {
+                            if (!playercontroller.isDead) {
+                                ThrowFireball();
+                            }
+                            fireballtimer = startingFireballTimer;
+                        }
+                    }
+                break;
+                //MAGIC CIRCLE
+                case 2:
+                    if (!familiarScript.myTurn) {
+                        if (useConfigurations) {
+                            if (spawnedConfiguration == false) {
+                                if (!playercontroller.isDead) {
+                                    SpawnMagicCircle();
+                                } 
+                            }
+                        }
+                        else {
+                            if (magicCircleTimer > 0) {
+                                magicCircleTimer -= Time.deltaTime;
+                            }
+                            else {
+                                if (!playercontroller.isDead) {
+                                    SpawnMagicCircle();
+                                }
+                                magicCircleTimer = startingMagicCircleTimer;
+                            }
+                        }
+                        
+                    }
+                break;
+                //FLAMETHROWER
+                case 3:
+                    if (!familiarScript.myTurn) {
+                        if (!blowFire) {
+                            if (windup == true) {
+                                WindingUp();
+                            }
+                            else {
+                                windupTimer -= Time.deltaTime;
+                                if (windupTimer <= 0) {
+                                    windup = true;
+                                }
+                            }
+                        }
+                        else {
+                            BlowFire();
+                        }
+                    }
+                break;
             }
         }
         else {
-            if (windup == false) {
-                if (reseting == true) {
-                    if (!configurationIsActive) {
-                        ChooseRandom(phases);
-                        reseting = false;
-                    }
-                }
-                else {
-                    transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
+            if (gotDestination == false) {
+                ChangeRooms(currentRoom);
+            }
+            else {
+                if (transform.position.x == roomDestinations[currentRoom].transform.position.x && transform.position.z == roomDestinations[currentRoom].transform.position.z) {
+                    gotDestination = false;
+                    moveToNextRoom = false;
                 }
             }
         }
-
-        switch (phases) {
-            //FIREBALL
-            case 1:
-                if (!familiarScript.myTurn) {
-                    if (fireballtimer > 0) {
-                        fireballtimer -= Time.deltaTime;
-                    }
-                    else {
-                        if (!playercontroller.isDead) {
-                            ThrowFireball();
-                        }
-                        fireballtimer = startingFireballTimer;
-                    }
-                }
-            break;
-            //MAGIC CIRCLE
-            case 2:
-                if (!familiarScript.myTurn) {
-                    if (useConfigurations) {
-                        if (spawnedConfiguration == false) {
-                            if (!playercontroller.isDead) {
-                                SpawnMagicCircle();
-                            } 
-                        }
-                    }
-                    else {
-                        if (magicCircleTimer > 0) {
-                            magicCircleTimer -= Time.deltaTime;
-                        }
-                        else {
-                            if (!playercontroller.isDead) {
-                                SpawnMagicCircle();
-                            }
-                            magicCircleTimer = startingMagicCircleTimer;
-                        }
-                    }
-                    
-                }
-            break;
-            //FLAMETHROWER
-            case 3:
-                if (!familiarScript.myTurn) {
-                    if (!blowFire) {
-                        if (windup == true) {
-                            WindingUp();
-                        }
-                        else {
-                            windupTimer -= Time.deltaTime;
-                            if (windupTimer <= 0) {
-                                windup = true;
-                            }
-                        }
-                    }
-                    else {
-                        BlowFire();
-                    }
-                }
-            break;
-        }
         
+    }
+
+    void ChangeRooms(int currentroom) {
+        int newroom = currentroom + 1;
+        Vector3 newdestination = new Vector3(roomDestinations[newroom].transform.position.x, transform.position.y, roomDestinations[newroom].transform.position.z);
+        navMeshAgent.SetDestination(newdestination);
+        currentRoom = newroom;
+        gotDestination = true;
     }
 
     void ChooseRandom(int previousPhase) {
