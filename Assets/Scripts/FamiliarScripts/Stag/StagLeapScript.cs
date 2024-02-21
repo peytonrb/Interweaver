@@ -109,7 +109,8 @@ public class StagLeapScript : MonoBehaviour
         }
         // put all impact stuff past this point
         //Debug.Log("Distance Fallen: " + (startingHeight - transform.position.y));
-        StartCoroutine(GrowSlamRadius());
+        Vector3 slamSpot = transform.position;
+        StartCoroutine(GrowSlamRadius(slamSpot));
         canSlam = true;
         movementScript.canMove = false;
         yield return new WaitForSeconds(postSlamStaggerTime);
@@ -136,7 +137,7 @@ public class StagLeapScript : MonoBehaviour
         displayGroundGizmos = false;
     }
 
-    private IEnumerator GrowSlamRadius()
+    private IEnumerator GrowSlamRadius(Vector3 slamSpot)
     {
         
         displaySlamGizmos = true;
@@ -146,12 +147,12 @@ public class StagLeapScript : MonoBehaviour
         {
             t += Time.deltaTime / slamTime;
             currentSlamRadius = Mathf.Lerp(0, maxSlamRadius, t);
-            RaycastHit[] hits = Physics.SphereCastAll(transform.position + characterController.center, currentSlamRadius, new Vector3(0f, -0.01f, 0f));
-            foreach (RaycastHit hit in hits)
+            Collider[] hitColliders = Physics.OverlapSphere(slamSpot, currentSlamRadius);
+            foreach (Collider hitCollider in hitColliders)
             {
-                if (hit.collider.gameObject.CompareTag("Breakable"))
+                if (hitCollider.gameObject.CompareTag("Breakable"))
                 {
-                    Destroy(hit.collider.gameObject); // call the thing being broken here!
+                    Destroy(hitCollider.gameObject); // call the thing being broken here!
                 }
             }
             yield return null;
