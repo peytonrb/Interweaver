@@ -130,6 +130,7 @@ public class FocusingCrystalScript : MonoBehaviour
             if (!collider.GetComponent<LightCrystalScript>().isActiveDefault 
                 && LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn)
             {
+                Debug.Log("here");
                 collider.GetComponent<LightCrystalScript>().isActive = false;
             }
         }
