@@ -31,6 +31,10 @@ public class StagLeapScript : MonoBehaviour
     [SerializeField] private float slamTime = 0.6f;
     private float currentSlamRadius = 0f;
     [SerializeField][Range(0f, 3f)] private float postSlamStaggerTime = 0.6f;
+
+    [Header("Utility")]
+    [SerializeField] private bool showSlamRadiusGizmo;
+    [SerializeField] private bool showMaxJumpHeightGizmo;
     // Start is called before the first frame update
     void Start()
     {
@@ -142,7 +146,7 @@ public class StagLeapScript : MonoBehaviour
         {
             t += Time.deltaTime / slamTime;
             currentSlamRadius = Mathf.Lerp(0, maxSlamRadius, t);
-            RaycastHit[] hits = Physics.SphereCastAll(transform.position + characterController.center, currentSlamRadius, Vector3.down);
+            RaycastHit[] hits = Physics.SphereCastAll(transform.position + characterController.center, currentSlamRadius, new Vector3(0f, -0.01f, 0f));
             foreach (RaycastHit hit in hits)
             {
                 if (hit.collider.gameObject.CompareTag("Breakable"))
@@ -166,6 +170,14 @@ public class StagLeapScript : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(transform.position, currentSlamRadius);
+        }
+        if (showSlamRadiusGizmo)
+        {
+            Gizmos.DrawWireSphere(transform.position, maxSlamRadius);
+        }
+        if (showMaxJumpHeightGizmo)
+        {
+            DrawArrow.ForGizmo(transform.position, transform.up * maxJumpForce);
         }
     }
 }

@@ -265,7 +265,6 @@ public class MovementScript : MonoBehaviour
                     velocity.z = currentSpeed * newDirection.z;
                 }
 
-
                 characterController.Move(velocity * Time.deltaTime); // make move
 
                 //Character gravity
@@ -340,7 +339,8 @@ public class MovementScript : MonoBehaviour
                 AudioManager.instance.StopSound(AudioManagerChannels.footStepsLoopChannel);
             }
         }
-        else {
+        else 
+        {
             velocity.x = 0f;
             velocity.z = 0f;
             velocity.y += gravity * Time.deltaTime;
@@ -349,7 +349,6 @@ public class MovementScript : MonoBehaviour
                 characterAnimationHandler.ToggleFallAnim(false);
             }
         }
-        
     }
 
     public void LookAndMove()

@@ -1700,15 +1700,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 244789256}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.62, y: 84.74, z: -32.22}
+  m_LocalRotation: {x: -0, y: 0.99960965, z: -0, w: 0.027939899}
+  m_LocalPosition: {x: 0.13, y: 84.74, z: -6.9}
   m_LocalScale: {x: 3.7092597, y: 3.7092597, z: 3.7092597}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1479880029}
   m_Father: {fileID: 0}
   m_RootOrder: 27
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 176.798, z: 0}
 --- !u!1 &257846451
 GameObject:
   m_ObjectHideFlags: 0
@@ -6101,7 +6101,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -8204,6 +8204,7 @@ GameObject:
   - component: {fileID: 1982321943}
   - component: {fileID: 1982321942}
   - component: {fileID: 1982321941}
+  - component: {fileID: 1982321945}
   m_Layer: 0
   m_Name: Catapult Bowl
   m_TagString: Untagged
@@ -8226,11 +8227,11 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 3.3881438, y: 3.388143, z: 3.388143}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1982321942
 MeshRenderer:
@@ -8291,12 +8292,27 @@ Transform:
   m_GameObject: {fileID: 1982321940}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.6817018, z: -0.000034935685}
-  m_LocalScale: {x: 1.8207638, y: 0.48301244, z: 1.8207637}
+  m_LocalScale: {x: 0.5493791, y: 0.14573935, z: 0.54937905}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1479880029}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: -43.885, y: 0, z: 0}
+--- !u!114 &1982321945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982321940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d63d6f8347076243be3f0b52737fec3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 0
+  launchForce: 0
+  direction: {x: 0, y: 0, z: 2.21}
 --- !u!1 &1984048068
 GameObject:
   m_ObjectHideFlags: 0
