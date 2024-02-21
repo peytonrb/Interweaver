@@ -24,13 +24,13 @@ public class StagLeapScript : MonoBehaviour
     [SerializeField] private float slamGravity = -30; // gravity of slam
     private float startingHeight; // starting height of slam
     [SerializeField] private bool canOnlySlamAfterLeap; // determines if slams can only be done after a leap
-    private bool canSlam; // can the stag slam at this moment?
-
+    [HideInInspector] public bool canSlam; // can the stag slam at this moment?
     private bool displaySlamGizmos; // displays size of slam
     [SerializeField][Range (2f, 6f)] private float maxSlamRadius = 5f;
     [SerializeField] private float slamTime = 0.6f;
     private float currentSlamRadius = 0f;
     [SerializeField][Range(0f, 3f)] private float postSlamStaggerTime = 0.6f;
+    [HideInInspector] public bool isStaggered;
 
     [Header("Utility")]
     [SerializeField] private bool showSlamRadiusGizmo;
@@ -55,7 +55,7 @@ public class StagLeapScript : MonoBehaviour
         {
             chargingJump = true;
             movementScript.ZeroCurrentSpeed();
-            movementScript.canMove = false;
+            movementScript.ToggleCanMove(false);
         }
         else
         {
@@ -80,7 +80,7 @@ public class StagLeapScript : MonoBehaviour
         {
             StartCoroutine(ShowGroundMarker());
             canSlam = true;
-            movementScript.canMove = true;
+            movementScript.ToggleCanMove(true);
             chargingJump = false;
             if (movementScript.canMove && characterController.isGrounded) 
             {
@@ -112,11 +112,13 @@ public class StagLeapScript : MonoBehaviour
         Vector3 slamSpot = transform.position;
         StartCoroutine(GrowSlamRadius(slamSpot));
         canSlam = true;
-        movementScript.canMove = false;
+        movementScript.ToggleCanMove(false);
+        isStaggered = true;
         yield return new WaitForSeconds(postSlamStaggerTime);
+        isStaggered = false;
         if (!chargingJump)
         {
-            movementScript.canMove = true;
+            movementScript.ToggleCanMove(true);
         }
     }
 

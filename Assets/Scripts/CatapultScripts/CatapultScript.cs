@@ -7,60 +7,56 @@ public class CatapultScript : MonoBehaviour
     [Header("References")]
     public bool active;
     [Header("Variables")]
-    [SerializeField] private float launchForce;
+    [SerializeField] [Range (1f, 100f)] private float launchForce;
     [SerializeField] private Vector3 direction;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (active)
-        {
-            Debug.Log("EEEEEEEEEE");
-        }
-    }
 
     void OnTriggerEnter(Collider collider)
     {
         if (collider.CompareTag("Familiar"))
         {
-            collider.gameObject.transform.position = transform.position;
-            MovementScript movementScript = collider.GetComponent<MovementScript>();
-            movementScript.enabled = false;
-            active = true;
+            collider.gameObject.transform.position = transform.position; // move character to bowl position
+            MovementScript movementScript = collider.GetComponent<MovementScript>(); 
+            movementScript.enabled = false; // completely move motion of character
             StartCoroutine(PrepareToLaunch(collider.gameObject));
         }
     }
 
     IEnumerator PrepareToLaunch(GameObject gameObject)
     {
-        yield return new WaitForSeconds(2f);
-        Debug.Log("GUH");
+        yield return new WaitForSeconds(2f); 
         MovementScript movementScript = gameObject.GetComponent<MovementScript>();
-        Launch(movementScript);
+        CharacterController characterController = gameObject.GetComponent<CharacterController>();
+        Launch(movementScript, characterController);
     }
 
-    private void Launch(MovementScript movementScript)
+    private void Launch(MovementScript movementScript, CharacterController characterController)
     {
-        movementScript.enabled = true;
-        movementScript.canMove = false;
-        Vector3 launchVelocity = transform.rotation * direction.normalized * 25f;
-        movementScript.ChangeVelocity(launchVelocity);
-        Debug.Log(launchVelocity);
+        movementScript.enabled = true; // unfreeze movement
+        movementScript.ToggleCanMove(false); // prevent control of movements
+        Vector3 launchVelocity = transform.rotation * direction.normalized * launchForce; // calculate initital launch velocity based on rotation of bowl, direction, and force
+        movementScript.ChangeVelocity(launchVelocity); // apply velocity to the character
+        StartCoroutine(RemoveLaunchForce(movementScript, characterController)); // prepare to remove this added velocity once the character hits the ground
     }
 
-    IEnumerator RemoveLaunchForce(MovementScript movementScript)
+    IEnumerator RemoveLaunchForce(MovementScript movementScript, CharacterController characterController)
     {
-        yield return new WaitForSeconds(5f);
+        StagLeapScript stagLeapScript = characterController.gameObject.GetComponent<StagLeapScript>(); // this is funky, but works!
+        while (!characterController.isGrounded)
+        {
+            yield return null;
+        }
+
+        yield return new WaitForFixedUpdate(); // we wait a slight tick for
+        if (!stagLeapScript.isStaggered) // check this to make sure we don't overwrite the slam's stagger if present
+        {
+            movementScript.ToggleCanMove(true);
+        }
+        
         movementScript.ChangeVelocity(new Vector3(0f, 0f, 0f));
     }
 
     void OnDrawGizmos()
     {
-        DrawArrow.ForGizmo(transform.position, transform.rotation * direction); 
+        DrawArrow.ForGizmo(transform.position, transform.rotation * direction.normalized * launchForce * 0.5f); 
     }
 }
