@@ -11,6 +11,9 @@ public class MoleDigScript : MonoBehaviour
     private float originalHeight;
     [Header("Variables")]
     [CannotBeNullObjectField] public GameObject familiar;
+    [CannotBeNullObjectField] [SerializeField] private GameObject moundModel;
+    [CannotBeNullObjectField] [SerializeField] private GameObject moleModel;
+    [SerializeField] private float moundSpeed = 5f;
     public LayerMask digableLayer;
     public float castDistance;
     [HideInInspector] public bool startedToDig; // true when digging begins, false when digging has stopped  
@@ -20,7 +23,7 @@ public class MoleDigScript : MonoBehaviour
     private bool coolDown;
     private Vector3 targetPosition;
     public List<string> tagToIgnore = new List<string>();
-    private float animLength;
+    [SerializeField] private float animLength = 1.5f;
     [Header("Animation")]
     [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
 
@@ -30,7 +33,7 @@ public class MoleDigScript : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         movementScript = familiar.GetComponent<MovementScript>();
-        animLength = characterAnimationHandler.animator.GetCurrentAnimatorStateInfo(0).length;
+        //animLength = characterAnimationHandler.animator.GetCurrentAnimatorStateInfo(0).length;
         originalHeight = characterController.height;
         startedToDig = false;
         coolDown = false;
@@ -40,6 +43,15 @@ public class MoleDigScript : MonoBehaviour
     void Update()
     {
         Debug.DrawRay(transform.position, -transform.up, Color.red);
+
+        if(movementScript.currentSpeed > 0)
+        {
+            moundModel.GetComponent<Renderer>().material.SetFloat("Speed", moundSpeed);
+        }
+        else
+        {
+            moundModel.GetComponent<Renderer>().material.SetFloat("Speed", 0);
+        }
 
         if ((startedToDig))
         {
@@ -151,12 +163,15 @@ public class MoleDigScript : MonoBehaviour
         Debug.Log("Dug out " + animLength);
 
         startedToDig = false;
+        moleModel.GetComponent<Renderer>().enabled = true;
         StartCoroutine(DiggingOut(animLength));
     }
     IEnumerator StartDigging(float animLength)
     {
         yield return new WaitForSeconds(animLength);
         borrowed = true;
+        moleModel.GetComponent<Renderer>().enabled = false;
+        moundModel.GetComponent<Renderer>().enabled = true;
         Debug.Log("waited for " + animLength);
     }
 
@@ -164,6 +179,7 @@ public class MoleDigScript : MonoBehaviour
     {
         borrowed = false;
         yield return new WaitForSeconds(animLength);
+        moundModel.GetComponent<Renderer>().enabled = false;
         //animation here so then it can play after it's on top of a pillar
         Debug.Log("waited for " + animLength);
     }

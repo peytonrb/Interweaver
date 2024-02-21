@@ -16,7 +16,7 @@ public class MovementScript : MonoBehaviour
     public bool canMove = true;
     public bool canLook = true;
     public float speed; //Base walk speed for player
-    private float currentSpeed = 0; // the current speed for the player
+    [HideInInspector] public float currentSpeed {get;  private set;} // the current speed for the player
     private bool turning;
     [HideInInspector] public bool freeMove; // bases movement off input rather than direction 
     private CharacterController characterController; //references the character controller component
