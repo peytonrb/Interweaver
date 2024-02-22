@@ -95,7 +95,7 @@ public class MoleDigScript : MonoBehaviour
             {
                 MakePillarsDiggable();
                 movementScript.active = false;
-                Invoke("ResetCooldown", 3.0f);
+                Invoke("ResetCooldown", 1.5f);
                 StartCoroutine(BurrowDownPillar());
             }
         }
@@ -124,7 +124,7 @@ public class MoleDigScript : MonoBehaviour
             //add the digging sound here if it was added to the audio manager
             movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
             movementScript.enabled = false;
-            Invoke("ResetCooldown", 3.0f);
+            Invoke("ResetCooldown", 1.5f);
         }
     }
 
@@ -151,7 +151,7 @@ public class MoleDigScript : MonoBehaviour
         //add the digging sound here if it was added to the audio manager
         movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
         movementScript.enabled = false;
-        Invoke("ResetCooldown", 3.0f);
+        Invoke("ResetCooldown", 1.5f);
     }
     public void AnimationForDiggingDown()
     {
@@ -175,20 +175,20 @@ public class MoleDigScript : MonoBehaviour
     }
     IEnumerator StartDigging(float animLength)
     {
-        yield return new WaitForSeconds(animLength);
+        yield return new WaitForSeconds(animLength/2);
         borrowed = true;
         moleModel.GetComponent<Renderer>().enabled = false;
         moundModel.GetComponent<Renderer>().enabled = true;
-        Debug.Log("waited for " + animLength);
+        Debug.Log("waited for " + animLength /2);
     }
 
     IEnumerator DiggingOut(float animLength)
     {
         borrowed = false;
-        yield return new WaitForSeconds(animLength);
+        yield return new WaitForSeconds(animLength/2);
         moundModel.GetComponent<Renderer>().enabled = false;
         //animation here so then it can play after it's on top of a pillar
-        Debug.Log("waited for " + animLength);
+        Debug.Log("waited for " + animLength/2);
     }
     //******************************************
     #endregion
