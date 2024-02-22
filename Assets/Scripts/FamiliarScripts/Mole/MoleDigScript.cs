@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -13,7 +14,7 @@ public class MoleDigScript : MonoBehaviour
     [CannotBeNullObjectField] public GameObject familiar;
     [CannotBeNullObjectField] [SerializeField] private GameObject moundModel;
     [CannotBeNullObjectField] [SerializeField] private GameObject moleModel;
-    [SerializeField] private float moundSpeed = 5f;
+    private float speedLerp = 0f;
     public LayerMask digableLayer;
     public float castDistance;
     [HideInInspector] public bool startedToDig; // true when digging begins, false when digging has stopped  
@@ -43,14 +44,24 @@ public class MoleDigScript : MonoBehaviour
     void Update()
     {
         Debug.DrawRay(transform.position, -transform.up, Color.red);
+        Debug.Log(movementScript.currentSpeed);
+        Debug.Log("Lerp =" + speedLerp);
 
         if(movementScript.currentSpeed > 0)
         {
-            moundModel.GetComponent<Renderer>().material.SetFloat("Speed", moundSpeed);
+            if(speedLerp < 1)
+            {
+                speedLerp += 0.1f * Time.deltaTime;
+            }
+            moundModel.GetComponent<Renderer>().material.SetFloat("_SpeedLerp", speedLerp);
         }
         else
         {
-            moundModel.GetComponent<Renderer>().material.SetFloat("Speed", 0);
+            if(speedLerp > 0)
+            {
+                speedLerp -= 0.1f * Time.deltaTime;
+            }
+            moundModel.GetComponent<Renderer>().material.SetFloat("_SpeedLerp", speedLerp);
         }
 
         if ((startedToDig))
