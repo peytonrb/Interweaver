@@ -33,7 +33,7 @@ public class FloatingIslandScript : MonoBehaviour
     public bool isislandfalling;
     public Rigidbody rb;
     private Animator anim;
-    private WeaveableNew weaveable;
+    private WeaveableObject weaveable;
     public GameObject thisinstance;
     public GameObject crystalWovenVFX;
 
@@ -43,7 +43,8 @@ public class FloatingIslandScript : MonoBehaviour
         //Assign Components
         anim = GetComponent<Animator>();
         if (thisinstance != null) {
-            weaveable = GetComponent<WeaveableNew>();
+            //weaveable = GetComponent<WeaveableNew>();
+            weaveable = GetComponent<WeaveableObject>();
         }
         
         //if it has a crystal, it'll auto assign the itself to the crystals variable
@@ -100,7 +101,7 @@ public class FloatingIslandScript : MonoBehaviour
             cameraswitched = false;
             AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, fallClip);
             if (!isFloatingIslandInTheTube) {
-                thisCrystal.GetComponent<WeaveableNew>().canBeRelocated = true;
+                thisCrystal.GetComponent<WeaveableObject>().canBeMoved = true;
             }
             thisCrystal.GetComponent<BoxCollider>().isTrigger = false;
         }

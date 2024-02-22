@@ -49,9 +49,18 @@ public class WeaveableObject : MonoBehaviour
     {
         weaveController = GameObject.FindWithTag("Player").GetComponent<WeaveController>();
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        targetingArrow = this.transform.GetChild(0).Find("Targeting Arrow Parent").gameObject;
-        weaveableObj = this.transform.GetChild(0).gameObject;
-        originalMat = this.transform.GetChild(0).GetComponent<Renderer>().material;
+
+        if (this.gameObject.tag != "FloatingIsland")
+        {
+            targetingArrow = this.transform.GetChild(0).Find("Targeting Arrow Parent").gameObject;
+            weaveableObj = this.transform.GetChild(0).gameObject;
+            originalMat = this.transform.GetChild(0).GetComponent<Renderer>().material;
+        }
+        else
+        {
+            weaveableObj = this.gameObject;
+            originalMat = this.transform.GetComponent<Renderer>().material;
+        }    
 
         // set snap points
         myTransformPoints = new Transform[6];
@@ -196,7 +205,7 @@ public class WeaveableObject : MonoBehaviour
             else
             {
                 // move object with joystick movement
-                rb.velocity = rayDirection * 6f;
+                rb.velocity = rayDirection * 16f;
             }
 
             UnfreezeConstraints("position", 'y');
@@ -467,8 +476,11 @@ public class WeaveableObject : MonoBehaviour
         Vector2 returnValue = new Vector2(0f, 0f);
 
         if (!hasBeenCombined)
+        {
+            Debug.Log("here");
             returnValue = WeaveableManager.Instance.AddWeaveableToList(this);
-
+        }
+            
         // AddWeaveableToList() returns a Vector2 to get both ints from the return value
         listIndex = (int)returnValue.x;
         ID = (int)returnValue.y;
@@ -499,6 +511,8 @@ public class WeaveableObject : MonoBehaviour
             listIndex = 0;
             ID = 0;
         }
+
+        hasBeenCombined = false;
 
         targetingArrow.SetActive(false);
         weaveController.targetingArrow.SetActive(true);
