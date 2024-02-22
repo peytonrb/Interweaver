@@ -52,6 +52,7 @@ public class SoundEffectSubtitlesScript : MonoBehaviour
         if (!AudioManager.instance.fallChannel.isPlaying) {
             TurnTextOff(audiosources[4]);
         }
+        
     }
 
     //Updates the text with the name of the sound clip
@@ -62,19 +63,29 @@ public class SoundEffectSubtitlesScript : MonoBehaviour
 
         switch (audiochannel) {
             case AudioManagerChannels.MusicChannel:
-                audiosourcetext.text = AudioManager.instance.musicChannel.clip.name;
+                if (AudioManager.instance.musicChannel.clip != null) {
+                    audiosourcetext.text = AudioManager.instance.musicChannel.clip.name;
+                }
             break;
             case AudioManagerChannels.SoundEffectChannel:
-                audiosourcetext.text = AudioManager.instance.soundeffectChannel.clip.name;
+                if (AudioManager.instance.soundeffectChannel.clip != null) {
+                    audiosourcetext.text = AudioManager.instance.soundeffectChannel.clip.name;
+                }
             break;
             case AudioManagerChannels.weaveLoopingChannel:
-                audiosourcetext.text = AudioManager.instance.weaveChannel.clip.name;
+                if (AudioManager.instance.weaveChannel.clip != null) {
+                    audiosourcetext.text = AudioManager.instance.weaveChannel.clip.name;
+                }
             break;
             case AudioManagerChannels.footStepsLoopChannel:
-                audiosourcetext.text = AudioManager.instance.footStepsChannel.clip.name;
+                if (AudioManager.instance.footStepsChannel.clip != null) {
+                    audiosourcetext.text = AudioManager.instance.footStepsChannel.clip.name;
+                }
             break;
             case AudioManagerChannels.fallLoopChannel:
-                audiosourcetext.text = AudioManager.instance.fallChannel.clip.name;
+                if (AudioManager.instance.fallChannel.clip != null) {
+                    audiosourcetext.text = AudioManager.instance.fallChannel.clip.name;
+                }
             break;
         }
         
@@ -84,4 +95,5 @@ public class SoundEffectSubtitlesScript : MonoBehaviour
     void TurnTextOff(GameObject thisobject) {
         thisobject.SetActive(false);
     }
+
 }
