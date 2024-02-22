@@ -9,14 +9,26 @@ public class TeleportationCrystalScript : MonoBehaviour
    [HideInInspector] public bool isTeleportable = true;
     public WeaveController weaveController;
 
-    public void TeleportFunction()
+    public void TeleportFunction(GameObject other)
     {
-        this.GetComponent<WeaveableObject>().objectToSnapTo.transform.position = new Vector3(linkedCrystal.transform.position.x,
-                   linkedCrystal.transform.position.y, linkedCrystal.transform.position.z + 3);
+        if (this.GetComponent<WeaveableObject>().isBeingWoven)
+        {
+            other.GetComponent<WeaveableObject>().objectToSnapTo.transform.position = new Vector3(linkedCrystal.transform.position.x,
+                  linkedCrystal.transform.position.y, linkedCrystal.transform.position.z + 3);
 
-        weaveController.currentWeaveable.ResetWeaveable();
+            weaveController.currentWeaveable.ResetWeaveable();
 
-        WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
+            WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
+        }
+        else
+        {
+            other.GetComponent<WeaveableObject>().transform.position = new Vector3(linkedCrystal.transform.position.x,
+                  linkedCrystal.transform.position.y, linkedCrystal.transform.position.z + 3);
+
+            weaveController.currentWeaveable.ResetWeaveable();
+
+            WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
+        }
         
     }
      

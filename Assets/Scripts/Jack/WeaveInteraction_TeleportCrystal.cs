@@ -14,7 +14,7 @@ public class WeaveInteraction_TeleportCrystal : WeaveInteraction
             {
                 if (teleportationCrystalScript.isTeleportable)
                 {
-                    teleportationCrystalScript.TeleportFunction();
+                    teleportationCrystalScript.TeleportFunction(other);
                     Debug.Log("teleportation interaction called 1");
                 }
             }
@@ -23,7 +23,7 @@ public class WeaveInteraction_TeleportCrystal : WeaveInteraction
             {
                 if (teleportationCrystalScript.isTeleportable)
                 {
-                    teleportationCrystalScript.TeleportFunction();
+                    teleportationCrystalScript.TeleportFunction(wovenObject);
                     Debug.Log("teleportation interaction called 2");
                 }
             }
