@@ -74,7 +74,7 @@ public class FocusingCrystalScript : MonoBehaviour
             if (!LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn)
             {
                 // is beam actually hitting crystal
-                if (beamHitObj.GetComponent<LightCrystalScript>() != null)
+                if (collider.GetComponent<LightCrystalScript>() != null)
                 {
                     collider.GetComponent<LightCrystalScript>().isActive = true;
                 }

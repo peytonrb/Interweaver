@@ -53,7 +53,6 @@ public class LightDetectionScript : MonoBehaviour
     public void OnTriggerStay(Collider collider)
     {
         if (!isTimedMushroom)
-
         {
             // again ensuring this is a powered object
             if (collider.gameObject.tag == "Weaveable" && collider.GetComponent<LightCrystalScript>() != null)
