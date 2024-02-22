@@ -39,12 +39,12 @@ public class FocusingCrystalScript : MonoBehaviour
             // calculates hit position & object
             if (Physics.Raycast(spawnPoint, transform.TransformDirection(Vector3.forward), out hit, 100000f))
             {
-                //Debug.DrawRay(this.gameObject.transform.position, transform.TransformDirection(Vector3.forward) * 100, 
+                // Debug.DrawRay(this.gameObject.transform.position, transform.TransformDirection(Vector3.forward) * 100, 
                 //              Color.red);
                 Vector3 hitPosition = hit.point;
                 beamHitObj = hit.collider.gameObject;
                 float distance = Vector3.Distance(spawnPoint, hitPosition);
-                spotLight.range = distance + 0.5f;
+                spotLight.range = distance + 0.2f;
                 distance /= 1.35f; // man idk. it works tho.
 
                 if (distance > 1f)
@@ -130,7 +130,6 @@ public class FocusingCrystalScript : MonoBehaviour
             if (!collider.GetComponent<LightCrystalScript>().isActiveDefault 
                 && LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn)
             {
-                Debug.Log("here");
                 collider.GetComponent<LightCrystalScript>().isActive = false;
             }
         }
