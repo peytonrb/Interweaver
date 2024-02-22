@@ -51,7 +51,7 @@ public class MoleDigScript : MonoBehaviour
         {
             if(speedLerp < 1)
             {
-                speedLerp += 0.1f * Time.deltaTime;
+                speedLerp += 1f * Time.deltaTime;
             }
             moundModel.GetComponent<Renderer>().material.SetFloat("_SpeedLerp", speedLerp);
         }
@@ -59,7 +59,7 @@ public class MoleDigScript : MonoBehaviour
         {
             if(speedLerp > 0)
             {
-                speedLerp -= 0.1f * Time.deltaTime;
+                speedLerp -= 1f * Time.deltaTime;
             }
             moundModel.GetComponent<Renderer>().material.SetFloat("_SpeedLerp", speedLerp);
         }
