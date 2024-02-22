@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.VFX;
 
 public class MovementScript : MonoBehaviour
 {
@@ -77,6 +78,9 @@ public class MovementScript : MonoBehaviour
     [SerializeField] private Material dissolveMat;
     [SerializeField] private GameObject materialHolder;
     private Material defaultMat;
+
+    [Header("DeathVFX")]
+    [SerializeField] private VisualEffect deathVFX;
 
     void Awake()
     {
@@ -491,6 +495,8 @@ public class MovementScript : MonoBehaviour
     public void GoToCheckPoint()
     {
         StartCoroutine(ChangeMaterialOnDeath());
+        deathVFX.Play();
+        FadeToBlack.instance.StartFadeToBlack();
 
         if (TryGetComponent<PlayerController>(out PlayerController playerCon))
         {
@@ -516,7 +522,6 @@ public class MovementScript : MonoBehaviour
             elapsedTime -= Time.deltaTime * 1.5f;
 
             cutoffHeight = Mathf.Lerp(-3, 4, elapsedTime / totalTime);
-            Debug.Log(elapsedTime);
             dissolveMat.SetFloat("_Cutoff_Height", cutoffHeight);
 
             yield return null;
