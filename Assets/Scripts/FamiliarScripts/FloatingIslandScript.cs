@@ -172,7 +172,7 @@ public class FloatingIslandScript : MonoBehaviour
             if (cameraswitched == false)
             {
                 Instantiate(crystalWovenVFX, transform.position + new Vector3(0, 9, 0), transform.rotation);
-                //CameraMasterScript.instance.FloatingIslandCameraSwitch(myFloatCamera, this);  --> need help :(
+                CameraMasterScript.instance.FloatingIslandCameraSwitch(myFloatCamera, this);
                 RaiseIsland(crystal);
             }
         }
