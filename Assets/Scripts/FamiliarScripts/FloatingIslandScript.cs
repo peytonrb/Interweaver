@@ -5,7 +5,7 @@ using Cinemachine;
 
 public class FloatingIslandScript : MonoBehaviour
 {
-   
+
     //Attachments
     [Header("Prereqs")]
     public CrystalScript myCrystal;
@@ -14,7 +14,7 @@ public class FloatingIslandScript : MonoBehaviour
     public CinemachineVirtualCamera myFloatCamera;
 
     //Designer Variables
-    [Header("Designer Variables")] 
+    [Header("Designer Variables")]
     [SerializeField] private bool isFloating = true;
     //public bool toggleTimer;
     [SerializeField] private float timerBeforeSwap;
@@ -42,16 +42,18 @@ public class FloatingIslandScript : MonoBehaviour
     {
         //Assign Components
         anim = GetComponent<Animator>();
-        if (thisinstance != null) {
+        if (thisinstance != null)
+        {
             //weaveable = GetComponent<WeaveableNew>();
             weaveable = GetComponent<WeaveableObject>();
         }
-        
+
         //if it has a crystal, it'll auto assign the itself to the crystals variable
         if (myCrystal != null)
         {
             myCrystal.AssignFloatingIsland(this);
-            if (thisinstance != null) {
+            if (thisinstance != null)
+            {
                 weaveable.enabled = false;
             }
         }
@@ -76,7 +78,7 @@ public class FloatingIslandScript : MonoBehaviour
     void Update()
     {
         // Vertical Offset is set in the animations, this bit makes it actually fall
-       if (verticalOffset != 0)
+        if (verticalOffset != 0)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y + verticalOffset, transform.position.z);
         }
@@ -84,23 +86,20 @@ public class FloatingIslandScript : MonoBehaviour
 
     public void AssignNewCrystal(CrystalScript crystal)
     {
-
         myCrystal = crystal;
-   
         crystal.AssignFloatingIsland(this);
-
     }
-    
+
     //Called by the crystal, changes animation state, starts timer before respawning at sit location
-    public void StartFalling(CrystalScript thisCrystal) 
+    public void StartFalling(CrystalScript thisCrystal)
     {
         if (isFloating)
         {
-            Debug.Log("my crystal: " + thisCrystal);
-            StartCoroutine(TimerBeforeRespawn(true));
+            StartCoroutine(TimerBeforeRespawn(true, thisCrystal.gameObject));
             cameraswitched = false;
             AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, fallClip);
-            if (!isFloatingIslandInTheTube) {
+            if (!isFloatingIslandInTheTube)
+            {
                 thisCrystal.GetComponent<WeaveableObject>().canBeMoved = true;
             }
             thisCrystal.GetComponent<BoxCollider>().isTrigger = false;
@@ -108,7 +107,7 @@ public class FloatingIslandScript : MonoBehaviour
     }
 
     //Coroutine timer for respawning the object at the float and sit locations
-    public IEnumerator TimerBeforeRespawn(bool isFalling)
+    public IEnumerator TimerBeforeRespawn(bool isFalling, GameObject crystal)
     {
         if (isFalling)
         {
@@ -116,14 +115,9 @@ public class FloatingIslandScript : MonoBehaviour
 
             yield return new WaitForSeconds(2f);
         }
-        
 
         yield return new WaitForSeconds(timerBeforeSwap / 2);
-
-        
-        
-
-        yield return new WaitForSeconds(timerBeforeSwap /2);
+        yield return new WaitForSeconds(timerBeforeSwap / 2);
 
         if (!isFalling && !isFloatingIslandInTheTube)
         {
@@ -137,7 +131,8 @@ public class FloatingIslandScript : MonoBehaviour
             transform.position = sitTransform.position;
             isFloating = false;
             //weaveable.enabled = true;
-            if (isFloatingIslandInTheTube) {
+            if (isFloatingIslandInTheTube)
+            {
                 LevelManagerScript.instance.TurnOnOffSection(1);
             }
         }
@@ -147,32 +142,46 @@ public class FloatingIslandScript : MonoBehaviour
             verticalOffset = 0;
             transform.position = floatTransform.position;
             isFloating = true;
+
+            // since crystal is set to trigger, holds gameobject in place
+            crystal.transform.position = this.transform.Find("SnapPoint").transform.position;
+            crystal.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition; // limit calls
+            //crystal.transform.parent = null;
         }
-        
+
         yield break;
     }
 
     //Swaps to the rising camera when woven to, called by the IslandSwap WeaveInteraction
-    public void SwapToRiseCamera()
+    public void SwapToRiseCamera(GameObject crystal)
     {
+        StartCoroutine(WaitForSnap(crystal));
+    }
+
+    // waits for crystal to reach snap point before starting to rise
+    IEnumerator WaitForSnap(GameObject crystal)
+    {
+        // wait a single frame for functions to run
+        yield return null;
+
+        crystal.transform.SetParent(this.transform); // sets crystal as child of island so it can rise
+
         if (!isFloating)
         {
-            
             //Camera is switched to a new view which watches the whole island rise. (Lasts about 2 seconds)
             if (cameraswitched == false)
             {
                 Instantiate(crystalWovenVFX, transform.position + new Vector3(0, 9, 0), transform.rotation);
-                CameraMasterScript.instance.FloatingIslandCameraSwitch(myFloatCamera, this);
-                RaiseIsland();
-                Debug.Log("swap to rise called");
+                //CameraMasterScript.instance.FloatingIslandCameraSwitch(myFloatCamera, this);  --> need help :(
+                RaiseIsland(crystal);
             }
         }
     }
 
     //changes the animation and starts the respawn at float spot timer
-    public void RaiseIsland()
+    public void RaiseIsland(GameObject crystal)
     {
-        StartCoroutine(TimerBeforeRespawn(false));
+        StartCoroutine(TimerBeforeRespawn(false, crystal));
         cameraswitched = false;
         staticCrystal.GetComponent<BoxCollider>().isTrigger = true;
         anim.SetTrigger("Rise");

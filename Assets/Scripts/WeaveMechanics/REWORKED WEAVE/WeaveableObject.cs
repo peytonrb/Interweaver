@@ -40,7 +40,7 @@ public class WeaveableObject : MonoBehaviour
     private Vector3 worldPosition;
 
     [Header("References")]
-    private WeaveController weaveController;
+    [HideInInspector] public WeaveController weaveController;
     private Camera mainCamera;
     [HideInInspector] public GameObject targetingArrow;
     [HideInInspector] public Material originalMat;
@@ -58,12 +58,13 @@ public class WeaveableObject : MonoBehaviour
         }
         else
         {
-            weaveableObj = this.gameObject;
-            originalMat = this.transform.GetComponent<Renderer>().material;
+            // floating islands have no targeting arrow
+            weaveableObj = this.transform.GetChild(0).gameObject;
+            originalMat = this.transform.GetChild(0).GetComponent<Renderer>().material;
         }    
 
         // set snap points
-        myTransformPoints = new Transform[6];
+        myTransformPoints = new Transform[6]; // can have a max of 6 transform points
         myTransformPoints = this.GetComponentsInChildren<Transform>();
         myTransformPoints = myTransformPoints.Where(child => child.tag == "SnapPoint").ToArray();
     }
@@ -331,7 +332,6 @@ public class WeaveableObject : MonoBehaviour
             }
         }
 
-
         // calculate nearest snap points - inefficient
         for (int i = 0; i < totalTransformPoints.Count; i++)
         {
@@ -457,7 +457,6 @@ public class WeaveableObject : MonoBehaviour
         weaveController.StartCoroutine(weaveController.PlayWeaveVFX());
         weaveController.weaveFXScript.WeaveableSelected(objectToSnapTo.gameObject);
 
-        // needs playtesting
         // interaction overrides for special weaveable objects
         if (weaveInteraction != null)
         {
@@ -477,7 +476,6 @@ public class WeaveableObject : MonoBehaviour
 
         if (!hasBeenCombined)
         {
-            Debug.Log("here");
             returnValue = WeaveableManager.Instance.AddWeaveableToList(this);
         }
             
@@ -513,9 +511,12 @@ public class WeaveableObject : MonoBehaviour
         }
 
         hasBeenCombined = false;
+        
+        if (targetingArrow != null) // for floating islands
+            targetingArrow.SetActive(false);
 
-        targetingArrow.SetActive(false);
-        weaveController.targetingArrow.SetActive(true);
+        if (weaveController.targetingArrow != null) // for floating islands
+            weaveController.targetingArrow.SetActive(true);
 
         if (this.gameObject.tag != "FloatingIsland" && this.gameObject.tag != "Breakable")
             UnfreezeConstraints("all");
