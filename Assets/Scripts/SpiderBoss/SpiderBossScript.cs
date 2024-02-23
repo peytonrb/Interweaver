@@ -30,17 +30,7 @@ public class SpiderBossScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*
-        if (Input.GetKeyDown(KeyCode.X)) {
-            if (arachnophobiaSetting == false) {
-                ToggleArachnophobia(true);
-            }
-            else {
-                ToggleArachnophobia(false);
-            }
-        }
-        */
-        //Debug.Log("A setting "+ arachnophobiaSetting);
+        
     }
 
     public void ToggleArachnophobia(bool toggleOn) {
