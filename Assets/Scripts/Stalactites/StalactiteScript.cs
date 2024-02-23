@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class StalactiteScript : MonoBehaviour, ITriggerable
+public class StalactiteScript : MonoBehaviour
 {
     private Rigidbody rb;
     private bool isFalling;
@@ -74,7 +73,7 @@ public class StalactiteScript : MonoBehaviour, ITriggerable
     }
 
     void Update() {
-        if (timerOn) {
+        if (timerOn && sss.canFall) {
             timer -= Time.deltaTime;
             if (timer <= 0) {
                 Fall();
@@ -82,17 +81,15 @@ public class StalactiteScript : MonoBehaviour, ITriggerable
         }
     }
 
-    public void OnTrigEnter(Collider other) {
-        if (other.gameObject.CompareTag("Stalactite")) {
-            if (!timerOn) {
-                Warning();
+    void OnTriggerEnter(Collider other) {
+        if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Familiar")) {
+            if (sss.canFall) {
+                if (!timerOn) {
+                    Warning();
+                }
+                timerOn = true;
             }
-            timerOn = true;
         }
-    }
-    
-    public void OnTrigExit(Collider other) {
-        
     }
 
     IEnumerator RegrowthCooldown() {
