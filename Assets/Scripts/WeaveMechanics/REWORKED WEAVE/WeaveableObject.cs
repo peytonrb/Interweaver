@@ -466,7 +466,7 @@ public class WeaveableObject : MonoBehaviour
 
         if (objectToSnapTo.weaveInteraction != null)
         {
-            objectToSnapTo.weaveInteraction.OnWeave(gameObject, objectToSnapTo.gameObject);
+            objectToSnapTo.weaveInteraction.OnWeave(objectToSnapTo.gameObject, gameObject);
         }
     }
 
