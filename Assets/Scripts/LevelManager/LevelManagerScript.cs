@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class LevelManagerScript : MonoBehaviour
 {
     public static LevelManagerScript instance;
     public bool cannonSectionIsActive;
+    public bool stalactiteSectionIsActive;
     private GameObject[] cannons;
+    private GameObject[] stalactites;
     private NetCannonScript netCannonScript;
     private LevelTriggerScript levelTriggerScript;
     public GameObject spikeArea;
@@ -27,6 +28,7 @@ public class LevelManagerScript : MonoBehaviour
     void Start()
     {
         cannons = GameObject.FindGameObjectsWithTag("Cannons");
+        stalactites = GameObject.FindGameObjectsWithTag("StalactiteSpawner");
 
         if (cannonSectionIsActive) {
             for (int i = 0; i < cannons.Length; i++) {
@@ -34,7 +36,14 @@ public class LevelManagerScript : MonoBehaviour
 
                 netCannonScript.isOn = true;
             }
-            Debug.Log("Cannons enabled");
+        }
+
+        if (stalactiteSectionIsActive) {
+            for (int i = 0; i < stalactites.Length; i++) {
+                StalactiteSpawnerScript stalactiteScript = stalactites[i].GetComponent<StalactiteSpawnerScript>();
+
+                stalactiteScript.canFall = true;
+            }
         }
         
     }
@@ -67,8 +76,40 @@ public class LevelManagerScript : MonoBehaviour
                 }
             break;
             case 1:
-                spikeArea.SetActive(false);
-                
+                if (spikeArea != null) {
+                    spikeArea.SetActive(false);
+                }
+            break;
+            case 2:
+                if (levelTriggerScript.triggered) {
+                    for (int i = 0; i < stalactites.Length; i++) {
+                        StalactiteSpawnerScript sss = stalactites[i].GetComponent<StalactiteSpawnerScript>();
+
+                        if (sss.canFall) {
+                            sss.canFall = false;
+                        }
+                        else {
+                            sss.canFall = true;
+                        }
+                    }
+
+                    levelTriggerScript.triggered = false;
+
+                }
+                else {
+                    for (int i = 0; i < stalactites.Length; i++) {
+                        StalactiteSpawnerScript sss = stalactites[i].GetComponent<StalactiteSpawnerScript>();
+                        
+                        if (sss.canFall) {
+                            sss.canFall = false;
+                        }
+                        else {
+                            sss.canFall = true;
+                        }
+                    }
+
+                    levelTriggerScript.triggered = true;
+                }
             break;
         }
     }
