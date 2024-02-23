@@ -9,8 +9,12 @@ public class TeleportationCrystalScript : MonoBehaviour
    [HideInInspector] public bool isTeleportable = true;
     public WeaveController weaveController;
 
+    //if doing it to a combined object it breaks and the code actually kills itself
+    // it says something about weaveableManager line 51
+
     public void TeleportFunction(GameObject other)
-    {        
+    {
+        //this takes the current object (teleport crystal) and then tells the weaveable object to go to the linked crystal
      other.GetComponent<WeaveableObject>().objectToSnapTo.transform.position = new Vector3(linkedCrystal.transform.position.x,
      linkedCrystal.transform.position.y, linkedCrystal.transform.position.z + 3);
 
@@ -21,6 +25,7 @@ public class TeleportationCrystalScript : MonoBehaviour
 
     public void TeleportToFunction(GameObject other)
     {
+         //this takes the current object (weaveable) and then tells the teleport crystal to go to the linked crystal
         other.GetComponent<WeaveableObject>().transform.position = new Vector3(linkedCrystal.transform.position.x,
                    linkedCrystal.transform.position.y, linkedCrystal.transform.position.z + 3);
 
