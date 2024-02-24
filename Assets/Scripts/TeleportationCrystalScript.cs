@@ -4,34 +4,39 @@ using UnityEngine;
 
 public class TeleportationCrystalScript : MonoBehaviour
 {
-    public bool isWeaveable = true;
+   
     public GameObject linkedCrystal;
-    public bool isTeleportable = true;
-    void Start()
+   [HideInInspector] public bool isTeleportable = true;
+    public WeaveController weaveController;
+
+    //if doing it to a combined object it breaks and the code actually kills itself
+    // it says something about weaveableManager line 51
+
+    public void TeleportFunction(GameObject other)
     {
-        if (!isWeaveable)
-        {
-            this.GetComponent<WeaveableNew>().enabled = false;
-        }
+        //this takes the current object (teleport crystal) and then tells the weaveable object to go to the linked crystal
+     other.GetComponent<WeaveableObject>().objectToSnapTo.transform.position = new Vector3(linkedCrystal.transform.position.x,
+     linkedCrystal.transform.position.y, linkedCrystal.transform.position.z + 3);
+
+     weaveController.currentWeaveable.ResetWeaveable();
+        //need to somehow stop the vfx
+     WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void TeleportToFunction(GameObject other)
     {
-       
+         //this takes the current object (weaveable) and then tells the teleport crystal to go to the linked crystal
+        other.GetComponent<WeaveableObject>().transform.position = new Vector3(linkedCrystal.transform.position.x,
+                   linkedCrystal.transform.position.y, linkedCrystal.transform.position.z + 3);
+
+        weaveController.currentWeaveable.ResetWeaveable();
+        //need to somehow stop the vfx
+        WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
     }
 
-     public void GetOtherCrystals()
+    void OnDrawGizmos()
     {
-        this.GetComponent<WeaveableNew>().Uncombine();
-        Debug.Log("This is the linked crystal's name " + linkedCrystal.name + " and this is it's position " + linkedCrystal.transform.position);
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Weaveable"))
-        {          
-            Debug.Log("this is the weaveable item that it collided with cause physics and shit " + collision.gameObject.name);           
-        }
+        Gizmos.color = Color.blue;
+        DrawArrow.ForGizmo(transform.position,Vector3.forward * 3);
     }
 }

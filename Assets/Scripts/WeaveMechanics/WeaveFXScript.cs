@@ -43,13 +43,9 @@ public class WeaveFXScript : MonoBehaviour
     public void ActivateWeave(Transform weaveablePos)
     {
         weaveActivation.Play();
-
-     
-        GameObject spawnedEffect = Instantiate(weaveEffect, transform.position, Quaternion.LookRotation(Vector3.up, weaveablePos.position - transform.position));
-
-        
-
-        spawnedEffect.GetComponent<NeedleVFXScript>().SetDestroyTimer(Vector3.Distance(weaveablePos.position, transform.position)/needleVel, weaveablePos.gameObject);
+        GameObject spawnedEffect = Instantiate(weaveEffect, transform.position,
+                                               Quaternion.LookRotation(Vector3.up, weaveablePos.position - transform.position));
+        spawnedEffect.GetComponent<NeedleVFXScript>().SetDestroyTimer(Vector3.Distance(weaveablePos.position, transform.position) / needleVel, weaveablePos.gameObject);
     }
 
     public void WeaveableSelected(GameObject weaveable)
@@ -61,10 +57,9 @@ public class WeaveFXScript : MonoBehaviour
             psShape.radius = weaveable.GetComponent<BoxCollider>().bounds.size.x; // will break if object doesn't have box collider
             Instantiate(objectSelectPS, weaveable.transform.position, Quaternion.Euler(-90f, 0f, 0f));
 
-            // aura effect
-            if (weaveable.GetComponent<Renderer>() != null) // this whole if block is here for the weaveable prefab change 
+            if (weaveable.transform.GetChild(0).GetComponent<Renderer>() != null)
             {
-                weaveable.GetComponent<Renderer>().material = emissiveMat;
+                weaveable.transform.GetChild(0).GetComponent<Renderer>().material = emissiveMat;
             }
             else
             {
@@ -86,8 +81,7 @@ public class WeaveFXScript : MonoBehaviour
 
         if (weaveable.gameObject.tag != "FloatingIsland")
         {
-            Debug.Log("this should print twice");
-            weaveable.GetComponent<Renderer>().material = weaveable.GetComponent<WeaveableNew>().originalMat;
+            weaveable.transform.GetChild(0).GetComponent<Renderer>().material = weaveable.GetComponent<WeaveableObject>().originalMat;
 
             // kinda inefficient if we end up having hella children per GameObject
             for (int i = 0; i < weaveable.transform.childCount; i++)

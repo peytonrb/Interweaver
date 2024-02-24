@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.VFX;
 
 public class MovementScript : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class MovementScript : MonoBehaviour
     public bool canLook = true;
     [field: SerializeField] public bool canMove {get;  private set;} = true; 
     public float speed; //Base walk speed for player
-    private float currentSpeed = 0; // the current speed for the player
+    [HideInInspector] public float currentSpeed {get;  private set;} // the current speed for the player
     private bool turning;
     [HideInInspector] public bool freeMove; // bases movement off input rather than direction 
     private CharacterController characterController; //references the character controller component
@@ -70,9 +71,16 @@ public class MovementScript : MonoBehaviour
     [Header("Dive VFX")]
     private ParticleSystem speedLinesVFX;
     [HideInInspector] public bool inCutscene;
-    private PlayerController playerController;
+    private PlayerControllerNew playerController;
     private FamiliarScript familiarScript;
 
+    [Header("Materials")]
+    [SerializeField] private Material dissolveMat;
+    [SerializeField] private GameObject materialHolder;
+    private Material defaultMat;
+
+    [Header("DeathVFX")]
+    [SerializeField] private VisualEffect deathVFX;
 
     void Awake()
     {
@@ -86,7 +94,7 @@ public class MovementScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControllerNew>();
         familiarScript = GameObject.FindGameObjectWithTag("Familiar").GetComponent<FamiliarScript>();
 
         originalGroundAcceleration = groundAcceleration;
@@ -105,6 +113,8 @@ public class MovementScript : MonoBehaviour
         debugisOn = DebugManager.instance.GetDebugOn();
 
         StartCoroutine(DelayBeforeFallAudio());
+
+        defaultMat = materialHolder.GetComponent<SkinnedMeshRenderer>().material;
     }
 
     // Update is called once per frame
@@ -218,7 +228,7 @@ public class MovementScript : MonoBehaviour
                     if (characterController.isGrounded)
                     {
                         //Play footstep Audio!
-                        if (TryGetComponent<PlayerController>(out PlayerController playerCon))
+                        if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon))
                         {
                             if (!AudioManager.instance.footStepsChannel.isPlaying)
                                 AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.3f);
@@ -268,7 +278,7 @@ public class MovementScript : MonoBehaviour
                 if (!characterController.isGrounded)
                 {
                     characterAnimationHandler.ToggleFallAnim(true);
-                    if (TryGetComponent<PlayerController>(out PlayerController playerCon) && !AudioManager.instance.fallChannel.isPlaying && canPlayFallAudio)
+                    if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon) && !AudioManager.instance.fallChannel.isPlaying && canPlayFallAudio)
                     {
                         AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, weaverFallClip);
                     }
@@ -484,7 +494,11 @@ public class MovementScript : MonoBehaviour
 
     public void GoToCheckPoint()
     {
-        if (TryGetComponent<PlayerController>(out PlayerController playerCon))
+        StartCoroutine(ChangeMaterialOnDeath());
+        deathVFX.Play();
+        FadeToBlack.instance.StartFadeToBlack();
+
+        if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon))
         {
             playerCon.Death();
         }
@@ -493,6 +507,32 @@ public class MovementScript : MonoBehaviour
         {
             familiarScript.Death();
         }
+    }
+
+    public IEnumerator ChangeMaterialOnDeath()
+    {
+        materialHolder.GetComponent<SkinnedMeshRenderer>().material = dissolveMat;
+
+        float elapsedTime = 2;
+        float totalTime = 2;
+        float cutoffHeight = 4;
+
+        while (elapsedTime > 0)
+        {
+            elapsedTime -= Time.deltaTime * 1.5f;
+
+            cutoffHeight = Mathf.Lerp(-3, 4, elapsedTime / totalTime);
+            dissolveMat.SetFloat("_Cutoff_Height", cutoffHeight);
+
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(2);
+        dissolveMat.SetFloat("_Cutoff_Height", 4);
+
+        materialHolder.GetComponent<SkinnedMeshRenderer>().material = defaultMat;
+
+        yield break;
     }
 
     public IEnumerator DelayBeforeFallAudio()

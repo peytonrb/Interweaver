@@ -19,6 +19,7 @@ public class WeaveController : MonoBehaviour
     private Vector3 worldPosition;
     [HideInInspector] public WeaveFXScript weaveFXScript;
     private GameObject weaveSpawn;
+    public int maxCombinedObjects = 4;
 
     [Header("Audio")]
     [SerializeField] private AudioClip startWeaveClip;
@@ -27,16 +28,18 @@ public class WeaveController : MonoBehaviour
     [SerializeField] private AudioClip weavingOutroClip;
 
     [Header("Other Script References - DO NOT MODIFY")]
-    public bool isWeaving;
-    public WeaveableObject currentWeaveable;
-    public WeaveableObject selectedWeaveable;
-    public Vector2 lookDirection;
+    [HideInInspector] public bool isWeaving;
+    [HideInInspector] public WeaveableObject currentWeaveable;
+    [HideInInspector] public WeaveableObject selectedWeaveable;
+    [HideInInspector] public Vector2 lookDirection;
+    private MovementScript movementScript;
 
     void Start()
     {
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         weaveFXScript = this.GetComponent<WeaveFXScript>();
         weaveSpawn = this.transform.Find("WeaveSpawn").gameObject;
+        movementScript = this.GetComponent<MovementScript>();
         targetingArrow.SetActive(true);
     }
 
@@ -46,6 +49,11 @@ public class WeaveController : MonoBehaviour
         if (isWeaving)
         {
             weaveFXScript.DrawWeave(weaveSpawn.transform.position, currentWeaveable.transform.position);
+        }
+
+        if (this.GetComponent<PlayerControllerNew>().isDead)
+        {
+            OnDrop();
         }
     }
 
@@ -124,20 +132,22 @@ public class WeaveController : MonoBehaviour
             }
         }
 
-        // up to here is working for both k&m and controller
         // if weaveable is within range and can be woven...
         if (isValidWeaveable)
         {
             currentWeaveable.isBeingWoven = true;
+            movementScript.freeMove = true; // lets weaver move even when not facing where they're moving
             StartCoroutine(PlayWeaveVFX());
             StartCoroutine(WaitForVFX()); // sets isWeaving to true. is in Coroutine for aesthetic purposes.
-            currentWeaveable.AddToWovenObjects(); // BEGINS WEAVEABLEOBEJCT'S INVOLVEMENT IN ALL THIS
+            currentWeaveable.AddToWovenObjects();
+            this.GetComponent<JumpAndDashScript>().canDash = false;
             // toggle on animation here
         }
     }
 
     // plays VFX and Audio at proper timings
-    IEnumerator PlayWeaveVFX()
+    // accessed by WeaveableObject
+    public IEnumerator PlayWeaveVFX()
     {
         // VFX
         weaveFXScript.ActivateWeave(currentWeaveable.transform);
@@ -160,12 +170,31 @@ public class WeaveController : MonoBehaviour
     {
         isWeaving = false;
         currentWeaveable.GetComponent<Rigidbody>().velocity = Vector3.down * 2f;
+        movementScript.freeMove = false; // returns weaver to needing to be facing where they're moving
         weaveFXScript.DisableWeave();
         StartCoroutine(EndWeaveAudio());
-        // toggle off animation here
-        currentWeaveable.ResetWeaveable();
+
+        // if this is the only weaveable in the list (weaveables are added on combine)
+        if (!currentWeaveable.hasBeenCombined)
+        {
+            currentWeaveable.ResetWeaveable();
+            WeaveableManager.Instance.RemoveWeaveableFromList(0, 0);
+        }
+        else
+        {
+            if (WeaveableManager.Instance.combinedWeaveables.Count > 0 && WeaveableManager.Instance.combinedWeaveables[currentWeaveable.listIndex] != null)
+            {
+                for (int i = 0; i < WeaveableManager.Instance.combinedWeaveables[currentWeaveable.listIndex].weaveableObjectGroup.Count; i++)
+                {
+                    WeaveableManager.Instance.combinedWeaveables[currentWeaveable.listIndex].weaveableObjectGroup[i].ResetWeaveable();
+                }
+            }
+        }
+
         currentWeaveable = null;
         selectedWeaveable = null;
+        this.GetComponent<JumpAndDashScript>().canDash = true;
+        // toggle off animation here
     }
 
     // stops all audio if audio is enabled
@@ -193,36 +222,40 @@ public class WeaveController : MonoBehaviour
     // <param> is player using a controller or k&m
     public void CheckIfWeaveable(bool isGamepad)
     {
-        if (isGamepad)
+        // prevents you from combining more than the max amount of weaveables per group
+        if (WeaveableManager.Instance.combinedWeaveables[currentWeaveable.listIndex].weaveableObjectGroup.Count < maxCombinedObjects)
         {
-            // boxcast in controller targeted direction
-            RaycastHit hitInfo;
-
-            // check for Weaveable object within range of BoxCast sent from CURRENTWEAVEABLE
-            if (Physics.BoxCast(currentWeaveable.transform.position, transform.localScale, 
-                                currentWeaveable.targetingArrow.transform.forward, out hitInfo,
-                                currentWeaveable.transform.rotation, weaveDistance, weaveableLayerMask))
+            if (isGamepad)
             {
-                if (hitInfo.collider.GetComponent<WeaveableObject>() != currentWeaveable)
+                // boxcast in controller targeted direction
+                RaycastHit hitInfo;
+
+                // check for Weaveable object within range of BoxCast sent from CURRENTWEAVEABLE
+                if (Physics.BoxCast(currentWeaveable.transform.position, transform.localScale,
+                                    currentWeaveable.targetingArrow.transform.forward, out hitInfo,
+                                    currentWeaveable.transform.rotation, weaveDistance, weaveableLayerMask))
                 {
-                    selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
-                    currentWeaveable.CombineObject();
+                    if (hitInfo.collider.GetComponent<WeaveableObject>() != currentWeaveable)
+                    {
+                        selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
+                        currentWeaveable.CombineObject();
+                    }
                 }
             }
-        }
-        else
-        {
-            // screen to point raycast using mouse position
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hitInfo;
-
-            // checks for a Weavable object within distance of Ray
-            if (Physics.Raycast(ray, out hitInfo, 100f, weaveableLayerMask))
+            else
             {
-                if (hitInfo.collider.GetComponent<WeaveableObject>() != currentWeaveable)
+                // screen to point raycast using mouse position
+                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hitInfo;
+
+                // checks for a Weavable object within distance of Ray
+                if (Physics.Raycast(ray, out hitInfo, 100f, weaveableLayerMask))
                 {
-                    selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
-                    currentWeaveable.CombineObject();
+                    if (hitInfo.collider.GetComponent<WeaveableObject>() != currentWeaveable)
+                    {
+                        selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
+                        currentWeaveable.CombineObject();
+                    }
                 }
             }
         }

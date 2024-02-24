@@ -15,7 +15,7 @@ public class JumpAndDashScript : MonoBehaviour
     [SerializeField][Range(1, 10)] private float jumpForce = 3f;
     [SerializeField][Tooltip("Allows the weaver to jump forever instead of dash")] private bool infiniteJump;
     [Header("Dashing")]
-    [SerializeField] private bool canDash;
+    public bool canDash; // accessed by WeaveableObject
     [SerializeField][Range(0f, 10f)] private float dashCooldown = 0.4f;
     [SerializeField][Range(0.1f, 10f)] private float dashLength = 0.1f;
     [SerializeField][Range(1f, 100f)] private float dashSpeed = 50f;

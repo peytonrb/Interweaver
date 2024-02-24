@@ -17,7 +17,8 @@ public class InputManagerScript : MonoBehaviour
     public static InputManagerScript instance;
 
     public bool isGamepad = false;
-    private PlayerController playerScript;
+    private PlayerControllerNew playerScript;
+    private WeaveController weaveController;
     private FamiliarScript familiarScript;
     private MovementScript movementScript;
     public PlayerInput playerInput;
@@ -31,10 +32,6 @@ public class InputManagerScript : MonoBehaviour
     }
     public myEnums familiarEnums;
 
-    [Header("Temp - For Weave Rework")]
-    public bool isNewWeave = false;
-    public WeaveController weaveController;
-
 
     void Awake()
     {
@@ -47,7 +44,8 @@ public class InputManagerScript : MonoBehaviour
             Destroy(gameObject);
         }
 
-        playerScript = player.GetComponent<PlayerController>();
+        playerScript = player.GetComponent<PlayerControllerNew>();
+        weaveController = player.GetComponent<WeaveController>();
         movementScript = player.GetComponent<MovementScript>();
         familiarScript = familiar.GetComponent<FamiliarScript>();
         pauseScript = pauseScreen.GetComponent<PauseScript>();
@@ -123,81 +121,22 @@ public class InputManagerScript : MonoBehaviour
     {
         if (input.isPressed)
         {
-            if (!isNewWeave) // FOR OLD WEAVE
+            if (weaveController.isWeaving)
             {
-                if (!playerScript.inRelocateMode && !playerScript.inCombineMode) // occasionally reads a hit during compile time???? NOT ANYMOREEEEEEE HEHEHEHEHE
-                {
-                    playerScript.interactInput = true;
-                    playerScript.WeaveActivated();
-
-                }
-                else if (playerScript.inCombineMode)
-                {
-                    playerScript.weaveableScript.OnCombineInput();
-
-                    //StartCoroutine(WeaveModeTimer());  //ayo peyton rework this                       
-                }
+                weaveController.CheckIfWeaveable(isGamepad);
             }
-            else // FOR REWORKED WEAVE
+            else
             {
-                if (weaveController.isWeaving)
-                {
-                    weaveController.CheckIfWeaveable(isGamepad);
-                }
-                else
-                {
-                    weaveController.WeaveObject(isGamepad);
-                }
+                weaveController.WeaveObject(isGamepad);
             }
         }
-    }
-
-    IEnumerator WeaveModeTimer() // and this
-    {
-        yield return new WaitForSeconds(1);
-        playerScript.inRelocateMode = true;
-        playerScript.inCombineMode = false;
     }
 
     public void OnDrop(InputValue input)
     {
         if (input.isPressed)
         {
-            if (!isNewWeave) // for old weave
-            {
-                if (playerScript.isCurrentlyWeaving)
-                {
-                    playerScript.uninteract = true;
-                }
-
-                playerScript.interactInput = false;
-                playerScript.inRelocateMode = false;
-                playerScript.inCombineMode = false;
-            }
-            else // for reworked weave
-            {
-                weaveController.OnDrop();
-            }
-        }
-    }
-
-    public void OnToggleWeaveMode(InputValue input) // no longer exists in reworked weave
-    {
-        if (input.isPressed)
-        {
-            if (!isNewWeave) // old weave functionality
-            {
-                if (playerScript.inRelocateMode)
-                {
-                    playerScript.inCombineMode = true;
-                    playerScript.inRelocateMode = false;
-                }
-                else if (playerScript.inCombineMode && !playerScript.floatingIslandCrystal)
-                {
-                    playerScript.inCombineMode = false;
-                    playerScript.inRelocateMode = true;
-                }
-            }
+            weaveController.OnDrop();
         }
     }
 
@@ -205,48 +144,26 @@ public class InputManagerScript : MonoBehaviour
     {
         Vector2 inputVector = input.Get<Vector2>();
 
-        if (!isNewWeave) // OLD WEAVE FUNCTIONALITY
+        if (isGamepad)
         {
-            if (isGamepad)
+            if (weaveController.isWeaving)
             {
-                if (playerScript.isCurrentlyWeaving)
-                {
-                    playerScript.weaveableScript.MovingWeaveController(inputVector);
-                }
-
-                if (inputVector != Vector2.zero)
-                {
-                    playerScript.ControllerAimTargetter(inputVector);
-                }
+                weaveController.currentWeaveable.MoveWeaveableToTarget(inputVector);
             }
             else
             {
-                playerScript.MouseAimTargetter(inputVector);
+                weaveController.GamepadTargetingArrow(inputVector);
             }
         }
-        else // REWORKED WEAVE FUNCTIONALITY
+        else
         {
-            if (isGamepad)
+            if (weaveController.isWeaving)
             {
-                if (weaveController.isWeaving)
-                {
-                    weaveController.currentWeaveable.MoveWeaveableToTarget(inputVector);
-                }
-                else
-                {
-                    weaveController.GamepadTargetingArrow(inputVector);
-                }
+                weaveController.currentWeaveable.MoveWeaveableToMouse();
             }
             else
             {
-                if (weaveController.isWeaving)
-                {
-                    weaveController.currentWeaveable.MoveWeaveableToMouse();
-                }
-                else
-                {
-                    weaveController.MouseTargetingArrow(inputVector);
-                }
+                weaveController.MouseTargetingArrow(inputVector);
             }
         }
     }
@@ -260,69 +177,30 @@ public class InputManagerScript : MonoBehaviour
     {
         Vector2 dir = input.Get<Vector2>();
 
-        if (!isNewWeave) // old weave
+        if (weaveController.currentWeaveable != null && weaveController.currentWeaveable.isBeingWoven)
         {
-            if (dir != Vector2.zero && playerScript.inRelocateMode)
+            switch (dir)
             {
-                if (playerScript.weaveableScript != null)
-                {
-                    switch (dir)
+                case Vector2 v when v.Equals(Vector2.up):
                     {
-                        case Vector2 v when v.Equals(Vector2.up):
-                            {
-                                //playerScript.weaveableScript.CallRotate(Vector3.forward, 45);
-                                playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.forward);
-                                break;
-                            }
-                        case Vector2 v when v.Equals(Vector2.down):
-                            {
-                                //playerScript.weaveableScript.CallRotate(Vector3.forward, -45);
-                                playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.back);
-                                break;
-                            }
-                        case Vector2 v when v.Equals(Vector2.right):
-                            {
-                                //playerScript.weaveableScript.CallRotate(Vector3.up, 45);
-                                playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.right);
-                                break;
-                            }
-                        case Vector2 v when v.Equals(Vector2.left):
-                            {
-                                //playerScript.weaveableScript.CallRotate(Vector3.up, -45);
-                                playerScript.weaveableScript.RotateObject(WeaveableNew.rotateDir.left);
-                                break;
-                            }
+                        weaveController.currentWeaveable.RotateObject(WeaveableObject.rotateDir.forward);
+                        break;
                     }
-                }
-            }
-        }
-        else // reworked weave
-        {
-            if (weaveController.currentWeaveable != null && weaveController.currentWeaveable.isBeingWoven)
-            {
-                switch (dir)
-                {
-                    case Vector2 v when v.Equals(Vector2.up):
-                        {
-                            weaveController.currentWeaveable.RotateObject(WeaveableObject.rotateDir.forward);
-                            break;
-                        }
-                    case Vector2 v when v.Equals(Vector2.down):
-                        {
-                            weaveController.currentWeaveable.RotateObject(WeaveableObject.rotateDir.back);
-                            break;
-                        }
-                    case Vector2 v when v.Equals(Vector2.right):
-                        {
-                            weaveController.currentWeaveable.RotateObject(WeaveableObject.rotateDir.right);
-                            break;
-                        }
-                    case Vector2 v when v.Equals(Vector2.left):
-                        {
-                            weaveController.currentWeaveable.RotateObject(WeaveableObject.rotateDir.left);
-                            break;
-                        }
-                }
+                case Vector2 v when v.Equals(Vector2.down):
+                    {
+                        weaveController.currentWeaveable.RotateObject(WeaveableObject.rotateDir.back);
+                        break;
+                    }
+                case Vector2 v when v.Equals(Vector2.right):
+                    {
+                        weaveController.currentWeaveable.RotateObject(WeaveableObject.rotateDir.right);
+                        break;
+                    }
+                case Vector2 v when v.Equals(Vector2.left):
+                    {
+                        weaveController.currentWeaveable.RotateObject(WeaveableObject.rotateDir.left);
+                        break;
+                    }
             }
         }
     }
@@ -331,23 +209,8 @@ public class InputManagerScript : MonoBehaviour
     {
         if (input.isPressed)
         {
-            if (!isNewWeave) // FOR OLD WEAVE
-            {
-                WeaveableNew[] weaveableArray = FindObjectsOfType<WeaveableNew>();
-
-                foreach (WeaveableNew weaveable in weaveableArray)
-                {
-                    if (weaveable.isCombined)
-                    {
-                        weaveable.Uncombine();
-                        playerScript.weaveVisualizer.StopAura(weaveable.gameObject);
-                    }
-                }
-            }
-            else // FOR REWORKED WEAVE
-            {
-                WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
-            }
+            WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
+            weaveController.OnDrop();
         }
     }
 
@@ -368,7 +231,7 @@ public class InputManagerScript : MonoBehaviour
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
         CharacterController playerCharacterController = player.GetComponent<CharacterController>();
 
-        if (!familiarScript.myTurn && !playerScript.isCurrentlyWeaving && playerCharacterController.isGrounded && !playerScript.inCutscene && canSwitch && !playerScript.talkingToNPC)
+        if (!familiarScript.myTurn && !weaveController.isWeaving && playerCharacterController.isGrounded && !playerScript.inCutscene && canSwitch && !playerScript.talkingToNPC)
         {
             playerScript.Possession();
             playerInput.SwitchCurrentActionMap("Familiar");

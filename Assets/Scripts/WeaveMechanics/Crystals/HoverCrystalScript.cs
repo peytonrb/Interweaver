@@ -7,7 +7,7 @@ public class HoverCrystalScript : MonoBehaviour
 {
     [Header("References")]
     private Rigidbody rigidBody;
-    private WeaveableNew weaveable; // make sure to change when script name gets changed as well!!!
+    private WeaveableObject weaveable; // make sure to change when script name gets changed as well!!!
     [Header("Variables")]
     private Vector3 pointToRiseTo = Vector3.up;
     [SerializeField] private float maxTimeToShatter = 5f; 
@@ -21,22 +21,20 @@ public class HoverCrystalScript : MonoBehaviour
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
-        weaveable = GetComponent<WeaveableNew>(); 
+        weaveable = GetComponent<WeaveableObject>(); 
     }
 
     public void StartHover(GameObject other)
     {
-        other.GetComponent<WeaveableNew>().Uninteract();
-        weaveable.Uninteract();
         pointToRiseTo = transform.position + (Vector3.up * hoverHeight);
         rigidBody.constraints = RigidbodyConstraints.FreezeAll;
         distance = Vector3.Distance(transform.position, pointToRiseTo);
 
-        StartCoroutine(Hover());
+        StartCoroutine(Hover(other));
     }
 
 
-    public IEnumerator Hover()
+    public IEnumerator Hover(GameObject other)
     {
         
         if (distance >= 0.1f)
@@ -46,25 +44,25 @@ public class HoverCrystalScript : MonoBehaviour
             hoverBegan = true;
             transform.position = Vector3.MoveTowards(transform.position, pointToRiseTo, 2f * Time.deltaTime);
             distance = Vector3.Distance(transform.position, pointToRiseTo);
-            StartCoroutine(Hover());
+            StartCoroutine(Hover(other));
             yield return null;
         }
         else
         {
             //when its reached the top
             TimeToShatter = maxTimeToShatter;
-            StartCoroutine(ShatterCountdown());
+            StartCoroutine(ShatterCountdown(other));
             hoverBegan = false;
         }
 
         yield break;
     }
 
-    IEnumerator ShatterCountdown()
+    IEnumerator ShatterCountdown(GameObject other)
     {
         yield return new WaitForSeconds(TimeToShatter);
         rigidBody.constraints = RigidbodyConstraints.None;
-        weaveable.Uncombine();
+        WeaveableManager.Instance.DestroyJoints(other.GetComponent<WeaveableObject>().listIndex);
         isCombined = false;
         yield return null;
     }
