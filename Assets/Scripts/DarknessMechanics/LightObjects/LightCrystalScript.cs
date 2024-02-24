@@ -21,12 +21,12 @@ public class LightCrystalScript : MonoBehaviour
 
     private Light crystalLight;
     private float currentBrightness;
-    [HideInInspector] public bool isActiveDefault;
+    [HideInInspector] public bool isActiveDefault = false;
 
     void Start()
     {
         isActiveDefault = isActive;
-        crystalLight = this.gameObject.transform.GetChild(0).GetComponent<Light>();
+        crystalLight = this.gameObject.transform.GetChild(1).GetComponent<Light>();
         Transform vfx = this.transform.Find("LightBeamBurstVFX");
 
         if (vfx != null)
@@ -42,7 +42,7 @@ public class LightCrystalScript : MonoBehaviour
 
         if (isFocusingCrystal)
         {
-            beamEffect = this.gameObject.transform.GetChild(1).GetComponent<VisualEffect>();
+            beamEffect = this.gameObject.transform.GetChild(2).GetComponent<VisualEffect>();
             focusingCrystalScript = beamEffect.gameObject.GetComponent<FocusingCrystalScript>();
         }
 
@@ -161,5 +161,10 @@ public class LightCrystalScript : MonoBehaviour
         beamEffect.enabled = true;
         beamEffect.Play();
         focusingCrystalScript.isActive = true;
+    }
+
+    public void Test()
+    {
+        Debug.Log("testing");
     }
 }

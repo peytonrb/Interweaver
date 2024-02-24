@@ -12,15 +12,27 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
     [SerializeField] private float height;
     [SerializeField] private float riseSpeed;
 
+    //Concerning magic circles inside a predetermined configuration. They are always attached to a configuration parent object.
+    private GameObject configurationParent;
+    private WyvernBossManager bossManager;
+    private bool hasParent;
+
 
     // Start is called before the first frame update
     void Start()
     {
         weaver = GameObject.FindGameObjectWithTag("Player");
+        bossManager = GameObject.FindGameObjectWithTag("Boss").GetComponent<WyvernBossManager>();
 
         pushUp = false;
         stayUp = false;
         warning.SetActive(true);
+
+        if (bossManager.useConfigurations) {
+            hasParent = true;
+            configurationParent = transform.parent.gameObject;
+            bossManager.configurationIsActive = true;
+        }
 
         StartCoroutine(Flashing());
     }
@@ -40,7 +52,14 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
                 timer -= Time.deltaTime;
                 if (timer <= 0) {
                     StopAllCoroutines();
-                    Destroy(gameObject);
+                    if (hasParent && configurationParent != null) {
+                        bossManager.configurationIsActive = false;
+                        bossManager.reseting = true;
+                        Destroy(configurationParent);
+                    }
+                    else {
+                        Destroy(gameObject);
+                    }   
                 }
             }
         }

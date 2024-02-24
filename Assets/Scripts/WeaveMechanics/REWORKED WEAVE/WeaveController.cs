@@ -50,6 +50,11 @@ public class WeaveController : MonoBehaviour
         {
             weaveFXScript.DrawWeave(weaveSpawn.transform.position, currentWeaveable.transform.position);
         }
+
+        if (this.GetComponent<PlayerControllerNew>().isDead)
+        {
+            OnDrop();
+        }
     }
 
     // adjusts targeting arrow based on gamepad
@@ -127,7 +132,6 @@ public class WeaveController : MonoBehaviour
             }
         }
 
-        // up to here is working for both k&m and controller
         // if weaveable is within range and can be woven...
         if (isValidWeaveable)
         {
@@ -136,6 +140,7 @@ public class WeaveController : MonoBehaviour
             StartCoroutine(PlayWeaveVFX());
             StartCoroutine(WaitForVFX()); // sets isWeaving to true. is in Coroutine for aesthetic purposes.
             currentWeaveable.AddToWovenObjects();
+            this.GetComponent<JumpAndDashScript>().canDash = false;
             // toggle on animation here
         }
     }
@@ -188,6 +193,7 @@ public class WeaveController : MonoBehaviour
 
         currentWeaveable = null;
         selectedWeaveable = null;
+        this.GetComponent<JumpAndDashScript>().canDash = true;
         // toggle off animation here
     }
 
