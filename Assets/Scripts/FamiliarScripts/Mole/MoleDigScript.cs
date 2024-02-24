@@ -13,9 +13,9 @@ public class MoleDigScript : MonoBehaviour
     [Header("VFX")]
     [CannotBeNullObjectField] [SerializeField] private GameObject moundModel;
     [CannotBeNullObjectField] [SerializeField] private GameObject moleModel;
-    private float elapsedTime;
-    private float storedTime;
-    private bool canPause;
+    //private float elapsedTime;
+    //private float storedTime;
+    //private bool canPause;
     private bool IsMoving;
     public LayerMask digableLayer;
     public float castDistance;
@@ -52,16 +52,16 @@ public class MoleDigScript : MonoBehaviour
         if(movementScript.currentSpeed > 0)
         {
             IsMoving = true;
-            canPause = true;
+            //canPause = true;
             ShaderSpeedControl(IsMoving);
         }
         else
         {
-            if(canPause)
+            /*if(canPause)
             {
                 storedTime = Time.time;
                 canPause = false;
-            }
+            }*/
             IsMoving = false;
             ShaderSpeedControl(IsMoving);
         }
@@ -287,10 +287,10 @@ public class MoleDigScript : MonoBehaviour
         else
         {
             moundModel.GetComponent<Renderer>().material.SetFloat("_IsMoving", 0);
-            moundModel.GetComponent<Renderer>().material.SetFloat("_StoredTime", storedTime);
+            /*moundModel.GetComponent<Renderer>().material.SetFloat("_StoredTime", storedTime);
 
             elapsedTime = Time.time - storedTime;
-            moundModel.GetComponent<Renderer>().material.SetFloat("_ElapsedTime", elapsedTime);
+            moundModel.GetComponent<Renderer>().material.SetFloat("_ElapsedTime", elapsedTime);*/
         }
     }
 
