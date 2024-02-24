@@ -377,7 +377,7 @@ public class WeaveableObject : MonoBehaviour
 
         // determines target position for combining movement
         targetTransform = staticObject.activeSnapPoint.transform;
-        targetPos = staticObject.transform.localPosition + targetTransform.localPosition;
+        targetPos = targetTransform.position;
 
         Quaternion nearestangle = Quaternion.Euler(x, y, z);
         movingObject.transform.rotation = nearestangle;
@@ -386,13 +386,12 @@ public class WeaveableObject : MonoBehaviour
         while (true)
         {
             timeSinceStarted += Time.deltaTime;
-            movingObject.transform.localPosition = Vector3.Lerp(movingObject.transform.localPosition,
+            movingObject.transform.position = Vector3.Lerp(movingObject.transform.position,
                                                           targetPos, timeSinceStarted);
-
-            if (Vector3.Distance(movingObject.transform.position, targetTransform.position) < 1f)
+            
+            if (Vector3.Distance(movingObject.transform.position, targetTransform.position) < 3f)
             {
                 movingObject.transform.position = targetTransform.position;
-
                 movingObject.GetComponent<Rigidbody>().useGravity = true;
                 combineFinished = true;
                 CombineTogether();
@@ -419,7 +418,7 @@ public class WeaveableObject : MonoBehaviour
     // <param> the moving weaveable
     IEnumerator BackUpForceSnap(WeaveableObject movingObject)
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
         if (!combineFinished)
         {

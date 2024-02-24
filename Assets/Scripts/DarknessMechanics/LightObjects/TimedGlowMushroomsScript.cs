@@ -86,7 +86,7 @@ public class TimedGlowMushroomsScript : MonoBehaviour
         pointLight.intensity = brightness;
         currentBrightness = pointLight.intensity;
         yield return new WaitForSeconds(lightOnDelay);
-        Debug.Log("this is turnning on");
+        //Debug.Log("this is turnning on");
         StartCoroutine(PulseLightOff());
     }
 
@@ -106,7 +106,7 @@ public class TimedGlowMushroomsScript : MonoBehaviour
         LightSourceScript.Instance.lightsArray[arrayIndex] = lightData;
         pointLight.intensity = 0f;
         yield return new WaitForSeconds(lightOffDelay);
-        Debug.Log("this is turnning off");
+        //Debug.Log("this is turnning off");
 
         if (isActive) {
             StartCoroutine(PulseLightOn());
