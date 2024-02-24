@@ -17,7 +17,7 @@ public class LightSourceScript : MonoBehaviour
     public struct LightData
     {
         public Light lightSource;
-        [Range(0, 40)] public float maxDistance;
+        //[Range(0, 40)] public float maxDistance;
         public Collider lightCollider;
         public bool isOn;
     }
@@ -51,7 +51,7 @@ public class LightSourceScript : MonoBehaviour
         {
             Light lightSource = lightsArray[i].lightSource; //this is from the public struct
 
-            float maxDistance = lightsArray[i].maxDistance; //also from the public struct
+            //float maxDistance = lightsArray[i].maxDistance; //also from the public struct
 
             lightDataCollider = lightsArray[i].lightCollider;
 
@@ -61,7 +61,7 @@ public class LightSourceScript : MonoBehaviour
 
             if ((lightDataCollider.bounds.Contains(playerTransform.position)) && (lightDataCollider != null) && (lightsOn))
             {
-                Debug.Log("this is the collider that yoinked it: " + lightDataCollider.gameObject.name);
+                //Debug.Log("this is the collider that yoinked it: " + lightDataCollider.gameObject.name);
                 playerIsNowSafe = true;
                 hasInvoked = false;
                 break;

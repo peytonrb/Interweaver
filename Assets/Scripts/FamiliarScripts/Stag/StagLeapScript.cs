@@ -24,13 +24,17 @@ public class StagLeapScript : MonoBehaviour
     [SerializeField] private float slamGravity = -30; // gravity of slam
     private float startingHeight; // starting height of slam
     [SerializeField] private bool canOnlySlamAfterLeap; // determines if slams can only be done after a leap
-    private bool canSlam; // can the stag slam at this moment?
-
+    [HideInInspector] public bool canSlam; // can the stag slam at this moment?
     private bool displaySlamGizmos; // displays size of slam
     [SerializeField][Range (2f, 6f)] private float maxSlamRadius = 5f;
     [SerializeField] private float slamTime = 0.6f;
     private float currentSlamRadius = 0f;
     [SerializeField][Range(0f, 3f)] private float postSlamStaggerTime = 0.6f;
+    [HideInInspector] public bool isStaggered;
+
+    [Header("Utility")]
+    [SerializeField] private bool showSlamRadiusGizmo;
+    [SerializeField] private bool showMaxJumpHeightGizmo;
     // Start is called before the first frame update
     void Start()
     {
@@ -51,7 +55,7 @@ public class StagLeapScript : MonoBehaviour
         {
             chargingJump = true;
             movementScript.ZeroCurrentSpeed();
-            movementScript.canMove = false;
+            movementScript.ToggleCanMove(false);
         }
         else
         {
@@ -76,7 +80,7 @@ public class StagLeapScript : MonoBehaviour
         {
             StartCoroutine(ShowGroundMarker());
             canSlam = true;
-            movementScript.canMove = true;
+            movementScript.ToggleCanMove(true);
             chargingJump = false;
             if (movementScript.canMove && characterController.isGrounded) 
             {
@@ -105,13 +109,16 @@ public class StagLeapScript : MonoBehaviour
         }
         // put all impact stuff past this point
         //Debug.Log("Distance Fallen: " + (startingHeight - transform.position.y));
-        StartCoroutine(GrowSlamRadius());
+        Vector3 slamSpot = transform.position;
+        StartCoroutine(GrowSlamRadius(slamSpot));
         canSlam = true;
-        movementScript.canMove = false;
+        movementScript.ToggleCanMove(false);
+        isStaggered = true;
         yield return new WaitForSeconds(postSlamStaggerTime);
+        isStaggered = false;
         if (!chargingJump)
         {
-            movementScript.canMove = true;
+            movementScript.ToggleCanMove(true);
         }
     }
 
@@ -132,7 +139,7 @@ public class StagLeapScript : MonoBehaviour
         displayGroundGizmos = false;
     }
 
-    private IEnumerator GrowSlamRadius()
+    private IEnumerator GrowSlamRadius(Vector3 slamSpot)
     {
         
         displaySlamGizmos = true;
@@ -142,12 +149,12 @@ public class StagLeapScript : MonoBehaviour
         {
             t += Time.deltaTime / slamTime;
             currentSlamRadius = Mathf.Lerp(0, maxSlamRadius, t);
-            RaycastHit[] hits = Physics.SphereCastAll(transform.position + characterController.center, currentSlamRadius, Vector3.down);
-            foreach (RaycastHit hit in hits)
+            Collider[] hitColliders = Physics.OverlapSphere(slamSpot, currentSlamRadius);
+            foreach (Collider hitCollider in hitColliders)
             {
-                if (hit.collider.gameObject.CompareTag("Breakable"))
+                if (hitCollider.gameObject.CompareTag("Breakable"))
                 {
-                    Destroy(hit.collider.gameObject); // call the thing being broken here!
+                    Destroy(hitCollider.gameObject); // call the thing being broken here!
                 }
             }
             yield return null;
@@ -166,6 +173,14 @@ public class StagLeapScript : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(transform.position, currentSlamRadius);
+        }
+        if (showSlamRadiusGizmo)
+        {
+            Gizmos.DrawWireSphere(transform.position, maxSlamRadius);
+        }
+        if (showMaxJumpHeightGizmo)
+        {
+            DrawArrow.ForGizmo(transform.position, transform.up * maxJumpForce);
         }
     }
 }
