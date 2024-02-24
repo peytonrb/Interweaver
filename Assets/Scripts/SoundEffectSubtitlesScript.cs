@@ -64,27 +64,38 @@ public class SoundEffectSubtitlesScript : MonoBehaviour
         switch (audiochannel) {
             case AudioManagerChannels.MusicChannel:
                 if (AudioManager.instance.musicChannel.clip != null) {
-                    audiosourcetext.text = AudioManager.instance.musicChannel.clip.name;
+                    string audioname = AudioManager.instance.musicChannel.clip.name;
+                    audiosourcetext.text = audioname;
                 }
             break;
             case AudioManagerChannels.SoundEffectChannel:
                 if (AudioManager.instance.soundeffectChannel.clip != null) {
-                    audiosourcetext.text = AudioManager.instance.soundeffectChannel.clip.name;
+                    string audioname = AudioManager.instance.soundeffectChannel.clip.name;
+                    audiosourcetext.text = audioname;
                 }
             break;
             case AudioManagerChannels.weaveLoopingChannel:
                 if (AudioManager.instance.weaveChannel.clip != null) {
-                    audiosourcetext.text = AudioManager.instance.weaveChannel.clip.name;
+                    string audioname = AudioManager.instance.weaveChannel.clip.name;
+                    audiosourcetext.text = audioname;
                 }
             break;
             case AudioManagerChannels.footStepsLoopChannel:
                 if (AudioManager.instance.footStepsChannel.clip != null) {
-                    audiosourcetext.text = AudioManager.instance.footStepsChannel.clip.name;
+                    string audioname = AudioManager.instance.footStepsChannel.clip.name;
+                    if (audioname == "Env_GrassStep") {
+                        audiosourcetext.text = "Footsteps";
+                    }
+                    else {
+                        audiosourcetext.text = audioname;
+                    }
+                    
                 }
             break;
             case AudioManagerChannels.fallLoopChannel:
                 if (AudioManager.instance.fallChannel.clip != null) {
-                    audiosourcetext.text = AudioManager.instance.fallChannel.clip.name;
+                    string audioname = AudioManager.instance.fallChannel.clip.name;
+                    audiosourcetext.text = audioname;
                 }
             break;
         }

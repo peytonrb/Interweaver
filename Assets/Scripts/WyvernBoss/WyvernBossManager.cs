@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class WyvernBossManager : MonoBehaviour
 {
     private GameObject weaver;
-    private PlayerController playercontroller;
+    private PlayerControllerNew playercontroller;
     private GameObject stag;
     private FamiliarScript familiarScript;
     private int phases; //0 = no phase, 1 = fireball, 2 = magic circle, 3 = flamethrower, 4 = flee
@@ -57,7 +57,7 @@ public class WyvernBossManager : MonoBehaviour
         weaver = GameObject.FindGameObjectWithTag("Player");
         stag = GameObject.FindGameObjectWithTag("Familiar");
         familiarScript = stag.GetComponent<FamiliarScript>();
-        playercontroller = weaver.GetComponent<PlayerController>();
+        playercontroller = weaver.GetComponent<PlayerControllerNew>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         //transform.position = new Vector3(roomDestinations[currentRoom].transform.position.x, transform.position.y, roomDestinations[currentRoom].transform.position.z);
         //rb = GetComponent<Rigidbody>();
