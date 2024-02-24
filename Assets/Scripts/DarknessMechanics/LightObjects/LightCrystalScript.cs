@@ -37,7 +37,7 @@ public class LightCrystalScript : MonoBehaviour
 
         if (!isWeaveable)
         {
-            this.GetComponent<WeaveableNew>().enabled = false;
+            this.GetComponent<WeaveableObject>().enabled = false;
         }
 
         if (isFocusingCrystal)
