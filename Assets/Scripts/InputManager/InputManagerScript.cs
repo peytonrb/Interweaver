@@ -280,6 +280,7 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
+    /*
     public void OnQuit(InputValue input)
     {
         if (input.isPressed)
@@ -287,6 +288,7 @@ public class InputManagerScript : MonoBehaviour
             Application.Quit();
         }
     }
+    */
 
     public void ResetCurrentCharacter()
     {
