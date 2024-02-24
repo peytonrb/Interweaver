@@ -868,6 +868,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "MoleJump",
+                    "type": "Button",
+                    "id": "31077362-112c-4864-915c-1308a9337a4d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "MoleAltAltFamiliarInteract",
                     "type": "Button",
                     "id": "0a7c0993-7c8c-4c1e-8c41-70103441caf5",
@@ -1100,7 +1109,7 @@
                 {
                     "name": "",
                     "id": "278ab1a9-cac4-4e79-9317-7ff2f1211c2a",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -1226,6 +1235,28 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "StagAltFamiliarInteract",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b78dd383-ba7f-467d-b7d6-b468182859f6",
+                    "path": "<Keyboard>/space",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "MoleJump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "659fd5c0-55f5-4561-8677-32c9df198e75",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "MoleJump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

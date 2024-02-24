@@ -5,7 +5,6 @@ using UnityEngine;
 public class CatapultScript : MonoBehaviour
 {
     [Header("References")]
-    public bool active;
     [Header("Variables")]
     [SerializeField] [Range (1f, 100f)] private float launchForce;
     [SerializeField] private Vector3 direction;
