@@ -36,6 +36,7 @@ public class WeaveableManager : MonoBehaviour
             }
 
             combinedWeaveables[listIndex].weaveableObjectGroup[i].ResetWeaveable();
+            combinedWeaveables[listIndex].weaveableObjectGroup[i].hasBeenCombined = false;
             StartCoroutine(WaitForFunction(listIndex, i));
         }
 

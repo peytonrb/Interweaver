@@ -24,7 +24,7 @@ public class WeaveableObject : MonoBehaviour
 
     // snapping
     [HideInInspector] public Transform[] myTransformPoints;
-    [HideInInspector] public GameObject activeSnapPoint;
+    public GameObject activeSnapPoint;
     private GameObject otherActiveSnapPoint;
     [HideInInspector] public WeaveableObject objectToSnapTo;
     private WeaveableObject closestObject;
@@ -96,7 +96,7 @@ public class WeaveableObject : MonoBehaviour
             else if (!Physics.Raycast(transform.position, new Vector3(0f, -90f, 0f), out hit, hoverHeight + 0.5f))
             {
                 Vector3 rayDirection = Vector3.up; // i??? idk??
-                this.GetComponent<Rigidbody>().AddForce(rayDirection * Physics.gravity.y * 4f * hoverHeight);
+                this.GetComponent<Rigidbody>().AddForce(rayDirection * Physics.gravity.y * 6f * hoverHeight);
             }
 
             // actually moves the weaveable with joystick or mouse
@@ -377,7 +377,7 @@ public class WeaveableObject : MonoBehaviour
 
         // determines target position for combining movement
         targetTransform = staticObject.activeSnapPoint.transform;
-        targetPos = staticObject.transform.localPosition + targetTransform.localPosition;
+        targetPos = targetTransform.position;
 
         Quaternion nearestangle = Quaternion.Euler(x, y, z);
         movingObject.transform.rotation = nearestangle;
@@ -386,13 +386,12 @@ public class WeaveableObject : MonoBehaviour
         while (true)
         {
             timeSinceStarted += Time.deltaTime;
-            movingObject.transform.localPosition = Vector3.Lerp(movingObject.transform.localPosition,
+            movingObject.transform.position = Vector3.Lerp(movingObject.transform.position,
                                                           targetPos, timeSinceStarted);
-
-            if (Vector3.Distance(movingObject.transform.position, targetTransform.position) < 1f)
+            
+            if (Vector3.Distance(movingObject.transform.position, targetTransform.position) < 3f)
             {
                 movingObject.transform.position = targetTransform.position;
-
                 movingObject.GetComponent<Rigidbody>().useGravity = true;
                 combineFinished = true;
                 CombineTogether();
@@ -419,7 +418,7 @@ public class WeaveableObject : MonoBehaviour
     // <param> the moving weaveable
     IEnumerator BackUpForceSnap(WeaveableObject movingObject)
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
         if (!combineFinished)
         {
@@ -509,8 +508,6 @@ public class WeaveableObject : MonoBehaviour
             listIndex = 0;
             ID = 0;
         }
-
-        hasBeenCombined = false;
         
         if (targetingArrow != null) // for floating islands
             targetingArrow.SetActive(false);
@@ -524,6 +521,14 @@ public class WeaveableObject : MonoBehaviour
         // vfx
         weaveController.weaveFXScript.StopAura(gameObject);
         weaveController.weaveFXScript.DisableWeave();
+        //StartCoroutine(WaitForPhysics());
+    }
+
+    // waits for physics to stop object movement before freezing the position and rotation
+    IEnumerator WaitForPhysics()
+    {
+        yield return new WaitForSeconds(1);
+        FreezeConstraints("rotation");
     }
 
     /*******************************************************
@@ -534,7 +539,7 @@ public class WeaveableObject : MonoBehaviour
 
     // call this method with either "position" or "rotation", or null in the parameter
     // freezes Rigidbody constraints
-    private void FreezeConstraints(string command)
+    public void FreezeConstraints(string command)
     {
         switch (command)
         {
@@ -551,7 +556,7 @@ public class WeaveableObject : MonoBehaviour
     }
 
     // overload of previous method, accepts a specific orientation to freeze
-    private void FreezeConstraints(string command, char orientation)
+    public void FreezeConstraints(string command, char orientation)
     {
         switch (command)
         {
@@ -576,7 +581,7 @@ public class WeaveableObject : MonoBehaviour
 
     // call this method with either "position", "rotation", or null in the parameter
     // unfreezes Rigidbody constraints
-    private void UnfreezeConstraints(string command)
+    public void UnfreezeConstraints(string command)
     {
         switch (command)
         {
@@ -593,7 +598,7 @@ public class WeaveableObject : MonoBehaviour
     }
 
     // overload of previous method, accepts a specific orientation to unfreeze
-    private void UnfreezeConstraints(string command, char orientation)
+    public void UnfreezeConstraints(string command, char orientation)
     {
         switch (command)
         {
@@ -618,7 +623,7 @@ public class WeaveableObject : MonoBehaviour
 
     // determines how far the ground is while hovering
     // <returns> the minimum y position of the weaveable
-    private float DetermineGroundDistance()
+    public float DetermineGroundDistance()
     {
         Ray ray = new Ray(transform.position, Vector3.down);
         RaycastHit hit;

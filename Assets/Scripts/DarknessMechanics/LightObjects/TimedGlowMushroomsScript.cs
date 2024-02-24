@@ -9,7 +9,7 @@ public class TimedGlowMushroomsScript : MonoBehaviour
     public float lightOnDelay;
     public float lightOffDelay;
     public int arrayIndex; // add the INDEX of the light in LIGHTARRAY in the LIGHTSOURCE OBJECT
-    [HideInInspector] public bool isActive;
+     [HideInInspector] public bool isActive;
     private bool isRunning;
 
     [Header("Has Start Delay?")]
@@ -24,7 +24,7 @@ public class TimedGlowMushroomsScript : MonoBehaviour
     void Start()
     {
         pointLight = this.gameObject.transform.GetChild(0).GetComponent<Light>();
-
+        isActive = true;
         if (isActive) {
             if (hasStartDelay)
             {
@@ -86,6 +86,7 @@ public class TimedGlowMushroomsScript : MonoBehaviour
         pointLight.intensity = brightness;
         currentBrightness = pointLight.intensity;
         yield return new WaitForSeconds(lightOnDelay);
+        //Debug.Log("this is turnning on");
         StartCoroutine(PulseLightOff());
     }
 
@@ -105,6 +106,8 @@ public class TimedGlowMushroomsScript : MonoBehaviour
         LightSourceScript.Instance.lightsArray[arrayIndex] = lightData;
         pointLight.intensity = 0f;
         yield return new WaitForSeconds(lightOffDelay);
+        //Debug.Log("this is turnning off");
+
         if (isActive) {
             StartCoroutine(PulseLightOn());
         }

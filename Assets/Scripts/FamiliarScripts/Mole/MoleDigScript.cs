@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.Rendering;
+using UnityEngine.VFX;
 
 public class MoleDigScript : MonoBehaviour
 {
@@ -12,9 +12,15 @@ public class MoleDigScript : MonoBehaviour
     private float originalHeight;
     [Header("Variables")]
     [CannotBeNullObjectField] public GameObject familiar;
+    [Header("VFX")]
     [CannotBeNullObjectField] [SerializeField] private GameObject moundModel;
     [CannotBeNullObjectField] [SerializeField] private GameObject moleModel;
-    private float speedLerp = 0f;
+    [SerializeField] private float vfxDelay = 1f;
+    private float randomRot;
+    //private float elapsedTime;
+    //private float storedTime;
+    //private bool canPause;
+    private bool IsMoving;
     public LayerMask digableLayer;
     public float castDistance;
     [HideInInspector] public bool startedToDig; // true when digging begins, false when digging has stopped  
@@ -22,7 +28,7 @@ public class MoleDigScript : MonoBehaviour
     private Collider boxCollider;
     private RaycastHit hitLayer;
     private bool coolDown;
-    private Vector3 targetPosition;
+    [SerializeField] private Vector3 targetPosition;
     public List<string> tagToIgnore = new List<string>();
     [SerializeField] private float animLength = 1.5f;
     [Header("Animation")]
@@ -34,6 +40,7 @@ public class MoleDigScript : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         movementScript = familiar.GetComponent<MovementScript>();
+        transform.Find("VFX_Dirt").GetComponent<VisualEffect>().Stop();
         //animLength = characterAnimationHandler.animator.GetCurrentAnimatorStateInfo(0).length;
         originalHeight = characterController.height;
         startedToDig = false;
@@ -44,25 +51,25 @@ public class MoleDigScript : MonoBehaviour
     void Update()
     {
         Debug.DrawRay(transform.position, -transform.up, Color.red);
-        Debug.Log(movementScript.currentSpeed);
-        Debug.Log("Lerp =" + speedLerp);
 
         if(movementScript.currentSpeed > 0)
         {
-            if(speedLerp < 1)
-            {
-                speedLerp += 1f * Time.deltaTime;
-            }
-            moundModel.GetComponent<Renderer>().material.SetFloat("_SpeedLerp", speedLerp);
+            IsMoving = true;
+            //canPause = true;
+            ShaderSpeedControl(IsMoving);
         }
         else
         {
-            if(speedLerp > 0)
+            /*if(canPause)
             {
-                speedLerp -= 1f * Time.deltaTime;
-            }
-            moundModel.GetComponent<Renderer>().material.SetFloat("_SpeedLerp", speedLerp);
+                storedTime = Time.time;
+                canPause = false;
+            }*/
+            IsMoving = false;
+            ShaderSpeedControl(IsMoving);
         }
+
+        moundModel.transform.eulerAngles = new Vector3(0, randomRot, 0);
 
         if ((startedToDig))
         {
@@ -76,14 +83,14 @@ public class MoleDigScript : MonoBehaviour
 
                 if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer))
                 {
-                    transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+                    //transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);                                 
+                    targetPosition = new Vector3(hitLayer.point.x, hitLayer.point.y, hitLayer.point.z);                    
                 }
                 else
                 {
-                    transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 5.0f);
+                    transform.position = Vector3.Lerp(transform.position, (targetPosition - (transform.forward*2)), Time.deltaTime * 5.0f);
                 }
             }
-
         }
     }
 
@@ -151,10 +158,7 @@ public class MoleDigScript : MonoBehaviour
     {
         Debug.Log("we're digging bois");
         startedToDig = true;
-        if ((!boxCollider.gameObject.CompareTag("Dirt Pillar")))
-        {
-            targetPosition = new Vector3(hitLayer.point.x, hitLayer.point.y, hitLayer.point.z);
-        }
+       
 
         coolDown = true;
         MakePillarsDiggable();
@@ -172,6 +176,7 @@ public class MoleDigScript : MonoBehaviour
         Debug.Log("Dug in " + animLength);
 
         StartCoroutine(StartDigging(animLength));
+        StartCoroutine(VFXStart(vfxDelay));
     }
     public void AnimationForDiggingUp()
     {
@@ -181,25 +186,46 @@ public class MoleDigScript : MonoBehaviour
         Debug.Log("Dug out " + animLength);
 
         startedToDig = false;
+        
         moleModel.GetComponent<Renderer>().enabled = true;
+        
         StartCoroutine(DiggingOut(animLength));
+
+        transform.Find("VFX_Dirt").GetComponent<VisualEffect>().Play();
     }
     IEnumerator StartDigging(float animLength)
     {
-        yield return new WaitForSeconds(animLength/2);
+        yield return new WaitForSeconds(animLength);
         borrowed = true;
+        
         moleModel.GetComponent<Renderer>().enabled = false;
-        moundModel.GetComponent<Renderer>().enabled = true;
-        Debug.Log("waited for " + animLength /2);
+        
+        Debug.Log("waited for " + animLength);
+
+        transform.Find("VFX_Dirt").GetComponent<VisualEffect>().Stop();
     }
 
     IEnumerator DiggingOut(float animLength)
     {
         borrowed = false;
+        moundModel.GetComponent<Animator>().SetTrigger("Lower");
         yield return new WaitForSeconds(animLength/2);
+        
         moundModel.GetComponent<Renderer>().enabled = false;
         //animation here so then it can play after it's on top of a pillar
+        
         Debug.Log("waited for " + animLength/2);
+
+        transform.Find("VFX_Dirt").GetComponent<VisualEffect>().Stop();
+    }
+
+    IEnumerator VFXStart(float vfxDelay)
+    {
+        yield return new WaitForSeconds(vfxDelay);
+        transform.Find("VFX_Dirt").GetComponent<VisualEffect>().Play();
+        moundModel.GetComponent<Renderer>().enabled = true;
+        moundModel.GetComponent<Animator>().SetTrigger("Raise");
+        randomRot = Random.Range(0, 360);
     }
     //******************************************
     #endregion
@@ -274,6 +300,22 @@ public class MoleDigScript : MonoBehaviour
         movementScript.active = true;
         ActualDigging();
 
+    }
+
+    void ShaderSpeedControl(bool IsMoving)
+    {
+        if(IsMoving)
+        {
+            moundModel.GetComponent<Renderer>().material.SetFloat("_IsMoving", 1);
+        }
+        else
+        {
+            moundModel.GetComponent<Renderer>().material.SetFloat("_IsMoving", 0);
+            /*moundModel.GetComponent<Renderer>().material.SetFloat("_StoredTime", storedTime);
+
+            elapsedTime = Time.time - storedTime;
+            moundModel.GetComponent<Renderer>().material.SetFloat("_ElapsedTime", elapsedTime);*/
+        }
     }
 
 
