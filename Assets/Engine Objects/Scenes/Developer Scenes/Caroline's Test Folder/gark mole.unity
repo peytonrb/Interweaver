@@ -4226,6 +4226,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shieldPuzzleWeaveables: []
   myRespawnables: []
+  startPositions: []
+  startRotations: []
   layersToCheck:
     serializedVersion: 2
     m_Bits: 0
@@ -6384,6 +6386,7 @@ MonoBehaviour:
   ControllerImage: {fileID: 0}
   KeyboardImage: {fileID: 0}
   spiderBoss: {fileID: 0}
+  subtitlesCanvas: {fileID: 0}
   theMixer: {fileID: 0}
   masterSlider: {fileID: 0}
   musicSlider: {fileID: 0}
@@ -6399,6 +6402,8 @@ MonoBehaviour:
   vsyncInt: 0
   arachnophobiaToggle: {fileID: 0}
   arachnophobiaInt: 0
+  subtitlesToggle: {fileID: 0}
+  subtitlesInt: 0
 --- !u!114 &1648945995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7278,7 +7283,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1903062311}
   m_LocalRotation: {x: -0.115075044, y: 0.88111967, z: -0.2778159, w: -0.3649715}
-  m_LocalPosition: {x: 3.5, y: 100.405, z: -11.639}
+  m_LocalPosition: {x: 5.6312127, y: 99.46, z: -7.6438828}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7777,18 +7782,59 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4727347459261568905, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
+      insertIndex: 5
+      addedObject: {fileID: 1936350988}
   m_SourcePrefab: {fileID: 100100000, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
 --- !u!1 &1936350967 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4727347459261568905, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
   m_PrefabInstance: {fileID: 1936350966}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1936350968 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5698960169409605435, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
+  m_PrefabInstance: {fileID: 1936350966}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a57eab0c7adfe05469eedb310755a0d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1936350977 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2915298869422515000, guid: 2b5b50d932430ef4e81c6495ba306d7e, type: 3}
   m_PrefabInstance: {fileID: 1936350966}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1936350988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1936350967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ff6c79968a903842bd219a06650481e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterAnimationHandler: {fileID: 1936350968}
+  jumpForce: 3
+  infiniteJump: 0
+  canDash: 0
+  dashCooldown: 0.4
+  dashLength: 0.1
+  dashSpeed: 50
+  zeroGravDash: 0
+  heavyDash: 0
+  heavyDashEffect: 3
+  freeJumpDash: 0
+  canTurnWhileDashing: 0
+  dashTimeToTurn: 1
+  showDistanceGizmo: 1
+  glowMaterial: {fileID: 0}
 --- !u!1 &1965216705
 GameObject:
   m_ObjectHideFlags: 0

@@ -388,6 +388,26 @@ public class InputManagerScript : MonoBehaviour
     #region //MOLE FAMILIAR ABILITIES
     //this is hot garbo because the button for the owl dive ability and the mole ability are the same (not sure if they're supposed) but it works if you uncomment
     //******************************************************
+
+    public void OnMoleJump(InputValue input)
+    {
+        switch (familiarEnums)
+        {
+            case myEnums.Owl: // owl jazz here
+                break;
+            case myEnums.Mole:
+                MoleDigScript moleDigScript = familiar.GetComponent<MoleDigScript>();
+                JumpAndDashScript jumpAndDashScript = familiar.GetComponent<JumpAndDashScript>();
+                if (!moleDigScript.borrowed)
+                {
+                    jumpAndDashScript.DoJump();
+                }
+                break;
+            case myEnums.Stag:
+                break;
+        }
+    }
+
     public void OnMoleFamiliarInteract(InputValue input) // burrowing and surfacing
     {
         bool isPressed = input.isPressed;
