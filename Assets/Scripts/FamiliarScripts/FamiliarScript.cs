@@ -128,18 +128,12 @@ public class FamiliarScript : MonoBehaviour
 
     public void Death() // this should be an interface EVENTUALLY WAHOO // I AGREE OMG OMG SAME BESTIE
     {
-        movementScript.active = false;
-        Invoke("ResetToCheckpoint", 3);
-    }
-
-    public void ResetToCheckpoint()
-    {
         characterController.enabled = false;
         transform.position = GM.FamiliarCheckPointPos;
         movementScript.HardResetMovementStats();
 
         CameraMasterScript.instance.FamiliarCameraReturnOnDeath(CameraMasterScript.instance.lastFamiliarCameraTriggered);
         characterController.enabled = true;
-        movementScript.active = true;
     }
+
 }

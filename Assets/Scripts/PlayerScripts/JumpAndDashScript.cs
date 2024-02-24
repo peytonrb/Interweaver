@@ -15,7 +15,7 @@ public class JumpAndDashScript : MonoBehaviour
     [SerializeField][Range(1, 10)] private float jumpForce = 3f;
     [SerializeField][Tooltip("Allows the weaver to jump forever instead of dash")] private bool infiniteJump;
     [Header("Dashing")]
-    public bool canDash; // accessed by WeaveableObject
+    [SerializeField] private bool canDash;
     [SerializeField][Range(0f, 10f)] private float dashCooldown = 0.4f;
     [SerializeField][Range(0.1f, 10f)] private float dashLength = 0.1f;
     [SerializeField][Range(1f, 100f)] private float dashSpeed = 50f;
@@ -77,7 +77,7 @@ public class JumpAndDashScript : MonoBehaviour
             {
                 movementScript.canLook = false;
             }
-            movementScript.ToggleCanMove(false);
+            movementScript.canMove = false;
             movementScript.ChangeTimeToTurn(dashTimeToTurn);
             canDash = false;
             characterAnimationHandler.ToggleDashAnim(true);
@@ -118,7 +118,7 @@ public class JumpAndDashScript : MonoBehaviour
         {
             movementScript.canLook = true;
         }
-        movementScript.ToggleCanMove(true);
+        movementScript.canMove = true;
         characterAnimationHandler.ToggleDashAnim(false);
         DisableDashVFX();
     }

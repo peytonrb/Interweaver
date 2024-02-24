@@ -7,17 +7,16 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.VFX;
 
 public class MovementScript : MonoBehaviour
 {
     private GameMasterScript GM; //This is refrencing the game master script
 
     [Header("Movement Variables")]
+    public bool canMove = true;
     public bool canLook = true;
-    [field: SerializeField] public bool canMove {get;  private set;} = true; 
     public float speed; //Base walk speed for player
-    [HideInInspector] public float currentSpeed {get;  private set;} // the current speed for the player
+    private float currentSpeed = 0; // the current speed for the player
     private bool turning;
     [HideInInspector] public bool freeMove; // bases movement off input rather than direction 
     private CharacterController characterController; //references the character controller component
@@ -71,16 +70,13 @@ public class MovementScript : MonoBehaviour
     [Header("Dive VFX")]
     private ParticleSystem speedLinesVFX;
     [HideInInspector] public bool inCutscene;
-    private PlayerControllerNew playerController;
+    private PlayerController playerController;
     private FamiliarScript familiarScript;
 
     [Header("Materials")]
     [SerializeField] private Material dissolveMat;
     [SerializeField] private GameObject materialHolder;
     private Material defaultMat;
-
-    [Header("DeathVFX")]
-    [SerializeField] private VisualEffect deathVFX;
 
     void Awake()
     {
@@ -94,7 +90,7 @@ public class MovementScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControllerNew>();
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         familiarScript = GameObject.FindGameObjectWithTag("Familiar").GetComponent<FamiliarScript>();
 
         originalGroundAcceleration = groundAcceleration;
@@ -158,8 +154,6 @@ public class MovementScript : MonoBehaviour
             }
             else
             {
-                velocity = Vector3.zero; // stop movements
-                Debug.Log(velocity);
                 canMove = false;
                 characterAnimationHandler.ToggleMoveSpeedBlend(0);
                 familiarScript.talkingToNPC = true;
@@ -178,7 +172,6 @@ public class MovementScript : MonoBehaviour
             }
             else
             {
-                velocity = Vector3.zero; // stop movements
                 canMove = false;
                 characterAnimationHandler.ToggleMoveSpeedBlend(0);
                 playerController.talkingToNPC = true;
@@ -228,7 +221,7 @@ public class MovementScript : MonoBehaviour
                     if (characterController.isGrounded)
                     {
                         //Play footstep Audio!
-                        if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon))
+                        if (TryGetComponent<PlayerController>(out PlayerController playerCon))
                         {
                             if (!AudioManager.instance.footStepsChannel.isPlaying)
                                 AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.3f);
@@ -272,13 +265,14 @@ public class MovementScript : MonoBehaviour
                     velocity.z = currentSpeed * newDirection.z;
                 }
 
+
                 characterController.Move(velocity * Time.deltaTime); // make move
 
                 //Character gravity
                 if (!characterController.isGrounded)
                 {
                     characterAnimationHandler.ToggleFallAnim(true);
-                    if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon) && !AudioManager.instance.fallChannel.isPlaying && canPlayFallAudio)
+                    if (TryGetComponent<PlayerController>(out PlayerController playerCon) && !AudioManager.instance.fallChannel.isPlaying && canPlayFallAudio)
                     {
                         AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, weaverFallClip);
                     }
@@ -346,14 +340,16 @@ public class MovementScript : MonoBehaviour
                 AudioManager.instance.StopSound(AudioManagerChannels.footStepsLoopChannel);
             }
         }
-        else 
-        {
+        else {
+            velocity.x = 0f;
+            velocity.z = 0f;
             velocity.y += gravity * Time.deltaTime;
             characterController.Move(velocity * Time.deltaTime);
             if (characterController.isGrounded) {
                 characterAnimationHandler.ToggleFallAnim(false);
             }
         }
+        
     }
 
     public void LookAndMove()
@@ -495,10 +491,8 @@ public class MovementScript : MonoBehaviour
     public void GoToCheckPoint()
     {
         StartCoroutine(ChangeMaterialOnDeath());
-        deathVFX.Play();
-        FadeToBlack.instance.StartFadeToBlack();
 
-        if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon))
+        if (TryGetComponent<PlayerController>(out PlayerController playerCon))
         {
             playerCon.Death();
         }
@@ -522,6 +516,7 @@ public class MovementScript : MonoBehaviour
             elapsedTime -= Time.deltaTime * 1.5f;
 
             cutoffHeight = Mathf.Lerp(-3, 4, elapsedTime / totalTime);
+            Debug.Log(elapsedTime);
             dissolveMat.SetFloat("_Cutoff_Height", cutoffHeight);
 
             yield return null;

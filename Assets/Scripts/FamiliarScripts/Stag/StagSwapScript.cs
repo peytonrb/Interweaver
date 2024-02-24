@@ -7,6 +7,7 @@ public class StagSwapScript : MonoBehaviour
     [Header("References")]
     private FamiliarScript familiarScript;
     private GameObject weaver;
+    [SerializeField] private InputManagerScript inputManagerScript;
     [Header("Variables")]
     [SerializeField] private float timeToHold = 1f;
     [HideInInspector] private bool isHolding; 

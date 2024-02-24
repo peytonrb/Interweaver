@@ -18,7 +18,7 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
 
     public void Awake()
     {
-        weaverTransform = FindObjectOfType<PlayerControllerNew>().GetComponent<Transform>();
+        weaverTransform = FindObjectOfType<PlayerController>().GetComponent<Transform>();
         familiarTransform = FindObjectOfType<FamiliarScript>().GetComponent<Transform>();
         familiarScript = FindObjectOfType<FamiliarScript>().GetComponent<FamiliarScript>();
         bc = GetComponent<BoxCollider>();

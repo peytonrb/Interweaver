@@ -39,12 +39,12 @@ public class FocusingCrystalScript : MonoBehaviour
             // calculates hit position & object
             if (Physics.Raycast(spawnPoint, transform.TransformDirection(Vector3.forward), out hit, 100000f))
             {
-                // Debug.DrawRay(this.gameObject.transform.position, transform.TransformDirection(Vector3.forward) * 100, 
+                //Debug.DrawRay(this.gameObject.transform.position, transform.TransformDirection(Vector3.forward) * 100, 
                 //              Color.red);
                 Vector3 hitPosition = hit.point;
                 beamHitObj = hit.collider.gameObject;
                 float distance = Vector3.Distance(spawnPoint, hitPosition);
-                spotLight.range = distance + 0.2f;
+                spotLight.range = distance + 0.5f;
                 distance /= 1.35f; // man idk. it works tho.
 
                 if (distance > 1f)
@@ -61,7 +61,7 @@ public class FocusingCrystalScript : MonoBehaviour
             Vector3 center = lightCollider.center;
             center.z = 0;
             lightCollider.center = center;
-            lightCollider.height = 4f;
+            lightCollider.height = 7f;
             spotLight.range = 0f;
         }
     }
@@ -74,7 +74,7 @@ public class FocusingCrystalScript : MonoBehaviour
             if (!LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn)
             {
                 // is beam actually hitting crystal
-                if (collider.GetComponent<LightCrystalScript>() != null)
+                if (beamHitObj.GetComponent<LightCrystalScript>() != null)
                 {
                     collider.GetComponent<LightCrystalScript>().isActive = true;
                 }

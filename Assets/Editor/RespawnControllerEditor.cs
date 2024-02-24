@@ -35,7 +35,7 @@ public class WevebleRespawnEditor : Editor
 
         foreach (var hit in hits) 
         {
-            if (!hit.collider.CompareTag("FloatingIsland") && hit.collider.GetComponent<WeaveableObject>() != null)
+            if (!hit.collider.CompareTag("FloatingIsland") && hit.collider.GetComponent<WeaveableNew>() != null)
             {
                 respawnController.myRespawnables.Add(hit.collider.gameObject);
                 EditorUtility.SetDirty(respawnController);

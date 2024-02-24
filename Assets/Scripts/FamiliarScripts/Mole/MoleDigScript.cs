@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,9 +11,6 @@ public class MoleDigScript : MonoBehaviour
     private float originalHeight;
     [Header("Variables")]
     [CannotBeNullObjectField] public GameObject familiar;
-    [CannotBeNullObjectField] [SerializeField] private GameObject moundModel;
-    [CannotBeNullObjectField] [SerializeField] private GameObject moleModel;
-    private float speedLerp = 0f;
     public LayerMask digableLayer;
     public float castDistance;
     [HideInInspector] public bool startedToDig; // true when digging begins, false when digging has stopped  
@@ -24,7 +20,7 @@ public class MoleDigScript : MonoBehaviour
     private bool coolDown;
     private Vector3 targetPosition;
     public List<string> tagToIgnore = new List<string>();
-    [SerializeField] private float animLength = 1.5f;
+    private float animLength;
     [Header("Animation")]
     [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
 
@@ -34,7 +30,7 @@ public class MoleDigScript : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         movementScript = familiar.GetComponent<MovementScript>();
-        //animLength = characterAnimationHandler.animator.GetCurrentAnimatorStateInfo(0).length;
+        animLength = characterAnimationHandler.animator.GetCurrentAnimatorStateInfo(0).length;
         originalHeight = characterController.height;
         startedToDig = false;
         coolDown = false;
@@ -44,25 +40,6 @@ public class MoleDigScript : MonoBehaviour
     void Update()
     {
         Debug.DrawRay(transform.position, -transform.up, Color.red);
-        Debug.Log(movementScript.currentSpeed);
-        Debug.Log("Lerp =" + speedLerp);
-
-        if(movementScript.currentSpeed > 0)
-        {
-            if(speedLerp < 1)
-            {
-                speedLerp += 1f * Time.deltaTime;
-            }
-            moundModel.GetComponent<Renderer>().material.SetFloat("_SpeedLerp", speedLerp);
-        }
-        else
-        {
-            if(speedLerp > 0)
-            {
-                speedLerp -= 1f * Time.deltaTime;
-            }
-            moundModel.GetComponent<Renderer>().material.SetFloat("_SpeedLerp", speedLerp);
-        }
 
         if ((startedToDig))
         {
@@ -106,7 +83,7 @@ public class MoleDigScript : MonoBehaviour
             {
                 MakePillarsDiggable();
                 movementScript.active = false;
-                Invoke("ResetCooldown", 1.5f);
+                Invoke("ResetCooldown", 3.0f);
                 StartCoroutine(BurrowDownPillar());
             }
         }
@@ -115,17 +92,10 @@ public class MoleDigScript : MonoBehaviour
         {
             Debug.Log("we got out bois");
             //checking the mole in other colliders and if it's a dirt pillar tag, it goes up
-            int weaveableLayer = LayerMask.NameToLayer("weaveObject"); 
-            int weaveableLayerMask = 1 << weaveableLayer;
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, 0f, digableLayer);
-            Collider[] hitWeaveableColliders = Physics.OverlapSphere(transform.position, 0f, weaveableLayerMask);
             foreach (Collider hitCollider in hitColliders)
             {
                 transform.position = new Vector3(transform.position.x, hitCollider.bounds.max.y, transform.position.z);
-            }
-            foreach (Collider hitWeaveableCollider in hitWeaveableColliders)
-            {
-                transform.position = new Vector3(transform.position.x, hitWeaveableCollider.bounds.max.y + 1, transform.position.z);
             }
 
             AnimationForDiggingUp();
@@ -135,7 +105,7 @@ public class MoleDigScript : MonoBehaviour
             //add the digging sound here if it was added to the audio manager
             movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
             movementScript.enabled = false;
-            Invoke("ResetCooldown", 1.5f);
+            Invoke("ResetCooldown", 3.0f);
         }
     }
 
@@ -162,7 +132,7 @@ public class MoleDigScript : MonoBehaviour
         //add the digging sound here if it was added to the audio manager
         movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
         movementScript.enabled = false;
-        Invoke("ResetCooldown", 1.5f);
+        Invoke("ResetCooldown", 3.0f);
     }
     public void AnimationForDiggingDown()
     {
@@ -181,25 +151,21 @@ public class MoleDigScript : MonoBehaviour
         Debug.Log("Dug out " + animLength);
 
         startedToDig = false;
-        moleModel.GetComponent<Renderer>().enabled = true;
         StartCoroutine(DiggingOut(animLength));
     }
     IEnumerator StartDigging(float animLength)
     {
-        yield return new WaitForSeconds(animLength/2);
+        yield return new WaitForSeconds(animLength);
         borrowed = true;
-        moleModel.GetComponent<Renderer>().enabled = false;
-        moundModel.GetComponent<Renderer>().enabled = true;
-        Debug.Log("waited for " + animLength /2);
+        Debug.Log("waited for " + animLength);
     }
 
     IEnumerator DiggingOut(float animLength)
     {
         borrowed = false;
-        yield return new WaitForSeconds(animLength/2);
-        moundModel.GetComponent<Renderer>().enabled = false;
+        yield return new WaitForSeconds(animLength);
         //animation here so then it can play after it's on top of a pillar
-        Debug.Log("waited for " + animLength/2);
+        Debug.Log("waited for " + animLength);
     }
     //******************************************
     #endregion

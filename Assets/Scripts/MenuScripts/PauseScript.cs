@@ -24,7 +24,6 @@ public class PauseScript : MonoBehaviour
     [SerializeField] private GameObject KeyboardImage;
 
     [SerializeField] private GameObject spiderBoss;
-    [SerializeField] private GameObject subtitlesCanvas;
 
     [Header("Audio Variables")]
     public AudioMixer theMixer;
@@ -44,10 +43,6 @@ public class PauseScript : MonoBehaviour
     [Header("Arachnophobia Setting")]
     public Toggle arachnophobiaToggle;
     [HideInInspector] public int arachnophobiaInt;
-
-    [Header("Subtitles")]
-    public Toggle subtitlesToggle;
-    [HideInInspector] public int subtitlesInt;
 
     public void Start()
     {
@@ -72,24 +67,6 @@ public class PauseScript : MonoBehaviour
                 SpiderBossScript spiderscript = spiderBoss.GetComponent<SpiderBossScript>();
                 spiderscript.ToggleArachnophobia(true);
                 arachnophobiaToggle.isOn = true;
-            }
-        }
-
-        if (subtitlesCanvas != null) {
-            if (PlayerPrefs.HasKey("SubtitlesToggleState")) {
-                subtitlesInt = PlayerPrefs.GetInt("SubtitlesToggleState");
-            }  
-            else {
-                subtitlesInt = 0;
-            } 
-
-            if (subtitlesInt == 1) {
-                subtitlesToggle.isOn = true;
-                subtitlesCanvas.SetActive(true);
-            }
-            else {
-                subtitlesToggle.isOn = false;
-                subtitlesCanvas.SetActive(false);
             }
         }
 
@@ -315,21 +292,6 @@ public class PauseScript : MonoBehaviour
             if (spiderBoss != null) {
                 SpiderBossScript spiderboss = spiderBoss.GetComponent<SpiderBossScript>();
                 spiderboss.ToggleArachnophobia(true);
-            }
-        }
-    }
-
-    public void AdjustSubtitles() {
-        if (subtitlesToggle.isOn == false) {
-            PlayerPrefs.SetInt("SubtitlesToggleState", 0);
-            if (subtitlesCanvas != null) {
-                subtitlesCanvas.SetActive(false);
-            }
-        }
-        else {
-            PlayerPrefs.SetInt("SubtitlesToggleState", 1);
-            if (subtitlesCanvas != null) {
-                subtitlesCanvas.SetActive(true);
             }
         }
     }

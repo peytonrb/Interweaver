@@ -228,8 +228,10 @@ public class DoorScript : MonoBehaviour
 
     IEnumerator OpenDoor()
     {
+        Debug.Log("Door called 1");
         if (distance >= 0.3f)
         {
+            Debug.Log("Door called");
             yield return new WaitForEndOfFrame();
             transform.position = Vector3.MoveTowards(transform.position, targetPoint, doorSpeed * Time.deltaTime);
             distance = Vector3.Distance(transform.position, targetPoint);
@@ -268,6 +270,7 @@ public class DoorScript : MonoBehaviour
 
         if (distance >= 0.3f)
         {
+            Debug.Log("Move back called");
             yield return new WaitForEndOfFrame();
             doorClosing = true;
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, doorSpeed * Time.deltaTime);

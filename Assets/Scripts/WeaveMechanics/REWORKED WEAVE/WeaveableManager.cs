@@ -92,7 +92,7 @@ public class WeaveableManager : MonoBehaviour
     // <param> the index of the list in parent list and the index of weaveable in internal list
     public void RemoveWeaveableFromList(int listIndex, int ID)
     {
-        if (combinedWeaveables.Count > 0 && combinedWeaveables[listIndex] != null)
+        if (combinedWeaveables[listIndex] != null)
         {
             // deletes specific ID
             if (combinedWeaveables[listIndex].weaveableObjectGroup[ID] != null)

@@ -5,13 +5,8 @@ using UnityEngine;
 public class LevelTriggerScript : MonoBehaviour
 {
     
-    [Tooltip ("0 is for Projectile Cannons, 1 is for Breakeable Spikes, 2 is for stalactites")]
+    [Tooltip ("0 is for Projectile Cannons, 1 is for Breakeable Spikes")]
     public int triggerType;
-
-    void OnTriggerEnter(Collider other) {
-        if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Familiar")) {
-            LevelManagerScript.instance.TurnOnOffSection(triggerType);
-        }
-    }
+    public bool triggered;
 
 }

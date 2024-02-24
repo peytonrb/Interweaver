@@ -40,7 +40,7 @@ public class WeaveableObject : MonoBehaviour
     private Vector3 worldPosition;
 
     [Header("References")]
-    [HideInInspector] public WeaveController weaveController;
+    private WeaveController weaveController;
     private Camera mainCamera;
     [HideInInspector] public GameObject targetingArrow;
     [HideInInspector] public Material originalMat;
@@ -49,22 +49,12 @@ public class WeaveableObject : MonoBehaviour
     {
         weaveController = GameObject.FindWithTag("Player").GetComponent<WeaveController>();
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-
-        if (this.gameObject.tag != "FloatingIsland")
-        {
-            targetingArrow = this.transform.GetChild(0).Find("Targeting Arrow Parent").gameObject;
-            weaveableObj = this.transform.GetChild(0).gameObject;
-            originalMat = this.transform.GetChild(0).GetComponent<Renderer>().material;
-        }
-        else
-        {
-            // floating islands have no targeting arrow
-            weaveableObj = this.transform.GetChild(0).gameObject;
-            originalMat = this.transform.GetChild(0).GetComponent<Renderer>().material;
-        }    
+        targetingArrow = this.transform.GetChild(0).Find("Targeting Arrow Parent").gameObject;
+        weaveableObj = this.transform.GetChild(0).gameObject;
+        originalMat = this.transform.GetChild(0).GetComponent<Renderer>().material;
 
         // set snap points
-        myTransformPoints = new Transform[6]; // can have a max of 6 transform points
+        myTransformPoints = new Transform[6];
         myTransformPoints = this.GetComponentsInChildren<Transform>();
         myTransformPoints = myTransformPoints.Where(child => child.tag == "SnapPoint").ToArray();
     }
@@ -206,7 +196,7 @@ public class WeaveableObject : MonoBehaviour
             else
             {
                 // move object with joystick movement
-                rb.velocity = rayDirection * 16f;
+                rb.velocity = rayDirection * 6f;
             }
 
             UnfreezeConstraints("position", 'y');
@@ -331,6 +321,7 @@ public class WeaveableObject : MonoBehaviour
                 totalTransformPoints.Add(transformPoint);
             }
         }
+
 
         // calculate nearest snap points - inefficient
         for (int i = 0; i < totalTransformPoints.Count; i++)
@@ -457,6 +448,7 @@ public class WeaveableObject : MonoBehaviour
         weaveController.StartCoroutine(weaveController.PlayWeaveVFX());
         weaveController.weaveFXScript.WeaveableSelected(objectToSnapTo.gameObject);
 
+        // needs playtesting
         // interaction overrides for special weaveable objects
         if (weaveInteraction != null)
         {
@@ -465,7 +457,7 @@ public class WeaveableObject : MonoBehaviour
 
         if (objectToSnapTo.weaveInteraction != null)
         {
-            objectToSnapTo.weaveInteraction.OnWeave(objectToSnapTo.gameObject, gameObject);
+            objectToSnapTo.weaveInteraction.OnWeave(gameObject, objectToSnapTo.gameObject);
         }
     }
 
@@ -475,10 +467,8 @@ public class WeaveableObject : MonoBehaviour
         Vector2 returnValue = new Vector2(0f, 0f);
 
         if (!hasBeenCombined)
-        {
             returnValue = WeaveableManager.Instance.AddWeaveableToList(this);
-        }
-            
+
         // AddWeaveableToList() returns a Vector2 to get both ints from the return value
         listIndex = (int)returnValue.x;
         ID = (int)returnValue.y;
@@ -510,13 +500,8 @@ public class WeaveableObject : MonoBehaviour
             ID = 0;
         }
 
-        hasBeenCombined = false;
-        
-        if (targetingArrow != null) // for floating islands
-            targetingArrow.SetActive(false);
-
-        if (weaveController.targetingArrow != null) // for floating islands
-            weaveController.targetingArrow.SetActive(true);
+        targetingArrow.SetActive(false);
+        weaveController.targetingArrow.SetActive(true);
 
         if (this.gameObject.tag != "FloatingIsland" && this.gameObject.tag != "Breakable")
             UnfreezeConstraints("all");

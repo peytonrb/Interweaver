@@ -113,7 +113,6 @@ public class RespawnController : MonoBehaviour
 
         objectToRespawn.transform.position = startPositions[myRespawnables.IndexOf(objectToRespawn)];
         objectToRespawn.transform.rotation = startRotations[myRespawnables.IndexOf(objectToRespawn)];
-        objectToRespawn.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
     //// will commonnly be called on puzzles that require a full reset if failed

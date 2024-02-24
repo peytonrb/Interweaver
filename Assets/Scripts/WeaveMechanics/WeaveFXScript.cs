@@ -5,6 +5,7 @@ using UnityEngine.Rendering;
 
 public class WeaveFXScript : MonoBehaviour
 {
+    public bool isNewWeave = false;
     [CannotBeNullObjectField] public LineRenderer weaveRenderer;
     [CannotBeNullObjectField] public ParticleSystem weaveActivation;
     [CannotBeNullObjectField] public ParticleSystem objectSelectPS;
@@ -43,8 +44,12 @@ public class WeaveFXScript : MonoBehaviour
     public void ActivateWeave(Transform weaveablePos)
     {
         weaveActivation.Play();
-        GameObject spawnedEffect = Instantiate(weaveEffect, transform.position,
-                                               Quaternion.LookRotation(Vector3.up, weaveablePos.position - transform.position));
+
+
+        GameObject spawnedEffect = Instantiate(weaveEffect, transform.position, Quaternion.LookRotation(Vector3.up, weaveablePos.position - transform.position));
+
+
+
         spawnedEffect.GetComponent<NeedleVFXScript>().SetDestroyTimer(Vector3.Distance(weaveablePos.position, transform.position) / needleVel, weaveablePos.gameObject);
     }
 
@@ -57,14 +62,30 @@ public class WeaveFXScript : MonoBehaviour
             psShape.radius = weaveable.GetComponent<BoxCollider>().bounds.size.x; // will break if object doesn't have box collider
             Instantiate(objectSelectPS, weaveable.transform.position, Quaternion.Euler(-90f, 0f, 0f));
 
-            if (weaveable.transform.GetChild(0).GetComponent<Renderer>() != null)
+            // aura effect
+            if (!isNewWeave)
             {
-                weaveable.transform.GetChild(0).GetComponent<Renderer>().material = emissiveMat;
+                if (weaveable.GetComponent<Renderer>() != null) // this whole if block is here for the weaveable prefab change 
+                {
+                    weaveable.GetComponent<Renderer>().material = emissiveMat;
+                }
+                else
+                {
+                    weaveable.GetComponent<Renderer>().material = emissiveMat;
+                }
             }
             else
             {
-                weaveable.transform.GetChild(0).GetComponent<Renderer>().material = emissiveMat;
+                if (weaveable.transform.GetChild(0).GetComponent<Renderer>() != null) // this whole if block is here for the weaveable prefab change 
+                {
+                    weaveable.transform.GetChild(0).GetComponent<Renderer>().material = emissiveMat;
+                }
+                else
+                {
+                    weaveable.transform.GetChild(0).GetComponent<Renderer>().material = emissiveMat;
+                }
             }
+
 
             StartCoroutine(StartAura(weaveable));
         }
@@ -81,7 +102,12 @@ public class WeaveFXScript : MonoBehaviour
 
         if (weaveable.gameObject.tag != "FloatingIsland")
         {
-            weaveable.transform.GetChild(0).GetComponent<Renderer>().material = weaveable.GetComponent<WeaveableObject>().originalMat;
+            Debug.Log("this should print twice");
+
+            if (!isNewWeave)
+                weaveable.GetComponent<Renderer>().material = weaveable.GetComponent<WeaveableNew>().originalMat;
+            else
+                weaveable.transform.GetChild(0).GetComponent<Renderer>().material = weaveable.GetComponent<WeaveableObject>().originalMat;
 
             // kinda inefficient if we end up having hella children per GameObject
             for (int i = 0; i < weaveable.transform.childCount; i++)

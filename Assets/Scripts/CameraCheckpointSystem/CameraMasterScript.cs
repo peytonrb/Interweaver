@@ -15,14 +15,14 @@ public class CameraMasterScript : MonoBehaviour
 
     //Weaver Camera + Checkpoints
     [HideInInspector] public List<GameObject> weaverCheckpoints = new List<GameObject>();
-    public List<GameObject> weaverCameras = new List<GameObject>();
+    [HideInInspector] public List<GameObject> weaverCameras = new List<GameObject>();
     private int weaverCamerasTriggeredSinceLastCheckpoint;
     [HideInInspector] public int lastWeaverCameraTriggered; //This is the last camera that is triggered upon entering the next checkpoint.
     //When the player dies, this camera index will be activated when the player is teleported back to the previous checkpoint.
     
     //Familiar Camera + Checkpoints
     [HideInInspector] public List<GameObject> familiarCheckpoints = new List<GameObject>();
-    public List<GameObject> familiarCameras = new List<GameObject>();
+    [HideInInspector] public List<GameObject> familiarCameras = new List<GameObject>();
     private int familiarCamerasTriggeredSinceLastCheckpoint;
     [HideInInspector] public int lastFamiliarCameraTriggered;
 
