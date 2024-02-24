@@ -21,7 +21,6 @@ public class FocusingCrystalScript : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(this.gameObject.transform.parent.transform.parent);
         if (this.gameObject.transform.parent.transform.parent.GetComponent<LightCrystalScript>().isActive && !isActive)
         {
             isActive = true;
