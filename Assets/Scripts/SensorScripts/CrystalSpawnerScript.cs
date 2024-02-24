@@ -9,8 +9,12 @@ public class CrystalSpawnerScript : MonoBehaviour
 
     void Start()
     {
-        successVFX = this.gameObject.transform.GetChild(1).GetComponent<ParticleSystem>();
-        Color color = this.GetComponent<Renderer>().material.color;
+        if (!this.GetComponent<LightCrystalScript>().isFocusingCrystal)
+            successVFX = this.gameObject.transform.GetChild(0).transform.GetChild(1).GetComponent<ParticleSystem>();
+        else
+            successVFX = this.gameObject.transform.GetChild(0).transform.GetChild(3).GetComponent<ParticleSystem>();
+
+        Color color = this.transform.GetChild(0).GetComponent<Renderer>().material.color;
         color.a = 0f;
         this.gameObject.SetActive(false);
         successVFX.gameObject.SetActive(false);
@@ -30,9 +34,9 @@ public class CrystalSpawnerScript : MonoBehaviour
 
     IEnumerator FadeIn()
     {
-        this.GetComponent<MeshRenderer>().enabled = true;
+        this.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
 
-        Color color = this.GetComponent<Renderer>().material.color;
+        Color color = this.transform.GetChild(0).GetComponent<Renderer>().material.color;
         color.a = 0f;
         float t = 0;
 
@@ -41,7 +45,7 @@ public class CrystalSpawnerScript : MonoBehaviour
             t += Time.deltaTime;
             float blend = Mathf.Clamp01(t / 1.5f);
             color.a = Mathf.Lerp(0f, 100f, blend);
-            this.GetComponent<Renderer>().material.color = color;
+            this.transform.GetChild(0).GetComponent<Renderer>().material.color = color;
             yield return null;
         }
 
