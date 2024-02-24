@@ -6,13 +6,14 @@ public class LightDetectionScript : MonoBehaviour
 {
     public bool isTimedMushroom;
     private LightCrystalScript crystalScript;
-    private bool wasCrystalOn;
+    private bool wasCrystalOn = false;
 
     void Start()
     {
         if (!isTimedMushroom)
         {
-            crystalScript = this.gameObject.transform.parent.GetComponent<LightCrystalScript>();
+            Debug.Log(this.gameObject.transform);
+            crystalScript = this.gameObject.transform.parent.transform.parent.GetComponent<LightCrystalScript>();
 
             if (crystalScript.isActive)
             {
@@ -38,14 +39,13 @@ public class LightDetectionScript : MonoBehaviour
             // if collision is with a sensor
             if (collision.GetComponent<SensorController>() != null)
             {
-                if (!collision.GetComponent<SensorController>().isActive)
+                if (LightSourceScript.Instance.lightsArray[transform.parent.GetComponent<LightCrystalScript>().arrayIndex].isOn && 
+                    !collision.GetComponent<SensorController>().isActive)
                 {
                     collision.GetComponent<SensorController>().isActive = true;
-                }
 
-                if (collision.GetComponent<SensorController>().sensorEvent != null)
-                {
-                    collision.GetComponent<SensorController>().StartEvent();
+                    if (collision.GetComponent<SensorController>().sensorEvent != null)
+                        collision.GetComponent<SensorController>().StartEvent();
                 }
             }
         }
@@ -101,13 +101,7 @@ public class LightDetectionScript : MonoBehaviour
                 if (!wasCrystalOn &&
                     LightSourceScript.Instance.lightsArray[collision.GetComponent<LightCrystalScript>().arrayIndex].isOn)
                 {
-                    float distance = Vector3.Distance(this.gameObject.transform.position,
-                                                      collision.gameObject.transform.position);
-
-                    if (distance > 4.5f) // 4.5f is based on calculation for dynamic collider in FocusingCrystalScript
-                    {
-                        crystalScript.isActive = false;
-                    }
+                    crystalScript.isActive = false;
                 }
             }
 

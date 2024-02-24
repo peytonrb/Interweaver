@@ -11,6 +11,10 @@ public class MolePillarScript : MonoBehaviour
     private MoleDigScript moleDigScript;
     [SerializeField] private GameObject dirtPillar;
     public List<GameObject> pillarList = new List<GameObject>();
+    private Camera dirtPillarCamera;
+    private Vector3 currentCameraPosition;
+    private Collider dirtPillarCollider;
+
     [Header("Variables")]
     [SerializeField] [Range (1, 10)] private int maxPillarCount = 1;
     [SerializeField] [Range (10f, 50)] private float maxPillarHeight = 25f;
@@ -24,6 +28,8 @@ public class MolePillarScript : MonoBehaviour
     [HideInInspector] public bool lowerInputPressed;
     [HideInInspector] public bool rise;
     [HideInInspector] public bool lower;
+
+
     [Header("Utility")]
     [SerializeField] private bool showHeightGizmo = true;
     [SerializeField] private bool showInteractionRadiusGizmo = true;
@@ -33,7 +39,7 @@ public class MolePillarScript : MonoBehaviour
         movementScript = GetComponent<MovementScript>();
         moleDigScript = GetComponent<MoleDigScript>();
         familiarScript = GetComponent<FamiliarScript>();
-        
+        dirtPillarCamera = Camera.main;
     }
 
     // Update is called once per frame
@@ -51,10 +57,20 @@ public class MolePillarScript : MonoBehaviour
         }
     }
 
+    private void DirtPillarCameraFollow()
+    {
+        //dirtPillarCamera.transform.position = new Vector3 (dirtPillarCamera.transform.position.x,
+        //    dirtPillarCamera.transform.position.y + dirtPillarCollider.bounds.max.y, dirtPillarCamera.transform.position.z);
+
+        //Debug.Log("is this function getting called?");
+    }
+
     public void DeployPillar()
     {
         if (moleDigScript.borrowed && SearchForNearbyPillars() == null) // can only deploy while burrowing
         {
+            currentCameraPosition = dirtPillarCamera.transform.position;
+            dirtPillarCollider = dirtPillar.GetComponentInChildren<Collider>();
             if (pillarList.Count() >= maxPillarCount) // destroy earliest pillar if we're at cap
             {
                 DestroyPillar();
@@ -106,6 +122,8 @@ public class MolePillarScript : MonoBehaviour
                     PillarRiseEnd();
                 }
             }
+
+            //DirtPillarCameraFollow();
         }
     }
 
