@@ -28,7 +28,7 @@ public class MoleDigScript : MonoBehaviour
     private Collider boxCollider;
     private RaycastHit hitLayer;
     private bool coolDown;
-    private Vector3 targetPosition;
+    [SerializeField] private Vector3 targetPosition;
     public List<string> tagToIgnore = new List<string>();
     [SerializeField] private float animLength = 1.5f;
     [Header("Animation")]
@@ -83,11 +83,12 @@ public class MoleDigScript : MonoBehaviour
 
                 if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer))
                 {
-                    transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+                    //transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);                                 
+                    targetPosition = new Vector3(hitLayer.point.x, hitLayer.point.y, hitLayer.point.z);                    
                 }
                 else
                 {
-                    transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 5.0f);
+                    transform.position = Vector3.Lerp(transform.position, (targetPosition - (transform.forward*2)), Time.deltaTime * 5.0f);
                 }
             }
         }
@@ -157,10 +158,7 @@ public class MoleDigScript : MonoBehaviour
     {
         Debug.Log("we're digging bois");
         startedToDig = true;
-        if ((!boxCollider.gameObject.CompareTag("Dirt Pillar")))
-        {
-            targetPosition = new Vector3(hitLayer.point.x, hitLayer.point.y, hitLayer.point.z);
-        }
+       
 
         coolDown = true;
         MakePillarsDiggable();
