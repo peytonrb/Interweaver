@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class MoleDigScript : MonoBehaviour
 {
@@ -12,9 +10,13 @@ public class MoleDigScript : MonoBehaviour
     private float originalHeight;
     [Header("Variables")]
     [CannotBeNullObjectField] public GameObject familiar;
+    [Header("VFX")]
     [CannotBeNullObjectField] [SerializeField] private GameObject moundModel;
     [CannotBeNullObjectField] [SerializeField] private GameObject moleModel;
-    private float speedLerp = 0f;
+    private float elapsedTime;
+    private float storedTime;
+    private bool canPause;
+    private bool IsMoving;
     public LayerMask digableLayer;
     public float castDistance;
     [HideInInspector] public bool startedToDig; // true when digging begins, false when digging has stopped  
@@ -45,23 +47,23 @@ public class MoleDigScript : MonoBehaviour
     {
         Debug.DrawRay(transform.position, -transform.up, Color.red);
         Debug.Log(movementScript.currentSpeed);
-        Debug.Log("Lerp =" + speedLerp);
+        Debug.Log("IsMoving: " + IsMoving);
 
         if(movementScript.currentSpeed > 0)
         {
-            if(speedLerp < 1)
-            {
-                speedLerp += 1f * Time.deltaTime;
-            }
-            moundModel.GetComponent<Renderer>().material.SetFloat("_SpeedLerp", speedLerp);
+            IsMoving = true;
+            canPause = true;
+            ShaderSpeedControl(IsMoving);
         }
         else
         {
-            if(speedLerp > 0)
+            if(canPause)
             {
-                speedLerp -= 1f * Time.deltaTime;
+                storedTime = Time.time;
+                canPause = false;
             }
-            moundModel.GetComponent<Renderer>().material.SetFloat("_SpeedLerp", speedLerp);
+            IsMoving = false;
+            ShaderSpeedControl(IsMoving);
         }
 
         if ((startedToDig))
@@ -274,6 +276,22 @@ public class MoleDigScript : MonoBehaviour
         movementScript.active = true;
         ActualDigging();
 
+    }
+
+    void ShaderSpeedControl(bool IsMoving)
+    {
+        if(IsMoving)
+        {
+            moundModel.GetComponent<Renderer>().material.SetFloat("_IsMoving", 1);
+        }
+        else
+        {
+            moundModel.GetComponent<Renderer>().material.SetFloat("_IsMoving", 0);
+            moundModel.GetComponent<Renderer>().material.SetFloat("_StoredTime", storedTime);
+
+            elapsedTime = Time.time - storedTime;
+            moundModel.GetComponent<Renderer>().material.SetFloat("_ElapsedTime", elapsedTime);
+        }
     }
 
 
