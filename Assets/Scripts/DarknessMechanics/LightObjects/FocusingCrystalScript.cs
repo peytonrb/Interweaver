@@ -21,11 +21,12 @@ public class FocusingCrystalScript : MonoBehaviour
 
     void Update()
     {
-        if (this.gameObject.transform.parent.GetComponent<LightCrystalScript>().isActive && !isActive)
+        Debug.Log(this.gameObject.transform.parent.transform.parent);
+        if (this.gameObject.transform.parent.transform.parent.GetComponent<LightCrystalScript>().isActive && !isActive)
         {
             isActive = true;
         }
-        else if (!this.gameObject.transform.parent.GetComponent<LightCrystalScript>().isActive && isActive)
+        else if (!this.gameObject.transform.parent.transform.parent.GetComponent<LightCrystalScript>().isActive && isActive)
         {
             isActive = false;
         }
