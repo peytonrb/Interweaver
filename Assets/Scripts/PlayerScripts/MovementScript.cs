@@ -71,7 +71,7 @@ public class MovementScript : MonoBehaviour
     [Header("Dive VFX")]
     private ParticleSystem speedLinesVFX;
     [HideInInspector] public bool inCutscene;
-    private PlayerController playerController;
+    private PlayerControllerNew playerController;
     private FamiliarScript familiarScript;
 
     [Header("Materials")]
@@ -94,7 +94,7 @@ public class MovementScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControllerNew>();
         familiarScript = GameObject.FindGameObjectWithTag("Familiar").GetComponent<FamiliarScript>();
 
         originalGroundAcceleration = groundAcceleration;
@@ -228,7 +228,7 @@ public class MovementScript : MonoBehaviour
                     if (characterController.isGrounded)
                     {
                         //Play footstep Audio!
-                        if (TryGetComponent<PlayerController>(out PlayerController playerCon))
+                        if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon))
                         {
                             if (!AudioManager.instance.footStepsChannel.isPlaying)
                                 AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.3f);
@@ -278,7 +278,7 @@ public class MovementScript : MonoBehaviour
                 if (!characterController.isGrounded)
                 {
                     characterAnimationHandler.ToggleFallAnim(true);
-                    if (TryGetComponent<PlayerController>(out PlayerController playerCon) && !AudioManager.instance.fallChannel.isPlaying && canPlayFallAudio)
+                    if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon) && !AudioManager.instance.fallChannel.isPlaying && canPlayFallAudio)
                     {
                         AudioManager.instance.PlaySound(AudioManagerChannels.fallLoopChannel, weaverFallClip);
                     }
@@ -498,7 +498,7 @@ public class MovementScript : MonoBehaviour
         deathVFX.Play();
         FadeToBlack.instance.StartFadeToBlack();
 
-        if (TryGetComponent<PlayerController>(out PlayerController playerCon))
+        if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon))
         {
             playerCon.Death();
         }

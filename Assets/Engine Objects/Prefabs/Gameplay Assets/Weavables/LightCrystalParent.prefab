@@ -1,0 +1,231 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1694593221733018388
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 697798100469635678}
+  - component: {fileID: 3211016787289432337}
+  - component: {fileID: 3675777594520580056}
+  - component: {fileID: 7088664670912742806}
+  - component: {fileID: 1066250515390210408}
+  m_Layer: 6
+  m_Name: LightCrystalParent
+  m_TagString: Weaveable
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &697798100469635678
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1694593221733018388}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -18.33533, y: -17.569384, z: -27.383144}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6041384070589905485}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &3211016787289432337
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1694593221733018388}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &3675777594520580056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1694593221733018388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb17812de6f9d7b4a8ad8d855b2d96f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActive: 1
+  arrayIndex: 1
+  brightness: 4
+  isWeaveable: 1
+  Notes: Array Index should be the INDEX of the light in LIGHTARRAY in the LIGHTSOURCE
+    OBJECT (is probably called LightsManager)
+  isFocusingCrystal: 0
+  isActiveDefault: 0
+--- !u!114 &7088664670912742806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1694593221733018388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0da983b286f933469896c0c67a0cc43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isBeingWoven: 0
+  hoverHeight: 2
+  objectMoveOverride: 0
+  weaveableLayers:
+    serializedVersion: 2
+    m_Bits: 270528
+  maxWeaveDistance: 25
+  hasBeenCombined: 0
+  canBeMoved: 1
+  myTransformPoints: []
+  activeSnapPoint: {fileID: 0}
+  objectToSnapTo: {fileID: 0}
+  weaveInteraction: {fileID: 0}
+  listIndex: 0
+  ID: 0
+  weaveController: {fileID: 0}
+  targetingArrow: {fileID: 0}
+  originalMat: {fileID: 0}
+--- !u!65 &1066250515390210408
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1694593221733018388}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.7504492, y: 1.8222183, z: 0.83677024}
+  m_Center: {x: -0.00046714148, y: 0.91101825, z: 0.007520636}
+--- !u!1001 &7131792363177650167
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 697798100469635678}
+    m_Modifications:
+    - target: {fileID: 132421242924013056, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_Intensity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2861921356091546047, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_Name
+      value: LightCrystal
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5581070958345306966, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8502524356530500406, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_TagString
+      value: SnapPoint
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 4496677307155589655, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+    - {fileID: 8658562235925613907, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+    - {fileID: 5581070958345306966, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+    - {fileID: 3537383877026485469, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 987410943757886431, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+--- !u!4 &6041384070589905485 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+  m_PrefabInstance: {fileID: 7131792363177650167}
+  m_PrefabAsset: {fileID: 0}

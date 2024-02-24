@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5402126169904835267}
-  - component: {fileID: 2864162376311042491}
+  - component: {fileID: 5842488839676496880}
+  - component: {fileID: 1087018741832568820}
   - component: {fileID: 20847522854274277}
   - component: {fileID: 2871888646774845234}
   - component: {fileID: 4762601280886837014}
@@ -47,7 +48,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2864162376311042491
+--- !u!114 &5842488839676496880
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -56,46 +57,50 @@ MonoBehaviour:
   m_GameObject: {fileID: 1359264606954408796}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b18dace2dbb7604f839bc1ec5ff34f4, type: 3}
+  m_Script: {fileID: 11500000, guid: 8adc7d03870712049bd0ffaff1a69678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
-  pauseMenu: {fileID: 0}
+  usingAudio: 0
+  targetingArrow: {fileID: 6321982546611138371}
   weaveDistance: 20
-  weaveObject:
-    serializedVersion: 2
-    m_Bits: 576
-  sensitivity: {x: 1500, y: 1500}
-  bias: {x: 0, y: -1}
-  currentMousePosition: {x: 0, y: 0}
-  interactInput: 0
-  isCurrentlyWeaving: 0
-  weaveableScript: {fileID: 0}
-  TargetingArrow: {fileID: 6321982546611138371}
   targetingLayerMask:
     serializedVersion: 2
     m_Bits: 704
-  isDead: 0
-  deathTimer: 3
-  inRelocateMode: 0
-  inCombineMode: 0
-  uninteract: 0
-  distanceBetween: 0
-  floatingIslandCrystal: 0
-  inCutscene: 0
-  talkingToNPC: 0
-  weaveSpawn: {fileID: 3156172625146419733}
-  weaveVisualizer: {fileID: 7571894926950752737}
-  familiar: {fileID: 0}
-  respawnController: {fileID: 0}
-  characterAnimationHandler: {fileID: 0}
-  relocateMode: {fileID: 0}
-  combineMode: {fileID: 0}
-  startWeaveClip: {fileID: 8300000, guid: 2119735134b10dc4c83fe5f337405aa5, type: 3}
-  weavingLoopClip: {fileID: 8300000, guid: 8e9d4ef38cb893947bb5b157af0c3f8e, type: 3}
+  weaveableLayerMask:
+    serializedVersion: 2
+    m_Bits: 576
+  weaveFXScript: {fileID: 0}
+  maxCombinedObjects: 4
+  startWeaveClip: {fileID: 0}
+  weavingLoopClip: {fileID: 0}
   weavingIntroClip: {fileID: 0}
   weavingOutroClip: {fileID: 0}
-  possessionClip: {fileID: 0}
+  isWeaving: 0
+  currentWeaveable: {fileID: 0}
+  selectedWeaveable: {fileID: 0}
+  lookDirection: {x: 0, y: 0}
+--- !u!114 &1087018741832568820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359264606954408796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11f4a91b98fcd3f499e09e173898bcaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 0}
+  isDead: 0
+  deathTimer: 3
+  pauseMenu: {fileID: 0}
+  inCutscene: 0
+  talkingToNPC: 0
+  characterAnimationHandler: {fileID: 9032169286115513460}
+  possessionClip: {fileID: 8300000, guid: 35d1efb4e21c4de43943a2d88a81a63d, type: 3}
+  familiar: {fileID: 0}
+  respawnController: {fileID: 0}
 --- !u!114 &20847522854274277
 MonoBehaviour:
   m_ObjectHideFlags: 0
