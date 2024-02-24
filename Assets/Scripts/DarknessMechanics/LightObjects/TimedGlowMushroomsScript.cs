@@ -9,7 +9,7 @@ public class TimedGlowMushroomsScript : MonoBehaviour
     public float lightOnDelay;
     public float lightOffDelay;
     public int arrayIndex; // add the INDEX of the light in LIGHTARRAY in the LIGHTSOURCE OBJECT
-     public bool isActive;
+     [HideInInspector] public bool isActive;
     private bool isRunning;
 
     [Header("Has Start Delay?")]
@@ -24,7 +24,7 @@ public class TimedGlowMushroomsScript : MonoBehaviour
     void Start()
     {
         pointLight = this.gameObject.transform.GetChild(0).GetComponent<Light>();
-
+        isActive = true;
         if (isActive) {
             if (hasStartDelay)
             {
