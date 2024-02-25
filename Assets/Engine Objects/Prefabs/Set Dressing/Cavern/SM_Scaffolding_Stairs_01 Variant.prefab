@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 5f87ae7cfe68e13478793a99316e8bc1, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5f87ae7cfe68e13478793a99316e8bc1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4300872744679526630, guid: 5f87ae7cfe68e13478793a99316e8bc1, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ca87952a190bb8b47b632d5f7bb5393c, type: 2}
     - target: {fileID: 919132149155446097, guid: 5f87ae7cfe68e13478793a99316e8bc1, type: 3}
       propertyPath: m_Name
       value: SM_Scaffolding_Stairs_01 Variant
@@ -59,5 +63,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -7453975568337607607, guid: 5f87ae7cfe68e13478793a99316e8bc1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7315611975215048247}
   m_SourcePrefab: {fileID: 100100000, guid: 5f87ae7cfe68e13478793a99316e8bc1, type: 3}
+--- !u!1 &7629081794809038912 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -7453975568337607607, guid: 5f87ae7cfe68e13478793a99316e8bc1, type: 3}
+  m_PrefabInstance: {fileID: 8165547079816834057}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &7315611975215048247
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7629081794809038912}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.4124773, y: 3.589394, z: 4.227579}
+  m_Center: {x: 0, y: 0, z: 0}

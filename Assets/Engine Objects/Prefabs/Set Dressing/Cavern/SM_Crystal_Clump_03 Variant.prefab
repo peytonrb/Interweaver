@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 4ce0c172e3d377f429ee6f84b60403bc, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4ce0c172e3d377f429ee6f84b60403bc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 4ce0c172e3d377f429ee6f84b60403bc, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b993328052278414a82ce50d7b63638c, type: 2}
     - target: {fileID: 919132149155446097, guid: 4ce0c172e3d377f429ee6f84b60403bc, type: 3}
       propertyPath: m_Name
       value: SM_Crystal_Clump_03 Variant
@@ -59,5 +63,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4ce0c172e3d377f429ee6f84b60403bc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4954903395892352731}
   m_SourcePrefab: {fileID: 100100000, guid: 4ce0c172e3d377f429ee6f84b60403bc, type: 3}
+--- !u!1 &8334888061009989338 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 4ce0c172e3d377f429ee6f84b60403bc, type: 3}
+  m_PrefabInstance: {fileID: 9181169868109001611}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &4954903395892352731
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8334888061009989338}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.46544427, y: 0.8510039, z: 0.31454152}
+  m_Center: {x: 0.025548153, y: 0.25260568, z: 0}
