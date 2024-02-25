@@ -12,7 +12,7 @@ public class MolePillarScript : MonoBehaviour
     private MoleDigScript moleDigScript;
     [SerializeField] private GameObject dirtPillar;
     public List<GameObject> pillarList = new List<GameObject>();
-    [SerializeField] private CinemachineVirtualCamera dirtPillarCamera;
+    private CinemachineVirtualCamera familiarCamera;
     private GameObject newPillar;
 
     [Header("Variables")]
@@ -39,7 +39,7 @@ public class MolePillarScript : MonoBehaviour
         movementScript = GetComponent<MovementScript>();
         moleDigScript = GetComponent<MoleDigScript>();
         familiarScript = GetComponent<FamiliarScript>();
-        dirtPillarCamera = dirtPillarCamera.GetComponent<CinemachineVirtualCamera>();
+        familiarCamera = GameObject.FindGameObjectWithTag("FamiliarCamera").GetComponent<CinemachineVirtualCamera>();
     }
 
     // Update is called once per frame
@@ -106,7 +106,7 @@ public class MolePillarScript : MonoBehaviour
                     pointToRiseTo = new Vector3 (pillarToRaise.transform.position.x, transform.position.y, 
                     pillarToRaise.transform.position.z) + (Vector3.up * maxPillarHeight); // set a destination for the pillar to rise
                     pillarRising = true; // mark that pillar has started rising
-                    dirtPillarCamera.Follow = pillarToRaise.transform; // set camera to pillar top
+                    familiarCamera.Follow = pillarToRaise.transform; // set camera to pillar top
                 }
                 else if (distance > 0.1f && pillarRising) // if pillar hasn't quite reached destination, and we're still meant to be rising
                 {
@@ -142,7 +142,7 @@ public class MolePillarScript : MonoBehaviour
                     movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
                     movementScript.enabled = false; // disable player movement
                     pillarLowering = true;
-                    dirtPillarCamera.Follow = pillarToLower.transform; // set camera to pillar top
+                    familiarCamera.Follow = pillarToLower.transform; // set camera to pillar top
                 }
                 pillarToLower.transform.position = Vector3.MoveTowards(pillarToLower.transform.position, 
                 pillarToLower.transform.position - transform.up, pillarBuildSpeed * Time.deltaTime);
@@ -162,7 +162,7 @@ public class MolePillarScript : MonoBehaviour
         }
         rise = false;
         pillarRising = false;
-        dirtPillarCamera.Follow = transform;
+        familiarCamera.Follow = transform;
     }
 
     public void PillarLowerEnd()
@@ -173,7 +173,7 @@ public class MolePillarScript : MonoBehaviour
         }
         lower = false;
         pillarLowering = false;
-        dirtPillarCamera.Follow = transform;
+        familiarCamera.Follow = transform;
     }
 
     public GameObject SearchForNearbyPillars()
