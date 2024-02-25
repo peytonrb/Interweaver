@@ -38,8 +38,8 @@ public class BlueprintScript : MonoBehaviour
     private void CheckIfCanCraft()
     {
         int needededIngredients = 0;
-        Debug.Log("Length of current ingredients: " + currentCraftingIngredients.Count);
-        Debug.Log("Length of current ingredients: " + requiredCraftables.Count);
+        ///Debug.Log("Length of current ingredients: " + currentCraftingIngredients.Count);
+        //Debug.Log("Length of current ingredients: " + requiredCraftables.Count);
         foreach(CraftableScript.Craftable craftableName in currentCraftingIngredients)
         {
             if (requiredCraftables.Contains(craftableName))
@@ -50,7 +50,7 @@ public class BlueprintScript : MonoBehaviour
 
         if (needededIngredients >= requiredCraftables.Count)
         {
-            Debug.Log("All ingredients here yay! Let's build!");
+            //Debug.Log("All ingredients here yay! Let's build!");
             CraftObject();
         } 
     }
