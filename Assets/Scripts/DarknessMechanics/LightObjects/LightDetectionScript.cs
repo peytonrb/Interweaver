@@ -39,7 +39,7 @@ public class LightDetectionScript : MonoBehaviour
             // if collision is with a sensor
             if (collision.GetComponent<SensorController>() != null)
             {
-                if (LightSourceScript.Instance.lightsArray[transform.parent.transform.parent.GetComponent<LightCrystalScript>().arrayIndex].isOn && 
+                if (LightSourceScript.Instance.lightsArray[transform.parent.transform.parent.GetComponent<LightCrystalScript>().arrayIndex].isOn &&
                     !collision.GetComponent<SensorController>().isActive)
                 {
                     collision.GetComponent<SensorController>().isActive = true;
@@ -71,6 +71,19 @@ public class LightDetectionScript : MonoBehaviour
                     && distance < 4.5f)
                 {
                     crystalScript.isActive = true;
+                }
+            }
+
+            // if collision is with a sensor
+            if (collision.GetComponent<SensorController>() != null)
+            {
+                if (LightSourceScript.Instance.lightsArray[transform.parent.transform.parent.GetComponent<LightCrystalScript>().arrayIndex].isOn &&
+                    !collision.GetComponent<SensorController>().isActive)
+                {
+                    collision.GetComponent<SensorController>().isActive = true;
+
+                    if (collision.GetComponent<SensorController>().sensorEvent != null)
+                        collision.GetComponent<SensorController>().StartEvent();
                 }
             }
         }
