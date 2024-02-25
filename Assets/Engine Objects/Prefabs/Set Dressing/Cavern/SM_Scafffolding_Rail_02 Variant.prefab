@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 11589bf0f212fe44aa739b55d4fbb736, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 11589bf0f212fe44aa739b55d4fbb736, type: 3}
       propertyPath: m_LocalPosition.x
@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7899929622500761266, guid: 11589bf0f212fe44aa739b55d4fbb736, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0f140efe3620d114eaa72d3f297cf06b, type: 2}
     - target: {fileID: 919132149155446097, guid: 11589bf0f212fe44aa739b55d4fbb736, type: 3}
       propertyPath: m_Name
       value: SM_Scafffolding_Rail_02 Variant
@@ -59,5 +63,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -6929730410376764525, guid: 11589bf0f212fe44aa739b55d4fbb736, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 278342222992229335}
   m_SourcePrefab: {fileID: 100100000, guid: 11589bf0f212fe44aa739b55d4fbb736, type: 3}
+--- !u!1 &6910665133156849290 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -6929730410376764525, guid: 11589bf0f212fe44aa739b55d4fbb736, type: 3}
+  m_PrefabInstance: {fileID: 4626106917443908889}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &278342222992229335
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6910665133156849290}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.8862486, y: 1.89972, z: 0.3043704}
+  m_Center: {x: 0, y: 0, z: 0}

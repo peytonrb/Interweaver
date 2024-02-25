@@ -142,6 +142,7 @@ public class MolePillarScript : MonoBehaviour
                 if (pillarToLower.transform.parent != null)
                 {
                     pillarToLower = pillarToLower.transform.parent.gameObject; // if we have a top, get it
+                    dirtPillarCamera.Follow = pillarToLower.transform.GetChild (1);
                 }
                 if (!pillarLowering) // right as we start things off
                 {
