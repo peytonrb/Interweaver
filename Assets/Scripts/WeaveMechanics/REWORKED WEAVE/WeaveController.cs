@@ -169,18 +169,21 @@ public class WeaveController : MonoBehaviour
     public void OnDrop()
     {
         isWeaving = false;
-        currentWeaveable.GetComponent<Rigidbody>().velocity = Vector3.down * 2f;
+
+        if (currentWeaveable != null) // in case of floating islands
+            currentWeaveable.GetComponent<Rigidbody>().velocity = Vector3.down * 2f;
+
         movementScript.freeMove = false; // returns weaver to needing to be facing where they're moving
         weaveFXScript.DisableWeave();
         StartCoroutine(EndWeaveAudio());
 
         // if this is the only weaveable in the list (weaveables are added on combine)
-        if (!currentWeaveable.hasBeenCombined)
+        if (currentWeaveable != null && !currentWeaveable.hasBeenCombined)
         {
             currentWeaveable.ResetWeaveable();
             WeaveableManager.Instance.RemoveWeaveableFromList(0, 0);
         }
-        else
+        else if (currentWeaveable != null)
         {
             if (WeaveableManager.Instance.combinedWeaveables.Count > 0 && WeaveableManager.Instance.combinedWeaveables[currentWeaveable.listIndex] != null)
             {
