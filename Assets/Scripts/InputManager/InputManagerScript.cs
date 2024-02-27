@@ -220,7 +220,7 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnPossessFamiliar(InputValue input)
     {
-        if (input.isPressed)
+        if ((input.isPressed) && (!playerScript.isDead))
         {
             PossessFamiliar();
         }
@@ -240,7 +240,7 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnPossessWeaver(InputValue input)
     {
-        if (input.isPressed)
+        if ((input.isPressed) && (!familiarScript.isDead))
         {
             PossessWeaver();
         }
