@@ -9,6 +9,11 @@ public class CatapultScript : MonoBehaviour
     [SerializeField] [Range (1f, 100f)] private float launchForce;
     [SerializeField] private Vector3 direction;
 
+    void Start()
+    {
+        
+    }
+
     void OnTriggerEnter(Collider collider)
     {
         if (collider.CompareTag("Familiar"))

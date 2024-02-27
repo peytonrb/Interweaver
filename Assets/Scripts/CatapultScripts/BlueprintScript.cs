@@ -12,11 +12,27 @@ public class BlueprintScript : MonoBehaviour
     [Header("Required Craftables")]
     [SerializeField] private List<CraftableScript.Craftable> requiredCraftables = new List<CraftableScript.Craftable>(); 
     [Header("Crafting Result")]
+    [SerializeField] private List<GameObject> dummyCraftingResults = new List<GameObject>();
     [SerializeField] private GameObject craftingResult;
 
     void Start()
     {
-        craftingResult.SetActive(false); 
+        var scripts = craftingResult.GetComponentsInChildren(typeof(MonoBehaviour)); // get all scripts on object(s) we're gonna craft
+        for (int i = 0; i < scripts.Length; i++)  
+        {
+            Debug.Log(scripts[i]);
+            Behaviour bhvr = (Behaviour)scripts[i];
+            bhvr.enabled = false;
+        }
+        foreach(GameObject dummyCraftingResult in dummyCraftingResults)
+        {
+            dummyCraftingResult.SetActive(false);
+        }
+        craftingResult.SetActive(false);
+    }
+
+    void Update()
+    {
     }
 
     void OnTriggerEnter(Collider collider)
@@ -34,16 +50,14 @@ public class BlueprintScript : MonoBehaviour
         }
     }
 
-
     private void CheckIfCanCraft()
     {
         int needededIngredients = 0;
-        ///Debug.Log("Length of current ingredients: " + currentCraftingIngredients.Count);
-        //Debug.Log("Length of current ingredients: " + requiredCraftables.Count);
         foreach(CraftableScript.Craftable craftableName in currentCraftingIngredients)
         {
             if (requiredCraftables.Contains(craftableName))
             {
+                EnableDummyParts(requiredCraftables.IndexOf(craftableName));
                 needededIngredients++;
             }
         }
@@ -53,6 +67,11 @@ public class BlueprintScript : MonoBehaviour
             //Debug.Log("All ingredients here yay! Let's build!");
             CraftObject();
         } 
+    }
+
+    private void EnableDummyParts(int i)
+    {
+        dummyCraftingResults[i].SetActive(true);
     }
 
     private void CraftObject()

@@ -111,6 +111,11 @@ public class WeaveableObject : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        weaveController.OnDrop();
+    }
+
     // weaveable moves in the direction of mouse position
     // triggers Update() if-blocks to run, allows player to move weaveable with mouse
     // drops object if player is too far or moving object too fast

@@ -498,6 +498,7 @@ public class MovementScript : MonoBehaviour
         deathVFX.Play();
         FadeToBlack.instance.StartFadeToBlack();
 
+
         if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon))
         {
             playerCon.Death();

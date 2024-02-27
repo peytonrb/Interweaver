@@ -126,6 +126,8 @@ public class FamiliarScript : MonoBehaviour
         movementScript.active = true;
         myTurn = true;
         StopCoroutine(ForcedDelay());
+        //movementScript.ToggleCanMove(false);
+        //movementScript.ToggleCanLook(false);
     }
 
     public void Death() // this should be an interface EVENTUALLY WAHOO // I AGREE OMG OMG SAME BESTIE
