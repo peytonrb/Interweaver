@@ -124,11 +124,12 @@ public class FamiliarScript : MonoBehaviour
         movementScript.active = true;
         myTurn = true;
         StopCoroutine(ForcedDelay());
+        //movementScript.ToggleCanMove(false);
+        //movementScript.ToggleCanLook(false);
     }
 
     public void Death() // this should be an interface EVENTUALLY WAHOO // I AGREE OMG OMG SAME BESTIE
     {
-        movementScript.active = false;
         Invoke("ResetToCheckpoint", 3);
     }
 
@@ -140,6 +141,7 @@ public class FamiliarScript : MonoBehaviour
 
         CameraMasterScript.instance.FamiliarCameraReturnOnDeath(CameraMasterScript.instance.lastFamiliarCameraTriggered);
         characterController.enabled = true;
-        movementScript.active = true;
+        movementScript.ToggleCanLook(true);
+        movementScript.ToggleCanMove(true);
     }
 }

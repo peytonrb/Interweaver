@@ -125,7 +125,7 @@ public class WeaveController : MonoBehaviour
             RaycastHit hitInfo;
 
             // checks for a Weavable object within distance of Ray
-            if (Physics.Raycast(rayPlayer, out hitInfo, weaveDistance, weaveableLayerMask))
+            if (Physics.SphereCast(transform.position, 1f, rayPlayer.direction, out hitInfo, 100f, weaveableLayerMask)) // changed to spherecast so horizontal objects are easier to pick up
             {
                 currentWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
                 isValidWeaveable = true;
@@ -249,6 +249,7 @@ public class WeaveController : MonoBehaviour
                 RaycastHit hitInfo;
 
                 // checks for a Weavable object within distance of Ray
+                //Physics.SphereCast(transform.position, 4f, ray.direction, out hitInfo, 100f, weaveableLayerMask);
                 if (Physics.Raycast(ray, out hitInfo, 100f, weaveableLayerMask))
                 {
                     if (hitInfo.collider.GetComponent<WeaveableObject>() != currentWeaveable)
