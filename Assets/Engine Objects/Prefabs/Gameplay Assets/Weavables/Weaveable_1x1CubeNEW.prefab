@@ -310,7 +310,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3431726753053853479}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalPosition: {x: -1, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -326,7 +326,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2583984905814059342}
-  - component: {fileID: 3107663957816731202}
+  - component: {fileID: 5872314792986291518}
   - component: {fileID: 4396762962481295004}
   - component: {fileID: 6237989117769592163}
   m_Layer: 6
@@ -350,9 +350,9 @@ Transform:
   m_Children:
   - {fileID: 5851331721830603683}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3107663957816731202
+--- !u!114 &5872314792986291518
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -361,53 +361,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 4699961208595689080}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afb9d456079c05c4dbbecf85046314bb, type: 3}
+  m_Script: {fileID: 11500000, guid: e0da983b286f933469896c0c67a0cc43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 6237989117769592163}
-  hoveringValue: 1
-  layersToHit:
+  isBeingWoven: 0
+  hoverHeight: 2
+  objectMoveOverride: 0
+  weaveableLayers:
     serializedVersion: 2
-    m_Bits: 8384
-  layersToHitController:
-    serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
+  maxWeaveDistance: 25
+  hasBeenCombined: 0
+  canBeMoved: 1
+  myTransformPoints: []
+  activeSnapPoint: {fileID: 0}
+  objectToSnapTo: {fileID: 0}
   weaveInteraction: {fileID: 0}
-  alwaysMovesWhenWoven: 0
-  neverMovesWhenWoven: 0
-  ID: 1
-  canRotate: 0
-  canCombine: 1
-  isWoven: 0
-  isHovering: 0
-  rotationSpeed: 0.5
-  canBeRelocated: 1
-  TargetingArrow: {fileID: 8726894183081665596}
-  isParent: 0
-  parentWeaveable: {fileID: 0}
-  myTransformPoints:
-  - {fileID: 3186787576018838860}
-  - {fileID: 6559688654637796369}
-  - {fileID: 6174936221538638016}
-  - {fileID: 148412308930217481}
-  - {fileID: 3431726753053853479}
-  - {fileID: 5223925767578921055}
-  nearestPoint: {fileID: 0}
-  myNearestPoint: {fileID: 0}
-  snapDistance: 0
-  nearestDistance: 50
-  targetTransform: {fileID: 0}
-  weaveableObj: {fileID: 1382899349896638687}
+  listIndex: 0
+  ID: 0
+  weaveController: {fileID: 0}
+  targetingArrow: {fileID: 0}
   originalMat: {fileID: 0}
-  isCombined: 0
-  startPos: {x: 0, y: 0, z: 0}
-  startRot: {x: 0, y: 0, z: 0, w: 0}
-  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
-  weaveableScript: {fileID: 0}
-  wovenObjects: []
-  player: {fileID: 0}
-  dayblockPuzzle: {fileID: 0}
-  rotateClip: {fileID: 8300000, guid: da607bdb707b41841a6006dad2f8a3e4, type: 3}
 --- !u!65 &4396762962481295004
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -480,7 +454,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5223925767578921055}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
