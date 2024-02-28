@@ -221,6 +221,7 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnPossessFamiliar(InputValue input)
     {
+        //When we add the hub scene, we will put this line back in. This error was likely caused by the scene of that name not being part of the build settings.
         //&& SceneHandler.instance.currentSceneName != "Hub" has been causing issues in this if statement
         if (input.isPressed && !playerScript.isDead)
         {
