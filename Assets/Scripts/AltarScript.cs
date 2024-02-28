@@ -12,7 +12,7 @@ public class AltarScript : MonoBehaviour
     [SerializeField] private InputManagerScript inputManagerScript;
     [SerializeField] private GameObject hatch;
     private FamiliarScript familiarScript;
-    private PlayerController playerController;
+    private WeaveController playerController;
     
     [Header("Variables for Orb")]
     [SerializeField] private Transform orbSnapPoint;
@@ -27,7 +27,7 @@ public class AltarScript : MonoBehaviour
     void Start()
     {
         familiarScript = GameObject.FindGameObjectWithTag("Familiar").GetComponent<FamiliarScript>();
-        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<WeaveController>();
         cutsceneManagerScript = cutsceneManager.GetComponent<CutsceneManagerScript>();
 
         if (!cutsceneManagerScript || !familiarScript || !playerController || !inputManagerScript)
@@ -40,7 +40,7 @@ public class AltarScript : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        playerController.Uninteract();
+        playerController.OnDrop();
         inputManagerScript.canSwitch = false;
         if (collider.gameObject.CompareTag("Altar Orb"))
         {   

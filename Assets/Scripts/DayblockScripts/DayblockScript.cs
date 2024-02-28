@@ -13,7 +13,8 @@ public class DayblockScript : MonoBehaviour
     public bool gotShape;
 
     public DayblockPuzzleManager dpm;
-    public enum managerCall{ 
+    public enum managerCall
+    {
         correct,
         incorrect,
         complete
@@ -23,112 +24,112 @@ public class DayblockScript : MonoBehaviour
     {
         if (other.gameObject.tag == "Weaveable")
         {
-            WeaveableNew weaveScript = other.gameObject.GetComponent<WeaveableNew>();
-            if (weaveScript.wovenObjects.Count == shapesCombined)
+            WeaveableObject weaveScript = other.gameObject.GetComponent<WeaveableObject>();
+            // if (weaveScript.wovenObjects.Count == shapesCombined)
+            // {
+            //Finds if the part of the puzzle has recieved its shape yet.
+            if (!gotShape)
             {
-                //Finds if the part of the puzzle has recieved its shape yet.
-                if (!gotShape)
+                switch (shapeNeeded)
                 {
-                    switch (shapeNeeded)
-                    {
-                        case 0:
+                    case 0:
+                        {
+                            //Check sunrise
+                            switch (dpm.combinationpart)
                             {
-                                //Check sunrise
-                                switch (dpm.combinationpart)
-                                {
-                                    case 0:
-                                        {
-                                            Debug.Log("please");
-                                            CallTheManager(managerCall.correct, weaveScript, 0);
-                                            gotShape = true;
-                                            other.gameObject.GetComponent<WeaveableNew>().Uninteract();
-                                            other.transform.position = new Vector3(99999f, -50, 0f);
-                                            break;
-                                        }
-                                    case 1:
-                                        {
-                                            CallTheManager(managerCall.incorrect, weaveScript, 0);
-                                            other.gameObject.GetComponent<WeaveableNew>().Uninteract();
-                                            other.transform.position = new Vector3(99999f, -50, 0f);
-                                            break;
-                                        }
-                                    case 2:
-                                        {
-                                            CallTheManager(managerCall.incorrect, weaveScript, 0);
-                                            other.gameObject.GetComponent<WeaveableNew>().Uninteract();
-                                            other.transform.position = new Vector3(99999f, -50, 0f);
-                                            break;
-                                        }
-                                }
-                                break;
+                                case 0:
+                                    {
+                                        Debug.Log("please");
+                                        CallTheManager(managerCall.correct, weaveScript, 0);
+                                        gotShape = true;
+                                        other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
+                                        other.transform.position = new Vector3(99999f, -50, 0f);
+                                        break;
+                                    }
+                                case 1:
+                                    {
+                                        CallTheManager(managerCall.incorrect, weaveScript, 0);
+                                        other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
+                                        other.transform.position = new Vector3(99999f, -50, 0f);
+                                        break;
+                                    }
+                                case 2:
+                                    {
+                                        CallTheManager(managerCall.incorrect, weaveScript, 0);
+                                        other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
+                                        other.transform.position = new Vector3(99999f, -50, 0f);
+                                        break;
+                                    }
                             }
-                        case 1:
+                            break;
+                        }
+                    case 1:
+                        {
+                            //Check sun
+                            switch (dpm.combinationpart)
                             {
-                                //Check sun
-                                switch (dpm.combinationpart)
-                                {
-                                    case 0:
-                                        {
-                                            CallTheManager(managerCall.incorrect, weaveScript, 1);
-                                            other.gameObject.GetComponent<WeaveableNew>().Uninteract();
-                                            other.transform.position = new Vector3(99999f, -50, 0f);
-                                            break;
-                                        }
-                                    case 1:
-                                        {
-                                            CallTheManager(managerCall.correct, weaveScript, 1);
-                                            gotShape = true;
-                                            other.gameObject.GetComponent<WeaveableNew>().Uninteract();
-                                            other.transform.position = new Vector3(99999f, -50, 0f);
-                                            break;
-                                        }
-                                    case 2:
-                                        {
-                                            CallTheManager(managerCall.incorrect, weaveScript, 1);
-                                            other.gameObject.GetComponent<WeaveableNew>().Uninteract();
-                                            other.transform.position = new Vector3(99999f, -50, 0f);
-                                            break;
-                                        }
-                                }
-                                break;
+                                case 0:
+                                    {
+                                        CallTheManager(managerCall.incorrect, weaveScript, 1);
+                                        other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
+                                        other.transform.position = new Vector3(99999f, -50, 0f);
+                                        break;
+                                    }
+                                case 1:
+                                    {
+                                        CallTheManager(managerCall.correct, weaveScript, 1);
+                                        gotShape = true;
+                                        other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
+                                        other.transform.position = new Vector3(99999f, -50, 0f);
+                                        break;
+                                    }
+                                case 2:
+                                    {
+                                        CallTheManager(managerCall.incorrect, weaveScript, 1);
+                                        other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
+                                        other.transform.position = new Vector3(99999f, -50, 0f);
+                                        break;
+                                    }
                             }
-                        case 2:
+                            break;
+                        }
+                    case 2:
+                        {
+                            //Check moon
+                            switch (dpm.combinationpart)
                             {
-                                //Check moon
-                                switch (dpm.combinationpart)
-                                {
-                                    case 0:
-                                        {
-                                            CallTheManager(managerCall.incorrect, weaveScript, 2);
-                                            other.gameObject.GetComponent<WeaveableNew>().Uninteract();
-                                            other.transform.position = new Vector3(99999f, -50, 0f);
-                                            break;
-                                        }
-                                    case 1:
-                                        {
-                                            CallTheManager(managerCall.incorrect, weaveScript, 2);
-                                            other.gameObject.GetComponent<WeaveableNew>().Uninteract();
-                                            other.transform.position = new Vector3(99999f, -50, 0f);
-                                            break;
-                                        }
-                                    case 2:
-                                        {
-                                            CallTheManager(managerCall.complete, weaveScript, 2);
-                                            other.gameObject.GetComponent<WeaveableNew>().Uninteract();
-                                            other.transform.position = new Vector3(99999f, -50, 0f);
-                                            break;
-                                        }
-                                }
-                                break;
+                                case 0:
+                                    {
+                                        CallTheManager(managerCall.incorrect, weaveScript, 2);
+                                        other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
+                                        other.transform.position = new Vector3(99999f, -50, 0f);
+                                        break;
+                                    }
+                                case 1:
+                                    {
+                                        CallTheManager(managerCall.incorrect, weaveScript, 2);
+                                        other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
+                                        other.transform.position = new Vector3(99999f, -50, 0f);
+                                        break;
+                                    }
+                                case 2:
+                                    {
+                                        CallTheManager(managerCall.complete, weaveScript, 2);
+                                        other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
+                                        other.transform.position = new Vector3(99999f, -50, 0f);
+                                        break;
+                                    }
                             }
-                    }
+                            break;
+                        }
                 }
             }
         }
+        // }
 
     }
 
-    public void CallTheManager(managerCall callType, WeaveableNew weaveScript, int correctKey = 0)
+    public void CallTheManager(managerCall callType, WeaveableObject weaveScript, int correctKey = 0)
     {
         switch (callType)
         {

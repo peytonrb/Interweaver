@@ -198,9 +198,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 7030ec0f16a4ae942873e842dee52704, type: 2}
     m_RemovedComponents:
     - {fileID: 0}
-    m_RemovedGameObjects: []
+    - {fileID: 4473131065183391954, guid: bea7478cfa148934898144d1385794a4, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 1976713659090677288, guid: bea7478cfa148934898144d1385794a4, type: 3}
+    - {fileID: 4753636567959437533, guid: bea7478cfa148934898144d1385794a4, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1182470488956426515, guid: bea7478cfa148934898144d1385794a4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3915918137614880237}
   m_SourcePrefab: {fileID: 100100000, guid: bea7478cfa148934898144d1385794a4, type: 3}
 --- !u!1 &4440959467401774734 stripped
 GameObject:
@@ -217,6 +223,41 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 67097595647080075, guid: bea7478cfa148934898144d1385794a4, type: 3}
   m_PrefabInstance: {fileID: 7092350282698510059}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8216234385402468344 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1182470488956426515, guid: bea7478cfa148934898144d1385794a4, type: 3}
+  m_PrefabInstance: {fileID: 7092350282698510059}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3915918137614880237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8216234385402468344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0da983b286f933469896c0c67a0cc43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isBeingWoven: 0
+  hoverHeight: 2
+  objectMoveOverride: 1
+  weaveableLayers:
+    serializedVersion: 2
+    m_Bits: 8384
+  maxWeaveDistance: 25
+  hasBeenCombined: 0
+  canBeMoved: 1
+  myTransformPoints: []
+  activeSnapPoint: {fileID: 0}
+  objectToSnapTo: {fileID: 0}
+  weaveInteraction: {fileID: 0}
+  listIndex: 0
+  ID: 0
+  weaveController: {fileID: 0}
+  targetingArrow: {fileID: 0}
+  originalMat: {fileID: 0}
 --- !u!1 &8316268697638125603 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1226181212704935624, guid: bea7478cfa148934898144d1385794a4, type: 3}

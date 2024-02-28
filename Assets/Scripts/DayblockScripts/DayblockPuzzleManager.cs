@@ -17,7 +17,7 @@ public class DayblockPuzzleManager : MonoBehaviour
     private List<GameObject> fakeObjects = new List<GameObject>();
     public Transform[] failSpitPoint;
 
-    private WeaveableNew weaveableScript;
+    private WeaveableObject weaveableScript;
     private DayblockScript[] dayblockScripts;
 
     public GameObject vfxObject;
@@ -53,35 +53,35 @@ public class DayblockPuzzleManager : MonoBehaviour
     public void FoundParent() 
     {
         foreach (GameObject weaveable in weaveables) {
-            weaveableScript = weaveable.GetComponent<WeaveableNew>();
+            weaveableScript = weaveable.GetComponent<WeaveableObject>();
             //Finds the parent script
-            switch (weaveableScript.ID) {
-                //Sunblock
-                case 0:
-                    if (weaveableScript.isParent) {
-                        sunblockweaveparent = weaveableScript;
-                    }
-                break;
+            // switch (weaveableScript.ID) {
+            //     //Sunblock
+            //     case 0:
+            //         if (weaveableScript.isParent) {
+            //             sunblockweaveparent = weaveableScript;
+            //         }
+            //     break;
 
-                //Sunsetblock
-                case 1:
-                    if (weaveableScript.isParent) {
-                        sunriseblockweaveparent = weaveableScript;
-                    }
-                break;
+            //     //Sunsetblock
+            //     case 1:
+            //         if (weaveableScript.isParent) {
+            //             sunriseblockweaveparent = weaveableScript;
+            //         }
+            //     break;
 
-                //Moonblock
-                case 2:
-                    if (weaveableScript.isParent) {
-                        moonblockweaveparent = weaveableScript;
-                    }
-                break;
-            }
+            //     //Moonblock
+            //     case 2:
+            //         if (weaveableScript.isParent) {
+            //             moonblockweaveparent = weaveableScript;
+            //         }
+            //     break;
+            // }
             
         }
     }
 
-    public void GotCombination(int combination, WeaveableNew weaveableScript, bool isCorrect = true) {
+    public void GotCombination(int combination, WeaveableObject weaveableScript, bool isCorrect = true) {
         combinationpart += 1;
 
         GameObject obj = Instantiate(fakeKeyObject, transform.GetChild(combination));
@@ -129,12 +129,12 @@ public class DayblockPuzzleManager : MonoBehaviour
     }
 
 
-    public void FailPuzzle(int correctKey, WeaveableNew weaveable)
+    public void FailPuzzle(int correctKey, WeaveableObject weaveable)
     {
         StartCoroutine(RestartPuzzle(correctKey, weaveable));
     }
 
-    public IEnumerator RestartPuzzle(int correctKey, WeaveableNew weaveable) {
+    public IEnumerator RestartPuzzle(int correctKey, WeaveableObject weaveable) {
 
         yield return new WaitForSeconds(1f);
 
@@ -148,7 +148,7 @@ public class DayblockPuzzleManager : MonoBehaviour
 
         //return original object
         weaveable.transform.position = failSpitPoint[correctKey].position;
-        weaveable.Uninteract();
+        weaveable.weaveController.OnDrop();
 
         //reset other objects
         dayblockScripts = GetComponentsInChildren<DayblockScript>();
