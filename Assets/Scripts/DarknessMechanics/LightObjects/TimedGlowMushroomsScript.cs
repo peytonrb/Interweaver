@@ -79,7 +79,7 @@ public class TimedGlowMushroomsScript : MonoBehaviour
         while (end >= Time.time)
         {
             pointLight.intensity = Mathf.Lerp(0f, brightness, (Time.time - start) / glowTime);
-            pointLight.range = ((3 * Vector3.Magnitude(pointLight.GetComponent<SphereCollider>().bounds.size)) / (4f * Mathf.PI)) * 1.2f; // matching volumetric light to sphere collider (trust)
+            pointLight.range = pointLight.GetComponent<SphereCollider>().radius; // matching volumetric light to sphere collider (trust)
             yield return null;
         }
 
