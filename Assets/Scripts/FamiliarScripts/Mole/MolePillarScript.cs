@@ -12,7 +12,7 @@ public class MolePillarScript : MonoBehaviour
     private MoleDigScript moleDigScript;
     [SerializeField] private GameObject dirtPillar;
     public List<GameObject> pillarList = new List<GameObject>();
-    private CinemachineVirtualCamera familiarCamera;
+    public CinemachineVirtualCamera familiarCamera;
     private GameObject newPillar;
 
     [Header("Variables")]
@@ -39,7 +39,7 @@ public class MolePillarScript : MonoBehaviour
         movementScript = GetComponent<MovementScript>();
         moleDigScript = GetComponent<MoleDigScript>();
         familiarScript = GetComponent<FamiliarScript>();
-        familiarCamera = GameObject.FindGameObjectWithTag("FamiliarCamera").GetComponent<CinemachineVirtualCamera>();
+        familiarCamera = familiarCamera.GetComponent<CinemachineVirtualCamera>();
     }
 
     // Update is called once per frame

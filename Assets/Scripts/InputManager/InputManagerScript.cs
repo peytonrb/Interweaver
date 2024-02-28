@@ -221,7 +221,8 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnPossessFamiliar(InputValue input)
     {
-        if (input.isPressed && !playerScript.isDead && SceneHandler.instance.currentSceneName != "Hub")
+        //&& SceneHandler.instance.currentSceneName != "Hub" has been causing issues in this if statement
+        if (input.isPressed && !playerScript.isDead)
         {
             PossessFamiliar();
         }

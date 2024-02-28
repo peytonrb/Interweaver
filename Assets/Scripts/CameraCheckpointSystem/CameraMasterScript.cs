@@ -104,7 +104,7 @@ public class CameraMasterScript : MonoBehaviour
 
     }
 
-    //WEAVER CAMERAS
+    #region//WEAVER CAMERAS
     //**************************************************************************************
     public void SwitchWeaverCameras(int rotationstate) {
         weaverVcamListLength = weaverCameras.Count;
@@ -255,9 +255,9 @@ public class CameraMasterScript : MonoBehaviour
         lastWeaverCameraTriggered = weaverCameraOnPriority;
     }
     //**************************************************************************************
+    #endregion
 
-
-    //FAMILIAR CAMERA
+    #region//FAMILIAR CAMERA
     //**************************************************************************************
     public void SwitchFamiliarCameras(int rotationstate) {
         familiarVcamListLength = familiarCameras.Count;
@@ -403,7 +403,7 @@ public class CameraMasterScript : MonoBehaviour
     }
 
     //**************************************************************************************
-
+    #endregion
     //FLOATING ISLAND CAMERA
     //**************************************************************************************
     public void FloatingIslandCameraSwitch(CinemachineVirtualCamera cameraToSwitchTo, FloatingIslandScript floatingIsland)
