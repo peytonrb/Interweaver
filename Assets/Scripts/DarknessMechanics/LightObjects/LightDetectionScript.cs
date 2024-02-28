@@ -12,12 +12,20 @@ public class LightDetectionScript : MonoBehaviour
     {
         if (!isTimedMushroom)
         {
-            Debug.Log(this.gameObject.transform);
             crystalScript = this.gameObject.transform.parent.transform.parent.GetComponent<LightCrystalScript>();
 
             if (crystalScript.isActive)
             {
                 wasCrystalOn = true; // crystal was originally powered, so it cannot be unpowered
+            }
+
+            // ensures the volumetric lighting matches the collider volume
+            Light lightComponent = this.GetComponent<Light>();
+
+            if (this.TryGetComponent<SphereCollider>(out SphereCollider collider))
+            {
+                float radius = collider.radius;
+                lightComponent.range = radius;
             }
         }
     }
