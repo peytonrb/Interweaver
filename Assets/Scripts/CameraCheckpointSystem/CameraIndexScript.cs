@@ -11,14 +11,14 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
     [HideInInspector] public bool isLoop; //Reference only, set in inspector
     private bool isZaxisTrigger; //If false, then its an X axis trigger
     public bool goingOppositeDirection;
-    public CinemachineVirtualCamera indexCamera;
+    [HideInInspector] public CinemachineVirtualCamera indexCamera;
     private Transform weaverTransform; //Put only the weaver's transform
     private Transform familiarTransform; //Put only the familiar's transform
     private FamiliarScript familiarScript; 
     private BoxCollider bc;
     private bool addedToList;
     private MolePillarScript molePillarScript;
-    [HideInInspector] private bool enteredFromNorth; //Determines if the player entered from the south side or the north side of the collider
+    private bool enteredFromNorth; //Determines if the player entered from the south side or the north side of the collider
 
     public void Awake()
     {
