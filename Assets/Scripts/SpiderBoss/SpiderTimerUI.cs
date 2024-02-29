@@ -10,7 +10,7 @@ public class SpiderTimerUI : MonoBehaviour
     public float timerMaxValue; //Timermaxvalue should be 180
     private Slider healthSlider;
     private GameObject weaver;
-    private PlayerController playercontroller;
+    private PlayerControllerNew playercontroller;
     private bool playerdied;
     public AnimationCurve screenShake;
     private float intensitytime;
@@ -20,7 +20,7 @@ public class SpiderTimerUI : MonoBehaviour
     {
         healthSlider = GetComponentInChildren<Slider>();
         weaver = GameObject.FindGameObjectWithTag("Player");
-        playercontroller = weaver.GetComponent<PlayerController>();
+        playercontroller = weaver.GetComponent<PlayerControllerNew>();
 
         timer = timerMaxValue;
         healthSlider.maxValue = timerMaxValue;
@@ -52,6 +52,7 @@ public class SpiderTimerUI : MonoBehaviour
 
     void KillPlayer() {
         if (!playerdied) {
+            Debug.Log("death happened!");
             playercontroller.Death();
             playerdied = true;
         }

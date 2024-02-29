@@ -23,11 +23,13 @@ public class FamiliarScript : MonoBehaviour
     [SerializeField] private AudioClip possessionClip;
     //public InputAction NPCInteraction;
 
+    [HideInInspector] public bool isDead;
     public bool islandisfalling;
 
     void Awake()
     {
         //references to character components
+        isDead = false;
         characterController = GetComponent<CharacterController>();
         movementScript = GetComponent<MovementScript>();
         characterController.enabled = false;
@@ -130,6 +132,8 @@ public class FamiliarScript : MonoBehaviour
 
     public void Death() // this should be an interface EVENTUALLY WAHOO // I AGREE OMG OMG SAME BESTIE
     {
+        movementScript.active = false;
+        isDead = true;
         Invoke("ResetToCheckpoint", 3);
     }
 
@@ -141,7 +145,7 @@ public class FamiliarScript : MonoBehaviour
 
         CameraMasterScript.instance.FamiliarCameraReturnOnDeath(CameraMasterScript.instance.lastFamiliarCameraTriggered);
         characterController.enabled = true;
-        movementScript.ToggleCanLook(true);
-        movementScript.ToggleCanMove(true);
+        movementScript.active = true;
+        isDead = false;
     }
 }
