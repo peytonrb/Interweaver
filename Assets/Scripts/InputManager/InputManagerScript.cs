@@ -3,6 +3,7 @@ using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Windows;
+using TMPro;
 
 
 public class InputManagerScript : MonoBehaviour
@@ -24,6 +25,7 @@ public class InputManagerScript : MonoBehaviour
     private MovementScript movementScript;
     public PlayerInput playerInput;
 
+    [SerializeField] private TMP_Text popUI;
     private bool isMole, isOwl, isStag;
     public enum myEnums
     {
@@ -120,6 +122,10 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnWeaverInteract(InputValue input)
     {
+        //pops up the ui if the bollean is true but for now not for the weave
+
+        Debug.Log(playerInput.actions["WeaverInteract"].GetBindingDisplayString());
+
         if (input.isPressed)
         {
             if (weaveController.isWeaving)
