@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BlackboardScript : MonoBehaviour
 {
-    [SerializeField] private GameObject interactiveBlackboardUI;
+    [SerializeField] private GameObject interactableUI;
     [SerializeField] private CinemachineVirtualCamera blackboardCamera;
     [SerializeField] private CinemachineBrain mainCamera;
     [SerializeField] private GameObject playerstuff;
@@ -18,7 +18,7 @@ public class BlackboardScript : MonoBehaviour
     {
         playerdata = playerstuff.GetComponent<PlayerData>();
 
-        interactiveBlackboardUI.SetActive(false);
+        interactableUI.SetActive(false);
         blackboardCamera.Priority = 0;
         onBlackboard = false;
         levelsCompleted = playerdata.GetLevelsCompleted();
@@ -39,7 +39,7 @@ public class BlackboardScript : MonoBehaviour
             onBlackboard = true;
         }
         else {
-            interactiveBlackboardUI.SetActive(false);
+            interactableUI.SetActive(false);
             movementScript.ToggleCanLook(true);
             movementScript.ToggleCanMove(true);
             blackboardCamera.Priority = 0;
@@ -78,7 +78,7 @@ public class BlackboardScript : MonoBehaviour
             yield return null;
         }
         if (onBlackboard) {
-            interactiveBlackboardUI.SetActive(true);
+            interactableUI.SetActive(true);
         }
         yield break;
     }
