@@ -17,7 +17,6 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
     private FamiliarScript familiarScript; 
     private BoxCollider bc;
     private bool addedToList;
-    private MolePillarScript molePillarScript;
     private bool enteredFromNorth; //Determines if the player entered from the south side or the north side of the collider
 
     public void Awake()
@@ -26,7 +25,6 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
         familiarTransform = FindObjectOfType<FamiliarScript>().GetComponent<Transform>();
         familiarScript = FindObjectOfType<FamiliarScript>().GetComponent<FamiliarScript>();
         indexCamera = gameObject.transform.GetChild(0).GetComponent<CinemachineVirtualCamera>();
-        molePillarScript = FindObjectOfType<MolePillarScript>().GetComponent<MolePillarScript>();
         bc = GetComponent<BoxCollider>();
         addedToList = false;
 
@@ -226,12 +224,12 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
                         if (!triggered && enteredFromNorth)
                         {
                             CameraMasterScript.instance.SwitchFamiliarCameras(triggerIndex);
-                            molePillarScript.familiarCamera = indexCamera;
+                             
                         }
                         else if (triggered && !enteredFromNorth)
                         {
                             CameraMasterScript.instance.SwitchFamiliarCameras(triggerIndex);
-                            molePillarScript.familiarCamera = indexCamera;
+                           
                         }
                     }
                     else
@@ -239,12 +237,12 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
                         if (triggered && !enteredFromNorth)
                         {
                             CameraMasterScript.instance.SwitchFamiliarCameras(triggerIndex);
-                            molePillarScript.familiarCamera = indexCamera;
+                        
                         }
                         else if (!triggered && enteredFromNorth)
                         {
                             CameraMasterScript.instance.SwitchFamiliarCameras(triggerIndex);
-                            molePillarScript.familiarCamera = indexCamera;
+                      
                         }
                     }
 
@@ -256,12 +254,12 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
                         if (!triggered && enteredFromNorth)
                         {
                             CameraMasterScript.instance.SwitchFamiliarCameras(triggerIndex);
-                            molePillarScript.familiarCamera = indexCamera;
+                       
                         }
                         else if (triggered && !enteredFromNorth)
                         {
                             CameraMasterScript.instance.SwitchFamiliarCameras(triggerIndex);
-                            molePillarScript.familiarCamera = indexCamera;
+                        
                         }
                     }
                     else
@@ -269,12 +267,12 @@ public class CameraIndexScript : MonoBehaviour, ITriggerable
                         if (triggered && !enteredFromNorth)
                         {
                             CameraMasterScript.instance.SwitchFamiliarCameras(triggerIndex);
-                            molePillarScript.familiarCamera = indexCamera;
+                        
                         }
                         else if (!triggered && enteredFromNorth)
                         {
                             CameraMasterScript.instance.SwitchFamiliarCameras(triggerIndex);
-                            molePillarScript.familiarCamera = indexCamera;
+                      
                         }
                     }
 
