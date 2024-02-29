@@ -17,13 +17,16 @@ public class InputManagerScript : MonoBehaviour
     public GameObject pauseScreen;
     private PauseScript pauseScript;
     public static InputManagerScript instance;
+    private bool hasFamiliarInvoke;
 
     public bool isGamepad = false;
     private PlayerControllerNew playerScript;
     private WeaveController weaveController;
     private FamiliarScript familiarScript;
     private MovementScript movementScript;
+    private MoleDigScript moleDigScript;
     public PlayerInput playerInput;
+
 
     [SerializeField] private TMP_Text popUI;
     private bool isMole, isOwl, isStag;
@@ -52,10 +55,12 @@ public class InputManagerScript : MonoBehaviour
         movementScript = player.GetComponent<MovementScript>();
         familiarScript = familiar.GetComponent<FamiliarScript>();
         pauseScript = pauseScreen.GetComponent<PauseScript>();
+        moleDigScript = familiar.GetComponent<MoleDigScript>();
         playerInput = GetComponent<PlayerInput>();
 
         //usingController = pauseScript.GetUsingController(); //Checks if using the controller
         // Debug.Log(playerInput.currentControlScheme);
+        
 
         switch (familiarEnums)
         {
@@ -74,6 +79,21 @@ public class InputManagerScript : MonoBehaviour
                 isStag = true;
                 isOwl = false;
                 break;
+        }
+    }
+
+    private void Update()
+    {
+        if ((moleDigScript.isOnDigableLayer) && !hasFamiliarInvoke)
+        {
+            //this is where I would put the ui being active and showing the buttons
+            Debug.Log(playerInput.actions["MoleFamiliarInteract"].GetBindingDisplayString());
+            hasFamiliarInvoke = true;
+        }
+        else if ((!moleDigScript.isOnDigableLayer) && hasFamiliarInvoke)
+        {
+            //this is where I would probably have it turned off when it leaves the layer
+            hasFamiliarInvoke = false;
         }
     }
 
@@ -123,9 +143,7 @@ public class InputManagerScript : MonoBehaviour
     public void OnWeaverInteract(InputValue input)
     {
         //pops up the ui if the bollean is true but for now not for the weave
-
-        Debug.Log(playerInput.actions["WeaverInteract"].GetBindingDisplayString());
-
+       
         if (input.isPressed)
         {
             if (weaveController.isWeaving)

@@ -10,6 +10,8 @@ public class MoleDigScript : MonoBehaviour
     private CharacterController characterController;
     private MovementScript movementScript;
     private float originalHeight;
+    [HideInInspector] public bool isOnDigableLayer;
+    private bool digableLayerInvoke;
     [Header("Variables")]
     [CannotBeNullObjectField] public GameObject familiar;
     [Header("VFX")]
@@ -92,6 +94,22 @@ public class MoleDigScript : MonoBehaviour
                 }
             }
         }
+
+
+        //this is so fucking ass I'm so sorry
+       //**********************************************
+        if ((Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer)) && !digableLayerInvoke)
+        {
+            isOnDigableLayer = true;
+            digableLayerInvoke = true;
+        }
+
+        else if ((!Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer)) && digableLayerInvoke)
+        {
+            isOnDigableLayer = false;
+            digableLayerInvoke = false;
+        }
+        //**********************************************
     }
 
 
