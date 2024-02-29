@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class CatapultScript : MonoBehaviour
 {
-    [Header("References")]
+    //[Header("References")]
     [Header("Variables")]
     [SerializeField] [Range (1f, 100f)] private float launchForce;
+    [SerializeField] private float timeToLaunch = 2f;
     [SerializeField] private Vector3 direction;
 
     void Start()
@@ -27,7 +28,7 @@ public class CatapultScript : MonoBehaviour
 
     IEnumerator PrepareToLaunch(GameObject gameObject)
     {
-        yield return new WaitForSeconds(2f); 
+        yield return new WaitForSeconds(timeToLaunch); 
         MovementScript movementScript = gameObject.GetComponent<MovementScript>();
         CharacterController characterController = gameObject.GetComponent<CharacterController>();
         Launch(movementScript, characterController);
@@ -61,6 +62,6 @@ public class CatapultScript : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        DrawArrow.ForGizmo(transform.position, transform.rotation * direction.normalized * launchForce * 0.5f); 
+        DrawArrow.ForGizmo(transform.position, transform.rotation * direction.normalized * launchForce * 0.5f, Color.blue); 
     }
 }

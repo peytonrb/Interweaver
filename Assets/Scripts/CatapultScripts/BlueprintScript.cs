@@ -7,32 +7,35 @@ public class BlueprintScript : MonoBehaviour
 {
 
     [Header("Current Crafting Ingredients")]
-    //[SerializeField] public List<List<GameObject>> SCRONK = new List<List<GameObject>>();
-    [SerializeField] private List<CraftableScript.Craftable> currentCraftingIngredients = new List<CraftableScript.Craftable>(); 
+    private List<CraftableScript.Craftable> currentCraftingIngredients = new List<CraftableScript.Craftable>(); 
     [Header("Required Craftables")]
     [SerializeField] private List<CraftableScript.Craftable> requiredCraftables = new List<CraftableScript.Craftable>(); 
     [Header("Crafting Result")]
-    [SerializeField] private List<GameObject> dummyCraftingResults = new List<GameObject>();
     [SerializeField] private GameObject craftingResult;
+    [Header("Dummy")]
+    [SerializeField] private List<GameObject> dummyCraftingResults = new List<GameObject>(); // dummy's represent the object we're making while not being that object
+    private List<Material> dummyCraftingResultsOriginalMaterials = new List<Material>();
+    [SerializeField] private Material dummyMaterial; 
+
+    // general premise of this is we have three fundamental lists, currentCraftingIngredients, which should start empty and gets filled with craftable names
+    // as stuff enters the trigger zone. Then, once everything in currentCraftingIngredients and requiredCraftables (which should contain the craftable
+    // names that we want) are equal, we activate the craftingResult gameobject. The final key list, dummyCraftingResults is meant to simulate the craftingResult
+    // being built. It's a list of gameobjects that SHOULD have equivilant indexes and models to the requiredCraftables 
+    // list (if catapult arm is at index 1 in requiredCraftables, the dummy object which represents the arm should be at index 1 in dummyCraftingResults).
+    // dummyCraftingResults starts active, and has it material stripped.
+    // As the equivilant indexes fill up in requiredCraftables, we re-apply their original materials. When it's all filled up, we delete all the 
+    // gameobjects in dummyCraftingResults
+    // hope this is comprehensible :)
 
     void Start()
     {
-        var scripts = craftingResult.GetComponentsInChildren(typeof(MonoBehaviour)); // get all scripts on object(s) we're gonna craft
-        for (int i = 0; i < scripts.Length; i++)  
-        {
-            Debug.Log(scripts[i]);
-            Behaviour bhvr = (Behaviour)scripts[i];
-            bhvr.enabled = false;
-        }
         foreach(GameObject dummyCraftingResult in dummyCraftingResults)
         {
-            dummyCraftingResult.SetActive(false);
+            dummyCraftingResultsOriginalMaterials.Add(dummyCraftingResult.GetComponent<Renderer>().material);
+            dummyCraftingResult.GetComponent<Renderer>().material = dummyMaterial; // set dummy materials to an 'unbuilt' material
+            dummyCraftingResult.transform.parent = null; // unparent all them. Why? Because Unity is fucking weird
         }
         craftingResult.SetActive(false);
-    }
-
-    void Update()
-    {
     }
 
     void OnTriggerEnter(Collider collider)
@@ -42,9 +45,9 @@ public class BlueprintScript : MonoBehaviour
         {
             if (!currentCraftingIngredients.Contains(craftableScript.GetCraftableName())) // make sure no dupes!
             {
-                currentCraftingIngredients.Add(craftableScript.GetCraftableName()); // add craftable to list
+                currentCraftingIngredients.Add(craftableScript.GetCraftableName());
                 // instantiate VFX here!
-                Destroy(craftableScript.gameObject); // destroy craftable
+                Destroy(craftableScript.gameObject);
                 CheckIfCanCraft(); // check if we're good to go on crafting
             }
         }
@@ -64,19 +67,22 @@ public class BlueprintScript : MonoBehaviour
 
         if (needededIngredients >= requiredCraftables.Count)
         {
-            //Debug.Log("All ingredients here yay! Let's build!");
             CraftObject();
         } 
     }
 
     private void EnableDummyParts(int i)
     {
-        dummyCraftingResults[i].SetActive(true);
+        dummyCraftingResults[i].GetComponent<Renderer>().material = dummyCraftingResultsOriginalMaterials[i]; // re-apply original material
     }
 
     private void CraftObject()
     {
         // instantiate VFX here!
+        foreach(GameObject dummyCraftingResult in dummyCraftingResults) 
+        {
+            Destroy(dummyCraftingResult); // dummies are unneeded now, get rid of em'
+        }
         craftingResult.SetActive(true); // make crafted object visible
     }
 }

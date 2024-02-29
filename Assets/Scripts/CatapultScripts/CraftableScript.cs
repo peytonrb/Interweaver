@@ -14,7 +14,6 @@ public class CraftableScript : MonoBehaviour
         CatapultBodyAndArm,
         CatapultArmAndBowl,
     }
-    [Header("References")]
     [Header("Variables")]
     [SerializeField] private Craftable craftableName;
     [SerializeField] private List<Craftable> compatibleCraftables = new List<Craftable>();
