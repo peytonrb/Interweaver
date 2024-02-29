@@ -128,6 +128,7 @@ public class FloatingIslandScript : MonoBehaviour
         {
             anim.SetTrigger("Sit");
             verticalOffset = 0;
+            transform.parent.transform.position = sitTransform.position; // compensating for weaveable prefab structure
             transform.position = sitTransform.position;
             isFloating = false;
             //weaveable.enabled = true;
@@ -140,6 +141,7 @@ public class FloatingIslandScript : MonoBehaviour
         {
             anim.SetTrigger("Float");
             verticalOffset = 0;
+            transform.parent.transform.position = floatTransform.position; // compensating for weaveable prefab structure
             transform.position = floatTransform.position;
             isFloating = true;
 

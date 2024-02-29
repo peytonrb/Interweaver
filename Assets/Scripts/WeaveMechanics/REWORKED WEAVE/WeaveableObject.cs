@@ -24,7 +24,7 @@ public class WeaveableObject : MonoBehaviour
 
     // snapping
     [HideInInspector] public Transform[] myTransformPoints;
-    public GameObject activeSnapPoint;
+    [HideInInspector] public GameObject activeSnapPoint;
     private GameObject otherActiveSnapPoint;
     [HideInInspector] public WeaveableObject objectToSnapTo;
     private WeaveableObject closestObject;

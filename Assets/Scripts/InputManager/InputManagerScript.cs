@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Windows;
@@ -220,7 +221,9 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnPossessFamiliar(InputValue input)
     {
-        if ((input.isPressed) && (!playerScript.isDead))
+        //When we add the hub scene, we will put this line back in. This error was likely caused by the scene of that name not being part of the build settings.
+        //&& SceneHandler.instance.currentSceneName != "Hub" has been causing issues in this if statement
+        if (input.isPressed && !playerScript.isDead)
         {
             PossessFamiliar();
         }
@@ -228,6 +231,7 @@ public class InputManagerScript : MonoBehaviour
 
     public void PossessFamiliar()
     {
+        //Ability to possess familiar inside hub is disabled since there are no familiars in the hub.
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
         CharacterController playerCharacterController = player.GetComponent<CharacterController>();
 
@@ -350,6 +354,7 @@ public class InputManagerScript : MonoBehaviour
 
 
     #region //FAMILIAR ABILITIES
+    //These functions will never be called in hub since the action map will not change to Familiar.
     //******************************************************
     public void OnFamiliarMove(InputValue input)
     {
@@ -496,7 +501,7 @@ public class InputManagerScript : MonoBehaviour
     }
     #endregion//******************************************************
 
-    #region //MOLE FAMILIAR ABILITIES
+    #region //STAG FAMILIAR ABILITIES
     //******************************************************
 
     public void OnStagFamiliarInteract(InputValue input)

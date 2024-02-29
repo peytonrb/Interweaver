@@ -12,7 +12,7 @@ public class MolePillarScript : MonoBehaviour
     private MoleDigScript moleDigScript;
     [SerializeField] private GameObject dirtPillar;
     public List<GameObject> pillarList = new List<GameObject>();
-    private CinemachineVirtualCamera familiarCamera;
+    [HideInInspector] public CinemachineVirtualCamera familiarCamera;
     private GameObject newPillar;
 
     [Header("Variables")]

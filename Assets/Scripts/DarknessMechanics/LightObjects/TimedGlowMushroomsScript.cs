@@ -5,7 +5,7 @@ using UnityEngine;
 public class TimedGlowMushroomsScript : MonoBehaviour
 {
     public float glowTime = 2f;
-    [Range(0, 3)] public float brightness = 0.5f;
+    private float brightness = 0.5f;
     public float lightOnDelay;
     public float lightOffDelay;
     public int arrayIndex; // add the INDEX of the light in LIGHTARRAY in the LIGHTSOURCE OBJECT
@@ -78,12 +78,12 @@ public class TimedGlowMushroomsScript : MonoBehaviour
 
         while (end >= Time.time)
         {
-            pointLight.intensity = Mathf.Lerp(0f, brightness, (Time.time - start) / glowTime);
-            pointLight.range = ((3 * Vector3.Magnitude(pointLight.GetComponent<SphereCollider>().bounds.size)) / (4f * Mathf.PI)) * 1.2f; // matching volumetric light to sphere collider (trust)
+            pointLight.intensity = Mathf.Lerp(0f, 0.5f, (Time.time - start) / glowTime);
+            pointLight.range = pointLight.GetComponent<SphereCollider>().radius; // matching volumetric light to sphere collider (trust)
             yield return null;
         }
 
-        pointLight.intensity = brightness;
+        pointLight.intensity = 0.5f;
         currentBrightness = pointLight.intensity;
         yield return new WaitForSeconds(lightOnDelay);
         //Debug.Log("this is turnning on");
