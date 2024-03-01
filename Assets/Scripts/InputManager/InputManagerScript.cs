@@ -89,40 +89,40 @@ public class InputManagerScript : MonoBehaviour
     {
         #region//MolePopUI
         //*************************************************************************
-        if (moleDigScript != null && (moleDigScript.isOnDigableLayer) && !hasFamiliarInvoke)
-        {
-            //this is where I would put the ui being active and showing the button for digging
-            popUIForFamiliar.gameObject.SetActive(true);
-            popUIForFamiliar.gameObject.transform.GetComponentInChildren<TMP_Text>().
-                SetText(playerInput.actions["MoleFamiliarInteract"].GetBindingDisplayString());
+        //if (moleDigScript != null && (moleDigScript.isOnDigableLayer) && !hasFamiliarInvoke)
+        //{
+        //    //this is where I would put the ui being active and showing the button for digging
+        //    popUIForFamiliar.gameObject.SetActive(true);
+        //    popUIForFamiliar.gameObject.transform.GetComponentInChildren<TMP_Text>().
+        //        SetText(playerInput.actions["MoleFamiliarInteract"].GetBindingDisplayString());
 
-            hasFamiliarInvoke = true;
+        //    hasFamiliarInvoke = true;
            
-        }
+        //}
 
-        else if (moleDigScript != null && (!moleDigScript.isOnDigableLayer) && hasFamiliarInvoke)
-        {
-            //this is where I would probably have it turned off when it leaves the layer
-            popUIForFamiliar.gameObject.SetActive(false);
-            hasFamiliarInvoke = false;
-        }
+        //else if (moleDigScript != null && (!moleDigScript.isOnDigableLayer) && hasFamiliarInvoke)
+        //{
+        //    //this is where I would probably have it turned off when it leaves the layer
+        //    popUIForFamiliar.gameObject.SetActive(false);
+        //    hasFamiliarInvoke = false;
+        //}
 
-        if ((moleDigScript != null && (moleDigScript.startedToDig) && !hasFamiliarInvoke2))
-        {
-            Debug.Log("this should turn on");
-            //for the familiar dig and wants to make a pillar
-            otherPopUIForFamiliar.gameObject.SetActive(true);
-            otherPopUIForFamiliar.gameObject.transform.GetComponentInChildren<TMP_Text>().
-            SetText(playerInput.actions["MoleAltFamiliarInteract"].GetBindingDisplayString());
-            hasFamiliarInvoke2 = true;
-        }
+        //if ((moleDigScript != null && (moleDigScript.startedToDig) && !hasFamiliarInvoke2))
+        //{
+        //    Debug.Log("this should turn on");
+        //    //for the familiar dig and wants to make a pillar
+        //    otherPopUIForFamiliar.gameObject.SetActive(true);
+        //    otherPopUIForFamiliar.gameObject.transform.GetComponentInChildren<TMP_Text>().
+        //    SetText(playerInput.actions["MoleAltFamiliarInteract"].GetBindingDisplayString());
+        //    hasFamiliarInvoke2 = true;
+        //}
 
-        else if ((moleDigScript != null && (!moleDigScript.startedToDig) && hasFamiliarInvoke2))
-        {
-            //this is where I would probably have it turned off when it undigs
-            otherPopUIForFamiliar.gameObject.SetActive(false);
-            hasFamiliarInvoke2 = false;
-        }
+        //else if ((moleDigScript != null && (!moleDigScript.startedToDig) && hasFamiliarInvoke2))
+        //{
+        //    //this is where I would probably have it turned off when it undigs
+        //    otherPopUIForFamiliar.gameObject.SetActive(false);
+        //    hasFamiliarInvoke2 = false;
+        //}
         //*************************************************************************
         #endregion
     }
