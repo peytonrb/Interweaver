@@ -134,6 +134,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7504492, y: 1.8222183, z: 0.83677024}
   m_Center: {x: -0.00046714148, y: 0.91101825, z: 0.007520636}
+--- !u!1 &7609559832210330867
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9068073000925017424}
+  m_Layer: 6
+  m_Name: SnapPointLC (1)
+  m_TagString: SnapPoint
+  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9068073000925017424
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7609559832210330867}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6041384070589905485}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &7131792363177650167
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -218,6 +249,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3920245833118296906, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3920245833118296906, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5321431282613267940, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -231,6 +270,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -2728823085922489614, guid: f1f4b321efa52034096d29a66621793c, type: 3}
     - target: {fileID: 8502524356530500406, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+    - target: {fileID: 8502524356530500406, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      propertyPath: m_Name
+      value: SnapPointLC
+      objectReference: {fileID: 0}
+    - target: {fileID: 8502524356530500406, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
       propertyPath: m_TagString
       value: SnapPoint
       objectReference: {fileID: 0}
@@ -241,7 +288,10 @@ PrefabInstance:
     - {fileID: 3537383877026485469, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
     m_RemovedGameObjects:
     - {fileID: 987410943757886431, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 9068073000925017424}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
 --- !u!4 &6041384070589905485 stripped

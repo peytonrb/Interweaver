@@ -63,52 +63,41 @@ public class LightDetectionScript : MonoBehaviour
     {
         if (!isTimedMushroom)
         {
+            LightCrystalScript lightScript = collider.GetComponent<LightCrystalScript>(); // efficiency xoxo
+
             // again ensuring this is a powered object
-            if (collider.gameObject.tag == "Weaveable" && collider.GetComponent<LightCrystalScript>() != null)
+            if (collider.gameObject.tag == "Weaveable" && lightScript != null)
             {
                 // if for some reason the light that was powering the crystal is turned off
                 if (!wasCrystalOn && !crystalScript.isFocusingCrystal &&
-                    !LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn)
+                    !LightSourceScript.Instance.lightsArray[lightScript.arrayIndex].isOn)
                 {
                     crystalScript.isActive = false;
                 }
 
                 float distance = Vector3.Distance(this.gameObject.transform.position, collider.gameObject.transform.position);
 
-                if (LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn
+                if (LightSourceScript.Instance.lightsArray[lightScript.arrayIndex].isOn
                     && distance < 4.5f)
                 {
                     crystalScript.isActive = true;
                 }
             }
 
+            SensorController sensorScript = collider.GetComponent<SensorController>();
             // if collision is with a sensor
-            if (collider.GetComponent<SensorController>() != null)
+            if (sensorScript != null)
             {
                 if (LightSourceScript.Instance.lightsArray[transform.parent.transform.parent.GetComponent<LightCrystalScript>().arrayIndex].isOn &&
-                    !collider.GetComponent<SensorController>().isActive)
+                    !sensorScript.isActive)
                 {
-                    collider.GetComponent<SensorController>().isActive = true;
+                    sensorScript.isActive = true;
 
-                    if (collider.GetComponent<SensorController>().sensorEvent != null)
-                        collider.GetComponent<SensorController>().StartEvent();
+                    if (sensorScript.sensorEvent != null)
+                        sensorScript.StartEvent();
                 }
             }
         }
-
-        // if light hits player
-        //if (collider.gameObject.tag == "Player")
-        //{
-        //    if ((isTimedMushroom && this.gameObject.transform.parent.GetComponent<TimedGlowMushroomsScript>().isActive) 
-        //         || !isTimedMushroom)
-        //    {
-        //        collider.GetComponent<DarknessMechanicScript>().isSafe = true;
-        //    }
-        //    else if (isTimedMushroom && !this.gameObject.transform.parent.GetComponent<TimedGlowMushroomsScript>().isActive)
-        //    {
-        //        collider.GetComponent<DarknessMechanicScript>().isSafe = false;
-        //    }
-        //}
     }
 
     public void OnTriggerExit(Collider collision)

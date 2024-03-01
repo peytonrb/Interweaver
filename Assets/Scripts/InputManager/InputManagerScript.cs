@@ -84,13 +84,13 @@ public class InputManagerScript : MonoBehaviour
 
     private void Update()
     {
-        if ((moleDigScript.isOnDigableLayer) && !hasFamiliarInvoke)
+        if (moleDigScript != null && (moleDigScript.isOnDigableLayer) && !hasFamiliarInvoke)
         {
             //this is where I would put the ui being active and showing the buttons
             Debug.Log(playerInput.actions["MoleFamiliarInteract"].GetBindingDisplayString());
             hasFamiliarInvoke = true;
         }
-        else if ((!moleDigScript.isOnDigableLayer) && hasFamiliarInvoke)
+        else if (moleDigScript != null && (!moleDigScript.isOnDigableLayer) && hasFamiliarInvoke)
         {
             //this is where I would probably have it turned off when it leaves the layer
             hasFamiliarInvoke = false;

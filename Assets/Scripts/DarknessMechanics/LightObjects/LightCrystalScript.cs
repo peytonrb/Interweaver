@@ -21,7 +21,7 @@ public class LightCrystalScript : MonoBehaviour
 
     private Light crystalLight;
     private float currentBrightness;
-    [HideInInspector] public bool isActiveDefault = false;
+     public bool isActiveDefault = false;
 
     void Start()
     {
