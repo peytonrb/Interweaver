@@ -59,7 +59,7 @@ public class DoorScript : MonoBehaviour
         {
             foreach (PressurePlateScript pplate in pressurePlates)
             {
-                if (!pplate.standingOnPlate && doorOpening || !pplate.standingOnPlate && doorIsOpen)
+                if (!pplate.activated && doorOpening || !pplate.activated && doorIsOpen)
                 {
                     if (doorOpening && !doorIsOpen)
                     {
@@ -99,7 +99,7 @@ public class DoorScript : MonoBehaviour
         {
             foreach (PressurePlateScript pplate in pressurePlates)
             {
-                if (!pplate.standingOnPlate)
+                if (!pplate.activated)
                 {
                     allActive = false;
                 }
@@ -235,7 +235,7 @@ public class DoorScript : MonoBehaviour
             distance = Vector3.Distance(transform.position, targetPoint);
 
             // stop coroutine only works at a yield break, which would not happen until too late otherwise
-            if (stopCoroutine)
+            if (stopCoroutine && !pplateTriggered)
             {
                 stopCoroutine = false;
                 yield break;
@@ -256,8 +256,6 @@ public class DoorScript : MonoBehaviour
 
     IEnumerator MoveBack()
     {
-
-        
         // door can be triggered again by pressure plate event
         if (pressurePlates != null && pplateTriggered)
         {
