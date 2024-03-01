@@ -39,13 +39,20 @@ public class RippleEffect : MonoBehaviour
     private void OnTriggerStay(Collider collider)
     {
         if (collider.gameObject.tag == "Player")
-        {
-            if (!psFollowPlayer.gameObject.activeSelf)
+        { 
+            if (collider.GetComponent<MovementScript>().currentSpeed > 0)
             {
-                psFollowPlayer.gameObject.SetActive(true); 
-            }   
-            
-            psFollowPlayer.transform.position = new Vector3(collider.transform.position.x, collider.transform.position.y - 2f, collider.transform.position.z);
+                if (!psFollowPlayer.gameObject.activeSelf)
+                {
+                    psFollowPlayer.gameObject.SetActive(true);
+                }
+
+                psFollowPlayer.transform.position = new Vector3(collider.transform.position.x, collider.transform.position.y - 2f, collider.transform.position.z);
+            }
+            else
+            {
+                psFollowPlayer.gameObject.SetActive(false);
+            }
         }
     }
 
