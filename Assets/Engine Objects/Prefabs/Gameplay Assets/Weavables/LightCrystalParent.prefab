@@ -34,7 +34,7 @@ Transform:
   m_Children:
   - {fileID: 6041384070589905485}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &3211016787289432337
 Rigidbody:
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isActive: 1
   arrayIndex: 1
-  brightness: 4
+  brightness: 0.5
   isWeaveable: 1
   Notes: Array Index should be the INDEX of the light in LIGHTARRAY in the LIGHTSOURCE
     OBJECT (is probably called LightsManager)
@@ -134,37 +134,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7504492, y: 1.8222183, z: 0.83677024}
   m_Center: {x: -0.00046714148, y: 0.91101825, z: 0.007520636}
---- !u!1 &7609559832210330867
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9068073000925017424}
-  m_Layer: 6
-  m_Name: SnapPointLC (1)
-  m_TagString: SnapPoint
-  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9068073000925017424
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7609559832210330867}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6041384070589905485}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &7131792363177650167
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -288,10 +257,8 @@ PrefabInstance:
     - {fileID: 3537383877026485469, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
     m_RemovedGameObjects:
     - {fileID: 987410943757886431, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 3543903632883375546, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
-      insertIndex: 2
-      addedObject: {fileID: 9068073000925017424}
+    - {fileID: 8502524356530500406, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f71e4538980f594e9234216eb009cc8, type: 3}
 --- !u!4 &6041384070589905485 stripped
