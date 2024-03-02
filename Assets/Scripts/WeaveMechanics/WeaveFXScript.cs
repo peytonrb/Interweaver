@@ -55,7 +55,17 @@ public class WeaveFXScript : MonoBehaviour
         {
             // particles upon select
             var psShape = objectSelectPS.shape; // i hate var but unity requires it to be like this. idk man.
-            psShape.radius = weaveable.GetComponent<BoxCollider>().bounds.size.x; // will break if object doesn't have box collider
+
+            //Try get box collider or sphere collider
+            if (weaveable.TryGetComponent<BoxCollider>(out BoxCollider box))
+            {
+                psShape.radius = box.bounds.size.x; // will break if object doesn't have box collider
+            }
+            else if (weaveable.TryGetComponent<SphereCollider>(out SphereCollider sphere))
+            {
+                psShape.radius = sphere.bounds.size.x;
+            }
+            
             Instantiate(objectSelectPS, weaveable.transform.position, Quaternion.Euler(-90f, 0f, 0f));
 
             if (weaveable.transform.GetChild(0).GetComponent<Renderer>() != null)

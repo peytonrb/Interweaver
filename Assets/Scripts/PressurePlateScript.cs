@@ -13,7 +13,7 @@ public class PressurePlateScript : MonoBehaviour
     public bool activated;
     private float bottomtargetposition;
     private float toptargetposition;
-
+    public bool activatedByWeaveable = false;
     public UnityEvent pressEvent;
 
     void Start() {
@@ -42,10 +42,20 @@ public class PressurePlateScript : MonoBehaviour
         {
             standingOnPlate = true;
         }
+
+        if (activatedByWeaveable && other.gameObject.CompareTag("Weaveable"))
+        {
+            standingOnPlate = true;
+        }
     }
 
     private void OnTriggerExit(Collider other) {
         if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Familiar")) 
+        {
+            standingOnPlate = false;
+        }
+
+        if (activatedByWeaveable && other.gameObject.CompareTag("Weaveable"))
         {
             standingOnPlate = false;
         }

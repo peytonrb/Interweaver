@@ -8,23 +8,44 @@ public class MovingPlatformScript : MonoBehaviour
     public PressurePlateScript pplate;
     public bool doesPlatformStop;
     private bool pplateTriggered = false;
+    public bool triggerStopsObject = false;
 
     void Start()
     {
-        this.GetComponent<ObjectMoverScript>().enabled = false;
+        if (!triggerStopsObject)
+        {
+            this.GetComponent<ObjectMoverScript>().enabled = false;
+        }
+        
     }
 
     void Update()
     {
-        if (sensor != null && !sensor.isActive && doesPlatformStop)
+        if (!triggerStopsObject)
         {
-            StopPlatform();
+            if (sensor != null && !sensor.isActive && doesPlatformStop)
+            {
+                StopPlatform();
+            }
+            else if (pplate != null && !pplate.standingOnPlate && doesPlatformStop)
+            {
+                pplateTriggered = false;
+                StopPlatform();
+            }
         }
-        else if (pplate != null && !pplate.standingOnPlate && doesPlatformStop)
+        else
         {
-            pplateTriggered = false;
-            StopPlatform();
+            if (sensor != null && sensor.isActive && doesPlatformStop)
+            {
+                StopPlatform();
+            }
+            else if (pplate != null && pplate.standingOnPlate && doesPlatformStop)
+            {
+                pplateTriggered = false;
+                StopPlatform();
+            }
         }
+        
     }
 
     public void AdvancePlatform()
