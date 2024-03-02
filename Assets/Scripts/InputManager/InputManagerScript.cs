@@ -18,8 +18,13 @@ public class InputManagerScript : MonoBehaviour
     public GameObject pauseScreen;
     private PauseScript pauseScript;
     public static InputManagerScript instance;
-    private bool hasFamiliarInvoke;
+
+    //the invoke bools are there so then it can only happen once instead of every frame in the update function
+    //*****************************************
+    private bool hasFamiliarInvoke; 
     private bool hasFamiliarInvoke2;
+    private bool hasWeaverInvoke;
+    //*****************************************
 
     public bool isGamepad = false;
     private PlayerControllerNew playerScript;
@@ -27,11 +32,15 @@ public class InputManagerScript : MonoBehaviour
     private FamiliarScript familiarScript;
     private MovementScript movementScript;
     private MoleDigScript moleDigScript;
+    private OwlDiveScript owlDiveScript;
     public PlayerInput playerInput;
-
+    private MovementScript familiarMovement;
 
     [SerializeField] private Image popUIForFamiliar;
     [SerializeField] private Image otherPopUIForFamiliar;
+
+    [SerializeField] private Image popUIForWeaver;
+    [SerializeField] private Image popUIForWeaver2;
     private bool isMole, isOwl, isStag;
     public enum myEnums
     {
@@ -56,11 +65,11 @@ public class InputManagerScript : MonoBehaviour
         playerScript = player.GetComponent<PlayerControllerNew>();
         weaveController = player.GetComponent<WeaveController>();
         movementScript = player.GetComponent<MovementScript>();
+        familiarMovement = familiar.GetComponent<MovementScript>();
         familiarScript = familiar.GetComponent<FamiliarScript>();
-        pauseScript = pauseScreen.GetComponent<PauseScript>();
-        moleDigScript = familiar.GetComponent<MoleDigScript>();
+        pauseScript = pauseScreen.GetComponent<PauseScript>();               
         playerInput = GetComponent<PlayerInput>();
-
+        
         //usingController = pauseScript.GetUsingController(); //Checks if using the controller
         // Debug.Log(playerInput.currentControlScheme);
         
@@ -73,6 +82,7 @@ public class InputManagerScript : MonoBehaviour
                 isOwl = true;
                 break;
             case myEnums.Mole:
+                moleDigScript = familiar.GetComponent<MoleDigScript>();
                 isMole = true;
                 isStag = false;
                 isOwl = false;
@@ -88,7 +98,7 @@ public class InputManagerScript : MonoBehaviour
     private void Update()
     {
         FamiliarUI();
-       
+        WeaverUI();
     }
 
     public void ToggleControlScheme(bool isController)
@@ -371,7 +381,27 @@ public class InputManagerScript : MonoBehaviour
 
     private void WeaverUI()
     {
-        
+        if ((weaveController != null) && (weaveController.isWeaving) && !hasWeaverInvoke)
+        {
+            popUIForWeaver.gameObject.SetActive(true);
+
+            popUIForWeaver2.gameObject.SetActive(true);
+
+            popUIForWeaver.gameObject.transform.GetComponentInChildren<TMP_Text>().
+                SetText(playerInput.actions["WeaverTargeting"].GetBindingDisplayString() + " to move the weaveables");
+
+            popUIForWeaver2.gameObject.transform.GetComponentInChildren<TMP_Text>().
+               SetText(playerInput.actions["Rotate"].GetBindingDisplayString() + " to rotate the weaveables");
+
+            hasWeaverInvoke = true;
+        }
+
+        else if ((!weaveController.isWeaving) && hasWeaverInvoke)
+        {
+            popUIForWeaver.gameObject.SetActive(false);
+            popUIForWeaver2.gameObject.SetActive(false);
+            hasWeaverInvoke = false;
+        }
     }
     private void FamiliarUI()
     {
@@ -412,6 +442,25 @@ public class InputManagerScript : MonoBehaviour
             hasFamiliarInvoke2 = false;
         }
 
+        //*************************************************************************
+        #endregion
+        #region//OwlPopUI
+        //*************************************************************************
+        if ((!familiarMovement.isNearGround) && (!hasFamiliarInvoke) && (familiarMovement.active))
+        {
+            //this is where I would put the ui being active and showing the button for digging
+            popUIForFamiliar.gameObject.SetActive(true);
+            popUIForFamiliar.gameObject.transform.GetComponentInChildren<TMP_Text>().
+                SetText(playerInput.actions["FamiliarInteract"].GetBindingDisplayString() + " to dive");
+
+            hasFamiliarInvoke = true;
+        }
+
+        else if ((familiarMovement.isNearGround) && (hasFamiliarInvoke) || (!familiarMovement.active))
+        {
+            popUIForFamiliar.gameObject.SetActive(false);            
+            hasFamiliarInvoke = false;
+        }
         //*************************************************************************
         #endregion
 
