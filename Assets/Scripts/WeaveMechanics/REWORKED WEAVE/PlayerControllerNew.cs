@@ -87,15 +87,18 @@ public class PlayerControllerNew : MonoBehaviour
     {
         //See CameraIndexScript for more information about this function
         ITriggerable trigger = other.GetComponent<ITriggerable>();
-        if (trigger != null) {
+        if (trigger != null) 
+        {
             trigger.OnTrigExit(other);
         }
     }
 
-    void OnTriggerEnter(Collider other) {
+    void OnTriggerEnter(Collider other) 
+    {
         //See CameraIndexScript for more information about this function
         ITriggerable trigger = other.GetComponent<ITriggerable>();
-        if (trigger != null) {
+        if (trigger != null) 
+        {
             //Debug.Log("Hit?");
             trigger.OnTrigEnter(other);
         }
