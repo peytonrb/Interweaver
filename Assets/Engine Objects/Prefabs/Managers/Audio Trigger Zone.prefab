@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5409886672382586202}
   - component: {fileID: 7975312360222853304}
   m_Layer: 0
-  m_Name: Music Transition Trigger
+  m_Name: Audio Trigger Zone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 21
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1441810351677980845
 MeshFilter:
@@ -95,10 +95,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4192255
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -120,12 +120,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transitionMode: 1
   addLayerMode: 0
+  trackSongPosition: 1
   clearPreviousLayers: 0
   musicToTransitionTo: {fileID: 8300000, guid: a44ec3846d9f67c4b98942403e189591, type: 3}
-  active: 1
+  currentCharacters: []
   fadeOutTransitionDuration: 2
   fadeInTransitionDuration: 5
   layersToAdd: []
-  tripped: 0
-  ping: 0
-  currentCharacters: []

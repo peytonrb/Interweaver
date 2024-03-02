@@ -9,10 +9,12 @@ public class MusicTriggerScript : MonoBehaviour
     [Header("Modes & Settings")]
     [SerializeField] private bool transitionMode;
     [SerializeField] private bool addLayerMode;
+    [SerializeField] private bool trackSongPosition;
     [SerializeField] [Tooltip("Clears previous musical layers.")] private bool clearPreviousLayers; 
     [Header("Generic Variables")]
     [SerializeField] AudioClip musicToTransitionTo;
-    [SerializeField] bool active = true;
+    private bool tripped; 
+    public List<GameObject> currentCharacters = new List<GameObject>();
     private float songTime;
     [Header("Transition Variables")]
     [SerializeField][Range (0.1f, 10f)] float fadeOutTransitionDuration = 2f; 
@@ -20,8 +22,6 @@ public class MusicTriggerScript : MonoBehaviour
     [Header("Add Layer Variables")]
     [SerializeField] private List<AudioClip> layersToAdd = new List<AudioClip>();
 
-    public bool tripped;
-    public List<GameObject> currentCharacters = new List<GameObject>();
 
     void Start()
     {
@@ -32,8 +32,11 @@ public class MusicTriggerScript : MonoBehaviour
     {
         if (tripped)
         {
-            songTime = audioManager.musicChannel.time;
-            Debug.Log(songTime);
+            if (trackSongPosition)
+            {
+                songTime = audioManager.musicChannel.time;
+            }
+            
             if (!gameObject.GetComponent<Collider>().bounds.Contains(currentCharacters[0].transform.position))
             {
                 tripped = false;
