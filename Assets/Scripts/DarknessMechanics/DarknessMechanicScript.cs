@@ -12,6 +12,7 @@ public class DarknessMechanicScript : MonoBehaviour
     [Range(0, 14)] private float countDown;
     public float deathTime = 5f;
     public bool isSafe;
+    public bool canKillPlayer = true;
     private bool hasInvoked;
 
     private float lastCount;
@@ -26,7 +27,11 @@ public class DarknessMechanicScript : MonoBehaviour
 
     void Start()
     {
-        isSafe = false;
+        if (canKillPlayer)
+            isSafe = false;
+        else
+            isSafe = true;
+
         hasInvoked = false;
         countDown = 0f;
         StartCoroutine(DarknessTimer());
@@ -82,19 +87,25 @@ public class DarknessMechanicScript : MonoBehaviour
             hasInvoked = true;
             Debug.Log("player is now safe");
         }
-       
+
     }
 
     public void PlayerIsNotSafe()
     {
-        isSafe = false;
-        if ((!isSafe) && (hasInvoked))
+        if (canKillPlayer)
         {
-            StartCoroutine(DarknessTimer());
-            hasInvoked = false;
-            Debug.Log("player is now not safe");
+            isSafe = false;
+            if ((!isSafe) && (hasInvoked))
+            {
+                StartCoroutine(DarknessTimer());
+                hasInvoked = false;
+                Debug.Log("player is now not safe");
+            }
         }
-        
+        else
+        {
+            isSafe = true;
+        }
     }
 
     private void OnTriggerStay(Collider other)
