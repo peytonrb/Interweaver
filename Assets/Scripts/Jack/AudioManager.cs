@@ -26,6 +26,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource weaveChannel;
     public AudioSource footStepsChannel;
     public AudioSource fallChannel;
+    public bool transitioning; 
     //AudioSource for the digging sound
 
     [Header("Music Audioclip List")]
@@ -254,8 +255,14 @@ public class AudioManager : MonoBehaviour
         yield break;
     }
 
-    public IEnumerator StartMusicFadeOut(AudioClip musicToTransitionTo, float fadeOutTransitionDuration, float fadeInTransitionDuration)
+    public IEnumerator StartMusicFadeOut(AudioClip musicToTransitionTo, float fadeOutTransitionDuration, float fadeInTransitionDuration, float musicStartTime)
     {
+        if (musicToTransitionTo.name == musicChannel.clip.name)
+        {
+            yield break;
+        }
+
+        transitioning = true;
         float time = 0;
         float start = musicChannel.volume;
         while (time < fadeOutTransitionDuration)
@@ -265,6 +272,7 @@ public class AudioManager : MonoBehaviour
             yield return null;
         }
         musicChannel.clip = musicToTransitionTo;
+        musicChannel.time = musicStartTime;
         StartCoroutine(StartMusicFadeIn(fadeInTransitionDuration, start));
         musicChannel.Play();
         yield break;
@@ -280,6 +288,7 @@ public class AudioManager : MonoBehaviour
             musicChannel.volume = Mathf.Lerp(start, originalMusicVolume, time / transitionDuration);
             yield return null;
         }
+        transitioning = false;
         yield break;
     }
 

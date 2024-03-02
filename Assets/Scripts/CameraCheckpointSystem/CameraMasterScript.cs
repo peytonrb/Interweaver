@@ -221,10 +221,6 @@ public class CameraMasterScript : MonoBehaviour
         CinemachineVirtualCamera vcam = weaverCameras[weaverCameraOnPriority].GetComponent<CinemachineVirtualCamera>();
         vcam.Priority = 1;
         currentCam = vcam;
-
-        Debug.Log("Switching");
-        Debug.Log(weaverCameraOnPriority);
-        Debug.Log(weaverCameras[weaverCameraOnPriority].name);
     }
 
     public void ResetWeaverCameras() {

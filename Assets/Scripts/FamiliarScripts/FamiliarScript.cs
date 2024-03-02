@@ -109,7 +109,6 @@ public class FamiliarScript : MonoBehaviour
             //Move character only if they are on the ground or in leapOfFaith
             if (characterController.isGrounded || leapOfFaith) {     
                 if (!leapOfFaith) {
-                    Debug.Log("Depossessing");
                     depossessing = true;
                     movementScript.ZeroCurrentSpeed();
                     movementScript.active = false;
