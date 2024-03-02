@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Windows;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class InputManagerScript : MonoBehaviour
@@ -49,6 +50,7 @@ public class InputManagerScript : MonoBehaviour
         Stag
     }
     public myEnums familiarEnums;
+    private string currentSceneName;
 
 
     void Awake()
@@ -69,7 +71,8 @@ public class InputManagerScript : MonoBehaviour
         familiarScript = familiar.GetComponent<FamiliarScript>();
         pauseScript = pauseScreen.GetComponent<PauseScript>();               
         playerInput = GetComponent<PlayerInput>();
-        
+        currentSceneName = SceneManager.GetActiveScene().name;
+
         //usingController = pauseScript.GetUsingController(); //Checks if using the controller
         // Debug.Log(playerInput.currentControlScheme);
         
@@ -253,7 +256,10 @@ public class InputManagerScript : MonoBehaviour
         //&& SceneHandler.instance.currentSceneName != "Hub" has been causing issues in this if statement
         if (input.isPressed && !playerScript.isDead)
         {
-            PossessFamiliar();
+            if (currentSceneName == "AlpineCombined" || currentSceneName == "Cavern") {
+                PossessFamiliar();
+            }
+            
         }
     }
 
@@ -274,7 +280,10 @@ public class InputManagerScript : MonoBehaviour
     {
         if ((input.isPressed) && (!familiarScript.isDead))
         {
-            PossessWeaver();
+            if (currentSceneName == "AlpineCombined" || currentSceneName == "Cavern") {
+                PossessWeaver();
+            }
+            
         }
     }
 
