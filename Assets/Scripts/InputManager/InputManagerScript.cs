@@ -3,6 +3,8 @@ using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Windows;
+using TMPro;
+using UnityEngine.UI;
 
 
 public class InputManagerScript : MonoBehaviour
@@ -16,14 +18,20 @@ public class InputManagerScript : MonoBehaviour
     public GameObject pauseScreen;
     private PauseScript pauseScript;
     public static InputManagerScript instance;
+    private bool hasFamiliarInvoke;
+    private bool hasFamiliarInvoke2;
 
     public bool isGamepad = false;
     private PlayerControllerNew playerScript;
     private WeaveController weaveController;
     private FamiliarScript familiarScript;
     private MovementScript movementScript;
+    private MoleDigScript moleDigScript;
     public PlayerInput playerInput;
 
+
+    [SerializeField] private Image popUIForFamiliar;
+    [SerializeField] private Image otherPopUIForFamiliar;
     private bool isMole, isOwl, isStag;
     public enum myEnums
     {
@@ -50,10 +58,12 @@ public class InputManagerScript : MonoBehaviour
         movementScript = player.GetComponent<MovementScript>();
         familiarScript = familiar.GetComponent<FamiliarScript>();
         pauseScript = pauseScreen.GetComponent<PauseScript>();
+        moleDigScript = familiar.GetComponent<MoleDigScript>();
         playerInput = GetComponent<PlayerInput>();
 
         //usingController = pauseScript.GetUsingController(); //Checks if using the controller
         // Debug.Log(playerInput.currentControlScheme);
+        
 
         switch (familiarEnums)
         {
@@ -73,6 +83,48 @@ public class InputManagerScript : MonoBehaviour
                 isOwl = false;
                 break;
         }
+    }
+
+    private void Update()
+    {
+        #region//MolePopUI
+        //*************************************************************************
+        //if (moleDigScript != null && (moleDigScript.isOnDigableLayer) && !hasFamiliarInvoke)
+        //{
+        //    //this is where I would put the ui being active and showing the button for digging
+        //    popUIForFamiliar.gameObject.SetActive(true);
+        //    popUIForFamiliar.gameObject.transform.GetComponentInChildren<TMP_Text>().
+        //        SetText(playerInput.actions["MoleFamiliarInteract"].GetBindingDisplayString());
+
+        //    hasFamiliarInvoke = true;
+           
+        //}
+
+        //else if (moleDigScript != null && (!moleDigScript.isOnDigableLayer) && hasFamiliarInvoke)
+        //{
+        //    //this is where I would probably have it turned off when it leaves the layer
+        //    popUIForFamiliar.gameObject.SetActive(false);
+        //    hasFamiliarInvoke = false;
+        //}
+
+        //if ((moleDigScript != null && (moleDigScript.startedToDig) && !hasFamiliarInvoke2))
+        //{
+        //    Debug.Log("this should turn on");
+        //    //for the familiar dig and wants to make a pillar
+        //    otherPopUIForFamiliar.gameObject.SetActive(true);
+        //    otherPopUIForFamiliar.gameObject.transform.GetComponentInChildren<TMP_Text>().
+        //    SetText(playerInput.actions["MoleAltFamiliarInteract"].GetBindingDisplayString());
+        //    hasFamiliarInvoke2 = true;
+        //}
+
+        //else if ((moleDigScript != null && (!moleDigScript.startedToDig) && hasFamiliarInvoke2))
+        //{
+        //    //this is where I would probably have it turned off when it undigs
+        //    otherPopUIForFamiliar.gameObject.SetActive(false);
+        //    hasFamiliarInvoke2 = false;
+        //}
+        //*************************************************************************
+        #endregion
     }
 
     public void ToggleControlScheme(bool isController)
@@ -120,6 +172,8 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnWeaverInteract(InputValue input)
     {
+        //pops up the ui if the bollean is true but for now not for the weave
+       
         if (input.isPressed)
         {
             if (weaveController.isWeaving)

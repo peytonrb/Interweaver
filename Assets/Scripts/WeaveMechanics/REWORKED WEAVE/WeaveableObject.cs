@@ -13,7 +13,7 @@ public class WeaveableObject : MonoBehaviour
     [SerializeField] private LayerMask weaveableLayers;
     [SerializeField] private float maxWeaveDistance = 25f;
     private bool isHovering = false;
-    [HideInInspector] public bool hasBeenCombined = false;
+    public bool hasBeenCombined = false;
     private bool combineFinished = false;
     public bool canBeMoved = true;
 
@@ -61,7 +61,7 @@ public class WeaveableObject : MonoBehaviour
             // floating islands have no targeting arrow
             weaveableObj = this.transform.GetChild(0).gameObject;
             originalMat = this.transform.GetChild(0).GetComponent<Renderer>().material;
-        }    
+        }
 
         // set snap points
         myTransformPoints = new Transform[6]; // can have a max of 6 transform points
@@ -113,7 +113,8 @@ public class WeaveableObject : MonoBehaviour
 
     private void OnDestroy()
     {
-        weaveController.OnDrop();
+        if (weaveController != null)
+            weaveController.OnDrop();
     }
 
     // weaveable moves in the direction of mouse position
@@ -211,7 +212,7 @@ public class WeaveableObject : MonoBehaviour
             else
             {
                 // move object with joystick movement
-                rb.velocity = rayDirection * 16f;
+                rb.velocity = rayDirection * 13f;
             }
 
             UnfreezeConstraints("position", 'y');
@@ -282,28 +283,32 @@ public class WeaveableObject : MonoBehaviour
     // combines object with active group of weaveables
     public void CombineObject()
     {
-        // set variables
-        hasBeenCombined = true;
-        FindSnapPoints();
-        objectToSnapTo.hasBeenCombined = true;
-
-        //check object move overrides to determine how the combined objects will move
-        switch (objectMoveOverride)
+        // if object has no snap points, do not combine
+        if (myTransformPoints.Length > 0)
         {
-            case ObjectMoveOverrides.ThisAlwaysMoves: // move this weavable 
-                StartCoroutine(MoveToPoint(this, objectToSnapTo));
-                StartCoroutine(BackUpForceSnap(this));
-                break;
+            // set variables
+            hasBeenCombined = true;
+            FindSnapPoints();
+            objectToSnapTo.hasBeenCombined = true;
 
-            case ObjectMoveOverrides.ThisNeverMoves:
-                StartCoroutine(MoveToPoint(objectToSnapTo, this));
-                StartCoroutine(BackUpForceSnap(objectToSnapTo));
-                break;
+            //check object move overrides to determine how the combined objects will move
+            switch (objectMoveOverride)
+            {
+                case ObjectMoveOverrides.ThisAlwaysMoves: // move this weavable 
+                    StartCoroutine(MoveToPoint(this, objectToSnapTo));
+                    StartCoroutine(BackUpForceSnap(this));
+                    break;
 
-            default: // move other weaveable
-                StartCoroutine(MoveToPoint(objectToSnapTo, this));
-                StartCoroutine(BackUpForceSnap(objectToSnapTo));
-                break;
+                case ObjectMoveOverrides.ThisNeverMoves:
+                    StartCoroutine(MoveToPoint(objectToSnapTo, this));
+                    StartCoroutine(BackUpForceSnap(objectToSnapTo));
+                    break;
+
+                default: // move other weaveable
+                    StartCoroutine(MoveToPoint(objectToSnapTo, this));
+                    StartCoroutine(BackUpForceSnap(objectToSnapTo));
+                    break;
+            }
         }
     }
 
@@ -393,7 +398,7 @@ public class WeaveableObject : MonoBehaviour
             timeSinceStarted += Time.deltaTime;
             movingObject.transform.position = Vector3.Lerp(movingObject.transform.position,
                                                           targetPos, timeSinceStarted);
-            
+
             if (Vector3.Distance(movingObject.transform.position, targetTransform.position) < 3f)
             {
                 movingObject.transform.position = targetTransform.position;
@@ -482,7 +487,7 @@ public class WeaveableObject : MonoBehaviour
         {
             returnValue = WeaveableManager.Instance.AddWeaveableToList(this);
         }
-            
+
         // AddWeaveableToList() returns a Vector2 to get both ints from the return value
         listIndex = (int)returnValue.x;
         ID = (int)returnValue.y;
@@ -513,7 +518,7 @@ public class WeaveableObject : MonoBehaviour
             listIndex = 0;
             ID = 0;
         }
-        
+
         if (targetingArrow != null) // for floating islands
             targetingArrow.SetActive(false);
 
