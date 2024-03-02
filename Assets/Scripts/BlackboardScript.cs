@@ -9,8 +9,9 @@ public class BlackboardScript : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera blackboardCamera;
     [SerializeField] private CinemachineBrain mainCamera;
     [SerializeField] private GameObject playerstuff;
+    public GameObject popupUIPrompt;
     private PlayerData playerdata;
-    [Tooltip ("If true, then you are currently staring at the blackboard, and blackboard functionality is on.")] public bool onBlackboard;
+    [HideInInspector] [Tooltip ("If true, then you are currently staring at the blackboard, and blackboard functionality is on.")] public bool onBlackboard;
     private int levelsCompleted;
 
     // Start is called before the first frame update
@@ -22,6 +23,7 @@ public class BlackboardScript : MonoBehaviour
         blackboardCamera.Priority = 0;
         onBlackboard = false;
         levelsCompleted = playerdata.GetLevelsCompleted();
+        popupUIPrompt.SetActive(false);
     }
 
     // Update is called once per frame
@@ -30,12 +32,27 @@ public class BlackboardScript : MonoBehaviour
 
     }
 
+    void OnTriggerEnter(Collider other) {
+        if (other.gameObject.CompareTag("Player")) {
+            popupUIPrompt.SetActive(true);
+        }
+    }
+
+    void OnTriggerExit(Collider other) {
+        if (other.gameObject.CompareTag("Player")) {
+            popupUIPrompt.SetActive(false);
+        }
+    }
+
     public void GoToFromBlackboard(MovementScript movementScript) {
         if (onBlackboard == false) {
             movementScript.ToggleCanLook(false);
             movementScript.ToggleCanMove(false);
             blackboardCamera.Priority = 2;
             StartCoroutine(WaitForBlendToFinish());
+            if (popupUIPrompt.activeSelf) {
+                popupUIPrompt.SetActive(false);
+            }
             onBlackboard = true;
         }
         else {
