@@ -25,6 +25,8 @@ public class DarknessMechanicScript : MonoBehaviour
 
     UnityEngine.Rendering.Universal.Vignette vignette;
 
+    public bool disableVignette;
+
     void Start()
     {
         if (canKillPlayer)
@@ -40,16 +42,26 @@ public class DarknessMechanicScript : MonoBehaviour
         if (!volumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
 
         if (!volumeProfile.TryGet(out vignette)) throw new System.NullReferenceException(nameof(vignette));
+
+        if (disableVignette)
+        {
+            vignette.intensity.Override(0f);
+        }
     }
 
     void Update()
     {
-        vignette.intensity.Override(vignetteCurve.Evaluate(countDown / 5));
+        if (!disableVignette)
+        {
+            vignette.intensity.Override(vignetteCurve.Evaluate(countDown / 6));
+        }
+        
 
         if (isSafe)
         {
-            countDown = Mathf.SmoothStep(lastCount, 0, t);
-            t += 0.5f * Time.deltaTime;
+            if (countDown > 0)
+                countDown -= Time.deltaTime * 2.2f;
+
         }
     }
 
@@ -63,7 +75,7 @@ public class DarknessMechanicScript : MonoBehaviour
             if (countDown > 1)
             {
                 //Debug.Log(countDown);
-                float shakeIntensity = shakeCurve.Evaluate(countDown / 5);
+                float shakeIntensity = shakeCurve.Evaluate(countDown / 6);
 
                 CameraMasterScript.instance.ShakeCurrentCamera(shakeIntensity, .2f, 0.1f);
 
