@@ -36,11 +36,11 @@ public class InputManagerScript : MonoBehaviour
     public PlayerInput playerInput;
     private MovementScript familiarMovement;
 
-    [SerializeField] private Image popUIForFamiliar;
-    [SerializeField] private Image otherPopUIForFamiliar;
+    [SerializeField] private Image popUIForFamiliarAbility;
+    [SerializeField] private Image popUIForFamiliarAltAbility;
 
-    [SerializeField] private Image popUIForWeaver;
-    [SerializeField] private Image popUIForWeaver2;
+    [SerializeField] private Image popUIForMovingWeve;
+    [SerializeField] private Image popUIForRotateWeave;
     private bool isMole, isOwl, isStag;
     public enum myEnums
     {
@@ -399,14 +399,14 @@ public class InputManagerScript : MonoBehaviour
     {
         if ((weaveController != null) && (weaveController.isWeaving) && !hasWeaverInvoke)
         {
-            popUIForWeaver.gameObject.SetActive(true);
+            popUIForMovingWeve.gameObject.SetActive(true);
 
-            popUIForWeaver2.gameObject.SetActive(true);
+            popUIForRotateWeave.gameObject.SetActive(true);
 
-            popUIForWeaver.gameObject.transform.GetComponentInChildren<TMP_Text>().
+            popUIForMovingWeve.gameObject.transform.GetComponentInChildren<TMP_Text>().
                 SetText(playerInput.actions["WeaverTargeting"].GetBindingDisplayString() + " to move the weaveables");
 
-            popUIForWeaver2.gameObject.transform.GetComponentInChildren<TMP_Text>().
+            popUIForRotateWeave.gameObject.transform.GetComponentInChildren<TMP_Text>().
                SetText(playerInput.actions["Rotate"].GetBindingDisplayString() + " to rotate the weaveables");
 
             hasWeaverInvoke = true;
@@ -414,8 +414,8 @@ public class InputManagerScript : MonoBehaviour
 
         else if ((!weaveController.isWeaving) && hasWeaverInvoke)
         {
-            popUIForWeaver.gameObject.SetActive(false);
-            popUIForWeaver2.gameObject.SetActive(false);
+            popUIForMovingWeve.gameObject.SetActive(false);
+            popUIForRotateWeave.gameObject.SetActive(false);
             hasWeaverInvoke = false;
         }
     }
@@ -426,8 +426,8 @@ public class InputManagerScript : MonoBehaviour
         if (moleDigScript != null && (moleDigScript.isOnDigableLayer) && !hasFamiliarInvoke)
         {
             //this is where I would put the ui being active and showing the button for digging
-            popUIForFamiliar.gameObject.SetActive(true);
-            popUIForFamiliar.gameObject.transform.GetComponentInChildren<TMP_Text>().
+            popUIForFamiliarAbility.gameObject.SetActive(true);
+            popUIForFamiliarAbility.gameObject.transform.GetComponentInChildren<TMP_Text>().
                 SetText(playerInput.actions["MoleFamiliarInteract"].GetBindingDisplayString() + " Dig/Interact");
 
             hasFamiliarInvoke = true;
@@ -437,7 +437,7 @@ public class InputManagerScript : MonoBehaviour
         else if (moleDigScript != null && (!moleDigScript.isOnDigableLayer) && hasFamiliarInvoke)
         {
             //this is where I would probably have it turned off when it leaves the layer
-            popUIForFamiliar.gameObject.SetActive(false);
+            popUIForFamiliarAbility.gameObject.SetActive(false);
             hasFamiliarInvoke = false;
         }
 
@@ -445,8 +445,8 @@ public class InputManagerScript : MonoBehaviour
         {
             Debug.Log("this should turn on");
             //for the familiar dig and wants to make a pillar
-            otherPopUIForFamiliar.gameObject.SetActive(true);
-            otherPopUIForFamiliar.gameObject.transform.GetComponentInChildren<TMP_Text>().
+            popUIForFamiliarAltAbility.gameObject.SetActive(true);
+            popUIForFamiliarAltAbility.gameObject.transform.GetComponentInChildren<TMP_Text>().
             SetText(playerInput.actions["MoleAltFamiliarInteract"].GetBindingDisplayString() + " to raise pillar");
             hasFamiliarInvoke2 = true;
         }
@@ -454,7 +454,7 @@ public class InputManagerScript : MonoBehaviour
         else if ((moleDigScript != null && (!moleDigScript.startedToDig) && hasFamiliarInvoke2))
         {
             //this is where I would probably have it turned off when it undigs
-            otherPopUIForFamiliar.gameObject.SetActive(false);
+            popUIForFamiliarAltAbility.gameObject.SetActive(false);
             hasFamiliarInvoke2 = false;
         }
 
@@ -462,11 +462,11 @@ public class InputManagerScript : MonoBehaviour
         #endregion
         #region//OwlPopUI
         //*************************************************************************
-        if ((!familiarMovement.isNearGround) && (!hasFamiliarInvoke) && (familiarMovement.active) && popUIForFamiliar != null)
+        if ((!familiarMovement.isNearGround) && (!hasFamiliarInvoke) && (familiarMovement.active) && popUIForFamiliarAbility != null)
         {
             //this is where I would put the ui being active and showing the button for digging
-            popUIForFamiliar.gameObject.SetActive(true);
-            popUIForFamiliar.gameObject.transform.GetComponentInChildren<TMP_Text>().
+            popUIForFamiliarAbility.gameObject.SetActive(true);
+            popUIForFamiliarAbility.gameObject.transform.GetComponentInChildren<TMP_Text>().
                 SetText(playerInput.actions["FamiliarInteract"].GetBindingDisplayString() + " to dive");
 
             hasFamiliarInvoke = true;
@@ -474,8 +474,8 @@ public class InputManagerScript : MonoBehaviour
 
         else if ((familiarMovement.isNearGround) && (hasFamiliarInvoke) || (!familiarMovement.active))
         {
-            if (popUIForFamiliar != null)
-            popUIForFamiliar.gameObject.SetActive(false); 
+            if (popUIForFamiliarAbility != null)
+                popUIForFamiliarAbility.gameObject.SetActive(false); 
             
             hasFamiliarInvoke = false;
         }
