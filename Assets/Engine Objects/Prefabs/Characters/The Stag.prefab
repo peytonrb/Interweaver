@@ -1611,7 +1611,7 @@ Transform:
   - {fileID: 2277790666478147513}
   - {fileID: 8802091841401120205}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &181293012379048751
 MeshFilter:
@@ -1643,7 +1643,7 @@ CharacterController:
   m_Height: 2.5
   m_Radius: 0.5
   m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_StepOffset: 0.5
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
@@ -1659,8 +1659,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d81c3474ba536648af37971310067f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canMove: 1
   canLook: 1
+  <canMove>k__BackingField: 1
   speed: 10
   freeMove: 0
   gravity: -25
@@ -1672,6 +1672,7 @@ MonoBehaviour:
   terminalVelocity: -50
   bounceVector: {x: 0, y: 1, z: 0}
   bounceValue: 3
+  isNearGround: 0
   characterAnimationHandler: {fileID: 2652947584446185567}
   timeToTurn: 0.1
   newDirection: {x: 0, y: 0, z: 0}
@@ -1683,6 +1684,9 @@ MonoBehaviour:
   owlGlideClip: {fileID: 8300000, guid: 4d89867d6ad72cb45affd75ee71c73f8, type: 3}
   owlDiveClip: {fileID: 8300000, guid: 440835242e5e14f489812588da29266e, type: 3}
   inCutscene: 0
+  dissolveMat: {fileID: 0}
+  materialHolder: {fileID: 0}
+  deathVFX: {fileID: 0}
 --- !u!114 &4702817493190882328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1701,6 +1705,7 @@ MonoBehaviour:
   familiarMovementAbility: 0
   talkingToNPC: 0
   possessionClip: {fileID: 8300000, guid: 35d1efb4e21c4de43943a2d88a81a63d, type: 3}
+  isDead: 0
   islandisfalling: 0
 --- !u!114 &8034669036731384007
 MonoBehaviour:
@@ -1743,14 +1748,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chargingJump: 0
-  jumpChargeTime: 3
-  maxJumpForce: 39.9
+  jumpChargeTime: 2
+  maxJumpForce: 28
   inititalSlamForce: -30
   slamGravity: -30
   canOnlySlamAfterLeap: 0
+  canSlam: 0
   maxSlamRadius: 5
   slamTime: 0.4
   postSlamStaggerTime: 0.6
+  isStaggered: 0
+  showSlamRadiusGizmo: 0
+  showMaxJumpHeightGizmo: 0
 --- !u!114 &183899957472724848
 MonoBehaviour:
   m_ObjectHideFlags: 0
