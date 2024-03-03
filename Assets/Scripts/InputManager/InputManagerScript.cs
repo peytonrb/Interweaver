@@ -252,13 +252,16 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnPossessFamiliar(InputValue input)
     {
+        
+
         //When we add the hub scene, we will put this line back in. This error was likely caused by the scene of that name not being part of the build settings.
         //&& SceneHandler.instance.currentSceneName != "Hub" has been causing issues in this if statement
         if (input.isPressed && !playerScript.isDead)
         {
-            if (currentSceneName == "AlpineCombined" || currentSceneName == "Cavern") {
-                PossessFamiliar();
-            }
+            PossessFamiliar();
+            //if (currentSceneName == "AlpineCombined" || currentSceneName == "Cavern") {
+            //    PossessFamiliar();
+            //}
             
         }
     }
@@ -271,6 +274,7 @@ public class InputManagerScript : MonoBehaviour
 
         if (!familiarScript.myTurn && !weaveController.isWeaving && playerCharacterController.isGrounded && !playerScript.inCutscene && canSwitch && !playerScript.talkingToNPC)
         {
+            Debug.Log("SDAFWASSF");
             playerScript.Possession();
             playerInput.SwitchCurrentActionMap("Familiar");
         }
@@ -280,9 +284,11 @@ public class InputManagerScript : MonoBehaviour
     {
         if ((input.isPressed) && (!familiarScript.isDead))
         {
-            if (currentSceneName == "AlpineCombined" || currentSceneName == "Cavern") {
-                PossessWeaver();
-            }
+            PossessWeaver();
+
+            //if (currentSceneName == "AlpineCombined" || currentSceneName == "Cavern") {
+            //    PossessWeaver();
+            //}
             
         }
     }
@@ -455,7 +461,7 @@ public class InputManagerScript : MonoBehaviour
         #endregion
         #region//OwlPopUI
         //*************************************************************************
-        if ((!familiarMovement.isNearGround) && (!hasFamiliarInvoke) && (familiarMovement.active))
+        if ((!familiarMovement.isNearGround) && (!hasFamiliarInvoke) && (familiarMovement.active) && popUIForFamiliar != null)
         {
             //this is where I would put the ui being active and showing the button for digging
             popUIForFamiliar.gameObject.SetActive(true);
@@ -467,7 +473,9 @@ public class InputManagerScript : MonoBehaviour
 
         else if ((familiarMovement.isNearGround) && (hasFamiliarInvoke) || (!familiarMovement.active))
         {
-            popUIForFamiliar.gameObject.SetActive(false);            
+            if (popUIForFamiliar != null)
+            popUIForFamiliar.gameObject.SetActive(false); 
+            
             hasFamiliarInvoke = false;
         }
         //*************************************************************************
