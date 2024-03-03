@@ -124,14 +124,17 @@ public class DialogueTriggers : MonoBehaviour
                 }
             case CharacterTriggerType.Weaver:
                 {
+  
                     if (collider.gameObject.tag == "Player")
                         AutoTrigger(collider);
+                    //this is where I would put the ui and the text element here
                     break;
                 }
             case CharacterTriggerType.Familiar:
                 {
                     if (collider.gameObject.tag == "Familiar")
                         AutoTrigger(collider);
+                    //this is where I would put the ui and the text element here
                     break;
                 }
         } 
@@ -141,7 +144,7 @@ public class DialogueTriggers : MonoBehaviour
     {
         if (triggerOnlyOnce && !triggered)
         {
-
+            //potentially get rid of if and else statement since inputmanager can auto detect
             if (InputManagerScript.instance.isGamepad)
             {
                 ControllerIndicator.SetActive(true);
@@ -165,6 +168,7 @@ public class DialogueTriggers : MonoBehaviour
 
         if (!triggerOnlyOnce)
         {
+            //potentially get rid of this if and else statement since the input manager can autodetect
             if (InputManagerScript.instance.isGamepad)
             {
                 ControllerIndicator.SetActive(true);
@@ -209,7 +213,7 @@ public class DialogueTriggers : MonoBehaviour
     {
         if (isAutoTrigger && isInteracting) // if actively within an event trigger
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E)) //will need to completely change this to get the input from the input manager
             {
                 DialogueManager.instance.DisplayNextSentence();
             }
