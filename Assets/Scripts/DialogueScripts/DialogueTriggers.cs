@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class DialogueTriggers : MonoBehaviour
 {
     [Header("Required")]
     public Dialogue dialogue;
     public GameObject textBox;
-    public GameObject ControllerIndicator;
-    public GameObject KeyboardIndicator;
+    public GameObject weaverInteraction;
+    public GameObject familiarInteraction;
 
     [Header("Optional")]
     public bool isAutoTrigger = false;
@@ -33,7 +36,7 @@ public class DialogueTriggers : MonoBehaviour
     // is called if near an NPC 
     public void TriggerDialogue(MovementScript movementScript)
     {
-        switch(type)
+        switch (type)
         {
             case CharacterTriggerType.bothChars:
                 {
@@ -46,7 +49,7 @@ public class DialogueTriggers : MonoBehaviour
                     {
                         StartDialogueFromInteraction(movementScript);
                     }
-                        break;
+                    break;
                 }
             case CharacterTriggerType.Familiar:
                 {
@@ -58,8 +61,8 @@ public class DialogueTriggers : MonoBehaviour
                 }
         }
 
-        
-        
+
+
     }
 
     private void StartDialogueFromInteraction(MovementScript movementScript)
@@ -114,7 +117,7 @@ public class DialogueTriggers : MonoBehaviour
     // occurs only with Event Triggers
     public void OnTriggerEnter(Collider collider)
     {
-        switch(type)
+        switch (type)
         {
             case CharacterTriggerType.bothChars:
                 {
@@ -124,9 +127,12 @@ public class DialogueTriggers : MonoBehaviour
                 }
             case CharacterTriggerType.Weaver:
                 {
-  
+
                     if (collider.gameObject.tag == "Player")
                         AutoTrigger(collider);
+                    weaverInteraction.SetActive(true);
+                    weaverInteraction.gameObject.transform.GetComponentInChildren<TMP_Text>().SetText(
+                        InputManagerScript.instance.playerInput.actions["NPCInteraction"].GetBindingDisplayString() + " Interact");
                     //this is where I would put the ui and the text element here
                     break;
                 }
@@ -134,25 +140,20 @@ public class DialogueTriggers : MonoBehaviour
                 {
                     if (collider.gameObject.tag == "Familiar")
                         AutoTrigger(collider);
+                    familiarInteraction.SetActive(true);
+                    familiarInteraction.gameObject.transform.GetComponentInChildren<TMP_Text>().SetText(
+                        InputManagerScript.instance.playerInput.actions["NPCInteraction"].GetBindingDisplayString() + " Interact");
                     //this is where I would put the ui and the text element here
                     break;
                 }
-        } 
+        }
     }
 
     private void AutoTrigger(Collider collider)
     {
         if (triggerOnlyOnce && !triggered)
         {
-            //potentially get rid of if and else statement since inputmanager can auto detect
-            if (InputManagerScript.instance.isGamepad)
-            {
-                ControllerIndicator.SetActive(true);
-            }
-            else
-            {
-                KeyboardIndicator.SetActive(true);
-            }
+
 
             if (isAutoTrigger)
             {
@@ -168,15 +169,6 @@ public class DialogueTriggers : MonoBehaviour
 
         if (!triggerOnlyOnce)
         {
-            //potentially get rid of this if and else statement since the input manager can autodetect
-            if (InputManagerScript.instance.isGamepad)
-            {
-                ControllerIndicator.SetActive(true);
-            }
-            else
-            {
-                KeyboardIndicator.SetActive(true);
-            }
 
             if (isAutoTrigger)
             {
@@ -199,11 +191,13 @@ public class DialogueTriggers : MonoBehaviour
             if (isAutoTrigger)
             {
                 DialogueManager.instance.EndDialogue();
+                weaverInteraction.SetActive(false);
+                familiarInteraction.SetActive(false);
             }
             else
             {
-                ControllerIndicator.SetActive(false);
-                KeyboardIndicator.SetActive(false);
+                weaverInteraction.SetActive(false);
+                familiarInteraction.SetActive(false);
             }
 
         }
