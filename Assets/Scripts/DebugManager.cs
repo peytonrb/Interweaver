@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class DebugManager : MonoBehaviour
@@ -94,6 +93,16 @@ public class DebugManager : MonoBehaviour
                 UpdateCameraOnPriority(cms.weaverCameraOnPriority,cms.familiarCameraOnPriority);
                 UpdateCurrentCheckpoint(gms.WeaverCheckPointNum,gms.FamiliarCheckPointNum);
                 UpdatePositions(weaver.transform,familiar.transform);
+
+                if (Input.GetKeyDown(KeyCode.Z)) {
+                    PlayerData.instance.SaveGame();
+                }
+                if (Input.GetKeyDown(KeyCode.X)) {
+                    PlayerData.instance.LoadGame();
+                }
+                if (Input.GetKeyDown(KeyCode.C)) {
+                    PlayerData.instance.NewGame();
+                }
             }
             //Toggle Debug UI
             if (Input.GetKeyDown(KeyCode.BackQuote)) {
