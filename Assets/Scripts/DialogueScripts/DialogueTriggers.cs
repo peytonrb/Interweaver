@@ -203,14 +203,15 @@ public class DialogueTriggers : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if (isAutoTrigger && isInteracting) // if actively within an event trigger
-        {
-            if (Input.GetKeyDown(KeyCode.E)) //will need to completely change this to get the input from the input manager
-            {
-                DialogueManager.instance.DisplayNextSentence();
-            }
-        }
-    }
+    //void Update()
+    //{
+    //    if (isAutoTrigger && isInteracting) // if actively within an event trigger
+    //    {
+    //        if (InputManagerScript.instance.playerInput.actions["NPCInteraction"].IsPressed()) //will need to completely change this to get the input from the input manager
+    //        {
+    //            Debug.Log("what the fuck am I dong and why is this happening every frame");
+    //            //DialogueManager.instance.DisplayNextSentence();
+    //        }
+    //    }
+    //}
 }

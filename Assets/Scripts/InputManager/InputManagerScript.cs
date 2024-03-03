@@ -305,7 +305,7 @@ public class InputManagerScript : MonoBehaviour
 
     #endregion//******************************************************
 
-    //Both Characters
+    #region//Both Characters
     //******************************************************
     public void OnPause(InputValue input)
     {
@@ -359,12 +359,14 @@ public class InputManagerScript : MonoBehaviour
             {
                 NPCInteractionScript npcInteractScript = familiar.GetComponent<NPCInteractionScript>();
                 npcInteractScript.Interact();
+                DialogueManager.instance.DisplayNextSentence();
                 Debug.Log("Interacting Familiar");
             }
             else
             {
                 NPCInteractionScript npcInteractScript = player.GetComponent<NPCInteractionScript>();
                 npcInteractScript.Interact();
+                DialogueManager.instance.DisplayNextSentence();
                 Debug.Log("Interacting Weaver");
             }
         }
@@ -391,7 +393,7 @@ public class InputManagerScript : MonoBehaviour
     }
 
     //******************************************************
-
+    #endregion
 
     private void WeaverUI()
     {
