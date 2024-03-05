@@ -175,16 +175,17 @@ public class WeaveController : MonoBehaviour
 
         movementScript.freeMove = false; // returns weaver to needing to be facing where they're moving
         weaveFXScript.DisableWeave();
-        StartCoroutine(EndWeaveAudio());
 
         // if this is the only weaveable in the list (weaveables are added on combine)
         if (currentWeaveable != null && !currentWeaveable.hasBeenCombined)
         {
+            StartCoroutine(EndWeaveAudio());
             currentWeaveable.ResetWeaveable();
             WeaveableManager.Instance.RemoveWeaveableFromList(0, 0);
         }
         else if (currentWeaveable != null)
         {
+            StartCoroutine(EndWeaveAudio());
             if (WeaveableManager.Instance.combinedWeaveables.Count > 0 && WeaveableManager.Instance.combinedWeaveables[currentWeaveable.listIndex] != null)
             {
                 for (int i = 0; i < WeaveableManager.Instance.combinedWeaveables[currentWeaveable.listIndex].weaveableObjectGroup.Count; i++)

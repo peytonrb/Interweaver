@@ -25,6 +25,7 @@ public class CameraMasterScript : MonoBehaviour
     public List<GameObject> familiarCameras = new List<GameObject>();
     private int familiarCamerasTriggeredSinceLastCheckpoint;
     [HideInInspector] public int lastFamiliarCameraTriggered;
+    private MolePillarScript molePillarScript;
 
     private int weaverVcamListLength;
     private int familiarVcamListLength;
@@ -43,6 +44,7 @@ public class CameraMasterScript : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        molePillarScript = FindObjectOfType<MolePillarScript>().GetComponent<MolePillarScript>();
     }
 
     public void ShakeCurrentCamera(float intensity, float freq, float time)
@@ -282,11 +284,13 @@ public class CameraMasterScript : MonoBehaviour
                 {
                     CinemachineVirtualCamera previousvcam = familiarCameras[i].GetComponent<CinemachineVirtualCamera>();
                     previousvcam.Priority = 0;
+                    molePillarScript.familiarCamera = previousvcam;
                     if (i < familiarVcamListLength - 1) 
                     {
                         CinemachineVirtualCamera nextvcam = familiarCameras[i+1].GetComponent<CinemachineVirtualCamera>();
                         nextvcam.Priority = 1;
                         familiarCameraOnPriority = i+1;
+                        molePillarScript.familiarCamera = nextvcam;
                     }
 
                     else 
@@ -294,6 +298,7 @@ public class CameraMasterScript : MonoBehaviour
                         CinemachineVirtualCamera firstvcam = familiarCameras[0].GetComponent<CinemachineVirtualCamera>();
                         firstvcam.Priority = 1;
                         familiarCameraOnPriority = 0;
+                        molePillarScript.familiarCamera = firstvcam;
                     }
                     
                     cis.triggered = true;
@@ -314,17 +319,20 @@ public class CameraMasterScript : MonoBehaviour
                 {
                     CinemachineVirtualCamera previousvcam = familiarCameras[i].GetComponent<CinemachineVirtualCamera>();
                     previousvcam.Priority = 1;
+                    molePillarScript.familiarCamera = previousvcam;
 
                     if (i < familiarVcamListLength - 1) 
                     {
                         CinemachineVirtualCamera nextvcam = familiarCameras[i+1].GetComponent<CinemachineVirtualCamera>();
                         nextvcam.Priority = 0;
+                        molePillarScript.familiarCamera = nextvcam;
                     }
 
                     else 
                     {
                         CinemachineVirtualCamera firstvcam = familiarCameras[0].GetComponent<CinemachineVirtualCamera>();
                         firstvcam.Priority = 0;
+                        molePillarScript.familiarCamera = firstvcam;
                     }
                     
                     cis.triggered = false;

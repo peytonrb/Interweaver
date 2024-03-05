@@ -37,7 +37,8 @@ public class WeaveFXScript : MonoBehaviour
 
     public void DisableWeave()
     {
-        weaveRenderer.gameObject.SetActive(false);
+        if (weaveRenderer != null)
+            weaveRenderer.gameObject.SetActive(false);
     }
 
     public void ActivateWeave(Transform weaveablePos)

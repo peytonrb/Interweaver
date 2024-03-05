@@ -16,6 +16,7 @@ public class FocusingCrystalScript : MonoBehaviour
         beamEffect = this.gameObject.GetComponent<VisualEffect>();
         lightCollider = this.gameObject.GetComponent<CapsuleCollider>();
         spotLight = this.transform.GetChild(0).GetComponent<Light>();
+        spotLight.gameObject.SetActive(false);
         spotLight.range = 0f;
     }
 
@@ -44,6 +45,10 @@ public class FocusingCrystalScript : MonoBehaviour
                 Vector3 hitPosition = hit.point;
                 beamHitObj = hit.collider.gameObject;
                 float distance = Vector3.Distance(spawnPoint, hitPosition);
+
+                if (!spotLight.gameObject.activeSelf)
+                    spotLight.gameObject.SetActive(true);
+
                 spotLight.range = distance + 0.2f;
                 distance /= 1.35f; // man idk. it works tho.
 
@@ -62,6 +67,7 @@ public class FocusingCrystalScript : MonoBehaviour
             center.z = 0;
             lightCollider.center = center;
             lightCollider.height = 4f;
+            spotLight.gameObject.SetActive(false);
             spotLight.range = 0f;
         }
     }
@@ -71,7 +77,8 @@ public class FocusingCrystalScript : MonoBehaviour
         // if beam hits crystal
         if (collider.gameObject.tag == "Weaveable" && collider.GetComponent<LightCrystalScript>() != null)
         {
-            if (!LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn)
+            if (!LightSourceScript.Instance.lightsArray[collider.GetComponent<LightCrystalScript>().arrayIndex].isOn &&
+                this.transform.parent.transform.parent.GetComponent<LightCrystalScript>().isActive)
             {
                 // is beam actually hitting crystal
                 if (collider.GetComponent<LightCrystalScript>() != null)
@@ -93,7 +100,7 @@ public class FocusingCrystalScript : MonoBehaviour
         }
 
         if (collider.GetComponent<LightCrystalScript>() && collider.GetComponent<LightCrystalScript>().isFocusingCrystal 
-            && !collider.GetComponent<LightCrystalScript>().isActive)
+            && !collider.GetComponent<LightCrystalScript>().isActive && this.transform.parent.transform.parent.GetComponent<LightCrystalScript>().isActive)
         {
             collider.GetComponent<LightCrystalScript>().isActive = true;
         }
