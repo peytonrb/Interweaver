@@ -33,6 +33,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip titleMusic;
     [SerializeField] private AudioClip alpineMusic;
     [SerializeField] private AudioClip cavernMusic;
+
+    [Header("SFX")]
+    [SerializeField] private List<AudioClip> soundEffects = new List<AudioClip>();  
    
 
     void Awake()
@@ -312,5 +315,44 @@ public class AudioManager : MonoBehaviour
             }
             musicLayers.Add(musicLayer);
         }
+    }
+
+    public AudioSource AddSFX(AudioClip newSFX, bool loop, AudioSource lastInstanceToKill)
+    {
+        if (lastInstanceToKill)
+        {
+            KillAudioSource(lastInstanceToKill);
+        }
+        else
+        {
+            Debug.LogWarning("No instance to kill");
+        }
+        if (newSFX != null)
+        {
+            AudioSource sfx = gameObject.AddComponent(typeof (AudioSource)) as AudioSource;
+            sfx.clip = newSFX;
+            sfx.Play();
+            sfx.outputAudioMixerGroup = soundeffectChannel.outputAudioMixerGroup;
+            if (loop)
+            {
+                sfx.loop = true;
+            }
+            return sfx;
+        }
+        else
+        {
+            Debug.LogWarning("No new sfx");
+            return null;
+        }
+    }
+
+    public AudioSource KillAudioSource(AudioSource audioSource)
+    {
+        if (audioSource)
+        {
+            Debug.Log("Killed " + audioSource + " that was playing " + audioSource.clip.name);
+            Destroy(audioSource);
+        }
+        return null;
     }
 }
