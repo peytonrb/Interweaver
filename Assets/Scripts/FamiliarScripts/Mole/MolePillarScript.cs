@@ -105,7 +105,7 @@ public class MolePillarScript : MonoBehaviour
                 distance = Vector3.Distance(pillarToRaise.transform.position, pointToRiseTo);
                 if (!pillarRising) // right as we start things off
                 {
-                    //pillarBuildAudioSource = audioManager.AddSFX(pillarBuildSound, true, pillarBuildAudioSource);
+                    pillarBuildAudioSource = audioManager.AddSFX(pillarBuildSound, true, pillarBuildAudioSource);
                     pillarLowering = false;
                     movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
                     movementScript.enabled = false; // disable player movement
@@ -145,7 +145,7 @@ public class MolePillarScript : MonoBehaviour
                 }
                 if (!pillarLowering) // right as we start things off
                 {
-                    //pillarBuildAudioSource = audioManager.AddSFX(pillarBuildSound, true, pillarBuildAudioSource);
+                    pillarBuildAudioSource = audioManager.AddSFX(pillarBuildSound, true, pillarBuildAudioSource);
                     movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
                     movementScript.enabled = false; // disable player movement
                     pillarLowering = true;
@@ -163,7 +163,7 @@ public class MolePillarScript : MonoBehaviour
 
     public void PillarRiseEnd()
     {
-        //pillarBuildAudioSource = audioManager.KillAudioSource(pillarBuildAudioSource);
+        pillarBuildAudioSource = audioManager.KillAudioSource(pillarBuildAudioSource);
         if (moleDigScript.startedToDig)
         {
             movementScript.enabled = true;
@@ -175,7 +175,7 @@ public class MolePillarScript : MonoBehaviour
 
     public void PillarLowerEnd()
     {
-        //pillarBuildAudioSource = audioManager.KillAudioSource(pillarBuildAudioSource);
+        pillarBuildAudioSource = audioManager.KillAudioSource(pillarBuildAudioSource);
         if (moleDigScript.startedToDig)
         {
             movementScript.enabled = true;

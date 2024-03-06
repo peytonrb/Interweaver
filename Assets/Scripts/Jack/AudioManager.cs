@@ -297,6 +297,10 @@ public class AudioManager : MonoBehaviour
 
     public void ClearMusicLayers()
     {
+        foreach (AudioSource musicLayer in musicLayers)
+        {
+            Destroy(musicLayer);
+        }
         musicLayers.Clear();
     }
 
@@ -325,7 +329,7 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("No instance to kill");
+            Debug.LogWarning("No audio source instance to kill");
         }
         if (newSFX != null)
         {
