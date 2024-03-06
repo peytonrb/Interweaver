@@ -47,7 +47,8 @@ public class RippleEffect : MonoBehaviour
                     psFollowPlayer.gameObject.SetActive(true);
                 }
 
-                psFollowPlayer.transform.position = new Vector3(collider.transform.position.x, collider.transform.position.y - 2f, collider.transform.position.z);
+                psFollowPlayer.transform.position = new Vector3(collider.transform.position.x, collider.transform.position.y - 1f, collider.transform.position.z);
+                //StartCoroutine(WaitForPS(collider));
             }
             else
             {

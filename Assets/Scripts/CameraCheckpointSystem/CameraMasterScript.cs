@@ -46,7 +46,6 @@ public class CameraMasterScript : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        molePillarScript = FindObjectOfType<MolePillarScript>().GetComponent<MolePillarScript>();
     }
 
     public void ShakeCurrentCamera(float intensity, float freq, float time)
@@ -118,6 +117,11 @@ public class CameraMasterScript : MonoBehaviour
         weaverCameraOnPriority = 0;
         familiarCameraOnPriority = 0;
 
+
+        if (InputManagerScript.instance.familiarEnums.Equals(InputManagerScript.myEnums.Mole))
+        {
+            molePillarScript = FindObjectOfType<MolePillarScript>().GetComponent<MolePillarScript>();
+        }
     }
 
     #region//WEAVER CAMERAS

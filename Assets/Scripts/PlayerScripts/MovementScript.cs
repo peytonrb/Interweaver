@@ -20,7 +20,7 @@ public class MovementScript : MonoBehaviour
     [HideInInspector] public float currentSpeed {get;  private set;} // the current speed for the player
     private bool turning;
     [HideInInspector] public bool freeMove; // bases movement off input rather than direction 
-    private CharacterController characterController; //references the character controller component
+    private CharacterController characterController; //references the character controller component  
     private Vector2 movement; //Vector2 regarding movement, which is set to track from moveInput's Vector2
     private Vector3 direction; //A reference to the directional movement of the player in 3D space
     private Vector3 velocity; // velocity of the controller
@@ -42,7 +42,7 @@ public class MovementScript : MonoBehaviour
     private float originalTerminalVelocity; // original terminal velocity of the controller
     public Vector3 bounceVector; //max velocity for bounce
     public float bounceValue = 3;
-    private bool isNearGround;
+    [HideInInspector] public bool isNearGround;
     private bool debugisOn;
 
     //private bool bouncing = false;
@@ -227,6 +227,7 @@ public class MovementScript : MonoBehaviour
 
                     if (characterController.isGrounded)
                     {
+                        isNearGround = true;
                         //Play footstep Audio!
                         if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon))
                         {
@@ -277,6 +278,7 @@ public class MovementScript : MonoBehaviour
                 //Character gravity
                 if (!characterController.isGrounded)
                 {
+                    isNearGround = false;
                     characterAnimationHandler.ToggleFallAnim(true);
                     if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon) && !AudioManager.instance.fallChannel.isPlaying && canPlayFallAudio)
                     {

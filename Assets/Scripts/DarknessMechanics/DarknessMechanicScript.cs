@@ -12,6 +12,7 @@ public class DarknessMechanicScript : MonoBehaviour
     [Range(0, 14)] private float countDown;
     public float deathTime = 5f;
     public bool isSafe;
+    public bool canKillPlayer = true;
     private bool hasInvoked;
 
     private float lastCount;
@@ -24,9 +25,15 @@ public class DarknessMechanicScript : MonoBehaviour
 
     UnityEngine.Rendering.Universal.Vignette vignette;
 
+    public bool disableVignette;
+
     void Start()
     {
-        isSafe = false;
+        if (canKillPlayer)
+            isSafe = false;
+        else
+            isSafe = true;
+
         hasInvoked = false;
         countDown = 0f;
         StartCoroutine(DarknessTimer());
@@ -35,16 +42,26 @@ public class DarknessMechanicScript : MonoBehaviour
         if (!volumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
 
         if (!volumeProfile.TryGet(out vignette)) throw new System.NullReferenceException(nameof(vignette));
+
+        if (disableVignette)
+        {
+            vignette.intensity.Override(0f);
+        }
     }
 
     void Update()
     {
-        vignette.intensity.Override(vignetteCurve.Evaluate(countDown / 5));
+        if (!disableVignette)
+        {
+            vignette.intensity.Override(vignetteCurve.Evaluate(countDown / 6));
+        }
+        
 
         if (isSafe)
         {
-            countDown = Mathf.SmoothStep(lastCount, 0, t);
-            t += 0.5f * Time.deltaTime;
+            if (countDown > 0)
+                countDown -= Time.deltaTime * 2.2f;
+
         }
     }
 
@@ -58,7 +75,7 @@ public class DarknessMechanicScript : MonoBehaviour
             if (countDown > 1)
             {
                 //Debug.Log(countDown);
-                float shakeIntensity = shakeCurve.Evaluate(countDown / 5);
+                float shakeIntensity = shakeCurve.Evaluate(countDown / 6);
 
                 CameraMasterScript.instance.ShakeCurrentCamera(shakeIntensity, .2f, 0.1f);
 
@@ -82,19 +99,25 @@ public class DarknessMechanicScript : MonoBehaviour
             hasInvoked = true;
             Debug.Log("player is now safe");
         }
-       
+
     }
 
     public void PlayerIsNotSafe()
     {
-        isSafe = false;
-        if ((!isSafe) && (hasInvoked))
+        if (canKillPlayer)
         {
-            StartCoroutine(DarknessTimer());
-            hasInvoked = false;
-            Debug.Log("player is now not safe");
+            isSafe = false;
+            if ((!isSafe) && (hasInvoked))
+            {
+                StartCoroutine(DarknessTimer());
+                hasInvoked = false;
+                Debug.Log("player is now not safe");
+            }
         }
-        
+        else
+        {
+            isSafe = true;
+        }
     }
 
     private void OnTriggerStay(Collider other)

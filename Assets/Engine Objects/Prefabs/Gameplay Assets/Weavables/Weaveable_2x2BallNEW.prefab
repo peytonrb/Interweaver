@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 4910005004653783423}
   m_Layer: 6
   m_Name: Sphere
-  m_TagString: Weaveable
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -326,9 +326,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2583984905814059342}
-  - component: {fileID: 3107663957816731202}
   - component: {fileID: 6237989117769592163}
-  - component: {fileID: 686057046175204151}
+  - component: {fileID: 3387651775083286851}
+  - component: {fileID: 3538320512734681635}
   m_Layer: 6
   m_Name: Weaveable_2x2BallNEW
   m_TagString: Weaveable
@@ -352,62 +352,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3107663957816731202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4699961208595689080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afb9d456079c05c4dbbecf85046314bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 6237989117769592163}
-  hoveringValue: 1
-  layersToHit:
-    serializedVersion: 2
-    m_Bits: 8384
-  layersToHitController:
-    serializedVersion: 2
-    m_Bits: 64
-  weaveInteraction: {fileID: 0}
-  alwaysMovesWhenWoven: 0
-  neverMovesWhenWoven: 0
-  ID: 1
-  canRotate: 0
-  canCombine: 1
-  isWoven: 0
-  isHovering: 0
-  rotationSpeed: 0.5
-  canBeRelocated: 1
-  TargetingArrow: {fileID: 8726894183081665596}
-  isParent: 0
-  parentWeaveable: {fileID: 0}
-  myTransformPoints:
-  - {fileID: 3186787576018838860}
-  - {fileID: 6559688654637796369}
-  - {fileID: 6174936221538638016}
-  - {fileID: 148412308930217481}
-  - {fileID: 3431726753053853479}
-  - {fileID: 5223925767578921055}
-  nearestPoint: {fileID: 0}
-  myNearestPoint: {fileID: 0}
-  snapDistance: 0
-  nearestDistance: 50
-  targetTransform: {fileID: 0}
-  weaveableObj: {fileID: 1382899349896638687}
-  originalMat: {fileID: 0}
-  isCombined: 0
-  startPos: {x: 0, y: 0, z: 0}
-  startRot: {x: 0, y: 0, z: 0, w: 0}
-  inputs: {fileID: -944628639613478452, guid: 5a7f95395977bf84c88572094976470f, type: 3}
-  weaveableScript: {fileID: 0}
-  wovenObjects: []
-  player: {fileID: 0}
-  dayblockPuzzle: {fileID: 0}
-  rotateClip: {fileID: 8300000, guid: da607bdb707b41841a6006dad2f8a3e4, type: 3}
 --- !u!54 &6237989117769592163
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -416,7 +360,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4699961208595689080}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -434,8 +378,38 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!135 &686057046175204151
+  m_CollisionDetection: 1
+--- !u!114 &3387651775083286851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4699961208595689080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0da983b286f933469896c0c67a0cc43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isBeingWoven: 0
+  hoverHeight: 2
+  objectMoveOverride: 0
+  weaveableLayers:
+    serializedVersion: 2
+    m_Bits: 270528
+  maxWeaveDistance: 25
+  hasBeenCombined: 0
+  canBeMoved: 1
+  myTransformPoints: []
+  activeSnapPoint: {fileID: 0}
+  objectToSnapTo: {fileID: 0}
+  weaveInteraction: {fileID: 0}
+  listIndex: 0
+  ID: 0
+  weaveController: {fileID: 0}
+  targetingArrow: {fileID: 0}
+  originalMat: {fileID: 0}
+--- !u!135 &3538320512734681635
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

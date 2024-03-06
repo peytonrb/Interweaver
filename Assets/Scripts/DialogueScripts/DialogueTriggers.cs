@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class DialogueTriggers : MonoBehaviour
 {
     [Header("Required")]
     public Dialogue dialogue;
     public GameObject textBox;
-    public GameObject ControllerIndicator;
-    public GameObject KeyboardIndicator;
+    public GameObject weaverInteraction;
+    public GameObject familiarInteraction;
 
     [Header("Optional")]
     public bool isAutoTrigger = false;
@@ -33,7 +36,7 @@ public class DialogueTriggers : MonoBehaviour
     // is called if near an NPC 
     public void TriggerDialogue(MovementScript movementScript)
     {
-        switch(type)
+        switch (type)
         {
             case CharacterTriggerType.bothChars:
                 {
@@ -46,7 +49,7 @@ public class DialogueTriggers : MonoBehaviour
                     {
                         StartDialogueFromInteraction(movementScript);
                     }
-                        break;
+                    break;
                 }
             case CharacterTriggerType.Familiar:
                 {
@@ -58,8 +61,8 @@ public class DialogueTriggers : MonoBehaviour
                 }
         }
 
-        
-        
+
+
     }
 
     private void StartDialogueFromInteraction(MovementScript movementScript)
@@ -114,7 +117,7 @@ public class DialogueTriggers : MonoBehaviour
     // occurs only with Event Triggers
     public void OnTriggerEnter(Collider collider)
     {
-        switch(type)
+        switch (type)
         {
             case CharacterTriggerType.bothChars:
                 {
@@ -124,17 +127,26 @@ public class DialogueTriggers : MonoBehaviour
                 }
             case CharacterTriggerType.Weaver:
                 {
+
                     if (collider.gameObject.tag == "Player")
                         AutoTrigger(collider);
+                    weaverInteraction.SetActive(true);
+                    weaverInteraction.gameObject.transform.GetComponentInChildren<TMP_Text>().SetText(
+                        InputManagerScript.instance.playerInput.actions["NPCInteraction"].GetBindingDisplayString() + " Interact");
+                    //this is where I would put the ui and the text element here
                     break;
                 }
             case CharacterTriggerType.Familiar:
                 {
                     if (collider.gameObject.tag == "Familiar")
                         AutoTrigger(collider);
+                    familiarInteraction.SetActive(true);
+                    familiarInteraction.gameObject.transform.GetComponentInChildren<TMP_Text>().SetText(
+                        InputManagerScript.instance.playerInput.actions["NPCInteraction"].GetBindingDisplayString() + " Interact");
+                    //this is where I would put the ui and the text element here
                     break;
                 }
-        } 
+        }
     }
 
     private void AutoTrigger(Collider collider)
@@ -142,14 +154,6 @@ public class DialogueTriggers : MonoBehaviour
         if (triggerOnlyOnce && !triggered)
         {
 
-            if (InputManagerScript.instance.isGamepad)
-            {
-                ControllerIndicator.SetActive(true);
-            }
-            else
-            {
-                KeyboardIndicator.SetActive(true);
-            }
 
             if (isAutoTrigger)
             {
@@ -165,14 +169,6 @@ public class DialogueTriggers : MonoBehaviour
 
         if (!triggerOnlyOnce)
         {
-            if (InputManagerScript.instance.isGamepad)
-            {
-                ControllerIndicator.SetActive(true);
-            }
-            else
-            {
-                KeyboardIndicator.SetActive(true);
-            }
 
             if (isAutoTrigger)
             {
@@ -195,24 +191,27 @@ public class DialogueTriggers : MonoBehaviour
             if (isAutoTrigger)
             {
                 DialogueManager.instance.EndDialogue();
+                weaverInteraction.SetActive(false);
+                familiarInteraction.SetActive(false);
             }
             else
             {
-                ControllerIndicator.SetActive(false);
-                KeyboardIndicator.SetActive(false);
+                weaverInteraction.SetActive(false);
+                familiarInteraction.SetActive(false);
             }
 
         }
     }
 
-    void Update()
-    {
-        if (isAutoTrigger && isInteracting) // if actively within an event trigger
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                DialogueManager.instance.DisplayNextSentence();
-            }
-        }
-    }
+    //void Update()
+    //{
+    //    if (isAutoTrigger && isInteracting) // if actively within an event trigger
+    //    {
+    //        if (InputManagerScript.instance.playerInput.actions["NPCInteraction"].IsPressed()) //will need to completely change this to get the input from the input manager
+    //        {
+    //            Debug.Log("what the fuck am I dong and why is this happening every frame");
+    //            //DialogueManager.instance.DisplayNextSentence();
+    //        }
+    //    }
+    //}
 }
