@@ -62,16 +62,22 @@ public class CameraMasterScript : MonoBehaviour
             shaker = currentCam.AddComponent<CinemachineShake>();
             shaker.AssignMyVirtualCamera();
             currentCam.AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_NoiseProfile = wobbleNoise;
-            //currentCam.GetComponent<CinemachineBasicMultiChannelPerlin>().m_NoiseProfile = wobbleNoise;
             shaker.ShakeCamera(intensity, freq, time);
         }
-        shaker.ShakeCamera(intensity, freq, time);
+        else
+        {
+            shaker.AssignMyVirtualCamera();
+            currentCam.AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_NoiseProfile = wobbleNoise;
+            shaker.ShakeCamera(intensity, freq, time);
+        }
+        
     }
 
     public void StopCurrentCameraShake()
     {
         if (currentCam.TryGetComponent<CinemachineShake>(out CinemachineShake shaker))
         {
+            shaker.AssignMyVirtualCamera();
             shaker.DepleteTimer();
         }
     }
@@ -229,6 +235,7 @@ public class CameraMasterScript : MonoBehaviour
         CinemachineVirtualCamera familiarvcam = familiarCameras[familiarCameraOnPriority].GetComponent<CinemachineVirtualCamera>();
         familiarvcam.Priority = 1;
         currentCam = familiarvcam;
+        StopCurrentCameraShake();
     }
 
     public void SwitchToWeaverCamera() {

@@ -42,7 +42,6 @@ public class CinemachineShake : MonoBehaviour
     {
         if (shakeTimer > 0)
         {
-            Debug.Log("AAAAAAAAAAAAAAAAA");
             shakeTimer -= Time.deltaTime;
             if (shakeTimer <= 0f)
             {
