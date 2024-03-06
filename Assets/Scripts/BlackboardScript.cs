@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using TMPro;
 using UnityEngine;
 
 public class BlackboardScript : MonoBehaviour
@@ -9,10 +10,12 @@ public class BlackboardScript : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera blackboardCamera;
     [SerializeField] private CinemachineBrain mainCamera;
     [SerializeField] private GameObject playerstuff;
+    [SerializeField] private TextMeshProUGUI lostSoulCount;
     public GameObject popupUIPrompt;
     private PlayerData playerdata;
     [HideInInspector] [Tooltip ("If true, then you are currently staring at the blackboard, and blackboard functionality is on.")] public bool onBlackboard;
     private int levelsCompleted;
+    private int lostSoulTotal;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +26,8 @@ public class BlackboardScript : MonoBehaviour
         blackboardCamera.Priority = 0;
         onBlackboard = false;
         levelsCompleted = playerdata.GetLevelsCompleted();
+        lostSoulTotal = playerdata.GetLostSoulCount();
+        lostSoulCount.text = "TOTAL LOST SOULS: " + lostSoulTotal;
         popupUIPrompt.SetActive(false);
     }
 
