@@ -272,7 +272,6 @@ public class InputManagerScript : MonoBehaviour
 
         if (!familiarScript.myTurn && !weaveController.isWeaving && playerCharacterController.isGrounded && !playerScript.inCutscene && canSwitch && !playerScript.talkingToNPC)
         {
-            Debug.Log("SDAFWASSF");
             playerScript.Possession();
             playerInput.SwitchCurrentActionMap("Familiar");
         }
@@ -472,7 +471,7 @@ public class InputManagerScript : MonoBehaviour
 
                 if ((moleDigScript != null && (moleDigScript.startedToDig) && !hasFamiliarInvoke2))
                 {
-                    Debug.Log("this should turn on");
+                    //Debug.Log("this should turn on");
                     //for the familiar dig and wants to make a pillar
                     popUIForFamiliarAltAbility.gameObject.SetActive(true);
                     popUIForFamiliarAltAbility.gameObject.transform.GetComponent<TMP_Text>().
