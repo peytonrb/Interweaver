@@ -146,7 +146,7 @@ public class MoleDigScript : MonoBehaviour
             Collider[] hitWeaveableColliders = Physics.OverlapSphere(transform.position, 0f, weaveableLayerMask);
             foreach (Collider hitCollider in hitColliders)
             {
-                transform.position = new Vector3(transform.position.x, hitCollider.bounds.max.y, transform.position.z);
+                transform.position = new Vector3(transform.position.x, hitCollider.bounds.max.y + 0.5f, transform.position.z);
             }
             foreach (Collider hitWeaveableCollider in hitWeaveableColliders)
             {

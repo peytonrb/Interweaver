@@ -422,70 +422,80 @@ public class InputManagerScript : MonoBehaviour
     }
     private void FamiliarUI()
     {
-        #region//MolePopUI
-        //*************************************************************************
-        var digInputName = playerInput.actions["MoleFamiliarInteract"].GetBindingDisplayString();
-        var pillarInputName = playerInput.actions["MoleAltFamiliarInteract"].GetBindingDisplayString();
-        if (moleDigScript != null && (moleDigScript.isOnDigableLayer) && !hasFamiliarInvoke)
+        switch (familiarEnums)
         {
-            //this is where I would put the ui being active and showing the button for digging
-            popUIForFamiliarAbility.gameObject.SetActive(true);
-            popUIForFamiliarAbility.gameObject.transform.GetComponent<TMP_Text>().
-                SetText("<sprite name="+digInputName+">" + " to dig");
+            case myEnums.Owl:
+                #region//OwlPopUI
+                //*************************************************************************
+                if ((!familiarMovement.isNearGround) && (!hasFamiliarInvoke) && (familiarMovement.active) && popUIForFamiliarAbility != null)
+                {
+                    var inputName = playerInput.actions["FamiliarInteract"].GetBindingDisplayString();
+                    //this is where I would put the ui being active and showing the button for digging
+                    popUIForFamiliarAbility.gameObject.SetActive(true);
+                    popUIForFamiliarAbility.gameObject.transform.GetComponent<TMP_Text>().
+                        SetText("<sprite name=" + inputName + ">" + " to dive");
+                    //playerInput.actions["FamiliarInteract"].GetBindingDisplayString()
+                    hasFamiliarInvoke = true;
+                }
 
-            hasFamiliarInvoke = true;
+                else if ((familiarMovement.isNearGround) && (hasFamiliarInvoke) || (!familiarMovement.active))
+                {
+                    if (popUIForFamiliarAbility != null)
+                        popUIForFamiliarAbility.gameObject.SetActive(false);
 
+                    hasFamiliarInvoke = false;
+                }
+                #endregion
+                break;
+            case myEnums.Mole:
+                #region//MolePopUI
+                //*************************************************************************
+                var digInputName = playerInput.actions["MoleFamiliarInteract"].GetBindingDisplayString();
+                var pillarInputName = playerInput.actions["MoleAltFamiliarInteract"].GetBindingDisplayString();
+                if (moleDigScript != null && (moleDigScript.isOnDigableLayer) && !hasFamiliarInvoke)
+                {
+                    //this is where I would put the ui being active and showing the button for digging
+                    popUIForFamiliarAbility.gameObject.SetActive(true);
+                    popUIForFamiliarAbility.gameObject.transform.GetComponent<TMP_Text>().
+                        SetText("<sprite name=" + digInputName + ">" + " to dig");
+
+                    hasFamiliarInvoke = true;
+
+                }
+
+                else if (moleDigScript != null && (!moleDigScript.isOnDigableLayer) && hasFamiliarInvoke)
+                {
+                    //this is where I would probably have it turned off when it leaves the layer
+                    popUIForFamiliarAbility.gameObject.SetActive(false);
+                    hasFamiliarInvoke = false;
+                }
+
+                if ((moleDigScript != null && (moleDigScript.startedToDig) && !hasFamiliarInvoke2))
+                {
+                    Debug.Log("this should turn on");
+                    //for the familiar dig and wants to make a pillar
+                    popUIForFamiliarAltAbility.gameObject.SetActive(true);
+                    popUIForFamiliarAltAbility.gameObject.transform.GetComponent<TMP_Text>().
+                    SetText("<sprite name=" + pillarInputName + ">" + " to make pillar");
+                    hasFamiliarInvoke2 = true;
+                }
+
+                else if ((moleDigScript != null && (!moleDigScript.startedToDig) && hasFamiliarInvoke2))
+                {
+                    //this is where I would probably have it turned off when it undigs
+                    popUIForFamiliarAltAbility.gameObject.SetActive(false);
+                    hasFamiliarInvoke2 = false;
+                }
+
+                //*************************************************************************
+                #endregion
+
+                break;
+            case myEnums.Stag:
+               
+                break;
         }
-
-        else if (moleDigScript != null && (!moleDigScript.isOnDigableLayer) && hasFamiliarInvoke)
-        {
-            //this is where I would probably have it turned off when it leaves the layer
-            popUIForFamiliarAbility.gameObject.SetActive(false);
-            hasFamiliarInvoke = false;
-        }
-
-        if ((moleDigScript != null && (moleDigScript.startedToDig) && !hasFamiliarInvoke2))
-        {
-            Debug.Log("this should turn on");
-            //for the familiar dig and wants to make a pillar
-            popUIForFamiliarAltAbility.gameObject.SetActive(true);
-            popUIForFamiliarAltAbility.gameObject.transform.GetComponent<TMP_Text>().
-            SetText("<sprite name=" +pillarInputName+">" + " to make pillar");
-            hasFamiliarInvoke2 = true;
-        }
-
-        else if ((moleDigScript != null && (!moleDigScript.startedToDig) && hasFamiliarInvoke2))
-        {
-            //this is where I would probably have it turned off when it undigs
-            popUIForFamiliarAltAbility.gameObject.SetActive(false);
-            hasFamiliarInvoke2 = false;
-        }
-
-        //*************************************************************************
-        #endregion
-        #region//OwlPopUI
-        //*************************************************************************
-        if ((!familiarMovement.isNearGround) && (!hasFamiliarInvoke) && (familiarMovement.active) && popUIForFamiliarAbility != null)
-        {
-            var inputName = playerInput.actions["FamiliarInteract"].GetBindingDisplayString();
-            //this is where I would put the ui being active and showing the button for digging
-            popUIForFamiliarAbility.gameObject.SetActive(true);
-            popUIForFamiliarAbility.gameObject.transform.GetComponent<TMP_Text>().
-                SetText("<sprite name="+inputName+">" + " to dive");
-            //playerInput.actions["FamiliarInteract"].GetBindingDisplayString()
-            hasFamiliarInvoke = true;
-        }
-
-        else if ((familiarMovement.isNearGround) && (hasFamiliarInvoke) || (!familiarMovement.active))
-        {
-            if (popUIForFamiliarAbility != null)
-                popUIForFamiliarAbility.gameObject.SetActive(false); 
-            
-            hasFamiliarInvoke = false;
-        }
-        //*************************************************************************
-        #endregion
-
+       
     }
 
 
