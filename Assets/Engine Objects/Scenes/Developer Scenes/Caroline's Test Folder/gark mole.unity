@@ -8321,6 +8321,7 @@ GameObject:
   - component: {fileID: 1903062313}
   - component: {fileID: 1903062312}
   - component: {fileID: 1903062314}
+  - component: {fileID: 1903062315}
   m_Layer: 0
   m_Name: FamiliarCamera
   m_TagString: FamiliarCamera
@@ -8397,6 +8398,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstWeaverCamera: 0
   firstFamiliarCamera: 1
+--- !u!114 &1903062315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903062311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfd69b4e8eb7996489a4fc15bca72cdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1909753033
 GameObject:
   m_ObjectHideFlags: 0
@@ -10022,6 +10035,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CameraMaster
       objectReference: {fileID: 0}
+    - target: {fileID: 4153128560626671037, guid: 8e8fbee58c38cca49bc7df7ca2aa694d, type: 3}
+      propertyPath: mynoisedef
+      value: 
+      objectReference: {fileID: 11400000, guid: a93fbd79772fc3946b93f5888ad772ad, type: 2}
     - target: {fileID: 4153128560626671037, guid: 8e8fbee58c38cca49bc7df7ca2aa694d, type: 3}
       propertyPath: familiarCamera
       value: 

@@ -32,6 +32,8 @@ public class CameraMasterScript : MonoBehaviour
     public int weaverCameraOnPriority;
     public int familiarCameraOnPriority;
 
+    [SerializeField] private NoiseSettings wobbleNoise;
+
     public CinemachineVirtualCamera leapOfFaithCamera;
 
     void Awake()
@@ -49,18 +51,30 @@ public class CameraMasterScript : MonoBehaviour
 
     public void ShakeCurrentCamera(float intensity, float freq, float time)
     {
+        currentCam.TryGetComponent<CinemachineShake>(out CinemachineShake shaker);
         foreach(GameObject weaverCamera in weaverCameras)
         {
             //Debug.Log(weaverCamera);
 
         }
-        //Debug.Log(currentCam);
 
-        if (currentCam.TryGetComponent<CinemachineShake>(out CinemachineShake shaker))
+        if (!shaker)
         {
+            shaker = currentCam.AddComponent<CinemachineShake>();
+            shaker.AssignMyVirtualCamera();
+            currentCam.AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_NoiseProfile = wobbleNoise;
+            //currentCam.GetComponent<CinemachineBasicMultiChannelPerlin>().m_NoiseProfile = wobbleNoise;
             shaker.ShakeCamera(intensity, freq, time);
         }
-        
+        shaker.ShakeCamera(intensity, freq, time);
+    }
+
+    public void StopCurrentCameraShake()
+    {
+        if (currentCam.TryGetComponent<CinemachineShake>(out CinemachineShake shaker))
+        {
+            shaker.DepleteTimer();
+        }
     }
 
     void Start() {

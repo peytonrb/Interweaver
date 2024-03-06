@@ -329,7 +329,7 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("No audio source instance to kill");
+            //Debug.LogWarning("No audio source instance to kill");
         }
         if (newSFX != null)
         {
@@ -345,7 +345,7 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("No new sfx");
+            //Debug.LogWarning("No new sfx");
             return null;
         }
     }
@@ -354,7 +354,7 @@ public class AudioManager : MonoBehaviour
     {
         if (audioSource)
         {
-            Debug.Log("Killed " + audioSource + " that was playing " + audioSource.clip.name);
+            //Debug.Log("Killed " + audioSource + " that was playing " + audioSource.clip.name);
             Destroy(audioSource);
         }
         return null;

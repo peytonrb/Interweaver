@@ -16,6 +16,11 @@ public class CinemachineShake : MonoBehaviour
         cinemachineVirtualCamera = GetComponent<CinemachineVirtualCamera>();
     }
 
+    public void AssignMyVirtualCamera()
+    {
+        cinemachineVirtualCamera = GetComponent<CinemachineVirtualCamera>();
+    }
+
     public void ShakeCamera(float intensity, float freq, float time)
     {
         CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin =
@@ -28,10 +33,16 @@ public class CinemachineShake : MonoBehaviour
         //Gamepad.current.SetMotorSpeeds(intensity, 0f);
     }
 
+    public void DepleteTimer() // to force end a shake :)
+    {
+        shakeTimer = 0.1f;
+    }
+
     private void Update()
     {
         if (shakeTimer > 0)
         {
+            Debug.Log("AAAAAAAAAAAAAAAAA");
             shakeTimer -= Time.deltaTime;
             if (shakeTimer <= 0f)
             {
