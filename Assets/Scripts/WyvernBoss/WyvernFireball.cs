@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class WyvernFireball : MonoBehaviour
@@ -62,9 +63,16 @@ public class WyvernFireball : MonoBehaviour
 
     void OnCollisionEnter(Collision other) {
         if (!other.gameObject.CompareTag("Boss")) {
-            if (weaveable.isBeingWoven == false) {
+            if (other.gameObject.TryGetComponent<BreakObject>(out BreakObject breakableObject)) {
+                breakableObject.BreakMyObject();
                 Destroy(gameObject);
             }
+            else {
+                if (weaveable.isBeingWoven == false) {
+                    Destroy(gameObject);
+                }
+            }
+            
         }
         if (other.gameObject.CompareTag("Player")) {
             playercontroller.Death();
