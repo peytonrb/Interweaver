@@ -10,9 +10,11 @@ public class MolePillarScript : MonoBehaviour
     private MovementScript movementScript;
     private FamiliarScript familiarScript;
     private MoleDigScript moleDigScript;
+    private AudioManager audioManager;
     [SerializeField] private GameObject dirtPillar;
     public List<GameObject> pillarList = new List<GameObject>();
     [HideInInspector] public CinemachineVirtualCamera familiarCamera;
+    private CameraMasterScript cameraMasterScript;
     private GameObject newPillar;
 
     [Header("Variables")]
@@ -29,6 +31,12 @@ public class MolePillarScript : MonoBehaviour
     [HideInInspector] public bool rise;
     [HideInInspector] public bool lower;
 
+    [Header("Audio")]
+    [SerializeField] AudioClip pillarBuildSound;
+    private AudioSource pillarBuildAudioSource;
+    [Header("Screenshake")]
+    [SerializeField][Range(0,5)] private float amplitude = 0.8f;
+    [SerializeField][Range(0,5)] private float frequency = 0.8f;
 
     [Header("Utility")]
     [SerializeField] private bool showHeightGizmo = true;
@@ -39,6 +47,8 @@ public class MolePillarScript : MonoBehaviour
         movementScript = GetComponent<MovementScript>();
         moleDigScript = GetComponent<MoleDigScript>();
         familiarScript = GetComponent<FamiliarScript>();
+        cameraMasterScript = GameObject.FindGameObjectWithTag("CameraMaster").GetComponent<CameraMasterScript>();
+        audioManager = GameObject.FindGameObjectWithTag("Audio Manager").GetComponent<AudioManager>();
         familiarCamera = GameObject.FindGameObjectWithTag("FamiliarCamera").GetComponent<CinemachineVirtualCamera>();
     }
 
@@ -52,12 +62,11 @@ public class MolePillarScript : MonoBehaviour
 
         if (lower) // I knooooow. I'm sorryyyyy
         {
+            pillarRising = false;
             rise = false; // lowering should override building methinks
             LowerPillar();
         }
     }
-
-  
 
     public void DeployPillar()
     {
@@ -101,6 +110,9 @@ public class MolePillarScript : MonoBehaviour
                 distance = Vector3.Distance(pillarToRaise.transform.position, pointToRiseTo);
                 if (!pillarRising) // right as we start things off
                 {
+                    cameraMasterScript.ShakeCurrentCamera(amplitude, frequency, 99f);
+                    pillarBuildAudioSource = audioManager.AddSFX(pillarBuildSound, true, pillarBuildAudioSource);
+                    pillarLowering = false;
                     movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
                     movementScript.enabled = false; // disable player movement
                     pointToRiseTo = new Vector3 (pillarToRaise.transform.position.x, transform.position.y, 
@@ -139,6 +151,8 @@ public class MolePillarScript : MonoBehaviour
                 }
                 if (!pillarLowering) // right as we start things off
                 {
+                    cameraMasterScript.ShakeCurrentCamera(amplitude, frequency, 99f);
+                    pillarBuildAudioSource = audioManager.AddSFX(pillarBuildSound, true, pillarBuildAudioSource);
                     movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
                     movementScript.enabled = false; // disable player movement
                     pillarLowering = true;
@@ -156,6 +170,8 @@ public class MolePillarScript : MonoBehaviour
 
     public void PillarRiseEnd()
     {
+        pillarBuildAudioSource = audioManager.KillAudioSource(pillarBuildAudioSource);
+        cameraMasterScript.StopCurrentCameraShake();
         if (moleDigScript.startedToDig)
         {
             movementScript.enabled = true;
@@ -167,6 +183,8 @@ public class MolePillarScript : MonoBehaviour
 
     public void PillarLowerEnd()
     {
+        pillarBuildAudioSource = audioManager.KillAudioSource(pillarBuildAudioSource);
+        cameraMasterScript.StopCurrentCameraShake();
         if (moleDigScript.startedToDig)
         {
             movementScript.enabled = true;

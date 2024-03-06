@@ -138,7 +138,7 @@ public class MoleDigScript : MonoBehaviour
 
         else if (Physics.Raycast(transform.position, -transform.up, out hitLayer, castDistance, digableLayer) && startedToDig && !coolDown)
         {
-            Debug.Log("we got out bois");
+            //Debug.Log("we got out bois");
             //checking the mole in other colliders and if it's a dirt pillar tag, it goes up
             int weaveableLayer = LayerMask.NameToLayer("weaveObject"); 
             int weaveableLayerMask = 1 << weaveableLayer;
@@ -174,7 +174,7 @@ public class MoleDigScript : MonoBehaviour
     //******************************************
     public void ActualDigging() //the actual digging and staying on the dirt layer
     {
-        Debug.Log("we're digging bois");
+        //Debug.Log("we're digging bois");
         startedToDig = true;
        
 
@@ -191,7 +191,7 @@ public class MoleDigScript : MonoBehaviour
         //animation here
         characterAnimationHandler.ToggleBurrowAnim();
 
-        Debug.Log("Dug in " + animLength);
+        //Debug.Log("Dug in " + animLength);
 
         StartCoroutine(StartDigging(animLength));
         StartCoroutine(VFXStart(vfxDelay));
@@ -201,7 +201,7 @@ public class MoleDigScript : MonoBehaviour
         //animation here
         characterAnimationHandler.ToggleSurfaceAnim();
 
-        Debug.Log("Dug out " + animLength);
+        //Debug.Log("Dug out " + animLength);
 
         startedToDig = false;
         
@@ -218,7 +218,7 @@ public class MoleDigScript : MonoBehaviour
         
         moleModel.GetComponent<Renderer>().enabled = false;
         
-        Debug.Log("waited for " + animLength);
+        //Debug.Log("waited for " + animLength);
 
         transform.Find("VFX_Dirt").GetComponent<VisualEffect>().Stop();
     }
@@ -232,7 +232,7 @@ public class MoleDigScript : MonoBehaviour
         moundModel.GetComponent<Renderer>().enabled = false;
         //animation here so then it can play after it's on top of a pillar
         
-        Debug.Log("waited for " + animLength/2);
+        //Debug.Log("waited for " + animLength/2);
 
         transform.Find("VFX_Dirt").GetComponent<VisualEffect>().Stop();
     }
