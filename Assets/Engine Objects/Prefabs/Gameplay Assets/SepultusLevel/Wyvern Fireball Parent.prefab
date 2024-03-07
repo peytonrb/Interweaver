@@ -44,8 +44,6 @@ GameObject:
   - component: {fileID: 7636904946249874634}
   - component: {fileID: 738257493575559580}
   - component: {fileID: 4582848023232955700}
-  - component: {fileID: 5281539214511366586}
-  - component: {fileID: 2353235361557428064}
   m_Layer: 6
   m_Name: Wyvern Fireball Parent
   m_TagString: Weaveable
@@ -93,7 +91,7 @@ MonoBehaviour:
   myTransformPoints: []
   activeSnapPoint: {fileID: 0}
   objectToSnapTo: {fileID: 0}
-  weaveInteraction: {fileID: 2353235361557428064}
+  weaveInteraction: {fileID: 0}
   listIndex: 0
   ID: 0
   weaveController: {fileID: 0}
@@ -160,33 +158,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5281539214511366586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1840411242474355259}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0795db3b4972b6647a8111a7c6687a8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  linkedCrystal: {fileID: 0}
-  isTeleportable: 1
-  weaveController: {fileID: 0}
---- !u!114 &2353235361557428064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1840411242474355259}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d2e10edb961a3d409caebcae8e0adc6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2461264054725319661
 GameObject:
   m_ObjectHideFlags: 0
