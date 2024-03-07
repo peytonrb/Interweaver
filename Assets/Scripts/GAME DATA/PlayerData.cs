@@ -50,6 +50,9 @@ public class PlayerData : MonoBehaviour
         ResetAllData();
     }
 
+    /// <summary>
+    /// Resets all game data.
+    /// </summary>
     public void ResetAllData() {
         levelsCompleted = 0;
         lostSoulCount = 0;
@@ -67,24 +70,76 @@ public class PlayerData : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Returns the amount of levels completed thus far.
+    /// </summary>
+    /// <returns></returns>
     public int GetLevelsCompleted() {
         return levelsCompleted;
     }
+    
+    /// <summary>
+    /// Adds 1 to the amount of levels completed.
+    /// </summary>
+    public void AddLevelCompleted() {
+        levelsCompleted++;
+    }
 
+    /// <summary>
+    /// Adds to or subtracts from the amount of lost souls collected so far. 
+    /// </summary>
+    /// <param name="souls">
+    /// Amount of lost souls you want to add/subtract from the total lost soul count.
+    /// </param>
+    /// <param name="addSouls">
+    /// If true, you are adding. If false, you are subtracting.
+    /// </param>
+    public void AddSubtractLostSoul(int souls, bool addSouls) {
+        if (addSouls == true) {
+            lostSoulCount += souls;
+        }
+        else {
+            lostSoulCount -= souls;
+        }
+        
+    }
+
+    /// <summary>
+    /// Returns the number of lost souls collected thus far.
+    /// </summary>
+    /// <returns></returns>
     public int GetLostSoulCount() {
         return lostSoulCount;
     }
 
+    /// <summary>
+    /// Returns true if there is a save file found in the data folder.
+    /// </summary>
+    /// <returns></returns>
     public bool GetSaveData() {
         return saveDataExists;
     }
 
+    /// <summary>
+    /// Sets levels completed by amount.
+    /// </summary>
+    /// <param name="amount"></param>
     public void SetLevelsCompleted(int amount) {
         levelsCompleted = amount;
     }
 
+    /// <summary>
+    /// Resets the amount of levels completed to 0.
+    /// </summary>
     public void ResetLevelsCompleted() {
         levelsCompleted = 0;
+    }
+
+    /// <summary>
+    /// Resets the amount of lost souls collected to 0.
+    /// </summary>
+    public void ResetLostSoulCount() {
+        lostSoulCount = 0;
     }
 
 }
