@@ -19,7 +19,7 @@ public class MolePillarScript : MonoBehaviour
 
     [Header("Variables")]
     [SerializeField] [Range (1, 10)] private int maxPillarCount = 1;
-    [SerializeField] [Range (10f, 50)] private float maxPillarHeight = 25f;
+    [SerializeField] private float maxPillarHeight = 17f;
     [SerializeField] private float pillarBuildSpeed = 1.5f;
     private Vector3 pointToRiseTo = Vector3.up;
     private float distance = -1f;
