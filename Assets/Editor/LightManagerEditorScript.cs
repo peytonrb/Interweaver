@@ -144,11 +144,11 @@ public class LightManagerEditorScript : Editor
         List<LightSourceScript.LightData> lightsArray = lightSourceScript.lightsArray;
         foreach (GameObject otherLight in otherLights)
         {
-            if (otherLight.name == prefabName)
+            if (otherLight.name == prefabName) 
             {
                 LightSourceScript.LightData newLightdata = new LightSourceScript.LightData();
                 newLightdata.lightSource = otherLight.GetComponent<Light>();
-                newLightdata.lightCollider = otherLight.GetComponent<Collider>();
+                newLightdata.lightCollider = otherLight.GetComponent<SphereCollider>();
                 newLightdata.isOn = true;
                 lightsArray.Add(newLightdata);
                 Debug.Log("Found " + lightsArray.Count + " items with script '" + prefabName + "'.");
