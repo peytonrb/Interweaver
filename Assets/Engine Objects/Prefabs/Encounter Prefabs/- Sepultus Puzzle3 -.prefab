@@ -6320,7 +6320,6 @@ Transform:
   - {fileID: 3212890267797215394}
   - {fileID: 2719351850656806123}
   - {fileID: 4288006548220880240}
-  - {fileID: 4638246904327407219}
   m_Father: {fileID: 5591446052145840191}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8894,7 +8893,7 @@ Transform:
   - {fileID: 3148939209730990992}
   - {fileID: 3913285247390685718}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3026889620790981755
 GameObject:
@@ -10634,6 +10633,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4638246904327407219}
   - {fileID: 6101364351603447250}
   - {fileID: 7801699868568175303}
   - {fileID: 6141208385129161938}
@@ -40914,17 +40914,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3327812696145007612, guid: b2d0c6a14ba668a4cbd90dad6f77a401, type: 3}
   m_PrefabInstance: {fileID: 2463698115291901877}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5641480122125703420 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7816630635434293065, guid: b2d0c6a14ba668a4cbd90dad6f77a401, type: 3}
-  m_PrefabInstance: {fileID: 2463698115291901877}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bce719d3c530724cb4fa21922198828, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2481211196411198980
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41183,7 +41172,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensors: []
   pressurePlates:
-  - {fileID: 5641480122125703420}
+  - {fileID: 0}
   opensVertically: 1
   opensRight: 0
   opensLeft: 0
@@ -42755,7 +42744,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 4858320350167631264}
+    m_TransformParent: {fileID: 3148939209730990992}
     m_Modifications:
     - target: {fileID: 1565707168808638867, guid: 7230f60b7a177fa44b21beb1ddfb5215, type: 3}
       propertyPath: m_RootOrder
