@@ -68,7 +68,7 @@ public class WyvernFireball : MonoBehaviour
                 Destroy(gameObject);
             }
             else {
-                if (weaveable.isBeingWoven == false) {
+                if (wasWoven == false) {
                     Destroy(gameObject);
                 }
             }
