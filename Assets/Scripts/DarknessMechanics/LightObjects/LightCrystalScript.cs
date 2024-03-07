@@ -26,7 +26,15 @@ public class LightCrystalScript : MonoBehaviour
     void Start()
     {
         isActiveDefault = isActive;
-        crystalLight = this.gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Light>();
+        if (transform.GetChild(0).TryGetComponent<Light>(out crystalLight))
+        {
+
+        }
+        else
+        {
+            crystalLight = this.gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Light>();
+        }
+        
         Transform vfx = this.transform.Find("LightBeamBurstVFX");
 
         if (vfx != null)

@@ -53,10 +53,21 @@ public class LightManagerEditorScript : Editor
         {
             if (scriptInstance.GetType().Name == lightCrystals)
             {
+                Transform lightComponents;
                 LightSourceScript.LightData newLightdata = new LightSourceScript.LightData();
                 LightCrystalScript lightCrystalScript = scriptInstance.GetComponent<LightCrystalScript>();
                 GameObject parentObj = scriptInstance.gameObject;
-                Transform lightComponents = parentObj.gameObject.transform.GetChild(0).transform.GetChild(0);
+
+                if (parentObj.gameObject.transform.GetChild(0).TryGetComponent( out Light light))
+                {
+                    lightComponents = parentObj.gameObject.transform.GetChild(0);
+                }
+                else
+                {
+                    lightComponents = parentObj.gameObject.transform.GetChild(0).transform.GetChild(0);
+                }
+                
+
                 newLightdata.lightSource = lightComponents.GetComponent<Light>();
                 newLightdata.lightCollider = lightComponents.GetComponent<Collider>();
                 newLightdata.isOn = true;
