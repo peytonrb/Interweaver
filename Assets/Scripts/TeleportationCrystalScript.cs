@@ -18,9 +18,10 @@ public class TeleportationCrystalScript : MonoBehaviour
      other.GetComponent<WeaveableObject>().objectToSnapTo.transform.position = new Vector3(linkedCrystal.transform.position.x,
      linkedCrystal.transform.position.y, linkedCrystal.transform.position.z + 3);
 
-     weaveController.currentWeaveable.ResetWeaveable();
-        //need to somehow stop the vfx
-     WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
+        WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
+        //weaveController.currentWeaveable.ResetWeaveable();
+        weaveController.OnDrop();
+     
     }
 
     public void TeleportToFunction(GameObject other)
@@ -29,9 +30,10 @@ public class TeleportationCrystalScript : MonoBehaviour
         other.GetComponent<WeaveableObject>().transform.position = new Vector3(linkedCrystal.transform.position.x,
                    linkedCrystal.transform.position.y, linkedCrystal.transform.position.z + 3);
 
-        weaveController.currentWeaveable.ResetWeaveable();
-        //need to somehow stop the vfx
         WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
+        //weaveController.currentWeaveable.ResetWeaveable();
+        weaveController.OnDrop();
+        
     }
 
     void OnDrawGizmos()
