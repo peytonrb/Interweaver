@@ -117,6 +117,8 @@ public class DialogueTriggers : MonoBehaviour
     // occurs only with Event Triggers
     public void OnTriggerEnter(Collider collider)
     {
+        var weaverNPCInteraction = InputManagerScript.instance.playerInput.actions["NPCInteraction"].GetBindingDisplayString();
+        var familiarNPCInteraction = InputManagerScript.instance.playerInput.actions["NPCInteraction"].GetBindingDisplayString();
         switch (type)
         {
             case CharacterTriggerType.bothChars:
@@ -131,8 +133,8 @@ public class DialogueTriggers : MonoBehaviour
                     if (collider.gameObject.tag == "Player")
                         AutoTrigger(collider);
                     weaverInteraction.SetActive(true);
-                    weaverInteraction.gameObject.transform.GetComponentInChildren<TMP_Text>().SetText(
-                        InputManagerScript.instance.playerInput.actions["NPCInteraction"].GetBindingDisplayString() + " Interact");
+                    weaverInteraction.gameObject.transform.GetComponent<TMP_Text>().SetText("<sprite name="+weaverNPCInteraction+">"
+                         + " Interact");
                     //this is where I would put the ui and the text element here
                     break;
                 }
@@ -141,8 +143,8 @@ public class DialogueTriggers : MonoBehaviour
                     if (collider.gameObject.tag == "Familiar")
                         AutoTrigger(collider);
                     familiarInteraction.SetActive(true);
-                    familiarInteraction.gameObject.transform.GetComponentInChildren<TMP_Text>().SetText(
-                        InputManagerScript.instance.playerInput.actions["NPCInteraction"].GetBindingDisplayString() + " Interact");
+                    familiarInteraction.gameObject.transform.GetComponent<TMP_Text>().SetText("<sprite name="+familiarNPCInteraction+">"
+                         + " Interact");
                     //this is where I would put the ui and the text element here
                     break;
                 }
