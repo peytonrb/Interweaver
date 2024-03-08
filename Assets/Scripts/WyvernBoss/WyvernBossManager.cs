@@ -319,7 +319,7 @@ public class WyvernBossManager : MonoBehaviour
 
     void OnCollisionEnter(Collision other) {
         if (other.gameObject.CompareTag("Player")) {
-            PlayerController player = other.gameObject.GetComponent<PlayerController>();
+            PlayerControllerNew player = other.gameObject.GetComponent<PlayerControllerNew>();
             if (player != null) {
                 player.Death();
             }
