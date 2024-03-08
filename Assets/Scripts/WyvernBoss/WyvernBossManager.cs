@@ -26,7 +26,8 @@ public class WyvernBossManager : MonoBehaviour
     public GameObject magicCircle;
     [SerializeField] [Tooltip("Radius of randomized spawner.")] private float spawnradius;
     [SerializeField] [Tooltip("Wait time between magic circle spawning.")] private float magicCircleTimer; //Wait time between magic circles
-    [SerializeField] [Tooltip("Amount of magic circles to spawn in a single phase.")] private float magicCircleAmount;
+    [SerializeField] private float magicCircleCooldown;
+    [Tooltip("Amount of magic circles to spawn in a single phase.")] public int magicCircleAmount;
     [Tooltip("If true, magic circles will spawn in predetermined arrangements")] public bool useConfigurations;
     [SerializeField] private GameObject[] configurations;
     [HideInInspector] public bool configurationIsActive;
@@ -48,7 +49,8 @@ public class WyvernBossManager : MonoBehaviour
     private float startingFireballTimer;
     private int startingFireballAmount;
     private float startingMagicCircleTimer;
-    private float startingMagicCircleAmount;
+    private float startingMagiCircleCooldown;
+    private int startingMagicCircleAmount;
     private float startingWindupTimer;
 
     // Start is called before the first frame update
@@ -66,14 +68,15 @@ public class WyvernBossManager : MonoBehaviour
         startingFireballAmount = fireballAmount;
         startingMagicCircleTimer = magicCircleTimer;
         startingMagicCircleAmount = magicCircleAmount;
+        startingMagiCircleCooldown = magicCircleCooldown;
         startingWindupTimer = windupTimer;
         windup = false;
         blowFire = false;
-        reseting = true;
+        reseting = false;
         configurationIsActive = false;
         spawnedConfiguration = false;
         moveToNextRoom = false;
-        phases = 0;
+        phases = 1;
 
         transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
         
@@ -87,26 +90,18 @@ public class WyvernBossManager : MonoBehaviour
                 if (windup == false) {
                     if (reseting == true) {
                         if (!configurationIsActive) {
-                            ChooseRandom(phases);
+                            //ChooseRandom(phases);
                             reseting = false;
                         }
                     }
                     else {
-                        transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
+                        transform.LookAt(new Vector3(stag.transform.position.x,transform.position.y,stag.transform.position.z));
                     }
                 }
             }
             else {
                 if (windup == false) {
-                    if (reseting == true) {
-                        if (!configurationIsActive) {
-                            ChooseRandom(phases);
-                            reseting = false;
-                        }
-                    }
-                    else {
-                        transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
-                    }
+                    transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
                 }
             }
 
@@ -124,29 +119,63 @@ public class WyvernBossManager : MonoBehaviour
                             fireballtimer = startingFireballTimer;
                         }
                     }
+                    else {
+                        if (fireballtimer > 0) {
+                            fireballtimer -= Time.deltaTime;
+                        }
+                        else {
+                            if (!familiarScript.isDead) {
+                                ThrowFireball();
+                            }
+                            fireballtimer = startingFireballTimer;
+                        }
+                    }
                 break;
                 //MAGIC CIRCLE
                 case 2:
                     if (!familiarScript.myTurn) {
-                        if (useConfigurations) {
-                            if (spawnedConfiguration == false) {
-                                if (!playercontroller.isDead) {
-                                    SpawnMagicCircle();
-                                } 
-                            }
-                        }
-                        else {
-                            if (magicCircleTimer > 0) {
-                                magicCircleTimer -= Time.deltaTime;
+                        if (reseting == false) {
+                            if (useConfigurations) {
+                                if (spawnedConfiguration == false) {
+                                    if (!playercontroller.isDead) {
+                                        SpawnMagicCircle();
+                                    } 
+                                }
                             }
                             else {
-                                if (!playercontroller.isDead) {
-                                    SpawnMagicCircle();
+                                if (magicCircleTimer > 0) {
+                                    magicCircleTimer -= Time.deltaTime;
                                 }
-                                magicCircleTimer = startingMagicCircleTimer;
+                                else {
+                                    if (!playercontroller.isDead) {
+                                        SpawnMagicCircle();
+                                    }
+                                    magicCircleTimer = startingMagicCircleTimer;
+                                }
                             }
                         }
-                        
+                    }
+                    else {
+                        if (reseting == false) {
+                            if (useConfigurations) {
+                                if (spawnedConfiguration == false) {
+                                    if (!playercontroller.isDead) {
+                                        SpawnMagicCircle();
+                                    } 
+                                }
+                            }
+                            else {
+                                if (magicCircleTimer > 0) {
+                                    magicCircleTimer -= Time.deltaTime;
+                                }
+                                else {
+                                    if (!playercontroller.isDead) {
+                                        SpawnMagicCircle();
+                                    }
+                                    magicCircleTimer = startingMagicCircleTimer;
+                                }
+                            }
+                        }
                     }
                 break;
                 //FLAMETHROWER
@@ -257,23 +286,43 @@ public class WyvernBossManager : MonoBehaviour
     void SpawnMagicCircle() {
         if (useConfigurations == false) {
             if (magicCircleAmount > 0) {
-                Vector3 randomposition = Random.insideUnitCircle * spawnradius;
-                Vector3 newposition = new Vector3(weaver.transform.position.x + randomposition.x, -5f, weaver.transform.position.z + randomposition.y);
-                Instantiate(magicCircle,newposition,Quaternion.identity);
+                if (!familiarScript.myTurn) {
+                    Vector3 randomposition = Random.insideUnitCircle * spawnradius;
+                    Vector3 newposition = new Vector3(weaver.transform.position.x + randomposition.x, weaver.transform.position.y - 7f, weaver.transform.position.z + randomposition.y);
+                    Instantiate(magicCircle,newposition,Quaternion.identity);
+                }
+                else {
+                    Vector3 randomposition = Random.insideUnitCircle * spawnradius;
+                    Vector3 newposition = new Vector3(stag.transform.position.x + randomposition.x, stag.transform.position.y - 1f, stag.transform.position.z + randomposition.y);
+                    Instantiate(magicCircle,newposition,Quaternion.identity);
+                }
                 magicCircleAmount -= 1;
             }
             else {
+                StartCoroutine(Cooldown());
                 reseting = true;
                 magicCircleAmount = startingMagicCircleAmount;
             }
         }
         else {
             int randomConfig = Random.Range(0, configurations.Length);
-            Vector3 newposition = new Vector3(weaver.transform.position.x, 0, weaver.transform.position.z);
+            Vector3 newposition = new Vector3(weaver.transform.position.x, weaver.transform.position.y - 7f, weaver.transform.position.z);
             Instantiate(configurations[randomConfig],newposition,Quaternion.identity);
             spawnedConfiguration = true;
         }
         
+    }
+
+    public IEnumerator Cooldown() {
+        switch (phases) {
+            case 2:
+                yield return new WaitForSeconds(magicCircleCooldown);
+            break;
+        }
+        Debug.Log("Cooldown finished");
+        magicCircleCooldown = startingMagiCircleCooldown;
+        reseting = false;
+        yield break;
     }
 
     void SpawnFire() {

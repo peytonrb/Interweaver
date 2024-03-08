@@ -10,12 +10,14 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
     private bool pushUp;
     private bool stayUp;
     [SerializeField] private float height;
+    private float newheight;
     [SerializeField] private float riseSpeed;
 
     //Concerning magic circles inside a predetermined configuration. They are always attached to a configuration parent object.
     private GameObject configurationParent;
     private WyvernBossManager bossManager;
     private bool hasParent;
+    private int magicCircleID;
 
 
     // Start is called before the first frame update
@@ -27,6 +29,8 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
         pushUp = false;
         stayUp = false;
         warning.SetActive(true);
+        newheight = transform.position.y + height + 5;
+        magicCircleID = bossManager.magicCircleAmount;
 
         if (bossManager.useConfigurations) {
             hasParent = true;
@@ -90,10 +94,10 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
     }
 
     void PushUp() {
-        float newpos = Mathf.MoveTowards(transform.position.y, height, riseSpeed * Time.deltaTime);
+        float newpos = Mathf.MoveTowards(transform.position.y, newheight, riseSpeed * Time.deltaTime);
         transform.position = new Vector3(transform.position.x,newpos,transform.position.z);
 
-        if (transform.position.y >= height) {
+        if (transform.position.y >= newheight) {
             stayUp = true;
             timer = 2.0f;
         }
