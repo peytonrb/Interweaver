@@ -14,9 +14,12 @@ public class WyvernFireball : MonoBehaviour
     private WeaveableObject weaveable;
     public float speed;
     private bool wasWoven;
+    private bool foundPosition;
     public float breakableObjectDetectionProximity;
     private bool breakableObjectFound;
     private Vector3 breakableObjectPosition;
+    private Vector3 weaverposition;
+    private Vector3 familiarposition;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +31,9 @@ public class WyvernFireball : MonoBehaviour
         weaveController = weaver.GetComponent<WeaveController>();
         weaveable = GetComponent<WeaveableObject>();
         rb = GetComponent<Rigidbody>();
+
+        weaverposition = new Vector3(weaver.transform.position.x,weaver.transform.position.y + 1, weaver.transform.position.z);
+        familiarposition = new Vector3(familiar.transform.position.x,familiar.transform.position.y + 1,familiar.transform.position.z);
 
         wasWoven = false;
         breakableObjectFound = false;
@@ -60,11 +66,11 @@ public class WyvernFireball : MonoBehaviour
     void HomingMissile() {
         //If familiar's turn, then move towards the familiar.
         if (familiarscript.myTurn) {
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(familiar.transform.position.x, familiar.transform.position.y + 1f, familiar.transform.position.y), speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, familiarposition, speed * Time.deltaTime);
         }
         else {
             if (wasWoven == false) {
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(weaver.transform.position.x, weaver.transform.position.y + 1f, weaver.transform.position.z), speed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, weaverposition, speed * Time.deltaTime);
             }
             else {
                 if (weaveController.isWeaving == false) {
