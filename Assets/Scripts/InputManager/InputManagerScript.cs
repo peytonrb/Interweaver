@@ -72,9 +72,7 @@ public class InputManagerScript : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         currentSceneName = SceneManager.GetActiveScene().name;
 
-        Debug.Log(playerInput.actions["WeaverTargeting"].GetBindingDisplayString());
-        
-
+       
         switch (familiarEnums)
         {
             case myEnums.Owl:
@@ -100,6 +98,7 @@ public class InputManagerScript : MonoBehaviour
     {
         FamiliarUI();
         WeaverUI();
+      
     }
 
     public void ToggleControlScheme(bool isController)
@@ -396,7 +395,7 @@ public class InputManagerScript : MonoBehaviour
     private void WeaverUI()
     {
         var weaverTargetingName = playerInput.actions["WeaverTargeting"].GetBindingDisplayString();
-        //var weaverRotatingName = playerInput.actions["Rotate"].GetBindingDisplayString();
+        var weaverRotatingName = playerInput.actions["Rotate"].GetBindingDisplayString();
         if ((weaveController != null) && (weaveController.isWeaving) && !hasWeaverInvoke)
         {
             popUIForMovingWeve.gameObject.SetActive(true);
@@ -407,7 +406,7 @@ public class InputManagerScript : MonoBehaviour
                 SetText("<sprite name="+weaverTargetingName+">" + " to move weave");
 
             popUIForRotateWeave.gameObject.transform.GetComponent<TMP_Text>().
-               SetText("<sprite name=arrows>" + " to rotate weave");
+               SetText("<sprite name="+ weaverRotatingName + ">" + " to rotate weave");
 
             hasWeaverInvoke = true;
         }
