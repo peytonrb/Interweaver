@@ -13,7 +13,7 @@ public class PlayerControllerNew : MonoBehaviour
     [Header("Movement/Possession")]
     private CharacterController characterController;
     private MovementScript movementScript;
-    private bool possessing;
+    [HideInInspector] public bool possessing;
 
     [Header("Camera")]
     [CannotBeNullObjectField] [SerializeField] private Camera mainCamera;

@@ -52,6 +52,9 @@ public class WyvernBossManager : MonoBehaviour
     private float startingMagiCircleCooldown;
     private int startingMagicCircleAmount;
     private float startingWindupTimer;
+    private bool frame1AfterSwap;
+    private int familiarCurrentPhase;
+    private int weaverCurrentPhase;
 
     // Start is called before the first frame update
     void Start()
@@ -76,6 +79,9 @@ public class WyvernBossManager : MonoBehaviour
         configurationIsActive = false;
         spawnedConfiguration = false;
         moveToNextRoom = false;
+        frame1AfterSwap = false;
+        familiarCurrentPhase = phases;
+        weaverCurrentPhase = phases;
 
         transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
         
@@ -86,22 +92,32 @@ public class WyvernBossManager : MonoBehaviour
     {
         if (moveToNextRoom == false) {
             if (familiarScript.myTurn) {
-                if (windup == false) {
-                    if (reseting == true) {
-                        reseting = false;
-                    }
-                    else {
-                        transform.LookAt(new Vector3(stag.transform.position.x,transform.position.y,stag.transform.position.z));
+                if (frame1AfterSwap) {
+                    WeaverStagPhaseSwap();
+                }
+                else {
+                    if (windup == false) {
+                        if (reseting == true) {
+                            reseting = false;
+                        }
+                        else {
+                            transform.LookAt(new Vector3(stag.transform.position.x,transform.position.y,stag.transform.position.z));
+                        }
                     }
                 }
             }
             else {
-                if (windup == false) {
-                    if (reseting == true) {
-                        reseting = false;
-                    }
-                    else {
-                        transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
+                if (frame1AfterSwap) {
+
+                }
+                else {
+                    if (windup == false) {
+                        if (reseting == true) {
+                            reseting = false;
+                        }
+                        else {
+                            transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
+                        }
                     }
                 }
             }
@@ -109,95 +125,60 @@ public class WyvernBossManager : MonoBehaviour
             switch (phases) {
                 //FIREBALL
                 case 1:
-                    if (!familiarScript.myTurn) {
-                        if (fireballtimer > 0) {
-                            fireballtimer -= Time.deltaTime;
-                        }
-                        else {
-                            if (!playercontroller.isDead) {
-                                ThrowFireball();
-                            }
-                            fireballtimer = startingFireballTimer;
-                        }
+                    if (fireballtimer > 0) {
+                        fireballtimer -= Time.deltaTime;
                     }
                     else {
-                        if (fireballtimer > 0) {
-                            fireballtimer -= Time.deltaTime;
+                        if (!playercontroller.isDead) {
+                            ThrowFireball();
                         }
-                        else {
-                            if (!familiarScript.isDead) {
-                                ThrowFireball();
-                            }
-                            fireballtimer = startingFireballTimer;
-                        }
+                        fireballtimer = startingFireballTimer;
                     }
                 break;
                 //MAGIC CIRCLE
                 case 2:
-                    if (!familiarScript.myTurn) {
-                        if (reseting == false) {
-                            if (useConfigurations) {
-                                if (spawnedConfiguration == false) {
-                                    if (!playercontroller.isDead) {
-                                        SpawnMagicCircle();
-                                    } 
-                                }
+                    if (reseting == false) {
+                        if (useConfigurations) {
+                            if (spawnedConfiguration == false) {
+                                if (!playercontroller.isDead) {
+                                    SpawnMagicCircle();
+                                } 
+                            }
+                        }
+                        else {
+                            if (magicCircleTimer > 0) {
+                                magicCircleTimer -= Time.deltaTime;
                             }
                             else {
-                                if (magicCircleTimer > 0) {
-                                    magicCircleTimer -= Time.deltaTime;
+                                if (!playercontroller.isDead) {
+                                    SpawnMagicCircle();
                                 }
-                                else {
-                                    if (!playercontroller.isDead) {
-                                        SpawnMagicCircle();
-                                    }
-                                    magicCircleTimer = startingMagicCircleTimer;
-                                }
+                                magicCircleTimer = startingMagicCircleTimer;
+                            }
+                        }
+                    }    
+                break;
+                //FLAMETHROWER
+                case 3:
+                    if (!blowFire) {
+                        if (windup == true) {
+                            WindingUp();
+                        }
+                        else {
+                            windupTimer -= Time.deltaTime;
+                            if (windupTimer <= 0) {
+                                windup = true;
                             }
                         }
                     }
                     else {
-                        if (reseting == false) {
-                            if (useConfigurations) {
-                                if (spawnedConfiguration == false) {
-                                    if (!familiarScript.isDead) {
-                                        SpawnMagicCircle();
-                                    } 
-                                }
-                            }
-                            else {
-                                if (magicCircleTimer > 0) {
-                                    magicCircleTimer -= Time.deltaTime;
-                                }
-                                else {
-                                    if (!familiarScript.isDead) {
-                                        SpawnMagicCircle();
-                                    }
-                                    magicCircleTimer = startingMagicCircleTimer;
-                                }
-                            }
-                        }
+                        BlowFire();
                     }
                 break;
-                //FLAMETHROWER
-                case 3:
-                    if (!familiarScript.myTurn) {
-                        if (!blowFire) {
-                            if (windup == true) {
-                                WindingUp();
-                            }
-                            else {
-                                windupTimer -= Time.deltaTime;
-                                if (windupTimer <= 0) {
-                                    windup = true;
-                                }
-                            }
-                        }
-                        else {
-                            BlowFire();
-                        }
-                    }
-                break;
+            }
+
+            if (playercontroller.possessing || familiarScript.depossessing) {
+                frame1AfterSwap = true;
             }
         }
         else {
@@ -222,56 +203,6 @@ public class WyvernBossManager : MonoBehaviour
         gotDestination = true;
     }
 
-    void ChooseRandom(int previousPhase) {
-        int newPhase = Random.Range(0,2);
-
-        if (spawnedConfiguration) {
-            spawnedConfiguration = false;
-        }
-
-        switch (previousPhase) {
-            case 0:
-                newPhase = Random.Range(0,2);
-                if (newPhase == 0) {
-                    phases = 1;
-                }
-                else if (newPhase == 1) {
-                    phases = 2;
-                }
-            break;
-
-            //FIREBALL | PHASE = 1
-            case 1:
-                if (newPhase == 0) {
-                    phases = 2;
-                }
-                else {
-                    phases = 3;
-                }
-            break;
-
-            //MAGIC CIRCLE | PHASE = 2
-            case 2:
-                if (newPhase == 0) {
-                    phases = 1;
-                }
-                else {
-                    phases = 3;
-                }
-            break;
-
-            //FLAMETHROWER | PHASE = 3
-            case 3:
-                if (newPhase == 0) {
-                    phases = 1;
-                }
-                else {
-                    phases = 2;
-                }
-            break;
-        }
-    }
-
     void ThrowFireball() {
         if (fireballAmount > 0) {
             Instantiate(fireball,transform.position,Quaternion.identity);
@@ -294,7 +225,7 @@ public class WyvernBossManager : MonoBehaviour
                 }
                 else {
                     Vector3 randomposition = Random.insideUnitCircle * spawnradius;
-                    Vector3 newposition = new Vector3(stag.transform.position.x + randomposition.x, stag.transform.position.y - 1f, stag.transform.position.z + randomposition.y);
+                    Vector3 newposition = new Vector3(stag.transform.position.x + randomposition.x, stag.transform.position.y - 7f, stag.transform.position.z + randomposition.y);
                     Instantiate(magicCircle,newposition,Quaternion.identity);
                 }
                 magicCircleAmount -= 1;
@@ -369,8 +300,23 @@ public class WyvernBossManager : MonoBehaviour
         reseting = true;
     }
 
-    public void SwitchToPhase(int newphase, int previousphase) {
+    /// <summary>
+    /// Switches to new phase.
+    /// </summary>
+    /// <param name="newphase"> 
+    /// A reference to the phase that you are entering
+    /// </param>
+    /// <param name="previousphase">
+    /// A reference to the phase that you are exiting
+    /// </param>
+    public void SwitchToPhase(int newphase, int previousphase, bool isWeaversTurn) {
         phases = newphase;
+        if (isWeaversTurn) {
+            weaverCurrentPhase = newphase;
+        }
+        else {
+            familiarCurrentPhase = newphase;
+        }
         switch (previousphase) {
             case 1:
                 fireballAmount = startingFireballAmount;
@@ -391,8 +337,14 @@ public class WyvernBossManager : MonoBehaviour
 
     }
 
-    public void WeaverStagPhaseSwap() {
-        
+    void WeaverStagPhaseSwap() {
+        if (familiarScript.myTurn) {
+            phases = familiarCurrentPhase;
+        }
+        else {
+            phases = weaverCurrentPhase;
+        }
+        frame1AfterSwap = false;
     }
 
     void OnCollisionEnter(Collision other) {
