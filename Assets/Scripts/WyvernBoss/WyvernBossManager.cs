@@ -9,7 +9,7 @@ public class WyvernBossManager : MonoBehaviour
     private PlayerControllerNew playercontroller;
     private GameObject stag;
     private FamiliarScript familiarScript;
-    private int phases; //0 = no phase, 1 = fireball, 2 = magic circle, 3 = flamethrower, 4 = flee
+    [HideInInspector] public int phases; //0 = no phase, 1 = fireball, 2 = magic circle, 3 = flamethrower, 4 = flee
     //private Rigidbody rb;
     private NavMeshAgent navMeshAgent;
     private bool moveToNextRoom; //If moving to next room
@@ -159,7 +159,7 @@ public class WyvernBossManager : MonoBehaviour
                         if (reseting == false) {
                             if (useConfigurations) {
                                 if (spawnedConfiguration == false) {
-                                    if (!playercontroller.isDead) {
+                                    if (!familiarScript.isDead) {
                                         SpawnMagicCircle();
                                     } 
                                 }
@@ -169,7 +169,7 @@ public class WyvernBossManager : MonoBehaviour
                                     magicCircleTimer -= Time.deltaTime;
                                 }
                                 else {
-                                    if (!playercontroller.isDead) {
+                                    if (!familiarScript.isDead) {
                                         SpawnMagicCircle();
                                     }
                                     magicCircleTimer = startingMagicCircleTimer;
