@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class BlackboardScript : MonoBehaviour
 {
@@ -39,7 +40,12 @@ public class BlackboardScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.CompareTag("Player")) {
+            var weaverNPCInteraction = InputManagerScript.instance.playerInput.actions["NPCInteraction"].GetBindingDisplayString();
+
             popupUIPrompt.SetActive(true);
+
+            popupUIPrompt.gameObject.transform.GetComponent<TMP_Text>().SetText("<sprite name=" + weaverNPCInteraction + ">"
+                        + " Interact");
         }
     }
 

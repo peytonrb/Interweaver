@@ -19,7 +19,7 @@ public class TeleportationCrystalScript : MonoBehaviour
      linkedCrystal.transform.position.y, linkedCrystal.transform.position.z + 3);
 
         WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
-        //weaveController.currentWeaveable.ResetWeaveable();
+        //audio here
         weaveController.OnDrop();
      
     }
@@ -31,7 +31,7 @@ public class TeleportationCrystalScript : MonoBehaviour
                    linkedCrystal.transform.position.y, linkedCrystal.transform.position.z + 3);
 
         WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
-        //weaveController.currentWeaveable.ResetWeaveable();
+        //audio here
         weaveController.OnDrop();
         
     }
