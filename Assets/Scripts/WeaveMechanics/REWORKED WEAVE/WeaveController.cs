@@ -125,6 +125,7 @@ public class WeaveController : MonoBehaviour
             RaycastHit hitInfo;
 
             // checks for a Weavable object within distance of Ray
+            //probably decrease the distance or somehow make it where it doesn't ignore walls
             if (Physics.SphereCast(transform.position, 1f, rayPlayer.direction, out hitInfo, 100f, weaveableLayerMask)) // changed to spherecast so horizontal objects are easier to pick up
             {
                 currentWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
@@ -227,6 +228,7 @@ public class WeaveController : MonoBehaviour
     // <param> is player using a controller or k&m
     public void CheckIfWeaveable(bool isGamepad)
     {
+        //somehow the the box cast and the raycasts are ignoring the walls?????
         // prevents you from combining more than the max amount of weaveables per group
         if (WeaveableManager.Instance.combinedWeaveables[currentWeaveable.listIndex].weaveableObjectGroup.Count < maxCombinedObjects)
         {
