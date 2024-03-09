@@ -28,7 +28,7 @@ public class WyvernFlamethrower : MonoBehaviour, ITriggerable
 
     public void OnTrigEnter(Collider other) {
         if (other.gameObject.CompareTag("Hazard")) {
-            PlayerController player = weaver.GetComponent<PlayerController>();
+            PlayerControllerNew player = weaver.GetComponent<PlayerControllerNew>();
             player.Death();
         }
     }
