@@ -19,6 +19,7 @@ public class WyvernPhaseTriggers : MonoBehaviour
     private bool weaverInsideTrigger, familiarInsideTrigger; //Note to self: used for determining if a trigger has been triggered if swapping to the other character
     private bool triggered;
     private bool isZTrigger;
+    private bool enteredFromNorth;
     private Vector3 currentPosition;
     private bool toggle;
 
@@ -80,17 +81,52 @@ public class WyvernPhaseTriggers : MonoBehaviour
     }
 
     void OnTriggerEnter(Collider other) {
+        
         if (other.gameObject.CompareTag("Player")) {
             if (familiarInsideTrigger == false) {
-                weaverInsideTrigger = true;
+                currentPosition = other.gameObject.transform.position;
+                if (isZTrigger) {
+                    if (bc.center.z > currentPosition.z) {
+                        enteredFromNorth = false;
+                    }
+                    else {
+                        enteredFromNorth = true;
+                    }
+                }
+                else {
+                    if (bc.center.x > currentPosition.x) {
+                        enteredFromNorth = false;
+                    }
+                    else {
+                        enteredFromNorth = true;
+                    }
+                }
                 FlipFlop(currentPhase,newPhase);
+                weaverInsideTrigger = true;
             }
             
         }
         if (other.gameObject.CompareTag("Familiar")) {
             if (weaverInsideTrigger == false) {
-                familiarInsideTrigger = true;
+                currentPosition = other.gameObject.transform.position;
+                if (isZTrigger) {
+                    if (bc.center.z > currentPosition.z) {
+                        enteredFromNorth = false;
+                    }
+                    else {
+                        enteredFromNorth = true;
+                    }
+                }
+                else {
+                    if (bc.center.x > currentPosition.x) {
+                        enteredFromNorth = false;
+                    }
+                    else {
+                        enteredFromNorth = true;
+                    }
+                }
                 FlipFlop(currentPhase,newPhase);
+                familiarInsideTrigger = true;
             }
         }
     }
@@ -98,20 +134,54 @@ public class WyvernPhaseTriggers : MonoBehaviour
     void OnTriggerExit(Collider other) {
         if (other.gameObject.CompareTag("Player")) {
             if (familiarInsideTrigger == false) {
-                weaverInsideTrigger = false;
                 currentPosition = other.gameObject.transform.position;
-                if (isZTrigger) {
-
+                if (isZTrigger && !enteredFromNorth) {
+                    if (bc.center.z < currentPosition.z) {
+                        FlipFlop(currentPhase,newPhase);
+                    }
                 }
+                else if (isZTrigger && enteredFromNorth) {
+                    if (bc.center.z > currentPosition.z) {
+                        FlipFlop(currentPhase,newPhase);
+                    }
+                }
+                else if (!isZTrigger && !enteredFromNorth) {
+                    if (bc.center.x < currentPosition.x) {
+                        FlipFlop(currentPhase,newPhase);
+                    }
+                }
+                else if (!isZTrigger && enteredFromNorth) {
+                    if (bc.center.x > currentPosition.x) {
+                        FlipFlop(currentPhase,newPhase);
+                    }
+                }
+                weaverInsideTrigger = false;
             }
         }
         if (other.gameObject.CompareTag("Familiar")) {
             if (weaverInsideTrigger == false) {
-                familiarInsideTrigger = false;
                 currentPosition = other.gameObject.transform.position;
-                if (isZTrigger) {
-                    
+                if (isZTrigger && !enteredFromNorth) {
+                    if (bc.center.z > currentPosition.z) {
+                        FlipFlop(currentPhase,newPhase);
+                    }
                 }
+                else if (isZTrigger && enteredFromNorth) {
+                    if (bc.center.z < currentPosition.z) {
+                        FlipFlop(currentPhase,newPhase);
+                    }
+                }
+                else if (!isZTrigger && !enteredFromNorth) {
+                    if (bc.center.x > currentPosition.x) {
+                        FlipFlop(currentPhase,newPhase);
+                    }
+                }
+                else if (!isZTrigger && enteredFromNorth) {
+                    if (bc.center.x < currentPosition.x) {
+                        FlipFlop(currentPhase,newPhase);
+                    }
+                }
+                familiarInsideTrigger = false;
             }
         }
     }
@@ -120,12 +190,12 @@ public class WyvernPhaseTriggers : MonoBehaviour
     void FlipFlop(int phase1, int phase2) {
         if (toggle == false) {
             //Phase 1 to Phase 2
-            bossManager.phases = phase2;
+            bossManager.SwitchToPhase(phase2,phase1);
             toggle = true;
         }
         else {
             //Phase 2 to Phase 1
-            bossManager.phases = phase1;
+            bossManager.SwitchToPhase(phase1,phase2);
             toggle = false;
         }
     }

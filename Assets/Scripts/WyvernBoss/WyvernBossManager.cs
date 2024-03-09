@@ -9,7 +9,7 @@ public class WyvernBossManager : MonoBehaviour
     private PlayerControllerNew playercontroller;
     private GameObject stag;
     private FamiliarScript familiarScript;
-    [HideInInspector] public int phases; //0 = no phase, 1 = fireball, 2 = magic circle, 3 = flamethrower, 4 = flee
+    public int phases; //0 = no phase, 1 = fireball, 2 = magic circle, 3 = flamethrower, 4 = flee
     //private Rigidbody rb;
     private NavMeshAgent navMeshAgent;
     private bool moveToNextRoom; //If moving to next room
@@ -76,7 +76,6 @@ public class WyvernBossManager : MonoBehaviour
         configurationIsActive = false;
         spawnedConfiguration = false;
         moveToNextRoom = false;
-        phases = 1;
 
         transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
         
@@ -89,10 +88,7 @@ public class WyvernBossManager : MonoBehaviour
             if (familiarScript.myTurn) {
                 if (windup == false) {
                     if (reseting == true) {
-                        if (!configurationIsActive) {
-                            //ChooseRandom(phases);
-                            reseting = false;
-                        }
+                        reseting = false;
                     }
                     else {
                         transform.LookAt(new Vector3(stag.transform.position.x,transform.position.y,stag.transform.position.z));
@@ -101,7 +97,12 @@ public class WyvernBossManager : MonoBehaviour
             }
             else {
                 if (windup == false) {
-                    transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
+                    if (reseting == true) {
+                        reseting = false;
+                    }
+                    else {
+                        transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
+                    }
                 }
             }
 
@@ -336,6 +337,8 @@ public class WyvernBossManager : MonoBehaviour
         }
 
         transform.eulerAngles = new Vector3(0, Mathf.MoveTowardsAngle(transform.eulerAngles.y, newrotation, windupRotationSpeed * Time.deltaTime), 0);
+        //Debug.Log("euler angles y = " + transform.eulerAngles.y);
+        //Debug.Log("new rotation = " + newrotation);
         if (transform.eulerAngles.y >= newrotation) {
             SpawnFire();
             blowFire = true;
@@ -364,6 +367,32 @@ public class WyvernBossManager : MonoBehaviour
         windup = false;
         gotNewRotation = false;
         reseting = true;
+    }
+
+    public void SwitchToPhase(int newphase, int previousphase) {
+        phases = newphase;
+        switch (previousphase) {
+            case 1:
+                fireballAmount = startingFireballAmount;
+                fireballtimer = startingFireballTimer;
+            break;
+            case 2:
+                magicCircleAmount = startingMagicCircleAmount;
+                magicCircleTimer = startingMagicCircleTimer;
+                magicCircleCooldown = startingMagiCircleCooldown;
+            break;
+            case 3:
+                WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
+                wyvernFlamethrower.KillThyself();
+                ResetPhase3();
+            break;
+        }
+        reseting = true;
+
+    }
+
+    public void WeaverStagPhaseSwap() {
+        
     }
 
     void OnCollisionEnter(Collision other) {
