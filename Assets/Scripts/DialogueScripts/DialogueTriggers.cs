@@ -125,6 +125,9 @@ public class DialogueTriggers : MonoBehaviour
                 {
                     if (collider.gameObject.tag == "Player" || collider.gameObject.tag == "Familiar")
                         AutoTrigger(collider);
+                    weaverInteraction.SetActive(true);
+                    weaverInteraction.gameObject.transform.GetComponent<TMP_Text>().SetText("<sprite name=" + weaverNPCInteraction + ">"
+                         + " Interact");
                     break;
                 }
             case CharacterTriggerType.Weaver:
