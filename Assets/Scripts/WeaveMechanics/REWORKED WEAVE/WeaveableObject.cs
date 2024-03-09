@@ -92,11 +92,11 @@ public class WeaveableObject : MonoBehaviour
                 Vector3 rayDirection = Vector3.down;
                 this.GetComponent<Rigidbody>().AddForce(rayDirection * Physics.gravity.y * hoverHeight);
             }
-            // if object is too high, make sure it falls to the ground
-            else if (!Physics.Raycast(transform.position, new Vector3(0f, -90f, 0f), out hit, hoverHeight + 0.5f))
+            // if object is too high, make sure it falls to the weaver's height
+            else if (!Physics.Raycast(transform.position, new Vector3(0f, -90f, 0f), out hit, weaveController.transform.position.y + hoverHeight + 0.5f))
             {
                 Vector3 rayDirection = Vector3.up; // i??? idk??
-                this.GetComponent<Rigidbody>().AddForce(rayDirection * Physics.gravity.y * 6f * hoverHeight);
+                this.GetComponent<Rigidbody>().AddForce(rayDirection * Physics.gravity.y * 6f * weaveController.transform.position.y);
             }
 
             // actually moves the weaveable with joystick or mouse
@@ -512,6 +512,7 @@ public class WeaveableObject : MonoBehaviour
     {
         isBeingWoven = false;
         isHovering = false;
+        this.GetComponent<Rigidbody>().useGravity = true;
 
         if (!hasBeenCombined)
         {

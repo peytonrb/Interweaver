@@ -136,6 +136,7 @@ public class WeaveController : MonoBehaviour
         if (isValidWeaveable)
         {
             currentWeaveable.isBeingWoven = true;
+            currentWeaveable.GetComponent<Rigidbody>().useGravity = false;
             movementScript.freeMove = true; // lets weaver move even when not facing where they're moving
             StartCoroutine(PlayWeaveVFX());
             StartCoroutine(WaitForVFX()); // sets isWeaving to true. is in Coroutine for aesthetic purposes.
