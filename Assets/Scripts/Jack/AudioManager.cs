@@ -33,9 +33,11 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip titleMusic;
     [SerializeField] private AudioClip alpineMusic;
     [SerializeField] private AudioClip cavernMusic;
+    [SerializeField] private AudioClip sepultusMusic;
+    [SerializeField] private AudioClip hubMusic;
 
-    [Header("SFX")]
-    [SerializeField] private List<AudioClip> soundEffects = new List<AudioClip>();  
+  //  [Header("SFX")]
+   // [SerializeField] private List<AudioClip> soundEffects = new List<AudioClip>();  
    
 
     void Awake()
@@ -84,7 +86,7 @@ public class AudioManager : MonoBehaviour
                 }
             case "Cavern":
                 {
-                    PlaySound(AudioManagerChannels.MusicChannel, alpineMusic);
+                    PlaySound(AudioManagerChannels.MusicChannel, cavernMusic);
                     break;
                 }
         }
