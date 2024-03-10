@@ -22,7 +22,8 @@ public class WyvernPhaseTriggers : MonoBehaviour
     private bool isZTrigger;
     private bool enteredFromNorth;
     private Vector3 currentPosition;
-    private bool toggle;
+    private bool weaverToggle;
+    private bool familiarToggle;
 
     // Start is called before the first frame update
     void Start()
@@ -158,6 +159,9 @@ public class WyvernPhaseTriggers : MonoBehaviour
                         FlipFlop(currentPhase,newPhase,true);
                     }
                 }
+                else {
+                    Debug.Log("NO FLIP FLOP");
+                }
                 weaverInsideTrigger = false;
             }
         }
@@ -165,22 +169,22 @@ public class WyvernPhaseTriggers : MonoBehaviour
             if (weaverInsideTrigger == false) {
                 currentPosition = other.gameObject.transform.position;
                 if (isZTrigger && !enteredFromNorth) {
-                    if (bc.center.z > currentPosition.z) {
-                        FlipFlop(currentPhase,newPhase,false);
-                    }
-                }
-                else if (isZTrigger && enteredFromNorth) {
                     if (bc.center.z < currentPosition.z) {
                         FlipFlop(currentPhase,newPhase,false);
                     }
                 }
+                else if (isZTrigger && enteredFromNorth) {
+                    if (bc.center.z > currentPosition.z) {
+                        FlipFlop(currentPhase,newPhase,false);
+                    }
+                }
                 else if (!isZTrigger && !enteredFromNorth) {
-                    if (bc.center.x > currentPosition.x) {
+                    if (bc.center.x < currentPosition.x) {
                         FlipFlop(currentPhase,newPhase,false);
                     }
                 }
                 else if (!isZTrigger && enteredFromNorth) {
-                    if (bc.center.x < currentPosition.x) {
+                    if (bc.center.x > currentPosition.x) {
                         FlipFlop(currentPhase,newPhase,false);
                     }
                 }
@@ -191,28 +195,90 @@ public class WyvernPhaseTriggers : MonoBehaviour
 
     //Flips between one phase and the other.
     void FlipFlop(int phase1, int phase2, bool isWeaversTurn) {
-        if (toggle == false) {
-            //Phase 1 to Phase 2
-            bossManager.SwitchToPhase(phase2,phase1,isWeaversTurn);
-            if (isWeaversTurn) {
+        if (isWeaversTurn) {
+            if (weaverToggle == false) {
+                //Phase 1 to Phase 2
+                bossManager.SwitchToPhase(phase2,phase1,isWeaversTurn);
+                Debug.Log("phase is now phase 2");
                 weaverCurrentPhase = phase2;
+                weaverToggle = true;
             }
             else {
-                familiarCurrentPhase = phase2;
+                //Phase 2 to Phase 1
+                bossManager.SwitchToPhase(phase1,phase2,isWeaversTurn);
+                Debug.Log("phase is now phase 1");
+                weaverCurrentPhase = phase1;
+                weaverToggle = false;
             }
-            toggle = true;
+            Debug.Log("weaver toggle is " + weaverToggle);
         }
         else {
-            //Phase 2 to Phase 1
-            bossManager.SwitchToPhase(phase1,phase2,isWeaversTurn);
-            if (weaverInsideTrigger) {
-                weaverCurrentPhase = phase1;
+            if (familiarToggle == false) {
+                //Phase 1 to Phase 2
+                bossManager.SwitchToPhase(phase2,phase1,isWeaversTurn);
+                Debug.Log("phase is now phase 2");
+                familiarCurrentPhase = phase2;
+                familiarToggle = true;
             }
-            else if (familiarInsideTrigger) {
+            else {
+                //Phase 2 to Phase 1
+                bossManager.SwitchToPhase(phase1,phase2,isWeaversTurn);
+                Debug.Log("phase is now phase 1");
                 familiarCurrentPhase = phase1;
+                familiarToggle = false;
             }
-            toggle = false;
+            Debug.Log("familiar toggle is " + familiarToggle);
         }
+        
+    }
+
+    void Update() {
+        if (bossManager.updatePhaseOnTrigger) {
+            UpdatePhase();
+        }
+        //Debug.Log("Current phase is " + currentPhase);
+        //Debug.Log("New phase is " + newPhase);
+    }
+
+    //Updates the triggers with the current phase after possession/depossession happens.
+    public void UpdatePhase() {
+        currentPhase = bossManager.phases;
+        switch (currentPhase) {
+            //Fireball
+            case 1:
+                switch (triggerType) {
+                    case TriggerType.FireballAndMagicCircle:
+                        newPhase = 2;
+                    break;
+                    case TriggerType.FlamethrowerAndFireball:
+                        newPhase = 3;
+                    break;
+                }
+            break;
+            //Magic Circle
+            case 2:
+                switch (triggerType) {
+                    case TriggerType.FireballAndMagicCircle:
+                        newPhase = 1;
+                    break;
+                    case TriggerType.MagicCircleAndFlameThrower:
+                        newPhase = 3;
+                    break;
+                }
+            break;
+            //Flamethrower
+            case 3:
+                switch (triggerType) {
+                    case TriggerType.MagicCircleAndFlameThrower:
+                        newPhase = 2;
+                    break;
+                    case TriggerType.FlamethrowerAndFireball:
+                        newPhase = 1;
+                    break;
+                }
+            break;
+        }
+        bossManager.updatePhaseOnTrigger = false;
     }
 
 }

@@ -55,6 +55,7 @@ public class WyvernBossManager : MonoBehaviour
     private bool frame1AfterSwap;
     private int familiarCurrentPhase;
     private int weaverCurrentPhase;
+    [HideInInspector] public bool updatePhaseOnTrigger;
 
     // Start is called before the first frame update
     void Start()
@@ -80,6 +81,7 @@ public class WyvernBossManager : MonoBehaviour
         spawnedConfiguration = false;
         moveToNextRoom = false;
         frame1AfterSwap = false;
+        updatePhaseOnTrigger = false;
         familiarCurrentPhase = phases;
         weaverCurrentPhase = phases;
 
@@ -94,6 +96,7 @@ public class WyvernBossManager : MonoBehaviour
             if (familiarScript.myTurn) {
                 if (frame1AfterSwap) {
                     WeaverStagPhaseSwap();
+                    Debug.Log("Performed phase swap for familiar");
                 }
                 else {
                     if (windup == false) {
@@ -108,7 +111,8 @@ public class WyvernBossManager : MonoBehaviour
             }
             else {
                 if (frame1AfterSwap) {
-
+                    WeaverStagPhaseSwap();
+                    Debug.Log("Performed phase swap for weaver");
                 }
                 else {
                     if (windup == false) {
@@ -177,9 +181,22 @@ public class WyvernBossManager : MonoBehaviour
                 break;
             }
 
-            if (playercontroller.possessing || familiarScript.depossessing) {
-                frame1AfterSwap = true;
+            //This stuff determines whether its reseting possessions.
+            if (frame1AfterSwap == false) {
+                if (familiarScript.myTurn) {
+                    if (familiarScript.depossessing) {
+                        frame1AfterSwap = true;
+                    }
+                }
+                else {
+                    if (playercontroller.possessing) {
+                        frame1AfterSwap = true;
+                        Debug.Log("possessing");
+                    }
+                }
+                
             }
+
         }
         else {
             if (gotDestination == false) {
@@ -251,7 +268,6 @@ public class WyvernBossManager : MonoBehaviour
                 yield return new WaitForSeconds(magicCircleCooldown);
             break;
         }
-        Debug.Log("Cooldown finished");
         magicCircleCooldown = startingMagiCircleCooldown;
         reseting = false;
         yield break;
@@ -340,10 +356,23 @@ public class WyvernBossManager : MonoBehaviour
     void WeaverStagPhaseSwap() {
         if (familiarScript.myTurn) {
             phases = familiarCurrentPhase;
+            Debug.Log("phase is now " + familiarCurrentPhase);
+            fireballAmount = startingFireballAmount;
+            fireballtimer = startingFireballTimer;
+            magicCircleAmount = startingMagicCircleAmount;
+            magicCircleTimer = startingMagicCircleTimer;
+            magicCircleCooldown = startingMagiCircleCooldown;
         }
         else {
             phases = weaverCurrentPhase;
+            Debug.Log("phase is now " + weaverCurrentPhase);
+            fireballAmount = startingFireballAmount;
+            fireballtimer = startingFireballTimer;
+            magicCircleAmount = startingMagicCircleAmount;
+            magicCircleTimer = startingMagicCircleTimer;
+            magicCircleCooldown = startingMagiCircleCooldown;
         }
+        updatePhaseOnTrigger = true;
         frame1AfterSwap = false;
     }
 
