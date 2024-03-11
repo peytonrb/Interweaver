@@ -10,7 +10,6 @@ public class WyvernBossManager : MonoBehaviour
     private GameObject stag;
     private FamiliarScript familiarScript;
     public int phases; //0 = no phase, 1 = fireball, 2 = magic circle, 3 = flamethrower, 4 = flee
-    //private Rigidbody rb;
     private NavMeshAgent navMeshAgent;
     private bool moveToNextRoom; //If moving to next room
     private int currentRoom; //Gets current room
@@ -46,16 +45,18 @@ public class WyvernBossManager : MonoBehaviour
     private bool gotNewRotation;
     [HideInInspector] public bool reseting;
 
+    [Header("PUT WYVERN TRIGGER MANAGER HERE")]
+    [SerializeField] private GameObject wyvernTriggerManager;
+    private WyvernPhaseTriggerManager triggerManager;
+
     private float startingFireballTimer;
     private int startingFireballAmount;
     private float startingMagicCircleTimer;
     private float startingMagiCircleCooldown;
     private int startingMagicCircleAmount;
     private float startingWindupTimer;
-    private bool frame1AfterSwap;
     private int familiarCurrentPhase;
     private int weaverCurrentPhase;
-    [HideInInspector] public bool updatePhaseOnTrigger;
 
     // Start is called before the first frame update
     void Start()
@@ -64,9 +65,9 @@ public class WyvernBossManager : MonoBehaviour
         stag = GameObject.FindGameObjectWithTag("Familiar");
         familiarScript = stag.GetComponent<FamiliarScript>();
         playercontroller = weaver.GetComponent<PlayerControllerNew>();
+        triggerManager = wyvernTriggerManager.GetComponent<WyvernPhaseTriggerManager>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         //transform.position = new Vector3(roomDestinations[currentRoom].transform.position.x, transform.position.y, roomDestinations[currentRoom].transform.position.z);
-        //rb = GetComponent<Rigidbody>();
 
         startingFireballTimer = fireballtimer;
         startingFireballAmount = fireballAmount;
@@ -80,8 +81,6 @@ public class WyvernBossManager : MonoBehaviour
         configurationIsActive = false;
         spawnedConfiguration = false;
         moveToNextRoom = false;
-        frame1AfterSwap = false;
-        updatePhaseOnTrigger = false;
         familiarCurrentPhase = phases;
         weaverCurrentPhase = phases;
 
@@ -94,34 +93,22 @@ public class WyvernBossManager : MonoBehaviour
     {
         if (moveToNextRoom == false) {
             if (familiarScript.myTurn) {
-                if (frame1AfterSwap) {
-                    WeaverStagPhaseSwap();
-                    Debug.Log("Performed phase swap for familiar");
-                }
-                else {
-                    if (windup == false) {
-                        if (reseting == true) {
-                            reseting = false;
-                        }
-                        else {
-                            transform.LookAt(new Vector3(stag.transform.position.x,transform.position.y,stag.transform.position.z));
-                        }
+                if (windup == false) {
+                    if (reseting == true) {
+                        reseting = false;
+                    }
+                    else {
+                        transform.LookAt(new Vector3(stag.transform.position.x,transform.position.y,stag.transform.position.z));
                     }
                 }
             }
             else {
-                if (frame1AfterSwap) {
-                    WeaverStagPhaseSwap();
-                    Debug.Log("Performed phase swap for weaver");
-                }
-                else {
-                    if (windup == false) {
-                        if (reseting == true) {
-                            reseting = false;
-                        }
-                        else {
-                            transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
-                        }
+                if (windup == false) {
+                    if (reseting == true) {
+                        reseting = false;
+                    }
+                    else {
+                        transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
                     }
                 }
             }
@@ -179,22 +166,6 @@ public class WyvernBossManager : MonoBehaviour
                         BlowFire();
                     }
                 break;
-            }
-
-            //This stuff determines whether its reseting possessions.
-            if (frame1AfterSwap == false) {
-                if (familiarScript.myTurn) {
-                    if (familiarScript.depossessing) {
-                        frame1AfterSwap = true;
-                    }
-                }
-                else {
-                    if (playercontroller.possessing) {
-                        frame1AfterSwap = true;
-                        Debug.Log("possessing");
-                    }
-                }
-                
             }
 
         }
@@ -284,8 +255,6 @@ public class WyvernBossManager : MonoBehaviour
         }
 
         transform.eulerAngles = new Vector3(0, Mathf.MoveTowardsAngle(transform.eulerAngles.y, newrotation, windupRotationSpeed * Time.deltaTime), 0);
-        //Debug.Log("euler angles y = " + transform.eulerAngles.y);
-        //Debug.Log("new rotation = " + newrotation);
         if (transform.eulerAngles.y >= newrotation) {
             SpawnFire();
             blowFire = true;
@@ -345,7 +314,9 @@ public class WyvernBossManager : MonoBehaviour
             break;
             case 3:
                 WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
-                wyvernFlamethrower.KillThyself();
+                if (wyvernFlamethrower != null) {
+                    wyvernFlamethrower.KillThyself();
+                }
                 ResetPhase3();
             break;
         }
@@ -353,8 +324,15 @@ public class WyvernBossManager : MonoBehaviour
 
     }
 
-    void WeaverStagPhaseSwap() {
-        if (familiarScript.myTurn) {
+    /// <summary>
+    /// Reads whos turn it was before the swap occured.
+    /// </summary>
+    /// <param name="familiarsTurn">
+    /// Should only read the bool myTurn from FamiliarScript.
+    /// </param>
+    public void WeaverOrFamiliar(bool familiarsTurn) {
+        if (familiarsTurn == false) {
+            //WHEN SWAPPING TO FAMILIAR
             phases = familiarCurrentPhase;
             Debug.Log("phase is now " + familiarCurrentPhase);
             fireballAmount = startingFireballAmount;
@@ -362,18 +340,33 @@ public class WyvernBossManager : MonoBehaviour
             magicCircleAmount = startingMagicCircleAmount;
             magicCircleTimer = startingMagicCircleTimer;
             magicCircleCooldown = startingMagiCircleCooldown;
+            WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
+            if (wyvernFlamethrower != null) {
+                wyvernFlamethrower.KillThyself();
+            }
+            ResetPhase3();
+
+            //Updates phase on all triggers
+            triggerManager.UpdatePhase();
         }
         else {
+            //WHEN SWAPPING TO WEAVER
             phases = weaverCurrentPhase;
-            Debug.Log("phase is now " + weaverCurrentPhase);
+            Debug.Log("phase is now " + familiarCurrentPhase);
             fireballAmount = startingFireballAmount;
             fireballtimer = startingFireballTimer;
             magicCircleAmount = startingMagicCircleAmount;
             magicCircleTimer = startingMagicCircleTimer;
             magicCircleCooldown = startingMagiCircleCooldown;
+            WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
+            if (wyvernFlamethrower != null) {
+                wyvernFlamethrower.KillThyself();
+            }
+            ResetPhase3();
+
+            //Updates phase on all triggers
+            triggerManager.UpdatePhase();
         }
-        updatePhaseOnTrigger = true;
-        frame1AfterSwap = false;
     }
 
     void OnCollisionEnter(Collision other) {

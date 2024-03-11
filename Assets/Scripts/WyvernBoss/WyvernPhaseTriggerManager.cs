@@ -93,12 +93,10 @@ public class WyvernPhaseTriggerManager : MonoBehaviour
                             case WyvernPhaseTriggers.TriggerType.FireballAndMagicCircle:
                                 triggerscript.currentPhase = currentPhase;
                                 triggerscript.newPhase = 2;
-                                Debug.Log("new phase is " + triggerscript.newPhase);
                             break;
                             case WyvernPhaseTriggers.TriggerType.FlamethrowerAndFireball:
                                 triggerscript.currentPhase = currentPhase;
                                 triggerscript.newPhase = 3;
-                                Debug.Log("new phase is " + triggerscript.newPhase);
                             break;
                         }
                     break;
@@ -108,12 +106,10 @@ public class WyvernPhaseTriggerManager : MonoBehaviour
                             case WyvernPhaseTriggers.TriggerType.FireballAndMagicCircle:
                                 triggerscript.currentPhase = currentPhase;
                                 triggerscript.newPhase = 1;
-                                Debug.Log("new phase is " + triggerscript.newPhase);
                             break;
                             case WyvernPhaseTriggers.TriggerType.MagicCircleAndFlameThrower:
                                 triggerscript.currentPhase = currentPhase;
                                 triggerscript.newPhase = 3;
-                                Debug.Log("new phase is " + triggerscript.newPhase);
                             break;
                         }
                     break;
@@ -123,12 +119,10 @@ public class WyvernPhaseTriggerManager : MonoBehaviour
                             case WyvernPhaseTriggers.TriggerType.MagicCircleAndFlameThrower:
                                 triggerscript.currentPhase = currentPhase;
                                 triggerscript.newPhase = 2;
-                                Debug.Log("new phase is " + triggerscript.newPhase);
                             break;
                             case WyvernPhaseTriggers.TriggerType.FlamethrowerAndFireball:
                                 triggerscript.currentPhase = currentPhase;
                                 triggerscript.newPhase = 1;
-                                Debug.Log("new phase is " + triggerscript.newPhase);
                             break;
                         }
                     break;
@@ -140,9 +134,49 @@ public class WyvernPhaseTriggerManager : MonoBehaviour
             
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    //Updates the triggers with the current phase after possession/depossession happens.
+    public void UpdatePhase() {
+        currentPhase = bossManager.phases;
+
+        foreach (GameObject go in triggers) {
+            WyvernPhaseTriggers triggerScript = go.GetComponent<WyvernPhaseTriggers>();
+
+            switch (currentPhase) {
+            //Fireball
+            case 1:
+                switch (triggerScript.triggerType) {
+                    case WyvernPhaseTriggers.TriggerType.FireballAndMagicCircle:
+                        triggerScript.newPhase = 2;
+                    break;
+                    case WyvernPhaseTriggers.TriggerType.FlamethrowerAndFireball:
+                        triggerScript.newPhase = 3;
+                    break;
+                }
+            break;
+            //Magic Circle
+            case 2:
+                switch (triggerScript.triggerType) {
+                    case WyvernPhaseTriggers.TriggerType.FireballAndMagicCircle:
+                        triggerScript.newPhase = 1;
+                    break;
+                    case WyvernPhaseTriggers.TriggerType.MagicCircleAndFlameThrower:
+                        triggerScript.newPhase = 3;
+                    break;
+                }
+            break;
+            //Flamethrower
+            case 3:
+                switch (triggerScript.triggerType) {
+                    case WyvernPhaseTriggers.TriggerType.MagicCircleAndFlameThrower:
+                        triggerScript.newPhase = 2;
+                    break;
+                    case WyvernPhaseTriggers.TriggerType.FlamethrowerAndFireball:
+                        triggerScript.newPhase = 1;
+                    break;
+                }
+            break;
+        }
+        }
         
     }
 }

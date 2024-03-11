@@ -18,7 +18,7 @@ public class WyvernPhaseTriggers : MonoBehaviour
     private WyvernPhaseTriggerManager triggerManager;
     private BoxCollider bc;
     private bool weaverInsideTrigger, familiarInsideTrigger; //Note to self: used for determining if a trigger has been triggered if swapping to the other character
-    public bool triggered;
+    [HideInInspector] public bool triggered;
     private bool isZTrigger;
     private bool enteredFromNorth;
     private Vector3 currentPosition;
@@ -38,6 +38,23 @@ public class WyvernPhaseTriggers : MonoBehaviour
         else {
             isZTrigger = true;
         }
+    }
+
+    //Flips between one phase and the other.
+    void FlipFlop(int phase1, int phase2, bool isWeaversTurn) {
+        if (isWeaversTurn) {
+            //Phase 1 to Phase 2
+            bossManager.SwitchToPhase(phase2,phase1,isWeaversTurn);
+            triggered = true;
+            triggerManager.UpdateOtherTriggers();
+        }
+        else {
+            //Phase 1 to Phase 2
+            bossManager.SwitchToPhase(phase2,phase1,isWeaversTurn);
+            triggered = true;
+            triggerManager.UpdateOtherTriggers();
+        }
+        
     }
 
     void OnTriggerEnter(Collider other) {
@@ -62,7 +79,7 @@ public class WyvernPhaseTriggers : MonoBehaviour
                     }
                 }
                 FlipFlop(currentPhase,newPhase,true);
-                weaverInsideTrigger = true;
+                //weaverInsideTrigger = true;
             }
             
         }
@@ -86,7 +103,7 @@ public class WyvernPhaseTriggers : MonoBehaviour
                     }
                 }
                 FlipFlop(currentPhase,newPhase,false);
-                familiarInsideTrigger = true;
+                //familiarInsideTrigger = true;
             }
         }
     }
@@ -149,72 +166,6 @@ public class WyvernPhaseTriggers : MonoBehaviour
             }
         }
         */
-    }
-
-    //Flips between one phase and the other.
-    void FlipFlop(int phase1, int phase2, bool isWeaversTurn) {
-        if (isWeaversTurn) {
-            //Phase 1 to Phase 2
-            bossManager.SwitchToPhase(phase2,phase1,isWeaversTurn);
-            triggered = true;
-            triggerManager.UpdateOtherTriggers();
-        }
-        else {
-            //Phase 1 to Phase 2
-            bossManager.SwitchToPhase(phase2,phase1,isWeaversTurn);
-            triggered = true;
-            triggerManager.UpdateOtherTriggers();
-        }
-        
-    }
-    
-    //Update other triggers with the change.
-
-    void Update() {
-        if (bossManager.updatePhaseOnTrigger) {
-            UpdatePhase();
-        }
-    }
-
-    //Updates the triggers with the current phase after possession/depossession happens.
-    public void UpdatePhase() {
-        currentPhase = bossManager.phases;
-        switch (currentPhase) {
-            //Fireball
-            case 1:
-                switch (triggerType) {
-                    case TriggerType.FireballAndMagicCircle:
-                        newPhase = 2;
-                    break;
-                    case TriggerType.FlamethrowerAndFireball:
-                        newPhase = 3;
-                    break;
-                }
-            break;
-            //Magic Circle
-            case 2:
-                switch (triggerType) {
-                    case TriggerType.FireballAndMagicCircle:
-                        newPhase = 1;
-                    break;
-                    case TriggerType.MagicCircleAndFlameThrower:
-                        newPhase = 3;
-                    break;
-                }
-            break;
-            //Flamethrower
-            case 3:
-                switch (triggerType) {
-                    case TriggerType.MagicCircleAndFlameThrower:
-                        newPhase = 2;
-                    break;
-                    case TriggerType.FlamethrowerAndFireball:
-                        newPhase = 1;
-                    break;
-                }
-            break;
-        }
-        bossManager.updatePhaseOnTrigger = false;
     }
 
 }
