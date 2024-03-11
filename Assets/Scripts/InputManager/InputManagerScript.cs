@@ -11,6 +11,7 @@ public class InputManagerScript : MonoBehaviour
 {
     public GameObject player;
     public GameObject familiar;
+    public GameObject wyvern;
     public bool canSwitch = true; // bool which determines if possession can occur
     public Vector2 movement;
     public Vector2 weaveCursor;
@@ -33,6 +34,7 @@ public class InputManagerScript : MonoBehaviour
     private MovementScript movementScript;
     private MoleDigScript moleDigScript;
     private OwlDiveScript owlDiveScript;
+    private WyvernBossManager wyvernScript;
     public PlayerInput playerInput;
     private MovementScript familiarMovement;
 
@@ -62,7 +64,7 @@ public class InputManagerScript : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
+        
         playerScript = player.GetComponent<PlayerControllerNew>();
         weaveController = player.GetComponent<WeaveController>();
         movementScript = player.GetComponent<MovementScript>();
@@ -71,6 +73,11 @@ public class InputManagerScript : MonoBehaviour
         pauseScript = pauseScreen.GetComponent<PauseScript>();               
         playerInput = GetComponent<PlayerInput>();
         currentSceneName = SceneManager.GetActiveScene().name;
+        if (wyvern != null) 
+        {
+            wyvernScript = wyvern.GetComponent<WyvernBossManager>();
+        }
+        
 
        
         switch (familiarEnums)
@@ -272,6 +279,11 @@ public class InputManagerScript : MonoBehaviour
         if (!familiarScript.myTurn && !weaveController.isWeaving && playerCharacterController.isGrounded && !playerScript.inCutscene && canSwitch && !playerScript.talkingToNPC)
         {
             playerScript.Possession();
+            //Familiar turn is false
+            if (wyvernScript != null) 
+            {
+                wyvernScript.WeaverOrFamiliar(familiarScript.myTurn);
+            }
             playerInput.SwitchCurrentActionMap("Familiar");
         }
     }
@@ -296,6 +308,11 @@ public class InputManagerScript : MonoBehaviour
         if (familiarScript.myTurn && familiarCharacterController.isGrounded && canSwitch && !familiarScript.talkingToNPC)
         {
             familiarScript.Depossess();
+            //Familiar turn is true
+            if (wyvernScript != null) 
+            {
+                wyvernScript.WeaverOrFamiliar(familiarScript.myTurn);
+            }
             playerInput.SwitchCurrentActionMap("Weaver");
         }
     }
