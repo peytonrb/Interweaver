@@ -269,9 +269,9 @@ public class PauseScript : MonoBehaviour
     /// </summary>
     public void AdjustFullscreen(bool isFullscreenOn)
     {
-        Screen.fullScreen = isFullscreenOn;
+        Screen.fullScreen = fullscreenToggle.isOn;
 
-        if (isFullscreenOn == false)
+        if (fullscreenToggle.isOn == false)
         {
             isFullscreenOn = false;
             PlayerPrefs.SetInt("FullscreenToggleState", 0);
@@ -406,9 +406,5 @@ public class PauseScript : MonoBehaviour
                     break;
                 }
         }
-
     }
-
-
-
 }

@@ -147,9 +147,9 @@ public class SettingsManager : MonoBehaviour
     /// </summary>
     public void AdjustFullscreen(bool isFullscreenOn)
     {
-        Screen.fullScreen = isFullscreenOn;
+        Screen.fullScreen = fullscreenToggle.isOn;
 
-        if (isFullscreenOn == false)
+        if (fullscreenToggle.isOn == false)
         {
             isFullscreenOn = false;
             PlayerPrefs.SetInt("FullscreenToggleState", 0);
@@ -219,8 +219,6 @@ public class SettingsManager : MonoBehaviour
     //Function to change screen resolution
     public void AdjustResolution()
     {
-
-
         switch (resDropdown.value)
         {
             case 0:
@@ -252,6 +250,16 @@ public class SettingsManager : MonoBehaviour
                     break;
                 }
         }
+    }
 
+    void Update()
+    {   
+        Debug.Log(PlayerPrefs.GetInt("FullscreenToggleState"));
+        if (PlayerPrefs.GetInt("FullscreenToggleState") == 1)
+        {
+            fullscreenToggle.isOn = true;
+            Debug.Log("Fullscreen!");
+        }
+        
     }
 }
