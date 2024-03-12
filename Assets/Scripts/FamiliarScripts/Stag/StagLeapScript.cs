@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,10 +29,13 @@ public class StagLeapScript : MonoBehaviour
     private float currentSlamRadius = 0f;
     [SerializeField][Range(0f, 3f)] private float postSlamStaggerTime = 0.6f;
     [HideInInspector] public bool isStaggered;
+    [HideInInspector] public bool wasLaunched;
 
     [Header("Utility")]
     [SerializeField] private bool showSlamRadiusGizmo;
     [SerializeField] private bool showMaxJumpHeightGizmo;
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +45,7 @@ public class StagLeapScript : MonoBehaviour
         {
             canSlam = true;
         }
+        wasLaunched = false;
     }
 
     public IEnumerator ChargeJump()
@@ -156,6 +158,14 @@ public class StagLeapScript : MonoBehaviour
                 {
                     Destroy(hitCollider.gameObject); // call the thing being broken here!
                 }
+                //Put in reference to boss if and only if stag was launched out of a cannon
+                if (hitCollider.gameObject.CompareTag("Boss")) {
+                    if (wasLaunched == true) {
+                        WyvernBossManager wyvern = hitCollider.gameObject.GetComponent<WyvernBossManager>();
+                        wyvern.HurtWyvern();
+                    }
+                }
+                
             }
             yield return null;
         }

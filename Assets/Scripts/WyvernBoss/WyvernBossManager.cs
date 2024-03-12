@@ -369,6 +369,29 @@ public class WyvernBossManager : MonoBehaviour
         }
     }
 
+    //When the stag launches from the cannon and strikes the wyvern, it will change rooms
+    public void HurtWyvern() {
+        switch (phases) {
+            case 1:
+                fireballAmount = startingFireballAmount;
+                fireballtimer = startingFireballTimer;
+            break;
+            case 2:
+                magicCircleAmount = startingMagicCircleAmount;
+                magicCircleTimer = startingMagicCircleTimer;
+                magicCircleCooldown = startingMagiCircleCooldown;
+            break;
+            case 3:
+                WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
+                if (wyvernFlamethrower != null) {
+                    wyvernFlamethrower.KillThyself();
+                }
+                ResetPhase3();
+            break;
+        }
+        moveToNextRoom = true;
+    }
+
     void OnCollisionEnter(Collision other) {
         if (other.gameObject.CompareTag("Player")) {
             PlayerControllerNew player = other.gameObject.GetComponent<PlayerControllerNew>();
