@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -36,13 +37,11 @@ public class WyvernBossManager : MonoBehaviour
     public GameObject flamethrower;
     private bool windup;
     private bool blowFire;
-    [SerializeField] [Tooltip("Amount of time before the wyvern winds up to attack.")] private float windupTimer; //The amount of time before the windup
-    [SerializeField] [Tooltip("The amount of wind up before blowing fire.")] private float windupAngle; //The angle amount the wyvern turns before blowing fire
+    [SerializeField] [Tooltip("Amount of time before the wyvern winds up to attack.")] private float preWindupTimer; //The amount of time before the windup
+    [SerializeField] [Tooltip("Amount of time to windup.")] private float windupTimer;
     [SerializeField] [Tooltip("Rotation speed of the windup.")] private float windupRotationSpeed; //The speed of winding rotation
-    [SerializeField] [Tooltip("The total angle the wyvern blows fire.")] private float blowFireAngle; //The angle amount the wyvern turns while blowing fire
+    [SerializeField] [Tooltip("Amount of time to blow fir.e")] private float blowFireTimer;
     [SerializeField] [Tooltip("Rotation speed of the blowing fire rotation.")] private float blowFireRotationSpeed; //The speed of blowing fire while rotating
-    private float newrotation;
-    private bool gotNewRotation;
     [HideInInspector] public bool reseting;
 
     [Header("PUT WYVERN TRIGGER MANAGER HERE")]
@@ -54,7 +53,9 @@ public class WyvernBossManager : MonoBehaviour
     private float startingMagicCircleTimer;
     private float startingMagiCircleCooldown;
     private int startingMagicCircleAmount;
+    private float startingPreWindupTimer;
     private float startingWindupTimer;
+    private float startingBlowFireTimer;
     private int familiarCurrentPhase;
     private int weaverCurrentPhase;
 
@@ -74,7 +75,9 @@ public class WyvernBossManager : MonoBehaviour
         startingMagicCircleTimer = magicCircleTimer;
         startingMagicCircleAmount = magicCircleAmount;
         startingMagiCircleCooldown = magicCircleCooldown;
+        startingPreWindupTimer = preWindupTimer;
         startingWindupTimer = windupTimer;
+        startingBlowFireTimer = blowFireTimer;
         windup = false;
         blowFire = false;
         reseting = false;
@@ -156,8 +159,8 @@ public class WyvernBossManager : MonoBehaviour
                             WindingUp();
                         }
                         else {
-                            windupTimer -= Time.deltaTime;
-                            if (windupTimer <= 0) {
+                            preWindupTimer -= Time.deltaTime;
+                            if (preWindupTimer <= 0) {
                                 windup = true;
                             }
                         }
@@ -249,28 +252,23 @@ public class WyvernBossManager : MonoBehaviour
     }
 
     void WindingUp() {
-        if (gotNewRotation == false) {
-            newrotation = transform.eulerAngles.y + windupAngle;
-            gotNewRotation = true;
+        //Use a quaternion instead of movetowardsangle
+        if (windupTimer > 0) {
+            transform.Rotate(Vector3.up * windupRotationSpeed * Time.deltaTime);
+            windupTimer -= Time.deltaTime;
         }
-
-        transform.eulerAngles = new Vector3(0, Mathf.MoveTowardsAngle(transform.eulerAngles.y, newrotation, windupRotationSpeed * Time.deltaTime), 0);
-        if (transform.eulerAngles.y >= newrotation) {
+        else {
             SpawnFire();
             blowFire = true;
-            gotNewRotation = false;
         }
     }
 
     void BlowFire() {
-        if (gotNewRotation == false) {
-            newrotation = transform.eulerAngles.y + -blowFireAngle;
-            gotNewRotation = true;
+        if (blowFireTimer > 0) {
+            transform.Rotate(Vector3.down * blowFireRotationSpeed * Time.deltaTime);
+            blowFireTimer -= Time.deltaTime;
         }
-
-        transform.eulerAngles = new Vector3(0, Mathf.MoveTowardsAngle(transform.eulerAngles.y, newrotation, blowFireRotationSpeed * Time.deltaTime), 0);
-        if (transform.eulerAngles.y <= newrotation) {
-            Debug.Log("Flamethrower complete");
+        else {
             ResetPhase3();
             WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
             wyvernFlamethrower.KillThyself();
@@ -278,10 +276,11 @@ public class WyvernBossManager : MonoBehaviour
     }
 
     void ResetPhase3() {
+        preWindupTimer = startingPreWindupTimer;
         windupTimer = startingWindupTimer;
+        blowFireTimer = startingBlowFireTimer;
         blowFire = false;
         windup = false;
-        gotNewRotation = false;
         reseting = true;
     }
 
