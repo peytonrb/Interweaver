@@ -467,6 +467,7 @@ public class InputManagerScript : MonoBehaviour
                 //*************************************************************************
                 var digInputName = playerInput.actions["MoleFamiliarInteract"].GetBindingDisplayString();
                 var pillarInputName = playerInput.actions["MoleAltFamiliarInteract"].GetBindingDisplayString();
+                var lowerPillarInputName = playerInput.actions["MoleAltAltFamiliarInteract"].GetBindingDisplayString();
                 if (moleDigScript != null && (moleDigScript.isOnDigableLayer) && !hasFamiliarInvoke)
                 {
                     //this is where I would put the ui being active and showing the button for digging
@@ -491,7 +492,8 @@ public class InputManagerScript : MonoBehaviour
                     //for the familiar dig and wants to make a pillar
                     popUIForFamiliarAltAbility.gameObject.SetActive(true);
                     popUIForFamiliarAltAbility.gameObject.transform.GetComponent<TMP_Text>().
-                    SetText("<sprite name=" + pillarInputName + ">" + " to make pillar");
+                    SetText("<sprite name=" + pillarInputName + ">" + " to make pillar " +
+                    "/  <sprite name="+ lowerPillarInputName + ">" + " to lower pillar");
                     hasFamiliarInvoke2 = true;
                 }
 
