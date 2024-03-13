@@ -22,6 +22,7 @@ public class MoleDigScript : MonoBehaviour
     //private float elapsedTime;
     //private float storedTime;
     //private bool canPause;
+    private VisualEffect dirtTrailVFX;
     private bool IsMoving;
     public LayerMask digableLayer;
     public float castDistance;
@@ -43,6 +44,8 @@ public class MoleDigScript : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         movementScript = familiar.GetComponent<MovementScript>();
         transform.Find("VFX_Dirt").GetComponent<VisualEffect>().Stop();
+        dirtTrailVFX = transform.Find("VFX_DirtTrail").GetComponent<VisualEffect>();
+        dirtTrailVFX.gameObject.SetActive(false);
         //animLength = characterAnimationHandler.animator.GetCurrentAnimatorStateInfo(0).length;
         originalHeight = characterController.height;
         startedToDig = false;
@@ -93,6 +96,15 @@ public class MoleDigScript : MonoBehaviour
                     transform.position = Vector3.Lerp(transform.position, (targetPosition - (transform.forward*2)), Time.deltaTime * 5.0f);
                 }
             }
+        }
+
+        if (isOnDigableLayer && !dirtTrailVFX.gameObject.activeSelf && movementScript.currentSpeed > 0)
+        {
+            dirtTrailVFX.gameObject.SetActive(true); // inefficient mb
+        }
+        else if ((!isOnDigableLayer && dirtTrailVFX.gameObject.activeSelf) || movementScript.currentSpeed <= 0)
+        {
+            dirtTrailVFX.gameObject.SetActive(false);
         }
 
 
