@@ -12,8 +12,10 @@ public class MoleDigScript : MonoBehaviour
     private float originalHeight;
     [HideInInspector] public bool isOnDigableLayer;
     private bool digableLayerInvoke;
+
     [Header("Variables")]
     [CannotBeNullObjectField] public GameObject familiar;
+
     [Header("VFX")]
     [CannotBeNullObjectField] [SerializeField] private GameObject moundModel;
     [CannotBeNullObjectField] [SerializeField] private GameObject moleModel;
@@ -34,6 +36,7 @@ public class MoleDigScript : MonoBehaviour
     [SerializeField] private Vector3 targetPosition;
     public List<string> tagToIgnore = new List<string>();
     [SerializeField] private float animLength = 1.5f;
+
     [Header("Animation")]
     [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
 

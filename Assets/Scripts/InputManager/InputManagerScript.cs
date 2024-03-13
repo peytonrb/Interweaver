@@ -411,15 +411,13 @@ public class InputManagerScript : MonoBehaviour
     {
         var weaverTargetingName = playerInput.actions["WeaverTargeting"].GetBindingDisplayString();
         var weaverRotatingName = playerInput.actions["Rotate"].GetBindingDisplayString();
-        if ((weaveController != null) && (weaveController.isWeaving) && !hasWeaverInvoke && weaveController.isInTutorial)
+        if ((weaveController != null) && (weaveController.isWeaving) && !hasWeaverInvoke && movementScript.isInTutorial)
         {
             popUiWeaverCanvas.gameObject.SetActive(true);
 
             popUiWeaverCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
                 SetText("<sprite name="+weaverTargetingName+">" + " to move weave" +
-                "<br><sprite name=" + weaverRotatingName + ">" + " to rotate weave");
-
-           
+                "<br><sprite name=" + weaverRotatingName + ">" + " to rotate weave");          
 
             hasWeaverInvoke = true;
         }
@@ -437,7 +435,8 @@ public class InputManagerScript : MonoBehaviour
             case myEnums.Owl:
                 #region//OwlPopUI
                 //*************************************************************************
-                if ((!familiarMovement.isNearGround) && (!hasFamiliarInvoke) && (familiarMovement.active) && popUiFamiliarCanvas != null)
+                if ((!familiarMovement.isNearGround) && (!hasFamiliarInvoke) && (familiarMovement.active) 
+                    && popUiFamiliarCanvas != null && familiarMovement.isInTutorial)
                 {
                     var inputName = playerInput.actions["FamiliarInteract"].GetBindingDisplayString();
                     //this is where I would put the ui being active and showing the button for digging
@@ -463,7 +462,7 @@ public class InputManagerScript : MonoBehaviour
                 var digInputName = playerInput.actions["MoleFamiliarInteract"].GetBindingDisplayString();
                 var pillarInputName = playerInput.actions["MoleAltFamiliarInteract"].GetBindingDisplayString();
                 var lowerPillarInputName = playerInput.actions["MoleAltAltFamiliarInteract"].GetBindingDisplayString();
-                if (moleDigScript != null && (moleDigScript.isOnDigableLayer) && !hasFamiliarInvoke)
+                if (moleDigScript != null && (moleDigScript.isOnDigableLayer) && !hasFamiliarInvoke && familiarMovement.isInTutorial)
                 {
                     //this is where I would put the ui being active and showing the button for digging
                     popUiFamiliarCanvas.gameObject.SetActive(true);
@@ -481,7 +480,7 @@ public class InputManagerScript : MonoBehaviour
                     hasFamiliarInvoke = false;
                 }
 
-                if ((moleDigScript.startedToDig) && !hasFamiliarInvoke2)
+                if ((moleDigScript.startedToDig) && !hasFamiliarInvoke2 && familiarMovement.isInTutorial)
                 {
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
                     SetText("<sprite name=" + pillarInputName + ">" + " to make pillar " +

@@ -13,6 +13,8 @@ public class MovementScript : MonoBehaviour
 {
     private GameMasterScript GM; //This is refrencing the game master script
 
+    [HideInInspector] public bool isInTutorial; //this is for the UI pop up and it only shows when they're in the tutorial
+
     [Header("Movement Variables")]
     public bool canLook = true;
     [field: SerializeField] public bool canMove {get;  private set;} = true; 
@@ -97,7 +99,8 @@ public class MovementScript : MonoBehaviour
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControllerNew>();
         familiarScript = GameObject.FindGameObjectWithTag("Familiar").GetComponent<FamiliarScript>();
 
-        originalGroundAcceleration = groundAcceleration;
+        isInTutorial = true; //this is the the funny boolean for being in tutorial
+       originalGroundAcceleration = groundAcceleration;
         originalGroundDeceleration = groundDeceleration;
         originalTimeToTurn = timeToTurn;
         originalGravity = gravity; // get original gravity of controller
@@ -168,6 +171,11 @@ public class MovementScript : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void NoLongerInTutorial()
+    {
+        isInTutorial = false;
     }
 
     public void ToggleCanMove(bool moves)
