@@ -40,8 +40,7 @@ public class MoleDigScript : MonoBehaviour
     [Header("Animation")]
     [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
 
-    //[Header("Animation")]
-    //[CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
+   
     void Start()
     {
         characterController = GetComponent<CharacterController>();

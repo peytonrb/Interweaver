@@ -38,6 +38,11 @@ public class InputManagerScript : MonoBehaviour
     public PlayerInput playerInput;
     private MovementScript familiarMovement;
 
+    [CannotBeNullObjectField] public PossessionUIAnimationHandler weaverAnimationUIPosessionHandler;
+
+    [CannotBeNullObjectField] public PossessionUIAnimationHandler familiarAnimationUIPosessionHandler;
+
+
     [SerializeField] private GameObject popUiFamiliarCanvas;
 
     [SerializeField] private GameObject popUiWeaverCanvas;
@@ -261,6 +266,7 @@ public class InputManagerScript : MonoBehaviour
         if (input.isPressed && !playerScript.isDead)
         {
             PossessFamiliar();
+           
             //if (currentSceneName == "AlpineCombined" || currentSceneName == "Cavern") {
             //    PossessFamiliar();
             //}
@@ -277,6 +283,8 @@ public class InputManagerScript : MonoBehaviour
         if (!familiarScript.myTurn && !weaveController.isWeaving && playerCharacterController.isGrounded && !playerScript.inCutscene && canSwitch && !playerScript.talkingToNPC)
         {
             playerScript.Possession();
+            weaverAnimationUIPosessionHandler.SwitchingToFamiliar();
+            familiarAnimationUIPosessionHandler.SwitchingToFamiliar();
             //Familiar turn is false
             if (wyvernScript != null) 
             {
@@ -291,11 +299,11 @@ public class InputManagerScript : MonoBehaviour
         if ((input.isPressed) && (!familiarScript.isDead))
         {
             PossessWeaver();
-
+            
             //if (currentSceneName == "AlpineCombined" || currentSceneName == "Cavern") {
             //    PossessWeaver();
             //}
-            
+
         }
     }
 
@@ -306,6 +314,8 @@ public class InputManagerScript : MonoBehaviour
         if (familiarScript.myTurn && familiarCharacterController.isGrounded && canSwitch && !familiarScript.talkingToNPC)
         {
             familiarScript.Depossess();
+            weaverAnimationUIPosessionHandler.SwitchingToWeaver();
+            familiarAnimationUIPosessionHandler.SwitchingToWeaver();
             //Familiar turn is true
             if (wyvernScript != null) 
             {
