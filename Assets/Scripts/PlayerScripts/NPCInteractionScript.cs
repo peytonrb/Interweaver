@@ -19,7 +19,8 @@ public class NPCInteractionScript : MonoBehaviour
             if (hitCollider.gameObject.tag == "Blackboard") 
             {
                 Debug.Log("Hit Blackboard");
-                hitCollider.gameObject.GetComponent<BlackboardScript>().GoToFromBlackboard(GetComponent<MovementScript>());
+                hitCollider.gameObject.GetComponent<HubDiageticBookUIScript>().GoToFromBlackboard(GetComponent<MovementScript>());
+                //hitCollider.gameObject.GetComponent<BlackboardScript>().GoToFromBlackboard(GetComponent<MovementScript>());
                 break;
             }
         }

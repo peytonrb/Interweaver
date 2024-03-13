@@ -24,7 +24,7 @@ public class JumpAndDashScript : MonoBehaviour
     [SerializeField][Range(1f, 25f)] private float heavyDashEffect = 3f;
     [SerializeField][Tooltip("Resets dash cooldown when you jump")] private bool freeJumpDash;
     [SerializeField] private bool canTurnWhileDashing;
-    [SerializeField][Range(0.5f, 2f)] private float dashTimeToTurn = 1.0f;
+    [SerializeField][Range(0.1f, 2f)] private float dashTimeToTurn = 1.0f;
     private float t = 0;
 
     [Header("Utility")]

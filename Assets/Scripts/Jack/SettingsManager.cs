@@ -28,118 +28,11 @@ public class SettingsManager : MonoBehaviour
 
     void Awake()
     {
-        
-        //Check if there is a key for the playerprefs for the fullscreen and set the int depending on it
-        if (PlayerPrefs.HasKey("FullscreenToggleState"))
-            fullscreenInt = PlayerPrefs.GetInt("FullscreenToggleState");
-        else
-            fullscreenInt = 1;
-
-        if (fullscreenInt == 1)
-        {
-            fullscreenToggle.isOn = true;
-            Screen.fullScreen = true;
-        }
-        else
-        {
-            fullscreenToggle.isOn = false;
-            Screen.fullScreen = false;
-        }
-
-        //Check if there is a key for the playerprefs for the vsync and set the int depending on it
-        if (PlayerPrefs.HasKey("VsyncToggleState"))
-            vsyncInt = PlayerPrefs.GetInt("VsyncToggleState");
-        else
-            vsyncInt = 1;
-
-        if (vsyncInt == 1)
-        {
-            vSyncToggle.isOn = true;
-            QualitySettings.vSyncCount = 1;
-        }
-        else
-        {
-            vSyncToggle.isOn = false;
-            QualitySettings.vSyncCount = 0;
-        }
-
-#if !UNITY_EDITOR
-        //Check if there is a key for the playerprefs for the resolution and set the int depending on it
-        if (PlayerPrefs.HasKey("resType"))
-            resolutionType = PlayerPrefs.GetInt("resType");
-        else
-            resolutionType = 1;
-
-        resDropdown.value = resolutionType;
-
-        switch (resDropdown.value)
-        {
-            case 0:
-                {
-                    Screen.SetResolution(1920, 1080, fullscreenToggle.isOn);
-                    PlayerPrefs.SetInt("resType", 1);
-                    resolutionType = 1;
-                    break;
-                }
-            case 1:
-                {
-                    Screen.SetResolution(1600, 900, fullscreenToggle.isOn);
-                    PlayerPrefs.SetInt("resType", 2);
-                    resolutionType = 2;
-                    break;
-                }
-            case 2:
-                {
-                    Screen.SetResolution(1366, 768, fullscreenToggle.isOn);
-                    PlayerPrefs.SetInt("resType", 3);
-                    resolutionType = 3;
-                    break;
-                }
-            case 3:
-                {
-                    Screen.SetResolution(1280, 720, fullscreenToggle.isOn);
-                    PlayerPrefs.SetInt("resType", 4);
-                    resolutionType = 3;
-                    break;
-                }
-        }
-#endif
-
+        RefreshSettings();
     }
     void Start()
     {
-        //Check if the master volume has a key via playerprefs and adjusts it value according to value stored in key
-        if (PlayerPrefs.HasKey("MasterVolume"))
-        {
-            theMixer.SetFloat("MasterVol", ConvertToLog(PlayerPrefs.GetFloat("MasterVolume")));
-            masterSlider.value = PlayerPrefs.GetFloat("MasterVolume");
-        }
-        //Check if the music volume has a key via playerprefs and adjusts it value according to value stored in key
-        if (PlayerPrefs.HasKey("MusicVolume"))
-        {
-            theMixer.SetFloat("MusicVol", ConvertToLog(PlayerPrefs.GetFloat("MusicVolume")));
-            musicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
-        }
-        else
-        {
-            musicSlider.value = -40f;
-        }
 
-        //Check if the sfx volume has a key via playerprefs and adjusts it value according to value stored in key
-        if (PlayerPrefs.HasKey("SfxVolume"))
-        {
-            theMixer.SetFloat("SFXVol", ConvertToLog(PlayerPrefs.GetFloat("SfxVolume")));
-            sfxSlider.value = PlayerPrefs.GetFloat("SfxVolume");
-        }
-        else
-        {
-            sfxSlider.value = -40f;
-        }
-
-        //Adjust the value of the value texts to the right of the slider using the value stored in playerprefs
-        masterValueText.text = (masterSlider.value + 80).ToString() + "%";
-        musicValueText.text = (musicSlider.value + 80).ToString() + "%";
-        sfxValueText.text = (sfxSlider.value + 80).ToString() + "%";
     }
 
     /// <summary>
@@ -147,9 +40,9 @@ public class SettingsManager : MonoBehaviour
     /// </summary>
     public void AdjustFullscreen(bool isFullscreenOn)
     {
-        Screen.fullScreen = isFullscreenOn;
+        Screen.fullScreen = fullscreenToggle.isOn;
 
-        if (isFullscreenOn == false)
+        if (fullscreenToggle.isOn == false)
         {
             isFullscreenOn = false;
             PlayerPrefs.SetInt("FullscreenToggleState", 0);
@@ -219,7 +112,121 @@ public class SettingsManager : MonoBehaviour
     //Function to change screen resolution
     public void AdjustResolution()
     {
+        switch (resDropdown.value)
+        {
+            case 0:
+                {
+                    Screen.SetResolution(1920, 1080, fullscreenToggle.isOn);
+                    PlayerPrefs.SetInt("resType", 1);
+                    resolutionType = 1;
+                    break;
+                }
+            case 1:
+                {
+                    Screen.SetResolution(1600, 900, fullscreenToggle.isOn);
+                    PlayerPrefs.SetInt("resType", 2);
+                    resolutionType = 2;
+                    break;
+                }
+            case 2:
+                {
+                    Screen.SetResolution(1366, 768, fullscreenToggle.isOn);
+                    PlayerPrefs.SetInt("resType", 3);
+                    resolutionType = 3;
+                    break;
+                }
+            case 3:
+                {
+                    Screen.SetResolution(1280, 720, fullscreenToggle.isOn);
+                    PlayerPrefs.SetInt("resType", 4);
+                    resolutionType = 3;
+                    break;
+                }
+        }
+    }
 
+    void Update()
+    {   
+
+    }
+
+    public void RefreshSettings()
+    {
+        //Check if there is a key for the playerprefs for the fullscreen and set the int depending on it
+        if (PlayerPrefs.HasKey("FullscreenToggleState"))
+            fullscreenInt = PlayerPrefs.GetInt("FullscreenToggleState");
+        else
+            fullscreenInt = 1;
+
+        if (fullscreenInt == 1)
+        {
+            fullscreenToggle.isOn = true;
+            Screen.fullScreen = true;
+        }
+        else
+        {
+            fullscreenToggle.isOn = false;
+            Screen.fullScreen = false;
+        }
+
+        //Check if there is a key for the playerprefs for the vsync and set the int depending on it
+        if (PlayerPrefs.HasKey("VsyncToggleState"))
+            vsyncInt = PlayerPrefs.GetInt("VsyncToggleState");
+        else
+            vsyncInt = 1;
+
+        if (vsyncInt == 1)
+        {
+            vSyncToggle.isOn = true;
+            QualitySettings.vSyncCount = 1;
+        }
+        else
+        {
+            vSyncToggle.isOn = false;
+            QualitySettings.vSyncCount = 0;
+        }
+
+        //Check if the master volume has a key via playerprefs and adjusts it value according to value stored in key
+        if (PlayerPrefs.HasKey("MasterVolume"))
+        {
+            theMixer.SetFloat("MasterVol", ConvertToLog(PlayerPrefs.GetFloat("MasterVolume")));
+            masterSlider.value = PlayerPrefs.GetFloat("MasterVolume");
+        }
+        //Check if the music volume has a key via playerprefs and adjusts it value according to value stored in key
+        if (PlayerPrefs.HasKey("MusicVolume"))
+        {
+            theMixer.SetFloat("MusicVol", ConvertToLog(PlayerPrefs.GetFloat("MusicVolume")));
+            musicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
+        }
+        else
+        {
+            musicSlider.value = -40f;
+        }
+
+        //Check if the sfx volume has a key via playerprefs and adjusts it value according to value stored in key
+        if (PlayerPrefs.HasKey("SfxVolume"))
+        {
+            theMixer.SetFloat("SFXVol", ConvertToLog(PlayerPrefs.GetFloat("SfxVolume")));
+            sfxSlider.value = PlayerPrefs.GetFloat("SfxVolume");
+        }
+        else
+        {
+            sfxSlider.value = -40f;
+        }
+
+        //Adjust the value of the value texts to the right of the slider using the value stored in playerprefs
+        masterValueText.text = (masterSlider.value + 80).ToString() + "%";
+        musicValueText.text = (musicSlider.value + 80).ToString() + "%";
+        sfxValueText.text = (sfxSlider.value + 80).ToString() + "%";
+
+        #if !UNITY_EDITOR
+        //Check if there is a key for the playerprefs for the resolution and set the int depending on it
+        if (PlayerPrefs.HasKey("resType"))
+            resolutionType = PlayerPrefs.GetInt("resType");
+        else
+            resolutionType = 1;
+
+        resDropdown.value = resolutionType;
 
         switch (resDropdown.value)
         {
@@ -252,6 +259,6 @@ public class SettingsManager : MonoBehaviour
                     break;
                 }
         }
-
+#endif
     }
 }
