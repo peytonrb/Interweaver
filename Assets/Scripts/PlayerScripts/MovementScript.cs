@@ -140,6 +140,30 @@ public class MovementScript : MonoBehaviour
                         if (Input.GetKeyDown(KeyCode.RightBracket)) {
                             GM.GoToNextCheckpoint();
                         }
+
+                        //Go forward one scene
+                        if (Input.GetKeyDown(KeyCode.Equals)) {
+                            switch (SceneHandler.instance.currentSceneName) {
+                                case "AlpineCombined":
+                                    SceneHandler.instance.LoadLevel("Cavern");
+                                break;
+                                case "Cavern":
+                                    SceneHandler.instance.LoadLevel("Menu");
+                                break;
+                            }
+                        }
+
+                        //Go backwards one scene
+                        if (Input.GetKeyDown(KeyCode.Minus)) {
+                            switch (SceneHandler.instance.currentSceneName) {
+                                case "AlpineCombined":
+                                    SceneHandler.instance.LoadLevel("Menu");
+                                break;
+                                case "Cavern":
+                                    SceneHandler.instance.LoadLevel("AlpineCombined");
+                                break;
+                            }
+                        }
                     }
                 }
             }
