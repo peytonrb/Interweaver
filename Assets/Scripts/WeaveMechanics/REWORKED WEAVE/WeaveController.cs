@@ -5,6 +5,7 @@ public class WeaveController : MonoBehaviour
 {
     [Header("General")]
     public bool usingAudio = true;
+    [HideInInspector] public bool isInTutorial;
 
     [Header("Camera")]
     private Camera mainCamera;
@@ -41,6 +42,7 @@ public class WeaveController : MonoBehaviour
         weaveSpawn = this.transform.Find("WeaveSpawn").gameObject;
         movementScript = this.GetComponent<MovementScript>();
         targetingArrow.SetActive(true);
+        isInTutorial = true;
     }
 
     void Update()
