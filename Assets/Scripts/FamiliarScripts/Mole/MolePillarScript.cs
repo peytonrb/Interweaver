@@ -42,6 +42,10 @@ public class MolePillarScript : MonoBehaviour
     [SerializeField] private bool showHeightGizmo = true;
     [SerializeField] private bool showInteractionRadiusGizmo = true;
 
+    [Header("VFX")]
+    [SerializeField] private ParticleSystem dirtPillarDustPS;
+    private ParticleSystem dustVFX;
+
     void Start()
     {
         movementScript = GetComponent<MovementScript>();
@@ -111,6 +115,11 @@ public class MolePillarScript : MonoBehaviour
                 if (!pillarRising) // right as we start things off
                 {
                     cameraMasterScript.ShakeCurrentCamera(amplitude, frequency, 99f);
+
+                    if (dustVFX == null)
+                        dustVFX = Instantiate(dirtPillarDustPS, moleDigScript.transform.position, Quaternion.identity);
+
+                    dustVFX.Play();
                     pillarBuildAudioSource = audioManager.AddSFX(pillarBuildSound, true, pillarBuildAudioSource);
                     pillarLowering = false;
                     movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
@@ -152,6 +161,12 @@ public class MolePillarScript : MonoBehaviour
                 if (!pillarLowering) // right as we start things off
                 {
                     cameraMasterScript.ShakeCurrentCamera(amplitude, frequency, 99f);
+
+                    if (dustVFX == null)
+                        dustVFX = Instantiate(dirtPillarDustPS, moleDigScript.transform.position, Quaternion.identity);
+
+                    dustVFX.Play();
+
                     pillarBuildAudioSource = audioManager.AddSFX(pillarBuildSound, true, pillarBuildAudioSource);
                     movementScript.ZeroCurrentSpeed(); // we do this to prevent sudden jarring movement after movement script is re-enabled
                     movementScript.enabled = false; // disable player movement
@@ -172,6 +187,10 @@ public class MolePillarScript : MonoBehaviour
     {
         pillarBuildAudioSource = audioManager.KillAudioSource(pillarBuildAudioSource);
         cameraMasterScript.StopCurrentCameraShake();
+
+        if (dustVFX != null)
+            Destroy(dustVFX.gameObject);
+
         if (moleDigScript.startedToDig)
         {
             movementScript.enabled = true;
@@ -185,6 +204,10 @@ public class MolePillarScript : MonoBehaviour
     {
         pillarBuildAudioSource = audioManager.KillAudioSource(pillarBuildAudioSource);
         cameraMasterScript.StopCurrentCameraShake();
+        
+        if (dustVFX != null)
+            Destroy(dustVFX.gameObject);
+
         if (moleDigScript.startedToDig)
         {
             movementScript.enabled = true;
