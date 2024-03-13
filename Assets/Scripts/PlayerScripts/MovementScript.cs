@@ -13,6 +13,8 @@ public class MovementScript : MonoBehaviour
 {
     private GameMasterScript GM; //This is refrencing the game master script
 
+    [HideInInspector] public bool isInTutorial; //this is for the UI pop up and it only shows when they're in the tutorial
+
     [Header("Movement Variables")]
     public bool canLook = true;
     [field: SerializeField] public bool canMove {get;  private set;} = true; 
@@ -97,7 +99,8 @@ public class MovementScript : MonoBehaviour
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControllerNew>();
         familiarScript = GameObject.FindGameObjectWithTag("Familiar").GetComponent<FamiliarScript>();
 
-        originalGroundAcceleration = groundAcceleration;
+        isInTutorial = true; //this is the the funny boolean for being in tutorial
+       originalGroundAcceleration = groundAcceleration;
         originalGroundDeceleration = groundDeceleration;
         originalTimeToTurn = timeToTurn;
         originalGravity = gravity; // get original gravity of controller
@@ -140,10 +143,39 @@ public class MovementScript : MonoBehaviour
                         if (Input.GetKeyDown(KeyCode.RightBracket)) {
                             GM.GoToNextCheckpoint();
                         }
+
+                        //Go forward one scene
+                        if (Input.GetKeyDown(KeyCode.Equals)) {
+                            switch (SceneHandler.instance.currentSceneName) {
+                                case "AlpineCombined":
+                                    SceneHandler.instance.LoadLevel("Cavern");
+                                break;
+                                case "Cavern":
+                                    SceneHandler.instance.LoadLevel("Menu");
+                                break;
+                            }
+                        }
+
+                        //Go backwards one scene
+                        if (Input.GetKeyDown(KeyCode.Minus)) {
+                            switch (SceneHandler.instance.currentSceneName) {
+                                case "AlpineCombined":
+                                    SceneHandler.instance.LoadLevel("Menu");
+                                break;
+                                case "Cavern":
+                                    SceneHandler.instance.LoadLevel("AlpineCombined");
+                                break;
+                            }
+                        }
                     }
                 }
             }
         }
+    }
+
+    public void NoLongerInTutorial()
+    {
+        isInTutorial = false;
     }
 
     public void ToggleCanMove(bool moves)

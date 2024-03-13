@@ -41,6 +41,8 @@ public class CatapultScript : MonoBehaviour
         Vector3 launchVelocity = transform.rotation * direction.normalized * launchForce; // calculate initital launch velocity based on rotation of bowl, direction, and force
         movementScript.ChangeVelocity(launchVelocity); // apply velocity to the character
         StartCoroutine(RemoveLaunchForce(movementScript, characterController)); // prepare to remove this added velocity once the character hits the ground
+        StagLeapScript stagLeapScript = characterController.gameObject.GetComponent<StagLeapScript>();
+        stagLeapScript.wasLaunched = true;
     }
 
     IEnumerator RemoveLaunchForce(MovementScript movementScript, CharacterController characterController)

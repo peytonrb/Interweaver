@@ -10,8 +10,7 @@ public class DialogueTriggers : MonoBehaviour
     [Header("Required")]
     public Dialogue dialogue;
     public GameObject textBox;
-    public GameObject weaverInteraction;
-    public GameObject familiarInteraction;
+    public GameObject popupUIInteraction;
 
     [Header("Optional")]
     public bool isAutoTrigger = false;
@@ -117,12 +116,17 @@ public class DialogueTriggers : MonoBehaviour
     // occurs only with Event Triggers
     public void OnTriggerEnter(Collider collider)
     {
+        var weaverNPCInteraction = InputManagerScript.instance.playerInput.actions["NPCInteraction"].GetBindingDisplayString();
+        var familiarNPCInteraction = InputManagerScript.instance.playerInput.actions["NPCInteraction"].GetBindingDisplayString();
         switch (type)
         {
             case CharacterTriggerType.bothChars:
                 {
                     if (collider.gameObject.tag == "Player" || collider.gameObject.tag == "Familiar")
                         AutoTrigger(collider);
+                    popupUIInteraction.SetActive(true);
+                    popupUIInteraction.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().SetText("<sprite name=" + weaverNPCInteraction + ">"
+                         + " Interact");
                     break;
                 }
             case CharacterTriggerType.Weaver:
@@ -130,9 +134,9 @@ public class DialogueTriggers : MonoBehaviour
 
                     if (collider.gameObject.tag == "Player")
                         AutoTrigger(collider);
-                    weaverInteraction.SetActive(true);
-                    weaverInteraction.gameObject.transform.GetComponentInChildren<TMP_Text>().SetText(
-                        InputManagerScript.instance.playerInput.actions["NPCInteraction"].GetBindingDisplayString() + " Interact");
+                    popupUIInteraction.SetActive(true);
+                    popupUIInteraction.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().SetText("<sprite name="+weaverNPCInteraction+">"
+                         + " Interact");
                     //this is where I would put the ui and the text element here
                     break;
                 }
@@ -140,9 +144,9 @@ public class DialogueTriggers : MonoBehaviour
                 {
                     if (collider.gameObject.tag == "Familiar")
                         AutoTrigger(collider);
-                    familiarInteraction.SetActive(true);
-                    familiarInteraction.gameObject.transform.GetComponentInChildren<TMP_Text>().SetText(
-                        InputManagerScript.instance.playerInput.actions["NPCInteraction"].GetBindingDisplayString() + " Interact");
+                    popupUIInteraction.SetActive(true);
+                    popupUIInteraction.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().SetText("<sprite name="+familiarNPCInteraction+">"
+                         + " Interact");
                     //this is where I would put the ui and the text element here
                     break;
                 }
@@ -191,27 +195,15 @@ public class DialogueTriggers : MonoBehaviour
             if (isAutoTrigger)
             {
                 DialogueManager.instance.EndDialogue();
-                weaverInteraction.SetActive(false);
-                familiarInteraction.SetActive(false);
+                popupUIInteraction.SetActive(false);
             }
             else
             {
-                weaverInteraction.SetActive(false);
-                familiarInteraction.SetActive(false);
+                popupUIInteraction.SetActive(false);
             }
 
         }
     }
 
-    //void Update()
-    //{
-    //    if (isAutoTrigger && isInteracting) // if actively within an event trigger
-    //    {
-    //        if (InputManagerScript.instance.playerInput.actions["NPCInteraction"].IsPressed()) //will need to completely change this to get the input from the input manager
-    //        {
-    //            Debug.Log("what the fuck am I dong and why is this happening every frame");
-    //            //DialogueManager.instance.DisplayNextSentence();
-    //        }
-    //    }
-    //}
+  
 }

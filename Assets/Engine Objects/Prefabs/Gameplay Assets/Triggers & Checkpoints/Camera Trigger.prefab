@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &6795317748750323333
 BoxCollider:
@@ -52,8 +52,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 275.67755, y: 10.940851, z: 2.5749063}
-  m_Center: {x: 1.355535, y: -3.217929, z: -1.406738}
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1494910001945832887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,7 +66,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e72118ee275ae3d45b39a2e5b26bb3a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraIndex: 0
+  triggerIndex: 0
   triggered: 0
   isLoop: 0
   goingOppositeDirection: 0
+  indexCamera: {fileID: 0}

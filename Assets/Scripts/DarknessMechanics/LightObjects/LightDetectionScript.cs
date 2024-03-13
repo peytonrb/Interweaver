@@ -12,7 +12,15 @@ public class LightDetectionScript : MonoBehaviour
     {
         if (!isTimedMushroom)
         {
-            crystalScript = this.gameObject.transform.parent.transform.parent.GetComponent<LightCrystalScript>();
+            if (gameObject.transform.parent.TryGetComponent<LightCrystalScript>(out crystalScript))
+            {
+
+            }
+            else
+            {
+                crystalScript = this.gameObject.transform.parent.transform.parent.GetComponent<LightCrystalScript>();
+            }
+            
 
             if (crystalScript.isActive)
             {

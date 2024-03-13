@@ -41,14 +41,15 @@ public class JumpAndDashScript : MonoBehaviour
         movementScript = GetComponent<MovementScript>();
         characterController = GetComponent<CharacterController>();
 
-        if (canDash)
+        // vfx
+        if (gameObject.CompareTag("Player"))
         {
-            // vfx
-            dashTrail = transform.Find("DashTrail").GetComponent<TrailRenderer>();
+            this.transform.Find("DashTrail").TryGetComponent<TrailRenderer>(out dashTrail);
             DisableDashVFX();
-            skinnedMeshWeaver = transform.Find("SK_Weaver/SM_Weaver").gameObject;
+            skinnedMeshWeaver = this.transform.Find("SK_Weaver/SM_Weaver").gameObject;
             originalMaterial = skinnedMeshWeaver.GetComponent<Renderer>().material;
         }
+        
     }
 
     public void DoJump()

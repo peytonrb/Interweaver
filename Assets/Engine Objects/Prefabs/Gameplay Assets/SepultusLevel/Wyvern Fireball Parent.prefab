@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &332381490428572323
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4508733318312980474}
+  m_Layer: 0
+  m_Name: 'SnappingPoint6 '
+  m_TagString: SnapPoint
+  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4508733318312980474
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 332381490428572323}
+  m_LocalRotation: {x: 0.700393, y: -0.09720925, z: 0.09720925, w: 0.700393}
+  m_LocalPosition: {x: 0, y: -0.559, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3853041974119982148}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1840411242474355259
 GameObject:
   m_ObjectHideFlags: 0
@@ -34,7 +65,7 @@ Transform:
   m_Children:
   - {fileID: 3853041974119982148}
   m_Father: {fileID: 0}
-  m_RootOrder: 28
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8235071469868029885
 MonoBehaviour:
@@ -50,10 +81,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isBeingWoven: 0
   hoverHeight: 4.51
-  objectMoveOverride: 0
+  objectMoveOverride: 1
   weaveableLayers:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 193
   maxWeaveDistance: 25
   hasBeenCombined: 0
   canBeMoved: 1
@@ -78,7 +109,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df5be2460e927a349a2792b6353246cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  speed: 18
+  breakableObjectDetectionProximity: 20
 --- !u!54 &738257493575559580
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -127,6 +159,37 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &2461264054725319661
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6131753517542710297}
+  m_Layer: 0
+  m_Name: SnappingPoint2
+  m_TagString: SnapPoint
+  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6131753517542710297
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2461264054725319661}
+  m_LocalRotation: {x: -0.700393, y: -0.09720925, z: -0.09720925, w: 0.700393}
+  m_LocalPosition: {x: 0, y: 0.55, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3853041974119982148}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!1 &3963335202953617979
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,6 +266,37 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &6088089006415662496
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7726151180331062970}
+  m_Layer: 0
+  m_Name: 'SnappingPoint3 '
+  m_TagString: SnapPoint
+  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7726151180331062970
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6088089006415662496}
+  m_LocalRotation: {x: -0, y: -0.13747466, z: -0, w: 0.99050534}
+  m_LocalPosition: {x: 0.55, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3853041974119982148}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6214181392623531713
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,6 +328,12 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1513054144757966942}
+  - {fileID: 2935703740247780159}
+  - {fileID: 6131753517542710297}
+  - {fileID: 7726151180331062970}
+  - {fileID: 5361488458744018536}
+  - {fileID: 4272784323173737411}
+  - {fileID: 4508733318312980474}
   m_Father: {fileID: 143761149973702108}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -287,6 +387,68 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6845011626483137287
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4272784323173737411}
+  m_Layer: 0
+  m_Name: 'SnappingPoint5 '
+  m_TagString: SnapPoint
+  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4272784323173737411
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6845011626483137287}
+  m_LocalRotation: {x: -0, y: -0.7976023, z: -0, w: 0.6031838}
+  m_LocalPosition: {x: -0.55, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3853041974119982148}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!1 &8144483833959352398
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2935703740247780159}
+  m_Layer: 0
+  m_Name: SnappingPoint1
+  m_TagString: SnapPoint
+  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2935703740247780159
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8144483833959352398}
+  m_LocalRotation: {x: -0, y: 0.99050534, z: -0, w: 0.13747466}
+  m_LocalPosition: {x: 0, y: 0, z: 0.55}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3853041974119982148}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &8422419268788405655
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,6 +482,37 @@ Transform:
   m_Father: {fileID: 3853041974119982148}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8483712615772508278
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5361488458744018536}
+  m_Layer: 0
+  m_Name: 'SnappingPoint4 '
+  m_TagString: SnapPoint
+  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5361488458744018536
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8483712615772508278}
+  m_LocalRotation: {x: -0, y: 0.6031838, z: -0, w: 0.7976023}
+  m_LocalPosition: {x: 0, y: 0, z: -0.55}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3853041974119982148}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &8742171911410721158
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,5 +733,23 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5830981374526560644, guid: f426b6456ee84754ca626a884a9f3e8a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1513054144757966942}
+    - targetCorrespondingSourceObject: {fileID: 5830981374526560644, guid: f426b6456ee84754ca626a884a9f3e8a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2935703740247780159}
+    - targetCorrespondingSourceObject: {fileID: 5830981374526560644, guid: f426b6456ee84754ca626a884a9f3e8a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6131753517542710297}
+    - targetCorrespondingSourceObject: {fileID: 5830981374526560644, guid: f426b6456ee84754ca626a884a9f3e8a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7726151180331062970}
+    - targetCorrespondingSourceObject: {fileID: 5830981374526560644, guid: f426b6456ee84754ca626a884a9f3e8a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5361488458744018536}
+    - targetCorrespondingSourceObject: {fileID: 5830981374526560644, guid: f426b6456ee84754ca626a884a9f3e8a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4272784323173737411}
+    - targetCorrespondingSourceObject: {fileID: 5830981374526560644, guid: f426b6456ee84754ca626a884a9f3e8a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4508733318312980474}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f426b6456ee84754ca626a884a9f3e8a, type: 3}

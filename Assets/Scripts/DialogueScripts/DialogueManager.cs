@@ -60,6 +60,9 @@ public class DialogueManager : MonoBehaviour
     // when enter is hit, next sentence is displayed
     public void DisplayNextSentence()
     {
+        if (textBoxUI == null)
+            return;
+
         if (sentences.Count == 0)
         {
             EndDialogue();
@@ -67,7 +70,6 @@ public class DialogueManager : MonoBehaviour
         }
 
         string sentence = sentences.Dequeue();
-        Debug.Log(sentence);
         StopAllCoroutines();
         StartCoroutine(SentenceScroll(sentence));
     }

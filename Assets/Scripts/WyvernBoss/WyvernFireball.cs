@@ -6,12 +6,20 @@ using UnityEngine;
 public class WyvernFireball : MonoBehaviour
 {
     private GameObject weaver;
+    private Rigidbody rb;
     private PlayerControllerNew playercontroller;
+    private WeaveController weaveController;
     private GameObject familiar;
     private FamiliarScript familiarscript;
     private WeaveableObject weaveable;
     public float speed;
     private bool wasWoven;
+    private bool foundPosition;
+    public float breakableObjectDetectionProximity;
+    private bool breakableObjectFound;
+    private Vector3 breakableObjectPosition;
+    private Vector3 weaverposition;
+    private Vector3 familiarposition;
 
     // Start is called before the first frame update
     void Start()
@@ -20,9 +28,15 @@ public class WyvernFireball : MonoBehaviour
         familiar = GameObject.FindGameObjectWithTag("Familiar");
         familiarscript = familiar.GetComponent<FamiliarScript>();
         playercontroller = weaver.GetComponent<PlayerControllerNew>();
+        weaveController = weaver.GetComponent<WeaveController>();
         weaveable = GetComponent<WeaveableObject>();
+        rb = GetComponent<Rigidbody>();
+
+        weaverposition = new Vector3(weaver.transform.position.x,weaver.transform.position.y + 1, weaver.transform.position.z);
+        familiarposition = new Vector3(familiar.transform.position.x,familiar.transform.position.y + 1,familiar.transform.position.z);
 
         wasWoven = false;
+        breakableObjectFound = false;
     }
 
     // Update is called once per frame
@@ -52,34 +66,56 @@ public class WyvernFireball : MonoBehaviour
     void HomingMissile() {
         //If familiar's turn, then move towards the familiar.
         if (familiarscript.myTurn) {
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(familiar.transform.position.x, familiar.transform.position.y + 0.75f, familiar.transform.position.y), speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, familiarposition, speed * Time.deltaTime);
+            if (transform.position == familiarposition) {
+                Destroy(gameObject);
+            }
         }
         else {
             if (wasWoven == false) {
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(weaver.transform.position.x, weaver.transform.position.y + 0.75f, weaver.transform.position.z), speed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, weaverposition, speed * Time.deltaTime);
+                if (transform.position == weaverposition) {
+                    Destroy(gameObject);
+                }
+            }
+            else {
+                if (weaveController.isWeaving == false) {
+                    if (breakableObjectFound == false) {
+                        DetectBreakableObject();
+                    }
+                    else {
+                        transform.position = Vector3.MoveTowards(transform.position, breakableObjectPosition, speed * Time.deltaTime);
+                    }
+                }
             }
         } 
+    }
+
+    //This detects if an object has a BreakObject script attached to it.
+    void DetectBreakableObject() {
+        Collider[] hitCollider = Physics.OverlapSphere(transform.position, 5f);
+        foreach (Collider colliderFound in hitCollider) {
+            if (colliderFound.gameObject.TryGetComponent<BreakObject>(out BreakObject breakObject)) {
+                breakableObjectPosition = breakObject.gameObject.transform.position;
+                breakableObjectFound = true;
+                Debug.Log("Object found");
+            }
+        }
     }
 
     void OnCollisionEnter(Collision other) {
         if (!other.gameObject.CompareTag("Boss")) {
             if (other.gameObject.TryGetComponent<BreakObject>(out BreakObject breakableObject)) {
-                breakableObject.BreakMyObject();
-                Destroy(gameObject);
+                breakableObject.BreakMyObject(); 
             }
-            else {
-                if (weaveable.isBeingWoven == false) {
-                    Destroy(gameObject);
-                }
-            }
-            
+            Destroy(gameObject);
         }
+
         if (other.gameObject.CompareTag("Player")) {
             playercontroller.Death();
-            if (weaveable.isBeingWoven == false) {
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
         }
+        
         if (other.gameObject.CompareTag("Familiar")) {
             familiarscript.Death();
             Destroy(gameObject);
