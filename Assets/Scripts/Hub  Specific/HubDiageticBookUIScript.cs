@@ -27,12 +27,6 @@ public class HubDiageticBookUIScript : MonoBehaviour
         //interactableUI.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.CompareTag("Player")) {
             
@@ -50,10 +44,9 @@ public class HubDiageticBookUIScript : MonoBehaviour
             movementScript.ToggleCanLook(false);
             movementScript.ToggleCanMove(false);
             characterReadingBook = movementScript;
-            pageList[0].SetActive(true);
             blackboardCamera.Priority = 2;
-            /*StartCoroutine(WaitForBlendToFinish());
-            if (popupUIPrompt.activeSelf) {
+            StartCoroutine(WaitForBlendToFinish());
+            /*if (popupUIPrompt.activeSelf) {
                 popupUIPrompt.SetActive(false);
             }*/
             inBook = true;
@@ -119,7 +112,9 @@ public class HubDiageticBookUIScript : MonoBehaviour
             yield return null;
         }
         if (inBook) {
-            interactableUI.SetActive(true);
+            pageList[0].SetActive(true);
+            currentPageNumber = 0;
+            //interactableUI.SetActive(true);
         }
         yield break;
     }
