@@ -24,11 +24,11 @@ public class NPCInteractionScript : MonoBehaviour
                 }
                 break;
             }
-            if (hitCollider.gameObject.tag == "Blackboard")
+            if (hitCollider.gameObject.tag == "Interactable Book")
             {
                 HubDiageticBookUIScript bookscript = hitCollider.gameObject.GetComponent<HubDiageticBookUIScript>();
                 if (bookscript != null) {
-                    bookscript.GoToFromBlackboard(GetComponent<MovementScript>());
+                    bookscript.GoToFromBook(GetComponent<MovementScript>());
                 }
             }
         }

@@ -12,6 +12,7 @@ public class HubDiageticBookUIScript : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera bookCamera;
     [SerializeField] private GameObject interactableUI;
     [SerializeField] private List<GameObject> pageList = new List<GameObject>();
+    [SerializeField] private GameObject pageTurnButtonCanvas;
     private MovementScript characterReadingBook;
     [Header("Variables")]
     private int currentPageNumber = 0;
@@ -39,7 +40,7 @@ public class HubDiageticBookUIScript : MonoBehaviour
         }
     }
 
-    public void GoToFromBlackboard(MovementScript movementScript) {
+    public void GoToFromBook(MovementScript movementScript) {
         if (inBook == false) {
             movementScript.ToggleCanLook(false);
             movementScript.ToggleCanMove(false);
@@ -66,7 +67,7 @@ public class HubDiageticBookUIScript : MonoBehaviour
     {
         if (currentPageNumber <= 0)
         {
-            GoToFromBlackboard(characterReadingBook);
+            GoToFromBook(characterReadingBook);
         }
         else
         {
@@ -96,6 +97,7 @@ public class HubDiageticBookUIScript : MonoBehaviour
         {
             page.SetActive(false);
         }
+        pageTurnButtonCanvas.SetActive(false);
         currentPageNumber = 0;
     }
 
@@ -113,9 +115,11 @@ public class HubDiageticBookUIScript : MonoBehaviour
         }
         if (inBook) {
             pageList[0].SetActive(true);
+            pageTurnButtonCanvas.SetActive(true);
             currentPageNumber = 0;
             //interactableUI.SetActive(true);
         }
         yield break;
     }
+    
 }
