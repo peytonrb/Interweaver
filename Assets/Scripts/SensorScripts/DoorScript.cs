@@ -12,6 +12,8 @@ public class DoorScript : MonoBehaviour
     public bool opensRight;
     public bool opensLeft;
     public bool opensForward;
+    public bool moveLocally = false;
+
 
     [Header("Other door settings")]
     public bool doesDoorClose;
@@ -159,25 +161,51 @@ public class DoorScript : MonoBehaviour
         // all relevant sensors/pplates need to be active at this point
         if (!doorIsOpen && !doNotOpenDoor && doorOpening && !pplateTriggered)
         {
-            if (opensRight)
+            if (!moveLocally)
             {
-                targetPoint = originalPosition + (Vector3.right * openingSize);
+                if (opensRight)
+                {
+                    targetPoint = originalPosition + (Vector3.right * openingSize);
+                }
+                else if (opensLeft)
+                {
+                    targetPoint = originalPosition + (Vector3.left * openingSize);
+                }
+                else if (opensForward)
+                {
+                    targetPoint = originalPosition + (Vector3.forward * openingSize);
+                }
+                else if (opensVertically)
+                {
+                    targetPoint = originalPosition + (Vector3.up * openingSize);
+                }
+                else if (!opensRight && !opensLeft && !opensForward && !opensVertically)
+                {
+                    targetPoint = originalPosition + (Vector3.back * openingSize);
+                }
             }
-            else if (opensLeft)
+            else
             {
-                targetPoint = originalPosition + (Vector3.left * openingSize);
-            }
-            else if (opensForward)
-            {
-                targetPoint = originalPosition + (Vector3.forward * openingSize);
-            }
-            else if (opensVertically)
-            {
-                targetPoint = originalPosition + (Vector3.up * openingSize);
-            }
-            else if (!opensRight && !opensLeft && !opensForward && !opensVertically)
-            {
-                targetPoint = originalPosition + (Vector3.back * openingSize);
+                if (opensRight)
+                {
+                    targetPoint = originalPosition + (transform.right * openingSize);
+                }
+                else if (opensLeft)
+                {
+                    targetPoint = originalPosition + (-transform.right * openingSize);
+                }
+                else if (opensForward)
+                {
+                    targetPoint = originalPosition + (transform.forward * openingSize);
+                }
+                else if (opensVertically)
+                {
+                    targetPoint = originalPosition + (transform.up * openingSize);
+                }
+                else if (!opensRight && !opensLeft && !opensForward && !opensVertically)
+                {
+                    targetPoint = originalPosition + (-transform.forward * openingSize);
+                }
             }
 
             distance = Vector3.Distance(originalPosition, targetPoint);
