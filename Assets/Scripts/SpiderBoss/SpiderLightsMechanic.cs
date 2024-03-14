@@ -23,6 +23,7 @@ public class SpiderLightsMechanic : MonoBehaviour
      private bool isBossSpider;
 
     [SerializeField] private int mySections = 1;
+    private Material spiderMaterial;
 
     //sounds here
 
@@ -38,8 +39,7 @@ public class SpiderLightsMechanic : MonoBehaviour
         pointLight = this.gameObject.transform.GetChild(0).GetComponent<Light>();
         pointLight.intensity = brightness;
         currentBrightness = pointLight.intensity;
-
-       
+        spiderMaterial = this.GetComponent<Renderer>().material;
     }
 
     IEnumerator PulseLightOn()
@@ -54,6 +54,8 @@ public class SpiderLightsMechanic : MonoBehaviour
         while (end >= Time.time)
         {
             pointLight.intensity = Mathf.Lerp(0f, brightness, (Time.time - start) / glowTime);
+            float setNum = Mathf.Lerp(4f, 0f, (Time.time - start) / glowTime);
+            spiderMaterial.SetFloat("_CutoffHeight", setNum);
             yield return null;
         }
         //sounds here? will have to test
@@ -72,6 +74,8 @@ public class SpiderLightsMechanic : MonoBehaviour
         while (end >= Time.time)
         {
             pointLight.intensity = Mathf.Lerp(currentBrightness, 0f, (Time.time - start) / glowTime);
+            float setNum = Mathf.Lerp(0f, 4f, (Time.time - start) / glowTime);
+            spiderMaterial.SetFloat("_CutoffHeight", setNum);
             yield return null;
         }
         //sounds here? will have to test
