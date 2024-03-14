@@ -9,7 +9,7 @@ public class HubDiageticBookUIScript : MonoBehaviour
 {
     [Header("References")]
     private CinemachineBrain mainCamera;
-    [SerializeField] private CinemachineVirtualCamera blackboardCamera;
+    [SerializeField] private CinemachineVirtualCamera bookCamera;
     [SerializeField] private GameObject interactableUI;
     [SerializeField] private List<GameObject> pageList = new List<GameObject>();
     private MovementScript characterReadingBook;
@@ -44,7 +44,7 @@ public class HubDiageticBookUIScript : MonoBehaviour
             movementScript.ToggleCanLook(false);
             movementScript.ToggleCanMove(false);
             characterReadingBook = movementScript;
-            blackboardCamera.Priority = 2;
+            bookCamera.Priority = 2;
             StartCoroutine(WaitForBlendToFinish());
             /*if (popupUIPrompt.activeSelf) {
                 popupUIPrompt.SetActive(false);
@@ -57,7 +57,7 @@ public class HubDiageticBookUIScript : MonoBehaviour
             movementScript.ToggleCanMove(true);
             CloseAllPages();
             characterReadingBook = null;
-            blackboardCamera.Priority = 0;
+            bookCamera.Priority = 0;
             inBook = false;
         }
     }
