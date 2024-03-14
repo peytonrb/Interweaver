@@ -11,10 +11,7 @@ public class PopUIScript : MonoBehaviour
     private Vector3 offset = new Vector3(0, 3.5f, 0);
 
     // Update is called once per frame
-    private void Start()
-    {
-        isSpeakerPost = false;
-    }
+    
     void Update()
     {
         transform.rotation = mainCamera.transform.rotation;
