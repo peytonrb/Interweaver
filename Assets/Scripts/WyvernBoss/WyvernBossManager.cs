@@ -66,7 +66,9 @@ public class WyvernBossManager : MonoBehaviour
         stag = GameObject.FindGameObjectWithTag("Familiar");
         familiarScript = stag.GetComponent<FamiliarScript>();
         playercontroller = weaver.GetComponent<PlayerControllerNew>();
-        triggerManager = wyvernTriggerManager.GetComponent<WyvernPhaseTriggerManager>();
+        if (wyvernTriggerManager != null) {
+            triggerManager = wyvernTriggerManager.GetComponent<WyvernPhaseTriggerManager>();
+        }
         navMeshAgent = GetComponent<NavMeshAgent>();
         //transform.position = new Vector3(roomDestinations[currentRoom].transform.position.x, transform.position.y, roomDestinations[currentRoom].transform.position.z);
 

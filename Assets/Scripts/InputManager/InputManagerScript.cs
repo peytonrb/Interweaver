@@ -248,6 +248,7 @@ public class InputManagerScript : MonoBehaviour
     {
         if (input.isPressed)
         {
+            //Disable this when in Hub
             WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
             weaveController.OnDrop();
         }
@@ -376,7 +377,6 @@ public class InputManagerScript : MonoBehaviour
     {
         if (input.isPressed)
         {
-
             if (familiarScript.myTurn)
             {
                 NPCInteractionScript npcInteractScript = familiar.GetComponent<NPCInteractionScript>();

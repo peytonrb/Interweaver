@@ -10,10 +10,8 @@ public class BlackboardScript : MonoBehaviour
     [SerializeField] private GameObject interactableUI;
     [SerializeField] private CinemachineVirtualCamera blackboardCamera;
     [SerializeField] private CinemachineBrain mainCamera;
-    [SerializeField] private GameObject playerstuff;
     [SerializeField] private TextMeshProUGUI lostSoulCount;
     public GameObject popupUIPrompt;
-    private PlayerData playerdata;
     [HideInInspector] [Tooltip ("If true, then you are currently staring at the blackboard, and blackboard functionality is on.")] public bool onBlackboard;
     private int levelsCompleted;
     private int lostSoulTotal;
@@ -21,13 +19,11 @@ public class BlackboardScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerdata = playerstuff.GetComponent<PlayerData>();
-
         interactableUI.SetActive(false);
         blackboardCamera.Priority = 0;
         onBlackboard = false;
-        levelsCompleted = playerdata.GetLevelsCompleted();
-        lostSoulTotal = playerdata.GetLostSoulCount();
+        levelsCompleted = PlayerData.instance.GetLevelsCompleted();
+        lostSoulTotal = PlayerData.instance.GetLostSoulCount();
         lostSoulCount.text = "TOTAL LOST SOULS: " + lostSoulTotal;
         popupUIPrompt.SetActive(false);
     }
