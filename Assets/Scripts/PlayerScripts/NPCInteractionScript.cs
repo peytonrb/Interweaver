@@ -18,9 +18,15 @@ public class NPCInteractionScript : MonoBehaviour
             }
             if (hitCollider.gameObject.tag == "Blackboard") 
             {
-                Debug.Log("Hit Blackboard");
-                hitCollider.gameObject.GetComponent<HubDiageticBookUIScript>().GoToFromBlackboard(GetComponent<MovementScript>());
-                //hitCollider.gameObject.GetComponent<BlackboardScript>().GoToFromBlackboard(GetComponent<MovementScript>());
+                HubDiageticBookUIScript bookscript = hitCollider.gameObject.GetComponent<HubDiageticBookUIScript>();
+                if (bookscript != null) {
+                    bookscript.GoToFromBlackboard(GetComponent<MovementScript>());
+                }
+
+                BlackboardScript blackboard = hitCollider.gameObject.GetComponent<BlackboardScript>();
+                if (blackboard != null) {
+                    blackboard.GoToFromBlackboard(GetComponent<MovementScript>());
+                }
                 break;
             }
         }
