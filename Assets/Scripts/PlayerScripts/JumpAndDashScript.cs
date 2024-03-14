@@ -45,9 +45,9 @@ public class JumpAndDashScript : MonoBehaviour
         if (gameObject.CompareTag("Player"))
         {
             this.transform.Find("DashTrail").TryGetComponent<TrailRenderer>(out dashTrail);
-            DisableDashVFX();
             skinnedMeshWeaver = this.transform.Find("SK_Weaver/SM_Weaver").gameObject;
             originalMaterial = skinnedMeshWeaver.GetComponent<Renderer>().material;
+            DisableDashVFX();
         }
         
     }
@@ -193,16 +193,19 @@ public class JumpAndDashScript : MonoBehaviour
 
     IEnumerator FadeGlowOut()
     {
-        float glowAmount = skinnedMeshWeaver.GetComponent<Renderer>().material.GetFloat("GlowTotal");
-        float t = 0;
-
-        while (t < dashCooldown)
+        if (skinnedMeshWeaver.GetComponent<Renderer>().material != originalMaterial)
         {
-            t += Time.deltaTime;
-            float blend = Mathf.Clamp01(t / dashCooldown);
-            float blendNum = Mathf.Lerp(1f, 0f, blend);
-            skinnedMeshWeaver.GetComponent<Renderer>().material.SetFloat("GlowTotal", blendNum);
-            yield return null;
+            float glowAmount = skinnedMeshWeaver.GetComponent<Renderer>().material.GetFloat("GlowTotal");
+            float t = 0;
+
+            while (t < dashCooldown)
+            {
+                t += Time.deltaTime;
+                float blend = Mathf.Clamp01(t / dashCooldown);
+                float blendNum = Mathf.Lerp(1f, 0f, blend);
+                skinnedMeshWeaver.GetComponent<Renderer>().material.SetFloat("GlowTotal", blendNum);
+                yield return null;
+            }
         }
 
         skinnedMeshWeaver.GetComponent<Renderer>().material = originalMaterial;
