@@ -348,7 +348,9 @@ public class WyvernBossManager : MonoBehaviour
             ResetPhase3();
 
             //Updates phase on all triggers
-            triggerManager.UpdatePhase();
+            if (triggerManager != null) {
+                triggerManager.UpdatePhase();
+            }
         }
         else {
             //WHEN SWAPPING TO WEAVER
@@ -366,7 +368,10 @@ public class WyvernBossManager : MonoBehaviour
             ResetPhase3();
 
             //Updates phase on all triggers
-            triggerManager.UpdatePhase();
+            if (triggerManager != null) {
+                triggerManager.UpdatePhase();
+            }
+            
         }
     }
 
