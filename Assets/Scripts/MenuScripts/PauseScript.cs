@@ -164,6 +164,18 @@ public class PauseScript : MonoBehaviour
     //Resumes the game
     public void Resume() {
         Time.timeScale = 1;
+        if (optionGroup.activeSelf) {
+            optionGroup.SetActive(false);
+            optionGroup.GetComponent<CanvasGroup>().alpha = 0;
+        }
+        if (controlsPanel.activeSelf) {
+            controlsPanel.SetActive(false);
+            controlsPanel.GetComponent<CanvasGroup>().alpha = 0;
+        }
+        if (defaultGroup.activeSelf == false) {
+            defaultGroup.SetActive(true);
+            defaultGroup.GetComponent<CanvasGroup>().alpha = 1;
+        }
         gameObject.SetActive(false);
     }
 
