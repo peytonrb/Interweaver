@@ -158,13 +158,6 @@ public class StagLeapScript : MonoBehaviour
                 {
                     Destroy(hitCollider.gameObject); // call the thing being broken here!
                 }
-                //Put in reference to boss if and only if stag was launched out of a cannon
-                if (hitCollider.gameObject.CompareTag("Boss")) {
-                    if (wasLaunched == true) {
-                        WyvernBossManager wyvern = hitCollider.gameObject.GetComponent<WyvernBossManager>();
-                        wyvern.HurtWyvern();
-                    }
-                }
                 
             }
             yield return null;

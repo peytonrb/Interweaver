@@ -40,7 +40,7 @@ public class WyvernBossManager : MonoBehaviour
     [SerializeField] [Tooltip("Amount of time before the wyvern winds up to attack.")] private float preWindupTimer; //The amount of time before the windup
     [SerializeField] [Tooltip("Amount of time to windup.")] private float windupTimer;
     [SerializeField] [Tooltip("Rotation speed of the windup.")] private float windupRotationSpeed; //The speed of winding rotation
-    [SerializeField] [Tooltip("Amount of time to blow fir.e")] private float blowFireTimer;
+    [SerializeField] [Tooltip("Amount of time to blow fire.")] private float blowFireTimer;
     [SerializeField] [Tooltip("Rotation speed of the blowing fire rotation.")] private float blowFireRotationSpeed; //The speed of blowing fire while rotating
     [HideInInspector] public bool reseting;
 
@@ -58,6 +58,7 @@ public class WyvernBossManager : MonoBehaviour
     private float startingBlowFireTimer;
     private int familiarCurrentPhase;
     private int weaverCurrentPhase;
+    [HideInInspector] public bool stagWasLaunched;
 
     // Start is called before the first frame update
     void Start()
@@ -103,7 +104,9 @@ public class WyvernBossManager : MonoBehaviour
                         reseting = false;
                     }
                     else {
-                        transform.LookAt(new Vector3(stag.transform.position.x,transform.position.y,stag.transform.position.z));
+                        if (stagWasLaunched == false) {
+                            transform.LookAt(new Vector3(stag.transform.position.x,transform.position.y,stag.transform.position.z));
+                        }
                     }
                 }
             }
@@ -113,7 +116,9 @@ public class WyvernBossManager : MonoBehaviour
                         reseting = false;
                     }
                     else {
-                        transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
+                        if (stagWasLaunched == false) {
+                            transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
+                        }
                     }
                 }
             }
@@ -224,7 +229,7 @@ public class WyvernBossManager : MonoBehaviour
                 magicCircleAmount -= 1;
             }
             else {
-                StartCoroutine(Cooldown());
+                StartCoroutine(Cooldown()); //PROBLEM WITH COOLDOWN MARKED
                 reseting = true;
                 magicCircleAmount = startingMagicCircleAmount;
             }
@@ -396,6 +401,7 @@ public class WyvernBossManager : MonoBehaviour
             break;
         }
         moveToNextRoom = true;
+        Debug.Log("Wyvern is hurt! Ouch!");
     }
 
     void OnCollisionEnter(Collision other) {
@@ -404,7 +410,6 @@ public class WyvernBossManager : MonoBehaviour
             if (player != null) {
                 player.Death();
             }
-            
         }
     }
 }
