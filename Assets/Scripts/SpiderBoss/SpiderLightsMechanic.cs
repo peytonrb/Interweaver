@@ -9,7 +9,7 @@ public class SpiderLightsMechanic : MonoBehaviour
     public float lightOnDelay;
     public float lightOffDelay;
     public int arrayIndex; // add the INDEX of the light in LIGHTARRAY in the LIGHTSOURCE OBJECT
-    [HideInInspector] public bool isActive;
+    public bool isActive;
     private Light pointLight;
     private float currentBrightness;
     [TextArea]
