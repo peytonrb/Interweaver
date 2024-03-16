@@ -340,7 +340,6 @@ public class WyvernBossManager : MonoBehaviour
         if (familiarsTurn == false) {
             //WHEN SWAPPING TO FAMILIAR
             phases = familiarCurrentPhase;
-            Debug.Log("phase is now " + familiarCurrentPhase);
             fireballAmount = startingFireballAmount;
             fireballtimer = startingFireballTimer;
             magicCircleAmount = startingMagicCircleAmount;
@@ -360,7 +359,6 @@ public class WyvernBossManager : MonoBehaviour
         else {
             //WHEN SWAPPING TO WEAVER
             phases = weaverCurrentPhase;
-            Debug.Log("phase is now " + familiarCurrentPhase);
             fireballAmount = startingFireballAmount;
             fireballtimer = startingFireballTimer;
             magicCircleAmount = startingMagicCircleAmount;

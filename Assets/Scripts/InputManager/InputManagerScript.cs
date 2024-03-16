@@ -289,7 +289,9 @@ public class InputManagerScript : MonoBehaviour
             //Familiar turn is false
             if (wyvernScript != null) 
             {
-                wyvernScript.WeaverOrFamiliar(familiarScript.myTurn);
+                if (wyvern.activeSelf) {
+                    wyvernScript.WeaverOrFamiliar(familiarScript.myTurn);
+                }
             }
             playerInput.SwitchCurrentActionMap("Familiar");
         }
@@ -320,7 +322,9 @@ public class InputManagerScript : MonoBehaviour
             //Familiar turn is true
             if (wyvernScript != null) 
             {
-                wyvernScript.WeaverOrFamiliar(familiarScript.myTurn);
+                if (wyvern.activeSelf) {
+                    wyvernScript.WeaverOrFamiliar(familiarScript.myTurn);
+                }
             }
             playerInput.SwitchCurrentActionMap("Weaver");
         }
