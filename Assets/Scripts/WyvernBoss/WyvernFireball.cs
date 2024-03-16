@@ -14,12 +14,11 @@ public class WyvernFireball : MonoBehaviour
     private WeaveableObject weaveable;
     public float speed;
     private bool wasWoven;
-    private bool foundPosition;
-    public float breakableObjectDetectionProximity;
     private bool breakableObjectFound;
     private Vector3 breakableObjectPosition;
     private Vector3 weaverposition;
     private Vector3 familiarposition;
+    private bool whosturn;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +33,8 @@ public class WyvernFireball : MonoBehaviour
 
         weaverposition = new Vector3(weaver.transform.position.x,weaver.transform.position.y + 1, weaver.transform.position.z);
         familiarposition = new Vector3(familiar.transform.position.x,familiar.transform.position.y + 1,familiar.transform.position.z);
+
+        whosturn = familiarscript.myTurn; //If true, its familiar's turn
 
         wasWoven = false;
         breakableObjectFound = false;
@@ -65,7 +66,7 @@ public class WyvernFireball : MonoBehaviour
     //Function that moves the fireball towards the player/familiar
     void HomingMissile() {
         //If familiar's turn, then move towards the familiar.
-        if (familiarscript.myTurn) {
+        if (whosturn == true) {
             transform.position = Vector3.MoveTowards(transform.position, familiarposition, speed * Time.deltaTime);
             if (transform.position == familiarposition) {
                 Destroy(gameObject);

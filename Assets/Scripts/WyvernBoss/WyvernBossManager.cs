@@ -32,6 +32,9 @@ public class WyvernBossManager : MonoBehaviour
     [SerializeField] private GameObject[] configurations;
     [HideInInspector] public bool configurationIsActive;
     private bool spawnedConfiguration;
+    private float weaverStartingY;
+    private float familiarStartingY;
+    private bool waitUntilIsGrounded;
 
     [Header("Flamethrower")]
     public GameObject flamethrower;
@@ -87,10 +90,32 @@ public class WyvernBossManager : MonoBehaviour
         configurationIsActive = false;
         spawnedConfiguration = false;
         moveToNextRoom = false;
+        waitUntilIsGrounded = false;
         familiarCurrentPhase = phases;
         weaverCurrentPhase = phases;
 
         transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
+
+         if (phases == 2) {
+            if (!familiarScript.myTurn) {
+                CharacterController weavercontroller = weaver.GetComponent<CharacterController>();
+                if (weavercontroller.isGrounded) {
+                    weaverStartingY = weaver.transform.position.y;
+                }
+                else {
+                    waitUntilIsGrounded = true;
+                }
+            }
+            else {
+                CharacterController familiarcontroller = stag.GetComponent<CharacterController>();
+                if (familiarcontroller.isGrounded) {
+                    familiarStartingY = stag.transform.position.y;
+                }
+                else {
+                    waitUntilIsGrounded = true;
+                }
+            }
+        }
         
     }
 
@@ -190,6 +215,23 @@ public class WyvernBossManager : MonoBehaviour
                 }
             }
         }
+
+        if (waitUntilIsGrounded == true) {
+            if (familiarScript.myTurn) {
+                CharacterController familiarcontroller = stag.GetComponent<CharacterController>();
+                if (familiarcontroller.isGrounded) {
+                    familiarStartingY = stag.transform.position.y;
+                    waitUntilIsGrounded = false;
+                }
+            }
+            else {
+                CharacterController weavercontroller = weaver.GetComponent<CharacterController>();
+                if (weavercontroller.isGrounded) {
+                    weaverStartingY = weaver.transform.position.y;
+                    waitUntilIsGrounded = false;
+                }
+            }
+        }
         
     }
 
@@ -217,16 +259,21 @@ public class WyvernBossManager : MonoBehaviour
         if (useConfigurations == false) {
             if (magicCircleAmount > 0) {
                 if (!familiarScript.myTurn) {
-                    Vector3 randomposition = Random.insideUnitCircle * spawnradius;
-                    Vector3 newposition = new Vector3(weaver.transform.position.x + randomposition.x, weaver.transform.position.y - 7f, weaver.transform.position.z + randomposition.y);
-                    Instantiate(magicCircle,newposition,Quaternion.identity);
+                    if (weaver.transform.position.y == weaverStartingY) {
+                        Vector3 randomposition = Random.insideUnitCircle * spawnradius;
+                        Vector3 newposition = new Vector3(weaver.transform.position.x + randomposition.x, weaver.transform.position.y - 7f, weaver.transform.position.z + randomposition.y);
+                        Instantiate(magicCircle,newposition,Quaternion.identity);
+                        magicCircleAmount -= 1;
+                    }
                 }
                 else {
-                    Vector3 randomposition = Random.insideUnitCircle * spawnradius;
-                    Vector3 newposition = new Vector3(stag.transform.position.x + randomposition.x, stag.transform.position.y - 7f, stag.transform.position.z + randomposition.y);
-                    Instantiate(magicCircle,newposition,Quaternion.identity);
+                    if (stag.transform.position.y == familiarStartingY) {
+                        Vector3 randomposition = Random.insideUnitCircle * spawnradius;
+                        Vector3 newposition = new Vector3(stag.transform.position.x + randomposition.x, stag.transform.position.y - 7f, stag.transform.position.z + randomposition.y);
+                        Instantiate(magicCircle,newposition,Quaternion.identity);
+                        magicCircleAmount -= 1;
+                    }
                 }
-                magicCircleAmount -= 1;
             }
             else {
                 StartCoroutine(Cooldown()); //PROBLEM WITH COOLDOWN MARKED
@@ -302,6 +349,29 @@ public class WyvernBossManager : MonoBehaviour
     /// </param>
     public void SwitchToPhase(int newphase, int previousphase, bool isWeaversTurn) {
         phases = newphase;
+
+        //This does not account for if the weaver or stag jumps through a trigger yet.
+        if (newphase == 2) {
+            if (isWeaversTurn) {
+                CharacterController weavercontroller = weaver.GetComponent<CharacterController>();
+                if (weavercontroller.isGrounded) {
+                    weaverStartingY = weaver.transform.position.y;
+                }
+                else {
+                    waitUntilIsGrounded = true;
+                }
+            }
+            else {
+                CharacterController familiarcontroller = stag.GetComponent<CharacterController>();
+                if (familiarcontroller.isGrounded) {
+                    familiarStartingY = stag.transform.position.y;
+                }
+                else {
+                    waitUntilIsGrounded = true;
+                }
+            }
+        }
+
         if (isWeaversTurn) {
             weaverCurrentPhase = newphase;
         }
