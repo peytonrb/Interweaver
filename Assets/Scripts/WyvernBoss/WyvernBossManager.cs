@@ -54,7 +54,6 @@ public class WyvernBossManager : MonoBehaviour
     private float startingFireballTimer;
     private int startingFireballAmount;
     private float startingMagicCircleTimer;
-    private float startingMagiCircleCooldown;
     private int startingMagicCircleAmount;
     private float startingPreWindupTimer;
     private float startingWindupTimer;
@@ -80,7 +79,6 @@ public class WyvernBossManager : MonoBehaviour
         startingFireballAmount = fireballAmount;
         startingMagicCircleTimer = magicCircleTimer;
         startingMagicCircleAmount = magicCircleAmount;
-        startingMagiCircleCooldown = magicCircleCooldown;
         startingPreWindupTimer = preWindupTimer;
         startingWindupTimer = windupTimer;
         startingBlowFireTimer = blowFireTimer;
@@ -126,7 +124,9 @@ public class WyvernBossManager : MonoBehaviour
             if (familiarScript.myTurn) {
                 if (windup == false) {
                     if (reseting == true) {
-                        reseting = false;
+                        if (phases != 2) {
+                            reseting = false;
+                        }
                     }
                     else {
                         if (stagWasLaunched == false) {
@@ -138,7 +138,9 @@ public class WyvernBossManager : MonoBehaviour
             else {
                 if (windup == false) {
                     if (reseting == true) {
-                        reseting = false;
+                        if (phases != 2) {
+                            reseting = false;
+                        }
                     }
                     else {
                         if (stagWasLaunched == false) {
@@ -296,7 +298,6 @@ public class WyvernBossManager : MonoBehaviour
                 yield return new WaitForSeconds(magicCircleCooldown);
             break;
         }
-        magicCircleCooldown = startingMagiCircleCooldown;
         reseting = false;
         yield break;
     }
@@ -386,7 +387,7 @@ public class WyvernBossManager : MonoBehaviour
             case 2:
                 magicCircleAmount = startingMagicCircleAmount;
                 magicCircleTimer = startingMagicCircleTimer;
-                magicCircleCooldown = startingMagiCircleCooldown;
+                StartCoroutine(Cooldown());
             break;
             case 3:
                 WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
@@ -414,7 +415,6 @@ public class WyvernBossManager : MonoBehaviour
             fireballtimer = startingFireballTimer;
             magicCircleAmount = startingMagicCircleAmount;
             magicCircleTimer = startingMagicCircleTimer;
-            magicCircleCooldown = startingMagiCircleCooldown;
             WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
             if (wyvernFlamethrower != null) {
                 wyvernFlamethrower.KillThyself();
@@ -433,7 +433,6 @@ public class WyvernBossManager : MonoBehaviour
             fireballtimer = startingFireballTimer;
             magicCircleAmount = startingMagicCircleAmount;
             magicCircleTimer = startingMagicCircleTimer;
-            magicCircleCooldown = startingMagiCircleCooldown;
             WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
             if (wyvernFlamethrower != null) {
                 wyvernFlamethrower.KillThyself();
@@ -458,7 +457,6 @@ public class WyvernBossManager : MonoBehaviour
             case 2:
                 magicCircleAmount = startingMagicCircleAmount;
                 magicCircleTimer = startingMagicCircleTimer;
-                magicCircleCooldown = startingMagiCircleCooldown;
             break;
             case 3:
                 WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
