@@ -9389,7 +9389,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 9085590001539255050}
+  - {fileID: 5973374461465829119}
   - {fileID: 3884110881225791433}
   - {fileID: 1773885070271375803}
   - {fileID: 7345343592811284791}
@@ -9437,7 +9437,6 @@ Transform:
   - {fileID: 1147631470174521184}
   - {fileID: 2005343441635829044}
   - {fileID: 2675698556768302409}
-  - {fileID: 9118512730007108662}
   m_Father: {fileID: 5718742570828214708}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 33.411, z: 0}
@@ -10149,6 +10148,38 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1583029687679027510
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1333849118601225069}
+  m_Layer: 0
+  m_Name: P1Area3toP2Area2 MoleDoor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1333849118601225069
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583029687679027510}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 9118512730007108662}
+  m_Father: {fileID: 1147631470174521184}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1616366915975952169
 GameObject:
   m_ObjectHideFlags: 0
@@ -10267,7 +10298,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8070986bd98793745bdbfac91b33ac2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensors: []
+  sensors:
+  - {fileID: 2585978538206734733}
   pressurePlates:
   - {fileID: 0}
   opensVertically: 0
@@ -11852,9 +11884,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8070986bd98793745bdbfac91b33ac2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensors: []
-  pressurePlates:
-  - {fileID: 0}
+  sensors:
+  - {fileID: 2585978538206734733}
+  pressurePlates: []
   opensVertically: 0
   opensRight: 1
   opensLeft: 0
@@ -23697,8 +23729,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3311149563568472152}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0.4532818, z: -0, w: 0.8913673}
+  m_LocalPosition: {x: 27.33006, y: 22.422913, z: -1.212574}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -23710,7 +23742,7 @@ Transform:
   - {fileID: 5254721361807756878}
   - {fileID: 8108156015368701924}
   - {fileID: 6324300725894981780}
-  m_Father: {fileID: 5262831400221880320}
+  m_Father: {fileID: 5973374461465829119}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3327500319276098341
@@ -25253,7 +25285,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5973374461465829119}
   - {fileID: 2327353874275912172}
   - {fileID: 5828735549880070931}
   - {fileID: 5262831400221880320}
@@ -25625,13 +25656,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4914535273393875878}
-  m_LocalRotation: {x: -0, y: 0.37492922, z: -0, w: 0.92705345}
-  m_LocalPosition: {x: -9.39, y: -22.422913, z: 20.91}
+  m_LocalRotation: {x: -0, y: 0.4532818, z: -0, w: 0.8913673}
+  m_LocalPosition: {x: -15.119492, y: -22.422913, z: 22.799194}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 9085590001539255050}
   - {fileID: 1641361967010928611}
-  m_Father: {fileID: 3061435384638796109}
+  m_Father: {fileID: 5262831400221880320}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 44.04, z: 0}
 --- !u!1 &5129853537836269755
@@ -41178,6 +41210,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1333849118601225069}
   - {fileID: 714935630963292295}
   - {fileID: 8759486424604349716}
   - {fileID: 3828818293588746779}
@@ -57427,24 +57460,32 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8271317320740537212, guid: f29975cbba69d854c98d21040cc98cc0, type: 3}
+      propertyPath: sensorEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 9158266506282449839}
+    - target: {fileID: 8271317320740537212, guid: f29975cbba69d854c98d21040cc98cc0, type: 3}
+      propertyPath: sensorEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 6006194911775273395}
+    - target: {fileID: 8271317320740537212, guid: f29975cbba69d854c98d21040cc98cc0, type: 3}
       propertyPath: sensorEvent.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8271317320740537212, guid: f29975cbba69d854c98d21040cc98cc0, type: 3}
       propertyPath: sensorEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SpawnPlatform
+      value: MoveDoor
       objectReference: {fileID: 0}
     - target: {fileID: 8271317320740537212, guid: f29975cbba69d854c98d21040cc98cc0, type: 3}
       propertyPath: sensorEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: SpawnPlatform
+      value: MoveDoor
       objectReference: {fileID: 0}
     - target: {fileID: 8271317320740537212, guid: f29975cbba69d854c98d21040cc98cc0, type: 3}
       propertyPath: sensorEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: PlatformSpawnerScript, Assembly-CSharp
+      value: DoorScript, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8271317320740537212, guid: f29975cbba69d854c98d21040cc98cc0, type: 3}
       propertyPath: sensorEvent.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: PlatformSpawnerScript, Assembly-CSharp
+      value: DoorScript, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8271317320740537212, guid: f29975cbba69d854c98d21040cc98cc0, type: 3}
       propertyPath: sensorEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -57460,6 +57501,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5183054396021013778, guid: f29975cbba69d854c98d21040cc98cc0, type: 3}
   m_PrefabInstance: {fileID: 5848665737301732081}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2585978538206734733 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8271317320740537212, guid: f29975cbba69d854c98d21040cc98cc0, type: 3}
+  m_PrefabInstance: {fileID: 5848665737301732081}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 483c49465ebb50940a8f5d882262ccbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5897096777324367041
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58630,7 +58682,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3340875388549602920}
+    m_TransformParent: {fileID: 1333849118601225069}
     m_Modifications:
     - target: {fileID: 2335585500700161782, guid: d2b68ee58bb90e64cadd4443575ccb37, type: 3}
       propertyPath: m_Name
@@ -58639,6 +58691,14 @@ PrefabInstance:
     - target: {fileID: 3108180901800537164, guid: d2b68ee58bb90e64cadd4443575ccb37, type: 3}
       propertyPath: m_RootOrder
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108180901800537164, guid: d2b68ee58bb90e64cadd4443575ccb37, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.9900004
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108180901800537164, guid: d2b68ee58bb90e64cadd4443575ccb37, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.9900004
       objectReference: {fileID: 0}
     - target: {fileID: 3108180901800537164, guid: d2b68ee58bb90e64cadd4443575ccb37, type: 3}
       propertyPath: m_LocalPosition.x
@@ -58654,7 +58714,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3108180901800537164, guid: d2b68ee58bb90e64cadd4443575ccb37, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8805238
+      value: 0.88052374
       objectReference: {fileID: 0}
     - target: {fileID: 3108180901800537164, guid: d2b68ee58bb90e64cadd4443575ccb37, type: 3}
       propertyPath: m_LocalRotation.x
@@ -58662,7 +58722,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3108180901800537164, guid: d2b68ee58bb90e64cadd4443575ccb37, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.47400212
+      value: 0.47400203
       objectReference: {fileID: 0}
     - target: {fileID: 3108180901800537164, guid: d2b68ee58bb90e64cadd4443575ccb37, type: 3}
       propertyPath: m_LocalRotation.z
