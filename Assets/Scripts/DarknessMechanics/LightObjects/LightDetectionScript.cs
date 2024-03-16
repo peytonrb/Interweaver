@@ -53,6 +53,7 @@ public class LightDetectionScript : MonoBehaviour
             }
 
             // if collision is with a sensor
+            
             if (collision.GetComponent<SensorController>() != null)
             {
                 if (LightSourceScript.Instance.lightsArray[transform.parent.transform.parent.GetComponent<LightCrystalScript>().arrayIndex].isOn &&
@@ -125,11 +126,13 @@ public class LightDetectionScript : MonoBehaviour
             }
 
             // if collision is with a sensor
-            if (collision.GetComponent<SensorController>() != null)
+            SensorController sensorScript = collision.GetComponent<SensorController>();
+            if (sensorScript != null)
             {
-                if (collision.GetComponent<SensorController>().isActive)
+                if (sensorScript.isActive)
                 {
-                    collision.GetComponent<SensorController>().isActive = false;
+                    sensorScript.isActive = false;
+                    sensorScript.RemoveVFX();
                 }
             }
         }
