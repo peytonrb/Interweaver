@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class WyvernBossManager : MonoBehaviour
 {
     private GameObject weaver;
+    private CharacterController weavercontroller;
     private PlayerControllerNew playercontroller;
     private GameObject stag;
+    private CharacterController familiarcontroller;
     private FamiliarScript familiarScript;
     public int phases; //0 = no phase, 1 = fireball, 2 = magic circle, 3 = flamethrower, 4 = flee
     private NavMeshAgent navMeshAgent;
@@ -34,7 +35,8 @@ public class WyvernBossManager : MonoBehaviour
     private bool spawnedConfiguration;
     private float weaverStartingY;
     private float familiarStartingY;
-    private bool waitUntilIsGrounded;
+    private bool waitUntilWeaverIsGrounded;
+    private bool waitUntilFamiliarIsGrounded;
 
     [Header("Flamethrower")]
     public GameObject flamethrower;
@@ -67,6 +69,8 @@ public class WyvernBossManager : MonoBehaviour
     {
         weaver = GameObject.FindGameObjectWithTag("Player");
         stag = GameObject.FindGameObjectWithTag("Familiar");
+        weavercontroller = weaver.GetComponent<CharacterController>();
+        familiarcontroller = stag.GetComponent<CharacterController>();
         familiarScript = stag.GetComponent<FamiliarScript>();
         playercontroller = weaver.GetComponent<PlayerControllerNew>();
         if (wyvernTriggerManager != null) {
@@ -88,31 +92,30 @@ public class WyvernBossManager : MonoBehaviour
         configurationIsActive = false;
         spawnedConfiguration = false;
         moveToNextRoom = false;
-        waitUntilIsGrounded = false;
+        waitUntilWeaverIsGrounded = false;
+        waitUntilFamiliarIsGrounded = false;
         familiarCurrentPhase = phases;
         weaverCurrentPhase = phases;
 
         transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
 
          if (phases == 2) {
-            if (!familiarScript.myTurn) {
-                CharacterController weavercontroller = weaver.GetComponent<CharacterController>();
-                if (weavercontroller.isGrounded) {
-                    weaverStartingY = weaver.transform.position.y;
-                }
-                else {
-                    waitUntilIsGrounded = true;
-                }
+            if (weavercontroller.isGrounded) {
+                weaverStartingY = weaver.transform.position.y;
+                Debug.Log("Got Weaver y");
             }
             else {
-                CharacterController familiarcontroller = stag.GetComponent<CharacterController>();
-                if (familiarcontroller.isGrounded) {
-                    familiarStartingY = stag.transform.position.y;
-                }
-                else {
-                    waitUntilIsGrounded = true;
-                }
+                waitUntilWeaverIsGrounded = true;
             }
+       
+            if (familiarcontroller.isGrounded) {
+                familiarStartingY = stag.transform.position.y;
+                Debug.Log("Got familiar y");
+            }
+            else {
+                waitUntilFamiliarIsGrounded = true;
+            }
+            
         }
         
     }
@@ -218,20 +221,16 @@ public class WyvernBossManager : MonoBehaviour
             }
         }
 
-        if (waitUntilIsGrounded == true) {
-            if (familiarScript.myTurn) {
-                CharacterController familiarcontroller = stag.GetComponent<CharacterController>();
-                if (familiarcontroller.isGrounded) {
-                    familiarStartingY = stag.transform.position.y;
-                    waitUntilIsGrounded = false;
-                }
+        if (waitUntilWeaverIsGrounded == true) {
+            if (weavercontroller.isGrounded) {
+                weaverStartingY = weaver.transform.position.y;
+                waitUntilWeaverIsGrounded = false;
             }
-            else {
-                CharacterController weavercontroller = weaver.GetComponent<CharacterController>();
-                if (weavercontroller.isGrounded) {
-                    weaverStartingY = weaver.transform.position.y;
-                    waitUntilIsGrounded = false;
-                }
+        }
+        if (waitUntilFamiliarIsGrounded == true) {
+            if (familiarcontroller.isGrounded) {
+                familiarStartingY = stag.transform.position.y;
+                waitUntilFamiliarIsGrounded = false;
             }
         }
         
@@ -278,7 +277,7 @@ public class WyvernBossManager : MonoBehaviour
                 }
             }
             else {
-                StartCoroutine(Cooldown()); //PROBLEM WITH COOLDOWN MARKED
+                StartCoroutine(Cooldown());
                 reseting = true;
                 magicCircleAmount = startingMagicCircleAmount;
             }
@@ -298,6 +297,7 @@ public class WyvernBossManager : MonoBehaviour
                 yield return new WaitForSeconds(magicCircleCooldown);
             break;
         }
+        Debug.Log("Cooldown finished");
         reseting = false;
         yield break;
     }
@@ -339,6 +339,27 @@ public class WyvernBossManager : MonoBehaviour
         reseting = true;
     }
 
+    public void ResetPhase2GroundLevel(bool isWeaversTurn) {
+        if (isWeaversTurn) {
+            if (weavercontroller.isGrounded) {
+                weaverStartingY = weaver.transform.position.y;
+                Debug.Log("Reset Weaver Ground Level");
+            }
+            else {
+                waitUntilWeaverIsGrounded = true;
+            }
+        }
+        else {
+            if (familiarcontroller.isGrounded) {
+                familiarStartingY = stag.transform.position.y;
+                Debug.Log("Reset Familiar Ground Level");
+            }
+            else {
+                waitUntilFamiliarIsGrounded = true;
+            }
+        }
+    }
+
     /// <summary>
     /// Switches to new phase.
     /// </summary>
@@ -354,21 +375,19 @@ public class WyvernBossManager : MonoBehaviour
         //This does not account for if the weaver or stag jumps through a trigger yet.
         if (newphase == 2) {
             if (isWeaversTurn) {
-                CharacterController weavercontroller = weaver.GetComponent<CharacterController>();
                 if (weavercontroller.isGrounded) {
                     weaverStartingY = weaver.transform.position.y;
                 }
                 else {
-                    waitUntilIsGrounded = true;
+                    waitUntilWeaverIsGrounded = true;
                 }
             }
             else {
-                CharacterController familiarcontroller = stag.GetComponent<CharacterController>();
                 if (familiarcontroller.isGrounded) {
                     familiarStartingY = stag.transform.position.y;
                 }
                 else {
-                    waitUntilIsGrounded = true;
+                    waitUntilFamiliarIsGrounded = true;
                 }
             }
         }
@@ -387,7 +406,6 @@ public class WyvernBossManager : MonoBehaviour
             case 2:
                 magicCircleAmount = startingMagicCircleAmount;
                 magicCircleTimer = startingMagicCircleTimer;
-                StartCoroutine(Cooldown());
             break;
             case 3:
                 WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
@@ -411,15 +429,26 @@ public class WyvernBossManager : MonoBehaviour
         if (familiarsTurn == false) {
             //WHEN SWAPPING TO FAMILIAR
             phases = familiarCurrentPhase;
-            fireballAmount = startingFireballAmount;
-            fireballtimer = startingFireballTimer;
-            magicCircleAmount = startingMagicCircleAmount;
-            magicCircleTimer = startingMagicCircleTimer;
-            WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
-            if (wyvernFlamethrower != null) {
-                wyvernFlamethrower.KillThyself();
+
+            //This resets the weaver's phase
+            switch (weaverCurrentPhase) {
+                case 1:
+                    fireballAmount = startingFireballAmount;
+                    fireballtimer = startingFireballTimer;
+                break;
+                case 2:
+                    magicCircleAmount = startingMagicCircleAmount;
+                    magicCircleTimer = startingMagicCircleTimer;
+                    StopCoroutine(Cooldown());
+                break;
+                case 3:
+                    WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
+                    if (wyvernFlamethrower != null) {
+                        wyvernFlamethrower.KillThyself();
+                    }
+                    ResetPhase3();
+                break;
             }
-            ResetPhase3();
 
             //Updates phase on all triggers
             if (triggerManager != null) {
@@ -429,15 +458,26 @@ public class WyvernBossManager : MonoBehaviour
         else {
             //WHEN SWAPPING TO WEAVER
             phases = weaverCurrentPhase;
-            fireballAmount = startingFireballAmount;
-            fireballtimer = startingFireballTimer;
-            magicCircleAmount = startingMagicCircleAmount;
-            magicCircleTimer = startingMagicCircleTimer;
-            WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
-            if (wyvernFlamethrower != null) {
-                wyvernFlamethrower.KillThyself();
+
+            //This resets the familiar's phase
+            switch (familiarCurrentPhase) {
+                case 1:
+                    fireballAmount = startingFireballAmount;
+                    fireballtimer = startingFireballTimer;
+                break;
+                case 2:
+                    magicCircleAmount = startingMagicCircleAmount;
+                    magicCircleTimer = startingMagicCircleTimer;
+                    StopCoroutine(Cooldown());
+                break;
+                case 3:
+                    WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
+                    if (wyvernFlamethrower != null) {
+                        wyvernFlamethrower.KillThyself();
+                    }
+                    ResetPhase3();
+                break;
             }
-            ResetPhase3();
 
             //Updates phase on all triggers
             if (triggerManager != null) {
