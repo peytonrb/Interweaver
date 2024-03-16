@@ -7,6 +7,8 @@ public class StagSwapScript : MonoBehaviour
     [Header("References")]
     private FamiliarScript familiarScript;
     private GameObject weaver;
+    private GameObject wyvern;
+    private WyvernBossManager bossManager;
     [Header("Variables")]
     [SerializeField] private float timeToHold = 1f;
     [HideInInspector] private bool isHolding; 
@@ -15,6 +17,8 @@ public class StagSwapScript : MonoBehaviour
     void Start()
     {
         weaver = GameObject.FindGameObjectWithTag("Player");
+        wyvern = GameObject.FindGameObjectWithTag("Boss");
+        bossManager = wyvern.GetComponent<WyvernBossManager>();
     }
 
     public IEnumerator ChargeSwap()
@@ -38,9 +42,13 @@ public class StagSwapScript : MonoBehaviour
         {
             
             Vector3 prevPosition = transform.position;
+            int prevPhase = bossManager.phases;
             //inputManagerScript.PossessWeaver(); // scrungly
             transform.position = weaver.transform.position;
             weaver.transform.position = prevPosition;
+            if (wyvern.activeSelf) {
+                bossManager.StagSwapPhaseSwap(prevPhase);
+            }
         }
     }
 }

@@ -260,7 +260,7 @@ public class WyvernBossManager : MonoBehaviour
         if (useConfigurations == false) {
             if (magicCircleAmount > 0) {
                 if (!familiarScript.myTurn) {
-                    if (weaver.transform.position.y == weaverStartingY) {
+                    if (weaver.transform.position.y >= weaverStartingY - 0.5f && weaver.transform.position.y <= weaverStartingY + 0.5f) {
                         Vector3 randomposition = Random.insideUnitCircle * spawnradius;
                         Vector3 newposition = new Vector3(weaver.transform.position.x + randomposition.x, weaver.transform.position.y - 7f, weaver.transform.position.z + randomposition.y);
                         Instantiate(magicCircle,newposition,Quaternion.identity);
@@ -268,7 +268,7 @@ public class WyvernBossManager : MonoBehaviour
                     }
                 }
                 else {
-                    if (stag.transform.position.y == familiarStartingY) {
+                    if (stag.transform.position.y >= familiarStartingY - 0.5f && stag.transform.position.y <= familiarStartingY + 0.5f) {
                         Vector3 randomposition = Random.insideUnitCircle * spawnradius;
                         Vector3 newposition = new Vector3(stag.transform.position.x + randomposition.x, stag.transform.position.y - 7f, stag.transform.position.z + randomposition.y);
                         Instantiate(magicCircle,newposition,Quaternion.identity);
@@ -497,6 +497,7 @@ public class WyvernBossManager : MonoBehaviour
             case 2:
                 magicCircleAmount = startingMagicCircleAmount;
                 magicCircleTimer = startingMagicCircleTimer;
+                StopCoroutine(Cooldown());
             break;
             case 3:
                 WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
@@ -508,6 +509,51 @@ public class WyvernBossManager : MonoBehaviour
         }
         moveToNextRoom = true;
         Debug.Log("Wyvern is hurt! Ouch!");
+    }
+
+    /// <summary>
+    /// Changes the phases around on a Stag Swap. Weaver phase becomes familiar's phase, and familiar's phase becomes weaver's phase.
+    /// </summary>
+    public void StagSwapPhaseSwap(int previousphase) {
+        //Familiar's phase is set to the weaver's current phase
+        familiarCurrentPhase = weaverCurrentPhase;
+        phases = weaverCurrentPhase;
+
+        if (weaverCurrentPhase == 2) {
+            if (familiarcontroller.isGrounded) {
+                familiarStartingY = stag.transform.position.y;
+            }
+            else {
+                waitUntilFamiliarIsGrounded = true;
+            }
+        }
+        
+        //Weavers current phase is set to the previous familiar phase
+        weaverCurrentPhase = previousphase;
+        
+        switch (previousphase) {
+            case 1:
+                fireballAmount = startingFireballAmount;
+                fireballtimer = startingFireballTimer;
+            break;
+            case 2:
+                magicCircleAmount = startingMagicCircleAmount;
+                magicCircleTimer = startingMagicCircleTimer;
+                StopCoroutine(Cooldown());
+            break;
+            case 3:
+                WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
+                if (wyvernFlamethrower != null) {
+                    wyvernFlamethrower.KillThyself();
+                }
+                ResetPhase3();
+            break;
+        }
+
+        //Updates phase on all triggers
+        if (triggerManager != null) {
+            triggerManager.UpdatePhase();
+        }
     }
 
     void OnCollisionEnter(Collision other) {
