@@ -10,6 +10,7 @@ public class LightDetectionScript : MonoBehaviour
 
      [Header("Audio")]
     [SerializeField] private AudioClip  sensorHitClip;
+    //[SerializeField] private AudioClip  crystalOnClip;
 
     void Start()
     {
@@ -48,11 +49,14 @@ public class LightDetectionScript : MonoBehaviour
             // if the collision is with another light crystal
             if (collision.gameObject.tag == "Weaveable" && collision.GetComponent<LightCrystalScript>() != null)
             {
+              //  AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, crystalOnClip);
                 // .. and that light source is on and therefore powered
                 if (LightSourceScript.Instance.lightsArray[collision.GetComponent<LightCrystalScript>().arrayIndex].isOn)
                 {
+                    
                     crystalScript.isActive = true; // turn this light on
                 }
+               
             }
 
             // if collision is with a sensor

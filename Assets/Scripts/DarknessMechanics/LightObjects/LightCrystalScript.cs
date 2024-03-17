@@ -22,6 +22,8 @@ public class LightCrystalScript : MonoBehaviour
     private Light crystalLight;
     private float currentBrightness;
      public bool isActiveDefault = false;
+   //  [Header("Audio")]
+  //   [SerializeField] private AudioClip  crystalOnClip;
 
     void Start()
     {
@@ -99,6 +101,7 @@ public class LightCrystalScript : MonoBehaviour
             }
             else
             {
+              //  AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, crystalOnClip);
                 beamEffect.enabled = true;
                 beamEffect.Play();
                 focusingCrystalScript.isActive = true;
@@ -120,7 +123,6 @@ public class LightCrystalScript : MonoBehaviour
 
             yield return null;
         }
-
         crystalLight.intensity = brightness;
         currentBrightness = crystalLight.intensity;
     }
