@@ -8,9 +8,9 @@ public class WyvernActivationTrigger : MonoBehaviour
     [SerializeField] private bool destroyThisAfterActivation;
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
-       wyvern.SetActive(false); 
+       StartCoroutine(WaitOneFrame());
     }
 
     void OnTriggerEnter(Collider other) {
@@ -33,6 +33,12 @@ public class WyvernActivationTrigger : MonoBehaviour
 
     public void ResetTrigger() {
         gameObject.SetActive(true);
+        wyvern.SetActive(false);
+    }
+
+    IEnumerator WaitOneFrame()
+    {
+        yield return null;
         wyvern.SetActive(false);
     }
 }
