@@ -10,5 +10,5 @@ public class Dialogue : ScriptableObject
 
     [TextArea(3,10)]
     public List<string> sentences;
-    public AudioClip speechFile;
+    //public AudioClip speechFile;
 }

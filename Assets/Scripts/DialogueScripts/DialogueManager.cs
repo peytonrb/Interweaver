@@ -84,6 +84,7 @@ public class DialogueManager : MonoBehaviour
         {
             
             AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, speechFile, 1f);
+            yield return new WaitForSeconds(.02f);
             dialogueText.text += letter;
             yield return null;
             
