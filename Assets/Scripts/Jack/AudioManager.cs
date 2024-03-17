@@ -17,6 +17,7 @@ public class AudioManager : MonoBehaviour
 {
     [Header("References")]
     private List<AudioSource> musicLayers = new List<AudioSource>();
+    [SerializeField] private AudioSource introMusicSource;
     [Header("Variables")]
     public static AudioManager instance;
     public static float musicChannelVol = 1f;
@@ -26,12 +27,15 @@ public class AudioManager : MonoBehaviour
     public AudioSource weaveChannel;
     public AudioSource footStepsChannel;
     public AudioSource fallChannel;
+
     public bool transitioning; 
+    public bool playingSequencedMusic;
     //AudioSource for the digging sound
 
     [Header("Music Audioclip List")]
     [SerializeField] private AudioClip titleMusic;
     [SerializeField] private AudioClip alpineMusic;
+    [SerializeField] private AudioClip alpineMusicIntro;
     [SerializeField] private AudioClip cavernMusic;
     [SerializeField] private AudioClip sepultusMusic;
     [SerializeField] private AudioClip hubMusic;
@@ -82,6 +86,10 @@ public class AudioManager : MonoBehaviour
             case "AlpineCombined":
                 {
                     PlaySound(AudioManagerChannels.MusicChannel, alpineMusic);
+                    introMusicSource.clip = alpineMusicIntro;
+                    introMusicSource.outputAudioMixerGroup = musicChannel.outputAudioMixerGroup;
+                    introMusicSource.Play();
+                    PlaySequencedMusic(alpineMusicIntro, alpineMusic);
                     break;
                 }
             case "Cavern":
@@ -260,9 +268,29 @@ public class AudioManager : MonoBehaviour
         yield break;
     }
 
+    public void PlaySequencedMusic(AudioClip audioClipOne, AudioClip audioClipTwo)
+    {
+        musicChannel.Stop();
+        double introTime = (double)audioClipOne.samples / audioClipOne.frequency; // most accurate way to get to get the length of an audioclip as a double
+        double startTime = AudioSettings.dspTime + 0.2; 
+        musicChannel.PlayScheduled(startTime + introTime); // best way to play without a delay, using the usually Play() will add a delay! Fucked!
+        playingSequencedMusic = true;
+        StartCoroutine(WaitForSongIntroToEnd(audioClipOne.length));
+    }
+
+    private IEnumerator WaitForSongIntroToEnd(float audioClipLength)
+    {
+        double startTime = Time.time;
+        while (Time.time < startTime + audioClipLength) // less accurate measure of time tracking, but not 'visible', so no worries
+        {
+            yield return null;
+        }
+        playingSequencedMusic = false;
+    }
+
     public IEnumerator StartMusicFadeOut(AudioClip musicToTransitionTo, float fadeOutTransitionDuration, float fadeInTransitionDuration, float musicStartTime)
     {
-        if (musicToTransitionTo.name == musicChannel.clip.name)
+        if (musicToTransitionTo.name == musicChannel.clip.name || playingSequencedMusic)
         {
             yield break;
         }
@@ -279,7 +307,7 @@ public class AudioManager : MonoBehaviour
         musicChannel.clip = musicToTransitionTo;
         musicChannel.time = musicStartTime;
         StartCoroutine(StartMusicFadeIn(fadeInTransitionDuration, start));
-        musicChannel.Play();
+        //musicChannel.Play();
         yield break;
     }
 
