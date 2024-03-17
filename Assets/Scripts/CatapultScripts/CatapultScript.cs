@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CatapultScript : MonoBehaviour
@@ -9,6 +10,7 @@ public class CatapultScript : MonoBehaviour
     [SerializeField] [Range (1f, 100f)] private float launchForce;
     [SerializeField] private float timeToLaunch = 2f;
     [SerializeField] private Vector3 direction;
+    [SerializeField] private GameObject wyvern;
 
     void Start()
     {
@@ -43,6 +45,8 @@ public class CatapultScript : MonoBehaviour
         StartCoroutine(RemoveLaunchForce(movementScript, characterController)); // prepare to remove this added velocity once the character hits the ground
         StagLeapScript stagLeapScript = characterController.gameObject.GetComponent<StagLeapScript>();
         stagLeapScript.wasLaunched = true;
+        WyvernBossManager wyvernboss = wyvern.GetComponent<WyvernBossManager>();
+        wyvernboss.stagWasLaunched = true;
     }
 
     IEnumerator RemoveLaunchForce(MovementScript movementScript, CharacterController characterController)

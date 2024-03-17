@@ -109,6 +109,7 @@ public class FocusingCrystalScript : MonoBehaviour
         if (collider.GetComponent<SensorController>() != null && collider.GetComponent<SensorController>().isActive)
         {
             collider.GetComponent<SensorController>().isActive = false;
+            // collider.GetComponent<SensorController>().RemoveVFX();
         }
 
         // if beam hits sensor
@@ -142,6 +143,7 @@ public class FocusingCrystalScript : MonoBehaviour
         if (collider.GetComponent<SensorController>() != null && collider.GetComponent<SensorController>().isActive)
         {
             collider.GetComponent<SensorController>().isActive = false;
+            collider.GetComponent<SensorController>().RemoveVFX();
         }
     }
 }

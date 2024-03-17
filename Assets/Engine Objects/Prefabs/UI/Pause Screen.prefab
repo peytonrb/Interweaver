@@ -7120,7 +7120,7 @@ RectTransform:
   - {fileID: 4470556030973481802}
   - {fileID: 7462213036512196612}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -7889,6 +7889,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4398531692910012815}
     m_Modifications:
+    - target: {fileID: 365116263123082764, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: NPC Interaction
+      objectReference: {fileID: 0}
     - target: {fileID: 1093952725184338920, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
       propertyPath: m_Name
       value: New Rebind UI
@@ -7896,6 +7900,46 @@ PrefabInstance:
     - target: {fileID: 1093952725184338920, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1392171527175195342, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Depossess
+      objectReference: {fileID: 0}
+    - target: {fileID: 1910151083447842553, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1910151083447842553, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1910151083447842553, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4421087491678674459}
+    - target: {fileID: 1910151083447842553, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1910151083447842553, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ToggleControls
+      objectReference: {fileID: 0}
+    - target: {fileID: 1910151083447842553, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PauseScript, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1910151083447842553, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2167363419093890677, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Weaver Move
+      objectReference: {fileID: 0}
+    - target: {fileID: 2201950185527494922, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Toggle Weave Mode
       objectReference: {fileID: 0}
     - target: {fileID: 2214478237692284005, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
       propertyPath: m_LocalScale.x
@@ -7937,6 +7981,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -150
       objectReference: {fileID: 0}
+    - target: {fileID: 2263437521367104993, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: NPC Interaction
+      objectReference: {fileID: 0}
     - target: {fileID: 2542737997030960135, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.65
@@ -7976,6 +8024,14 @@ PrefabInstance:
     - target: {fileID: 2631374258533915124, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 188
+      objectReference: {fileID: 0}
+    - target: {fileID: 2695050187812893605, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Familiar Interact
+      objectReference: {fileID: 0}
+    - target: {fileID: 2726957115196622579, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Rotate
       objectReference: {fileID: 0}
     - target: {fileID: 2873280175829755762, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
       propertyPath: m_LocalScale.x
@@ -8025,9 +8081,17 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 3412126912640317682, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Weaver Interact
+      objectReference: {fileID: 0}
     - target: {fileID: 3470854738439180325, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3567542519707812948, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Uncombine
       objectReference: {fileID: 0}
     - target: {fileID: 3731467227626854585, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
       propertyPath: m_LocalScale.x
@@ -8069,6 +8133,38 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 57
       objectReference: {fileID: 0}
+    - target: {fileID: 3989293326896255421, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Pause
+      objectReference: {fileID: 0}
+    - target: {fileID: 4592205570770913305, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: NPC Interaction
+      objectReference: {fileID: 0}
+    - target: {fileID: 4786160734430740817, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Familiar Move
+      objectReference: {fileID: 0}
+    - target: {fileID: 5179140921574554216, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Toggle Weave Mode
+      objectReference: {fileID: 0}
+    - target: {fileID: 5251479319273489669, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: NPC Interaction
+      objectReference: {fileID: 0}
+    - target: {fileID: 5403936688169240873, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Possess Weaver
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520818691473938296, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Familiar Interact
+      objectReference: {fileID: 0}
+    - target: {fileID: 5724964903056482414, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Pause
+      objectReference: {fileID: 0}
     - target: {fileID: 6022262122956153988, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.65
@@ -8088,6 +8184,22 @@ PrefabInstance:
     - target: {fileID: 6022262122956153988, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 326
+      objectReference: {fileID: 0}
+    - target: {fileID: 6022262122956153995, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Weaver Move
+      objectReference: {fileID: 0}
+    - target: {fileID: 6304540789311961046, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Drop
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315480017675171054, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Possess Familiar
+      objectReference: {fileID: 0}
+    - target: {fileID: 6742627028808869112, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Rotate
       objectReference: {fileID: 0}
     - target: {fileID: 7163979700163800113, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
       propertyPath: m_RootOrder
@@ -8165,8 +8277,30 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 123.00002
       objectReference: {fileID: 0}
+    - target: {fileID: 7209975101727970171, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Weaver Interact
+      objectReference: {fileID: 0}
+    - target: {fileID: 7339693208985246634, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Uncombine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7371596632777099889, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: PossessFamiliar
+      objectReference: {fileID: 0}
+    - target: {fileID: 7853557131049882691, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Drop
+      objectReference: {fileID: 0}
+    - target: {fileID: 8215885356675485161, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+      propertyPath: m_Name
+      value: Familiar Move
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2484177253191300721, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
+    - {fileID: 2974692931817164060, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1093952725184338920, guid: 5aa48337ae1c44a4bb310a41f559f42c, type: 3}

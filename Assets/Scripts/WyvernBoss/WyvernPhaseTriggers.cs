@@ -58,114 +58,102 @@ public class WyvernPhaseTriggers : MonoBehaviour
     }
 
     void OnTriggerEnter(Collider other) {
-        
         if (other.gameObject.CompareTag("Player")) {
-            if (familiarInsideTrigger == false) {
-                currentPosition = other.gameObject.transform.position;
-                if (isZTrigger) {
-                    if (bc.center.z > currentPosition.z) {
-                        enteredFromNorth = false;
-                    }
-                    else {
-                        enteredFromNorth = true;
-                    }
+            currentPosition = other.gameObject.transform.position;
+            if (isZTrigger) {
+                if (bc.center.z > currentPosition.z) {
+                    enteredFromNorth = false;
                 }
                 else {
-                    if (bc.center.x > currentPosition.x) {
-                        enteredFromNorth = false;
-                    }
-                    else {
-                        enteredFromNorth = true;
-                    }
+                    enteredFromNorth = true;
                 }
-                FlipFlop(currentPhase,newPhase,true);
-                //weaverInsideTrigger = true;
             }
+            else {
+                if (bc.center.x > currentPosition.x) {
+                    enteredFromNorth = false;
+                }
+                else {
+                    enteredFromNorth = true;
+                }
+            }
+            FlipFlop(currentPhase,newPhase,true);
             
         }
         if (other.gameObject.CompareTag("Familiar")) {
-            if (weaverInsideTrigger == false) {
-                currentPosition = other.gameObject.transform.position;
-                if (isZTrigger) {
-                    if (bc.center.z > currentPosition.z) {
-                        enteredFromNorth = false;
-                    }
-                    else {
-                        enteredFromNorth = true;
-                    }
+            currentPosition = other.gameObject.transform.position;
+            if (isZTrigger) {
+                if (bc.center.z > currentPosition.z) {
+                    enteredFromNorth = false;
                 }
                 else {
-                    if (bc.center.x > currentPosition.x) {
-                        enteredFromNorth = false;
-                    }
-                    else {
-                        enteredFromNorth = true;
-                    }
+                    enteredFromNorth = true;
                 }
-                FlipFlop(currentPhase,newPhase,false);
-                //familiarInsideTrigger = true;
             }
+            else {
+                if (bc.center.x > currentPosition.x) {
+                    enteredFromNorth = false;
+                }
+                else {
+                    enteredFromNorth = true;
+                }
+            }
+            FlipFlop(currentPhase,newPhase,false);
         }
     }
 
     void OnTriggerExit(Collider other) {
-        /*
         if (other.gameObject.CompareTag("Player")) {
-            if (familiarInsideTrigger == false) {
-                currentPosition = other.gameObject.transform.position;
-                if (isZTrigger && !enteredFromNorth) {
-                    if (bc.center.z < currentPosition.z) {
-                        FlipFlop(currentPhase,newPhase,true);
-                    }
+            currentPosition = other.gameObject.transform.position;
+            if (isZTrigger && !enteredFromNorth) {
+                if (bc.center.z < currentPosition.z) {
+                    FlipFlop(currentPhase,newPhase,true);
                 }
-                else if (isZTrigger && enteredFromNorth) {
-                    if (bc.center.z > currentPosition.z) {
-                        FlipFlop(currentPhase,newPhase,true);
-                    }
+            }
+            else if (isZTrigger && enteredFromNorth) {
+                if (bc.center.z > currentPosition.z) {
+                    FlipFlop(currentPhase,newPhase,true);
                 }
-                else if (!isZTrigger && !enteredFromNorth) {
-                    if (bc.center.x < currentPosition.x) {
-                        FlipFlop(currentPhase,newPhase,true);
-                    }
+            }
+            else if (!isZTrigger && !enteredFromNorth) {
+                if (bc.center.x < currentPosition.x) {
+                    FlipFlop(currentPhase,newPhase,true);
                 }
-                else if (!isZTrigger && enteredFromNorth) {
-                    if (bc.center.x > currentPosition.x) {
-                        FlipFlop(currentPhase,newPhase,true);
-                    }
+            }
+            else if (!isZTrigger && enteredFromNorth) {
+                if (bc.center.x > currentPosition.x) {
+                    FlipFlop(currentPhase,newPhase,true);
                 }
-                else {
-                    Debug.Log("NO FLIP FLOP");
-                }
-                weaverInsideTrigger = false;
+            }
+            else {
+                Debug.Log("NO FLIP FLOP");
             }
         }
         if (other.gameObject.CompareTag("Familiar")) {
-            if (weaverInsideTrigger == false) {
-                currentPosition = other.gameObject.transform.position;
-                if (isZTrigger && !enteredFromNorth) {
-                    if (bc.center.z < currentPosition.z) {
-                        FlipFlop(currentPhase,newPhase,false);
-                    }
+            currentPosition = other.gameObject.transform.position;
+            if (isZTrigger && !enteredFromNorth) {
+                if (bc.center.z < currentPosition.z) {
+                    FlipFlop(currentPhase,newPhase,false);
                 }
-                else if (isZTrigger && enteredFromNorth) {
-                    if (bc.center.z > currentPosition.z) {
-                        FlipFlop(currentPhase,newPhase,false);
-                    }
+            }
+            else if (isZTrigger && enteredFromNorth) {
+                if (bc.center.z > currentPosition.z) {
+                    FlipFlop(currentPhase,newPhase,false);
                 }
-                else if (!isZTrigger && !enteredFromNorth) {
-                    if (bc.center.x < currentPosition.x) {
-                        FlipFlop(currentPhase,newPhase,false);
-                    }
+            }
+            else if (!isZTrigger && !enteredFromNorth) {
+                if (bc.center.x < currentPosition.x) {
+                    FlipFlop(currentPhase,newPhase,false);
                 }
-                else if (!isZTrigger && enteredFromNorth) {
-                    if (bc.center.x > currentPosition.x) {
-                        FlipFlop(currentPhase,newPhase,false);
-                    }
+            }
+            else if (!isZTrigger && enteredFromNorth) {
+                if (bc.center.x > currentPosition.x) {
+                    FlipFlop(currentPhase,newPhase,false);
                 }
-                familiarInsideTrigger = false;
+            }
+            else {
+                Debug.Log("NO FLIP FLOP");
             }
         }
-        */
     }
 
 }
