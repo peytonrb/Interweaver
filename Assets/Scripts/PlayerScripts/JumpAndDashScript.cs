@@ -36,7 +36,7 @@ public class JumpAndDashScript : MonoBehaviour
     private GameObject skinnedMeshWeaver;
     private Material originalMaterial;
 
-    [Header("VFX")]
+    [Header("Audio")]
 
     [SerializeField] private AudioClip dashAudioClip;
 
