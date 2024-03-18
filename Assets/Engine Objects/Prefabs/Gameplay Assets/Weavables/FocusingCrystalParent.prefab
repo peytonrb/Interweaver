@@ -34,7 +34,7 @@ Transform:
   m_Children:
   - {fileID: 8730132874896827108}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 166.546, z: 0}
 --- !u!54 &4647904544007332133
 Rigidbody:
@@ -84,6 +84,7 @@ MonoBehaviour:
   maxWeaveDistance: 25
   hasBeenCombined: 0
   canBeMoved: 1
+  rotAmount: 10
   myTransformPoints: []
   activeSnapPoint: {fileID: 0}
   objectToSnapTo: {fileID: 0}
@@ -113,7 +114,6 @@ MonoBehaviour:
     OBJECT (is probably called LightsManager)
   isFocusingCrystal: 1
   isActiveDefault: 0
-  crystalOnClip: {fileID: 8300000, guid: 73ff5706bc47a314fa88872e1dc5904a, type: 3}
 --- !u!65 &3458212378058539181
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -285,7 +285,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8497586690104016624, guid: 44209d6adbd56ce4995811bed5a3e5c9, type: 3}
       propertyPath: m_PropertySheet.m_Bool.m_Array.Array.data[0].m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8497586690104016624, guid: 44209d6adbd56ce4995811bed5a3e5c9, type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.x
@@ -297,19 +297,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8497586690104016624, guid: 44209d6adbd56ce4995811bed5a3e5c9, type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.z
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 8497586690104016624, guid: 44209d6adbd56ce4995811bed5a3e5c9, type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.x
-      value: 0
+      value: -609.9334
       objectReference: {fileID: 0}
     - target: {fileID: 8497586690104016624, guid: 44209d6adbd56ce4995811bed5a3e5c9, type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.y
-      value: 0
+      value: 98.629196
       objectReference: {fileID: 0}
     - target: {fileID: 8497586690104016624, guid: 44209d6adbd56ce4995811bed5a3e5c9, type: 3}
       propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.z
-      value: 0
+      value: -206.53947
       objectReference: {fileID: 0}
     - target: {fileID: 8497586690104016624, guid: 44209d6adbd56ce4995811bed5a3e5c9, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.ctime0

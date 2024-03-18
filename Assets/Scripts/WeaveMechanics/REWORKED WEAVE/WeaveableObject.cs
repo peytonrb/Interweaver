@@ -19,7 +19,7 @@ public class WeaveableObject : MonoBehaviour
 
     // rotation
     [HideInInspector] public enum rotateDir { forward, back, left, right }
-    private float rotAmount = 45f;
+    public float rotAmount = 45f;
     private GameObject weaveableObj;
 
     // snapping
