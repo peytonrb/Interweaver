@@ -9,6 +9,8 @@ public class MovingPlatformScript : MonoBehaviour
     public bool doesPlatformStop;
     private bool pplateTriggered = false;
     public bool triggerStopsObject = false;
+    private bool isStopped = false;
+    private CarriageOpener carriageScript;
 
     void Start()
     {
@@ -16,7 +18,8 @@ public class MovingPlatformScript : MonoBehaviour
         {
             this.GetComponent<ObjectMoverScript>().enabled = false;
         }
-        
+
+        carriageScript = this.GetComponent<CarriageOpener>();
     }
 
     void Update()
@@ -44,8 +47,11 @@ public class MovingPlatformScript : MonoBehaviour
                 pplateTriggered = false;
                 StopPlatform();
             }
+            else if (pplate != null && !pplate.standingOnPlate && isStopped)
+            {
+                AdvancePlatform();
+            }
         }
-        
     }
 
     public void AdvancePlatform()
@@ -60,5 +66,11 @@ public class MovingPlatformScript : MonoBehaviour
     private void StopPlatform()
     {
         this.GetComponent<ObjectMoverScript>().enabled = false;
+        isStopped = true;
+
+        if (carriageScript != null)
+        {
+            carriageScript.OpenCarriage();
+        }
     }
 }
