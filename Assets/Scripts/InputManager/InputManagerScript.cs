@@ -515,7 +515,25 @@ public class InputManagerScript : MonoBehaviour
 
                 break;
             case myEnums.Stag:
-               //this is where I would put the stag input stuff
+                #region //StagPopUI
+                //*************************************
+                var jumpInputName = playerInput.actions["StagFamiliarInteract"].GetBindingDisplayString();
+                if (familiarMovement.isInTutorial)
+                {
+                    popUiFamiliarCanvas.gameObject.SetActive(true);
+                    popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
+                        SetText("<sprite name=" + jumpInputName + ">" + " press and hold to jump");
+
+                   
+                }
+
+                else if (!familiarMovement.isInTutorial)
+                {
+                    popUiFamiliarCanvas.gameObject.SetActive(false);
+                    hasFamiliarInvoke = false;
+                }
+                //*************************************
+                #endregion
                 break;
         }
        
