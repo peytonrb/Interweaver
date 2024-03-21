@@ -91,6 +91,13 @@ public class BlackboardScript : MonoBehaviour
                         SceneHandler.instance.LoadLevel("Cavern");
                     }
                 break;
+
+                 case 2:
+                    //GO TO SEPULTUS
+                    if (levelNumber <= levelsCompleted) {
+                        SceneHandler.instance.LoadLevel("Sepultus");
+                    }
+                break;
             }
         }
         
