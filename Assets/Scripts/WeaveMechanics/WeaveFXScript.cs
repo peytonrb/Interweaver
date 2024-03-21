@@ -72,10 +72,10 @@ public class WeaveFXScript : MonoBehaviour
             {
                 weaveable.transform.GetChild(0).GetComponent<Renderer>().material = emissiveMat;
             }
-            else
-            {
-                weaveable.transform.GetChild(0).GetComponent<Renderer>().material = emissiveMat;
-            }
+            // else
+            // {
+            //     weaveable.transform.GetChild(0).GetComponent<Renderer>().material = emissiveMat;
+            // }
 
             StartCoroutine(StartAura(weaveable));
         }
@@ -92,7 +92,8 @@ public class WeaveFXScript : MonoBehaviour
 
         if (weaveable.gameObject.tag != "FloatingIsland")
         {
-            weaveable.transform.GetChild(0).GetComponent<Renderer>().material = weaveable.GetComponent<WeaveableObject>().originalMat;
+            if (weaveable.transform.GetChild(0).GetComponent<Renderer>() != null)
+                weaveable.transform.GetChild(0).GetComponent<Renderer>().material = weaveable.GetComponent<WeaveableObject>().originalMat;
 
             // kinda inefficient if we end up having hella children per GameObject
             for (int i = 0; i < weaveable.transform.childCount; i++)
