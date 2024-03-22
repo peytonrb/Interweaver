@@ -7,13 +7,14 @@ using UnityEngine.SceneManagement;
 public class EndCutsceneTrigger : MonoBehaviour
 {
     private AnimaticCutsceneController amc;
+    public int cutsceneToPlay = 1;
 
     void Start() {
         amc = GetComponent<AnimaticCutsceneController>();
     }
 
     public void StartCutscene() {
-        amc.ChangeCutscene(1);
+        amc.ChangeCutscene(cutsceneToPlay);
         //Debug.Log("Hit");
         //Changes to end cutscene
         SceneManager.LoadScene("AnimaticCutscenes");
