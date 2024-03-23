@@ -496,7 +496,7 @@ public class InputManagerScript : MonoBehaviour
                 var digInputName = playerInput.actions["MoleFamiliarInteract"].GetBindingDisplayString();
                 var pillarInputName = playerInput.actions["MoleAltFamiliarInteract"].GetBindingDisplayString();
                 var lowerPillarInputName = playerInput.actions["MoleAltAltFamiliarInteract"].GetBindingDisplayString();
-                if (moleDigScript != null && (moleDigScript.isOnDigableLayer) && !hasFamiliarInvoke && familiarMovement.isInTutorial)
+                if (moleDigScript != null && (moleDigScript.isOnDigableLayer) && !hasFamiliarInvoke && familiarMovement.isInTutorial && familiarMovement.active)
                 {
                     //this is where I would put the ui being active and showing the button for digging
                     popUiFamiliarCanvas.gameObject.SetActive(true);
@@ -507,14 +507,14 @@ public class InputManagerScript : MonoBehaviour
 
                 }
 
-                else if (moleDigScript != null && (!moleDigScript.isOnDigableLayer) && hasFamiliarInvoke)
+                else if (moleDigScript != null && (!moleDigScript.isOnDigableLayer) && hasFamiliarInvoke || !familiarMovement.active)
                 {
                     //this is where I would probably have it turned off when it leaves the layer
                     popUiFamiliarCanvas.gameObject.SetActive(false);
                     hasFamiliarInvoke = false;
                 }
 
-                if ((moleDigScript.startedToDig) && !hasFamiliarInvoke2 && familiarMovement.isInTutorial)
+                if ((moleDigScript.startedToDig) && !hasFamiliarInvoke2 && familiarMovement.isInTutorial && familiarMovement.active)
                 {
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
                     SetText("<sprite name=" + pillarInputName + ">" + " to make pillar " +
