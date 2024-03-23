@@ -18,7 +18,7 @@ public class StagSwapScript : MonoBehaviour
     {
         weaver = GameObject.FindGameObjectWithTag("Player");
         wyvern = GameObject.FindGameObjectWithTag("Boss");
-        bossManager = wyvern.GetComponent<WyvernBossManager>();
+        //bossManager = wyvern.GetComponent<WyvernBossManager>();
     }
 
     public IEnumerator ChargeSwap()
@@ -46,9 +46,9 @@ public class StagSwapScript : MonoBehaviour
             //inputManagerScript.PossessWeaver(); // scrungly
             transform.position = weaver.transform.position;
             weaver.transform.position = prevPosition;
-            if (wyvern.activeSelf) {
+            /*if (wyvern.activeSelf) {
                 bossManager.StagSwapPhaseSwap(prevPhase);
-            }
+            }*/
         }
     }
 }
