@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 3496648402269946815}
   - component: {fileID: 5141920393840078282}
   - component: {fileID: 7931939745029251741}
-  - component: {fileID: 2477048640010815203}
   m_Layer: 0
   m_Name: WyvernBoss
   m_TagString: Boss
@@ -35,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 22
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2317219786328802630
 MeshFilter:
@@ -120,28 +119,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ab0baa3510b705498af85fe0771052e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  phases: 1
   roomDestinations:
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   fireball: {fileID: 1840411242474355259, guid: a630ab1ed0251804cb19184be5412f08, type: 3}
   fireballtimer: 1
-  fireballAmount: 5
+  fireballAmount: 3
   magicCircle: {fileID: 8132092767648183921, guid: e576bd5c6adc9244091c085a620e77d8, type: 3}
   spawnradius: 10
   magicCircleTimer: 0.5
+  magicCircleCooldown: 10
   magicCircleAmount: 5
-  useConfigurations: 1
+  useConfigurations: 0
   configurations:
   - {fileID: 2758066301535946857, guid: 3189b73774c738b448f8e115747082d4, type: 3}
   - {fileID: 6285739573783532351, guid: 33c8931045924f645902ddd67ac402c4, type: 3}
   configurationIsActive: 0
   flamethrower: {fileID: 241278293351353054, guid: 75f4fb63adf7c6842910be8011bc44a9, type: 3}
+  preWindupTimer: 0
   windupTimer: 1
-  windupAngle: 25
   windupRotationSpeed: 5
-  blowFireAngle: 45
+  blowFireTimer: 0
   blowFireRotationSpeed: 10
   reseting: 0
+  wyvernTriggerManager: {fileID: 0}
+  stagWasLaunched: 0
 --- !u!54 &7931939745029251741
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -169,25 +174,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 90
   m_CollisionDetection: 0
---- !u!195 &2477048640010815203
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1075757170409433108}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1
-  m_BaseOffset: 0.5
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
