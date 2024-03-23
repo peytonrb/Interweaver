@@ -8,10 +8,13 @@ public class WyvernLookAt : MonoBehaviour
     private float dampTime = 3f;
     private GameObject player;
     private GameObject wyvern;
+    private GameObject wyvernCamera;
+    private Camera activeCamera;
 
     void Start()
     {
         player = this.transform.parent.gameObject;
+        wyvernCamera = this.transform.GetChild(0).gameObject;
     }
 
     void LateUpdate()
@@ -39,7 +42,10 @@ public class WyvernLookAt : MonoBehaviour
 
                 Vector3 zero = Vector3.zero;
                 transform.position = Vector3.SmoothDamp(transform.position, camPos, ref zero, dampTime);
-                transform.GetChild(0).LookAt(wyvern.transform.position);
+                Vector3 hitpoint = new Vector3 ((wyvernPos.x + playerPos.x) / 2f, 
+                                                (wyvernPos.y + playerPos.y) / 2f,
+                                                (wyvernPos.z + playerPos.z) / 2f);
+                transform.GetChild(0).LookAt(hitpoint);
             }
         }
     }

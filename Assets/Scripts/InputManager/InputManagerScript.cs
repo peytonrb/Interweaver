@@ -5,7 +5,7 @@ using UnityEngine.Windows;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using Cinemachine;
 
 public class InputManagerScript : MonoBehaviour
 {
@@ -251,6 +251,26 @@ public class InputManagerScript : MonoBehaviour
             //Disable this when in Hub
             WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
             weaveController.OnDrop();
+        }
+    }
+
+    public void OnWyvernCameraToggle(InputValue input)
+    {
+        if (input.isPressed)
+        {
+            WyvernLookAt wyvernLookAtScript = player.transform.Find("WyvernCamera").GetComponent<WyvernLookAt>();
+            GameObject wyvernCamera = wyvernLookAtScript.transform.GetChild(0).gameObject;
+            
+            if (!wyvernLookAtScript.cameraIsActive)
+            {
+                wyvernCamera.GetComponent<CinemachineVirtualCamera>().m_Priority = 2;
+                wyvernLookAtScript.cameraIsActive = true;
+            }
+            else
+            {
+                wyvernCamera.GetComponent<CinemachineVirtualCamera>().m_Priority = 1;
+                wyvernLookAtScript.cameraIsActive = false;
+            }
         }
     }
 
