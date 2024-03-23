@@ -8,6 +8,10 @@ public class LightDetectionScript : MonoBehaviour
     private LightCrystalScript crystalScript;
     private bool wasCrystalOn = false;
 
+     [Header("Audio")]
+    [SerializeField] private AudioClip  sensorHitClip;
+    //[SerializeField] private AudioClip  crystalOnClip;
+
     void Start()
     {
         if (!isTimedMushroom)
@@ -45,17 +49,21 @@ public class LightDetectionScript : MonoBehaviour
             // if the collision is with another light crystal
             if (collision.gameObject.tag == "Weaveable" && collision.GetComponent<LightCrystalScript>() != null)
             {
+              //  AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, crystalOnClip);
                 // .. and that light source is on and therefore powered
                 if (LightSourceScript.Instance.lightsArray[collision.GetComponent<LightCrystalScript>().arrayIndex].isOn)
                 {
+                    
                     crystalScript.isActive = true; // turn this light on
                 }
+               
             }
 
             // if collision is with a sensor
             
             if (collision.GetComponent<SensorController>() != null)
             {
+                AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, sensorHitClip);
                 if (LightSourceScript.Instance.lightsArray[transform.parent.transform.parent.GetComponent<LightCrystalScript>().arrayIndex].isOn &&
                     !collision.GetComponent<SensorController>().isActive)
                 {

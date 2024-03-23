@@ -20,6 +20,9 @@ public class WyvernFireball : MonoBehaviour
     private Vector3 familiarposition;
     private bool whosturn;
 
+    [Header("VFX")]
+    private ParticleSystem impactPS;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +33,10 @@ public class WyvernFireball : MonoBehaviour
         weaveController = weaver.GetComponent<WeaveController>();
         weaveable = GetComponent<WeaveableObject>();
         rb = GetComponent<Rigidbody>();
+
+        // gets destroyed with object lol --> needs new setup
+        impactPS = transform.GetChild(0).Find("FireballImpactVFX").GetComponent<ParticleSystem>();
+        impactPS.gameObject.SetActive(false);
 
         weaverposition = new Vector3(weaver.transform.position.x,weaver.transform.position.y + 1, weaver.transform.position.z);
         familiarposition = new Vector3(familiar.transform.position.x,familiar.transform.position.y + 1,familiar.transform.position.z);
@@ -109,18 +116,31 @@ public class WyvernFireball : MonoBehaviour
             if (other.gameObject.TryGetComponent<BreakObject>(out BreakObject breakableObject)) {
                 breakableObject.BreakMyObject(); 
             }
+
+            impactPS.transform.position = other.contacts[0].point;
+            impactPS.gameObject.SetActive(true);
+            impactPS.Play();
             Destroy(gameObject);
         }
 
         if (other.gameObject.CompareTag("Player")) {
             playercontroller.Death();
+
+            impactPS.transform.position = other.contacts[0].point;
+            impactPS.gameObject.SetActive(true);
+            impactPS.Play();
             Destroy(gameObject);
         }
         
         if (other.gameObject.CompareTag("Familiar")) {
             familiarscript.Death();
+
+            impactPS.transform.position = other.contacts[0].point;
+            impactPS.gameObject.SetActive(true);
+            impactPS.Play();
             Destroy(gameObject);
         }
         
+        impactPS.gameObject.SetActive(false);
     }
 }

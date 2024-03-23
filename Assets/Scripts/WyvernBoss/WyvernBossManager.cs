@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class WyvernBossManager : MonoBehaviour
 {
@@ -12,7 +11,6 @@ public class WyvernBossManager : MonoBehaviour
     private CharacterController familiarcontroller;
     private FamiliarScript familiarScript;
     public int phases; //0 = no phase, 1 = fireball, 2 = magic circle, 3 = flamethrower, 4 = flee
-    private NavMeshAgent navMeshAgent;
     private bool moveToNextRoom; //If moving to next room
     private int currentRoom; //Gets current room
     [SerializeField] private Transform[] roomDestinations; //Room destinations that the boss moves towards when changing rooms
@@ -76,7 +74,6 @@ public class WyvernBossManager : MonoBehaviour
         if (wyvernTriggerManager != null) {
             triggerManager = wyvernTriggerManager.GetComponent<WyvernPhaseTriggerManager>();
         }
-        navMeshAgent = GetComponent<NavMeshAgent>();
         //transform.position = new Vector3(roomDestinations[currentRoom].transform.position.x, transform.position.y, roomDestinations[currentRoom].transform.position.z);
 
         startingFireballTimer = fireballtimer;
@@ -236,11 +233,20 @@ public class WyvernBossManager : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Sends the wyvern to a new room via teleportation.
+    /// </summary>
+    /// <param name="currentroom"></param>
     void ChangeRooms(int currentroom) {
         int newroom = currentroom + 1;
-        Vector3 newdestination = new Vector3(roomDestinations[newroom].transform.position.x, transform.position.y, roomDestinations[newroom].transform.position.z);
-        navMeshAgent.SetDestination(newdestination);
-        currentRoom = newroom;
+        if (newroom <= roomDestinations.Length) {
+            Vector3 newdestination = new Vector3(roomDestinations[newroom].transform.position.x, transform.position.y, roomDestinations[newroom].transform.position.z);
+            transform.position = newdestination;
+            currentRoom = newroom;
+        }
+        else {
+            Debug.Log("Teleportation could not be done. This is because the wyvern has reached the end of its destinations array");
+        }
         gotDestination = true;
     }
 

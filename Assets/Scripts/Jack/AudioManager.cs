@@ -37,6 +37,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip alpineMusic;
     [SerializeField] private AudioClip alpineMusicIntro;
     [SerializeField] private AudioClip cavernMusic;
+    [SerializeField] private AudioClip cavernIntroMusic;
     [SerializeField] private AudioClip sepultusMusic;
     [SerializeField] private AudioClip hubMusic;
 
@@ -95,6 +96,10 @@ public class AudioManager : MonoBehaviour
             case "Cavern":
                 {
                     PlaySound(AudioManagerChannels.MusicChannel, cavernMusic);
+                    introMusicSource.clip = cavernIntroMusic;
+                    introMusicSource.outputAudioMixerGroup = musicChannel.outputAudioMixerGroup;
+                    introMusicSource.Play();
+                    PlaySequencedMusic(cavernIntroMusic, cavernMusic);
                     break;
                 }
         }

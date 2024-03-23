@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class DarknessMechanicScript : MonoBehaviour
 {
@@ -38,14 +39,14 @@ public class DarknessMechanicScript : MonoBehaviour
         countDown = 0f;
         StartCoroutine(DarknessTimer());
 
-        UnityEngine.Rendering.VolumeProfile volumeProfile = GameObject.Find("CavernPostProcessing").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
-        if (!volumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
-
-        if (!volumeProfile.TryGet(out vignette)) throw new System.NullReferenceException(nameof(vignette));
-
-        if (disableVignette)
-        {
-            vignette.intensity.Override(0f);
+        if (SceneManager.GetActiveScene().name == "Cavern") {
+            UnityEngine.Rendering.VolumeProfile volumeProfile = GameObject.Find("CavernPostProcessing").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
+            if (!volumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
+            if (!volumeProfile.TryGet(out vignette)) throw new System.NullReferenceException(nameof(vignette));
+            if (disableVignette)
+            {
+                vignette.intensity.Override(0f);
+            }
         }
     }
 

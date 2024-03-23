@@ -47,6 +47,12 @@ public class MovementScript : MonoBehaviour
     [HideInInspector] public bool isNearGround;
     private bool debugisOn;
 
+    [Header("Spawn Settings")]
+    [SerializeField]
+    private bool freezePlayerAtStart = true;
+    [SerializeField]
+    private float freezeTime = 4f;
+
     //private bool bouncing = false;
 
     [Header("Animation")]
@@ -118,8 +124,26 @@ public class MovementScript : MonoBehaviour
         StartCoroutine(DelayBeforeFallAudio());
 
         defaultMat = materialHolder.GetComponent<SkinnedMeshRenderer>().material;
+
+        if (freezePlayerAtStart)
+        {
+            canMove = false;
+            canLook = false;
+
+            StartCoroutine(FreezePlayerAtStart());
+        }
     }
 
+    //Freeze Player at Start
+    public IEnumerator FreezePlayerAtStart()
+    {
+        yield return new WaitForSeconds(freezeTime);
+
+        canMove = true;
+        canLook = true;
+        yield break;
+    }
+    
     // Update is called once per frame
     void Update()
     {

@@ -20,6 +20,8 @@ public class TimedGlowMushroomsScript : MonoBehaviour
     private float currentBrightness;
     [TextArea][SerializeField] private string Notes = "Array Index should be the INDEX of the light in LIGHTARRAY " 
                                                     + "in the LIGHTSOURCE OBJECT (is probably called LightsManager)";
+    [Header("Audio")]
+    [SerializeField] private AudioClip glowMushroomFile;                                               
 
     void Start()
     {
@@ -83,6 +85,8 @@ public class TimedGlowMushroomsScript : MonoBehaviour
             yield return null;
         }
 
+
+      //AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, glowMushroomFile, 1f);
         pointLight.intensity = 0.5f;
         currentBrightness = pointLight.intensity;
         yield return new WaitForSeconds(lightOnDelay);

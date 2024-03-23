@@ -36,6 +36,10 @@ public class JumpAndDashScript : MonoBehaviour
     private GameObject skinnedMeshWeaver;
     private Material originalMaterial;
 
+    [Header("Audio")]
+
+    [SerializeField] private AudioClip dashAudioClip;
+
     void Start()
     {
         movementScript = GetComponent<MovementScript>();
@@ -100,7 +104,7 @@ public class JumpAndDashScript : MonoBehaviour
             t += Time.deltaTime / dashLength;
             currentDashSpeed = Mathf.Lerp(dashSpeed, 0, t);
             characterController.Move(gameObject.transform.forward * currentDashSpeed * Time.deltaTime);
-
+            
             yield return null;
         }
         t = 0;
@@ -161,6 +165,11 @@ public class JumpAndDashScript : MonoBehaviour
 
         // material
         StartCoroutine(FadeGlowIn());
+
+        //Audio
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, dashAudioClip);
+        
+
     }
 
     private void DisableDashVFX()

@@ -5,7 +5,7 @@ using UnityEngine.Windows;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using Cinemachine;
 
 public class InputManagerScript : MonoBehaviour
 {
@@ -254,6 +254,26 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
+    public void OnWyvernCameraToggle(InputValue input)
+    {
+        if (input.isPressed)
+        {
+            WyvernLookAt wyvernLookAtScript = player.transform.Find("WyvernCamera").GetComponent<WyvernLookAt>();
+            GameObject wyvernCamera = wyvernLookAtScript.transform.GetChild(0).gameObject;
+            
+            if (!wyvernLookAtScript.cameraIsActive)
+            {
+                wyvernCamera.GetComponent<CinemachineVirtualCamera>().m_Priority = 2;
+                wyvernLookAtScript.cameraIsActive = true;
+            }
+            else
+            {
+                wyvernCamera.GetComponent<CinemachineVirtualCamera>().m_Priority = 1;
+                wyvernLookAtScript.cameraIsActive = false;
+            }
+        }
+    }
+
     #endregion//******************************************************
 
     #region//SWITCHING
@@ -476,7 +496,7 @@ public class InputManagerScript : MonoBehaviour
                 var digInputName = playerInput.actions["MoleFamiliarInteract"].GetBindingDisplayString();
                 var pillarInputName = playerInput.actions["MoleAltFamiliarInteract"].GetBindingDisplayString();
                 var lowerPillarInputName = playerInput.actions["MoleAltAltFamiliarInteract"].GetBindingDisplayString();
-                if (moleDigScript != null && (moleDigScript.isOnDigableLayer) && !hasFamiliarInvoke && familiarMovement.isInTutorial)
+                if (moleDigScript != null && (moleDigScript.isOnDigableLayer) && !hasFamiliarInvoke && familiarMovement.isInTutorial && familiarMovement.active)
                 {
                     //this is where I would put the ui being active and showing the button for digging
                     popUiFamiliarCanvas.gameObject.SetActive(true);
@@ -487,14 +507,14 @@ public class InputManagerScript : MonoBehaviour
 
                 }
 
-                else if (moleDigScript != null && (!moleDigScript.isOnDigableLayer) && hasFamiliarInvoke)
+                else if (moleDigScript != null && (!moleDigScript.isOnDigableLayer) && hasFamiliarInvoke || !familiarMovement.active)
                 {
                     //this is where I would probably have it turned off when it leaves the layer
                     popUiFamiliarCanvas.gameObject.SetActive(false);
                     hasFamiliarInvoke = false;
                 }
 
-                if ((moleDigScript.startedToDig) && !hasFamiliarInvoke2 && familiarMovement.isInTutorial)
+                if ((moleDigScript.startedToDig) && !hasFamiliarInvoke2 && familiarMovement.isInTutorial && familiarMovement.active)
                 {
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
                     SetText("<sprite name=" + pillarInputName + ">" + " to make pillar " +
@@ -515,7 +535,25 @@ public class InputManagerScript : MonoBehaviour
 
                 break;
             case myEnums.Stag:
-               //this is where I would put the stag input stuff
+                #region //StagPopUI
+                //*************************************
+                var jumpInputName = playerInput.actions["StagFamiliarInteract"].GetBindingDisplayString();
+                if (familiarMovement.isInTutorial)
+                {
+                    popUiFamiliarCanvas.gameObject.SetActive(true);
+                    popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
+                        SetText("<sprite name=" + jumpInputName + ">" + " press and hold to jump");
+
+                   
+                }
+
+                else if (!familiarMovement.isInTutorial)
+                {
+                    popUiFamiliarCanvas.gameObject.SetActive(false);
+                    hasFamiliarInvoke = false;
+                }
+                //*************************************
+                #endregion
                 break;
         }
        

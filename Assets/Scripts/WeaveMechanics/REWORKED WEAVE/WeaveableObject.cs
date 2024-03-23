@@ -19,7 +19,7 @@ public class WeaveableObject : MonoBehaviour
 
     // rotation
     [HideInInspector] public enum rotateDir { forward, back, left, right }
-    private float rotAmount = 45f;
+    public float rotAmount = 45f;
     private GameObject weaveableObj;
 
     // snapping
@@ -54,13 +54,17 @@ public class WeaveableObject : MonoBehaviour
         {
             targetingArrow = this.transform.GetChild(0).Find("Targeting Arrow Parent").gameObject;
             weaveableObj = this.transform.GetChild(0).gameObject;
-            originalMat = this.transform.GetChild(0).GetComponent<Renderer>().material;
+
+            if (this.transform.GetChild(0).GetComponent<Renderer>() != null)
+                originalMat = this.transform.GetChild(0).GetComponent<Renderer>().material;
         }
         else
         {
             // floating islands have no targeting arrow
             weaveableObj = this.transform.GetChild(0).gameObject;
-            originalMat = this.transform.GetChild(0).GetComponent<Renderer>().material;
+
+            if (this.transform.GetChild(0).GetComponent<Renderer>() != null)
+                originalMat = this.transform.GetChild(0).GetComponent<Renderer>().material;
         }
 
         // set snap points
