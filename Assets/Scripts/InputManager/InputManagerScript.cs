@@ -522,9 +522,9 @@ public class InputManagerScript : MonoBehaviour
                 if ((moleDigScript.startedToDig) && !hasFamiliarInvoke2 && familiarMovement.isInTutorial && familiarMovement.active)
                 {
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                    SetText("<sprite name=" + pillarInputName + ">" + " to make pillar " +
-                 "/  <sprite name=" + lowerPillarInputName + ">" + " to lower pillar" +
-                        "<br><sprite name=" + digInputName + ">" + " to dig");
+                    SetText("<sprite name=" + pillarInputName + ">" + " Build " +
+                 "/  <sprite name=" + lowerPillarInputName + ">" + " Deconstruct" +
+                        "<br><sprite name=" + digInputName + ">" + " Dig");
                     hasFamiliarInvoke2 = true;
                 }
 
@@ -547,7 +547,7 @@ public class InputManagerScript : MonoBehaviour
                 {
                     popUiFamiliarCanvas.gameObject.SetActive(true);
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                        SetText("<sprite name=" + jumpInputName + ">" + " press and hold to jump");
+                        SetText("<sprite name=" + jumpInputName + ">" + " Hold to jump");
 
 
                 }
