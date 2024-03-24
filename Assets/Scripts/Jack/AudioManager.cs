@@ -39,7 +39,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip cavernMusic;
     [SerializeField] private AudioClip cavernIntroMusic;
     [SerializeField] private AudioClip sepultusMusic;
-    [SerializeField] private AudioClip hubMusic;
+    [SerializeField] private AudioClip sepultusIntroMusic;
+    [SerializeField] private AudioClip hubMusic; 
 
   //  [Header("SFX")]
    // [SerializeField] private List<AudioClip> soundEffects = new List<AudioClip>();  
@@ -100,6 +101,15 @@ public class AudioManager : MonoBehaviour
                     introMusicSource.outputAudioMixerGroup = musicChannel.outputAudioMixerGroup;
                     introMusicSource.Play();
                     PlaySequencedMusic(cavernIntroMusic);
+                    break;
+                }
+            case "Sepultus":
+                {
+                    PlaySound(AudioManagerChannels.MusicChannel, sepultusMusic);
+                    introMusicSource.clip = sepultusIntroMusic;
+                    introMusicSource.outputAudioMixerGroup = musicChannel.outputAudioMixerGroup;
+                    introMusicSource.Play();
+                    PlaySequencedMusic(sepultusIntroMusic);
                     break;
                 }
         }
