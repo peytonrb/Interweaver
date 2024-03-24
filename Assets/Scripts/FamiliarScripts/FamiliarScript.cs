@@ -148,16 +148,4 @@ public class FamiliarScript : MonoBehaviour
         isDead = false;
     }
 
-    void OnControllerColliderHit(ControllerColliderHit hit) {
-        if (hit.collider.gameObject.CompareTag("Boss")) {
-            WyvernBossManager wyvernboss = hit.collider.gameObject.GetComponent<WyvernBossManager>();
-            if (wyvernboss.stagWasLaunched) {
-                wyvernboss.HurtWyvern();
-                wyvernboss.stagWasLaunched = false;
-            }
-            else {
-                Death();
-            }
-        }
-    }
 }

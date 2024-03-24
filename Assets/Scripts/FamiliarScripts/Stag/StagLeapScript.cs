@@ -158,6 +158,19 @@ public class StagLeapScript : MonoBehaviour
                 {
                     Destroy(hitCollider.gameObject); // call the thing being broken here!
                 }
+                if (hitCollider.gameObject.CompareTag("Boss")) {
+                    WyvernBossManager wyvernBossManager = hitCollider.gameObject.GetComponent<WyvernBossManager>();
+                    if (wyvernBossManager != null) {
+                        if (wyvernBossManager.stagWasLaunched) {
+                            wyvernBossManager.HurtWyvern();
+                            wyvernBossManager.stagWasLaunched = false;
+                        }
+                        else {
+                            FamiliarScript familiarScript = gameObject.GetComponent<FamiliarScript>();
+                            familiarScript.Death();
+                        }
+                    }
+                }
                 
             }
             yield return null;
