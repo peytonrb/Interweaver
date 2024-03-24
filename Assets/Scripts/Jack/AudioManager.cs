@@ -90,7 +90,7 @@ public class AudioManager : MonoBehaviour
                     introMusicSource.clip = alpineMusicIntro;
                     introMusicSource.outputAudioMixerGroup = musicChannel.outputAudioMixerGroup;
                     introMusicSource.Play();
-                    PlaySequencedMusic(alpineMusicIntro, alpineMusic);
+                    PlaySequencedMusic(alpineMusicIntro);
                     break;
                 }
             case "Cavern":
@@ -99,7 +99,7 @@ public class AudioManager : MonoBehaviour
                     introMusicSource.clip = cavernIntroMusic;
                     introMusicSource.outputAudioMixerGroup = musicChannel.outputAudioMixerGroup;
                     introMusicSource.Play();
-                    PlaySequencedMusic(cavernIntroMusic, cavernMusic);
+                    PlaySequencedMusic(cavernIntroMusic);
                     break;
                 }
         }
@@ -273,14 +273,14 @@ public class AudioManager : MonoBehaviour
         yield break;
     }
 
-    public void PlaySequencedMusic(AudioClip audioClipOne, AudioClip audioClipTwo)
+    public void PlaySequencedMusic(AudioClip audioClip)
     {
         musicChannel.Stop();
-        double introTime = (double)audioClipOne.samples / audioClipOne.frequency; // most accurate way to get to get the length of an audioclip as a double
+        double introTime = (double)audioClip.samples / audioClip.frequency; // most accurate way to get to get the length of an audioclip as a double
         double startTime = AudioSettings.dspTime + 0.2; 
         musicChannel.PlayScheduled(startTime + introTime); // best way to play without a delay, using the usually Play() will add a delay! Fucked!
         playingSequencedMusic = true;
-        StartCoroutine(WaitForSongIntroToEnd(audioClipOne.length));
+        StartCoroutine(WaitForSongIntroToEnd(audioClip.length));
     }
 
     private IEnumerator WaitForSongIntroToEnd(float audioClipLength)

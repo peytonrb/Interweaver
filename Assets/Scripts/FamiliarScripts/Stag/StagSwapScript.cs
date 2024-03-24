@@ -5,7 +5,6 @@ using UnityEngine;
 public class StagSwapScript : MonoBehaviour
 {
     [Header("References")]
-    private FamiliarScript familiarScript;
     private GameObject weaver;
     private GameObject wyvern;
     private WyvernBossManager bossManager;
@@ -18,7 +17,11 @@ public class StagSwapScript : MonoBehaviour
     {
         weaver = GameObject.FindGameObjectWithTag("Player");
         wyvern = GameObject.FindGameObjectWithTag("Boss");
-        bossManager = wyvern.GetComponent<WyvernBossManager>();
+        if (wyvern.TryGetComponent<WyvernBossManager>(out WyvernBossManager dingus))
+        {
+            bossManager = dingus;
+        }
+        
     }
 
     public IEnumerator ChargeSwap()
@@ -40,14 +43,15 @@ public class StagSwapScript : MonoBehaviour
 
         if (timeHeld >= timeToHold)
         {
-            
             Vector3 prevPosition = transform.position;
-            int prevPhase = bossManager.phases;
-            //inputManagerScript.PossessWeaver(); // scrungly
             transform.position = weaver.transform.position;
             weaver.transform.position = prevPosition;
-            if (wyvern.activeSelf) {
-                bossManager.StagSwapPhaseSwap(prevPhase);
+            if (bossManager != null && wyvern != null) // pissing and shitty
+            {
+                int prevPhase = bossManager.phases;
+                if (wyvern.activeSelf && wyvern != null) {
+                    bossManager.StagSwapPhaseSwap(prevPhase);
+                }
             }
         }
     }
