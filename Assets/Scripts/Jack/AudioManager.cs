@@ -99,7 +99,7 @@ public class AudioManager : MonoBehaviour
                     introMusicSource.clip = cavernIntroMusic;
                     introMusicSource.outputAudioMixerGroup = musicChannel.outputAudioMixerGroup;
                     introMusicSource.Play();
-                    PlaySequencedMusic(cavernIntroMusic, cavernMusic);
+                    PlaySequencedMusic(cavernIntroMusic);
                     break;
                 }
         }
