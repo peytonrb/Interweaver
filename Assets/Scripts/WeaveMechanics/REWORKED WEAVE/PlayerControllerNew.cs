@@ -16,7 +16,7 @@ public class PlayerControllerNew : MonoBehaviour
     [HideInInspector] public bool possessing;
 
     [Header("Camera")]
-    [CannotBeNullObjectField] [SerializeField] private Camera mainCamera;
+    [CannotBeNullObjectField][SerializeField] private Camera mainCamera;
     private int vCamRotationState; //State 0 is default
 
     [Header("Death")]
@@ -63,6 +63,11 @@ public class PlayerControllerNew : MonoBehaviour
         characterController.enabled = true;
 
         inCutscene = movementScript.inCutscene;
+
+        if (SceneManager.GetActiveScene().name != "Sepultus")
+        {
+            this.transform.Find("WyvernCamera").gameObject.SetActive(false);
+        }
     }
 
     void Update()
@@ -87,17 +92,17 @@ public class PlayerControllerNew : MonoBehaviour
     {
         //See CameraIndexScript for more information about this function
         ITriggerable trigger = other.GetComponent<ITriggerable>();
-        if (trigger != null) 
+        if (trigger != null)
         {
             trigger.OnTrigExit(other);
         }
     }
 
-    void OnTriggerEnter(Collider other) 
+    void OnTriggerEnter(Collider other)
     {
         //See CameraIndexScript for more information about this function
         ITriggerable trigger = other.GetComponent<ITriggerable>();
-        if (trigger != null) 
+        if (trigger != null)
         {
             //Debug.Log("Hit?");
             trigger.OnTrigEnter(other);
@@ -125,7 +130,7 @@ public class PlayerControllerNew : MonoBehaviour
 
     public void Death()
     {
-        if(!isDead)
+        if (!isDead)
         {
             isDead = true;
             movementScript.active = false;
@@ -155,7 +160,8 @@ public class PlayerControllerNew : MonoBehaviour
         yield break;
     }
 
-    public void SetNewPosition(Vector3 newposition, Quaternion newrotation) {
+    public void SetNewPosition(Vector3 newposition, Quaternion newrotation)
+    {
         transform.position = newposition;
         transform.rotation = newrotation;
     }

@@ -139,7 +139,7 @@ public class WeaveableObject : MonoBehaviour
                 weaveController.targetingArrow.SetActive(false);
                 RaycastHit hitData;
 
-                if (Physics.Raycast(ray, out hitData, 100f))
+                if (Physics.Raycast(ray, out hitData, 100f, weaveableLayers))
                     worldPosition = hitData.point;
 
                 FreezeConstraints("rotation");

@@ -22,7 +22,7 @@ public class InputManagerScript : MonoBehaviour
 
     //the invoke bools are there so then it can only happen once instead of every frame in the update function
     //*****************************************
-    private bool hasFamiliarInvoke; 
+    private bool hasFamiliarInvoke;
     private bool hasFamiliarInvoke2;
     private bool hasWeaverInvoke;
     //*****************************************
@@ -67,22 +67,22 @@ public class InputManagerScript : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
+
         playerScript = player.GetComponent<PlayerControllerNew>();
         weaveController = player.GetComponent<WeaveController>();
         movementScript = player.GetComponent<MovementScript>();
         familiarMovement = familiar.GetComponent<MovementScript>();
         familiarScript = familiar.GetComponent<FamiliarScript>();
-        pauseScript = pauseScreen.GetComponent<PauseScript>();               
+        pauseScript = pauseScreen.GetComponent<PauseScript>();
         playerInput = GetComponent<PlayerInput>();
         currentSceneName = SceneManager.GetActiveScene().name;
-        if (wyvern != null) 
+        if (wyvern != null)
         {
             wyvernScript = wyvern.GetComponent<WyvernBossManager>();
         }
-        
 
-       
+
+
         switch (familiarEnums)
         {
             case myEnums.Owl:
@@ -108,7 +108,7 @@ public class InputManagerScript : MonoBehaviour
     {
         FamiliarUI();
         WeaverUI();
-      
+
     }
 
     public void ToggleControlScheme(bool isController)
@@ -157,7 +157,7 @@ public class InputManagerScript : MonoBehaviour
     public void OnWeaverInteract(InputValue input)
     {
         //pops up the ui if the bollean is true but for now not for the weave
-       
+
         if (input.isPressed)
         {
             if (weaveController.isWeaving)
@@ -254,21 +254,24 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
-    public void OnWyvernCameraToggle(InputValue input)
+    public void OnWyvernCameraToggle(InputValue input) // cant handle camera for both weaver and familiar yet
     {
-        if (input.isPressed)
+        bool isPressed = input.isPressed;
+        WyvernLookAt wyvernLookAtScript = player.transform.Find("WyvernCamera").GetComponent<WyvernLookAt>();
+        GameObject wyvernCamera = wyvernLookAtScript.transform.GetChild(0).gameObject;
+
+        if (wyvernLookAtScript != null)
         {
-            WyvernLookAt wyvernLookAtScript = player.transform.Find("WyvernCamera").GetComponent<WyvernLookAt>();
-            GameObject wyvernCamera = wyvernLookAtScript.transform.GetChild(0).gameObject;
-            
-            if (!wyvernLookAtScript.cameraIsActive)
+            if (isPressed && Time.timeScale != 0)
             {
+                wyvernLookAtScript.activeCamera.m_Priority = 0;
                 wyvernCamera.GetComponent<CinemachineVirtualCamera>().m_Priority = 2;
                 wyvernLookAtScript.cameraIsActive = true;
             }
             else
             {
-                wyvernCamera.GetComponent<CinemachineVirtualCamera>().m_Priority = 1;
+                wyvernCamera.GetComponent<CinemachineVirtualCamera>().m_Priority = 0;
+                wyvernLookAtScript.activeCamera.m_Priority = 1;
                 wyvernLookAtScript.cameraIsActive = false;
             }
         }
@@ -280,18 +283,18 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnPossessFamiliar(InputValue input)
     {
-        
+
 
         //When we add the hub scene, we will put this line back in. This error was likely caused by the scene of that name not being part of the build settings.
         //&& SceneHandler.instance.currentSceneName != "Hub" has been causing issues in this if statement
         if (input.isPressed && !playerScript.isDead)
         {
             PossessFamiliar();
-           
+
             //if (currentSceneName == "AlpineCombined" || currentSceneName == "Cavern") {
             //    PossessFamiliar();
             //}
-            
+
         }
     }
 
@@ -307,9 +310,10 @@ public class InputManagerScript : MonoBehaviour
             weaverAnimationUIPosessionHandler.SwitchingToFamiliar();
             familiarAnimationUIPosessionHandler.SwitchingToFamiliar();
             //Familiar turn is false
-            if (wyvernScript != null) 
+            if (wyvernScript != null)
             {
-                if (wyvern.activeSelf) {
+                if (wyvern.activeSelf)
+                {
                     wyvernScript.WeaverOrFamiliar(familiarScript.myTurn);
                 }
             }
@@ -322,7 +326,7 @@ public class InputManagerScript : MonoBehaviour
         if ((input.isPressed) && (!familiarScript.isDead))
         {
             PossessWeaver();
-            
+
             //if (currentSceneName == "AlpineCombined" || currentSceneName == "Cavern") {
             //    PossessWeaver();
             //}
@@ -340,9 +344,10 @@ public class InputManagerScript : MonoBehaviour
             weaverAnimationUIPosessionHandler.SwitchingToWeaver();
             familiarAnimationUIPosessionHandler.SwitchingToWeaver();
             //Familiar turn is true
-            if (wyvernScript != null) 
+            if (wyvernScript != null)
             {
-                if (wyvern.activeSelf) {
+                if (wyvern.activeSelf)
+                {
                     wyvernScript.WeaverOrFamiliar(familiarScript.myTurn);
                 }
             }
@@ -450,8 +455,8 @@ public class InputManagerScript : MonoBehaviour
             popUiWeaverCanvas.gameObject.SetActive(true);
 
             popUiWeaverCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                SetText("<sprite name="+weaverTargetingName+">" + " to move weave" +
-                "<br><sprite name=" + weaverRotatingName + ">" + " to rotate weave");          
+                SetText("<sprite name=" + weaverTargetingName + ">" + " to move weave" +
+                "<br><sprite name=" + weaverRotatingName + ">" + " to rotate weave");
 
             hasWeaverInvoke = true;
         }
@@ -469,7 +474,7 @@ public class InputManagerScript : MonoBehaviour
             case myEnums.Owl:
                 #region//OwlPopUI
                 //*************************************************************************
-                if ((!familiarMovement.isNearGround) && (!hasFamiliarInvoke) && (familiarMovement.active) 
+                if ((!familiarMovement.isNearGround) && (!hasFamiliarInvoke) && (familiarMovement.active)
                     && popUiFamiliarCanvas != null && familiarMovement.isInTutorial)
                 {
                     var inputName = playerInput.actions["FamiliarInteract"].GetBindingDisplayString();
@@ -503,7 +508,7 @@ public class InputManagerScript : MonoBehaviour
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
                         SetText("<sprite name=" + digInputName + ">" + " to dig");
 
-                    hasFamiliarInvoke = true;                   
+                    hasFamiliarInvoke = true;
 
                 }
 
@@ -517,9 +522,9 @@ public class InputManagerScript : MonoBehaviour
                 if ((moleDigScript.startedToDig) && !hasFamiliarInvoke2 && familiarMovement.isInTutorial && familiarMovement.active)
                 {
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                    SetText("<sprite name=" + pillarInputName + ">" + " to make pillar " +
-                 "/  <sprite name=" + lowerPillarInputName + ">" + " to lower pillar" +
-                        "<br><sprite name=" + digInputName + ">" + " to dig");
+                    SetText("<sprite name=" + pillarInputName + ">" + " Build " +
+                 "/  <sprite name=" + lowerPillarInputName + ">" + " Deconstruct" +
+                        "<br><sprite name=" + digInputName + ">" + " Dig");
                     hasFamiliarInvoke2 = true;
                 }
 
@@ -542,9 +547,9 @@ public class InputManagerScript : MonoBehaviour
                 {
                     popUiFamiliarCanvas.gameObject.SetActive(true);
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                        SetText("<sprite name=" + jumpInputName + ">" + " press and hold to jump");
+                        SetText("<sprite name=" + jumpInputName + ">" + " Hold to jump");
 
-                   
+
                 }
 
                 else if (!familiarMovement.isInTutorial)
@@ -556,7 +561,7 @@ public class InputManagerScript : MonoBehaviour
                 #endregion
                 break;
         }
-       
+
     }
 
 
