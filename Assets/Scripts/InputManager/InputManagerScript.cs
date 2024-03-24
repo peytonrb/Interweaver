@@ -257,7 +257,17 @@ public class InputManagerScript : MonoBehaviour
     public void OnWyvernCameraToggle(InputValue input) // cant handle camera for both weaver and familiar yet
     {
         bool isPressed = input.isPressed;
-        WyvernLookAt wyvernLookAtScript = player.transform.Find("WyvernCamera").GetComponent<WyvernLookAt>();
+        WyvernLookAt wyvernLookAtScript;
+        
+        if (familiarScript.myTurn)
+        {
+            wyvernLookAtScript = familiar.transform.Find("WyvernCamera").GetComponent<WyvernLookAt>();
+        }
+        else
+        {
+            wyvernLookAtScript = player.transform.Find("WyvernCamera").GetComponent<WyvernLookAt>();
+        }
+        
         GameObject wyvernCamera = wyvernLookAtScript.transform.GetChild(0).gameObject;
 
         if (wyvernLookAtScript != null)

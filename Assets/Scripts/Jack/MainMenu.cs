@@ -127,6 +127,14 @@ public class MainMenu : MonoBehaviour
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startFile, 1f);
         SceneHandler.instance.LoadLevel("Cavern");
     }
+
+    public void PlaySepultus() 
+    {
+        // Starts game from Sepultus
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startFile, 1f);
+        SceneHandler.instance.LoadLevel("Sepultus");
+    }
+
     public void PlayHoverSound()
     {
         //Debug.Log("Hover Played");
