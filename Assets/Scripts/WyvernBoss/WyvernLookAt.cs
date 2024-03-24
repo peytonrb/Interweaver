@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class WyvernLookAt : MonoBehaviour
 {
@@ -9,12 +10,13 @@ public class WyvernLookAt : MonoBehaviour
     private GameObject player;
     private GameObject wyvern;
     private GameObject wyvernCamera;
-    private Camera activeCamera;
+    public CinemachineVirtualCamera activeCamera;
 
     void Start()
     {
         player = this.transform.parent.gameObject;
         wyvernCamera = this.transform.GetChild(0).gameObject;
+        StartCoroutine(WaitFrame());
     }
 
     void LateUpdate()
@@ -25,6 +27,25 @@ public class WyvernLookAt : MonoBehaviour
             {
                 wyvern = GameObject.Find("WyvernBoss");
             }
+
+            // if stored activeCamera is different than actual active camera
+            if (player.gameObject.tag == "Player")
+            {
+                if (activeCamera == null ||
+                activeCamera != CameraMasterScript.instance.weaverCameras[CameraMasterScript.instance.weaverCameraOnPriority].GetComponent<CinemachineVirtualCamera>())
+                {
+                    activeCamera = CameraMasterScript.instance.weaverCameras[CameraMasterScript.instance.weaverCameraOnPriority].GetComponent<CinemachineVirtualCamera>();
+                }
+            }
+            else if (player.gameObject.tag == "Familiar")
+            {
+                if (activeCamera == null ||
+                activeCamera != CameraMasterScript.instance.familiarCameras[CameraMasterScript.instance.familiarCameraOnPriority].GetComponent<CinemachineVirtualCamera>())
+                {
+                    activeCamera = CameraMasterScript.instance.familiarCameras[CameraMasterScript.instance.familiarCameraOnPriority].GetComponent<CinemachineVirtualCamera>();
+                }
+            }
+
 
             if (wyvern != null) // catches if wyvern doesnt exist in the scene
             {
@@ -41,8 +62,8 @@ public class WyvernLookAt : MonoBehaviour
                 camPos.y = 13f;
 
                 Vector3 zero = Vector3.zero;
-                transform.position = Vector3.SmoothDamp(transform.position, camPos, ref zero, dampTime);
-                Vector3 hitpoint = new Vector3 ((wyvernPos.x + playerPos.x) / 2f, 
+                //transform.position = Vector3.SmoothDamp(transform.position, camPos, ref zero, dampTime);
+                Vector3 hitpoint = new Vector3((wyvernPos.x + playerPos.x) / 2f,
                                                 (wyvernPos.y + playerPos.y) / 2f,
                                                 (wyvernPos.z + playerPos.z) / 2f);
                 transform.GetChild(0).LookAt(hitpoint);
@@ -50,8 +71,13 @@ public class WyvernLookAt : MonoBehaviour
         }
     }
 
-    private void TriggerCamera()
+    IEnumerator WaitFrame()
     {
+        yield return null;
 
+        if (player.gameObject.tag == "Player")
+            activeCamera = CameraMasterScript.instance.weaverCameras[CameraMasterScript.instance.weaverCameraOnPriority].GetComponent<CinemachineVirtualCamera>();
+        else if (player.gameObject.tag == "Familiar")
+            activeCamera = CameraMasterScript.instance.familiarCameras[CameraMasterScript.instance.familiarCameraOnPriority].GetComponent<CinemachineVirtualCamera>();
     }
 }
