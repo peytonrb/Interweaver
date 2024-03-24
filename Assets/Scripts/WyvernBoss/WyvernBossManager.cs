@@ -50,7 +50,8 @@ public class WyvernBossManager : MonoBehaviour
     [Header("PUT WYVERN TRIGGER MANAGER HERE")]
     [SerializeField] private GameObject wyvernTriggerManager;
     private WyvernPhaseTriggerManager triggerManager;
-
+    private GameObject amcRef;
+    private AnimaticCutsceneController amc;
     private float startingFireballTimer;
     private int startingFireballAmount;
     private float startingMagicCircleTimer;
@@ -67,12 +68,17 @@ public class WyvernBossManager : MonoBehaviour
     {
         weaver = GameObject.FindGameObjectWithTag("Player");
         stag = GameObject.FindGameObjectWithTag("Familiar");
+        amcRef = GameObject.FindGameObjectWithTag("CutsceneTrigger");
         weavercontroller = weaver.GetComponent<CharacterController>();
         familiarcontroller = stag.GetComponent<CharacterController>();
         familiarScript = stag.GetComponent<FamiliarScript>();
         playercontroller = weaver.GetComponent<PlayerControllerNew>();
+        amc = amcRef.GetComponent<AnimaticCutsceneController>();
         if (wyvernTriggerManager != null) {
             triggerManager = wyvernTriggerManager.GetComponent<WyvernPhaseTriggerManager>();
+        }
+        if (amcRef == null) {
+            Debug.LogError("Animatic cutscene reference not found! Please contact the authorities immediately!");
         }
         //transform.position = new Vector3(roomDestinations[currentRoom].transform.position.x, transform.position.y, roomDestinations[currentRoom].transform.position.z);
 
@@ -245,7 +251,9 @@ public class WyvernBossManager : MonoBehaviour
             currentRoom = newroom;
         }
         else {
-            Debug.Log("Teleportation could not be done. This is because the wyvern has reached the end of its destinations array");
+            //Debug.Log("Teleportation could not be done. This is because the wyvern has reached the end of its destinations array");
+            amc.ChangeCutscene(5);
+            SceneHandler.instance.LoadLevel("AnimaticCutscenes");
         }
         gotDestination = true;
     }
