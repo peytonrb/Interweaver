@@ -107,6 +107,18 @@ public class AnimaticCutsceneController : MonoBehaviour
                             SceneManager.LoadScene("Menu");
                             Debug.Log("Cutscene Completed");
                         break;
+                        case 2:
+                            SceneManager.LoadScene("Cavern");
+                        break;
+                        case 3:
+                            SceneManager.LoadScene("Menu");
+                        break;
+                        case 4:
+                            SceneManager.LoadScene("Sepultus");
+                        break;
+                        case 5:
+                            SceneManager.LoadScene("Menu");
+                        break;
                     }
                 }
             }
