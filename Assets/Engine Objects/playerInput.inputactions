@@ -491,7 +491,7 @@
                     "name": "",
                     "id": "c8c78e14-9b85-475a-8097-3733ca46fd4b",
                     "path": "<Keyboard>/f",
-                    "interactions": "Press",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "WyvernCameraToggle",
@@ -502,7 +502,7 @@
                     "name": "",
                     "id": "ee52423d-ae8b-4993-9dc9-1195506e3990",
                     "path": "<Gamepad>/rightShoulder",
-                    "interactions": "Press",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "WyvernCameraToggle",
@@ -940,6 +940,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "WyvernCameraToggle",
+                    "type": "Button",
+                    "id": "3d0c477e-0492-4bb1-849a-2229d46aea74",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1248,6 +1257,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "MoleJump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a32f5f8d-ab98-438c-babc-4ab3d1e1d673",
+                    "path": "<Keyboard>/f",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "WyvernCameraToggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dbd30609-a34e-4977-8345-f6ab72d7f6c7",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "WyvernCameraToggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
