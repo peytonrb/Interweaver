@@ -117,7 +117,8 @@ public class WeaveableObject : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (weaveController != null)
+        //Makes sure that if the weaver is weaving, it doesn't drop it if its not a fireball.
+        if (weaveController != null && gameObject.GetComponent<WyvernFireball>() == null)
             weaveController.OnDrop();
     }
 
@@ -514,6 +515,7 @@ public class WeaveableObject : MonoBehaviour
     // resets all variables of the object to default
     public void ResetWeaveable()
     {
+        Debug.Log("Reseting weaveable");
         isBeingWoven = false;
         isHovering = false;
         this.GetComponent<Rigidbody>().useGravity = true;

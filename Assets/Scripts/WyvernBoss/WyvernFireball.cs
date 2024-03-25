@@ -79,6 +79,7 @@ public class WyvernFireball : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+        //Move towards Weaver
         else {
             if (wasWoven == false) {
                 transform.position = Vector3.MoveTowards(transform.position, weaverposition, speed * Time.deltaTime);
@@ -114,7 +115,7 @@ public class WyvernFireball : MonoBehaviour
     void OnCollisionEnter(Collision other) {
         if (!other.gameObject.CompareTag("Boss")) {
             if (other.gameObject.TryGetComponent<BreakObject>(out BreakObject breakableObject)) {
-                breakableObject.BreakMyObject(); 
+                breakableObject.BreakMyObject();
             }
 
             impactPS.transform.position = other.contacts[0].point;
