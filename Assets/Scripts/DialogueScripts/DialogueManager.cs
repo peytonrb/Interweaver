@@ -80,9 +80,14 @@ public class DialogueManager : MonoBehaviour
         //Debug.Log(sentence); - prints 2 lines at a time
         dialogueText.text = "";
 
-        foreach (char letter in sentence.ToCharArray()) // add array of clips w pitches to be randomly called from here
+        
+            foreach (char letter in sentence.ToCharArray()) // add array of clips w pitches to be randomly called from here
         {
-            
+            if(!isActive)
+            {
+                break;
+            }
+            //Debug.Log("Ahh");
             AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, speechFile, 1f);
             yield return new WaitForSeconds(.02f);
             dialogueText.text += letter;
