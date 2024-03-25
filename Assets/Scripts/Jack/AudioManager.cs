@@ -322,7 +322,7 @@ public class AudioManager : MonoBehaviour
         musicChannel.clip = musicToTransitionTo;
         musicChannel.time = musicStartTime;
         StartCoroutine(StartMusicFadeIn(fadeInTransitionDuration, start));
-        //musicChannel.Play();
+        musicChannel.Play();
         yield break;
     }
 
