@@ -11,6 +11,7 @@ public class BlackboardScript : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera blackboardCamera;
     [SerializeField] private CinemachineBrain mainCamera;
     [SerializeField] private TextMeshProUGUI lostSoulCount;
+    private AnimaticCutsceneController acc;
     public GameObject popupUIPrompt;
     [HideInInspector] [Tooltip ("If true, then you are currently staring at the blackboard, and blackboard functionality is on.")] public bool onBlackboard;
     private int levelsCompleted;
@@ -19,6 +20,8 @@ public class BlackboardScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        acc = GetComponent<AnimaticCutsceneController>();
+
         interactableUI.SetActive(false);
         blackboardCamera.Priority = 0;
         onBlackboard = false;
@@ -82,20 +85,23 @@ public class BlackboardScript : MonoBehaviour
                 case 0:
                     //GO TO ALPINE
                     if (levelNumber <= levelsCompleted) {
-                        SceneHandler.instance.LoadLevel("AlpineCombined");
+                        acc.ChangeCutscene(0);
+                        SceneHandler.instance.LoadLevel("AnimaticCutscenes");
                     }
                 break;
                 case 1:
                     //GO TO CAVERN
                     if (levelNumber <= levelsCompleted) {
-                        SceneHandler.instance.LoadLevel("Cavern");
+                        acc.ChangeCutscene(2);
+                        SceneHandler.instance.LoadLevel("AnimaticCutscenes");
                     }
                 break;
 
                  case 2:
                     //GO TO SEPULTUS
                     if (levelNumber <= levelsCompleted) {
-                        SceneHandler.instance.LoadLevel("Sepultus");
+                        acc.ChangeCutscene(4);
+                        SceneHandler.instance.LoadLevel("AnimaticCutscenes");
                     }
                 break;
             }
