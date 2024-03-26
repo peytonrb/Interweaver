@@ -258,7 +258,7 @@ public class InputManagerScript : MonoBehaviour
     {
         bool isPressed = input.isPressed;
         WyvernLookAt wyvernLookAtScript;
-        
+
         if (familiarScript.myTurn)
         {
             wyvernLookAtScript = familiar.transform.Find("WyvernCamera").GetComponent<WyvernLookAt>();
@@ -267,16 +267,20 @@ public class InputManagerScript : MonoBehaviour
         {
             wyvernLookAtScript = player.transform.Find("WyvernCamera").GetComponent<WyvernLookAt>();
         }
-        
+
         GameObject wyvernCamera = wyvernLookAtScript.transform.GetChild(0).gameObject;
 
         if (wyvernLookAtScript != null)
         {
             if (isPressed && Time.timeScale != 0)
             {
-                wyvernLookAtScript.activeCamera.m_Priority = 0;
-                wyvernCamera.GetComponent<CinemachineVirtualCamera>().m_Priority = 2;
                 wyvernLookAtScript.cameraIsActive = true;
+
+                if (wyvernLookAtScript.wyvern != null)
+                {
+                    wyvernLookAtScript.activeCamera.m_Priority = 0;
+                    wyvernCamera.GetComponent<CinemachineVirtualCamera>().m_Priority = 2;
+                }
             }
             else
             {

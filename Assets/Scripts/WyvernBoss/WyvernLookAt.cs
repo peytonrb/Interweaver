@@ -8,7 +8,7 @@ public class WyvernLookAt : MonoBehaviour
     public bool cameraIsActive = false;
     private float dampTime = 3f;
     private GameObject player;
-    private GameObject wyvern;
+    [HideInInspector] public GameObject wyvern;
     private GameObject wyvernCamera;
     public CinemachineVirtualCamera activeCamera;
 
