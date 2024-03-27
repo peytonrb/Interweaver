@@ -557,7 +557,7 @@ public class InputManagerScript : MonoBehaviour
                 #region //StagPopUI
                 //*************************************
                 var jumpInputName = playerInput.actions["StagFamiliarInteract"].GetBindingDisplayString();
-                if (familiarMovement.isInTutorial)
+                if (familiarMovement.isInTutorial && familiarMovement.active)
                 {
                     popUiFamiliarCanvas.gameObject.SetActive(true);
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
@@ -566,7 +566,7 @@ public class InputManagerScript : MonoBehaviour
 
                 }
 
-                else if (!familiarMovement.isInTutorial)
+                else if (!familiarMovement.isInTutorial || !familiarMovement.active)
                 {
                     popUiFamiliarCanvas.gameObject.SetActive(false);
                     hasFamiliarInvoke = false;
