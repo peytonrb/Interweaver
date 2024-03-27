@@ -10,12 +10,16 @@ public class BlackboardScript : MonoBehaviour
     [SerializeField] private GameObject interactableUI;
     [SerializeField] private CinemachineVirtualCamera blackboardCamera;
     [SerializeField] private CinemachineBrain mainCamera;
-    [SerializeField] private TextMeshProUGUI lostSoulCount;
+    [SerializeField] private TextMeshProUGUI lostSoulCountAlpine;
+    [SerializeField] private TextMeshProUGUI lostSoulCountCavern;
+    [SerializeField] private TextMeshProUGUI lostSoulCountSepultus;
     private AnimaticCutsceneController acc;
     public GameObject popupUIPrompt;
     [HideInInspector] [Tooltip ("If true, then you are currently staring at the blackboard, and blackboard functionality is on.")] public bool onBlackboard;
     private int levelsCompleted;
-    private int lostSoulTotal;
+    private int lostSoulTotalAlpine;
+    private int lostSoulTotalCavern;
+    private int lostSoulTotalSepultus;
 
     // Start is called before the first frame update
     void Start()
@@ -26,15 +30,18 @@ public class BlackboardScript : MonoBehaviour
         blackboardCamera.Priority = 0;
         onBlackboard = false;
         levelsCompleted = PlayerData.instance.GetLevelsCompleted();
-        lostSoulTotal = PlayerData.instance.GetLostSoulCount();
-        lostSoulCount.text = "TOTAL LOST SOULS: " + lostSoulTotal;
+        lostSoulTotalAlpine = PlayerData.instance.GetAlpineLostSoulCount();
+        lostSoulTotalCavern = PlayerData.instance.GetCavernLostSoulCount();
+        lostSoulTotalSepultus = PlayerData.instance.GetSepultusLostSoulCount();
+        
+        lostSoulCountAlpine.text = "SOULS COLLECTED: " + lostSoulTotalAlpine;
+        lostSoulCountCavern.text = "SOULS COLLECTED: " + lostSoulTotalCavern;
+        lostSoulCountSepultus.text = "SOULS COLLECTED: " + lostSoulTotalSepultus;
+
+        lostSoulCountAlpine.gameObject.SetActive(false);
+        lostSoulCountCavern.gameObject.SetActive(false);
+        lostSoulCountSepultus.gameObject.SetActive(false);
         popupUIPrompt.SetActive(false);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     void OnTriggerEnter(Collider other) {
