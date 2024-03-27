@@ -26,6 +26,10 @@ public class MolePillarScript : MonoBehaviour
     [SerializeField] [Range (0.1f, 4f)] private float pillarInteractionRadius = 1f; // the radius at which the mole can affect pillars around them
     private bool pillarRising;
     private bool pillarLowering;
+    [SerializeField] private Vector3 pillarRisePreventionBoxSize;
+    private Transform pillarRisePreventionBoxTransform;
+    [SerializeField] private LayerMask pillarRisePreventionLayerMask;
+    [SerializeField] private float pillarRisePreventionHeight = 0;
     [HideInInspector] public bool riseInputPressed;
     [HideInInspector] public bool lowerInputPressed;
     [HideInInspector] public bool rise;
@@ -41,6 +45,7 @@ public class MolePillarScript : MonoBehaviour
     [Header("Utility")]
     [SerializeField] private bool showHeightGizmo = true;
     [SerializeField] private bool showInteractionRadiusGizmo = true;
+    [SerializeField] private bool showPillarRisePreventionBoxGizmo = true;
 
     [Header("VFX")]
     [SerializeField] private ParticleSystem dirtPillarDustPS;
@@ -51,6 +56,7 @@ public class MolePillarScript : MonoBehaviour
         movementScript = GetComponent<MovementScript>();
         moleDigScript = GetComponent<MoleDigScript>();
         familiarScript = GetComponent<FamiliarScript>();
+        pillarRisePreventionBoxTransform = transform; // this prevents any null transforms, very important!
         cameraMasterScript = GameObject.FindGameObjectWithTag("CameraMaster").GetComponent<CameraMasterScript>();
         audioManager = GameObject.FindGameObjectWithTag("Audio Manager").GetComponent<AudioManager>();
         familiarCamera = GameObject.FindGameObjectWithTag("FamiliarCamera").GetComponent<CinemachineVirtualCamera>();
@@ -61,6 +67,16 @@ public class MolePillarScript : MonoBehaviour
     {
         if (rise) // this is bad. I know this is bad. Sorry.
         {
+            Collider[] hitColliders = Physics.OverlapBox(pillarRisePreventionBoxTransform.position + (transform.up * pillarRisePreventionHeight), pillarRisePreventionBoxSize/2, Quaternion.identity, pillarRisePreventionLayerMask);
+            foreach (Collider hitCollider in hitColliders)
+            {
+                if (!hitCollider.TryGetComponent<Rigidbody>(out Rigidbody rigidbody)) // if whatever we're messing with ain't a rigidbody, it's unmoveable, ergo, stop!! 
+                {
+                    PillarRiseEnd();
+                    riseInputPressed = false;
+                    pillarRisePreventionBoxTransform = transform;
+                }
+            }
             RaisePillar();
         }
 
@@ -111,6 +127,7 @@ public class MolePillarScript : MonoBehaviour
                 {
                     pillarToRaise = pillarToRaise.transform.parent.gameObject; // if we have a top, get it
                 }
+                pillarRisePreventionBoxTransform = pillarToRaise.transform;
                 distance = Vector3.Distance(pillarToRaise.transform.position, pointToRiseTo);
                 if (!pillarRising) // right as we start things off
                 {
@@ -236,16 +253,33 @@ public class MolePillarScript : MonoBehaviour
         {
             if (!pillarRising)
             {
+                 Gizmos.color = Color.white;
                 DrawArrow.ForGizmo(transform.position, Vector3.up * maxPillarHeight);
             }
             else
             {
+                 Gizmos.color = Color.white;
                 DrawArrow.ForGizmo(transform.position, Vector3.up * distance);
             }
         }
         if (showInteractionRadiusGizmo)
         {
+            Gizmos.color = Color.white;
             Gizmos.DrawWireSphere(transform.position, pillarInteractionRadius);
+        }
+
+        if (showPillarRisePreventionBoxGizmo)
+        {
+            if (!pillarRising)
+            {
+                Gizmos.color = new Color(1, 0, 0, 0.3f);
+                Gizmos.DrawCube(transform.position + (transform.up * pillarRisePreventionHeight), pillarRisePreventionBoxSize);
+            }
+            else
+            {
+                Gizmos.color = new Color(1, 0, 0, 0.3f);
+                Gizmos.DrawCube(pillarRisePreventionBoxTransform.position + (transform.up * pillarRisePreventionHeight), pillarRisePreventionBoxSize);
+            }
         }
     }
 }

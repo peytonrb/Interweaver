@@ -49,7 +49,7 @@ public class FamiliarScript : MonoBehaviour
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>(); 
         characterController.enabled = true;
-        Debug.Log("Active Current Position: " + transform.position);
+        // Debug.Log("Active Current Position: " + transform.position);
     }
     
     public void OnTriggerStay(Collider other)
