@@ -121,6 +121,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleFreeFlyCamera",
+                    "type": "Button",
+                    "id": "b6c28ffc-e3f4-4ecb-bc31-645797860218",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -506,6 +515,17 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "WyvernCameraToggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9d2d732d-3252-46cb-984c-9460873bb0cd",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleFreeFlyCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

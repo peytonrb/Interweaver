@@ -12,6 +12,7 @@ public class InputManagerScript : MonoBehaviour
     public GameObject player;
     public GameObject familiar;
     public GameObject wyvern;
+    public GameObject FFC;
     public bool canSwitch = true; // bool which determines if possession can occur
     public Vector2 movement;
     public Vector2 weaveCursor;
@@ -20,12 +21,20 @@ public class InputManagerScript : MonoBehaviour
     private PauseScript pauseScript;
     public static InputManagerScript instance;
 
+
+
     //the invoke bools are there so then it can only happen once instead of every frame in the update function
     //*****************************************
     private bool hasFamiliarInvoke;
     private bool hasFamiliarInvoke2;
     private bool hasWeaverInvoke;
     //*****************************************
+
+    //These bools are here to keep track of the familiar and weavers turn for the marketing camera
+    //**************************************************
+    private bool wasWeaverTurn;
+    private bool wasFamiliarTurn;
+    //**************************************************
 
     public bool isGamepad = false;
     private PlayerControllerNew playerScript;
@@ -37,6 +46,7 @@ public class InputManagerScript : MonoBehaviour
     private WyvernBossManager wyvernScript;
     public PlayerInput playerInput;
     private MovementScript familiarMovement;
+    private FreeFlyCameraScript freeFlyCameraScript;
 
     [CannotBeNullObjectField] public PossessionUIAnimationHandler weaverAnimationUIPosessionHandler;
 
@@ -59,6 +69,9 @@ public class InputManagerScript : MonoBehaviour
 
     void Awake()
     {
+        wasFamiliarTurn = false;
+        wasWeaverTurn = false;
+
         if (instance == null)
         {
             instance = this;
@@ -75,6 +88,7 @@ public class InputManagerScript : MonoBehaviour
         familiarScript = familiar.GetComponent<FamiliarScript>();
         pauseScript = pauseScreen.GetComponent<PauseScript>();
         playerInput = GetComponent<PlayerInput>();
+        freeFlyCameraScript = FFC.GetComponent<FreeFlyCameraScript>();
         currentSceneName = SceneManager.GetActiveScene().name;
         if (wyvern != null)
         {
@@ -318,7 +332,8 @@ public class InputManagerScript : MonoBehaviour
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
         CharacterController playerCharacterController = player.GetComponent<CharacterController>();
 
-        if (!familiarScript.myTurn && !weaveController.isWeaving && playerCharacterController.isGrounded && !playerScript.inCutscene && canSwitch && !playerScript.talkingToNPC)
+        if (!familiarScript.myTurn && !weaveController.isWeaving && playerCharacterController.isGrounded && 
+            !playerScript.inCutscene && canSwitch && !playerScript.talkingToNPC && movementScript.active)
         {
             playerScript.Possession();
             weaverAnimationUIPosessionHandler.SwitchingToFamiliar();
@@ -781,4 +796,50 @@ public class InputManagerScript : MonoBehaviour
         }
     }
     #endregion//******************************************************
+
+    public void OnToggleFreeFlyCamera(InputValue input)
+    {
+        if (FFC != null && !freeFlyCameraScript.isFlyCameraActive)
+        {
+            freeFlyCameraScript.isFlyCameraActive = true;
+            FFC.GetComponent<CinemachineVirtualCamera>().m_Priority = 10;
+
+            if (movementScript.active && !wasWeaverTurn)
+            {
+                movementScript.active = false;
+                wasWeaverTurn = true;
+            }
+
+            if (familiarMovement.active && !wasFamiliarTurn)
+            {
+                familiarMovement.active = false;
+                wasFamiliarTurn = true;
+            }
+        }
+
+        else if (freeFlyCameraScript.isFlyCameraActive && FFC != null)
+        {
+            freeFlyCameraScript.isFlyCameraActive = false;
+            FFC.GetComponent<CinemachineVirtualCamera>().m_Priority = -1;
+
+
+            if (!movementScript.active && wasWeaverTurn)
+            {
+                movementScript.active = true;
+                wasWeaverTurn = false;
+            }
+
+            if (!familiarMovement.active && wasFamiliarTurn)
+            {
+                familiarMovement.active = true;
+                wasFamiliarTurn = false;
+            }
+        }
+
+        else if (FFC == null)
+        {
+            Debug.Log("nothing happens");
+            return;
+        }
+    }
 }
