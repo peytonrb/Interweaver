@@ -31,7 +31,7 @@ public class FreeFlyCameraScript : MonoBehaviour
 
     private Vector3 _moveSpeed;
 
-    public bool isFlyCameraActive;
+     [HideInInspector] public bool isFlyCameraActive;
 
     private void Start()
     {
