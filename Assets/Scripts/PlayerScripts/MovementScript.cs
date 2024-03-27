@@ -123,7 +123,10 @@ public class MovementScript : MonoBehaviour
 
         StartCoroutine(DelayBeforeFallAudio());
 
-        defaultMat = materialHolder.GetComponent<SkinnedMeshRenderer>().material;
+        if (materialHolder.TryGetComponent<SkinnedMeshRenderer>(out SkinnedMeshRenderer meshRender))
+        {
+            defaultMat = meshRender.material;
+        }
 
         if (freezePlayerAtStart)
         {
@@ -570,26 +573,30 @@ public class MovementScript : MonoBehaviour
 
     public IEnumerator ChangeMaterialOnDeath()
     {
-        materialHolder.GetComponent<SkinnedMeshRenderer>().material = dissolveMat;
-
-        float elapsedTime = 2;
-        float totalTime = 2;
-        float cutoffHeight = 4;
-
-        while (elapsedTime > 0)
+        if (defaultMat != null)
         {
-            elapsedTime -= Time.deltaTime * 1.5f;
+            materialHolder.GetComponent<SkinnedMeshRenderer>().material = dissolveMat;
 
-            cutoffHeight = Mathf.Lerp(-3, 4, elapsedTime / totalTime);
-            dissolveMat.SetFloat("_Cutoff_Height", cutoffHeight);
+            float elapsedTime = 2;
+            float totalTime = 2;
+            float cutoffHeight = 4;
 
-            yield return null;
+            while (elapsedTime > 0)
+            {
+                elapsedTime -= Time.deltaTime * 1.5f;
+
+                cutoffHeight = Mathf.Lerp(-3, 4, elapsedTime / totalTime);
+                dissolveMat.SetFloat("_Cutoff_Height", cutoffHeight);
+
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(2);
+            dissolveMat.SetFloat("_Cutoff_Height", 4);
+
+            materialHolder.GetComponent<SkinnedMeshRenderer>().material = defaultMat;
         }
-
-        yield return new WaitForSeconds(2);
-        dissolveMat.SetFloat("_Cutoff_Height", 4);
-
-        materialHolder.GetComponent<SkinnedMeshRenderer>().material = defaultMat;
+        
 
         yield break;
     }
