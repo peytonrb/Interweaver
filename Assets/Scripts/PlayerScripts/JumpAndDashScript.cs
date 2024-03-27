@@ -14,6 +14,8 @@ public class JumpAndDashScript : MonoBehaviour
     [Header("Jumping")]
     [SerializeField][Range(1, 10)] private float jumpForce = 3f;
     [SerializeField][Tooltip("Allows the weaver to jump forever instead of dash")] private bool infiniteJump;
+    [SerializeField] private float coyoteTimeLength;
+    private float coyoteTime;
     [Header("Dashing")]
     public bool canDash; // accessed by WeaveableObject
     [SerializeField][Range(0f, 10f)] private float dashCooldown = 0.4f;
@@ -44,6 +46,7 @@ public class JumpAndDashScript : MonoBehaviour
     {
         movementScript = GetComponent<MovementScript>();
         characterController = GetComponent<CharacterController>();
+        coyoteTime = coyoteTimeLength;
 
         // vfx
         if (gameObject.CompareTag("Player"))
@@ -56,11 +59,24 @@ public class JumpAndDashScript : MonoBehaviour
         
     }
 
+    private void Update()
+    {
+        if (!characterController.isGrounded && !infiniteJump && coyoteTime > 0)
+        {
+            coyoteTime -= Time.deltaTime;
+        }
+        else if (characterController.isGrounded && coyoteTime < coyoteTimeLength)
+        {
+            coyoteTime = coyoteTimeLength;
+        }
+    }
+
     public void DoJump()
     {
-        if (characterController.isGrounded || infiniteJump)
+        if (characterController.isGrounded || infiniteJump || coyoteTime > 0)
         {
             if (movementScript.canMove) {
+                StartCoroutine(JumpBuffer());
                 characterAnimationHandler.ToggleJumpAnim();
                 movementScript.ChangeVelocity(new UnityEngine.Vector3(movementScript.GetVelocity().x, jumpForce, movementScript.GetVelocity().z));
                 if (freeJumpDash)
@@ -70,6 +86,15 @@ public class JumpAndDashScript : MonoBehaviour
                 }
             }
         }
+    }
+
+    IEnumerator JumpBuffer() // there's a very brief period where a character has JUST jumped, but it still grounded, this coroutine simply waits till their officially off the ground to avoid double jumps
+    {
+        while (characterController.isGrounded)
+        {
+            yield return null;
+        }
+        coyoteTime = 0;
     }
 
     public void DoDash()
@@ -168,8 +193,6 @@ public class JumpAndDashScript : MonoBehaviour
 
         //Audio
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, dashAudioClip);
-        
-
     }
 
     private void DisableDashVFX()
