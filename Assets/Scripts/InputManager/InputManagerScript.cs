@@ -774,7 +774,8 @@ public class InputManagerScript : MonoBehaviour
                 }
                 else
                 {
-                    stagSwapScript.DoSwap();
+                    stagSwapScript.isHolding = false;
+                    //stagSwapScript.DoSwap();
                 }
                 break;
         }
