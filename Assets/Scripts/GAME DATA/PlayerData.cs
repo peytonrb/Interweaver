@@ -6,8 +6,10 @@ using UnityEngine;
 public class PlayerData : MonoBehaviour
 {
     public static PlayerData instance;
+    public static int lostSoulCountAlpine = 0;
+    public static int lostSoulCountCavern = 0;
+    public static int lostSoulCountSepultus = 0;
     public static int levelsCompleted = 0;
-    public static int lostSoulCount = 0;
     public static bool saveDataExists = false;
 
     void Awake() {
@@ -22,7 +24,9 @@ public class PlayerData : MonoBehaviour
     public void SaveGame() {
         GameSaveData gameData = new GameSaveData();
         gameData.levelsCompleted = levelsCompleted;
-        gameData.lostSoulCount = lostSoulCount;
+        gameData.lostSoulsFoundInAlpine = lostSoulCountAlpine;
+        gameData.lostSoulsFoundInCavern = lostSoulCountCavern;
+        gameData.lostSoulsFoundInSepultus = lostSoulCountSepultus;
 
         string json = JsonUtility.ToJson(gameData,false);
         File.WriteAllText(Application.dataPath + "/GameData.json",json);
@@ -37,7 +41,9 @@ public class PlayerData : MonoBehaviour
             GameSaveData gameData = JsonUtility.FromJson<GameSaveData>(json);
 
             levelsCompleted = gameData.levelsCompleted;
-            lostSoulCount = gameData.lostSoulCount;
+            lostSoulCountAlpine = gameData.lostSoulsFoundInAlpine;
+            lostSoulCountCavern = gameData.lostSoulsFoundInCavern;
+            lostSoulCountSepultus = gameData.lostSoulsFoundInSepultus;
 
             Debug.Log("Game found and loaded!");
         }
@@ -55,7 +61,9 @@ public class PlayerData : MonoBehaviour
     /// </summary>
     public void ResetAllData() {
         levelsCompleted = 0;
-        lostSoulCount = 0;
+        lostSoulCountAlpine = 0;
+        lostSoulCountCavern = 0;
+        lostSoulCountSepultus = 0;
         saveDataExists = false;
     }
 
@@ -88,28 +96,67 @@ public class PlayerData : MonoBehaviour
     /// <summary>
     /// Adds to or subtracts from the amount of lost souls collected so far. 
     /// </summary>
+    /// <param name="level">
+    /// level 1 = Alpine, level 2 = Cavern, level 3 = Sepultus
+    /// </param>
     /// <param name="souls">
     /// Amount of lost souls you want to add/subtract from the total lost soul count.
     /// </param>
     /// <param name="addSouls">
     /// If true, you are adding. If false, you are subtracting.
     /// </param>
-    public void AddSubtractLostSoul(int souls, bool addSouls) {
+    public void AddSubtractLostSoul(int level, int souls, bool addSouls) {
         if (addSouls == true) {
-            lostSoulCount += souls;
+            switch (level) {
+                case 1:
+                    lostSoulCountAlpine += souls;
+                break;
+                case 2:
+                    lostSoulCountCavern += souls;
+                break;
+                case 3:
+                    lostSoulCountSepultus += souls;
+                break;
+            }
         }
         else {
-            lostSoulCount -= souls;
+            switch (level) {
+                case 1:
+                    lostSoulCountAlpine -= souls;
+                break;
+                case 2:
+                    lostSoulCountCavern -= souls;
+                break;
+                case 3:
+                    lostSoulCountSepultus -= souls;
+                break;
+            }
         }
         
     }
 
     /// <summary>
-    /// Returns the number of lost souls collected thus far.
+    /// Returns the number of lost souls collected in Alpine thus far.
     /// </summary>
     /// <returns></returns>
-    public int GetLostSoulCount() {
-        return lostSoulCount;
+    public int GetAlpineLostSoulCount() {
+        return lostSoulCountAlpine;
+    }
+
+    /// <summary>
+    /// Returns the number of lost souls collected in Cavern thus far.
+    /// </summary>
+    /// <returns></returns>
+    public int GetCavernLostSoulCount() {
+        return lostSoulCountCavern;
+    }
+
+    /// <summary>
+    /// Returns the number of lost souls collected in Sepultus thus far.
+    /// </summary>
+    /// <returns></returns>
+    public int GetSepultusLostSoulCount() {
+        return lostSoulCountSepultus;
     }
 
     /// <summary>
@@ -138,8 +185,16 @@ public class PlayerData : MonoBehaviour
     /// <summary>
     /// Resets the amount of lost souls collected to 0.
     /// </summary>
-    public void ResetLostSoulCount() {
-        lostSoulCount = 0;
+    public void ResetAlpineSoulCount() {
+        lostSoulCountAlpine = 0;
+    }
+
+    public void ResetCavernSoulCount() {
+        lostSoulCountCavern = 0;
+    }
+
+    public void ResetSepultusSoulCount() {
+        lostSoulCountSepultus = 0;
     }
 
 }
