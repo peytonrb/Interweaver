@@ -10,18 +10,20 @@ public class StagSwapScript : MonoBehaviour
     private WyvernBossManager bossManager;
     [Header("Variables")]
     [SerializeField] private float timeToHold = 1f;
-    [HideInInspector] private bool isHolding; 
+    [HideInInspector] public bool isHolding;
     private float timeHeld = 0f;
     // Start is called before the first frame update
     void Start()
     {
         weaver = GameObject.FindGameObjectWithTag("Player");
         wyvern = GameObject.FindGameObjectWithTag("Boss");
-        if (wyvern.TryGetComponent<WyvernBossManager>(out WyvernBossManager dingus))
+        if (wyvern != null)
         {
-            bossManager = dingus;
+            if (wyvern.TryGetComponent<WyvernBossManager>(out WyvernBossManager dingus))
+            {
+                bossManager = dingus;
+            }
         }
-        
     }
 
     public IEnumerator ChargeSwap()
@@ -35,6 +37,8 @@ public class StagSwapScript : MonoBehaviour
             timeHeld += Time.deltaTime;
             yield return null;
         }
+
+        DoSwap();
     }
 
     public void DoSwap()
