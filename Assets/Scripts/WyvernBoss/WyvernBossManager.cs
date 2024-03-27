@@ -317,7 +317,7 @@ public class WyvernBossManager : MonoBehaviour
     }
 
     void SpawnFire() {
-        Instantiate(flamethrower,transform,false);
+        flamethrower.GetComponent<FlamethrowerController>().isActive = true;
     }
 
     void WindingUp() {
@@ -339,8 +339,9 @@ public class WyvernBossManager : MonoBehaviour
         }
         else {
             ResetPhase3();
-            WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
-            wyvernFlamethrower.KillThyself();
+            //WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
+            //wyvernFlamethrower.KillThyself();
+            flamethrower.GetComponent<FlamethrowerController>().isActive = false;
         }
     }
 
@@ -422,10 +423,15 @@ public class WyvernBossManager : MonoBehaviour
                 magicCircleTimer = startingMagicCircleTimer;
             break;
             case 3:
-                WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
-                if (wyvernFlamethrower != null) {
-                    wyvernFlamethrower.KillThyself();
+                //WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
+                //if (wyvernFlamethrower != null) {
+                //    wyvernFlamethrower.KillThyself();
+                //}
+                if (flamethrower.GetComponent<FlamethrowerController>().isActive)
+                {
+                    flamethrower.GetComponent<FlamethrowerController>().isActive = false;
                 }
+
                 ResetPhase3();
             break;
         }
@@ -456,9 +462,13 @@ public class WyvernBossManager : MonoBehaviour
                     StopCoroutine(Cooldown());
                 break;
                 case 3:
-                    WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
-                    if (wyvernFlamethrower != null) {
-                        wyvernFlamethrower.KillThyself();
+                    //WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
+                    //if (wyvernFlamethrower != null) {
+                    //    wyvernFlamethrower.KillThyself();
+                    //}
+                    if (flamethrower.GetComponent<FlamethrowerController>().isActive)
+                    {
+                        flamethrower.GetComponent<FlamethrowerController>().isActive = false;
                     }
                     ResetPhase3();
                 break;
@@ -485,9 +495,13 @@ public class WyvernBossManager : MonoBehaviour
                     StopCoroutine(Cooldown());
                 break;
                 case 3:
-                    WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
-                    if (wyvernFlamethrower != null) {
-                        wyvernFlamethrower.KillThyself();
+                    //WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
+                    //if (wyvernFlamethrower != null) {
+                    //    wyvernFlamethrower.KillThyself();
+                    //}
+                    if (flamethrower.GetComponent<FlamethrowerController>().isActive)
+                    {
+                        flamethrower.GetComponent<FlamethrowerController>().isActive = false;
                     }
                     ResetPhase3();
                 break;
@@ -514,9 +528,13 @@ public class WyvernBossManager : MonoBehaviour
                 StopCoroutine(Cooldown());
             break;
             case 3:
-                WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
-                if (wyvernFlamethrower != null) {
-                    wyvernFlamethrower.KillThyself();
+                //WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
+                //if (wyvernFlamethrower != null) {
+                //    wyvernFlamethrower.KillThyself();
+                //}
+                if (flamethrower.GetComponent<FlamethrowerController>().isActive)
+                {
+                    flamethrower.GetComponent<FlamethrowerController>().isActive = false;
                 }
                 ResetPhase3();
             break;
@@ -556,9 +574,13 @@ public class WyvernBossManager : MonoBehaviour
                 StopCoroutine(Cooldown());
             break;
             case 3:
-                WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
-                if (wyvernFlamethrower != null) {
-                    wyvernFlamethrower.KillThyself();
+                //WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
+                //if (wyvernFlamethrower != null) {
+                //    wyvernFlamethrower.KillThyself();
+                //}
+                if (flamethrower.GetComponent<FlamethrowerController>().isActive)
+                {
+                    flamethrower.GetComponent<FlamethrowerController>().isActive = false;
                 }
                 ResetPhase3();
             break;
