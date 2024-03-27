@@ -6,6 +6,7 @@ public class LostSoulController : MonoBehaviour
 {
     public float attractionStrength;
     public GameObject player;
+    public int soulID; //First soul in the level should have ID = 0
 
     void FixedUpdate()
     {
@@ -22,5 +23,9 @@ public class LostSoulController : MonoBehaviour
         {
             gameObject.GetComponent<Rigidbody>().isKinematic = true;
         }
+    }
+
+    public void DestroyMyself() {
+        Destroy(gameObject);
     }
 }

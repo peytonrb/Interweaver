@@ -9,6 +9,13 @@ public class PlayerData : MonoBehaviour
     public static int lostSoulCountAlpine = 0;
     public static int lostSoulCountCavern = 0;
     public static int lostSoulCountSepultus = 0;
+
+    //If false, then that lost soul has not been retrieved from that level.
+    //The length of the array should be 3 for each level.
+    public static List<bool> lostSoulsinAlpine = new List<bool>();
+    public static List<bool> lostSoulsinCavern = new List<bool>();
+    public static List<bool> lostSoulsinSepultus = new List<bool>();
+
     public static int levelsCompleted = 0;
     public static bool saveDataExists = false;
 
@@ -19,6 +26,17 @@ public class PlayerData : MonoBehaviour
         else {
             Destroy(gameObject);
         }
+
+        if (lostSoulsinAlpine.Count < 3) {
+            lostSoulsinAlpine.Capacity = 3;
+        }
+        if (lostSoulsinCavern.Count < 3) {
+            lostSoulsinCavern.Capacity = 3;
+        }
+        if (lostSoulsinSepultus.Count < 3) {
+            lostSoulsinSepultus.Capacity = 3;
+        }
+        
     }
 
     public void SaveGame() {
@@ -27,6 +45,9 @@ public class PlayerData : MonoBehaviour
         gameData.lostSoulsFoundInAlpine = lostSoulCountAlpine;
         gameData.lostSoulsFoundInCavern = lostSoulCountCavern;
         gameData.lostSoulsFoundInSepultus = lostSoulCountSepultus;
+        gameData.lostSoulsinAlpine = lostSoulsinAlpine;
+        gameData.lostSoulsinCavern = lostSoulsinCavern;
+        gameData.lostSoulsinSepultus = lostSoulsinSepultus;
 
         string json = JsonUtility.ToJson(gameData,false);
         File.WriteAllText(Application.dataPath + "/GameData.json",json);
@@ -44,6 +65,9 @@ public class PlayerData : MonoBehaviour
             lostSoulCountAlpine = gameData.lostSoulsFoundInAlpine;
             lostSoulCountCavern = gameData.lostSoulsFoundInCavern;
             lostSoulCountSepultus = gameData.lostSoulsFoundInSepultus;
+            lostSoulsinAlpine = gameData.lostSoulsinAlpine;
+            lostSoulsinCavern = gameData.lostSoulsinCavern;
+            lostSoulsinSepultus = gameData.lostSoulsinSepultus;
 
             Debug.Log("Game found and loaded!");
         }
@@ -64,6 +88,15 @@ public class PlayerData : MonoBehaviour
         lostSoulCountAlpine = 0;
         lostSoulCountCavern = 0;
         lostSoulCountSepultus = 0;
+        for (int i = 0; i < lostSoulsinAlpine.Count; i++) {
+            lostSoulsinAlpine[i] = true;
+        }
+        for (int i = 0; i < lostSoulsinCavern.Count; i++) {
+            lostSoulsinCavern[i] = true;
+        }
+        for (int i = 0; i < lostSoulsinSepultus.Count; i++) {
+            lostSoulsinSepultus[i] = true;
+        }
         saveDataExists = false;
     }
 
@@ -133,6 +166,43 @@ public class PlayerData : MonoBehaviour
             }
         }
         
+    }
+
+    /// <summary>
+    /// References the existence of lost souls in a particular level.
+    /// </summary>
+    /// <returns></returns>
+    public List<bool> GetAlpineLostSouls() {
+        return lostSoulsinAlpine;
+    }
+
+    public List<bool> GetCavernLostSouls() {
+        return lostSoulsinCavern;
+    }
+
+    public List<bool> GetSepultusLostSouls() {
+        return lostSoulsinSepultus;
+    }
+
+    /// <summary>
+    /// Sets the lost soul's existence in a level
+    /// </summary>
+    /// <param name="index">
+    /// The index of the lostSoulsinAlpine list.
+    /// </param>
+    /// <param name="isAlive">
+    /// Is this Lost Soul alive? (Hint: Set to false if its being captured)
+    /// </param>
+    public void SetAlpineLostSouls(int index, bool isAlive) {
+        lostSoulsinAlpine[index] = isAlive;
+    }
+
+    public void SetCavernLostSouls(int index, bool isAlive) {
+        lostSoulsinAlpine[index] = isAlive;
+    }
+
+    public void SetSepultusLostSouls(int index, bool isAlive) {
+        lostSoulsinAlpine[index] = isAlive;
     }
 
     /// <summary>
