@@ -1184,6 +1184,8 @@ MonoBehaviour:
   bounceVector: {x: 0, y: 1, z: 0}
   bounceValue: 3
   isNearGround: 0
+  freezePlayerAtStart: 1
+  freezeTime: 4
   characterAnimationHandler: {fileID: 5698960169409605435}
   timeToTurn: 0.1
   newDirection: {x: 0, y: 0, z: 0}
@@ -1225,6 +1227,7 @@ MonoBehaviour:
   dashTimeToTurn: 1
   showDistanceGizmo: 0
   glowMaterial: {fileID: 0}
+  dashAudioClip: {fileID: 0}
 --- !u!114 &1441626170731545336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1324,6 +1327,11 @@ MonoBehaviour:
   maxPillarHeight: 17
   pillarBuildSpeed: 4
   pillarInteractionRadius: 1.01
+  pillarRisePreventionBoxSize: {x: 0.5, y: 3, z: 0.5}
+  pillarRisePreventionLayerMask:
+    serializedVersion: 2
+    m_Bits: 3930047
+  pillarRisePreventionHeight: 1.5
   riseInputPressed: 0
   lowerInputPressed: 0
   rise: 0
@@ -1333,6 +1341,7 @@ MonoBehaviour:
   frequency: 0.24
   showHeightGizmo: 1
   showInteractionRadiusGizmo: 1
+  showPillarRisePreventionBoxGizmo: 1
   dirtPillarDustPS: {fileID: 8645474648492935814, guid: 707bc947e7b4d3a4ab45bf72f9d30de8, type: 3}
 --- !u!1 &4752719490831409805
 GameObject:
