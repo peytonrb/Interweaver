@@ -357,6 +357,10 @@ public class InputManagerScript : MonoBehaviour
             familiarScript.Depossess();
             weaverAnimationUIPosessionHandler.SwitchingToWeaver();
             familiarAnimationUIPosessionHandler.SwitchingToWeaver();
+
+            hasFamiliarInvoke = false;
+            hasFamiliarInvoke2 = false;
+
             //Familiar turn is true
             if (wyvernScript != null)
             {
