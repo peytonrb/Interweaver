@@ -236,7 +236,18 @@ public class WyvernBossManager : MonoBehaviour
                 waitUntilFamiliarIsGrounded = false;
             }
         }
-        
+
+        // VFX for stag
+        if (phases == 2 && !familiarScript.transform.Find("StagShieldParent").gameObject.activeSelf)
+        {
+            familiarScript.transform.Find("StagShieldParent").gameObject.SetActive(true); // sets shield on for stag
+            familiarScript.transform.Find("StagShieldParent").GetComponent<ShieldVFXController>().shouldBeOn = true;
+        }
+        else if (phases != 2 && familiarScript.transform.Find("StagShieldParent").gameObject.activeSelf)
+        {
+            familiarScript.transform.Find("StagShieldParent").GetComponent<ShieldVFXController>().shouldBeOn = false; // sets shield off for stag
+            StartCoroutine(WaitForVFX());
+        }
     }
 
     /// <summary>
@@ -599,5 +610,11 @@ public class WyvernBossManager : MonoBehaviour
                 player.Death();
             }
         }
+    }
+
+    IEnumerator WaitForVFX()
+    {
+        yield return new WaitForSeconds(3);
+        familiarScript.transform.Find("StagShieldParent").gameObject.SetActive(false); // sets shield off for stag
     }
 }

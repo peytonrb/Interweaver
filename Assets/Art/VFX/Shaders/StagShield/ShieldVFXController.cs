@@ -6,7 +6,7 @@ using UnityEngine.VFX;
 public class ShieldVFXController : MonoBehaviour
 {
     public bool isActive;
-    [SerializeField] private bool shouldBeOn; // needs to be varied by another script
+    public bool shouldBeOn; // needs to be varied by another script
 
     private GameObject stagShield;
     private GameObject outerSwirls;
