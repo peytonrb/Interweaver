@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class StagSwapScript : MonoBehaviour
 {
@@ -12,6 +13,12 @@ public class StagSwapScript : MonoBehaviour
     [SerializeField] private float timeToHold = 1f;
     [HideInInspector] public bool isHolding;
     private float timeHeld = 0f;
+
+    [Header("VFX")]
+    private VisualEffect chargeVFX;
+    private VisualEffect swapVFX;
+    private ParticleSystem flashPS;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +31,12 @@ public class StagSwapScript : MonoBehaviour
                 bossManager = dingus;
             }
         }
+
+        chargeVFX = this.transform.Find("StagSwapVFX").GetChild(0).GetComponent<VisualEffect>();
+        chargeVFX.gameObject.SetActive(false);
+        swapVFX = this.transform.Find("StagSwapVFX").GetChild(1).GetComponent<VisualEffect>();
+        swapVFX.gameObject.SetActive(false);
+        flashPS = this.transform.Find("StagSwapVFX").GetChild(2).GetComponent<ParticleSystem>();
     }
 
     public IEnumerator ChargeSwap()
@@ -31,19 +44,33 @@ public class StagSwapScript : MonoBehaviour
         float startTime = Time.time;
         timeHeld = 0f;
         isHolding = true;
-        
+        chargeVFX.gameObject.SetActive(true);
+        chargeVFX.Play();
+        bool vfxPlayed = false;
+
         while (isHolding && (Time.time <= startTime + timeToHold))
         {
             timeHeld += Time.deltaTime;
+
+            if (timeHeld > timeToHold - 0.95f && !vfxPlayed)
+            {
+                vfxPlayed = true;
+                swapVFX.gameObject.SetActive(true);
+                swapVFX.Play();
+                StartCoroutine(WaitForVFX());
+            }
+
             yield return null;
         }
 
+        flashPS.Play();
         DoSwap();
     }
 
     public void DoSwap()
     {
         isHolding = false;
+        chargeVFX.Stop();
 
         if (timeHeld >= timeToHold)
         {
@@ -53,10 +80,18 @@ public class StagSwapScript : MonoBehaviour
             if (bossManager != null && wyvern != null) // pissing and shitty
             {
                 int prevPhase = bossManager.phases;
-                if (wyvern.activeSelf && wyvern != null) {
+                if (wyvern.activeSelf && wyvern != null)
+                {
                     bossManager.StagSwapPhaseSwap(prevPhase);
                 }
             }
         }
+    }
+
+    IEnumerator WaitForVFX()
+    {
+        yield return new WaitForSeconds(5);
+        swapVFX.gameObject.SetActive(false);
+        chargeVFX.gameObject.SetActive(false);
     }
 }
