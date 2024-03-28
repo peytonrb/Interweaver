@@ -88,6 +88,7 @@ public class PlayerData : MonoBehaviour
         lostSoulCountAlpine = 0;
         lostSoulCountCavern = 0;
         lostSoulCountSepultus = 0;
+        
         for (int i = 0; i < lostSoulsinAlpine.Count; i++) {
             lostSoulsinAlpine[i] = true;
         }

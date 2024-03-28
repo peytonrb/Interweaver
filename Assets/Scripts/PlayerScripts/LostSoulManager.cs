@@ -11,10 +11,13 @@ public class LostSoulManager : MonoBehaviour
     private readonly HashSet<GameObject> alreadyCollidedWith = new HashSet<GameObject>();
     private GameMasterScript gameMaster;
     private int level;
-    private GameObject[] lostSouls;
-    private List<GameObject> lostSoulsList = new List<GameObject>();
-    //private List<bool> lostSoulsInThisLevel;
 
+    [Header("FOR TESTING PURPOSES ONLY - DO NOT TOUCH")]
+    [SerializeField] private GameObject[] lostSouls;
+    [SerializeField] private List<GameObject> lostSoulsList = new List<GameObject>();
+    
+    //NOTES FOR LATER:
+    //STILL NEED TO MAKE SURE THAT THE LIST ON THE FAMILIAR IS UPDATED AS WELL
     void Start()
     {
         gameMaster = GameObject.FindWithTag("GM").GetComponent<GameMasterScript>();
