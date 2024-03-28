@@ -16,14 +16,13 @@ public class LostSoulManager : MonoBehaviour
     [SerializeField] private GameObject[] lostSouls;
     [SerializeField] private List<GameObject> lostSoulsList = new List<GameObject>();
     
-    //NOTES FOR LATER:
-    //STILL NEED TO MAKE SURE THAT THE LIST ON THE FAMILIAR IS UPDATED AS WELL
     void Start()
     {
         gameMaster = GameObject.FindWithTag("GM").GetComponent<GameMasterScript>();
 
         //Finds the lost souls in the level and adds them to the lost souls list. There should only be 3 in a level.
         lostSouls = GameObject.FindGameObjectsWithTag("Lost Soul");
+
         for (int i = 0; i < lostSouls.Length; i++) {
             LostSoulController soulController = lostSouls[i].GetComponent<LostSoulController>();
             
@@ -37,8 +36,10 @@ public class LostSoulManager : MonoBehaviour
                 for (int i = 0; i < PlayerData.instance.GetAlpineLostSouls().Count; i++) {
                     //If this is false, then this doesn't exist anymore
                     if (PlayerData.instance.GetAlpineLostSouls()[i] == false) {
-                        LostSoulController soulController = lostSoulsList[i].GetComponent<LostSoulController>();
-                        soulController.DestroyMyself();
+                        if (lostSoulsList[i] != null) {
+                            LostSoulController soulController = lostSoulsList[i].GetComponent<LostSoulController>();
+                            soulController.DestroyMyself();
+                        }
                     }
                 }
                 level = 1;
@@ -48,8 +49,10 @@ public class LostSoulManager : MonoBehaviour
                 for (int i = 0; i < PlayerData.instance.GetCavernLostSouls().Count; i++) {
                     //If this is false, then this doesn't exist anymore
                     if (PlayerData.instance.GetCavernLostSouls()[i] == false) {
-                        LostSoulController soulController = lostSoulsList[i].GetComponent<LostSoulController>();
-                        soulController.DestroyMyself();
+                        if (lostSoulsList[i] != null) {
+                            LostSoulController soulController = lostSoulsList[i].GetComponent<LostSoulController>();
+                            soulController.DestroyMyself();
+                        }
                     }
                 }
                 level = 2;
@@ -59,8 +62,10 @@ public class LostSoulManager : MonoBehaviour
                 for (int i = 0; i < PlayerData.instance.GetSepultusLostSouls().Count; i++) {
                     //If this is false, then this doesn't exist anymore
                     if (PlayerData.instance.GetSepultusLostSouls()[i] == false) {
-                        LostSoulController soulController = lostSoulsList[i].GetComponent<LostSoulController>();
-                        soulController.DestroyMyself();
+                        if (lostSoulsList[i] != null) {
+                            LostSoulController soulController = lostSoulsList[i].GetComponent<LostSoulController>();
+                            soulController.DestroyMyself();
+                        }
                     }
                 }
                 level = 3;
@@ -68,7 +73,7 @@ public class LostSoulManager : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider hit) //void OnControllerColliderHit(ControllerColliderHit hit)
+    void OnTriggerEnter(Collider hit)
     {
         if (hit.gameObject.tag == "Lost Soul" && !alreadyCollidedWith.Contains(hit.gameObject))
         {
@@ -77,7 +82,7 @@ public class LostSoulManager : MonoBehaviour
             //Gamemaster's lost soul count is added.
             gameMaster.totalLostSouls++;
             lostSoulText.text = "" + gameMaster.totalLostSouls;
-            //Add something that tells the playerdata which soul has been collected in a particular level.
+
             switch (level) {
                 case 1:
                     LostSoulController soulController = hit.gameObject.GetComponent<LostSoulController>();

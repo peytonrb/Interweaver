@@ -29,12 +29,21 @@ public class PlayerData : MonoBehaviour
 
         if (lostSoulsinAlpine.Count < 3) {
             lostSoulsinAlpine.Capacity = 3;
+            for (int i = 0; i < lostSoulsinAlpine.Count; i++) {
+                lostSoulsinAlpine[i] = true;
+            }
         }
         if (lostSoulsinCavern.Count < 3) {
             lostSoulsinCavern.Capacity = 3;
+            for (int i = 0; i < lostSoulsinCavern.Count; i++) {
+                lostSoulsinCavern[i] = true;
+            }
         }
         if (lostSoulsinSepultus.Count < 3) {
             lostSoulsinSepultus.Capacity = 3;
+            for (int i = 0; i < lostSoulsinSepultus.Count; i++) {
+                lostSoulsinSepultus[i] = true;
+            }
         }
         
     }
