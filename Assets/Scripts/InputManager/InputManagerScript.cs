@@ -164,8 +164,12 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnDash(InputValue input)
     {
-        JumpAndDashScript jumpAndDashScript = player.GetComponent<JumpAndDashScript>();
-        jumpAndDashScript.DoDash();
+        if (PlayerData.levelsCompleted >= 1)
+        {
+            JumpAndDashScript jumpAndDashScript = player.GetComponent<JumpAndDashScript>();
+            jumpAndDashScript.DoDash();
+        }
+       
     }
     //******************************************************
     public void OnWeaverInteract(InputValue input)
