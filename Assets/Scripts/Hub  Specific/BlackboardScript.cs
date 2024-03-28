@@ -13,6 +13,7 @@ public class BlackboardScript : MonoBehaviour
     [SerializeField] private TextMeshProUGUI lostSoulCountAlpine;
     [SerializeField] private TextMeshProUGUI lostSoulCountCavern;
     [SerializeField] private TextMeshProUGUI lostSoulCountSepultus;
+    [SerializeField] private GameObject pressEToExit;
     private AnimaticCutsceneController acc;
     public GameObject popupUIPrompt;
     [HideInInspector] [Tooltip ("If true, then you are currently staring at the blackboard, and blackboard functionality is on.")] public bool onBlackboard;
@@ -27,6 +28,7 @@ public class BlackboardScript : MonoBehaviour
         acc = GetComponent<AnimaticCutsceneController>();
 
         interactableUI.SetActive(false);
+        pressEToExit.SetActive(false);
         blackboardCamera.Priority = 0;
         onBlackboard = false;
         levelsCompleted = PlayerData.instance.GetLevelsCompleted();
@@ -74,6 +76,7 @@ public class BlackboardScript : MonoBehaviour
         }
         else {
             interactableUI.SetActive(false);
+            pressEToExit.SetActive(false);
             movementScript.ToggleCanLook(true);
             movementScript.ToggleCanMove(true);
             blackboardCamera.Priority = 0;
@@ -123,6 +126,7 @@ public class BlackboardScript : MonoBehaviour
         }
         if (onBlackboard) {
             interactableUI.SetActive(true);
+            pressEToExit.SetActive(true);
         }
         yield break;
     }
