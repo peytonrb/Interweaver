@@ -16,7 +16,7 @@ public class BlueprintScript : MonoBehaviour
     [SerializeField] private List<GameObject> dummyCraftingResults = new List<GameObject>(); // dummy's represent the object we're making while not being that object
     private List<Material> dummyCraftingResultsOriginalMaterials = new List<Material>();
     [SerializeField] private Material dummyMaterial; 
-
+    [SerializeField] private GameObject grunk; 
     // general premise of this is we have three fundamental lists, currentCraftingIngredients, which should start empty and gets filled with craftable names
     // as stuff enters the trigger zone. Then, once everything in currentCraftingIngredients and requiredCraftables (which should contain the craftable
     // names that we want) are equal, we activate the craftingResult gameobject. The final key list, dummyCraftingResults is meant to simulate the craftingResult
@@ -36,6 +36,7 @@ public class BlueprintScript : MonoBehaviour
             dummyCraftingResult.transform.parent = null; // unparent all them. Why? Because Unity is fucking weird
         }
         craftingResult.SetActive(false);
+        grunk.SetActive(false);
     }
 
     void OnTriggerEnter(Collider collider)
@@ -83,6 +84,9 @@ public class BlueprintScript : MonoBehaviour
         {
             Destroy(dummyCraftingResult); // dummies are unneeded now, get rid of em'
         }
+        grunk.SetActive(true);
+        ParticleSystem guh = grunk.GetComponent<ParticleSystem>();
+        guh.Play();
         craftingResult.SetActive(true); // make crafted object visible
     }
 }

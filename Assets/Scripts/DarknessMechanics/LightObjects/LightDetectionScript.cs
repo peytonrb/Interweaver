@@ -93,7 +93,7 @@ public class LightDetectionScript : MonoBehaviour
                 }
 
                 float distance = Vector3.Distance(this.gameObject.transform.position, collider.gameObject.transform.position);
-                Debug.Log(collider.name + "I got this far" + distance);
+                //Debug.Log(collider.name + "I got this far" + distance);
 
                 if (LightSourceScript.Instance.lightsArray[lightScript.arrayIndex].isOn
                     && distance < 4.5f)
