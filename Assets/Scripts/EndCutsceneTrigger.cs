@@ -17,6 +17,12 @@ public class EndCutsceneTrigger : MonoBehaviour
 
     }
 
+    void OnTriggerEnter(Collider other) {
+        if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Familiar")) {
+            StartCutscene();
+        }
+    }
+
     public void StartCutscene() {
         int lostSoulsCollected = gameMaster.totalLostSouls;
         string currentScene = SceneHandler.instance.currentSceneName;
