@@ -130,6 +130,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "IncreaseLevelsCompleted",
+                    "type": "Button",
+                    "id": "6200b4d5-0cf4-4a18-8899-68fa1f437200",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -521,11 +530,22 @@
                 {
                     "name": "",
                     "id": "9d2d732d-3252-46cb-984c-9460873bb0cd",
-                    "path": "<Keyboard>/backquote",
+                    "path": "<Keyboard>/f12",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "ToggleFreeFlyCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b9434b41-c021-4c6a-8864-3e340d2510fe",
+                    "path": "<Keyboard>/backslash",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "IncreaseLevelsCompleted",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

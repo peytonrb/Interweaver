@@ -20,7 +20,7 @@ public class InputManagerScript : MonoBehaviour
     public GameObject pauseScreen;
     private PauseScript pauseScript;
     public static InputManagerScript instance;
-
+    [SerializeField] private bool devMode;
 
 
     //the invoke bools are there so then it can only happen once instead of every frame in the update function
@@ -71,6 +71,7 @@ public class InputManagerScript : MonoBehaviour
     {
         wasFamiliarTurn = false;
         wasWeaverTurn = false;
+
 
         if (instance == null)
         {
@@ -845,5 +846,14 @@ public class InputManagerScript : MonoBehaviour
             Debug.Log("nothing happens");
             return;
         }
+    }
+
+    public void OnIncreaseLevelsCompleted(InputValue input)
+    {
+        if (devMode) 
+        {
+            PlayerData.levelsCompleted = 1;
+        }
+        
     }
 }
