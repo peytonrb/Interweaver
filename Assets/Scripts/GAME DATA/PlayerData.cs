@@ -107,7 +107,18 @@ public class PlayerData : MonoBehaviour
         for (int i = 0; i < lostSoulsinSepultus.Count; i++) {
             lostSoulsinSepultus[i] = true;
         }
-        saveDataExists = false;
+        
+        GameSaveData gameData = new GameSaveData();
+        gameData.levelsCompleted = levelsCompleted;
+        gameData.lostSoulsFoundInAlpine = lostSoulCountAlpine;
+        gameData.lostSoulsFoundInCavern = lostSoulCountCavern;
+        gameData.lostSoulsFoundInSepultus = lostSoulCountSepultus;
+        gameData.lostSoulsinAlpine = lostSoulsinAlpine;
+        gameData.lostSoulsinCavern = lostSoulsinCavern;
+        gameData.lostSoulsinSepultus = lostSoulsinSepultus;
+
+        string json = JsonUtility.ToJson(gameData,false);
+        File.WriteAllText(Application.dataPath + "/GameData.json",json);
     }
 
     public void InitialFileCheck() {

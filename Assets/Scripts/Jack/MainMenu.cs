@@ -11,6 +11,7 @@ public class MainMenu : MonoBehaviour
 {
     [Header("Menu Variables")]
     public GameObject[] buttons;
+    public GameObject continueButton;
     public CanvasGroup mainMenu, creditsMenu, optionsMenu;
     public GameObject TitleLogo;
     public AudioClip soundFile;
@@ -23,6 +24,14 @@ public class MainMenu : MonoBehaviour
     EventSystem eventSystem;
     void Start()
     {
+        //Only turns on continue button if save data is found.
+        if (PlayerData.instance.GetSaveData() == true) {
+            continueButton.SetActive(true);
+        }
+        else {
+            continueButton.SetActive(false);
+        }
+
         eventSystem = EventSystem.current;
         optionsMenu.gameObject.SetActive(false);
         creditsMenu.gameObject.SetActive(false);
@@ -139,6 +148,28 @@ public class MainMenu : MonoBehaviour
     {
         //Debug.Log("Hover Played");
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, hoverFile, 1f);
+    }
+
+    public void StartNewGame() 
+    {
+        if (PlayerData.instance.GetSaveData() == true) {
+            PlayerData.instance.NewGame();
+            AnimaticCutsceneController acc = gameObject.GetComponent<AnimaticCutsceneController>();
+            acc.ChangeCutscene(0);
+        }
+
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startFile, 1f);
+        SceneHandler.instance.LoadLevel("AnimaticCutscenes");
+    }
+
+    public void ContinueGame() 
+    {
+        if (PlayerData.instance.GetSaveData() == true) {
+            PlayerData.instance.LoadGame();
+
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startFile, 1f);
+            SceneHandler.instance.LoadLevel("Courtyard");
+        }
     }
 
     //Detect conntroller input
