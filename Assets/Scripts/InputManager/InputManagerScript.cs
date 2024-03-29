@@ -66,7 +66,6 @@ public class InputManagerScript : MonoBehaviour
     public myEnums familiarEnums;
     private string currentSceneName;
 
-
     void Awake()
     {
         wasFamiliarTurn = false;
@@ -89,14 +88,25 @@ public class InputManagerScript : MonoBehaviour
         familiarScript = familiar.GetComponent<FamiliarScript>();
         pauseScript = pauseScreen.GetComponent<PauseScript>();
         playerInput = GetComponent<PlayerInput>();
-        freeFlyCameraScript = FFC.GetComponent<FreeFlyCameraScript>();
+        if (FFC)
+        {
+            freeFlyCameraScript = FFC.GetComponent<FreeFlyCameraScript>();
+        }
         currentSceneName = SceneManager.GetActiveScene().name;
+
+        if (currentSceneName == "Courtyard")
+        {
+            if (PlayerData.levelsCompleted < 1)
+            {
+                JumpAndDashScript jumpAndDashScript = player.GetComponent<JumpAndDashScript>();
+                jumpAndDashScript.canDash = false;
+            }
+        }
+
         if (wyvern != null)
         {
             wyvernScript = wyvern.GetComponent<WyvernBossManager>();
         }
-
-
 
         switch (familiarEnums)
         {
@@ -165,12 +175,8 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnDash(InputValue input)
     {
-        if (PlayerData.levelsCompleted >= 1)
-        {
-            JumpAndDashScript jumpAndDashScript = player.GetComponent<JumpAndDashScript>();
-            jumpAndDashScript.DoDash();
-        }
-       
+        JumpAndDashScript jumpAndDashScript = player.GetComponent<JumpAndDashScript>();
+        jumpAndDashScript.DoDash();
     }
     //******************************************************
     public void OnWeaverInteract(InputValue input)

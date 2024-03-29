@@ -45,7 +45,6 @@ public class RespawnController : MonoBehaviour
             {
                 startPositions.Add(obj.transform.position);
                 startRotations.Add(obj.transform.rotation);
-                Debug.Log("fuck Dean");
             }
         //}
         
