@@ -95,14 +95,14 @@ public class BlackboardScript : MonoBehaviour
                 case 0:
                     //GO TO ALPINE
                     if (levelNumber <= levelsCompleted) {
-                        acc.ChangeCutscene(0);
+                        acc.ChangeCutscene(1);
                         SceneHandler.instance.LoadLevel("AnimaticCutscenes");
                     }
                 break;
                 case 1:
                     //GO TO CAVERN
                     if (levelNumber <= levelsCompleted) {
-                        acc.ChangeCutscene(2);
+                        acc.ChangeCutscene(3);
                         SceneHandler.instance.LoadLevel("AnimaticCutscenes");
                     }
                 break;
@@ -110,7 +110,7 @@ public class BlackboardScript : MonoBehaviour
                  case 2:
                     //GO TO SEPULTUS
                     if (levelNumber <= levelsCompleted) {
-                        acc.ChangeCutscene(4);
+                        acc.ChangeCutscene(5);
                         SceneHandler.instance.LoadLevel("AnimaticCutscenes");
                     }
                 break;

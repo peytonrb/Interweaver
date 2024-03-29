@@ -85,6 +85,9 @@ public class AnimaticCutsceneController : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.H)) {
                     SceneManager.LoadScene("Sepultus");
                 }
+                if (Input.GetKeyDown(KeyCode.J)) {
+                    SceneManager.LoadScene("Courtyard");
+                }
             }
         }   
     }
@@ -106,22 +109,25 @@ public class AnimaticCutsceneController : MonoBehaviour
                 if (panelsCG.alpha >= 1) {
                     switch (cutscene) {
                         case 0:
-                            SceneManager.LoadScene("AlpineCombined");
+                            SceneManager.LoadScene("Courtyard");
                         break;
                         case 1:
-                            SceneManager.LoadScene("Courtyard");
+                            SceneManager.LoadScene("AlpineCombined");
                         break;
                         case 2:
-                            SceneManager.LoadScene("Cavern");
+                            SceneManager.LoadScene("Courtyard");
                         break;
                         case 3:
-                            SceneManager.LoadScene("Courtyard");
+                            SceneManager.LoadScene("Cavern");
                         break;
                         case 4:
-                            SceneManager.LoadScene("Sepultus");
+                            SceneManager.LoadScene("Courtyard");
                         break;
                         case 5:
-                            SceneManager.LoadScene("Courtyard");
+                            SceneManager.LoadScene("Sepultus");
+                        break;
+                        case 6:
+                            SceneManager.LoadScene("Menu");
                         break;
                     }
                 }
