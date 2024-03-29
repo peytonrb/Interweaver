@@ -10,7 +10,7 @@ public class NetCannonScript : MonoBehaviour
     public float firstShotDelayTime = 0;
 
     private bool fired = false;
-    //public bool isOn = false;
+    public bool isOn = false;
 
     //Set this in inspector
     public Transform projectileSpawnPoint;
@@ -22,45 +22,42 @@ public class NetCannonScript : MonoBehaviour
         netProjectileScript = projectile.GetComponent<NetProjectileScript>();
         netProjectileScript.speed = projectileSpeed;
 
-        //isOn = false;
+        isOn = false;
     }
 
-    //public void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.CompareTag("Player") || other.CompareTag("Familiar"))
-    //    {
-    //        isOn = true;
-    //    }
-    //}
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player") || other.CompareTag("Familiar"))
+        {
+            isOn = true;
+        }
+    }
 
-    //public void OnTriggerExit(Collider other)
-    //{
-    //    if (other.CompareTag("Player") || other.CompareTag("Familiar"))
-    //    {
-    //        isOn = false;
-    //    }
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player") || other.CompareTag("Familiar"))
+        {
+            isOn = false;
+        }
 
-    //}
+    }
 
     // Update is called once per frame
     void Update()
     {
+        if (isOn) {
+            if (fired == false) {
+                GameObject spawnedShot = Instantiate(projectile, projectileSpawnPoint.position, transform.rotation);
+
+                spawnedShot.GetComponent<NetProjectileScript>().speed = projectileSpeed;
+
+                StartCoroutine(Wait());
+                fired = true;
+            }
+        }
         
     }
 
-
-    public void FireNet()
-    {
-        if (fired == false)
-        {
-            GameObject spawnedShot = Instantiate(projectile, projectileSpawnPoint.position, transform.rotation);
-
-            spawnedShot.GetComponent<NetProjectileScript>().speed = projectileSpeed;
-
-            StartCoroutine(Wait());
-            fired = true;
-        }
-    }
     IEnumerator Wait() {
         yield return new WaitForSeconds(fireRate);
         fired = false;
@@ -70,7 +67,7 @@ public class NetCannonScript : MonoBehaviour
     {
         yield return new WaitForSeconds(firstShotDelayTime);
 
-        //isOn = true;
+        isOn = true;
         yield break;
     }
 }
