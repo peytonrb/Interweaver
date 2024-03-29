@@ -18,6 +18,7 @@ public class StagSwapScript : MonoBehaviour
     private VisualEffect chargeVFX;
     private VisualEffect swapVFX;
     private ParticleSystem flashPS;
+    private ParticleSystem chargingPS;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +38,8 @@ public class StagSwapScript : MonoBehaviour
         swapVFX = this.transform.Find("StagSwapVFX").GetChild(1).GetComponent<VisualEffect>();
         swapVFX.gameObject.SetActive(false);
         flashPS = this.transform.Find("StagSwapVFX").GetChild(2).GetComponent<ParticleSystem>();
+        chargingPS = this.transform.Find("StagSwapVFX").GetChild(3).GetComponent<ParticleSystem>();
+        chargingPS.gameObject.SetActive(false);
     }
 
     public IEnumerator ChargeSwap()
@@ -44,8 +47,15 @@ public class StagSwapScript : MonoBehaviour
         float startTime = Time.time;
         timeHeld = 0f;
         isHolding = true;
+
+        // i apologize for the slightly boof vfx code
         chargeVFX.gameObject.SetActive(true);
         chargeVFX.Play();
+
+        if (!chargingPS.gameObject.activeSelf)
+            chargingPS.gameObject.SetActive(true);
+
+        chargingPS.Play();
         bool vfxPlayed = false;
 
         while (isHolding && (Time.time <= startTime + timeToHold))
