@@ -41,6 +41,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip sepultusMusic;
     [SerializeField] private AudioClip sepultusIntroMusic;
     [SerializeField] private AudioClip hubMusic; 
+    [SerializeField] private AudioClip hubIntroMusic;
 
   //  [Header("SFX")]
    // [SerializeField] private List<AudioClip> soundEffects = new List<AudioClip>();  
@@ -110,6 +111,15 @@ public class AudioManager : MonoBehaviour
                     introMusicSource.outputAudioMixerGroup = musicChannel.outputAudioMixerGroup;
                     introMusicSource.Play();
                     PlaySequencedMusic(sepultusIntroMusic);
+                    break;
+                }
+                case "Courtyard":
+                {
+                    PlaySound(AudioManagerChannels.MusicChannel, hubMusic);
+                    introMusicSource.clip = hubIntroMusic;
+                    introMusicSource.outputAudioMixerGroup = musicChannel.outputAudioMixerGroup;
+                    introMusicSource.Play();
+                    PlaySequencedMusic(hubIntroMusic);
                     break;
                 }
         }
