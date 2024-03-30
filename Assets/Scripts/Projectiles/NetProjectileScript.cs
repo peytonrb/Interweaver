@@ -36,7 +36,7 @@ public class NetProjectileScript : MonoBehaviour
     {
         yield return new WaitForSeconds(lifetime);
 
-        Destroy(gameObject);
+        gameObject.SetActive(false);
         yield break;
     }
     //*************************************************************************
@@ -47,19 +47,19 @@ public class NetProjectileScript : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             other.GetComponent<MovementScript>().GoToCheckPoint();
-            Destroy(clone.gameObject, 3f);
-            Destroy(gameObject);
+            Destroy(clone.gameObject, 1f);
+            gameObject.SetActive(false);
         }
         else if (other.gameObject.CompareTag("Familiar"))
         {
             MSF.GoToCheckPoint();
-            Destroy(clone.gameObject, 3f);
-            Destroy(gameObject);
+            Destroy(clone.gameObject, 1f);
+            gameObject.SetActive(false);
         }
         else
         {
-            Destroy(clone.gameObject, 3f);
-            Destroy(gameObject);
+            Destroy(clone.gameObject, 1f);
+            gameObject.SetActive(false);
         }
     }
     //*************************************************************************************
