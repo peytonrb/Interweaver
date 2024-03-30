@@ -19,7 +19,7 @@ public class MovingPlatformScript : MonoBehaviour
             this.GetComponent<ObjectMoverScript>().enabled = false;
         }
 
-        carriageScript = this.GetComponent<CarriageOpener>();
+        TryGetComponent<CarriageOpener>(out carriageScript);
     }
 
     void Update()
@@ -44,12 +44,14 @@ public class MovingPlatformScript : MonoBehaviour
             }
             else if (pplate != null && pplate.standingOnPlate && doesPlatformStop)
             {
-                pplateTriggered = false;
+                pplateTriggered = true;
                 StopPlatform();
             }
             else if (pplate != null && !pplate.standingOnPlate && isStopped)
             {
+                
                 AdvancePlatform();
+                pplateTriggered = false;
             }
         }
     }
@@ -58,7 +60,9 @@ public class MovingPlatformScript : MonoBehaviour
     {
         if (pplate != null && !pplateTriggered || sensor != null)
         {
-            pplateTriggered = true;
+            if (!triggerStopsObject)
+                pplateTriggered = true;
+
             this.GetComponent<ObjectMoverScript>().enabled = true;
         }
     }
