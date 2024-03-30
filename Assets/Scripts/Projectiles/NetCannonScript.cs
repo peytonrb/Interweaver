@@ -25,49 +25,28 @@ public class NetCannonScript : MonoBehaviour
         isOn = false;
     }
 
-    public void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player") || other.CompareTag("Familiar"))
-        {
-            isOn = true;
-        }
-    }
-
-    public void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player") || other.CompareTag("Familiar"))
-        {
-            isOn = false;
-        }
-
-    }
 
     // Update is called once per frame
     void Update()
     {
-        if (isOn) {
-            if (fired == false) {
-                GameObject spawnedShot = Instantiate(projectile, projectileSpawnPoint.position, transform.rotation);
-
-                spawnedShot.GetComponent<NetProjectileScript>().speed = projectileSpeed;
-
-                StartCoroutine(Wait());
-                fired = true;
-            }
-        }
+       
         
     }
+    public void FireNet()
+    {
+        if (fired == false)
+        {
+            GameObject spawnedShot = Instantiate(projectile, projectileSpawnPoint.position, transform.rotation);
 
+            spawnedShot.GetComponent<NetProjectileScript>().speed = projectileSpeed;
+
+            StartCoroutine(Wait());
+            fired = true;
+        }
+    }
     IEnumerator Wait() {
         yield return new WaitForSeconds(fireRate);
         fired = false;
     }
 
-    IEnumerator StartOffset()
-    {
-        yield return new WaitForSeconds(firstShotDelayTime);
-
-        isOn = true;
-        yield break;
-    }
 }
