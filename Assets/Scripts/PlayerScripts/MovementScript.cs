@@ -214,7 +214,7 @@ public class MovementScript : MonoBehaviour
             else
             {
                 velocity = Vector3.zero; // stop movements
-                Debug.Log(velocity);
+                //Debug.Log(velocity);
                 canMove = false;
                 characterAnimationHandler.ToggleMoveSpeedBlend(0);
                 familiarScript.talkingToNPC = true;

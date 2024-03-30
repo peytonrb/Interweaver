@@ -8,14 +8,17 @@ public class StagLeapScript : MonoBehaviour
     [Header("References")]
     private MovementScript movementScript;
     private CharacterController characterController;
+    private CameraMasterScript cameraMasterScript;
     [Header("Variables")]
     private float currentJumpForce = 0f; // the current jump force
-    //private float t = 0f;
     [HideInInspector] public bool chargingJump; // is a jump currently being charged?
     [Header("Leap Variables")]
     [SerializeField] private float jumpChargeTime = 3f; // how long is takes to charge a jump to max
     private Vector3 groundLocation; // marks the position of the ground directly below the stag while airborne
-    private bool displayGroundGizmos; // displays gizmo 
+    [SerializeField] private Vector3 bonkBoxSize;
+    [SerializeField] private float bonkBoxHeight = 0;
+    [SerializeField] private LayerMask bonkBoxLayerMask;
+    [SerializeField] private float headBonkStunLength = 0.2f;
     [SerializeField] [Range (1f, 75f)] private float maxJumpForce = 10f;
     [Header("Slam Variables")]
     [SerializeField] private float inititalSlamForce = -10f; // the initial slam force, if y velocity is already lower, just adds this number
@@ -31,7 +34,12 @@ public class StagLeapScript : MonoBehaviour
     [HideInInspector] public bool isStaggered;
     [HideInInspector] public bool wasLaunched;
 
+    [Header("Screenshake")]
+    [SerializeField][Range(0,5)] private float amplitude = 0.8f;
+    [SerializeField][Range(0,5)] private float frequency = 0.8f;
+
     [Header("Utility")]
+    private bool displayGroundGizmos; // displays gizmo 
     [SerializeField] private bool showSlamRadiusGizmo;
     [SerializeField] private bool showMaxJumpHeightGizmo;
     
@@ -41,11 +49,44 @@ public class StagLeapScript : MonoBehaviour
     {
         movementScript = GetComponent<MovementScript>();
         characterController = GetComponent<CharacterController>();
+        cameraMasterScript = GameObject.FindGameObjectWithTag("CameraMaster").GetComponent<CameraMasterScript>();
         if (!canOnlySlamAfterLeap)
         {
             canSlam = true;
         }
         wasLaunched = false;
+    }
+
+    void Update()
+    {
+        if (!characterController.isGrounded && movementScript.GetVelocity().y > 0 && !isStaggered)
+        {
+            Collider[] hitColliders = Physics.OverlapBox(transform.position + (transform.up * bonkBoxHeight), bonkBoxSize/2, Quaternion.identity, bonkBoxLayerMask);
+            foreach (Collider hitCollider in hitColliders)
+            {
+                StartCoroutine(DoStagHeadBonkAndStun());
+                break;
+            }
+        }
+    }
+
+    private IEnumerator DoStagHeadBonkAndStun()
+    {
+        float originalGravity = movementScript.GetGravity();
+
+        isStaggered = true;
+        cameraMasterScript.ShakeCurrentCamera(amplitude, frequency, headBonkStunLength);
+
+        movementScript.ToggleCanMove(false);
+        movementScript.ChangeVelocity(new Vector3(movementScript.GetVelocity().x, 0, movementScript.GetVelocity().z));
+        movementScript.ChangeGravity(0f);
+
+        yield return new WaitForSeconds(headBonkStunLength);
+
+        movementScript.ChangeGravity(originalGravity);
+        movementScript.ChangeVelocity(new Vector3(movementScript.GetVelocity().x, -15f, movementScript.GetVelocity().z));
+        movementScript.ToggleCanMove(true);
+        isStaggered = false;
     }
 
     public IEnumerator ChargeJump()
@@ -198,5 +239,8 @@ public class StagLeapScript : MonoBehaviour
         {
             DrawArrow.ForGizmo(transform.position, transform.up * maxJumpForce);
         }
+
+        Gizmos.color = new Color(1, 0, 0, 0.3f);
+        Gizmos.DrawCube(transform.position + (transform.up * bonkBoxHeight), bonkBoxSize);
     }
 }
