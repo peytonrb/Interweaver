@@ -17,6 +17,7 @@ public class JumpAndDashScript : MonoBehaviour
     [SerializeField] private float coyoteTimeLength;
     private float coyoteTime;
     [Header("Dashing")]
+    [HideInInspector] public bool dashLock; // use this in situations where you're TEMPORARILY preventing the use of dash 
     public bool canDash; // accessed by WeaveableObject
     [SerializeField][Range(0f, 10f)] private float dashCooldown = 0.4f;
     [SerializeField][Range(0.1f, 10f)] private float dashLength = 0.1f;
@@ -99,7 +100,7 @@ public class JumpAndDashScript : MonoBehaviour
 
     public void DoDash()
     {
-        if (canDash && movementScript.canMove)
+        if (canDash && movementScript.canMove && !dashLock)
         {
             if (zeroGravDash)
             {

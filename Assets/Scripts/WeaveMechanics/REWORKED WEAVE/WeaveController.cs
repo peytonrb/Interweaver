@@ -146,7 +146,7 @@ public class WeaveController : MonoBehaviour
             StartCoroutine(PlayWeaveVFX());
             StartCoroutine(WaitForVFX()); // sets isWeaving to true. is in Coroutine for aesthetic purposes.
             currentWeaveable.AddToWovenObjects();
-            this.GetComponent<JumpAndDashScript>().canDash = false;
+            this.GetComponent<JumpAndDashScript>().dashLock = true;
             // toggle on animation here
         }
     }
@@ -203,7 +203,7 @@ public class WeaveController : MonoBehaviour
 
         currentWeaveable = null;
         selectedWeaveable = null;
-        this.GetComponent<JumpAndDashScript>().canDash = true;
+        this.GetComponent<JumpAndDashScript>().dashLock = false;
         // toggle off animation here
     }
 
