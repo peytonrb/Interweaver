@@ -59,6 +59,16 @@ public class CharacterAnimationHandler : MonoBehaviour
         animator.SetTrigger("Surface");
     }
 
+    public void ToggleCharging(bool charging)
+    {
+        animator.SetBool("Charging", charging);
+    }
+
+    public void ToggleSlam(bool slaming)
+    {
+        animator.SetBool("Slam", slaming);
+    }
+
     public void ToggleDeathAnim()
     {
         animator.SetTrigger("Death");
