@@ -96,10 +96,9 @@ public class InputManagerScript : MonoBehaviour
 
         if (currentSceneName == "Hub")
         {
-            Debug.Log("Current Levels Completed: " + PlayerData.levelsCompleted);
+            //Debug.Log("Current Levels Completed: " + PlayerData.levelsCompleted);
             if (PlayerData.levelsCompleted < 1)
             {
-                Debug.Log("GUUUH");
                 JumpAndDashScript jumpAndDashScript = player.GetComponent<JumpAndDashScript>();
                 jumpAndDashScript.canDash = false;
                 jumpAndDashScript.freeJumpDash = false;
