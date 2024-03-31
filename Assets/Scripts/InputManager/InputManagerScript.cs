@@ -94,7 +94,7 @@ public class InputManagerScript : MonoBehaviour
         }
         currentSceneName = SceneManager.GetActiveScene().name;
 
-        if (currentSceneName == "Courtyard")
+        if (currentSceneName == "Hub")
         {
             if (PlayerData.levelsCompleted < 1)
             {

@@ -113,7 +113,7 @@ public class AudioManager : MonoBehaviour
                     PlaySequencedMusic(sepultusIntroMusic);
                     break;
                 }
-                case "Courtyard":
+                case "Hub":
                 {
                     PlaySound(AudioManagerChannels.MusicChannel, hubMusic);
                     introMusicSource.clip = hubIntroMusic;

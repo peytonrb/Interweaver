@@ -168,7 +168,7 @@ public class MainMenu : MonoBehaviour
             PlayerData.instance.LoadGame();
 
             AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startFile, 1f);
-            SceneHandler.instance.LoadLevel("Courtyard");
+            SceneHandler.instance.LoadLevel("Hub");
         }
     }
 
