@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class WyvernMagicCircle : MonoBehaviour, ITriggerable
 {
-    public GameObject warning;
+    //public GameObject warning;
+    private MagicCircleVFXController vfxScript;
     private GameObject weaver;
     [SerializeField] private float timer;
     private bool pushUp;
@@ -25,10 +26,11 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
     {
         weaver = GameObject.FindGameObjectWithTag("Player");
         bossManager = GameObject.FindGameObjectWithTag("Boss").GetComponent<WyvernBossManager>();
+        vfxScript = this.GetComponent<MagicCircleVFXController>();
 
         pushUp = false;
         stayUp = false;
-        warning.SetActive(true);
+        //warning.SetActive(true);
         newheight = transform.position.y + height + 5;
         magicCircleID = bossManager.magicCircleAmount;
 
@@ -38,7 +40,7 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
             bossManager.configurationIsActive = true;
         }
 
-        StartCoroutine(Flashing());
+        //StartCoroutine(Flashing());
     }
 
     // Update is called once per frame
@@ -46,11 +48,11 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
     {
         if (pushUp == false) {
             timer -= Time.deltaTime;
-            Warning(timer);
+            Warning();
         }
         else {
             if (stayUp == false) {
-                PushUp();
+                //PushUp();
             }
             else {
                 timer -= Time.deltaTime;
@@ -69,39 +71,42 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
         }
     }
 
-    void Warning(float number) {
-        if (number <= 0) {
-            pushUp = true;
-        }
+    void Warning() {
+        // if (number <= 0) {
+        //     pushUp = true;
+        // }
+        
+        if (!vfxScript.activateVFX)
+            vfxScript.activateVFX = true;
     }
 
-    IEnumerator Flashing() {
-        while (warning.activeSelf) {
-            yield return new WaitForSeconds(0.2f);
-            warning.SetActive(false);
-        }
-        while (!warning.activeSelf) {
-            yield return new WaitForSeconds(0.2f);
-            warning.SetActive(true);
-        }
-        if (pushUp == false) {
-            StartCoroutine(Flashing());
-        }
-        else {
-            warning.SetActive(false);
-            yield break;
-        }
-    }
+    // IEnumerator Flashing() {
+    //     while (warning.activeSelf) {
+    //         yield return new WaitForSeconds(0.2f);
+    //         warning.SetActive(false);
+    //     }
+    //     while (!warning.activeSelf) {
+    //         yield return new WaitForSeconds(0.2f);
+    //         warning.SetActive(true);
+    //     }
+    //     if (pushUp == false) {
+    //         StartCoroutine(Flashing());
+    //     }
+    //     else {
+    //         warning.SetActive(false);
+    //         yield break;
+    //     }
+    // }
 
-    void PushUp() {
-        float newpos = Mathf.MoveTowards(transform.position.y, newheight, riseSpeed * Time.deltaTime);
-        transform.position = new Vector3(transform.position.x,newpos,transform.position.z);
+    // void PushUp() {
+    //     float newpos = Mathf.MoveTowards(transform.position.y, newheight, riseSpeed * Time.deltaTime);
+    //     transform.position = new Vector3(transform.position.x,newpos,transform.position.z);
 
-        if (transform.position.y >= newheight) {
-            stayUp = true;
-            timer = 2.0f;
-        }
-    }
+    //     if (transform.position.y >= newheight) {
+    //         stayUp = true;
+    //         timer = 2.0f;
+    //     }
+    // }
 
     public void OnTrigEnter(Collider other) {
         if (other.gameObject.CompareTag("Hazard")) {
