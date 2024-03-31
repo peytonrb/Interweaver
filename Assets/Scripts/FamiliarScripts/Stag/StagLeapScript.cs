@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class StagLeapScript : MonoBehaviour
 {
     [Header("References")]
     private MovementScript movementScript;
     private CharacterController characterController;
+    [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
     private CameraMasterScript cameraMasterScript;
     [Header("Variables")]
     private float currentJumpForce = 0f; // the current jump force
@@ -98,6 +100,7 @@ public class StagLeapScript : MonoBehaviour
         if (characterController.isGrounded)
         {
             chargingJump = true;
+            characterAnimationHandler.ToggleCharging(chargingJump);
             movementScript.ZeroCurrentSpeed();
             movementScript.ToggleCanMove(false);
         }
@@ -126,6 +129,7 @@ public class StagLeapScript : MonoBehaviour
             canSlam = true;
             movementScript.ToggleCanMove(true);
             chargingJump = false;
+            characterAnimationHandler.ToggleCharging(chargingJump);
             if (movementScript.canMove && characterController.isGrounded) 
             {
                 movementScript.ChangeVelocity(new Vector3(movementScript.GetVelocity().x, currentJumpForce, movementScript.GetVelocity().z));
@@ -136,6 +140,8 @@ public class StagLeapScript : MonoBehaviour
     private IEnumerator StartSlam()
     {
         canSlam = false;
+
+        characterAnimationHandler.ToggleSlam(true);
 
         if (movementScript.GetVelocity().y >= 0)
         {
@@ -156,6 +162,7 @@ public class StagLeapScript : MonoBehaviour
         Vector3 slamSpot = transform.position;
         StartCoroutine(GrowSlamRadius(slamSpot));
         canSlam = true;
+        characterAnimationHandler.ToggleSlam(false);
         movementScript.ToggleCanMove(false);
         isStaggered = true;
         yield return new WaitForSeconds(postSlamStaggerTime);
