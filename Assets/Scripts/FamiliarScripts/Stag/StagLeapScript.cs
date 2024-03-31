@@ -42,6 +42,7 @@ public class StagLeapScript : MonoBehaviour
     private bool displayGroundGizmos; // displays gizmo 
     [SerializeField] private bool showSlamRadiusGizmo;
     [SerializeField] private bool showMaxJumpHeightGizmo;
+    [SerializeField] private bool showBonkBoxGizmo;
     
 
     // Start is called before the first frame update
@@ -61,7 +62,7 @@ public class StagLeapScript : MonoBehaviour
     {
         if (!characterController.isGrounded && movementScript.GetVelocity().y > 0 && !isStaggered)
         {
-            Collider[] hitColliders = Physics.OverlapBox(transform.position + (transform.up * bonkBoxHeight), bonkBoxSize/2, Quaternion.identity, bonkBoxLayerMask);
+            Collider[] hitColliders = Physics.OverlapBox(transform.position + (transform.up * bonkBoxHeight), bonkBoxSize/2, transform.rotation, bonkBoxLayerMask);
             foreach (Collider hitCollider in hitColliders)
             {
                 StartCoroutine(DoStagHeadBonkAndStun());
@@ -240,7 +241,10 @@ public class StagLeapScript : MonoBehaviour
             DrawArrow.ForGizmo(transform.position, transform.up * maxJumpForce);
         }
 
-        Gizmos.color = new Color(1, 0, 0, 0.3f);
-        Gizmos.DrawCube(transform.position + (transform.up * bonkBoxHeight), bonkBoxSize);
+        if (showBonkBoxGizmo)
+        {
+            Gizmos.color = new Color(1, 0, 0, 0.3f);
+            Gizmos.DrawCube(transform.position + (transform.up * bonkBoxHeight), bonkBoxSize);
+        }
     }
 }
