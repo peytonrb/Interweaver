@@ -96,10 +96,12 @@ public class InputManagerScript : MonoBehaviour
 
         if (currentSceneName == "Hub")
         {
+            //Debug.Log("Current Levels Completed: " + PlayerData.levelsCompleted);
             if (PlayerData.levelsCompleted < 1)
             {
                 JumpAndDashScript jumpAndDashScript = player.GetComponent<JumpAndDashScript>();
                 jumpAndDashScript.canDash = false;
+                jumpAndDashScript.freeJumpDash = false;
             }
         }
 
@@ -858,7 +860,17 @@ public class InputManagerScript : MonoBehaviour
     {
         if (devMode) 
         {
-            PlayerData.levelsCompleted = 1;
+            PlayerData.levelsCompleted ++;
+            Debug.Log("Current Levels Completed: " + PlayerData.levelsCompleted);
+        }
+        
+    }
+    public void OnDecreaseLevelsCompleted(InputValue input)
+    {
+        if (devMode) 
+        {
+            PlayerData.levelsCompleted --;
+            Debug.Log("Current Levels Completed: " + PlayerData.levelsCompleted);
         }
         
     }

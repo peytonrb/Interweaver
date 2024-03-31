@@ -139,6 +139,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DecreaseLevelsCompleted",
+                    "type": "Button",
+                    "id": "508a06a6-4e4a-4409-9faa-5be2c29c278b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -541,11 +550,22 @@
                 {
                     "name": "",
                     "id": "b9434b41-c021-4c6a-8864-3e340d2510fe",
-                    "path": "<Keyboard>/backslash",
+                    "path": "<Keyboard>/period",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "IncreaseLevelsCompleted",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c53bcad4-2425-4b17-83c2-6cafd5b39f9b",
+                    "path": "<Keyboard>/comma",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DecreaseLevelsCompleted",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
