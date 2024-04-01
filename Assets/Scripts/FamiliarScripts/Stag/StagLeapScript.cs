@@ -45,6 +45,9 @@ public class StagLeapScript : MonoBehaviour
     [SerializeField] private bool showSlamRadiusGizmo;
     [SerializeField] private bool showMaxJumpHeightGizmo;
     [SerializeField] private bool showBonkBoxGizmo;
+
+    [Header("VFX")]
+    private StagChargingVFXController stagChargingVFXScript;
     
 
     // Start is called before the first frame update
@@ -58,6 +61,8 @@ public class StagLeapScript : MonoBehaviour
             canSlam = true;
         }
         wasLaunched = false;
+
+        stagChargingVFXScript = this.transform.Find("StagLeapChargingVFX").GetComponent<StagChargingVFXController>();
     }
 
     void Update()
@@ -100,6 +105,7 @@ public class StagLeapScript : MonoBehaviour
         if (characterController.isGrounded)
         {
             chargingJump = true;
+            stagChargingVFXScript.StartEffect();
             characterAnimationHandler.ToggleCharging(chargingJump);
             movementScript.ZeroCurrentSpeed();
             movementScript.ToggleCanMove(false);
@@ -129,6 +135,7 @@ public class StagLeapScript : MonoBehaviour
             canSlam = true;
             movementScript.ToggleCanMove(true);
             chargingJump = false;
+            stagChargingVFXScript.EndEffect();
             characterAnimationHandler.ToggleCharging(chargingJump);
             if (movementScript.canMove && characterController.isGrounded) 
             {
