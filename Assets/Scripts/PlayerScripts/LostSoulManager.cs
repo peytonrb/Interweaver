@@ -13,7 +13,7 @@ public class LostSoulManager : MonoBehaviour
     private int level;
 
     [Header("FOR TESTING PURPOSES ONLY - DO NOT TOUCH")]
-    [SerializeField] private GameObject[] lostSouls;
+    public GameObject[] lostSouls;
     [SerializeField] private List<GameObject> lostSoulsList = new List<GameObject>();
     
     void Start()
@@ -87,17 +87,17 @@ public class LostSoulManager : MonoBehaviour
                 case 1:
                     LostSoulController soulController = hit.gameObject.GetComponent<LostSoulController>();
                     
-                    PlayerData.instance.SetAlpineLostSouls(soulController.soulID,false);
+                    //PlayerData.instance.SetAlpineLostSouls(soulController.soulID,false);
                 break;
                 case 2:
                     soulController = hit.gameObject.GetComponent<LostSoulController>();
                     
-                    PlayerData.instance.SetCavernLostSouls(soulController.soulID,false);
+                    //PlayerData.instance.SetCavernLostSouls(soulController.soulID,false);
                 break;
                 case 3:
                     soulController = hit.gameObject.GetComponent<LostSoulController>();
                     
-                    PlayerData.instance.SetSepultusLostSouls(soulController.soulID,false);
+                    //PlayerData.instance.SetSepultusLostSouls(soulController.soulID,false);
                 break;
             }
             
