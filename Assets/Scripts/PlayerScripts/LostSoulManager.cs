@@ -11,9 +11,10 @@ public class LostSoulManager : MonoBehaviour
     private readonly HashSet<GameObject> alreadyCollidedWith = new HashSet<GameObject>();
     private GameMasterScript gameMaster;
     private int level;
+    private bool gotScene;
 
     [Header("FOR TESTING PURPOSES ONLY - DO NOT TOUCH")]
-    public GameObject[] lostSouls;
+    [HideInInspector] public GameObject[] lostSouls;
     [SerializeField] private List<GameObject> lostSoulsList = new List<GameObject>();
     
     void Start()
@@ -23,54 +24,67 @@ public class LostSoulManager : MonoBehaviour
         //Finds the lost souls in the level and adds them to the lost souls list. There should only be 3 in a level.
         lostSouls = GameObject.FindGameObjectsWithTag("Lost Soul");
 
+        gotScene = false;
+
         for (int i = 0; i < lostSouls.Length; i++) {
             LostSoulController soulController = lostSouls[i].GetComponent<LostSoulController>();
             
             lostSoulsList.Insert(soulController.soulID, lostSouls[i]);
         }
 
-        //Finds what scene the player is currently in.
-        switch (SceneHandler.instance.currentSceneName) {
-            case "AlpineCombined":
-                //Tells the lost souls list which objects dont exist anymore
-                for (int i = 0; i < PlayerData.instance.GetAlpineLostSouls().Count; i++) {
-                    //If this is false, then this doesn't exist anymore
-                    if (PlayerData.instance.GetAlpineLostSouls()[i] == false) {
-                        if (lostSoulsList[i] != null) {
-                            LostSoulController soulController = lostSoulsList[i].GetComponent<LostSoulController>();
-                            soulController.DestroyMyself();
+    }
+
+    void Update() {
+        if (gotScene == false) {
+            if (SceneHandler.instance.currentSceneName != null) {
+                //Finds what scene the player is currently in.
+                switch (SceneHandler.instance.currentSceneName) {
+                    case "AlpineCombined":
+                        //Tells the lost souls list which objects dont exist anymore
+                        for (int i = 0; i < PlayerData.instance.GetAlpineLostSouls().Count; i++) {
+                            //If this is false, then this doesn't exist anymore
+                            if (PlayerData.instance.GetAlpineLostSouls()[i] == false) {
+                                if (lostSoulsList[i] != null) {
+                                    LostSoulController soulController = lostSoulsList[i].GetComponent<LostSoulController>();
+                                    soulController.DestroyMyself();
+                                }
+                            }
                         }
-                    }
-                }
-                level = 1;
-            break;
-            case "Cavern":
-                //Tells the lost souls list which objects dont exist anymore
-                for (int i = 0; i < PlayerData.instance.GetCavernLostSouls().Count; i++) {
-                    //If this is false, then this doesn't exist anymore
-                    if (PlayerData.instance.GetCavernLostSouls()[i] == false) {
-                        if (lostSoulsList[i] != null) {
-                            LostSoulController soulController = lostSoulsList[i].GetComponent<LostSoulController>();
-                            soulController.DestroyMyself();
+                        level = 1;
+                        gotScene = true;
+                    break;
+                    case "Cavern":
+                        //Tells the lost souls list which objects dont exist anymore
+                        for (int i = 0; i < PlayerData.instance.GetCavernLostSouls().Count; i++) {
+                            //If this is false, then this doesn't exist anymore
+                            if (PlayerData.instance.GetCavernLostSouls()[i] == false) {
+                                if (lostSoulsList[i] != null) {
+                                    LostSoulController soulController = lostSoulsList[i].GetComponent<LostSoulController>();
+                                    soulController.DestroyMyself();
+                                }
+                            }
                         }
-                    }
-                }
-                level = 2;
-            break;
-            case "Sepultus":
-                //Tells the lost souls list which objects dont exist anymore
-                for (int i = 0; i < PlayerData.instance.GetSepultusLostSouls().Count; i++) {
-                    //If this is false, then this doesn't exist anymore
-                    if (PlayerData.instance.GetSepultusLostSouls()[i] == false) {
-                        if (lostSoulsList[i] != null) {
-                            LostSoulController soulController = lostSoulsList[i].GetComponent<LostSoulController>();
-                            soulController.DestroyMyself();
+                        level = 2;
+                        gotScene = true;
+                    break;
+                    case "Sepultus":
+                        //Tells the lost souls list which objects dont exist anymore
+                        for (int i = 0; i < PlayerData.instance.GetSepultusLostSouls().Count; i++) {
+                            //If this is false, then this doesn't exist anymore
+                            if (PlayerData.instance.GetSepultusLostSouls()[i] == false) {
+                                if (lostSoulsList[i] != null) {
+                                    LostSoulController soulController = lostSoulsList[i].GetComponent<LostSoulController>();
+                                    soulController.DestroyMyself();
+                                }
+                            }
                         }
-                    }
+                        level = 3;
+                        gotScene = true;
+                    break;
                 }
-                level = 3;
-            break;
+            }
         }
+        
     }
 
     void OnTriggerEnter(Collider hit)
@@ -87,17 +101,17 @@ public class LostSoulManager : MonoBehaviour
                 case 1:
                     LostSoulController soulController = hit.gameObject.GetComponent<LostSoulController>();
                     
-                    //PlayerData.instance.SetAlpineLostSouls(soulController.soulID,false);
+                    PlayerData.instance.SetAlpineLostSouls(soulController.soulID,false);
                 break;
                 case 2:
                     soulController = hit.gameObject.GetComponent<LostSoulController>();
                     
-                    //PlayerData.instance.SetCavernLostSouls(soulController.soulID,false);
+                    PlayerData.instance.SetCavernLostSouls(soulController.soulID,false);
                 break;
                 case 3:
                     soulController = hit.gameObject.GetComponent<LostSoulController>();
                     
-                    //PlayerData.instance.SetSepultusLostSouls(soulController.soulID,false);
+                    PlayerData.instance.SetSepultusLostSouls(soulController.soulID,false);
                 break;
             }
             

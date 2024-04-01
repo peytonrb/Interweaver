@@ -29,21 +29,18 @@ public class PlayerData : MonoBehaviour
         }
 
         if (lostSoulsinAlpine.Count < 3) {
-            lostSoulsinAlpine.Capacity = 3;
-            for (int i = 0; i < lostSoulsinAlpine.Count; i++) {
-                lostSoulsinAlpine[i] = true;
+            for (int i = 0; i < 3; i++) {
+                lostSoulsinAlpine.Add(true);
             }
         }
         if (lostSoulsinCavern.Count < 3) {
-            lostSoulsinCavern.Capacity = 3;
-            for (int i = 0; i < lostSoulsinCavern.Count; i++) {
-                lostSoulsinCavern[i] = true;
+            for (int i = 0; i < 3; i++) {
+                lostSoulsinCavern.Add(true);
             }
         }
         if (lostSoulsinSepultus.Count < 3) {
-            lostSoulsinSepultus.Capacity = 3;
-            for (int i = 0; i < lostSoulsinSepultus.Count; i++) {
-                lostSoulsinSepultus[i] = true;
+            for (int i = 0; i < 3; i++) {
+                lostSoulsinSepultus.Add(true);
             }
         }
         player = GameObject.FindWithTag("Player").GetComponent<PlayerControllerNew>();
@@ -289,4 +286,23 @@ public class PlayerData : MonoBehaviour
         lostSoulCountSepultus = 0;
     }
 
+    public void DebugDestroyAllLostSouls(int index) {
+        switch (index) {
+            case 0:
+                for (int i = 0; i < lostSoulsinAlpine.Capacity; i++) {
+                lostSoulsinAlpine[i] = false;
+            }
+            break;
+            case 1:
+                for (int i = 0; i < lostSoulsinCavern.Count; i++) {
+                    lostSoulsinCavern[i] = false;
+                }
+            break;
+            case 2:
+                for (int i = 0; i < lostSoulsinSepultus.Capacity; i++) {
+                lostSoulsinSepultus[i] = false;
+            }
+            break;
+        }
+    }
 }
