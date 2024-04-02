@@ -48,7 +48,7 @@ public class StagLeapScript : MonoBehaviour
 
     [Header("VFX")]
     private StagChargingVFXController stagChargingVFXScript;
-    
+    private StagLeapVFXController stagLeapVFXScript;
 
     // Start is called before the first frame update
     void Start()
@@ -63,6 +63,7 @@ public class StagLeapScript : MonoBehaviour
         wasLaunched = false;
 
         stagChargingVFXScript = this.transform.Find("StagLeapChargingVFX").GetComponent<StagChargingVFXController>();
+        stagLeapVFXScript = this.transform.Find("StagLeapVFX").GetComponent<StagLeapVFXController>();
     }
 
     void Update()
@@ -132,6 +133,7 @@ public class StagLeapScript : MonoBehaviour
         if (chargingJump)
         {
             StartCoroutine(ShowGroundMarker());
+            stagLeapVFXScript.StartVFX(stagLeapVFXScript.transform.position);
             canSlam = true;
             movementScript.ToggleCanMove(true);
             chargingJump = false;

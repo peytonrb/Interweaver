@@ -7,30 +7,16 @@ public class StagLeapVFXController : MonoBehaviour
 {
     public bool isActive;
     private bool isPlaying = false;
-    private GameObject stag;
 
     [Header("Components")]
+    public GameObject groundVFX;
     private VisualEffect leapVFX;
-    private ParticleSystem shockwavePS;
-    private ParticleSystem smokePS;
-    private ParticleSystem flashPS;
-    private ParticleSystem twinkleImpactPS;
 
     void Start()
     {
         leapVFX = this.transform.GetChild(0).GetComponent<VisualEffect>();
-        Transform groundEffect = this.transform.GetChild(1);
-        shockwavePS = groundEffect.GetChild(0).GetComponent<ParticleSystem>();
-        smokePS = groundEffect.GetChild(1).GetComponent<ParticleSystem>();
-        flashPS = groundEffect.GetChild(2).GetComponent<ParticleSystem>();
-        twinkleImpactPS = groundEffect.GetChild(3).GetComponent<ParticleSystem>();
-        //stag = this.transform.parent.gameObject;
 
         leapVFX.gameObject.SetActive(false);
-        shockwavePS.gameObject.SetActive(false);
-        smokePS.gameObject.SetActive(false);
-        flashPS.gameObject.SetActive(false);
-        twinkleImpactPS.gameObject.SetActive(false);
     }
 
     void Update()
@@ -38,7 +24,7 @@ public class StagLeapVFXController : MonoBehaviour
         if (isActive && !isPlaying)
         {
             isPlaying = true;
-            StartVFX();
+            StartVFX(new Vector3(0, 0, 0));
         }
 
         if (!isActive)
@@ -47,23 +33,24 @@ public class StagLeapVFXController : MonoBehaviour
         }
     }
 
-    public void StartVFX()
+    public void StartVFX(Vector3 pos)
     {
         leapVFX.gameObject.SetActive(true);
         leapVFX.Play();
 
-        // spawn ground ones on ground - get stag position
-        if (!shockwavePS.gameObject.activeSelf) // only happens first time effect plays
-        {
-            shockwavePS.gameObject.SetActive(true);
-            smokePS.gameObject.SetActive(true);
-            flashPS.gameObject.SetActive(true);
-            twinkleImpactPS.gameObject.SetActive(true);
-        }
+        GameObject groundEffect = Instantiate(groundVFX, pos, Quaternion.identity);
 
-        shockwavePS.Play();
-        smokePS.Play();
-        flashPS.Play();
-        twinkleImpactPS.Play();
+        groundEffect.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+        groundEffect.transform.GetChild(1).GetComponent<ParticleSystem>().Play();
+        groundEffect.transform.GetChild(2).GetComponent<ParticleSystem>().Play();
+        groundEffect.transform.GetChild(3).GetComponent<ParticleSystem>().Play();
+
+        StartCoroutine(WaitToDestroy(groundEffect));
+    }
+
+    IEnumerator WaitToDestroy(GameObject groundEffect)
+    {
+        yield return new WaitForSeconds(1);
+        Destroy(groundEffect);
     }
 }

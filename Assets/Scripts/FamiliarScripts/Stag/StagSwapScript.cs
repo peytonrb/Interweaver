@@ -16,11 +16,10 @@ public class StagSwapScript : MonoBehaviour
 
     [Header("VFX")]
     private VisualEffect chargeVFX;
-    private ParticleSystem swapVFX;
+    private VisualEffect swapVFX;
     private ParticleSystem flashPS;
     private ParticleSystem chargingPS;
 
-    // Start is called before the first frame update
     void Start()
     {
         weaver = GameObject.FindGameObjectWithTag("Player");
@@ -35,7 +34,7 @@ public class StagSwapScript : MonoBehaviour
 
         chargeVFX = this.transform.Find("StagSwapVFX").GetChild(0).GetComponent<VisualEffect>();
         chargeVFX.gameObject.SetActive(false);
-        swapVFX = this.transform.Find("StagSwapVFX").GetChild(1).GetComponent<ParticleSystem>();
+        swapVFX = this.transform.Find("StagSwapVFX").GetChild(1).GetComponent<VisualEffect>();
         swapVFX.gameObject.SetActive(false);
         flashPS = this.transform.Find("StagSwapVFX").GetChild(2).GetComponent<ParticleSystem>();
         chargingPS = this.transform.Find("StagSwapVFX").GetChild(3).GetComponent<ParticleSystem>();
