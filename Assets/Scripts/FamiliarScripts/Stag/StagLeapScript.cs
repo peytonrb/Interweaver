@@ -47,6 +47,7 @@ public class StagLeapScript : MonoBehaviour
     [SerializeField] private bool showBonkBoxGizmo;
 
     [Header("VFX")]
+    public GameObject groundPoundMarker;
     private StagChargingVFXController stagChargingVFXScript;
     private StagLeapVFXController stagLeapVFXScript;
     private StagGroundPoundVFXController stagGroundPoundVFXScript;
@@ -191,18 +192,31 @@ public class StagLeapScript : MonoBehaviour
     private IEnumerator ShowGroundMarker()
     {
         yield return new WaitForFixedUpdate();
+        GameObject marker = new GameObject();
+        bool hasSpawned = false;
+
         RaycastHit hit;
         while (!characterController.isGrounded)
         {
             Physics.SphereCast(transform.position + characterController.center, 1f, Vector3.down, out hit);
             if (hit.collider != null)
             {
-                displayGroundGizmos = true; // we'll replace this with some other kind of marker later on
+                //displayGroundGizmos = true; // we'll replace this with some other kind of marker later on
                 groundLocation = hit.point;
+
+                if (!hasSpawned)
+                {
+                    marker = Instantiate(groundPoundMarker, groundLocation, Quaternion.identity);
+                    hasSpawned = true;
+                }
+
+                marker.transform.position = groundLocation;
             }
             yield return null;
         }
-        displayGroundGizmos = false;
+
+        Destroy(marker);
+        //displayGroundGizmos = false;
     }
 
     private IEnumerator GrowSlamRadius(Vector3 slamSpot)
