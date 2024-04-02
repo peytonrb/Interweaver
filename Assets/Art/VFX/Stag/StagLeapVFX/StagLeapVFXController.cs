@@ -44,6 +44,7 @@ public class StagLeapVFXController : MonoBehaviour
         groundEffect.transform.GetChild(1).GetComponent<ParticleSystem>().Play();
         groundEffect.transform.GetChild(2).GetComponent<ParticleSystem>().Play();
         groundEffect.transform.GetChild(3).GetComponent<ParticleSystem>().Play();
+        groundEffect.transform.GetChild(4).GetComponent<VisualEffect>().Play();
 
         StartCoroutine(WaitToDestroy(groundEffect));
     }
