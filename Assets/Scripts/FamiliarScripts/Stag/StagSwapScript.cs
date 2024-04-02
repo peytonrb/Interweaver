@@ -16,7 +16,7 @@ public class StagSwapScript : MonoBehaviour
 
     [Header("VFX")]
     private VisualEffect chargeVFX;
-    private VisualEffect swapVFX;
+    private ParticleSystem swapVFX;
     private ParticleSystem flashPS;
     private ParticleSystem chargingPS;
 
@@ -35,7 +35,7 @@ public class StagSwapScript : MonoBehaviour
 
         chargeVFX = this.transform.Find("StagSwapVFX").GetChild(0).GetComponent<VisualEffect>();
         chargeVFX.gameObject.SetActive(false);
-        swapVFX = this.transform.Find("StagSwapVFX").GetChild(1).GetComponent<VisualEffect>();
+        swapVFX = this.transform.Find("StagSwapVFX").GetChild(1).GetComponent<ParticleSystem>();
         swapVFX.gameObject.SetActive(false);
         flashPS = this.transform.Find("StagSwapVFX").GetChild(2).GetComponent<ParticleSystem>();
         chargingPS = this.transform.Find("StagSwapVFX").GetChild(3).GetComponent<ParticleSystem>();
@@ -101,7 +101,7 @@ public class StagSwapScript : MonoBehaviour
     IEnumerator WaitForVFX()
     {
         yield return new WaitForSeconds(5);
-        swapVFX.gameObject.SetActive(false);
+        //swapVFX.gameObject.SetActive(false);
         chargeVFX.gameObject.SetActive(false);
     }
 }
