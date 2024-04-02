@@ -49,6 +49,7 @@ public class StagLeapScript : MonoBehaviour
     [Header("VFX")]
     private StagChargingVFXController stagChargingVFXScript;
     private StagLeapVFXController stagLeapVFXScript;
+    private StagGroundPoundVFXController stagGroundPoundVFXScript;
 
     // Start is called before the first frame update
     void Start()
@@ -64,6 +65,7 @@ public class StagLeapScript : MonoBehaviour
 
         stagChargingVFXScript = this.transform.Find("StagLeapChargingVFX").GetComponent<StagChargingVFXController>();
         stagLeapVFXScript = this.transform.Find("StagLeapVFX").GetComponent<StagLeapVFXController>();
+        stagGroundPoundVFXScript = this.transform.Find("StagGroundPoundVFX").GetComponent<StagGroundPoundVFXController>();
     }
 
     void Update()
@@ -149,6 +151,7 @@ public class StagLeapScript : MonoBehaviour
     private IEnumerator StartSlam()
     {
         canSlam = false;
+        stagGroundPoundVFXScript.PlaySlammingVFX();
 
         characterAnimationHandler.ToggleSlam(true);
 
@@ -168,6 +171,9 @@ public class StagLeapScript : MonoBehaviour
         }
         // put all impact stuff past this point
         //Debug.Log("Distance Fallen: " + (startingHeight - transform.position.y));
+        stagGroundPoundVFXScript.DisableSlammingVFX();
+        stagGroundPoundVFXScript.PlayExplosionVFX();
+        
         Vector3 slamSpot = transform.position;
         StartCoroutine(GrowSlamRadius(slamSpot));
         canSlam = true;
