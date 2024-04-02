@@ -15,6 +15,7 @@ public class BlackboardScript : MonoBehaviour
     [SerializeField] private TextMeshProUGUI lostSoulCountSepultus;
     [SerializeField] private GameObject pressEToExit;
     private AnimaticCutsceneController acc;
+    private VideoCutsceneController vcc;
     public GameObject popupUIPrompt;
     [HideInInspector] [Tooltip ("If true, then you are currently staring at the blackboard, and blackboard functionality is on.")] public bool onBlackboard;
     private int levelsCompleted;
@@ -26,6 +27,7 @@ public class BlackboardScript : MonoBehaviour
     void Start()
     {
         acc = GetComponent<AnimaticCutsceneController>();
+        vcc = GetComponent<VideoCutsceneController>();
 
         interactableUI.SetActive(false);
         pressEToExit.SetActive(false);
@@ -96,6 +98,7 @@ public class BlackboardScript : MonoBehaviour
                     //GO TO ALPINE
                     if (levelNumber <= levelsCompleted) {
                         acc.ChangeCutscene(1);
+                        vcc.ChangeCutscene(1);
                         SceneHandler.instance.LoadLevel("AnimaticCutscenes");
                     }
                 break;
@@ -103,6 +106,7 @@ public class BlackboardScript : MonoBehaviour
                     //GO TO CAVERN
                     if (levelNumber <= levelsCompleted) {
                         acc.ChangeCutscene(3);
+                        vcc.ChangeCutscene(3);
                         SceneHandler.instance.LoadLevel("AnimaticCutscenes");
                     }
                 break;
@@ -111,6 +115,7 @@ public class BlackboardScript : MonoBehaviour
                     //GO TO SEPULTUS
                     if (levelNumber <= levelsCompleted) {
                         acc.ChangeCutscene(5);
+                        vcc.ChangeCutscene(5);
                         SceneHandler.instance.LoadLevel("AnimaticCutscenes");
                     }
                 break;

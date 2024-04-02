@@ -7,12 +7,14 @@ using UnityEngine.SceneManagement;
 public class EndCutsceneTrigger : MonoBehaviour
 {
     private AnimaticCutsceneController amc;
+    private VideoCutsceneController vcc;
     private GameMasterScript gameMaster;
     public int cutsceneToPlay;
     private int currentLevel;
 
     void Start() {
         amc = GetComponent<AnimaticCutsceneController>();
+        vcc = GetComponent<VideoCutsceneController>();
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();
 
     }
@@ -42,6 +44,7 @@ public class EndCutsceneTrigger : MonoBehaviour
         PlayerData.instance.SetLevelsCompleted(currentLevel);
         PlayerData.instance.SaveGame();
         amc.ChangeCutscene(cutsceneToPlay);
+        vcc.ChangeCutscene(cutsceneToPlay);
         SceneManager.LoadScene("AnimaticCutscenes");
     }
     

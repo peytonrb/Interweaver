@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlayerData : MonoBehaviour
 {
     public static PlayerData instance;
-    private PlayerControllerNew player;
     public static int lostSoulCountAlpine = 0;
     public static int lostSoulCountCavern = 0;
     public static int lostSoulCountSepultus = 0;
@@ -43,7 +42,6 @@ public class PlayerData : MonoBehaviour
                 lostSoulsinSepultus.Add(true);
             }
         }
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerControllerNew>();
     }
 
     public void SaveGame() {
