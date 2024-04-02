@@ -52,6 +52,11 @@ public class StagLeapScript : MonoBehaviour
     private StagLeapVFXController stagLeapVFXScript;
     private StagGroundPoundVFXController stagGroundPoundVFXScript;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip  chargeLeapSound;
+    [SerializeField] private AudioClip  leapSound;
+    [SerializeField] private AudioClip  groundSlamSound;
+
     // Start is called before the first frame update
     void Start()
     {

@@ -10,6 +10,9 @@ public class FlamethrowerController : MonoBehaviour
     private ParticleSystem flamethrowerPS;
     private Vector3 origin;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip  flamethrowerSound;
+
     private void Start()
     {
         origin = this.transform.position;
@@ -26,6 +29,7 @@ public class FlamethrowerController : MonoBehaviour
             flamethrowerVFX.Play();
             flamethrowerPS.gameObject.SetActive(true);
             flamethrowerPS.Play();
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, flamethrowerSound, .7f);
         }
         // if isActive is off and the VFX or PS is turned on, turn them off
         else if (!isActive && flamethrowerVFX.gameObject.activeSelf || !isActive && flamethrowerPS.gameObject.activeSelf)

@@ -272,12 +272,12 @@ MonoBehaviour:
   cam: {fileID: 0}
   virtualCam: {fileID: 0}
   active: 0
-  footStepsClip: {fileID: 8300000, guid: 6112a6d22da114246a8b5678954b8941, type: 3}
+  footStepsClip: {fileID: 8300000, guid: 53d3e95380887e24884b04163b5ead4d, type: 3}
   weaverFallClip: {fileID: 8300000, guid: 4d89867d6ad72cb45affd75ee71c73f8, type: 3}
   owlGlideClip: {fileID: 8300000, guid: 4d89867d6ad72cb45affd75ee71c73f8, type: 3}
   owlDiveClip: {fileID: 8300000, guid: 440835242e5e14f489812588da29266e, type: 3}
   inCutscene: 0
-  dissolveMat: {fileID: 0}
+  dissolveMat: {fileID: 2100000, guid: 6f71add89b90ccc418119200d1371ae9, type: 2}
   materialHolder: {fileID: 0}
   deathVFX: {fileID: 0}
 --- !u!114 &4702817493190882328
@@ -351,7 +351,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4192255
   headBonkStunLength: 0.2
-  maxJumpForce: 28
+  maxJumpForce: 27
   inititalSlamForce: -30
   slamGravity: -30
   canOnlySlamAfterLeap: 0
@@ -366,6 +366,10 @@ MonoBehaviour:
   showSlamRadiusGizmo: 0
   showMaxJumpHeightGizmo: 0
   showBonkBoxGizmo: 0
+  groundPoundMarker: {fileID: 1969129995875850711, guid: 425f406a1e006594b8c1e4d83db34794, type: 3}
+  chargeLeapSound: {fileID: 0}
+  leapSound: {fileID: 0}
+  groundSlamSound: {fileID: 0}
 --- !u!114 &183899957472724848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,6 +384,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeToHold: 1
   isHolding: 0
+  swapChargeSound: {fileID: 8300000, guid: 815273998d328de4d895480dab7b2889, type: 3}
+  swapCompleteSound: {fileID: 8300000, guid: 3540c9fd47342d445a342ff38df2f1a9, type: 3}
 --- !u!1 &8913467139892167822
 GameObject:
   m_ObjectHideFlags: 0

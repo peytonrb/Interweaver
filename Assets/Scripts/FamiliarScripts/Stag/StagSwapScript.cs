@@ -20,6 +20,10 @@ public class StagSwapScript : MonoBehaviour
     private ParticleSystem flashPS;
     private ParticleSystem chargingPS;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip swapChargeSound;
+    [SerializeField] private AudioClip swapCompleteSound;
+
     void Start()
     {
         weaver = GameObject.FindGameObjectWithTag("Player");
@@ -50,6 +54,7 @@ public class StagSwapScript : MonoBehaviour
         // i apologize for the slightly boof vfx code
         chargeVFX.gameObject.SetActive(true);
         chargeVFX.Play();
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, swapChargeSound, 1f);
 
         if (!chargingPS.gameObject.activeSelf)
             chargingPS.gameObject.SetActive(true);
@@ -86,6 +91,7 @@ public class StagSwapScript : MonoBehaviour
             Vector3 prevPosition = transform.position;
             transform.position = weaver.transform.position;
             weaver.transform.position = prevPosition;
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, swapCompleteSound, 1f);
             if (bossManager != null && wyvern != null) // pissing and shitty
             {
                 int prevPhase = bossManager.phases;
