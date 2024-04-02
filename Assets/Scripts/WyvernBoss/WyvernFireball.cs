@@ -6,6 +6,10 @@ using UnityEngine;
 public class WyvernFireball : MonoBehaviour
 {
     private GameObject weaver;
+    private GameObject wyvern;
+    private WyvernBossManager wyvernBossManager;
+    private GameObject phaseTriggerManager;
+    private WyvernPhaseTriggerManager wptm;
     private Rigidbody rb;
     private PlayerControllerNew playercontroller;
     private WeaveController weaveController;
@@ -28,6 +32,10 @@ public class WyvernFireball : MonoBehaviour
     {
         weaver = GameObject.FindGameObjectWithTag("Player");
         familiar = GameObject.FindGameObjectWithTag("Familiar");
+        wyvern = GameObject.FindGameObjectWithTag("Boss");
+        wyvernBossManager = wyvern.GetComponent<WyvernBossManager>();
+        phaseTriggerManager = wyvernBossManager.wyvernTriggerManager;
+        wptm = phaseTriggerManager.GetComponent<WyvernPhaseTriggerManager>();
         familiarscript = familiar.GetComponent<FamiliarScript>();
         playercontroller = weaver.GetComponent<PlayerControllerNew>();
         weaveController = weaver.GetComponent<WeaveController>();
@@ -126,6 +134,7 @@ public class WyvernFireball : MonoBehaviour
 
         if (other.gameObject.CompareTag("Player")) {
             playercontroller.Death();
+            wptm.UpdateTriggersOnDeath(true);
 
             impactPS.transform.position = other.contacts[0].point;
             impactPS.gameObject.SetActive(true);
@@ -135,6 +144,7 @@ public class WyvernFireball : MonoBehaviour
         
         if (other.gameObject.CompareTag("Familiar")) {
             familiarscript.Death();
+            wptm.UpdateTriggersOnDeath(false);
 
             impactPS.transform.position = other.contacts[0].point;
             impactPS.gameObject.SetActive(true);

@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WyvernMagicCircle : MonoBehaviour, ITriggerable
+public class WyvernMagicCircle : MonoBehaviour
 {
     //public GameObject warning;
     private MagicCircleVFXController vfxScript;
-    private GameObject weaver;
     [SerializeField] private float timer;
     private bool pushUp;
     private bool stayUp;
@@ -17,6 +16,8 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
     //Concerning magic circles inside a predetermined configuration. They are always attached to a configuration parent object.
     private GameObject configurationParent;
     private WyvernBossManager bossManager;
+    private GameObject phaseTriggerManager;
+    private WyvernPhaseTriggerManager wptm;
     private bool hasParent;
     private int magicCircleID;
 
@@ -24,8 +25,9 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
     // Start is called before the first frame update
     void Start()
     {
-        weaver = GameObject.FindGameObjectWithTag("Player");
         bossManager = GameObject.FindGameObjectWithTag("Boss").GetComponent<WyvernBossManager>();
+        phaseTriggerManager = bossManager.wyvernTriggerManager;
+        wptm = phaseTriggerManager.GetComponent<WyvernPhaseTriggerManager>();
         vfxScript = this.GetComponent<MagicCircleVFXController>();
 
         pushUp = false;
@@ -108,14 +110,16 @@ public class WyvernMagicCircle : MonoBehaviour, ITriggerable
     //     }
     // }
 
-    public void OnTrigEnter(Collider other) {
-        if (other.gameObject.CompareTag("Hazard")) {
-            PlayerControllerNew player = weaver.GetComponent<PlayerControllerNew>();
-            player.Death();
+    void OnTriggerEnter(Collider other) {
+        if (other.gameObject.CompareTag("Player")) {
+            PlayerControllerNew playerController = other.gameObject.GetComponent<PlayerControllerNew>();
+            playerController.Death();
+            wptm.UpdateTriggersOnDeath(true);
         }
-    }
-
-    public void OnTrigExit(Collider other) {
-
+        if (other.gameObject.CompareTag("Familiar")) {
+            FamiliarScript familiarScript = other.gameObject.GetComponent<FamiliarScript>();
+            familiarScript.Death();
+            wptm.UpdateTriggersOnDeath(false);
+        }
     }
 }

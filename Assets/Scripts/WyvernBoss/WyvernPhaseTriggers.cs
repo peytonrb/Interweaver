@@ -17,7 +17,6 @@ public class WyvernPhaseTriggers : MonoBehaviour
     private WyvernBossManager bossManager;
     private WyvernPhaseTriggerManager triggerManager;
     private BoxCollider bc;
-    private bool weaverInsideTrigger, familiarInsideTrigger; //Note to self: used for determining if a trigger has been triggered if swapping to the other character
     [HideInInspector] public bool triggered;
     private bool isZTrigger;
     private bool enteredFromNorth;

@@ -12,6 +12,7 @@ public class WyvernBossManager : MonoBehaviour
     private CharacterController familiarcontroller;
     private FamiliarScript familiarScript;
     public int phases; //0 = no phase, 1 = fireball, 2 = magic circle, 3 = flamethrower, 4 = flee
+    [HideInInspector] public int startingPhase;
     private bool moveToNextRoom; //If moving to next room
     private int currentRoom; //Gets current room
     [SerializeField] private Transform[] roomDestinations; //Room destinations that the boss moves towards when changing rooms
@@ -49,7 +50,7 @@ public class WyvernBossManager : MonoBehaviour
     [HideInInspector] public bool reseting;
 
     [Header("PUT WYVERN TRIGGER MANAGER HERE")]
-    [SerializeField] private GameObject wyvernTriggerManager;
+    public GameObject wyvernTriggerManager;
     private WyvernPhaseTriggerManager triggerManager;
     [SerializeField] private GameObject endCutsceneController;
     private EndCutsceneTrigger ect;
@@ -85,6 +86,7 @@ public class WyvernBossManager : MonoBehaviour
         startingPreWindupTimer = preWindupTimer;
         startingWindupTimer = windupTimer;
         startingBlowFireTimer = blowFireTimer;
+        startingPhase = phases;
         windup = false;
         blowFire = false;
         reseting = false;

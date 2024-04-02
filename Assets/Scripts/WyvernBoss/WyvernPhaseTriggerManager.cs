@@ -9,6 +9,7 @@ public class WyvernPhaseTriggerManager : MonoBehaviour
     public GameObject wyvern;
     private WyvernBossManager bossManager;
     private int currentPhase;
+    [HideInInspector] public bool playerHasDied;
     private int weaverCurrentPhase;
     private int familiarCurrentPhase;
     private bool triggeredTriggerFound;
@@ -21,6 +22,7 @@ public class WyvernPhaseTriggerManager : MonoBehaviour
         currentPhase = bossManager.phases;
         weaverCurrentPhase = currentPhase;
         familiarCurrentPhase = currentPhase;
+        playerHasDied = false;
 
         foreach (GameObject go in triggers) {
             WyvernPhaseTriggers triggerscript = go.GetComponent<WyvernPhaseTriggers>();
@@ -142,41 +144,64 @@ public class WyvernPhaseTriggerManager : MonoBehaviour
             WyvernPhaseTriggers triggerScript = go.GetComponent<WyvernPhaseTriggers>();
 
             switch (currentPhase) {
-            //Fireball
-            case 1:
-                switch (triggerScript.triggerType) {
-                    case WyvernPhaseTriggers.TriggerType.FireballAndMagicCircle:
-                        triggerScript.newPhase = 2;
-                    break;
-                    case WyvernPhaseTriggers.TriggerType.FlamethrowerAndFireball:
-                        triggerScript.newPhase = 3;
-                    break;
-                }
-            break;
-            //Magic Circle
-            case 2:
-                switch (triggerScript.triggerType) {
-                    case WyvernPhaseTriggers.TriggerType.FireballAndMagicCircle:
-                        triggerScript.newPhase = 1;
-                    break;
-                    case WyvernPhaseTriggers.TriggerType.MagicCircleAndFlameThrower:
-                        triggerScript.newPhase = 3;
-                    break;
-                }
-            break;
-            //Flamethrower
-            case 3:
-                switch (triggerScript.triggerType) {
-                    case WyvernPhaseTriggers.TriggerType.MagicCircleAndFlameThrower:
-                        triggerScript.newPhase = 2;
-                    break;
-                    case WyvernPhaseTriggers.TriggerType.FlamethrowerAndFireball:
-                        triggerScript.newPhase = 1;
-                    break;
-                }
-            break;
-        }
+                //Fireball
+                case 1:
+                    switch (triggerScript.triggerType) {
+                        case WyvernPhaseTriggers.TriggerType.FireballAndMagicCircle:
+                            triggerScript.newPhase = 2;
+                        break;
+                        case WyvernPhaseTriggers.TriggerType.FlamethrowerAndFireball:
+                            triggerScript.newPhase = 3;
+                        break;
+                    }
+                break;
+                //Magic Circle
+                case 2:
+                    switch (triggerScript.triggerType) {
+                        case WyvernPhaseTriggers.TriggerType.FireballAndMagicCircle:
+                            triggerScript.newPhase = 1;
+                        break;
+                        case WyvernPhaseTriggers.TriggerType.MagicCircleAndFlameThrower:
+                            triggerScript.newPhase = 3;
+                        break;
+                    }
+                break;
+                //Flamethrower
+                case 3:
+                    switch (triggerScript.triggerType) {
+                        case WyvernPhaseTriggers.TriggerType.MagicCircleAndFlameThrower:
+                            triggerScript.newPhase = 2;
+                        break;
+                        case WyvernPhaseTriggers.TriggerType.FlamethrowerAndFireball:
+                            triggerScript.newPhase = 1;
+                        break;
+                    }
+                break;
+            }
         }
         
+    }
+
+    /// <summary>
+    /// Resets triggers on the death of either the weaver or familiar.
+    /// </summary>
+    /// <param name="isWeaver">
+    /// Set to true if the weaver died, false if the familiar died.
+    /// </param>
+    public void UpdateTriggersOnDeath(bool isWeaver) {
+        if (isWeaver) {
+            bossManager.SwitchToPhase(bossManager.startingPhase,bossManager.phases,true);
+            StartCoroutine(WaitForSwitch());
+            }
+        else {
+            bossManager.SwitchToPhase(bossManager.startingPhase,bossManager.phases,false);
+            StartCoroutine(WaitForSwitch());
+        }
+    }
+
+    IEnumerator WaitForSwitch() {
+        yield return new WaitForSeconds(0.1f);
+        UpdatePhase();
+        yield break;
     }
 }

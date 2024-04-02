@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WyvernFlamethrower : MonoBehaviour, ITriggerable
+public class WyvernFlamethrower : MonoBehaviour
 {
-    private GameObject weaver;
+    private GameObject wyvern;
+    private WyvernBossManager wyvernBossManager;
+    private GameObject phaseTriggerManager;
+    private WyvernPhaseTriggerManager wptm;
     [SerializeField] private bool useDefaultPositionAndScale;
     [SerializeField] private Vector3 flamethrowerLocalPosition;
     [SerializeField] private Vector3 flamethrowerLocalScale;
@@ -12,6 +15,11 @@ public class WyvernFlamethrower : MonoBehaviour, ITriggerable
     // Start is called before the first frame update
     void Start()
     {
+        wyvern = GameObject.FindGameObjectWithTag("Boss");
+        wyvernBossManager = wyvern.GetComponent<WyvernBossManager>();
+        phaseTriggerManager = wyvernBossManager.wyvernTriggerManager;
+        wptm = phaseTriggerManager.GetComponent<WyvernPhaseTriggerManager>();
+
         //DEFAULT LOCAL POSITION AND SCALES
         if (useDefaultPositionAndScale == true) {
             transform.localPosition = new Vector3(0,-0.47f,1.3f);
@@ -22,22 +30,22 @@ public class WyvernFlamethrower : MonoBehaviour, ITriggerable
             transform.localScale = flamethrowerLocalScale;
         }
         
-
-        weaver = GameObject.FindGameObjectWithTag("Player");
-    }
-
-    public void OnTrigEnter(Collider other) {
-        if (other.gameObject.CompareTag("Hazard")) {
-            PlayerControllerNew player = weaver.GetComponent<PlayerControllerNew>();
-            player.Death();
-        }
-    }
-
-    public void OnTrigExit(Collider other) {
-
     }
 
     public void KillThyself() {
         Destroy(gameObject);
+    }
+
+    void OnTriggerEnter(Collider other) {
+        if (other.gameObject.CompareTag("Player")) {
+            PlayerControllerNew playerController = other.gameObject.GetComponent<PlayerControllerNew>();
+            playerController.Death();
+            wptm.UpdateTriggersOnDeath(true);
+        }
+        if (other.gameObject.CompareTag("Familiar")) {
+            FamiliarScript familiarScript = other.gameObject.GetComponent<FamiliarScript>();
+            familiarScript.Death();
+            wptm.UpdateTriggersOnDeath(false);
+        }
     }
 }
