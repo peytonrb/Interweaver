@@ -284,7 +284,7 @@ public class WyvernBossManager : MonoBehaviour
                 if (!familiarScript.myTurn) {
                     if (weaver.transform.position.y >= weaverStartingY - 0.5f && weaver.transform.position.y <= weaverStartingY + 0.5f) {
                         Vector3 randomposition = Random.insideUnitCircle * spawnradius;
-                        Vector3 newposition = new Vector3(weaver.transform.position.x + randomposition.x, weaver.transform.position.y - 7f, weaver.transform.position.z + randomposition.y);
+                        Vector3 newposition = new Vector3(weaver.transform.position.x + randomposition.x, weaver.transform.position.y, weaver.transform.position.z + randomposition.y);
                         Instantiate(magicCircle,newposition,Quaternion.identity);
                         magicCircleAmount -= 1;
                     }
@@ -292,7 +292,7 @@ public class WyvernBossManager : MonoBehaviour
                 else {
                     if (stag.transform.position.y >= familiarStartingY - 0.5f && stag.transform.position.y <= familiarStartingY + 0.5f) {
                         Vector3 randomposition = Random.insideUnitCircle * spawnradius;
-                        Vector3 newposition = new Vector3(stag.transform.position.x + randomposition.x, stag.transform.position.y - 7f, stag.transform.position.z + randomposition.y);
+                        Vector3 newposition = new Vector3(stag.transform.position.x + randomposition.x, stag.transform.position.y, stag.transform.position.z + randomposition.y);
                         Instantiate(magicCircle,newposition,Quaternion.identity);
                         magicCircleAmount -= 1;
                     }
@@ -306,7 +306,7 @@ public class WyvernBossManager : MonoBehaviour
         }
         else {
             int randomConfig = Random.Range(0, configurations.Length);
-            Vector3 newposition = new Vector3(weaver.transform.position.x, weaver.transform.position.y - 7f, weaver.transform.position.z);
+            Vector3 newposition = new Vector3(weaver.transform.position.x, weaver.transform.position.y, weaver.transform.position.z);
             Instantiate(configurations[randomConfig],newposition,Quaternion.identity);
             spawnedConfiguration = true;
         }

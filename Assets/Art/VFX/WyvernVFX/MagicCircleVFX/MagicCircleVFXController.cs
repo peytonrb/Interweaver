@@ -5,6 +5,7 @@ using UnityEngine;
 public class MagicCircleVFXController : MonoBehaviour
 {
     public bool activateVFX;
+    private bool isPlaying = false;
     public float blowUpTime = 1.5f;
     private ParticleSystem firstCirclePS;
     private ParticleSystem explosionPS;
@@ -17,8 +18,9 @@ public class MagicCircleVFXController : MonoBehaviour
 
     void Update()
     {
-        if (activateVFX)
+        if (activateVFX && !isPlaying)
         {
+            isPlaying = true;
             firstCirclePS.gameObject.SetActive(true);
             StartCoroutine(WaitForVFX());
         }
@@ -37,5 +39,6 @@ public class MagicCircleVFXController : MonoBehaviour
         yield return new WaitForSeconds(2f);
         firstCirclePS.gameObject.SetActive(false);
         explosionPS.gameObject.SetActive(false);
+        Destroy(this.gameObject);
     }
 }

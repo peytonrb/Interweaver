@@ -33,7 +33,7 @@ public class WyvernMagicCircle : MonoBehaviour
         pushUp = false;
         stayUp = false;
         //warning.SetActive(true);
-        newheight = transform.position.y + height + 5;
+        //newheight = transform.position.y + height + 5;
         magicCircleID = bossManager.magicCircleAmount;
 
         if (bossManager.useConfigurations) {
