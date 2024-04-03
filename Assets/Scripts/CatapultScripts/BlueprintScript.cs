@@ -27,6 +27,9 @@ public class BlueprintScript : MonoBehaviour
     // gameobjects in dummyCraftingResults
     // hope this is comprehensible :)
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip buildSound;
+
     void Start()
     {
         foreach(GameObject dummyCraftingResult in dummyCraftingResults)
@@ -48,6 +51,7 @@ public class BlueprintScript : MonoBehaviour
             {
                 currentCraftingIngredients.Add(craftableScript.GetCraftableName());
                 // instantiate VFX here!
+                AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, buildSound, 1f);
                 Destroy(craftableScript.gameObject);
                 CheckIfCanCraft(); // check if we're good to go on crafting
             }

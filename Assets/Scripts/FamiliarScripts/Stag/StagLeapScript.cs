@@ -54,14 +54,18 @@ public class StagLeapScript : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioClip  chargeLeapSound;
+    private AudioSource chargeLeapAudioSource;
     [SerializeField] private AudioClip  leapSound;
+    [SerializeField] private AudioClip  airSlamSound;
     [SerializeField] private AudioClip  groundSlamSound;
+    [SerializeField] private AudioClip  headBonkSound;
 
     // Start is called before the first frame update
     void Start()
     {
         movementScript = GetComponent<MovementScript>();
         characterController = GetComponent<CharacterController>();
+        chargeLeapAudioSource = null;
         cameraMasterScript = GameObject.FindGameObjectWithTag("CameraMaster").GetComponent<CameraMasterScript>();
         if (!canOnlySlamAfterLeap)
         {
@@ -115,6 +119,7 @@ public class StagLeapScript : MonoBehaviour
         {
             chargingJump = true;
             stagChargingVFXScript.StartEffect();
+            chargeLeapAudioSource = AudioManager.instance.AddSFX(chargeLeapSound, false, chargeLeapAudioSource);
             characterAnimationHandler.ToggleCharging(chargingJump);
             movementScript.ZeroCurrentSpeed();
             movementScript.ToggleCanMove(false);
@@ -133,6 +138,7 @@ public class StagLeapScript : MonoBehaviour
             currentJumpForce = Mathf.Lerp(0, maxJumpForce, t);
             yield return null;
         }
+        chargeLeapAudioSource = AudioManager.instance.KillAudioSource(chargeLeapAudioSource);
         t = 0;
     }
 

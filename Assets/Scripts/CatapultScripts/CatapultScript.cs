@@ -12,6 +12,9 @@ public class CatapultScript : MonoBehaviour
     [SerializeField] private Vector3 direction;
     [SerializeField] private GameObject wyvern;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip launchSound;
+
     void Start()
     {
         
@@ -40,6 +43,7 @@ public class CatapultScript : MonoBehaviour
     {
         movementScript.enabled = true; // unfreeze movement
         movementScript.ToggleCanMove(false); // prevent control of movements
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, launchSound, 1f);
         Vector3 launchVelocity = transform.rotation * direction.normalized * launchForce; // calculate initital launch velocity based on rotation of bowl, direction, and force
         movementScript.ChangeVelocity(launchVelocity); // apply velocity to the character
         StartCoroutine(RemoveLaunchForce(movementScript, characterController)); // prepare to remove this added velocity once the character hits the ground
