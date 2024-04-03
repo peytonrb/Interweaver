@@ -48,9 +48,11 @@ public class DialogueManager : MonoBehaviour
         textBoxUI.SetActive(true);
         isActive = true;
 
+        //int i = 0;
         foreach (string sentence in dialogue.sentences)
         {
-            // Debug.Log(sentence); -- okay here
+            //i++;
+            //Debug.Log("Sentence #" + i + ": " + sentence); //-- okay here
             sentences.Enqueue(sentence);
         }
 

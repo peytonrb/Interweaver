@@ -10,6 +10,7 @@ public class CatapultScript : MonoBehaviour
     [SerializeField] [Range (1f, 100f)] private float launchForce;
     [SerializeField] private float timeToLaunch = 2f;
     [SerializeField] private Vector3 direction;
+    [SerializeField] private Transform stagSocketPosition;
     [SerializeField] private GameObject wyvern;
 
     [Header("Audio")]
@@ -24,12 +25,19 @@ public class CatapultScript : MonoBehaviour
     {
         if (collider.CompareTag("Familiar"))
         {
-            collider.gameObject.transform.position = transform.position; // move character to bowl position
+            collider.gameObject.transform.position = stagSocketPosition.position; // move character to bowl position
             MovementScript movementScript = collider.GetComponent<MovementScript>(); 
+            movementScript.ZeroCurrentSpeed();
+            movementScript.ChangeVelocity(Vector3.zero);
             movementScript.enabled = false; // completely move motion of character
             StartCoroutine(PrepareToLaunch(collider.gameObject));
         }
     }
+
+    /*IEnumerator DelayedFall(MovementScript movementScript)
+    {
+
+    }*/
 
     IEnumerator PrepareToLaunch(GameObject gameObject)
     {
@@ -49,13 +57,14 @@ public class CatapultScript : MonoBehaviour
         StartCoroutine(RemoveLaunchForce(movementScript, characterController)); // prepare to remove this added velocity once the character hits the ground
         StagLeapScript stagLeapScript = characterController.gameObject.GetComponent<StagLeapScript>();
         stagLeapScript.wasLaunched = true;
-        WyvernBossManager wyvernboss = wyvern.GetComponent<WyvernBossManager>();
-        wyvernboss.stagWasLaunched = true;
+        //WyvernBossManager wyvernboss = wyvern.GetComponent<WyvernBossManager>();
+        //wyvernboss.stagWasLaunched = true;
     }
 
     IEnumerator RemoveLaunchForce(MovementScript movementScript, CharacterController characterController)
     {
         StagLeapScript stagLeapScript = characterController.gameObject.GetComponent<StagLeapScript>(); // this is funky, but works!
+        yield return new WaitForFixedUpdate(); // we wait a slight tick for
         while (!characterController.isGrounded)
         {
             yield return null;
@@ -72,6 +81,6 @@ public class CatapultScript : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        DrawArrow.ForGizmo(transform.position, transform.rotation * direction.normalized * launchForce * 0.5f, Color.blue); 
+        DrawArrow.ForGizmo(stagSocketPosition.position, transform.rotation * direction.normalized * launchForce * 0.5f, Color.blue); 
     }
 }
