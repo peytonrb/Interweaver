@@ -129,9 +129,9 @@ public class OwlDiveScript : MonoBehaviour
             {
                 Bounce();
                 
-                if (collision.gameObject.TryGetComponent<CrystalScript>(out CrystalScript crystal))
+                if (collision.gameObject.TryGetComponent(out IDamageable damageObject))
                 {
-                    crystal.TriggerBreak();
+                    damageObject.Damage();
                 }
                 else
                 {

@@ -52,16 +52,17 @@ public class FamiliarScript : MonoBehaviour
         // Debug.Log("Active Current Position: " + transform.position);
     }
     
-    public void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.CompareTag("Crystal"))
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                other.GetComponent<CrystalScript>().TriggerBreak();
-            }
-        }
-    }
+    //why is this here again?
+    //public void OnTriggerStay(Collider other)
+    //{
+    //    if (other.gameObject.CompareTag("Crystal"))
+    //    {
+    //        if (Input.GetKeyDown(KeyCode.E))
+    //        {
+    //            other.GetComponent<CrystalScript>().TriggerBreak();
+    //        }
+    //    }
+    //}
 
     private void OnTriggerEnter(Collider collision)
     {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CrystalScript : MonoBehaviour
+public class CrystalScript : MonoBehaviour, IDamageable
 {
     public FloatingIslandScript myFloatingIsland;
 
@@ -17,8 +17,9 @@ public class CrystalScript : MonoBehaviour
         myFloatingIsland = myIsland;
     }
 
-    public void TriggerBreak()
+    public void Damage()
     {
+        GameObject shatterVFX = Instantiate(vfxPrefab, transform.position, transform.rotation);
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, shatterFile, 1f);
 
         if (myFloatingIsland != null)
@@ -26,8 +27,9 @@ public class CrystalScript : MonoBehaviour
             myFloatingIsland.StartFalling(this);
         }
 
-        Instantiate(vfxPrefab, transform.position, transform.rotation);
-        Destroy(gameObject);
+        Destroy(shatterVFX.gameObject, 1f);
+       gameObject.SetActive(false);
     }
+    
 
 }
