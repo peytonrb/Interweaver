@@ -21,6 +21,7 @@ public class InputManagerScript : MonoBehaviour
     private PauseScript pauseScript;
     public static InputManagerScript instance;
     [SerializeField] private bool devMode;
+    [HideInInspector] public bool stopCutscene;
 
 
     //the invoke bools are there so then it can only happen once instead of every frame in the update function
@@ -283,37 +284,39 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnWyvernCameraToggle(InputValue input) // cant handle camera for both weaver and familiar yet
     {
-        bool isPressed = input.isPressed;
-        WyvernLookAt wyvernLookAtScript;
+        if (wyvern != null) {
+            bool isPressed = input.isPressed;
+            WyvernLookAt wyvernLookAtScript;
 
-        if (familiarScript.myTurn)
-        {
-            wyvernLookAtScript = familiar.transform.Find("WyvernCamera").GetComponent<WyvernLookAt>();
-        }
-        else
-        {
-            wyvernLookAtScript = player.transform.Find("WyvernCamera").GetComponent<WyvernLookAt>();
-        }
-
-        GameObject wyvernCamera = wyvernLookAtScript.transform.GetChild(0).gameObject;
-
-        if (wyvernLookAtScript != null)
-        {
-            if (isPressed && Time.timeScale != 0)
+            if (familiarScript.myTurn)
             {
-                wyvernLookAtScript.cameraIsActive = true;
-
-                if (wyvernLookAtScript.wyvern != null)
-                {
-                    wyvernLookAtScript.activeCamera.m_Priority = 0;
-                    wyvernCamera.GetComponent<CinemachineVirtualCamera>().m_Priority = 2;
-                }
+                wyvernLookAtScript = familiar.transform.Find("WyvernCamera").GetComponent<WyvernLookAt>();
             }
             else
             {
-                wyvernCamera.GetComponent<CinemachineVirtualCamera>().m_Priority = 0;
-                wyvernLookAtScript.activeCamera.m_Priority = 1;
-                wyvernLookAtScript.cameraIsActive = false;
+                wyvernLookAtScript = player.transform.Find("WyvernCamera").GetComponent<WyvernLookAt>();
+            }
+
+            GameObject wyvernCamera = wyvernLookAtScript.transform.GetChild(0).gameObject;
+
+            if (wyvernLookAtScript != null)
+            {
+                if (isPressed && Time.timeScale != 0)
+                {
+                    wyvernLookAtScript.cameraIsActive = true;
+
+                    if (wyvernLookAtScript.wyvern != null)
+                    {
+                        wyvernLookAtScript.activeCamera.m_Priority = 0;
+                        wyvernCamera.GetComponent<CinemachineVirtualCamera>().m_Priority = 2;
+                    }
+                }
+                else
+                {
+                    wyvernCamera.GetComponent<CinemachineVirtualCamera>().m_Priority = 0;
+                    wyvernLookAtScript.activeCamera.m_Priority = 1;
+                    wyvernLookAtScript.cameraIsActive = false;
+                }
             }
         }
     }
@@ -859,5 +862,14 @@ public class InputManagerScript : MonoBehaviour
             Debug.Log("Current Levels Completed: " + PlayerData.levelsCompleted);
         }
         
+    }
+
+    public void OnSkipCutscene(InputValue input) {
+        if (input.isPressed) {
+            stopCutscene = true;
+        }
+        else {
+            stopCutscene = false;
+        }
     }
 }

@@ -10,6 +10,7 @@ public class CutsceneManagerScript : MonoBehaviour
 {
     public CinemachineVirtualCamera[] cutsceneCams;
     public GameObject cutsceneTrigger;
+    [SerializeField] private GameObject skipCutsceneText;
     private bool isCutscene;
     private int cutscenePhase;
     private PlayableDirector director;
@@ -52,6 +53,7 @@ public class CutsceneManagerScript : MonoBehaviour
         isCutscene = false;
         isTransitioning = false;
         cutscenePhase = 0;
+        skipCutsceneText.SetActive(false);
 
         foreach (CinemachineVirtualCamera vcam in cutsceneCams) {
             vcam.Priority = 0;
@@ -159,6 +161,10 @@ public class CutsceneManagerScript : MonoBehaviour
                 }
             }
 
+            if (InputManagerScript.instance.stopCutscene == true) {
+                EndCutscene();
+            }
+
             if (debugisOn) {
                 if (Input.GetKeyDown(KeyCode.F)) {
                     EndCutscene();
@@ -182,6 +188,7 @@ public class CutsceneManagerScript : MonoBehaviour
 
     private void BeginTimeline() {
         director.Play();
+        skipCutsceneText.SetActive(true);
         if (usingCutsceneWeaver) {
             cutsceneWeaver.SetActive(true); 
         }
@@ -194,6 +201,7 @@ public class CutsceneManagerScript : MonoBehaviour
     private void EndCutscene() {
         Destroy(cutsceneTrigger);
         director.Stop();
+        skipCutsceneText.SetActive(false);
         foreach (CinemachineVirtualCamera vcam in cutsceneCams) {
             vcam.Priority = 0;  
         }
