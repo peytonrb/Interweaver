@@ -28,8 +28,9 @@ public class CutsceneManagerScript : MonoBehaviour
     public GameObject cutsceneCanvas;
     public GameObject blackPanel;
     private CanvasGroup bpCanvasGroup;
-    
+    public float blackedoutPauseDuration = 0;
     private bool debugisOn;
+    private bool startedPause = false;
 
     // Start is called before the first frame update
     void Start()
@@ -70,8 +71,17 @@ public class CutsceneManagerScript : MonoBehaviour
                         else {
                             bpCanvasGroup.alpha = Mathf.MoveTowards(bpCanvasGroup.alpha, 1f, transitionSpeed * Time.deltaTime);
                             if (bpCanvasGroup.alpha >= 1) {
-                                BeginTimeline();
-                                bpCanvasGroup.alpha = 1;
+                                if (blackedoutPauseDuration == 0)
+                                {
+                                    BeginTimeline();
+                                    bpCanvasGroup.alpha = 1;
+                                }
+                                else if (!startedPause)
+                                {
+                                    StartCoroutine(CutsceneDelay());
+                                    startedPause = true;
+                                }
+                                
                             }
                         }
                     break;
@@ -97,9 +107,20 @@ public class CutsceneManagerScript : MonoBehaviour
                             bpCanvasGroup.alpha = Mathf.MoveTowards(bpCanvasGroup.alpha, 1f, transitionSpeed * Time.deltaTime);
                             
                             if (bpCanvasGroup.alpha >= 1) {
-                                bpCanvasGroup.alpha = 1;
-                                EndCutscene();
+
+                                if (blackedoutPauseDuration == 0)
+                                {
+                                    bpCanvasGroup.alpha = 1;
+                                    EndCutscene();
+                                }
+                                else if (!startedPause)
+                                {
+                                    StartCoroutine(CutsceneDelay());
+                                    startedPause = true;
+                                }
+
                             }
+                            
                         }
                     break;
                     case 3:
@@ -183,6 +204,30 @@ public class CutsceneManagerScript : MonoBehaviour
         playerMovementScript.inCutscene = false;
 
         cutscenePhase += 1;
+    }
+
+    public IEnumerator CutsceneDelay()
+    {
+        foreach (CinemachineVirtualCamera vcam in cutsceneCams)
+        {
+            vcam.Priority = 10;
+        }
+
+        yield return new WaitForSeconds(blackedoutPauseDuration);
+
+        bpCanvasGroup.alpha = 1;
+
+        if (cutscenePhase == 0)
+        {
+            BeginTimeline();    
+        }
+        else
+        {
+            EndCutscene();
+        }
+
+        startedPause = false;
+        yield break;
     }
 
 }
