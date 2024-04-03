@@ -25,7 +25,7 @@ public class WyvernFireball : MonoBehaviour
     private bool whosturn;
 
     [Header("VFX")]
-    private ParticleSystem impactPS;
+    public ParticleSystem impactPS;
 
     [Header("Audio")]
     [SerializeField] private AudioClip  fireballSound;
@@ -45,10 +45,6 @@ public class WyvernFireball : MonoBehaviour
         weaveController = weaver.GetComponent<WeaveController>();
         weaveable = GetComponent<WeaveableObject>();
         rb = GetComponent<Rigidbody>();
-
-        // gets destroyed with object lol --> needs new setup
-        impactPS = transform.GetChild(0).Find("FireballImpactVFX").GetComponent<ParticleSystem>();
-        impactPS.gameObject.SetActive(false);
 
         weaverposition = new Vector3(weaver.transform.position.x,weaver.transform.position.y + 1, weaver.transform.position.z);
         familiarposition = new Vector3(familiar.transform.position.x,familiar.transform.position.y + 1,familiar.transform.position.z);
@@ -125,37 +121,31 @@ public class WyvernFireball : MonoBehaviour
     }
 
     void OnCollisionEnter(Collision other) {
+        Vector3 pos;
+        Debug.Log("here");
+
         if (!other.gameObject.CompareTag("Boss")) {
             if (other.gameObject.TryGetComponent<BreakObject>(out BreakObject breakableObject)) {
                 breakableObject.BreakMyObject();
             }
 
-            impactPS.transform.position = other.contacts[0].point;
-            impactPS.gameObject.SetActive(true);
-            impactPS.Play();
+            pos = new Vector3(this.transform.position.x, this.transform.position.y - 1f, this.transform.position.z);
+            ParticleSystem ps = Instantiate(impactPS, pos, Quaternion.identity);
+            ps.Play();
             Destroy(gameObject);
         }
 
         if (other.gameObject.CompareTag("Player")) {
             playercontroller.Death();
             wptm.UpdateTriggersOnDeath(true);
-
-            impactPS.transform.position = other.contacts[0].point;
-            impactPS.gameObject.SetActive(true);
-            impactPS.Play();
             Destroy(gameObject);
         }
-        
-        if (other.gameObject.CompareTag("Familiar")) {
+
+        if (other.gameObject.CompareTag("Familiar"))
+        {
             familiarscript.Death();
             wptm.UpdateTriggersOnDeath(false);
-
-            impactPS.transform.position = other.contacts[0].point;
-            impactPS.gameObject.SetActive(true);
-            impactPS.Play();
             Destroy(gameObject);
         }
-        
-        impactPS.gameObject.SetActive(false);
     }
 }
