@@ -9,99 +9,117 @@ public class StalactiteScript : MonoBehaviour
     public GameObject stalactiteFallingParticle;
     public GameObject stalactiteCrashingParticle;
     private StalactiteSpawnerScript sss;
-    [SerializeField] private float timer;
+     private float timer;
     [SerializeField] private float cooldown;
-    private bool timerOn;
-    private BoxCollider bc;
+    public float currentTimer;
+    public bool timerOn;   
     private AudioSource audioSource;
     public AudioClip fallingAudio;
     public AudioClip crashAudio;
+    private bool hasInvoked;
 
     void Start()
     {
+        timerOn = false;
         rb = GetComponent<Rigidbody>();
         sss = GetComponentInParent<StalactiteSpawnerScript>();
-        bc = GetComponent<BoxCollider>();
-
-        bc.size = new Vector3(1,50,1);
-        bc.center = new Vector3(0,-25,0);
-        bc.isTrigger = true;
-        bc.enabled = false;
-        isFalling = false;
-
-        StartCoroutine(RegrowthCooldown());
+        timer = currentTimer;
+        Warning();
     }
 
-    public void Warning() {
+    public void Warning() 
+    {
         Instantiate(stalactiteFallingParticle,transform.position,Quaternion.identity);
-        bc.size = new Vector3(1,1,1);
-        bc.center = Vector3.zero;
-        bc.isTrigger = false;
+        rb.velocity = Vector3.zero;
     }
 
-    public void Fall() {
+    public void Fall() 
+    {
         rb.constraints = RigidbodyConstraints.None;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
         isFalling = true;
     }
 
-    void OnCollisionEnter(Collision collision) {
-        if (isFalling == true) {
-            if (collision.gameObject.CompareTag("Player")) {
+    void OnCollisionEnter(Collision collision) 
+    {
+        GameObject stalactiteCrashVFX = Instantiate(stalactiteCrashingParticle, transform.position, Quaternion.identity);
+        if (isFalling)
+        {
+            if (collision.gameObject.CompareTag("Player")) 
+            {
                 PlayerController pc = collision.gameObject.GetComponent<PlayerController>();
                 pc.Death();
-                sss.SpawnStalactite();
-                Instantiate(stalactiteCrashingParticle,transform.position,Quaternion.identity);
-                Destroy(gameObject);
+                
+                Destroy(stalactiteCrashVFX.gameObject, 1f);
+           
+                gameObject.SetActive(false);                
+                timer = currentTimer;
+                hasInvoked = false;
+                timerOn = false;
+                rb.velocity = Vector3.zero;
             }
-            else if (collision.gameObject.CompareTag("Familiar")) {
+            else if (collision.gameObject.CompareTag("Familiar")) 
+            {
                 FamiliarScript fs = collision.gameObject.GetComponent<FamiliarScript>();
                 MoleDigScript mds = collision.gameObject.GetComponent<MoleDigScript>();
-                if (mds.borrowed == false) {
+                if (!mds.borrowed) 
+                {
                     fs.Death();
                 }
-                sss.SpawnStalactite();
-                Instantiate(stalactiteCrashingParticle,transform.position,Quaternion.identity);
-                Destroy(gameObject);
+                Destroy(stalactiteCrashVFX.gameObject, 1f);
+                
+                gameObject.SetActive(false);                
+                timer = currentTimer;
+                hasInvoked = false;
+                timerOn = false;
+                rb.velocity = Vector3.zero;
             }
-            else {
+            else 
+            {
                 //Debug.Log(collision.gameObject.name);
-                sss.SpawnStalactite();
-                Instantiate(stalactiteCrashingParticle,transform.position,Quaternion.identity);
-                Destroy(gameObject);
+                Destroy(stalactiteCrashVFX.gameObject, 1f);
+               
+                gameObject.SetActive(false);                
+                timer = currentTimer;
+                hasInvoked = false;
+                timerOn = false;
+                rb.velocity = Vector3.zero;
             }
         }
     }
 
-    void Update() {
-        if (timerOn && sss.canFall) {
+    void Update() 
+    {
+        if (!hasInvoked) 
+        {
+            StartCoroutine(RegrowthCooldown());
+           
+        }
+        
+        if (timerOn && hasInvoked) 
+        {           
             timer -= Time.deltaTime;
-            if (timer <= 0) {
-                Fall();
+            if (timer <= 0) 
+            {
+                Fall();                
             }
         }
     }
+   
 
-    void OnTriggerEnter(Collider other) {
-        if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Familiar")) {
-            if (sss.canFall) {
-                if (!timerOn) {
-                    Warning();
-                }
-                timerOn = true;
-            }
-        }
-    }
-
-    IEnumerator RegrowthCooldown() {
+    IEnumerator RegrowthCooldown() 
+    {
+        Warning();
+        rb.constraints = RigidbodyConstraints.FreezePosition;
+        hasInvoked = true;
         yield return new WaitForSeconds(cooldown);
-        if (sss.constantFalling) {
-            Warning();
-            timerOn = true;
+
+        if (sss.canFall && !timerOn)
+        {            
+            timerOn = true;            
+            Debug.Log("I want to kil lmyself");
         }
-        else if (sss.constantFalling == false) {
-            timerOn = false;
-        }
-        bc.enabled = true;
+       
         yield break;
     }
 }
