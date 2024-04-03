@@ -34,11 +34,6 @@ public class CatapultScript : MonoBehaviour
         }
     }
 
-    /*IEnumerator DelayedFall(MovementScript movementScript)
-    {
-
-    }*/
-
     IEnumerator PrepareToLaunch(GameObject gameObject)
     {
         yield return new WaitForSeconds(timeToLaunch); 
@@ -57,8 +52,8 @@ public class CatapultScript : MonoBehaviour
         StartCoroutine(RemoveLaunchForce(movementScript, characterController)); // prepare to remove this added velocity once the character hits the ground
         StagLeapScript stagLeapScript = characterController.gameObject.GetComponent<StagLeapScript>();
         stagLeapScript.wasLaunched = true;
-        //WyvernBossManager wyvernboss = wyvern.GetComponent<WyvernBossManager>();
-        //wyvernboss.stagWasLaunched = true;
+        WyvernBossManager wyvernboss = wyvern.GetComponent<WyvernBossManager>();
+        wyvernboss.stagWasLaunched = true;
     }
 
     IEnumerator RemoveLaunchForce(MovementScript movementScript, CharacterController characterController)
