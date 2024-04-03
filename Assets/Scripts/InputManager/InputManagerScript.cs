@@ -324,18 +324,9 @@ public class InputManagerScript : MonoBehaviour
     //******************************************************
     public void OnPossessFamiliar(InputValue input)
     {
-
-
-        //When we add the hub scene, we will put this line back in. This error was likely caused by the scene of that name not being part of the build settings.
-        //&& SceneHandler.instance.currentSceneName != "Hub" has been causing issues in this if statement
         if (input.isPressed && !playerScript.isDead)
         {
             PossessFamiliar();
-
-            //if (currentSceneName == "AlpineCombined" || currentSceneName == "Cavern") {
-            //    PossessFamiliar();
-            //}
-
         }
     }
 
@@ -365,14 +356,9 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnPossessWeaver(InputValue input)
     {
-        if ((input.isPressed) && (!familiarScript.isDead))
+        if (input.isPressed && !familiarScript.isDead)
         {
             PossessWeaver();
-
-            //if (currentSceneName == "AlpineCombined" || currentSceneName == "Cavern") {
-            //    PossessWeaver();
-            //}
-
         }
     }
 
@@ -409,11 +395,11 @@ public class InputManagerScript : MonoBehaviour
     {
         if (input.isPressed)
         {
-
             if (!pauseScreen.activeSelf)
             {
                 pauseScript = pauseScreen.GetComponent<PauseScript>();
                 pauseScreen.SetActive(true);
+                canSwitch = false;
                 Time.timeScale = 0;
             }
             else

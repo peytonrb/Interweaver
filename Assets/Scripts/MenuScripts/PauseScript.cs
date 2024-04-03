@@ -176,6 +176,7 @@ public class PauseScript : MonoBehaviour
             defaultGroup.SetActive(true);
             defaultGroup.GetComponent<CanvasGroup>().alpha = 1;
         }
+        InputManagerScript.instance.canSwitch = true;
         gameObject.SetActive(false);
     }
 

@@ -32,38 +32,41 @@ public class VideoCutsceneController : MonoBehaviour
     }
 
     void Update() {
-        if (started == true) {
-            if (videoPlayer.isPlaying == false) {
-                switch (cutscene) {
-                    case 0:
-                        SceneManager.LoadScene("Hub");
-                    break;
-                    case 1:
-                        SceneManager.LoadScene("AlpineCombined");
-                    break;
-                    case 2:
-                        SceneManager.LoadScene("Hub");
-                    break;
-                    case 3:
-                        SceneManager.LoadScene("Cavern");
-                    break;
-                    case 4:
-                        SceneManager.LoadScene("Hub");
-                    break;
-                    case 5:
-                        SceneManager.LoadScene("Sepultus");
-                    break;
-                    case 6:
-                        SceneManager.LoadScene("Menu");
-                    break;       
+        if (isOnTrigger == false) {
+            if (started == true) {
+                if (videoPlayer.isPlaying == false) {
+                    switch (cutscene) {
+                        case 0:
+                            SceneManager.LoadScene("Hub");
+                        break;
+                        case 1:
+                            SceneManager.LoadScene("AlpineCombined");
+                        break;
+                        case 2:
+                            SceneManager.LoadScene("Hub");
+                        break;
+                        case 3:
+                            SceneManager.LoadScene("Cavern");
+                        break;
+                        case 4:
+                            SceneManager.LoadScene("Hub");
+                        break;
+                        case 5:
+                            SceneManager.LoadScene("Sepultus");
+                        break;
+                        case 6:
+                            SceneManager.LoadScene("Menu");
+                        break;       
+                    }
+                }
+            }
+            else {
+                if (videoPlayer.isPlaying == true) {
+                    started = true;
                 }
             }
         }
-        else {
-            if (videoPlayer.isPlaying == true) {
-                started = true;
-            }
-        }
+        
     }
 
     public void ChangeCutscene(int scene) {
