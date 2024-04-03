@@ -69,6 +69,32 @@ public class VideoCutsceneController : MonoBehaviour
         
     }
 
+    public void SkipCutscene() {
+        switch (cutscene) {
+            case 0:
+                SceneManager.LoadScene("Hub");
+            break;
+            case 1:
+                SceneManager.LoadScene("AlpineCombined");
+            break;
+            case 2:
+                SceneManager.LoadScene("Hub");
+            break;
+            case 3:
+                SceneManager.LoadScene("Cavern");
+            break;
+            case 4:
+                SceneManager.LoadScene("Hub");
+            break;
+            case 5:
+                SceneManager.LoadScene("Sepultus");
+            break;
+            case 6:
+                SceneManager.LoadScene("Menu");
+            break;       
+        }
+    }
+
     public void ChangeCutscene(int scene) {
         cutscene = scene;
     }
