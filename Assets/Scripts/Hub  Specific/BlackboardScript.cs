@@ -22,6 +22,7 @@ public class BlackboardScript : MonoBehaviour
     private int lostSoulTotalAlpine;
     private int lostSoulTotalCavern;
     private int lostSoulTotalSepultus;
+    public bool DebugLoadAnyLevel = true;
 
     // Start is called before the first frame update
     void Start()
@@ -104,7 +105,7 @@ public class BlackboardScript : MonoBehaviour
                 break;
                 case 1:
                     //GO TO CAVERN
-                    if (levelNumber <= levelsCompleted) {
+                    if (levelNumber <= levelsCompleted || DebugLoadAnyLevel) {
                         acc.ChangeCutscene(3);
                         vcc.ChangeCutscene(3);
                         SceneHandler.instance.LoadLevel("AnimaticCutscenes");
@@ -113,7 +114,7 @@ public class BlackboardScript : MonoBehaviour
 
                  case 2:
                     //GO TO SEPULTUS
-                    if (levelNumber <= levelsCompleted) {
+                    if (levelNumber <= levelsCompleted || DebugLoadAnyLevel) {
                         acc.ChangeCutscene(5);
                         vcc.ChangeCutscene(5);
                         SceneHandler.instance.LoadLevel("AnimaticCutscenes");
