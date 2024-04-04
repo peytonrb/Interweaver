@@ -413,16 +413,6 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
-    /*
-    public void OnQuit(InputValue input)
-    {
-        if (input.isPressed)
-        {
-            Application.Quit();
-        }
-    }
-    */
-
     public void ResetCurrentCharacter()
     {
         if (familiarScript.myTurn)
@@ -762,13 +752,15 @@ public class InputManagerScript : MonoBehaviour
                 break;
             case myEnums.Stag:
                 StagLeapScript stagLeapScript = familiar.GetComponent<StagLeapScript>();
-                if (isPressed && Time.timeScale != 0)
-                {
-                    StartCoroutine(stagLeapScript.ChargeJump());
-                }
-                else
-                {
-                    stagLeapScript.EndCharging();
+                if (stagLeapScript.wasLaunched == false) {
+                    if (isPressed && Time.timeScale != 0)
+                    {
+                        StartCoroutine(stagLeapScript.ChargeJump());
+                    }
+                    else
+                    {
+                        stagLeapScript.EndCharging();
+                    }
                 }
                 break;
         }
@@ -785,14 +777,17 @@ public class InputManagerScript : MonoBehaviour
                 break;
             case myEnums.Stag:
                 StagSwapScript stagSwapScript = familiar.GetComponent<StagSwapScript>();
-                if (isPressed && Time.timeScale != 0)
-                {
-                    StartCoroutine(stagSwapScript.ChargeSwap());
-                }
-                else
-                {
-                    stagSwapScript.isHolding = false;
-                    //stagSwapScript.DoSwap();
+                StagLeapScript stagLeapScript = familiar.GetComponent<StagLeapScript>();
+                if (stagLeapScript.wasLaunched == false) {
+                    if (isPressed && Time.timeScale != 0)
+                    {
+                        StartCoroutine(stagSwapScript.ChargeSwap());
+                    }
+                    else
+                    {
+                        stagSwapScript.isHolding = false;
+                        //stagSwapScript.DoSwap();
+                    }
                 }
                 break;
         }
