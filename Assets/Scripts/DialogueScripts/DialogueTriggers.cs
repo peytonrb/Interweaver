@@ -111,6 +111,8 @@ public class DialogueTriggers : MonoBehaviour
     {
         myMoveScript.ToggleCanMove(true);
         myMoveScript.ToggleCanLook(true);
+
+        popupUIInteraction.SetActive(false);
     }
 
     // occurs only with Event Triggers
@@ -126,7 +128,7 @@ public class DialogueTriggers : MonoBehaviour
                         AutoTrigger(collider);
                     popupUIInteraction.SetActive(true);
                     popupUIInteraction.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().SetText("<sprite name=" + weaverNPCInteraction + ">"
-                         + " Interact");
+                         + " ...");
                     break;
                 }
             case CharacterTriggerType.Weaver:
@@ -136,7 +138,7 @@ public class DialogueTriggers : MonoBehaviour
                         AutoTrigger(collider);
                     popupUIInteraction.SetActive(true);
                     popupUIInteraction.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().SetText("<sprite name="+weaverNPCInteraction+">"
-                         + " Interact");
+                         + " ...");
                     //this is where I would put the ui and the text element here
                     break;
                 }
@@ -146,7 +148,7 @@ public class DialogueTriggers : MonoBehaviour
                         AutoTrigger(collider);
                     popupUIInteraction.SetActive(true);
                     popupUIInteraction.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().SetText("<sprite name="+familiarNPCInteraction+">"
-                         + " Interact");
+                         + " ...");
                     //this is where I would put the ui and the text element here
                     break;
                 }
