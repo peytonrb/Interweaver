@@ -203,7 +203,7 @@ Transform:
   - {fileID: 163297276209911344}
   - {fileID: 6672032035271926771}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7724704668718821332
 MeshFilter:
@@ -315,10 +315,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624c1bbb12a90f244af454d9430404c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rival: {fileID: 0}
   smokePrefab: {fileID: 8589962604103078387, guid: ad9e57e4a8d9f4f4fa5838e79beb2c50, type: 3}
   dialogue: {fileID: 11400000, guid: 961abfa1e3bdc8c49a126e510b8bb37b, type: 2}
   textBox: {fileID: 0}
   secondsUntilDialogueAppears: 2
+  smoke: {fileID: 0}
+  animator: {fileID: 7724172507067840854}
 --- !u!1001 &1281018437358775045
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -394,10 +397,36 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1785925562473736079, guid: eb027d3c6192d964ba9b66d46ad521f4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7691496417191762275}
   m_SourcePrefab: {fileID: 100100000, guid: eb027d3c6192d964ba9b66d46ad521f4, type: 3}
 --- !u!4 &163297276209911344 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1406021911413603637, guid: eb027d3c6192d964ba9b66d46ad521f4, type: 3}
+  m_PrefabInstance: {fileID: 1281018437358775045}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &653011695894498442 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1785925562473736079, guid: eb027d3c6192d964ba9b66d46ad521f4, type: 3}
+  m_PrefabInstance: {fileID: 1281018437358775045}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7691496417191762275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653011695894498442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb5fe078b1e924447b0e6a56a3a5d5ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rivalEventTrigger: {fileID: 560276694103471158}
+--- !u!95 &7724172507067840854 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8860500780451566163, guid: eb027d3c6192d964ba9b66d46ad521f4, type: 3}
   m_PrefabInstance: {fileID: 1281018437358775045}
   m_PrefabAsset: {fileID: 0}

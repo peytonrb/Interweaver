@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 using Cinemachine;
+using Unity.VisualScripting;
+using System.Linq;
 
 public class RivalEventTrigger : MonoBehaviour
 {
     private GameObject weaver;
     private MovementScript moveScript;
-    private GameObject rival;
+    [HideInInspector] public GameObject rival;
     private bool hasPlayed; // only will play once. if player runs through trigger again, it would fail
     [CannotBeNullObjectField] public GameObject smokePrefab;
     private CinemachineVirtualCamera myVirtualCam;
@@ -18,7 +20,9 @@ public class RivalEventTrigger : MonoBehaviour
     [CannotBeNullObjectField] public GameObject textBox;
     [Range(0, 10)] public int secondsUntilDialogueAppears = 2;
     private bool isSpeaking = false;
-    private VisualEffect smoke;
+    [HideInInspector] public VisualEffect smoke;
+
+    [CannotBeNullObjectField] public Animator animator;
 
     void Start()
     {
@@ -37,6 +41,11 @@ public class RivalEventTrigger : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E)) // will refactor, fastest way to fix this for rn
             {
                 DialogueManager.instance.DisplayNextSentence();
+
+                if(!DialogueManager.instance.isActive)
+                {
+                    animator.SetTrigger("Laugh");
+                }
             }
         }
 
@@ -63,8 +72,7 @@ public class RivalEventTrigger : MonoBehaviour
     {
         if (collider.CompareTag("Player") && !hasPlayed)
         {
-            smoke.Play();
-            rival.SetActive(false);
+            animator.SetTrigger("Leave");
             hasPlayed = true;
         }
         
@@ -76,6 +84,5 @@ public class RivalEventTrigger : MonoBehaviour
         DialogueManager.instance.StartDialogue(dialogue, textBox);
         moveScript.ToggleCanMove(false);
         isSpeaking = true;
-        
     }
 }
