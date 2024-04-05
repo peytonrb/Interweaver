@@ -21,7 +21,7 @@ public class TeleportationCrystalScript : MonoBehaviour
         WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
         //audio here
         weaveController.OnDrop();
-        
+     
     }
 
     public void TeleportToFunction(GameObject other)
