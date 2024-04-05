@@ -79,10 +79,7 @@ public class DialogueTriggers : MonoBehaviour
                 myMoveScript.ToggleCanMove(false);
                 myMoveScript.ToggleCanLook(false);
             }
-            else
-            {
-                DialogueManager.instance.DisplayNextSentence();
-            }
+            DialogueManager.instance.DisplayNextSentence();
 
             triggered = true;
 
@@ -100,10 +97,7 @@ public class DialogueTriggers : MonoBehaviour
                 myMoveScript.ToggleCanMove(false);
                 myMoveScript.ToggleCanLook(false);
             }
-            else
-            {
-                DialogueManager.instance.DisplayNextSentence();
-            }
+            DialogueManager.instance.DisplayNextSentence();
         }
     }
 
@@ -111,6 +105,7 @@ public class DialogueTriggers : MonoBehaviour
     {
         myMoveScript.ToggleCanMove(true);
         myMoveScript.ToggleCanLook(true);
+        DialogueManager.instance.inAutoTriggeredDialogue = false;
     }
 
     // occurs only with Event Triggers
@@ -157,11 +152,10 @@ public class DialogueTriggers : MonoBehaviour
     {
         if (triggerOnlyOnce && !triggered)
         {
-
-
             if (isAutoTrigger)
             {
                 myMoveScript = collider.GetComponent<MovementScript>();
+                DialogueManager.instance.inAutoTriggeredDialogue = true;
                 DialogueManager.instance.currentTrigger = this;
                 DialogueManager.instance.StartDialogue(dialogue, textBox);
                 isInteracting = true;
@@ -173,10 +167,10 @@ public class DialogueTriggers : MonoBehaviour
 
         if (!triggerOnlyOnce)
         {
-
             if (isAutoTrigger)
             {
                 myMoveScript = collider.GetComponent<MovementScript>();
+                DialogueManager.instance.inAutoTriggeredDialogue = true;
                 DialogueManager.instance.currentTrigger = this;
                 DialogueManager.instance.StartDialogue(dialogue, textBox);
                 isInteracting = true;
@@ -191,7 +185,6 @@ public class DialogueTriggers : MonoBehaviour
     {
         if (collider.gameObject.tag == "Player" || collider.gameObject.tag == "Familiar")
         {
-
             if (isAutoTrigger)
             {
                 DialogueManager.instance.EndDialogue();
@@ -201,9 +194,6 @@ public class DialogueTriggers : MonoBehaviour
             {
                 popupUIInteraction.SetActive(false);
             }
-
         }
     }
-
-  
 }
