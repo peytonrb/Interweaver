@@ -26,6 +26,7 @@ public class WeaveableManager : MonoBehaviour
     // <param> the index of the list to be deleted in the parent list
     public void DestroyJoints(int listIndex)
     {
+
         for (int i = 0; i < combinedWeaveables[listIndex].weaveableObjectGroup.Count; i++)
         {
             // its possible that there may be multiple fixed joints per gameobject
