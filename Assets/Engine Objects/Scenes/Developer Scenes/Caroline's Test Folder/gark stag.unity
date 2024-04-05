@@ -2368,7 +2368,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5570
+  m_Name: pb_Mesh-2592
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2533,7 +2533,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5558
+  m_Name: pb_Mesh-2580
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2757,6 +2757,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 2122026641}
+    - target: {fileID: 8977571022788081958, guid: e6bf1b4f874e350498836e091dded2fe, type: 3}
+      propertyPath: devMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8977571022788081958, guid: e6bf1b4f874e350498836e091dded2fe, type: 3}
       propertyPath: familiar
       value: 
@@ -4602,8 +4606,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 823247042}
-  m_LocalRotation: {x: -0.088507116, y: 0.8988306, z: -0.3723078, w: -0.21367508}
-  m_LocalPosition: {x: 3.5, y: 21.555, z: -11}
+  m_LocalRotation: {x: -0.115075044, y: 0.88111967, z: -0.2778159, w: -0.3649715}
+  m_LocalPosition: {x: 12.5, y: 16.555, z: 17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8274,7 +8278,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5582
+  m_Name: pb_Mesh-2604
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -10086,7 +10090,7 @@ PrefabInstance:
       objectReference: {fileID: 367863480}
     - target: {fileID: 5040561894218972097, guid: 1e78e3f9674c9ba499e6250cb1f790cd, type: 3}
       propertyPath: m_VersionIndex
-      value: 3535
+      value: 3544
       objectReference: {fileID: 0}
     - target: {fileID: 5410547144551193912, guid: 1e78e3f9674c9ba499e6250cb1f790cd, type: 3}
       propertyPath: m_RootOrder
@@ -10166,7 +10170,7 @@ PrefabInstance:
       objectReference: {fileID: 363314248}
     - target: {fileID: 7600359014171259801, guid: 1e78e3f9674c9ba499e6250cb1f790cd, type: 3}
       propertyPath: m_VersionIndex
-      value: 3245
+      value: 3254
       objectReference: {fileID: 0}
     - target: {fileID: 7616252754230352647, guid: 1e78e3f9674c9ba499e6250cb1f790cd, type: 3}
       propertyPath: mainCamera
@@ -10201,6 +10205,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1938335447580302831, guid: 5dd65775d35933348a6e77af51431535, type: 3}
     - target: {fileID: 7743076414497641082, guid: 1e78e3f9674c9ba499e6250cb1f790cd, type: 3}
+      propertyPath: hasDynamicDialogue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7743076414497641082, guid: 1e78e3f9674c9ba499e6250cb1f790cd, type: 3}
       propertyPath: popupUIInteraction
       value: 
       objectReference: {fileID: 1818080928}
@@ -10208,6 +10216,22 @@ PrefabInstance:
       propertyPath: familiarInteraction
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7743076414497641082, guid: 1e78e3f9674c9ba499e6250cb1f790cd, type: 3}
+      propertyPath: dialogueList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7743076414497641082, guid: 1e78e3f9674c9ba499e6250cb1f790cd, type: 3}
+      propertyPath: dialogueList.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: e8155acea9976f94eab53409921ffdfc, type: 2}
+    - target: {fileID: 7743076414497641082, guid: 1e78e3f9674c9ba499e6250cb1f790cd, type: 3}
+      propertyPath: dialogueList.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 50e9e99ca5b4304498d6ebd57e80b30a, type: 2}
+    - target: {fileID: 7743076414497641082, guid: 1e78e3f9674c9ba499e6250cb1f790cd, type: 3}
+      propertyPath: dialogueList.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: ac8dd29a7d848944dbb5478e12999e8f, type: 2}
     - target: {fileID: 7888563646983756164, guid: 1e78e3f9674c9ba499e6250cb1f790cd, type: 3}
       propertyPath: m_Name
       value: Speaker Post (1)
@@ -10222,7 +10246,7 @@ PrefabInstance:
       objectReference: {fileID: 1537877586}
     - target: {fileID: 8369359743217887553, guid: 1e78e3f9674c9ba499e6250cb1f790cd, type: 3}
       propertyPath: m_VersionIndex
-      value: 1867
+      value: 1876
       objectReference: {fileID: 0}
     - target: {fileID: 8612748934348222840, guid: 1e78e3f9674c9ba499e6250cb1f790cd, type: 3}
       propertyPath: m_AnchoredPosition.y

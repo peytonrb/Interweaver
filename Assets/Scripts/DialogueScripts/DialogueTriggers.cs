@@ -32,6 +32,11 @@ public class DialogueTriggers : MonoBehaviour
 
     private bool triggered = false;
 
+    [Header("Dynamic Dialogue")]
+    [SerializeField] private bool hasDynamicDialogue;
+    [SerializeField] private List<Dialogue> dialogueList = new List<Dialogue>();
+
+
     // is called if near an NPC 
     public void TriggerDialogue(MovementScript movementScript)
     {
@@ -59,27 +64,28 @@ public class DialogueTriggers : MonoBehaviour
                     break;
                 }
         }
-
-
-
     }
 
     private void StartDialogueFromInteraction(MovementScript movementScript)
     {
         if (triggerOnlyOnce && !triggered)
         {
-
             myMoveScript = movementScript;
 
             if (!isInteracting)
             {
+                RefreshDynamicDialogue();
                 DialogueManager.instance.StartDialogue(dialogue, textBox);
                 DialogueManager.instance.currentTrigger = this;
                 isInteracting = true;
                 myMoveScript.ToggleCanMove(false);
                 myMoveScript.ToggleCanLook(false);
             }
-            DialogueManager.instance.DisplayNextSentence();
+            else
+            {
+                DialogueManager.instance.DisplayNextSentence();
+            }
+            
 
             triggered = true;
 
@@ -91,13 +97,18 @@ public class DialogueTriggers : MonoBehaviour
 
             if (!isInteracting)
             {
+                RefreshDynamicDialogue();
                 DialogueManager.instance.StartDialogue(dialogue, textBox);
                 DialogueManager.instance.currentTrigger = this;
                 isInteracting = true;
                 myMoveScript.ToggleCanMove(false);
                 myMoveScript.ToggleCanLook(false);
             }
-            DialogueManager.instance.DisplayNextSentence();
+            else
+            {
+                DialogueManager.instance.DisplayNextSentence();
+            }
+            
         }
     }
 
@@ -157,6 +168,7 @@ public class DialogueTriggers : MonoBehaviour
                 myMoveScript = collider.GetComponent<MovementScript>();
                 DialogueManager.instance.inAutoTriggeredDialogue = true;
                 DialogueManager.instance.currentTrigger = this;
+                RefreshDynamicDialogue();
                 DialogueManager.instance.StartDialogue(dialogue, textBox);
                 isInteracting = true;
                 myMoveScript.ToggleCanMove(false);
@@ -172,6 +184,7 @@ public class DialogueTriggers : MonoBehaviour
                 myMoveScript = collider.GetComponent<MovementScript>();
                 DialogueManager.instance.inAutoTriggeredDialogue = true;
                 DialogueManager.instance.currentTrigger = this;
+                RefreshDynamicDialogue();
                 DialogueManager.instance.StartDialogue(dialogue, textBox);
                 isInteracting = true;
                 myMoveScript.ToggleCanMove(false);
@@ -194,6 +207,19 @@ public class DialogueTriggers : MonoBehaviour
             {
                 popupUIInteraction.SetActive(false);
             }
+        }
+    }
+
+    private void RefreshDynamicDialogue()
+    {
+        if (!hasDynamicDialogue)
+        {
+            return;
+        }
+
+        if (dialogueList.Count > PlayerData.levelsCompleted && dialogueList[PlayerData.levelsCompleted])
+        {
+            dialogue = dialogueList[PlayerData.levelsCompleted];
         }
     }
 }

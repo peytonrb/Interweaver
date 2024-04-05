@@ -65,10 +65,8 @@ public class DialogueManager : MonoBehaviour
     {
         if (textBoxUI == null)
         {
-            Debug.Log("ee");
             return; 
         }
-            
 
         if (sentences.Count == 0)
         {
