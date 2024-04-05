@@ -40,8 +40,9 @@ public class JumpAndDashScript : MonoBehaviour
     private Material originalMaterial;
 
     [Header("Audio")]
-
     [SerializeField] private AudioClip dashAudioClip;
+
+    [HideInInspector] public bool hitAutoTrigger;
 
     void Start()
     {
@@ -152,7 +153,10 @@ public class JumpAndDashScript : MonoBehaviour
         {
             movementScript.canLook = true;
         }
-        movementScript.ToggleCanMove(true);
+        if (hitAutoTrigger == false) 
+        {
+            movementScript.ToggleCanMove(true);
+        }
         characterAnimationHandler.ToggleDashAnim(false);
         DisableDashVFX();
     }
