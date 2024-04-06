@@ -86,9 +86,8 @@ public class DialogueTriggers : MonoBehaviour
                 DialogueManager.instance.DisplayNextSentence();
             }
             
-
+            isAutoTrigger = false;
             triggered = true;
-
         }
 
         if (!triggerOnlyOnce)
@@ -175,6 +174,8 @@ public class DialogueTriggers : MonoBehaviour
                 myMoveScript.ToggleCanLook(false);
                 triggered = true;
             }
+            triggerOnlyOnce = false;
+            isAutoTrigger = false;
         }
 
         if (!triggerOnlyOnce)
