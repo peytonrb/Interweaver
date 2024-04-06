@@ -445,7 +445,10 @@ public class InputManagerScript : MonoBehaviour
                 {
                     DialogueManager.instance.DisplayNextSentence();
                 }
-                npcInteractScript.Interact();
+                else
+                {
+                    npcInteractScript.Interact();
+                }
                 Debug.Log("Interacting Familiar");
             }
             else
@@ -455,7 +458,10 @@ public class InputManagerScript : MonoBehaviour
                 {
                     DialogueManager.instance.DisplayNextSentence();
                 }
-                npcInteractScript.Interact();
+                else
+                {
+                    npcInteractScript.Interact();
+                }
                 Debug.Log("Interacting Weaver");
             }
         }

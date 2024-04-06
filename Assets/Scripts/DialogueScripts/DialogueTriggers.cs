@@ -36,6 +36,15 @@ public class DialogueTriggers : MonoBehaviour
     [SerializeField] private bool hasDynamicDialogue;
     [SerializeField] private List<Dialogue> dialogueList = new List<Dialogue>();
 
+    void Update()
+    {
+        if (myMoveScript != null && isInteracting)
+        {
+            myMoveScript.ToggleCanMove(false);
+            myMoveScript.ToggleCanLook(false);
+        }
+    }
+
 
     // is called if near an NPC 
     public void TriggerDialogue(MovementScript movementScript)
@@ -86,7 +95,6 @@ public class DialogueTriggers : MonoBehaviour
                 DialogueManager.instance.DisplayNextSentence();
             }
             
-            isAutoTrigger = false;
             triggered = true;
         }
 
@@ -113,6 +121,11 @@ public class DialogueTriggers : MonoBehaviour
 
     public void disableNPCDialogue()
     {
+        if (isAutoTrigger && triggerOnlyOnce)
+        {
+            triggerOnlyOnce = false;
+            isAutoTrigger = false;
+        }
         myMoveScript.ToggleCanMove(true);
         myMoveScript.ToggleCanLook(true);
         DialogueManager.instance.inAutoTriggeredDialogue = false;
@@ -174,8 +187,6 @@ public class DialogueTriggers : MonoBehaviour
                 myMoveScript.ToggleCanLook(false);
                 triggered = true;
             }
-            triggerOnlyOnce = false;
-            isAutoTrigger = false;
         }
 
         if (!triggerOnlyOnce)
