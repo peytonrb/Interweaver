@@ -129,6 +129,7 @@ public class DialogueTriggers : MonoBehaviour
         myMoveScript.ToggleCanMove(true);
         myMoveScript.ToggleCanLook(true);
         DialogueManager.instance.inAutoTriggeredDialogue = false;
+        popupUIInteraction.SetActive(false);
     }
 
     // occurs only with Event Triggers
@@ -144,7 +145,7 @@ public class DialogueTriggers : MonoBehaviour
                         AutoTrigger(collider);
                     popupUIInteraction.SetActive(true);
                     popupUIInteraction.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().SetText("<sprite name=" + weaverNPCInteraction + ">"
-                         + " Interact");
+                         + " ...");
                     break;
                 }
             case CharacterTriggerType.Weaver:
@@ -154,7 +155,7 @@ public class DialogueTriggers : MonoBehaviour
                         AutoTrigger(collider);
                     popupUIInteraction.SetActive(true);
                     popupUIInteraction.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().SetText("<sprite name="+weaverNPCInteraction+">"
-                         + " Interact");
+                         + " ...");
                     //this is where I would put the ui and the text element here
                     break;
                 }
@@ -164,7 +165,7 @@ public class DialogueTriggers : MonoBehaviour
                         AutoTrigger(collider);
                     popupUIInteraction.SetActive(true);
                     popupUIInteraction.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().SetText("<sprite name="+familiarNPCInteraction+">"
-                         + " Interact");
+                         + " ...");
                     //this is where I would put the ui and the text element here
                     break;
                 }
@@ -185,6 +186,12 @@ public class DialogueTriggers : MonoBehaviour
                 isInteracting = true;
                 myMoveScript.ToggleCanMove(false);
                 myMoveScript.ToggleCanLook(false);
+                //Tells the jump and dash script that the weaver has just dashed into an auto trigger.
+                JumpAndDashScript jads = collider.GetComponent<JumpAndDashScript>();
+                if (jads != null) 
+                {
+                    jads.hitAutoTrigger = true;
+                }
                 triggered = true;
             }
         }
@@ -201,6 +208,11 @@ public class DialogueTriggers : MonoBehaviour
                 isInteracting = true;
                 myMoveScript.ToggleCanMove(false);
                 myMoveScript.ToggleCanLook(false);
+                JumpAndDashScript jads = collider.GetComponent<JumpAndDashScript>();
+                if (jads != null) 
+                {
+                    jads.hitAutoTrigger = true;
+                }
                 triggered = true;
             }
         }

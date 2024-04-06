@@ -58,13 +58,13 @@ public class WyvernLookAt : MonoBehaviour
                 Vector3 direction = (wyvernPos - playerPos).normalized;
                 direction.y = 0f;
 
-                Vector3 camPos = player.transform.position + (direction * 15f);
-                camPos.y = 13f;
+                Vector3 camPos = player.transform.position + (direction * 20f);
+                camPos.y = 30f;
 
                 Vector3 zero = Vector3.zero;
                 //transform.position = Vector3.SmoothDamp(transform.position, camPos, ref zero, dampTime);
                 Vector3 hitpoint = new Vector3((wyvernPos.x + playerPos.x) / 2f,
-                                                (wyvernPos.y + playerPos.y) / 2f,
+                                                (wyvernPos.y + playerPos.y + 34f) / 2f,
                                                 (wyvernPos.z + playerPos.z) / 2f);
                 transform.GetChild(0).LookAt(hitpoint);
             }

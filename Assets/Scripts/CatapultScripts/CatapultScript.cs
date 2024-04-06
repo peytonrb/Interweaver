@@ -71,6 +71,9 @@ public class CatapultScript : MonoBehaviour
             movementScript.ToggleCanMove(true);
         }
         
+        stagLeapScript.wasLaunched = false;
+        WyvernBossManager wyvernBoss = wyvern.GetComponent<WyvernBossManager>();
+        wyvernBoss.stagWasLaunched = false;
         movementScript.ChangeVelocity(new Vector3(0f, 0f, 0f));
     }
 

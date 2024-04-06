@@ -518,8 +518,11 @@ public class WeaveableObject : MonoBehaviour
         Debug.Log("Reseting weaveable");
         isBeingWoven = false;
         isHovering = false;
-        this.GetComponent<Rigidbody>().useGravity = true;
-
+        if (this.TryGetComponent<Rigidbody>(out Rigidbody riglyboy))
+        {
+            riglyboy.useGravity = true;
+        }
+        
         if (!hasBeenCombined)
         {
             listIndex = 0;
@@ -609,7 +612,8 @@ public class WeaveableObject : MonoBehaviour
                 this.GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezeRotation;
                 break;
             default:
-                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+                if (this.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                    rb.constraints = RigidbodyConstraints.None;
                 break;
         }
     }

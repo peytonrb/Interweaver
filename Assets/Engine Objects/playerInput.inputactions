@@ -148,6 +148,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "CutsceneSkip",
+                    "type": "Button",
+                    "id": "a0724e0b-02ce-4f8c-8130-c6f665dad1fa",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -566,6 +575,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "DecreaseLevelsCompleted",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a7b2a3d4-73e7-4f5f-a96b-fad8930268da",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "CutsceneSkip",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6fea3e00-5053-4723-822a-79d033bc4b29",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "CutsceneSkip",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -230,6 +230,14 @@ public class MovementScript : MonoBehaviour
                 canMove = true;
                 characterAnimationHandler.ToggleMoveSpeedBlend(currentSpeed);
                 playerController.talkingToNPC = false;
+                JumpAndDashScript jads = gameObject.GetComponent<JumpAndDashScript>();
+                if (jads != null) 
+                {
+                    if (jads.hitAutoTrigger == true)
+                    {
+                        jads.hitAutoTrigger = false;
+                    }
+                }
             }
             else
             {
