@@ -186,12 +186,6 @@ public class DialogueTriggers : MonoBehaviour
                 isInteracting = true;
                 myMoveScript.ToggleCanMove(false);
                 myMoveScript.ToggleCanLook(false);
-                //Tells the jump and dash script that the weaver has just dashed into an auto trigger.
-                JumpAndDashScript jads = collider.GetComponent<JumpAndDashScript>();
-                if (jads != null) 
-                {
-                    jads.hitAutoTrigger = true;
-                }
                 triggered = true;
             }
         }
@@ -208,11 +202,6 @@ public class DialogueTriggers : MonoBehaviour
                 isInteracting = true;
                 myMoveScript.ToggleCanMove(false);
                 myMoveScript.ToggleCanLook(false);
-                JumpAndDashScript jads = collider.GetComponent<JumpAndDashScript>();
-                if (jads != null) 
-                {
-                    jads.hitAutoTrigger = true;
-                }
                 triggered = true;
             }
         }
