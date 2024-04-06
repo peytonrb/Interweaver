@@ -32,6 +32,20 @@ public class DialogueTriggers : MonoBehaviour
 
     private bool triggered = false;
 
+    [Header("Dynamic Dialogue")]
+    [SerializeField] private bool hasDynamicDialogue;
+    [SerializeField] private List<Dialogue> dialogueList = new List<Dialogue>();
+
+    void Update()
+    {
+        if (myMoveScript != null && isInteracting)
+        {
+            myMoveScript.ToggleCanMove(false);
+            myMoveScript.ToggleCanLook(false);
+        }
+    }
+
+
     // is called if near an NPC 
     public void TriggerDialogue(MovementScript movementScript)
     {
@@ -59,20 +73,17 @@ public class DialogueTriggers : MonoBehaviour
                     break;
                 }
         }
-
-
-
     }
 
     private void StartDialogueFromInteraction(MovementScript movementScript)
     {
         if (triggerOnlyOnce && !triggered)
         {
-
             myMoveScript = movementScript;
 
             if (!isInteracting)
             {
+                RefreshDynamicDialogue();
                 DialogueManager.instance.StartDialogue(dialogue, textBox);
                 DialogueManager.instance.currentTrigger = this;
                 isInteracting = true;
@@ -83,9 +94,8 @@ public class DialogueTriggers : MonoBehaviour
             {
                 DialogueManager.instance.DisplayNextSentence();
             }
-
+            
             triggered = true;
-
         }
 
         if (!triggerOnlyOnce)
@@ -94,6 +104,7 @@ public class DialogueTriggers : MonoBehaviour
 
             if (!isInteracting)
             {
+                RefreshDynamicDialogue();
                 DialogueManager.instance.StartDialogue(dialogue, textBox);
                 DialogueManager.instance.currentTrigger = this;
                 isInteracting = true;
@@ -104,14 +115,20 @@ public class DialogueTriggers : MonoBehaviour
             {
                 DialogueManager.instance.DisplayNextSentence();
             }
+            
         }
     }
 
     public void disableNPCDialogue()
     {
+        if (isAutoTrigger && triggerOnlyOnce)
+        {
+            triggerOnlyOnce = false;
+            isAutoTrigger = false;
+        }
         myMoveScript.ToggleCanMove(true);
         myMoveScript.ToggleCanLook(true);
-
+        DialogueManager.instance.inAutoTriggeredDialogue = false;
         popupUIInteraction.SetActive(false);
     }
 
@@ -162,7 +179,9 @@ public class DialogueTriggers : MonoBehaviour
             if (isAutoTrigger)
             {
                 myMoveScript = collider.GetComponent<MovementScript>();
+                DialogueManager.instance.inAutoTriggeredDialogue = true;
                 DialogueManager.instance.currentTrigger = this;
+                RefreshDynamicDialogue();
                 DialogueManager.instance.StartDialogue(dialogue, textBox);
                 isInteracting = true;
                 myMoveScript.ToggleCanMove(false);
@@ -179,11 +198,12 @@ public class DialogueTriggers : MonoBehaviour
 
         if (!triggerOnlyOnce)
         {
-
             if (isAutoTrigger)
             {
                 myMoveScript = collider.GetComponent<MovementScript>();
+                DialogueManager.instance.inAutoTriggeredDialogue = true;
                 DialogueManager.instance.currentTrigger = this;
+                RefreshDynamicDialogue();
                 DialogueManager.instance.StartDialogue(dialogue, textBox);
                 isInteracting = true;
                 myMoveScript.ToggleCanMove(false);
@@ -202,7 +222,6 @@ public class DialogueTriggers : MonoBehaviour
     {
         if (collider.gameObject.tag == "Player" || collider.gameObject.tag == "Familiar")
         {
-
             if (isAutoTrigger)
             {
                 DialogueManager.instance.EndDialogue();
@@ -212,9 +231,19 @@ public class DialogueTriggers : MonoBehaviour
             {
                 popupUIInteraction.SetActive(false);
             }
-
         }
     }
 
-  
+    private void RefreshDynamicDialogue()
+    {
+        if (!hasDynamicDialogue)
+        {
+            return;
+        }
+
+        if (dialogueList.Count > PlayerData.levelsCompleted && dialogueList[PlayerData.levelsCompleted])
+        {
+            dialogue = dialogueList[PlayerData.levelsCompleted];
+        }
+    }
 }

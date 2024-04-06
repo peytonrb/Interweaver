@@ -11,6 +11,7 @@ public class DialogueManager : MonoBehaviour
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI dialogueText;
     private GameObject textBoxUI;
+    public bool inAutoTriggeredDialogue;
     private AudioClip audioClip;
 
     public AudioClip speechFile;
@@ -63,7 +64,9 @@ public class DialogueManager : MonoBehaviour
     public void DisplayNextSentence()
     {
         if (textBoxUI == null)
-            return;
+        {
+            return; 
+        }
 
         if (sentences.Count == 0)
         {

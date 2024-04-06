@@ -434,19 +434,30 @@ public class InputManagerScript : MonoBehaviour
             if (familiarScript.myTurn)
             {
                 NPCInteractionScript npcInteractScript = familiar.GetComponent<NPCInteractionScript>();
-                npcInteractScript.Interact();
-                DialogueManager.instance.DisplayNextSentence();
+                if (DialogueManager.instance.inAutoTriggeredDialogue)
+                {
+                    DialogueManager.instance.DisplayNextSentence();
+                }
+                else
+                {
+                    npcInteractScript.Interact();
+                }
                 Debug.Log("Interacting Familiar");
             }
             else
             {
                 NPCInteractionScript npcInteractScript = player.GetComponent<NPCInteractionScript>();
-                npcInteractScript.Interact();
-                DialogueManager.instance.DisplayNextSentence();
+                if (DialogueManager.instance.inAutoTriggeredDialogue)
+                {
+                    DialogueManager.instance.DisplayNextSentence();
+                }
+                else
+                {
+                    npcInteractScript.Interact();
+                }
                 Debug.Log("Interacting Weaver");
             }
         }
-
     }
 
     public void ControllerRumble(float duration, float leftMotorFreq = 0, float rightMotorFreq = 0)
