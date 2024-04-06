@@ -42,8 +42,6 @@ public class JumpAndDashScript : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioClip dashAudioClip;
 
-    [HideInInspector] public bool hitAutoTrigger;
-
     void Start()
     {
         movementScript = GetComponent<MovementScript>();
@@ -153,10 +151,7 @@ public class JumpAndDashScript : MonoBehaviour
         {
             movementScript.canLook = true;
         }
-        if (hitAutoTrigger == false) 
-        {
-            movementScript.ToggleCanMove(true);
-        }
+        movementScript.ToggleCanMove(true);
         characterAnimationHandler.ToggleDashAnim(false);
         DisableDashVFX();
     }
