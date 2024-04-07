@@ -763,15 +763,13 @@ public class InputManagerScript : MonoBehaviour
                 break;
             case myEnums.Stag:
                 StagLeapScript stagLeapScript = familiar.GetComponent<StagLeapScript>();
-                if (stagLeapScript.wasLaunched == false) {
-                    if (isPressed && Time.timeScale != 0)
-                    {
-                        StartCoroutine(stagLeapScript.ChargeJump());
-                    }
-                    else
-                    {
-                        stagLeapScript.EndCharging();
-                    }
+                if (isPressed && Time.timeScale != 0)
+                {
+                    StartCoroutine(stagLeapScript.ChargeJump());
+                }
+                else
+                {
+                    stagLeapScript.EndCharging();
                 }
                 break;
         }
@@ -789,7 +787,7 @@ public class InputManagerScript : MonoBehaviour
             case myEnums.Stag:
                 StagSwapScript stagSwapScript = familiar.GetComponent<StagSwapScript>();
                 StagLeapScript stagLeapScript = familiar.GetComponent<StagLeapScript>();
-                if (stagLeapScript.wasLaunched == false) {
+                if (stagLeapScript.movementScript.enabled) {
                     if (isPressed && Time.timeScale != 0)
                     {
                         StartCoroutine(stagSwapScript.ChargeSwap());
