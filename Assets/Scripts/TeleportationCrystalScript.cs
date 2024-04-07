@@ -9,6 +9,9 @@ public class TeleportationCrystalScript : MonoBehaviour
    [HideInInspector] public bool isTeleportable = true;
     private WeaveController weaveController;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip weaveWarpSound;
+
     //if doing it to a combined object it breaks and the code actually kills itself
     // it says something about weaveableManager line 51
 
@@ -24,7 +27,6 @@ public class TeleportationCrystalScript : MonoBehaviour
 
 
         //audio here
-
         StartCoroutine(DisconnectOnTeleport());
      
     }
@@ -45,8 +47,10 @@ public class TeleportationCrystalScript : MonoBehaviour
     {
         WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
 
-        weaveController.OnDrop();
 
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, weaveWarpSound, 1f);
+        weaveController.OnDrop();
+        
         yield break;
     }
 

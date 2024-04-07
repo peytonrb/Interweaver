@@ -16,6 +16,9 @@ public class PressurePlateScript : MonoBehaviour
     public bool activatedByWeaveable = false;
     public UnityEvent pressEvent;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip pressurePlateSound;
+
     void Start() {
         bottomtargetposition = transform.position.y - 0.2f;
         toptargetposition = transform.position.y;
@@ -41,11 +44,13 @@ public class PressurePlateScript : MonoBehaviour
         if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Familiar"))
         {
             standingOnPlate = true;
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, pressurePlateSound, 1f);
         }
 
         if (activatedByWeaveable && other.gameObject.CompareTag("Weaveable"))
         {
             standingOnPlate = true;
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, pressurePlateSound, 1f);
         }
     }
 

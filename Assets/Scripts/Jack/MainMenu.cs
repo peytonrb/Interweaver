@@ -25,6 +25,7 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         //Only turns on continue button if save data is found.
+        PlayerData.instance.InitialFileCheck();
         if (PlayerData.instance.GetSaveData() == true) {
             continueButton.SetActive(true);
         }
@@ -156,6 +157,8 @@ public class MainMenu : MonoBehaviour
             PlayerData.instance.NewGame();
             AnimaticCutsceneController acc = gameObject.GetComponent<AnimaticCutsceneController>();
             acc.ChangeCutscene(0);
+            VideoCutsceneController vcc = gameObject.GetComponent<VideoCutsceneController>();
+            vcc.ChangeCutscene(0);
         }
 
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startFile, 1f);

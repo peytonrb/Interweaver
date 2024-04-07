@@ -30,6 +30,9 @@ public class DoorScript : MonoBehaviour
     private bool pplateTriggered = false;
     private bool stopCoroutine = false;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip doorOpenSound;
+
     void Start()
     {
         originalPosition = transform.position;
@@ -214,6 +217,7 @@ public class DoorScript : MonoBehaviour
             if (pressurePlates != null && !pplateTriggered && !doorIsOpen)
             {
                 StartCoroutine(OpenDoor());
+                 AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, doorOpenSound, 1f);
                 pplateTriggered = true;
             }
             else if (pressurePlates == null && !doorIsOpen)
