@@ -56,6 +56,7 @@ public class StagLeapScript : MonoBehaviour
     [SerializeField] private AudioClip  chargeLeapSound;
     private AudioSource chargeLeapAudioSource;
     [SerializeField] private AudioClip  leapSound;
+    private AudioSource leapAudioSource;
     [SerializeField] private AudioClip  airSlamSound;
     [SerializeField] private AudioClip  groundSlamSound;
     [SerializeField] private AudioClip  headBonkSound;
@@ -66,6 +67,7 @@ public class StagLeapScript : MonoBehaviour
         movementScript = GetComponent<MovementScript>();
         characterController = GetComponent<CharacterController>();
         chargeLeapAudioSource = null;
+        leapAudioSource = null;
         cameraMasterScript = GameObject.FindGameObjectWithTag("CameraMaster").GetComponent<CameraMasterScript>();
         if (!canOnlySlamAfterLeap)
         {
@@ -89,6 +91,10 @@ public class StagLeapScript : MonoBehaviour
                 break;
             }
         }
+        if (movementScript.canMove && chargingJump)
+        {
+            movementScript.ToggleCanMove(false); //sorry teehee - caroline
+        }
     }
 
     private IEnumerator DoStagHeadBonkAndStun()
@@ -96,6 +102,7 @@ public class StagLeapScript : MonoBehaviour
         float originalGravity = movementScript.GetGravity();
 
         isStaggered = true;
+        //bonk sound!
         cameraMasterScript.ShakeCurrentCamera(amplitude, frequency, headBonkStunLength);
 
         movementScript.ToggleCanMove(false);
@@ -138,7 +145,6 @@ public class StagLeapScript : MonoBehaviour
             currentJumpForce = Mathf.Lerp(0, maxJumpForce, t);
             yield return null;
         }
-        chargeLeapAudioSource = AudioManager.instance.KillAudioSource(chargeLeapAudioSource);
         t = 0;
     }
 
@@ -146,6 +152,7 @@ public class StagLeapScript : MonoBehaviour
     {
         if (chargingJump)
         {
+            chargeLeapAudioSource = AudioManager.instance.KillAudioSource(chargeLeapAudioSource);
             StartCoroutine(ShowGroundMarker());
             stagLeapVFXScript.StartVFX(stagLeapVFXScript.transform.position);
             canSlam = true;
@@ -153,8 +160,9 @@ public class StagLeapScript : MonoBehaviour
             chargingJump = false;
             stagChargingVFXScript.EndEffect();
             characterAnimationHandler.ToggleCharging(chargingJump);
-            if (movementScript.canMove && characterController.isGrounded) 
+            if (movementScript.canMove && characterController.isGrounded) //jump sound!
             {
+                leapAudioSource = AudioManager.instance.KillAudioSource(leapAudioSource);
                 movementScript.ChangeVelocity(new Vector3(movementScript.GetVelocity().x, currentJumpForce, movementScript.GetVelocity().z));
             }
         }
@@ -163,7 +171,7 @@ public class StagLeapScript : MonoBehaviour
     private IEnumerator StartSlam()
     {
         canSlam = false;
-        stagGroundPoundVFXScript.PlaySlammingVFX();
+        stagGroundPoundVFXScript.PlaySlammingVFX();//mid air slam
 
         characterAnimationHandler.ToggleSlam(true);
 
@@ -230,7 +238,7 @@ public class StagLeapScript : MonoBehaviour
         //displayGroundGizmos = false;
     }
 
-    private IEnumerator GrowSlamRadius(Vector3 slamSpot)
+    private IEnumerator GrowSlamRadius(Vector3 slamSpot)//slam sound here
     {
         
         displaySlamGizmos = true;
