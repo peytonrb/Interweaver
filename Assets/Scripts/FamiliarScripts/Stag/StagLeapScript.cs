@@ -124,7 +124,7 @@ public class StagLeapScript : MonoBehaviour
         {
             chargingJump = true;
             stagChargingVFXScript.StartEffect();
-            chargeLeapAudioSource = AudioManager.instance.AddSFX(chargeLeapSound, false, chargeLeapAudioSource);
+            chargeLeapAudioSource = AudioManager.instance.AddSFX(chargeLeapSound, true, chargeLeapAudioSource);
             characterAnimationHandler.ToggleCharging(chargingJump);
             movementScript.ZeroCurrentSpeed();
             movementScript.ToggleCanMove(false);
