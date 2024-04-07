@@ -7,7 +7,7 @@ using UnityEngine.TextCore.Text;
 public class StagLeapScript : MonoBehaviour
 {
     [Header("References")]
-    private MovementScript movementScript;
+    [HideInInspector] public MovementScript movementScript;
     private CharacterController characterController;
     [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
     private CameraMasterScript cameraMasterScript;
@@ -34,7 +34,6 @@ public class StagLeapScript : MonoBehaviour
     private float currentSlamRadius = 0f;
     [SerializeField][Range(0f, 3f)] private float postSlamStaggerTime = 0.6f;
     [HideInInspector] public bool isStaggered;
-    [HideInInspector] public bool wasLaunched;
 
     [Header("Screenshake")]
     [SerializeField][Range(0,5)] private float amplitude = 0.8f;
@@ -73,7 +72,6 @@ public class StagLeapScript : MonoBehaviour
         {
             canSlam = true;
         }
-        wasLaunched = false;
 
         stagChargingVFXScript = this.transform.Find("StagLeapChargingVFX").GetComponent<StagChargingVFXController>();
         stagLeapVFXScript = this.transform.Find("StagLeapVFX").GetComponent<StagLeapVFXController>();
@@ -122,7 +120,7 @@ public class StagLeapScript : MonoBehaviour
         float startTime = Time.time;
         float t = 0f;
 
-        if (characterController.isGrounded)
+        if (characterController.isGrounded && movementScript.enabled)
         {
             chargingJump = true;
             stagChargingVFXScript.StartEffect();
