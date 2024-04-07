@@ -29,16 +29,19 @@ public class CatapultScript : MonoBehaviour
             MovementScript movementScript = collider.GetComponent<MovementScript>(); 
             movementScript.ZeroCurrentSpeed();
             movementScript.ChangeVelocity(Vector3.zero);
-            movementScript.enabled = false; // completely move motion of character
             StartCoroutine(PrepareToLaunch(collider.gameObject));
         }
     }
 
     IEnumerator PrepareToLaunch(GameObject gameObject)
     {
-        yield return new WaitForSeconds(timeToLaunch); 
         MovementScript movementScript = gameObject.GetComponent<MovementScript>();
+        movementScript.enabled = false; // completely move motion of character
         CharacterController characterController = gameObject.GetComponent<CharacterController>();
+        StagLeapScript stagLeapScript = characterController.gameObject.GetComponent<StagLeapScript>();
+        stagLeapScript.canSlam = false;
+        yield return new WaitForSeconds(timeToLaunch); 
+        stagLeapScript.canSlam = true;
         Launch(movementScript, characterController);
     }
 
@@ -51,7 +54,6 @@ public class CatapultScript : MonoBehaviour
         movementScript.ChangeVelocity(launchVelocity); // apply velocity to the character
         StartCoroutine(RemoveLaunchForce(movementScript, characterController)); // prepare to remove this added velocity once the character hits the ground
         StagLeapScript stagLeapScript = characterController.gameObject.GetComponent<StagLeapScript>();
-        stagLeapScript.wasLaunched = true;
         WyvernBossManager wyvernboss = wyvern.GetComponent<WyvernBossManager>();
         wyvernboss.stagWasLaunched = true;
     }
@@ -71,7 +73,6 @@ public class CatapultScript : MonoBehaviour
             movementScript.ToggleCanMove(true);
         }
         
-        stagLeapScript.wasLaunched = false;
         WyvernBossManager wyvernBoss = wyvern.GetComponent<WyvernBossManager>();
         wyvernBoss.stagWasLaunched = false;
         movementScript.ChangeVelocity(new Vector3(0f, 0f, 0f));
