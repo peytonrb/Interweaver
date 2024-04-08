@@ -88,6 +88,14 @@ public class SoundEffectSubtitlesScript : MonoBehaviour
                     {
                         audiosourcetext.text = "Catapult Launch";
                     }
+                    else if (audioname == "Wyvern_Flamethrower")
+                    {
+                        audiosourcetext.text = "Wyvern Flamethrower";
+                    }
+                    else if (audioname == "Wyvern_Fireball")
+                    {
+                        audiosourcetext.text = "Wyvern Fireball";
+                    }
                 }
             break;
             case AudioManagerChannels.weaveLoopingChannel:
