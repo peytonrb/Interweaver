@@ -56,6 +56,7 @@ public class CatapultScript : MonoBehaviour
         StagLeapScript stagLeapScript = characterController.gameObject.GetComponent<StagLeapScript>();
         WyvernBossManager wyvernboss = wyvern.GetComponent<WyvernBossManager>();
         wyvernboss.stagWasLaunched = true;
+        Debug.Log("Stag was launched");
     }
 
     IEnumerator RemoveLaunchForce(MovementScript movementScript, CharacterController characterController)
@@ -73,8 +74,6 @@ public class CatapultScript : MonoBehaviour
             movementScript.ToggleCanMove(true);
         }
         
-        WyvernBossManager wyvernBoss = wyvern.GetComponent<WyvernBossManager>();
-        wyvernBoss.stagWasLaunched = false;
         movementScript.ChangeVelocity(new Vector3(0f, 0f, 0f));
     }
 
