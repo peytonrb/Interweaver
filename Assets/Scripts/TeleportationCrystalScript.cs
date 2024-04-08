@@ -47,10 +47,11 @@ public class TeleportationCrystalScript : MonoBehaviour
     {
         WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
 
+        yield return new WaitForSeconds(0.1f);
 
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, weaveWarpSound, 1f);
         weaveController.OnDrop();
-        
+
         yield break;
     }
 
