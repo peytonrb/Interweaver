@@ -169,7 +169,8 @@ public class AudioManager : MonoBehaviour
                 musicChannel.Play();
                 break;
             case AudioManagerChannels.SoundEffectChannel:
-                soundeffectChannel.PlayOneShot(clip);
+                soundeffectChannel.clip = clip;
+                soundeffectChannel.Play();
                 break;
             case AudioManagerChannels.weaveLoopingChannel:
                 weaveChannel.clip = clip;
@@ -204,7 +205,8 @@ public class AudioManager : MonoBehaviour
                 break;
             case AudioManagerChannels.SoundEffectChannel:
                 soundeffectChannel.pitch = pitch;
-                soundeffectChannel.PlayOneShot(clip);
+                soundeffectChannel.clip = clip;
+                soundeffectChannel.Play();
                 break;
             case AudioManagerChannels.weaveLoopingChannel:
                 weaveChannel.pitch = pitch;
