@@ -101,6 +101,7 @@ MonoBehaviour:
   talkingToNPC: 0
   characterAnimationHandler: {fileID: 9032169286115513460}
   possessionClip: {fileID: 8300000, guid: 35d1efb4e21c4de43943a2d88a81a63d, type: 3}
+  deathClip: {fileID: 8300000, guid: da7f31879c0fcfd42a590612d035f2fb, type: 3}
   familiar: {fileID: 0}
   respawnController: {fileID: 0}
 --- !u!114 &20847522854274277
@@ -162,6 +163,7 @@ MonoBehaviour:
   jumpForce: 8.99
   infiniteJump: 0
   coyoteTimeLength: 0.3
+  dashLock: 0
   canDash: 1
   dashCooldown: 0.19
   dashLength: 0.53
@@ -190,6 +192,8 @@ MonoBehaviour:
   lostSoulUI: {fileID: 0}
   lostSoulText: {fileID: 0}
   animator: {fileID: 0}
+  lostSouls: []
+  lostSoulsList: []
 --- !u!114 &7571894926950752737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -805,7 +809,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6471388089332486267}
   m_LocalRotation: {x: 0.37783775, y: -0.14655736, z: 0.060706038, w: 0.9121811}
-  m_LocalPosition: {x: 3.1065397, y: 13.538212, z: -10.572347}
+  m_LocalPosition: {x: 2.0307317, y: 13.538212, z: -10.830569}
   m_LocalScale: {x: 0.67691094, y: 0.6769105, z: 0.6769106}
   m_ConstrainProportionsScale: 0
   m_Children:

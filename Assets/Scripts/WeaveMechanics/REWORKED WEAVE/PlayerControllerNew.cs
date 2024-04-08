@@ -34,6 +34,7 @@ public class PlayerControllerNew : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioClip possessionClip;
+    [SerializeField] private AudioClip deathClip;
 
     [Header("References")]
     [CannotBeNullObjectField] public GameObject familiar;
@@ -135,6 +136,7 @@ public class PlayerControllerNew : MonoBehaviour
             isDead = true;
             movementScript.active = false;
             characterAnimationHandler.ToggleDeathAnim();
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, deathClip);
             StartCoroutine(DeathTimer(deathTimer));
         }
     }
