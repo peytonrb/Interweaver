@@ -1215,6 +1215,8 @@ MonoBehaviour:
   characterAnimationHandler: {fileID: 5698960169409605435}
   jumpForce: 4.31
   infiniteJump: 0
+  coyoteTimeLength: 0
+  dashLock: 0
   canDash: 0
   dashCooldown: 0.4
   dashLength: 0.1
@@ -1276,6 +1278,8 @@ MonoBehaviour:
   lostSoulUI: {fileID: 0}
   lostSoulText: {fileID: 0}
   animator: {fileID: 0}
+  lostSouls: []
+  lostSoulsList: []
 --- !u!114 &3688034466893937994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1308,6 +1312,8 @@ MonoBehaviour:
   - Hazard
   animLength: 1.5
   characterAnimationHandler: {fileID: 5698960169409605435}
+  burrowClip: {fileID: 8300000, guid: ac97189fdac0b4e4b9283d4bb46acda6, type: 3}
+  unburrowClip: {fileID: 8300000, guid: 83c90d40e6154c14aad4c79117b78c31, type: 3}
 --- !u!114 &6699170393875146026
 MonoBehaviour:
   m_ObjectHideFlags: 0

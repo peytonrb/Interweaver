@@ -40,6 +40,10 @@ public class MoleDigScript : MonoBehaviour
     [Header("Animation")]
     [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip  burrowClip;
+    [SerializeField] private AudioClip  unburrowClip;
+
    
     void Start()
     {
@@ -208,6 +212,7 @@ public class MoleDigScript : MonoBehaviour
         //Debug.Log("Dug in " + animLength);
 
         StartCoroutine(StartDigging(animLength));
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, burrowClip);
         StartCoroutine(VFXStart(vfxDelay));
     }
     public void AnimationForDiggingUp()
@@ -222,7 +227,7 @@ public class MoleDigScript : MonoBehaviour
         moleModel.GetComponent<Renderer>().enabled = true;
         
         StartCoroutine(DiggingOut(animLength));
-
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, unburrowClip);
         transform.Find("VFX_Dirt").GetComponent<VisualEffect>().Play();
     }
     IEnumerator StartDigging(float animLength)
