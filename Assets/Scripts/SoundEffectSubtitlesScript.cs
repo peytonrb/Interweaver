@@ -96,6 +96,11 @@ public class SoundEffectSubtitlesScript : MonoBehaviour
                     {
                         audiosourcetext.text = "Wyvern Fireball";
                     }
+
+                    else if (audioname == "Weaver_Dash")
+                    {
+                        audiosourcetext.text = "Dash";
+                    }
                 }
             break;
             case AudioManagerChannels.weaveLoopingChannel:
