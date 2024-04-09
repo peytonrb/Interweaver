@@ -40,7 +40,7 @@ public class PlayerControllerNew : MonoBehaviour
     [CannotBeNullObjectField] public GameObject familiar;
     [CannotBeNullObjectField] public RespawnController respawnController;
     private FamiliarScript familiarScript;
-    private GameMasterScript GM;
+    public GameMasterScript GM;
 
     void Awake()
     {
@@ -136,7 +136,10 @@ public class PlayerControllerNew : MonoBehaviour
             isDead = true;
             movementScript.active = false;
             characterAnimationHandler.ToggleDeathAnim();
-            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, deathClip);
+
+            if (AudioManager.instance != null)
+                AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, deathClip);
+
             StartCoroutine(DeathTimer(deathTimer));
         }
     }
@@ -144,7 +147,7 @@ public class PlayerControllerNew : MonoBehaviour
     IEnumerator DeathTimer(float deathTimer)
     {
         yield return new WaitForSeconds(deathTimer);
-
+;
         transform.position = GM.WeaverCheckPointPos;
         CameraMasterScript.instance.WeaverCameraReturnOnDeath(CameraMasterScript.instance.lastWeaverCameraTriggered);
         movementScript.HardResetMovementStats();

@@ -553,7 +553,9 @@ public class MovementScript : MonoBehaviour
     {
         StartCoroutine(ChangeMaterialOnDeath());
         deathVFX.Play();
-        FadeToBlack.instance.StartFadeToBlack();
+
+        if (FadeToBlack.instance != null)
+            FadeToBlack.instance.StartFadeToBlack();
 
 
         if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon))
