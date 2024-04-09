@@ -13,6 +13,7 @@ public class VideoCutsceneController : MonoBehaviour
     private VideoPlayer videoPlayer;
     [SerializeField] private bool playOnStart;
     private bool started;
+    [SerializeField] private GameObject introController;
 
     // Start is called before the first frame update
     void Start()
@@ -20,8 +21,17 @@ public class VideoCutsceneController : MonoBehaviour
         if (isOnTrigger == false) {
             videoPlayer = GetComponent<VideoPlayer>();
 
-            if (playOnStart == true) {
-                PlayVideo();
+            IntroSequenceScript introSequenceScript = introController.GetComponent<IntroSequenceScript>();
+            bool gameStarted = introSequenceScript.GetGameStarted();
+
+            if (gameStarted) {
+                introController.SetActive(false);
+                if (playOnStart == true) {
+                    PlayVideo();
+                }
+            }
+            else {
+                gameObject.SetActive(false);
             }
         }
     }

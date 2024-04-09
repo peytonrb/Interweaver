@@ -10,22 +10,33 @@ public class CutsceneInputScript : MonoBehaviour
     private float startingTextTimer;
     [SerializeField] private GameObject videoCutscene;
     private VideoCutsceneController vcc;
+    [SerializeField] private GameObject introController;
+    private bool gameStarted;
 
     // Start is called before the first frame update
     void Start()
     {
         vcc = videoCutscene.GetComponent<VideoCutsceneController>();
+        IntroSequenceScript introSequenceScript = introController.GetComponent<IntroSequenceScript>();
+        gameStarted = introSequenceScript.GetGameStarted();
 
-        startingTextTimer = popupTextTimer;
-        skipCutsceneText.SetActive(true);
+        if (gameStarted) {
+            startingTextTimer = popupTextTimer;
+            skipCutsceneText.SetActive(true);
+        }
+        else {
+            skipCutsceneText.SetActive(false);
+        }
     }
 
     void Update() {
-        if (skipCutsceneText.activeSelf) {
-            popupTextTimer -= Time.deltaTime;
-            if (popupTextTimer <= 0f) {
-                skipCutsceneText.SetActive(false);
-                popupTextTimer = startingTextTimer;
+        if (gameStarted) {
+            if (skipCutsceneText.activeSelf) {
+                popupTextTimer -= Time.deltaTime;
+                if (popupTextTimer <= 0f) {
+                    skipCutsceneText.SetActive(false);
+                    popupTextTimer = startingTextTimer;
+                }
             }
         }
     }
