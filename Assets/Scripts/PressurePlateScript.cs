@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.VFX;
 
 public class PressurePlateScript : MonoBehaviour
 {
@@ -16,6 +17,12 @@ public class PressurePlateScript : MonoBehaviour
     public bool activatedByWeaveable = false;
     public UnityEvent pressEvent;
 
+    [Header("VFX")]
+    public GameObject[] wires;
+    public Material activeMat;
+    public Material defaultMat;
+    private VisualEffect wireVFX;
+
     [Header("Audio")]
     [SerializeField] private AudioClip pressurePlateSound;
 
@@ -25,6 +32,12 @@ public class PressurePlateScript : MonoBehaviour
         bottomedOut = false;
         toppedOut = true;
         activated = false;
+
+        if (this.transform.childCount > 0 && this.transform.GetChild(0) != null)
+            wireVFX = this.transform.GetChild(0).GetComponent<VisualEffect>();
+        
+        if (wireVFX != null)
+            wireVFX.gameObject.SetActive(false);
     }
 
     void Update() {
@@ -37,6 +50,9 @@ public class PressurePlateScript : MonoBehaviour
         else if (activated) {
             Activation();
         }
+
+        if (!activated && wireVFX != null && wireVFX.gameObject.activeSelf)
+            RemoveVFX();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -91,6 +107,29 @@ public class PressurePlateScript : MonoBehaviour
     }
 
     void Activation() {
+        if (wires.Length > 0 && wireVFX != null)
+        {
+            wireVFX.gameObject.SetActive(true);
+
+            foreach (GameObject wire in wires)
+            {
+                wire.GetComponent<Renderer>().material = activeMat;
+            }
+        }
+        
         pressEvent.Invoke();
+    }
+
+    public void RemoveVFX()
+    {
+        wireVFX.gameObject.SetActive(false);
+
+        if (wires.Length > 0)
+        {
+            foreach (GameObject wire in wires)
+            {
+                wire.GetComponent<Renderer>().material = defaultMat;
+            }
+        }
     }
 }
