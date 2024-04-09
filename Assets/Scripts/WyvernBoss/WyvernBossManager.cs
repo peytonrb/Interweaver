@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class WyvernBossManager : MonoBehaviour
 {
@@ -54,6 +55,10 @@ public class WyvernBossManager : MonoBehaviour
     private WyvernPhaseTriggerManager triggerManager;
     [SerializeField] private GameObject endCutsceneController;
     private EndCutsceneTrigger ect;
+
+    [Header("Method invoke for wyvern injury")]
+    public UnityEvent[] onHurtWyvern;
+
     private float startingFireballTimer;
     private int startingFireballAmount;
     private float startingMagicCircleTimer;
@@ -547,8 +552,19 @@ public class WyvernBossManager : MonoBehaviour
                 ResetPhase3();
             break;
         }
+        ActivateOnHurt();
         moveToNextRoom = true;
         Debug.Log("Wyvern is hurt! Ouch!");
+    }
+
+    /// <summary>
+    /// Hurts the wyvern only if the invoke on the current room's index does not equal null.
+    /// </summary>
+    /// <param name="room"></param>
+    void ActivateOnHurt() {
+        if (onHurtWyvern[currentRoom] != null) {
+            onHurtWyvern[currentRoom].Invoke();
+        }
     }
 
     /// <summary>
