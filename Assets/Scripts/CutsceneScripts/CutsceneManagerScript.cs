@@ -21,6 +21,7 @@ public class CutsceneManagerScript : MonoBehaviour
     public bool usingCutsceneWeaver;
     public GameObject cutsceneWeaver;
     private DummyWeaverScript dummyScript;
+    public bool isSkippable = true;
 
     [Header ("Transitions")]
     [SerializeField] private bool useTransitions; //For using fade ins and fade outs
@@ -161,7 +162,7 @@ public class CutsceneManagerScript : MonoBehaviour
                 }
             }
 
-            if (InputManagerScript.instance.stopCutscene == true) {
+            if (InputManagerScript.instance.stopCutscene == true && isSkippable) {
                 EndCutscene();
             }
 
