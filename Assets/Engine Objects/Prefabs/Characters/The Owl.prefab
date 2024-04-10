@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d81c3474ba536648af37971310067f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInTutorial: 0
   canLook: 1
   <canMove>k__BackingField: 1
   speed: 10
@@ -107,6 +108,8 @@ MonoBehaviour:
   bounceVector: {x: 0, y: 1, z: 0}
   bounceValue: 3
   isNearGround: 0
+  freezePlayerAtStart: 1
+  freezeTime: 4
   characterAnimationHandler: {fileID: 9173301895383922949}
   timeToTurn: 0.1
   newDirection: {x: 0, y: 0, z: 0}
@@ -139,6 +142,7 @@ MonoBehaviour:
   familiarMovementAbility: 0
   talkingToNPC: 0
   possessionClip: {fileID: 8300000, guid: 35d1efb4e21c4de43943a2d88a81a63d, type: 3}
+  deathClip: {fileID: 8300000, guid: da7f31879c0fcfd42a590612d035f2fb, type: 3}
   isDead: 0
   islandisfalling: 0
 --- !u!114 &2139394294988104313
@@ -236,6 +240,10 @@ MonoBehaviour:
   lostSoulUI: {fileID: 0}
   lostSoulText: {fileID: 0}
   animator: {fileID: 0}
+  textbox: {fileID: 0}
+  isSpeaking: 0
+  lostSouls: []
+  lostSoulsList: []
 --- !u!199 &4888923489974806630
 ParticleSystemRenderer:
   serializedVersion: 6
