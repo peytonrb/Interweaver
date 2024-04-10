@@ -204,6 +204,8 @@ public class PauseScript : MonoBehaviour
                 ControllerImage.SetActive(true);
                 KeyboardImage.SetActive(false);
                 usingController = true;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
         }
         else
@@ -218,6 +220,8 @@ public class PauseScript : MonoBehaviour
                 ControllerImage.SetActive(false);
                 KeyboardImage.SetActive(true);
                 usingController = false;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = false;
             }
         }
 
@@ -271,11 +275,13 @@ public class PauseScript : MonoBehaviour
             {
                 controllerGroup.SetActive(true);
                 keyboardGroup.SetActive(false);
+                
             }
             else 
             {
                 controllerGroup.SetActive(false);
                 keyboardGroup.SetActive(true);
+               
             }
         }
     }
