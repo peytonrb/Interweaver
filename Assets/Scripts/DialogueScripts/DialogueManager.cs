@@ -46,6 +46,7 @@ public class DialogueManager : MonoBehaviour
         initialize(textBox);
         nameText.text = dialogue.name;
         sentences.Clear();
+        textBoxUI = textBox;
         textBoxUI.SetActive(true);
         isActive = true;
 

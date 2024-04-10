@@ -237,7 +237,6 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnWeaverNPCInteractions(InputValue input)
     {
-
     }
 
     public void OnRotate(InputValue input)
@@ -284,7 +283,8 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnWyvernCameraToggle(InputValue input) // cant handle camera for both weaver and familiar yet
     {
-        if (wyvern != null) {
+        if (wyvern != null)
+        {
             bool isPressed = input.isPressed;
             WyvernLookAt wyvernLookAtScript;
 
@@ -339,7 +339,7 @@ public class InputManagerScript : MonoBehaviour
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
         CharacterController playerCharacterController = player.GetComponent<CharacterController>();
 
-        if (!familiarScript.myTurn && !weaveController.isWeaving && playerCharacterController.isGrounded && 
+        if (!familiarScript.myTurn && !weaveController.isWeaving && playerCharacterController.isGrounded &&
             !playerScript.inCutscene && canSwitch && !playerScript.talkingToNPC && movementScript.active && !playerScript.isDead)
         {
             playerScript.Possession();
@@ -444,6 +444,11 @@ public class InputManagerScript : MonoBehaviour
                 {
                     npcInteractScript.Interact();
                 }
+
+                if (familiar.GetComponent<LostSoulManager>().isSpeaking)
+                {
+                    DialogueManager.instance.DisplayNextSentence();
+                }
                 Debug.Log("Interacting Familiar");
             }
             else
@@ -456,6 +461,11 @@ public class InputManagerScript : MonoBehaviour
                 else
                 {
                     npcInteractScript.Interact();
+                }
+
+                if (player.GetComponent<LostSoulManager>().isSpeaking)
+                {
+                    DialogueManager.instance.DisplayNextSentence();
                 }
                 Debug.Log("Interacting Weaver");
             }
@@ -789,7 +799,8 @@ public class InputManagerScript : MonoBehaviour
             case myEnums.Stag:
                 StagSwapScript stagSwapScript = familiar.GetComponent<StagSwapScript>();
                 StagLeapScript stagLeapScript = familiar.GetComponent<StagLeapScript>();
-                if (stagLeapScript.movementScript.enabled) {
+                if (stagLeapScript.movementScript.enabled)
+                {
                     if (isPressed && Time.timeScale != 0)
                     {
                         StartCoroutine(stagSwapScript.ChargeSwap());
@@ -853,28 +864,31 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnIncreaseLevelsCompleted(InputValue input)
     {
-        if (devMode) 
+        if (devMode)
         {
-            PlayerData.levelsCompleted ++;
+            PlayerData.levelsCompleted++;
             Debug.Log("Current Levels Completed: " + PlayerData.levelsCompleted);
         }
-        
+
     }
     public void OnDecreaseLevelsCompleted(InputValue input)
     {
-        if (devMode) 
+        if (devMode)
         {
-            PlayerData.levelsCompleted --;
+            PlayerData.levelsCompleted--;
             Debug.Log("Current Levels Completed: " + PlayerData.levelsCompleted);
         }
-        
+
     }
 
-    public void OnSkipCutscene(InputValue input) {
-        if (input.isPressed) {
+    public void OnSkipCutscene(InputValue input)
+    {
+        if (input.isPressed)
+        {
             stopCutscene = true;
         }
-        else {
+        else
+        {
             stopCutscene = false;
         }
     }

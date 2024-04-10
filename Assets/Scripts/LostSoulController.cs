@@ -7,6 +7,7 @@ public class LostSoulController : MonoBehaviour
     public float attractionStrength;
     public GameObject player;
     public int soulID; //First soul in the level should have ID = 0
+    public Dialogue lostSoulDialogue;
 
     void FixedUpdate()
     {
