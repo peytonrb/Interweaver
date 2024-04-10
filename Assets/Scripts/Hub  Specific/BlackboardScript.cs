@@ -4,6 +4,7 @@ using Cinemachine;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class BlackboardScript : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class BlackboardScript : MonoBehaviour
     [SerializeField] private TextMeshProUGUI lostSoulCountAlpine;
     [SerializeField] private TextMeshProUGUI lostSoulCountCavern;
     [SerializeField] private TextMeshProUGUI lostSoulCountSepultus;
+    [SerializeField] private Button defaultButton;
     [SerializeField] private GameObject pressEToExit;
     private AnimaticCutsceneController acc;
     private VideoCutsceneController vcc;
@@ -131,6 +133,7 @@ public class BlackboardScript : MonoBehaviour
             yield return null;
         }
         if (onBlackboard) {
+            defaultButton.Select();
             interactableUI.SetActive(true);
             pressEToExit.SetActive(true);
         }

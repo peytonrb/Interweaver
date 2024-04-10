@@ -1,11 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Animations;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class PlayerControllerNew : MonoBehaviour
@@ -147,15 +143,19 @@ public class PlayerControllerNew : MonoBehaviour
     IEnumerator DeathTimer(float deathTimer)
     {
         yield return new WaitForSeconds(deathTimer);
-;
+
         transform.position = GM.WeaverCheckPointPos;
         CameraMasterScript.instance.WeaverCameraReturnOnDeath(CameraMasterScript.instance.lastWeaverCameraTriggered);
         movementScript.HardResetMovementStats();
 
+        //Gonna comment this out for now since testing Alpine - Gabriel
+        //This is due to the fact that the weaveables do not currently have the WeaveableNew scripts on them.
+        /*
         if (GM.WeaverCheckPointNum == 0 && respawnController != null) // first checkpoint in shield puzzle - should also specify scene
         {
             respawnController.RespawnInShieldPuzzle();
         }
+        */
 
         characterAnimationHandler.ToggleRespawnAnim();
 
