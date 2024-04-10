@@ -72,6 +72,7 @@ public class SoundEffectSubtitlesScript : MonoBehaviour
                 if (AudioManager.instance.soundeffectChannel.clip != null) {
                     string audioname = AudioManager.instance.soundeffectChannel.clip.name;
                     audiosourcetext.text = audioname;
+                    //I'm so fucking sorry about this cause it sucks so much ass
                     if (audioname == "env_crystalShatter")
                     {
                         audiosourcetext.text = "Crystal Shatter";
@@ -100,6 +101,11 @@ public class SoundEffectSubtitlesScript : MonoBehaviour
                     else if (audioname == "Weaver_Dash")
                     {
                         audiosourcetext.text = "Dash";
+                    }
+
+                    else if (audioname == "Weaver_Death")
+                    {
+                        audiosourcetext.text = "";
                     }
                 }
             break;
