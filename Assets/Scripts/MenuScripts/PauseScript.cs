@@ -49,6 +49,10 @@ public class PauseScript : MonoBehaviour
     public Toggle subtitlesToggle;
     [HideInInspector] public int subtitlesInt;
 
+    [Header("Button UI Selection On Screen Change")]
+    [SerializeField] private Button defaultMenuButton;
+    [SerializeField] private Button defaultOptionsButton;
+
     public void Start()
     {
         toggle = GetComponentInChildren<Toggle>();
@@ -65,12 +69,17 @@ public class PauseScript : MonoBehaviour
 
             if (arachnophobiaInt == 0) {
                 SpiderBossScript spiderscript = spiderBoss.GetComponent<SpiderBossScript>();
-                spiderscript.ToggleArachnophobia(false);
+                if (spiderscript != null) {
+                    spiderscript.ToggleArachnophobia(false);
+                }
                 arachnophobiaToggle.isOn = false;
+                
             }
             else {
                 SpiderBossScript spiderscript = spiderBoss.GetComponent<SpiderBossScript>();
-                spiderscript.ToggleArachnophobia(true);
+                if (spiderscript != null) {
+                    spiderscript.ToggleArachnophobia(true);
+                }
                 arachnophobiaToggle.isOn = true;
             }
         }
@@ -223,6 +232,8 @@ public class PauseScript : MonoBehaviour
 
             optionGroup.GetComponent<CanvasGroup>().alpha = 0f;
             defaultGroup.GetComponent<CanvasGroup>().alpha = 1f;
+
+            defaultMenuButton.Select();
         }
         else
         {
@@ -231,6 +242,8 @@ public class PauseScript : MonoBehaviour
 
             optionGroup.GetComponent<CanvasGroup>().alpha = 1f;
             defaultGroup.GetComponent<CanvasGroup>().alpha = 0f;
+
+            defaultOptionsButton.Select();
         }
     }
 
