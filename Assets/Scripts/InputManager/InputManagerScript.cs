@@ -403,6 +403,8 @@ public class InputManagerScript : MonoBehaviour
                 pauseScript = pauseScreen.GetComponent<PauseScript>();
                 pauseScreen.SetActive(true);
                 canSwitch = false;
+                AudioManager.instance.StopSound(AudioManagerChannels.fallLoopChannel);
+                AudioManager.instance.StopSound(AudioManagerChannels.footStepsLoopChannel);
                 Time.timeScale = 0;
             }
             else

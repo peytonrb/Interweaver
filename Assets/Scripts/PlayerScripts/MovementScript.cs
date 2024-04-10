@@ -10,6 +10,7 @@ public class MovementScript : MonoBehaviour
     private GameMasterScript GM; //This is refrencing the game master script
 
     [HideInInspector] public bool isInTutorial; //this is for the UI pop up and it only shows when they're in the tutorial
+    private GameObject pause;
 
     [Header("Movement Variables")]
     public bool canLook = true;
@@ -53,7 +54,6 @@ public class MovementScript : MonoBehaviour
 
     [Header("Animation")]
     [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
-
 
     [Header("character's camera")]
     //Character Rotation values
@@ -100,6 +100,7 @@ public class MovementScript : MonoBehaviour
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControllerNew>();
         familiarScript = GameObject.FindGameObjectWithTag("Familiar").GetComponent<FamiliarScript>();
+        pause = playerController.pauseMenu;        
 
         isInTutorial = true; //this is the the funny boolean for being in tutorial
        originalGroundAcceleration = groundAcceleration;
@@ -268,7 +269,7 @@ public class MovementScript : MonoBehaviour
     {
         if (canMove)
         {
-            if (Time.timeScale != 0 && active && !inCutscene)
+            if (Time.timeScale != 0 && active && !inCutscene && !pause.activeSelf)
             {
                 // changes what acceleration/deceleration type is being used based on if controller is grouunded or not
                 acceleration = characterController.isGrounded ? groundAcceleration : aerialAcceleration;
