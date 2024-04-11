@@ -19,6 +19,7 @@ public class InputManagerScript : MonoBehaviour
     public bool switching;
     public GameObject pauseScreen;
     private PauseScript pauseScript;
+    private bool hasControllerInvoke;
     public static InputManagerScript instance;
     [SerializeField] private bool devMode;
     [HideInInspector] public bool stopCutscene;
@@ -72,7 +73,7 @@ public class InputManagerScript : MonoBehaviour
     {
         wasFamiliarTurn = false;
         wasWeaverTurn = false;
-
+        hasControllerInvoke = false;
 
         if (instance == null)
         {
@@ -137,13 +138,32 @@ public class InputManagerScript : MonoBehaviour
     {
         FamiliarUI();
         WeaverUI();
+        CheckForControllers();
+    }
 
+    private void CheckForControllers()
+    {
+        if (Gamepad.current != null && !hasControllerInvoke)
+        {
+            ToggleControlScheme(true);
+            hasControllerInvoke = true;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else if (Gamepad.current == null && hasControllerInvoke) 
+        {
+            ToggleControlScheme(false);
+            hasControllerInvoke = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
     public void ToggleControlScheme(bool isController)
     {
         if (isController)
         {
+            Debug.Log("current control is gamepad");
             isGamepad = true;
             playerInput.SwitchCurrentControlScheme("Gamepad", Gamepad.current);
 
