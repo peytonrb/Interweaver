@@ -144,7 +144,10 @@ public class FamiliarScript : MonoBehaviour
 
         CameraMasterScript.instance.FamiliarCameraReturnOnDeath(CameraMasterScript.instance.lastFamiliarCameraTriggered);
         characterController.enabled = true;
-        movementScript.active = true;
+        if (myTurn)
+        {
+            movementScript.active = true;
+        }
         isDead = false;
     }
 

@@ -66,27 +66,15 @@ public class FlamethrowerController : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             PlayerControllerNew playerController = other.gameObject.GetComponent<PlayerControllerNew>();
+            
             playerController.Death();
         }
         if (other.gameObject.CompareTag("Familiar"))
         {
             FamiliarScript familiarScript = other.gameObject.GetComponent<FamiliarScript>();
+
             familiarScript.Death();
         }
-        Debug.Log("Hit");
     }
 
-    /*
-    private void OnParticleCollision(GameObject other) {
-        if (other.CompareTag("Player")) {
-            PlayerControllerNew playerController = other.GetComponent<PlayerControllerNew>();
-            playerController.Death();
-        }
-        if (other.CompareTag("Familiar")) {
-            FamiliarScript familiarScript = other.GetComponent<FamiliarScript>();
-            familiarScript.Death();
-        }
-        Debug.Log("Collided");
-    }
-    */
 }

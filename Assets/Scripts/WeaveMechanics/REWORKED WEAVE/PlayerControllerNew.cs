@@ -160,7 +160,10 @@ public class PlayerControllerNew : MonoBehaviour
         characterAnimationHandler.ToggleRespawnAnim();
 
         isDead = false;
-        movementScript.active = true;
+        if (familiarScript.myTurn == false)
+        {
+            movementScript.active = true;
+        }
 
         yield break;
     }
