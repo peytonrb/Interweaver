@@ -15,7 +15,7 @@ public class BlackboardScript : MonoBehaviour
     [SerializeField] private TextMeshProUGUI lostSoulCountCavern;
     [SerializeField] private TextMeshProUGUI lostSoulCountSepultus;
     [SerializeField] private Button defaultButton;
-    [SerializeField] private GameObject pressEToExit;
+    [SerializeField] private TextMeshProUGUI pressEToExit;
     private AnimaticCutsceneController acc;
     private VideoCutsceneController vcc;
     public GameObject popupUIPrompt;
@@ -33,7 +33,7 @@ public class BlackboardScript : MonoBehaviour
         vcc = GetComponent<VideoCutsceneController>();
 
         interactableUI.SetActive(false);
-        pressEToExit.SetActive(false);
+        pressEToExit.gameObject.SetActive(false);
         blackboardCamera.Priority = 0;
         onBlackboard = false;
         levelsCompleted = PlayerData.instance.GetLevelsCompleted();
@@ -77,14 +77,16 @@ public class BlackboardScript : MonoBehaviour
             if (popupUIPrompt.activeSelf) {
                 popupUIPrompt.SetActive(false);
             }
+            InputManagerScript.instance.isOnBlackboard = true;
             onBlackboard = true;
         }
         else {
             interactableUI.SetActive(false);
-            pressEToExit.SetActive(false);
+            pressEToExit.gameObject.SetActive(false);
             movementScript.ToggleCanLook(true);
             movementScript.ToggleCanMove(true);
             blackboardCamera.Priority = 0;
+            InputManagerScript.instance.isOnBlackboard = false;
             onBlackboard = false;
         }
     }
@@ -135,7 +137,15 @@ public class BlackboardScript : MonoBehaviour
         if (onBlackboard) {
             defaultButton.Select();
             interactableUI.SetActive(true);
-            pressEToExit.SetActive(true);
+            pressEToExit.gameObject.SetActive(true);
+            //Changes the text on the exit prompt depending on the control scheme
+            PlayerInput playerInput = InputManagerScript.instance.GetComponent<PlayerInput>();
+            if (playerInput.currentControlScheme == "Gamepad") {
+                pressEToExit.text = "Press B to Exit";
+            }
+            else {
+                pressEToExit.text = "Press E to Exit";
+            }
         }
         yield break;
     }

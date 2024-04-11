@@ -157,6 +157,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ControllerNPCUninteract",
+                    "type": "Button",
+                    "id": "cc9a4f80-1260-4a11-80e3-e13a47bded09",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -597,6 +606,17 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "CutsceneSkip",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "67a56e66-b190-4963-a5b6-5419b22a2925",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "ControllerNPCUninteract",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

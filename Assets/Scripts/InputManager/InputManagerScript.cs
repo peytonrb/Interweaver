@@ -22,6 +22,7 @@ public class InputManagerScript : MonoBehaviour
     public static InputManagerScript instance;
     [SerializeField] private bool devMode;
     [HideInInspector] public bool stopCutscene;
+    [HideInInspector] public bool isOnBlackboard;
 
 
     //the invoke bools are there so then it can only happen once instead of every frame in the update function
@@ -460,7 +461,17 @@ public class InputManagerScript : MonoBehaviour
                 }
                 else
                 {
-                    npcInteractScript.Interact();
+                    if (!isOnBlackboard) 
+                    {
+                        npcInteractScript.Interact();
+                    }
+                    else
+                    {
+                        if (playerInput.currentControlScheme != "Gamepad")
+                        {
+                            npcInteractScript.Interact();
+                        }
+                    }
                 }
 
                 if (player.GetComponent<LostSoulManager>().isSpeaking)
@@ -468,6 +479,18 @@ public class InputManagerScript : MonoBehaviour
                     DialogueManager.instance.DisplayNextSentence();
                 }
                 Debug.Log("Interacting Weaver");
+            }
+        }
+    }
+
+    public void OnControllerNPCUninteract(InputValue input)
+    {
+        if (input.isPressed)
+        {
+            if (isOnBlackboard)
+            {
+                NPCInteractionScript npcInteractScript = player.GetComponent<NPCInteractionScript>();
+                npcInteractScript.Interact();
             }
         }
     }
