@@ -66,10 +66,12 @@ public class MovementScript : MonoBehaviour
     public bool active; //Determines if movement controller is active
 
     [Header("Character's sounds")]
-    [SerializeField] private AudioClip footStepsClip;
+    [SerializeField] public AudioClip footStepsClip;
     [SerializeField] private AudioClip weaverFallClip;
     [SerializeField] private AudioClip owlGlideClip;
     [SerializeField] private AudioClip owlDiveClip;
+
+    public float footstepPitch = 1;
     private bool canPlayFallAudio = false;
 
     [Header("Dive VFX")]
@@ -288,12 +290,12 @@ public class MovementScript : MonoBehaviour
                         if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon))
                         {
                             if (!AudioManager.instance.footStepsChannel.isPlaying)
-                                AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.3f);
+                                AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, footstepPitch);
                         }
                         else
                         {
                             if (!AudioManager.instance.footStepsChannel.isPlaying)
-                                AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.7f);
+                                AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, footstepPitch);
                         }
                     }
                     else

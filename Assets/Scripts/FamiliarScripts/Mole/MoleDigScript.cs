@@ -43,6 +43,10 @@ public class MoleDigScript : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioClip  burrowClip;
     [SerializeField] private AudioClip  unburrowClip;
+    [SerializeField] private AudioClip digMovementClip;
+    private AudioClip originalFootstepClip;
+    [SerializeField] private float diggingMovementPitch;
+    [SerializeField] private float originalFootstepsPitch;
 
    
     void Start()
@@ -233,7 +237,13 @@ public class MoleDigScript : MonoBehaviour
     IEnumerator StartDigging(float animLength)
     {
         yield return new WaitForSeconds(animLength);
+        originalFootstepClip = movementScript.footStepsClip;
+        originalFootstepsPitch = movementScript.footstepPitch;
+        movementScript.footStepsClip = digMovementClip;
+        movementScript.footstepPitch = diggingMovementPitch;
         borrowed = true;
+        AudioManager.instance.footStepsChannel.Stop();
+
         
         moleModel.GetComponent<Renderer>().enabled = false;
         
@@ -245,6 +255,10 @@ public class MoleDigScript : MonoBehaviour
     IEnumerator DiggingOut(float animLength)
     {
         borrowed = false;
+        AudioManager.instance.footStepsChannel.Stop();
+        movementScript.ZeroCurrentSpeed();
+        movementScript.footStepsClip = originalFootstepClip;
+        movementScript.footstepPitch = originalFootstepsPitch;
         moundModel.GetComponent<Animator>().SetTrigger("Lower");
         yield return new WaitForSeconds(animLength/2);
         
