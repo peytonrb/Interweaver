@@ -6,7 +6,7 @@ using UnityEngine.Playables;
 public class DummyWeaverScript : MonoBehaviour
 {
     public GameObject player;
-    private PlayerController playerController;
+    private PlayerControllerNew playerController;
     //private CutsceneManagerScript cms;
     private PlayableDirector director;
     private bool playerNotRelocated; //fail safe in case timeline were to loop
@@ -14,11 +14,9 @@ public class DummyWeaverScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerController = player.GetComponent<PlayerController>();
+        playerController = player.GetComponent<PlayerControllerNew>();
         //cms = GetComponentInParent<CutsceneManagerScript>();
         director = GetComponentInParent<PlayableDirector>();
-
-        
 
         playerNotRelocated = true;
     }
