@@ -201,7 +201,7 @@ Transform:
   - {fileID: 4137010560760013977}
   - {fileID: 1919168892669399989}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &181293012379048751
 MeshFilter:
@@ -342,6 +342,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37b73927cc4be9f43bf718b91d9405bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementScript: {fileID: 0}
   characterAnimationHandler: {fileID: 8042015713206778282}
   chargingJump: 0
   jumpChargeTime: 1
@@ -360,7 +361,6 @@ MonoBehaviour:
   slamTime: 0.4
   postSlamStaggerTime: 0.6
   isStaggered: 0
-  wasLaunched: 0
   amplitude: 1.51
   frequency: 1.51
   showSlamRadiusGizmo: 0

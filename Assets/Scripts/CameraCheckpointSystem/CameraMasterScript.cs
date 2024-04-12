@@ -10,7 +10,7 @@ public class CameraMasterScript : MonoBehaviour
     //Singleton
     public static CameraMasterScript instance;
 
-    [HideInInspector]
+    
     public CinemachineVirtualCamera currentCam;
 
     //Weaver Camera + Checkpoints
@@ -211,7 +211,7 @@ public class CameraMasterScript : MonoBehaviour
     }
 
     public void SwitchToFamiliarCamera() {
-       for(int i = 0; i < weaverCameras.Count; i++) {
+        for(int i = 0; i < weaverCameras.Count; i++) {
             CinemachineVirtualCamera vcams = weaverCameras[i].GetComponent<CinemachineVirtualCamera>();
             vcams.Priority = 0;
         }
@@ -229,6 +229,7 @@ public class CameraMasterScript : MonoBehaviour
         CinemachineVirtualCamera vcam = weaverCameras[weaverCameraOnPriority].GetComponent<CinemachineVirtualCamera>();
         vcam.Priority = 1;
         currentCam = vcam;
+        StopCurrentCameraShake();
     }
 
     public void ResetWeaverCameras() {
@@ -477,5 +478,7 @@ public class CameraMasterScript : MonoBehaviour
         vcam.Priority = 1;
         cameraToSwitchFrom.Priority = 0;
     }
+
+    
 
 }
