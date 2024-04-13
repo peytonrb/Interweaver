@@ -87,6 +87,7 @@ public class FloatingIslandScript : MonoBehaviour
     public void AssignNewCrystal(CrystalScript crystal)
     {
         myCrystal = crystal;
+        staticCrystal = crystal;
         crystal.AssignFloatingIsland(this);
     }
 

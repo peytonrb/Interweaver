@@ -249,10 +249,10 @@ public class InputManagerScript : MonoBehaviour
             {
                 weaveController.currentWeaveable.MoveWeaveableToMouse();
             }
-            else
-            {
-                weaveController.MouseTargetingArrow(inputVector);
-            }
+            //else
+            //{
+            //    weaveController.MouseTargetingArrow(inputVector);
+            //}
         }
     }
 
