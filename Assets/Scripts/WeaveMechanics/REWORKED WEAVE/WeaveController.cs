@@ -51,6 +51,9 @@ public class WeaveController : MonoBehaviour
             weaveFXScript.DrawWeave(weaveSpawn.transform.position, currentWeaveable.transform.position);
         }
 
+        //unsure if this would cause problems but I'm pretty sure it won't
+        MouseTargetingArrow();
+
         if (this.GetComponent<PlayerControllerNew>().isDead)
         {
             OnDrop();
@@ -83,9 +86,10 @@ public class WeaveController : MonoBehaviour
 
     // adjusts targeting arrow based on mouse position
     // <param> the direction that the player is looking in
-    public void MouseTargetingArrow(Vector2 lookDir)
+    // public void MouseTargetingArrow(Vector2 lookDir) <---this is what it was before for the method
+    public void MouseTargetingArrow()
     {
-        lookDirection = lookDir;
+        
         targetingArrow.SetActive(true);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitData;
