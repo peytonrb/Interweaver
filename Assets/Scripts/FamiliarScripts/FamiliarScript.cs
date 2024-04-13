@@ -24,6 +24,7 @@ public class FamiliarScript : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioClip possessionClip;
     [SerializeField] private AudioClip deathClip;
+    [SerializeField] private AudioClip respawnClip;
     //public InputAction NPCInteraction;
 
     [HideInInspector] public bool isDead;
@@ -149,6 +150,7 @@ public class FamiliarScript : MonoBehaviour
             movementScript.active = true;
         }
         isDead = false;
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, respawnClip);
     }
 
 }

@@ -1194,8 +1194,9 @@ MonoBehaviour:
   active: 0
   footStepsClip: {fileID: 8300000, guid: 6112a6d22da114246a8b5678954b8941, type: 3}
   weaverFallClip: {fileID: 8300000, guid: 4d89867d6ad72cb45affd75ee71c73f8, type: 3}
-  owlGlideClip: {fileID: 8300000, guid: 4d89867d6ad72cb45affd75ee71c73f8, type: 3}
-  owlDiveClip: {fileID: 8300000, guid: 440835242e5e14f489812588da29266e, type: 3}
+  owlGlideClip: {fileID: 0}
+  owlDiveClip: {fileID: 0}
+  footstepPitch: 1.7
   inCutscene: 0
   dissolveMat: {fileID: 0}
   materialHolder: {fileID: 0}
@@ -1248,7 +1249,8 @@ MonoBehaviour:
   familiarMovementAbility: 0
   talkingToNPC: 0
   possessionClip: {fileID: 8300000, guid: 35d1efb4e21c4de43943a2d88a81a63d, type: 3}
-  deathClip: {fileID: 0}
+  deathClip: {fileID: 8300000, guid: da7f31879c0fcfd42a590612d035f2fb, type: 3}
+  respawnClip: {fileID: 8300000, guid: 205aed89cf4a5fe488d40df30b135e3d, type: 3}
   isDead: 0
   islandisfalling: 0
 --- !u!114 &758329149717841849
@@ -1318,6 +1320,8 @@ MonoBehaviour:
   burrowClip: {fileID: 8300000, guid: ac97189fdac0b4e4b9283d4bb46acda6, type: 3}
   unburrowClip: {fileID: 8300000, guid: 83c90d40e6154c14aad4c79117b78c31, type: 3}
   digMovementClip: {fileID: 8300000, guid: 84c3017aa6f10d04c91f6b2510a10ca1, type: 3}
+  diggingMovementPitch: 1
+  originalFootstepsPitch: 1.7
 --- !u!114 &6699170393875146026
 MonoBehaviour:
   m_ObjectHideFlags: 0

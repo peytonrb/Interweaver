@@ -31,6 +31,7 @@ public class PlayerControllerNew : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioClip possessionClip;
     [SerializeField] private AudioClip deathClip;
+    [SerializeField] private AudioClip respawnClip;
 
     [Header("References")]
     [CannotBeNullObjectField] public GameObject familiar;
@@ -129,9 +130,12 @@ public class PlayerControllerNew : MonoBehaviour
     {
         if (!isDead)
         {
+            
             isDead = true;
+            AudioManager.instance.footStepsChannel.Stop();
             movementScript.active = false;
             characterAnimationHandler.ToggleDeathAnim();
+            
 
             if (AudioManager.instance != null)
                 AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, deathClip);
@@ -144,9 +148,12 @@ public class PlayerControllerNew : MonoBehaviour
     {
         yield return new WaitForSeconds(deathTimer);
 
+
         transform.position = GM.WeaverCheckPointPos;
+        //AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, respawnClip);
         CameraMasterScript.instance.WeaverCameraReturnOnDeath(CameraMasterScript.instance.lastWeaverCameraTriggered);
         movementScript.HardResetMovementStats();
+        
 
         //Gonna comment this out for now since testing Alpine - Gabriel
         //This is due to the fact that the weaveables do not currently have the WeaveableNew scripts on them.
@@ -163,8 +170,9 @@ public class PlayerControllerNew : MonoBehaviour
         if (familiarScript.myTurn == false)
         {
             movementScript.active = true;
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, respawnClip);
         }
-
+        
         yield break;
     }
 

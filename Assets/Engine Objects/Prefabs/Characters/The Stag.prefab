@@ -156,7 +156,7 @@ MonoBehaviour:
   m_PivotOffset: {x: 0, y: 0, z: 0}
   m_AmplitudeGain: 0
   m_FrequencyGain: 0
-  mNoiseOffsets: {x: 0, y: 0, z: 0}
+  mNoiseOffsets: {x: -898.07434, y: -483.89944, z: 757.44104}
 --- !u!1 &7263900705511667863
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,7 +201,7 @@ Transform:
   - {fileID: 4137010560760013977}
   - {fileID: 1919168892669399989}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &181293012379048751
 MeshFilter:
@@ -276,6 +276,7 @@ MonoBehaviour:
   weaverFallClip: {fileID: 8300000, guid: 4d89867d6ad72cb45affd75ee71c73f8, type: 3}
   owlGlideClip: {fileID: 8300000, guid: 4d89867d6ad72cb45affd75ee71c73f8, type: 3}
   owlDiveClip: {fileID: 8300000, guid: 440835242e5e14f489812588da29266e, type: 3}
+  footstepPitch: 1.7
   inCutscene: 0
   dissolveMat: {fileID: 2100000, guid: 6f71add89b90ccc418119200d1371ae9, type: 2}
   materialHolder: {fileID: 0}
@@ -298,6 +299,8 @@ MonoBehaviour:
   familiarMovementAbility: 0
   talkingToNPC: 0
   possessionClip: {fileID: 8300000, guid: 35d1efb4e21c4de43943a2d88a81a63d, type: 3}
+  deathClip: {fileID: 8300000, guid: da7f31879c0fcfd42a590612d035f2fb, type: 3}
+  respawnClip: {fileID: 8300000, guid: 205aed89cf4a5fe488d40df30b135e3d, type: 3}
   isDead: 0
   islandisfalling: 0
 --- !u!114 &8034669036731384007
@@ -328,6 +331,8 @@ MonoBehaviour:
   lostSoulUI: {fileID: 0}
   lostSoulText: {fileID: 0}
   animator: {fileID: 0}
+  textbox: {fileID: 0}
+  isSpeaking: 0
   lostSouls: []
   lostSoulsList: []
 --- !u!114 &6838502372027027517
@@ -342,6 +347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37b73927cc4be9f43bf718b91d9405bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementScript: {fileID: 0}
   characterAnimationHandler: {fileID: 8042015713206778282}
   chargingJump: 0
   jumpChargeTime: 1
@@ -360,7 +366,6 @@ MonoBehaviour:
   slamTime: 0.4
   postSlamStaggerTime: 0.6
   isStaggered: 0
-  wasLaunched: 0
   amplitude: 1.51
   frequency: 1.51
   showSlamRadiusGizmo: 0
