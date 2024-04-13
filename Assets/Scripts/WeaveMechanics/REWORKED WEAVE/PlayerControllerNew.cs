@@ -132,6 +132,8 @@ public class PlayerControllerNew : MonoBehaviour
         {
             
             isDead = true;
+            characterController.enabled = false;
+            movementScript.ZeroCurrentSpeed();
             AudioManager.instance.footStepsChannel.Stop();
             movementScript.active = false;
             characterAnimationHandler.ToggleDeathAnim();
@@ -167,6 +169,7 @@ public class PlayerControllerNew : MonoBehaviour
         characterAnimationHandler.ToggleRespawnAnim();
 
         isDead = false;
+        characterController.enabled = true;
         if (familiarScript.myTurn == false)
         {
             movementScript.active = true;
