@@ -62,6 +62,11 @@ public class NetProjectileScript : MonoBehaviour
 
         if (other.gameObject.CompareTag("Player"))
         {
+
+           if (other.GetComponent<PlayerControllerNew>().isDead)
+           {
+                return;
+           }
             other.GetComponent<MovementScript>().GoToCheckPoint();
             Destroy(clone.gameObject, 1f);
             gameObject.SetActive(false);

@@ -287,21 +287,11 @@ public class MovementScript : MonoBehaviour
                     {
                         isNearGround = true;
                         //Play footstep Audio!
-                        if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon))
-                        {
-                            if (!AudioManager.instance.footStepsChannel.isPlaying)
-                                AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, footstepPitch);
-                        }
-                        else
-                        {
-                            if (!AudioManager.instance.footStepsChannel.isPlaying)
-                                AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, footstepPitch);
-                        }
+                            AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1f);
                     }
                     else
                     {
-                        if (AudioManager.instance.footStepsChannel.isPlaying)
-                            AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
+                        AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
                     }
 
                 }
@@ -563,6 +553,10 @@ public class MovementScript : MonoBehaviour
 
         if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon))
         {
+            if (playerCon.isDead)
+            {
+                return;
+            }
             playerCon.Death();
         }
 

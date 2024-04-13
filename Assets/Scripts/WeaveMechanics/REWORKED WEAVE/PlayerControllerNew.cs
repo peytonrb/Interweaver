@@ -83,6 +83,7 @@ public class PlayerControllerNew : MonoBehaviour
             }
 
             inCutscene = movementScript.inCutscene;
+            
         }
     }
 
@@ -132,6 +133,8 @@ public class PlayerControllerNew : MonoBehaviour
         {
             
             isDead = true;
+            characterController.enabled = false;
+            movementScript.ZeroCurrentSpeed();
             AudioManager.instance.footStepsChannel.Stop();
             movementScript.active = false;
             characterAnimationHandler.ToggleDeathAnim();
@@ -150,7 +153,6 @@ public class PlayerControllerNew : MonoBehaviour
 
 
         transform.position = GM.WeaverCheckPointPos;
-        //AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, respawnClip);
         CameraMasterScript.instance.WeaverCameraReturnOnDeath(CameraMasterScript.instance.lastWeaverCameraTriggered);
         movementScript.HardResetMovementStats();
         
@@ -167,6 +169,7 @@ public class PlayerControllerNew : MonoBehaviour
         characterAnimationHandler.ToggleRespawnAnim();
 
         isDead = false;
+        characterController.enabled = true;
         if (familiarScript.myTurn == false)
         {
             movementScript.active = true;
