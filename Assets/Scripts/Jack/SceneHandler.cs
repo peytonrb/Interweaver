@@ -16,6 +16,7 @@ public class SceneHandler : MonoBehaviour
     public string currentSceneName;
     public GameObject sceneLoader;
     public Slider progressBar;
+    [HideInInspector] public AsyncOperation loadOperation;
     void OnEnable()
     {
         //Tell our 'OnLevelFinishedLoading' function to start listening for a scene change as soon as this script is enabled.
@@ -77,7 +78,7 @@ public class SceneHandler : MonoBehaviour
 
     IEnumerator LoadAsynchrously(string sceneToLoad)
     {
-        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneToLoad);
+         loadOperation = SceneManager.LoadSceneAsync(sceneToLoad);
 
         sceneLoader.SetActive(true);
 
