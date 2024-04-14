@@ -63,6 +63,7 @@ public class StagLeapScript : MonoBehaviour
     [SerializeField] private AudioClip  headBonkSound;
     private AudioSource headBonkAudioSource;
     [SerializeField] private AudioClip destroySound;
+    private AudioSource destroyAudioSource;
 
     // Start is called before the first frame update
     void Start()
@@ -74,6 +75,7 @@ public class StagLeapScript : MonoBehaviour
         groundSlamAudioSource = null;
         groundSlamAudioSource = null;
         headBonkAudioSource = null;
+        destroyAudioSource = null;
         cameraMasterScript = GameObject.FindGameObjectWithTag("CameraMaster").GetComponent<CameraMasterScript>();
         if (!canOnlySlamAfterLeap)
         {
@@ -264,8 +266,10 @@ public class StagLeapScript : MonoBehaviour
             {
                 if (hitCollider.gameObject.CompareTag("Breakable"))
                 {
-                    AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, destroySound, 1f);
+                    //AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, destroySound, 1f);
+                    //destroyAudioSource = AudioManager.instance.AddSFX(destroySound, true, destroyAudioSource);
                     Destroy(hitCollider.gameObject); // call the thing being broken here!
+                    //destroyAudioSource = AudioManager.instance.KillAudioSource(destroyAudioSource);
                 }
                 if (hitCollider.gameObject.CompareTag("Boss")) {
                     WyvernBossManager wyvernBossManager = hitCollider.gameObject.GetComponent<WyvernBossManager>();
