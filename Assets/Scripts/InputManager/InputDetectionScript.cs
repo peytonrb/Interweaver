@@ -13,10 +13,18 @@ public class InputDetectionScript : MonoBehaviour
         if (gamepad != null)
         {
             InputManagerScript.instance.isGamepad = true;
+            Debug.Log("Using Controller");
         }
-        else if (Keyboard.current != null || Mouse.current != null)
+        else 
         {
-            //Debug.Log("k&M");
+            CheckForKeyboard();
+        } 
+    }
+
+    void CheckForKeyboard() 
+    {
+        if (Keyboard.current != null || Mouse.current != null)
+        {
             InputManagerScript.instance.isGamepad = false;
         }
     }

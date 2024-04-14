@@ -26,14 +26,16 @@ public class CutsceneInputScript : MonoBehaviour
         gameStarted = introSequenceScript.GetGameStarted();
         hasPressedSkip = false;
 
-        if (playerInput.currentControlScheme == "Gamepad") 
+        var gamepad = Gamepad.current;
+        if (gamepad != null)
         {
             usingController = true;
+            playerInput.SwitchCurrentControlScheme("Gamepad", Gamepad.current);
         }
         else 
         {
-            usingController = false;
-        }
+            CheckForKeyboard();
+        } 
 
         if (gameStarted) 
         {
@@ -54,6 +56,14 @@ public class CutsceneInputScript : MonoBehaviour
         {
             skipCutsceneTextKeyboard.SetActive(false);
             skipCutsceneTextGamepad.SetActive(false);
+        }
+    }
+
+    void CheckForKeyboard() {
+        if (Keyboard.current != null || Mouse.current != null)
+        {
+            usingController = false;
+            playerInput.SwitchCurrentControlScheme("Keyboard&Mouse", Keyboard.current, Mouse.current);
         }
     }
 

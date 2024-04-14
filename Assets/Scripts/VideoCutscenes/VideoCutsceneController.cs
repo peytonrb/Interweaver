@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.SceneManagement;
-using Unity.VisualScripting;
 
 public class VideoCutsceneController : MonoBehaviour
 {
