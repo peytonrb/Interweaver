@@ -12,11 +12,14 @@ public class VideoCutsceneController : MonoBehaviour
     private VideoPlayer videoPlayer;
     [SerializeField] private bool playOnStart;
     private bool started;
+    [HideInInspector] public bool isDonePlaying;
     [SerializeField] private GameObject introController;
 
     // Start is called before the first frame update
     void Start()
     {
+        isDonePlaying = false;
+
         if (isOnTrigger == false) {
             videoPlayer = GetComponent<VideoPlayer>();
 
@@ -46,25 +49,56 @@ public class VideoCutsceneController : MonoBehaviour
                 if (videoPlayer.isPlaying == false) {
                     switch (cutscene) {
                         case 0:
+                            if (!isDonePlaying)
                             SceneHandler.instance.LoadLevel("Hub");
                         break;
                         case 1:
-                            SceneHandler.instance.LoadLevel("AlpineCombined");
+                            if (!isDonePlaying)
+                            {
+                                SceneHandler.instance.LoadLevel("AlpineCombined");
+                                isDonePlaying = true;
+                            }
+                                
                         break;
                         case 2:
-                            SceneHandler.instance.LoadLevel("Hub");
+                            if (!isDonePlaying)
+                            {
+                                SceneHandler.instance.LoadLevel("Hub");
+                                isDonePlaying = true;
+                            }
+                                
                         break;
                         case 3:
-                            SceneHandler.instance.LoadLevel("Cavern");
+                            if (!isDonePlaying)
+                            {
+                                SceneHandler.instance.LoadLevel("Cavern");
+                                isDonePlaying = true;
+                            }
+                                
                         break;
                         case 4:
-                            SceneHandler.instance.LoadLevel("Hub");
+                            if (!isDonePlaying)
+                            {
+                                SceneHandler.instance.LoadLevel("Hub");
+                                isDonePlaying = true;
+                            }
+                                
                         break;
                         case 5:
-                            SceneHandler.instance.LoadLevel("Sepultus");
+                            if (!isDonePlaying)
+                            {
+                                SceneHandler.instance.LoadLevel("Sepultus");
+                                isDonePlaying = true;
+                            }
+                                
                         break;
                         case 6:
-                            SceneHandler.instance.LoadLevel("Menu");
+                            if (!isDonePlaying)
+                            {
+                                SceneHandler.instance.LoadLevel("Menu");
+                                isDonePlaying = true;
+                            }
+                                
                         break;       
                     }
                 }

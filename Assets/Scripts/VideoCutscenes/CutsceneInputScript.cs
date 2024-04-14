@@ -98,6 +98,7 @@ public class CutsceneInputScript : MonoBehaviour
         if (SceneHandler.instance.loadOperation.isDone) 
         {
             hasPressedSkip = false;
+            vcc.isDonePlaying = false;
         }
     }
 
