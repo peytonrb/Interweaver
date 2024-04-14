@@ -10,12 +10,19 @@ public class BouncyCrystalsScript : MonoBehaviour, IDamageable
 
     public GameObject vfxPrefab;
 
+    public GameObject spawnFXPrefab;
+
     public AudioClip shatterFile;
     // Start is called before the first frame update
     void Start()
     {
         hasInvoked = false;
         isRespawning = false;
+    }
+
+    public void OnEnable()
+    {
+        Instantiate(spawnFXPrefab, new Vector3(transform.position.x, transform.position.y+4, transform.position.z), transform.rotation);
     }
 
     public void Damage()

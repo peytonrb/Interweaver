@@ -37,6 +37,7 @@ public class BouncyCrystalController : MonoBehaviour
                 
                 respawnTimerOn = false;
                 inActiveBouncyCrystals.SetActive(true);
+               
             }
         }
 
