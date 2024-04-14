@@ -70,6 +70,9 @@ public class WyvernBossManager : MonoBehaviour
     private int weaverCurrentPhase;
     [HideInInspector] public bool stagWasLaunched;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip wyvernHurtSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -552,7 +555,8 @@ public class WyvernBossManager : MonoBehaviour
                 ResetPhase3();
             break;
         }
-        ActivateOnHurt();
+        ActivateOnHurt(); 
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, wyvernHurtSound, 1f);
         moveToNextRoom = true;
         Debug.Log("Wyvern is hurt! Ouch!");
     }

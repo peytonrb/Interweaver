@@ -29,6 +29,7 @@ public class CatapultScript : MonoBehaviour
             MovementScript movementScript = collider.GetComponent<MovementScript>(); 
             movementScript.ZeroCurrentSpeed();
             movementScript.ChangeVelocity(Vector3.zero);
+            AudioManager.instance.footStepsChannel.Stop();
             StartCoroutine(PrepareToLaunch(collider.gameObject));
         }
     }
