@@ -16,7 +16,7 @@ public class CutsceneInputScript : MonoBehaviour
     private PlayerInput playerInput;
     private bool gameStarted;
     private bool usingController;
-
+    private bool hasPressedSkip;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +24,7 @@ public class CutsceneInputScript : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         IntroSequenceScript introSequenceScript = introController.GetComponent<IntroSequenceScript>();
         gameStarted = introSequenceScript.GetGameStarted();
+        hasPressedSkip = false;
 
         if (playerInput.currentControlScheme == "Gamepad") 
         {
@@ -83,6 +84,11 @@ public class CutsceneInputScript : MonoBehaviour
                 }
             }
         }
+
+        if (SceneHandler.instance.loadOperation.isDone) 
+        {
+            hasPressedSkip = false;
+        }
     }
 
     public void OnSkipCutscene(InputValue input) {
@@ -90,9 +96,10 @@ public class CutsceneInputScript : MonoBehaviour
         {
             if (usingController == false)
             {
-                if (skipCutsceneTextKeyboard.activeSelf) 
+                if (skipCutsceneTextKeyboard.activeSelf && !hasPressedSkip) 
                 {
                     vcc.SkipCutscene();
+                    hasPressedSkip = true;
                 }
                 else 
                 {
@@ -111,5 +118,6 @@ public class CutsceneInputScript : MonoBehaviour
                 }
             }    
         }
+        
     }
 }
