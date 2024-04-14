@@ -198,7 +198,7 @@ public class WeaveableObject : MonoBehaviour
             weaveController.targetingArrow.SetActive(false);
             float targetAngle = Mathf.Atan2(lookDir.x, lookDir.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
 
-            if (lookDir == Vector2.zero) // if player releases RS, targeting arrow is hidden
+            if (lookDir.magnitude <= 0.01f) // if player releases RS, targeting arrow is hidden
             {
                 targetingArrow.SetActive(false);
             }
@@ -212,23 +212,32 @@ public class WeaveableObject : MonoBehaviour
             FreezeConstraints("rotation");
             FreezeConstraints("position", 'y');
 
-            // if object is past the max distance allowed from player, object is disconnected
-            if (Vector3.Distance(transform.position, weaveController.transform.position) > maxWeaveDistance)
+            if (lookDir.magnitude >= 0.01f)
             {
-                // maintain distance from weaver - very not smooth
-                Vector3 radiusPos = weaveController.transform.position + (Vector3.forward * maxWeaveDistance);
-                rb.velocity = new Vector3(radiusPos.x - rb.position.x,
-                                          transform.position.y - rb.position.y,
-                                          radiusPos.z - rb.position.z);
-            }
-            else
-            {
-                // move object with joystick movement
-                rb.velocity = rayDirection * 13f;
+                // if object is past the max distance allowed from player, object is disconnected
+                if (Vector3.Distance(transform.position, weaveController.transform.position) > maxWeaveDistance)
+                {
+                    // maintain distance from weaver - very not smooth
+                    Vector3 radiusPos = weaveController.transform.position + (Vector3.forward * maxWeaveDistance);
+                    rb.velocity = new Vector3(radiusPos.x - rb.position.x,
+                                              transform.position.y - rb.position.y,
+                                              radiusPos.z - rb.position.z);
+                }
+                else
+                {
+                    // move object with joystick movement
+                    rb.velocity = rayDirection * 13f;
+                }
+
+                UnfreezeConstraints("position", 'y');
             }
 
-            UnfreezeConstraints("position", 'y');
+            else if (lookDir.magnitude <= 0.01f)
+            {
+                rb.velocity = Vector3.zero;
+            }
         }
+            
     }
 
     // rotates the object after being called by InputManager
