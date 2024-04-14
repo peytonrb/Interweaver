@@ -285,12 +285,12 @@ public class WeaveableObject : MonoBehaviour
         switch (r)
         {
             case rotateDir.forward:
-                weaveableObj.transform.RotateAround(transform.position, transform.right, xAmount);
-                weaveableObj.transform.RotateAround(transform.position, transform.forward, zAmount);
+                transform.RotateAround(transform.position, transform.right, xAmount);
+                transform.RotateAround(transform.position, transform.forward, zAmount);
                 break;
             case rotateDir.back:
-                weaveableObj.transform.RotateAround(transform.position, transform.right, -xAmount);
-                weaveableObj.transform.RotateAround(transform.position, transform.forward, -zAmount);
+                transform.RotateAround(transform.position, transform.right, -xAmount);
+                transform.RotateAround(transform.position, transform.forward, -zAmount);
                 break;
             case rotateDir.right:
                 transform.Rotate(0f, yAmount, 0f, Space.World);
