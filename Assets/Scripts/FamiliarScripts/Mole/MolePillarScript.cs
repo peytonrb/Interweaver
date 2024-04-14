@@ -67,16 +67,25 @@ public class MolePillarScript : MonoBehaviour
     {
         if (rise) // this is bad. I know this is bad. Sorry.
         {
-            Collider[] hitColliders = Physics.OverlapBox(pillarRisePreventionBoxTransform.position + (transform.up * pillarRisePreventionHeight), pillarRisePreventionBoxSize/2, Quaternion.identity, pillarRisePreventionLayerMask);
-            foreach (Collider hitCollider in hitColliders)
+            if (pillarRisePreventionBoxTransform == null)
             {
-                if (!hitCollider.TryGetComponent<Rigidbody>(out Rigidbody rigidbody)) // if whatever we're messing with ain't a rigidbody, it's unmoveable, ergo, stop!! 
+                pillarRisePreventionBoxTransform = transform;
+            }
+            else
+            {
+                Collider[] hitColliders = Physics.OverlapBox(pillarRisePreventionBoxTransform.position + (transform.up * pillarRisePreventionHeight), pillarRisePreventionBoxSize/2, Quaternion.identity, pillarRisePreventionLayerMask);
+                foreach (Collider hitCollider in hitColliders)
                 {
-                    PillarRiseEnd();
-                    riseInputPressed = false;
-                    pillarRisePreventionBoxTransform = transform;
+                    Debug.Log("AAAAAAAAAA");
+                    if (!hitCollider.TryGetComponent<Rigidbody>(out Rigidbody rigidbody)) // if whatever we're messing with ain't a rigidbody, it's unmoveable, ergo, stop!! 
+                    {
+                        PillarRiseEnd();
+                        riseInputPressed = false;
+                        pillarRisePreventionBoxTransform = transform;
+                    }
                 }
             }
+            
             RaisePillar();
         }
 
