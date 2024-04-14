@@ -184,4 +184,16 @@ public class PlayerControllerNew : MonoBehaviour
         transform.position = newposition;
         transform.rotation = newrotation;
     }
+
+    public void WeaveAnimation(bool isWeaving)
+    {
+        if(isWeaving)
+        {
+            characterAnimationHandler.ToggleWeaveAnim(true);
+        }
+        else
+        {
+            characterAnimationHandler.ToggleWeaveAnim(false);
+        }
+    }
 }

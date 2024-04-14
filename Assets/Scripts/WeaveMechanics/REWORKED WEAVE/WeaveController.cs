@@ -33,6 +33,7 @@ public class WeaveController : MonoBehaviour
     [HideInInspector] public WeaveableObject selectedWeaveable;
     [HideInInspector] public Vector2 lookDirection;
     private MovementScript movementScript;
+    private PlayerControllerNew playerControllerNew;
 
     void Start()
     {
@@ -41,6 +42,7 @@ public class WeaveController : MonoBehaviour
         weaveSpawn = this.transform.Find("WeaveSpawn").gameObject;
         movementScript = this.GetComponent<MovementScript>();
         targetingArrow.SetActive(true);
+        playerControllerNew = this.GetComponent<PlayerControllerNew>();
     }
 
     void Update()
@@ -193,6 +195,9 @@ public class WeaveController : MonoBehaviour
     {
         isWeaving = false;
 
+        //Disables the Weaving bool in the animator for the animation blending
+        playerControllerNew.WeaveAnimation(false);
+
         if (currentWeaveable != null) // in case of floating islands
             currentWeaveable.GetComponent<Rigidbody>().velocity = Vector3.down * 2f;
 
@@ -242,6 +247,9 @@ public class WeaveController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
         isWeaving = true;
+        
+        //Enables the Weaving bool in the animator for the animation blending
+        playerControllerNew.WeaveAnimation(true);
     }
 
     // is called by InputManager, is used to determine the weaveable actively being selected for COMBINING
