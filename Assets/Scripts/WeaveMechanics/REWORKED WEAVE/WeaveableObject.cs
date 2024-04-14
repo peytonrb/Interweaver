@@ -45,6 +45,8 @@ public class WeaveableObject : MonoBehaviour
     [HideInInspector] public GameObject targetingArrow;
     [HideInInspector] public Material originalMat;
 
+    [Header("Island Override")]
+    public bool isFloatingIsland;
     void Start()
     {
         weaveController = GameObject.FindWithTag("Player").GetComponent<WeaveController>();

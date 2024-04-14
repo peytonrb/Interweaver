@@ -2,34 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CrystalScript : MonoBehaviour, IDamageable
+public class CrystalScript : MonoBehaviour
 {
     public FloatingIslandScript myFloatingIsland;
 
-    private bool inRange = false;
+    public bool startsWeaveable = false;
 
-    public GameObject vfxPrefab;
+    private Vector3 startPos;
 
-    public AudioClip shatterFile;
+    private WeaveController weaveController;
 
-    public void AssignFloatingIsland(FloatingIslandScript myIsland)
+
+    public void Start()
     {
-        myFloatingIsland = myIsland;
-    }
+        weaveController = InputManagerScript.instance.player.GetComponent<WeaveController>();
 
-    public void Damage()
-    {
-        GameObject shatterVFX = Instantiate(vfxPrefab, transform.position, transform.rotation);
-        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, shatterFile, 1f);
-
-        if (myFloatingIsland != null)
+        if (startsWeaveable)
         {
-            myFloatingIsland.StartFalling(this);
+            startPos = transform.position;
         }
-
-        Destroy(shatterVFX.gameObject, 1f);
-       gameObject.SetActive(false);
     }
+
+    public void ResetCrystal()
+    {
+        gameObject.SetActive(false);
+        transform.position = startPos;
+        StartCoroutine(ResetWeave());
+    }
+
+    public IEnumerator ResetWeave()
+    {
+        WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
+
+        yield return new WaitForSeconds(0.1f);
+
+        weaveController.OnDrop();
+
+        yield break;
+    }
+
     
 
 }
