@@ -47,25 +47,25 @@ public class VideoCutsceneController : MonoBehaviour
                 if (videoPlayer.isPlaying == false) {
                     switch (cutscene) {
                         case 0:
-                            SceneManager.LoadScene("Hub");
+                            SceneHandler.instance.LoadLevel("Hub");
                         break;
                         case 1:
-                            SceneManager.LoadScene("AlpineCombined");
+                            SceneHandler.instance.LoadLevel("AlpineCombined");
                         break;
                         case 2:
-                            SceneManager.LoadScene("Hub");
+                            SceneHandler.instance.LoadLevel("Hub");
                         break;
                         case 3:
-                            SceneManager.LoadScene("Cavern");
+                            SceneHandler.instance.LoadLevel("Cavern");
                         break;
                         case 4:
-                            SceneManager.LoadScene("Hub");
+                            SceneHandler.instance.LoadLevel("Hub");
                         break;
                         case 5:
-                            SceneManager.LoadScene("Sepultus");
+                            SceneHandler.instance.LoadLevel("Sepultus");
                         break;
                         case 6:
-                            SceneManager.LoadScene("Menu");
+                            SceneHandler.instance.LoadLevel("Menu");
                         break;       
                     }
                 }
@@ -82,25 +82,25 @@ public class VideoCutsceneController : MonoBehaviour
     public void SkipCutscene() {
         switch (cutscene) {
             case 0:
-                SceneManager.LoadScene("Hub");
+                SceneHandler.instance.LoadLevel("Hub");
             break;
             case 1:
-                SceneManager.LoadScene("AlpineCombined");
+                SceneHandler.instance.LoadLevel("AlpineCombined");
             break;
             case 2:
-                SceneManager.LoadScene("Hub");
+                SceneHandler.instance.LoadLevel("Hub");
             break;
             case 3:
-                SceneManager.LoadScene("Cavern");
+                SceneHandler.instance.LoadLevel("Cavern");
             break;
             case 4:
-                SceneManager.LoadScene("Hub");
+                SceneHandler.instance.LoadLevel("Hub");
             break;
             case 5:
-                SceneManager.LoadScene("Sepultus");
+                SceneHandler.instance.LoadLevel("Sepultus");
             break;
             case 6:
-                SceneManager.LoadScene("Menu");
+                SceneHandler.instance.LoadLevel("Menu");
             break;       
         }
     }
