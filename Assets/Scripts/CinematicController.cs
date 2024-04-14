@@ -12,6 +12,8 @@ public class CinematicController : MonoBehaviour
     public GameObject transformPS;
     public ParticleSystem flashPS;
     public GameObject rival;
+    public GameObject portalVFX;
+    public GameObject weaver;
 
     public void Clip1()
     {
@@ -36,5 +38,15 @@ public class CinematicController : MonoBehaviour
         flashPS.gameObject.SetActive(true);
         rival.SetActive(false);
         flashPS.Play();
+    }
+
+    public void portal()
+    {
+        portalVFX.GetComponent<PortalVFXController>().isActive = true;
+    }
+
+    public void DeactivateWeaver()
+    {
+        weaver.SetActive(false);
     }
 }
