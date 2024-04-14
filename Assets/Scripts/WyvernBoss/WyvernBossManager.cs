@@ -129,6 +129,10 @@ public class WyvernBossManager : MonoBehaviour
         
     }
 
+    public void StartingPosition() {
+        transform.position = roomDestinations[0].transform.position;
+    }
+
     // Update is called once per frame
     void Update()
     {
