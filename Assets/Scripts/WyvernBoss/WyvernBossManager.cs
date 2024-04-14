@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class WyvernBossManager : MonoBehaviour
 {
@@ -54,6 +55,10 @@ public class WyvernBossManager : MonoBehaviour
     private WyvernPhaseTriggerManager triggerManager;
     [SerializeField] private GameObject endCutsceneController;
     private EndCutsceneTrigger ect;
+
+    [Header("Method invoke for wyvern injury")]
+    public UnityEvent[] onHurtWyvern;
+
     private float startingFireballTimer;
     private int startingFireballAmount;
     private float startingMagicCircleTimer;
@@ -64,6 +69,9 @@ public class WyvernBossManager : MonoBehaviour
     private int familiarCurrentPhase;
     private int weaverCurrentPhase;
     [HideInInspector] public bool stagWasLaunched;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip wyvernHurtSound;
 
     // Start is called before the first frame update
     void Start()
@@ -119,6 +127,10 @@ public class WyvernBossManager : MonoBehaviour
             
         }
         
+    }
+
+    public void StartingPosition() {
+        transform.position = roomDestinations[0].transform.position;
     }
 
     // Update is called once per frame
@@ -547,8 +559,20 @@ public class WyvernBossManager : MonoBehaviour
                 ResetPhase3();
             break;
         }
+        ActivateOnHurt(); 
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, wyvernHurtSound, 1f);
         moveToNextRoom = true;
         Debug.Log("Wyvern is hurt! Ouch!");
+    }
+
+    /// <summary>
+    /// Hurts the wyvern only if the invoke on the current room's index does not equal null.
+    /// </summary>
+    /// <param name="room"></param>
+    void ActivateOnHurt() {
+        if (onHurtWyvern[currentRoom] != null) {
+            onHurtWyvern[currentRoom].Invoke();
+        }
     }
 
     /// <summary>

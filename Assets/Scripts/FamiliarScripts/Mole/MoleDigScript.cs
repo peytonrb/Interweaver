@@ -40,6 +40,14 @@ public class MoleDigScript : MonoBehaviour
     [Header("Animation")]
     [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip  burrowClip;
+    [SerializeField] private AudioClip  unburrowClip;
+    [SerializeField] private AudioClip digMovementClip;
+    private AudioClip originalFootstepClip;
+    [SerializeField] private float diggingMovementPitch;
+    [SerializeField] private float originalFootstepsPitch;
+
    
     void Start()
     {
@@ -208,6 +216,7 @@ public class MoleDigScript : MonoBehaviour
         //Debug.Log("Dug in " + animLength);
 
         StartCoroutine(StartDigging(animLength));
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, burrowClip);
         StartCoroutine(VFXStart(vfxDelay));
     }
     public void AnimationForDiggingUp()
@@ -222,13 +231,19 @@ public class MoleDigScript : MonoBehaviour
         moleModel.GetComponent<Renderer>().enabled = true;
         
         StartCoroutine(DiggingOut(animLength));
-
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, unburrowClip);
         transform.Find("VFX_Dirt").GetComponent<VisualEffect>().Play();
     }
     IEnumerator StartDigging(float animLength)
     {
         yield return new WaitForSeconds(animLength);
+        originalFootstepClip = movementScript.footStepsClip;
+        originalFootstepsPitch = movementScript.footstepPitch;
+        movementScript.footStepsClip = digMovementClip;
+        movementScript.footstepPitch = diggingMovementPitch;
         borrowed = true;
+        AudioManager.instance.footStepsChannel.Stop();
+
         
         moleModel.GetComponent<Renderer>().enabled = false;
         
@@ -240,6 +255,10 @@ public class MoleDigScript : MonoBehaviour
     IEnumerator DiggingOut(float animLength)
     {
         borrowed = false;
+        AudioManager.instance.footStepsChannel.Stop();
+        movementScript.ZeroCurrentSpeed();
+        movementScript.footStepsClip = originalFootstepClip;
+        movementScript.footstepPitch = originalFootstepsPitch;
         moundModel.GetComponent<Animator>().SetTrigger("Lower");
         yield return new WaitForSeconds(animLength/2);
         

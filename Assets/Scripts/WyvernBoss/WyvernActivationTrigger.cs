@@ -21,6 +21,8 @@ public class WyvernActivationTrigger : MonoBehaviour
 
     public void ActivateWyvern() {
         wyvern.SetActive(true);
+        WyvernBossManager wyvernBossManager = wyvern.GetComponent<WyvernBossManager>();
+        wyvernBossManager.StartingPosition();
 
         if (destroyThisAfterActivation) {
             Destroy(gameObject);

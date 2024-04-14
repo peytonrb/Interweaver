@@ -13,6 +13,7 @@ public class VideoCutsceneController : MonoBehaviour
     private VideoPlayer videoPlayer;
     [SerializeField] private bool playOnStart;
     private bool started;
+    [SerializeField] private GameObject introController;
 
     // Start is called before the first frame update
     void Start()
@@ -20,8 +21,17 @@ public class VideoCutsceneController : MonoBehaviour
         if (isOnTrigger == false) {
             videoPlayer = GetComponent<VideoPlayer>();
 
-            if (playOnStart == true) {
-                PlayVideo();
+            IntroSequenceScript introSequenceScript = introController.GetComponent<IntroSequenceScript>();
+            bool gameStarted = introSequenceScript.GetGameStarted();
+
+            if (gameStarted) {
+                introController.SetActive(false);
+                if (playOnStart == true) {
+                    PlayVideo();
+                }
+            }
+            else {
+                gameObject.SetActive(false);
             }
         }
     }
@@ -37,25 +47,25 @@ public class VideoCutsceneController : MonoBehaviour
                 if (videoPlayer.isPlaying == false) {
                     switch (cutscene) {
                         case 0:
-                            SceneManager.LoadScene("Hub");
+                            SceneHandler.instance.LoadLevel("Hub");
                         break;
                         case 1:
-                            SceneManager.LoadScene("AlpineCombined");
+                            SceneHandler.instance.LoadLevel("AlpineCombined");
                         break;
                         case 2:
-                            SceneManager.LoadScene("Hub");
+                            SceneHandler.instance.LoadLevel("Hub");
                         break;
                         case 3:
-                            SceneManager.LoadScene("Cavern");
+                            SceneHandler.instance.LoadLevel("Cavern");
                         break;
                         case 4:
-                            SceneManager.LoadScene("Hub");
+                            SceneHandler.instance.LoadLevel("Hub");
                         break;
                         case 5:
-                            SceneManager.LoadScene("Sepultus");
+                            SceneHandler.instance.LoadLevel("Sepultus");
                         break;
                         case 6:
-                            SceneManager.LoadScene("Menu");
+                            SceneHandler.instance.LoadLevel("Menu");
                         break;       
                     }
                 }
@@ -72,25 +82,25 @@ public class VideoCutsceneController : MonoBehaviour
     public void SkipCutscene() {
         switch (cutscene) {
             case 0:
-                SceneManager.LoadScene("Hub");
+                SceneHandler.instance.LoadLevel("Hub");
             break;
             case 1:
-                SceneManager.LoadScene("AlpineCombined");
+                SceneHandler.instance.LoadLevel("AlpineCombined");
             break;
             case 2:
-                SceneManager.LoadScene("Hub");
+                SceneHandler.instance.LoadLevel("Hub");
             break;
             case 3:
-                SceneManager.LoadScene("Cavern");
+                SceneHandler.instance.LoadLevel("Cavern");
             break;
             case 4:
-                SceneManager.LoadScene("Hub");
+                SceneHandler.instance.LoadLevel("Hub");
             break;
             case 5:
-                SceneManager.LoadScene("Sepultus");
+                SceneHandler.instance.LoadLevel("Sepultus");
             break;
             case 6:
-                SceneManager.LoadScene("Menu");
+                SceneHandler.instance.LoadLevel("Menu");
             break;       
         }
     }

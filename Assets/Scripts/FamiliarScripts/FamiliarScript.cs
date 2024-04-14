@@ -20,7 +20,11 @@ public class FamiliarScript : MonoBehaviour
     private bool insideTrigger;
     [HideInInspector] public bool talkingToNPC;
     private GameMasterScript GM; //This is refrencing the game master script
+
+    [Header("Audio")]
     [SerializeField] private AudioClip possessionClip;
+    [SerializeField] private AudioClip deathClip;
+    [SerializeField] private AudioClip respawnClip;
     //public InputAction NPCInteraction;
 
     [HideInInspector] public bool isDead;
@@ -129,6 +133,8 @@ public class FamiliarScript : MonoBehaviour
     {
         movementScript.active = false;
         isDead = true;
+        AudioManager.instance.fallChannel.Stop();
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, deathClip);
         Invoke("ResetToCheckpoint", 3);
     }
 
@@ -140,8 +146,12 @@ public class FamiliarScript : MonoBehaviour
 
         CameraMasterScript.instance.FamiliarCameraReturnOnDeath(CameraMasterScript.instance.lastFamiliarCameraTriggered);
         characterController.enabled = true;
-        movementScript.active = true;
+        if (myTurn)
+        {
+            movementScript.active = true;
+        }
         isDead = false;
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, respawnClip);
     }
 
 }

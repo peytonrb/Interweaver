@@ -12,16 +12,6 @@ public class FloatingIsland_Inspector : Editor
 
         GUILayout.Label("Spawning Required Objects:", EditorStyles.boldLabel);
 
-        if (GUILayout.Button("Spawn Transforms"))
-        {
-            myFloatingIslandScript.SpawnTransforms();
-        }
-
-        if (GUILayout.Button("Spawn Crystal"))
-        {
-            myFloatingIslandScript.SpawnCrystal();
-        }
-
         if (GUILayout.Button("Spawn Camera"))
         {
             myFloatingIslandScript.SpawnCamera();
@@ -29,8 +19,7 @@ public class FloatingIsland_Inspector : Editor
 
         DrawDefaultInspector();
 
-        
-
+       
         EditorGUILayout.HelpBox("Assign the following: sit and float transforms, isFloating bool, and myFloatCamera VCAM", MessageType.Info);
     }
 }

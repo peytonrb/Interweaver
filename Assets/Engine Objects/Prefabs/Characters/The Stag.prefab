@@ -156,7 +156,7 @@ MonoBehaviour:
   m_PivotOffset: {x: 0, y: 0, z: 0}
   m_AmplitudeGain: 0
   m_FrequencyGain: 0
-  mNoiseOffsets: {x: 0, y: 0, z: 0}
+  mNoiseOffsets: {x: -898.07434, y: -483.89944, z: 757.44104}
 --- !u!1 &7263900705511667863
 GameObject:
   m_ObjectHideFlags: 0
@@ -274,8 +274,9 @@ MonoBehaviour:
   active: 0
   footStepsClip: {fileID: 8300000, guid: 53d3e95380887e24884b04163b5ead4d, type: 3}
   weaverFallClip: {fileID: 8300000, guid: 4d89867d6ad72cb45affd75ee71c73f8, type: 3}
-  owlGlideClip: {fileID: 8300000, guid: 4d89867d6ad72cb45affd75ee71c73f8, type: 3}
+  owlGlideClip: {fileID: 0}
   owlDiveClip: {fileID: 8300000, guid: 440835242e5e14f489812588da29266e, type: 3}
+  footstepPitch: 1.7
   inCutscene: 0
   dissolveMat: {fileID: 2100000, guid: 6f71add89b90ccc418119200d1371ae9, type: 2}
   materialHolder: {fileID: 0}
@@ -298,6 +299,8 @@ MonoBehaviour:
   familiarMovementAbility: 0
   talkingToNPC: 0
   possessionClip: {fileID: 8300000, guid: 35d1efb4e21c4de43943a2d88a81a63d, type: 3}
+  deathClip: {fileID: 8300000, guid: da7f31879c0fcfd42a590612d035f2fb, type: 3}
+  respawnClip: {fileID: 8300000, guid: 205aed89cf4a5fe488d40df30b135e3d, type: 3}
   isDead: 0
   islandisfalling: 0
 --- !u!114 &8034669036731384007
@@ -328,6 +331,8 @@ MonoBehaviour:
   lostSoulUI: {fileID: 0}
   lostSoulText: {fileID: 0}
   animator: {fileID: 0}
+  textbox: {fileID: 0}
+  isSpeaking: 0
   lostSouls: []
   lostSoulsList: []
 --- !u!114 &6838502372027027517
@@ -367,11 +372,11 @@ MonoBehaviour:
   showMaxJumpHeightGizmo: 0
   showBonkBoxGizmo: 0
   groundPoundMarker: {fileID: 1969129995875850711, guid: 425f406a1e006594b8c1e4d83db34794, type: 3}
-  chargeLeapSound: {fileID: 8300000, guid: f49a89b950ef5fb48b607f91b2d162e0, type: 3}
-  leapSound: {fileID: 0}
-  airSlamSound: {fileID: 0}
-  groundSlamSound: {fileID: 0}
-  headBonkSound: {fileID: 0}
+  chargeLeapSound: {fileID: 8300000, guid: faacced0bc660ab4c876be9c24dc3c14, type: 3}
+  leapSound: {fileID: 8300000, guid: e9418246ff59b204a9904ba70cb0e2a8, type: 3}
+  airSlamSound: {fileID: 8300000, guid: 440835242e5e14f489812588da29266e, type: 3}
+  groundSlamSound: {fileID: 8300000, guid: 856458b6182e45343a01c3fd99027791, type: 3}
+  headBonkSound: {fileID: 8300000, guid: 30f7c493dc9fcfd479bc76cf6d11e23a, type: 3}
 --- !u!114 &183899957472724848
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -15,7 +15,8 @@ public class NetProjectileScript : MonoBehaviour
     //*******************************
     //These variables are set by NetCannonScript
     public float speed;
-    public float lifetime = 4;
+    public float lifetime;
+    private float decayingLifeTime;
     //*******************************
 
     public GameObject impactVFX;
@@ -27,18 +28,27 @@ public class NetProjectileScript : MonoBehaviour
 
         rb.AddRelativeForce(Vector3.forward * speed, ForceMode.Impulse);
 
-        StartCoroutine(TimerBeforeDestroy(lifetime));
+        //StartCoroutine(TimerBeforeDestroy(lifetime));
 
         MSF = GameObject.FindWithTag("Familiar").GetComponent<MovementScript>();
+
+        decayingLifeTime = lifetime;
     }
 
-    public IEnumerator TimerBeforeDestroy(float lifetime)
+    private void Update()
     {
-        yield return new WaitForSeconds(lifetime);
-
-        gameObject.SetActive(false);
-        yield break;
+        if (gameObject.activeInHierarchy)
+        {
+            decayingLifeTime -= Time.deltaTime;
+            if (decayingLifeTime <= 0)
+            {
+                gameObject.SetActive(false);
+                decayingLifeTime = lifetime;
+            }
+        }
     }
+
+   
     //*************************************************************************
     private void OnTriggerEnter(Collider other)
     {
@@ -49,17 +59,20 @@ public class NetProjectileScript : MonoBehaviour
             other.GetComponent<MovementScript>().GoToCheckPoint();
             Destroy(clone.gameObject, 1f);
             gameObject.SetActive(false);
+            decayingLifeTime = lifetime;
         }
         else if (other.gameObject.CompareTag("Familiar"))
         {
             MSF.GoToCheckPoint();
             Destroy(clone.gameObject, 1f);
             gameObject.SetActive(false);
+            decayingLifeTime = lifetime;
         }
         else
         {
             Destroy(clone.gameObject, 1f);
             gameObject.SetActive(false);
+            decayingLifeTime = lifetime;
         }
     }
     //*************************************************************************************

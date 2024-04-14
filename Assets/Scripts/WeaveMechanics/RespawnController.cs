@@ -92,7 +92,7 @@ public class RespawnController : MonoBehaviour
             //Call respawn
             if (obj != null)
             {
-                Debug.Log("respawned");
+                Debug.Log("respawned " + obj.name);
                 RespawnObject(obj);
             }
         }

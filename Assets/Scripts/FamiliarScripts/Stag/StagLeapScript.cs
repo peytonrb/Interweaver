@@ -57,8 +57,12 @@ public class StagLeapScript : MonoBehaviour
     [SerializeField] private AudioClip  leapSound;
     private AudioSource leapAudioSource;
     [SerializeField] private AudioClip  airSlamSound;
+    private AudioSource airSlamAudioSource;
     [SerializeField] private AudioClip  groundSlamSound;
+    private AudioSource groundSlamAudioSource;
     [SerializeField] private AudioClip  headBonkSound;
+    private AudioSource headBonkAudioSource;
+    [SerializeField] private AudioClip destroySound;
 
     // Start is called before the first frame update
     void Start()
@@ -67,6 +71,9 @@ public class StagLeapScript : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         chargeLeapAudioSource = null;
         leapAudioSource = null;
+        groundSlamAudioSource = null;
+        groundSlamAudioSource = null;
+        headBonkAudioSource = null;
         cameraMasterScript = GameObject.FindGameObjectWithTag("CameraMaster").GetComponent<CameraMasterScript>();
         if (!canOnlySlamAfterLeap)
         {
@@ -100,7 +107,8 @@ public class StagLeapScript : MonoBehaviour
         float originalGravity = movementScript.GetGravity();
 
         isStaggered = true;
-        //bonk sound!
+        headBonkAudioSource = AudioManager.instance.AddSFX(headBonkSound, true, headBonkAudioSource);
+
         cameraMasterScript.ShakeCurrentCamera(amplitude, frequency, headBonkStunLength);
 
         movementScript.ToggleCanMove(false);
@@ -113,6 +121,7 @@ public class StagLeapScript : MonoBehaviour
         movementScript.ChangeVelocity(new Vector3(movementScript.GetVelocity().x, -15f, movementScript.GetVelocity().z));
         movementScript.ToggleCanMove(true);
         isStaggered = false;
+        headBonkAudioSource = AudioManager.instance.KillAudioSource(headBonkAudioSource);
     }
 
     public IEnumerator ChargeJump()
@@ -160,8 +169,8 @@ public class StagLeapScript : MonoBehaviour
             characterAnimationHandler.ToggleCharging(chargingJump);
             if (movementScript.canMove && characterController.isGrounded) //jump sound!
             {
-                leapAudioSource = AudioManager.instance.KillAudioSource(leapAudioSource);
                 movementScript.ChangeVelocity(new Vector3(movementScript.GetVelocity().x, currentJumpForce, movementScript.GetVelocity().z));
+                AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, leapSound, 1f);
             }
         }
     }
@@ -169,7 +178,10 @@ public class StagLeapScript : MonoBehaviour
     private IEnumerator StartSlam()
     {
         canSlam = false;
+        AudioManager.instance.soundeffectChannel.Stop();
+        //leapAudioSource = AudioManager.instance.KillAudioSource(leapAudioSource);
         stagGroundPoundVFXScript.PlaySlammingVFX();//mid air slam
+        airSlamAudioSource = AudioManager.instance.AddSFX(airSlamSound,true, airSlamAudioSource);
 
         characterAnimationHandler.ToggleSlam(true);
 
@@ -238,7 +250,8 @@ public class StagLeapScript : MonoBehaviour
 
     private IEnumerator GrowSlamRadius(Vector3 slamSpot)//slam sound here
     {
-        
+        airSlamAudioSource = AudioManager.instance.KillAudioSource(airSlamAudioSource);   
+        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, groundSlamSound, 1f);
         displaySlamGizmos = true;
         float startTime = Time.time;
         float t = 0f;
@@ -251,6 +264,7 @@ public class StagLeapScript : MonoBehaviour
             {
                 if (hitCollider.gameObject.CompareTag("Breakable"))
                 {
+                    AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, destroySound, 1f);
                     Destroy(hitCollider.gameObject); // call the thing being broken here!
                 }
                 if (hitCollider.gameObject.CompareTag("Boss")) {

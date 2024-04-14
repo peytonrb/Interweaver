@@ -51,6 +51,9 @@ public class WeaveController : MonoBehaviour
             weaveFXScript.DrawWeave(weaveSpawn.transform.position, currentWeaveable.transform.position);
         }
 
+        //unsure if this would cause problems but I'm pretty sure it won't
+        MouseTargetingArrow();
+
         if (this.GetComponent<PlayerControllerNew>().isDead)
         {
             OnDrop();
@@ -83,9 +86,10 @@ public class WeaveController : MonoBehaviour
 
     // adjusts targeting arrow based on mouse position
     // <param> the direction that the player is looking in
-    public void MouseTargetingArrow(Vector2 lookDir)
+    // public void MouseTargetingArrow(Vector2 lookDir) <---this is what it was before for the method
+    public void MouseTargetingArrow()
     {
-        lookDirection = lookDir;
+        
         targetingArrow.SetActive(true);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitData;
@@ -118,8 +122,12 @@ public class WeaveController : MonoBehaviour
             if (Physics.BoxCast(transform.position, transform.localScale, targetingArrow.transform.forward, out hitInfo,
                                 transform.rotation, weaveDistance, weaveableLayerMask))
             {
-                currentWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
-                isValidWeaveable = true;
+                if (!hitInfo.collider.GetComponent<WeaveableObject>().isFloatingIsland)
+                {
+                    currentWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
+                    isValidWeaveable = true;
+                }
+                
             }
         }
         else
@@ -132,8 +140,11 @@ public class WeaveController : MonoBehaviour
             
             if (Physics.SphereCast(transform.position, 1f, rayPlayer.direction, out hitInfo, direction, weaveableLayerMask)) // changed to spherecast so horizontal objects are easier to pick up
             {
-                currentWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
-                isValidWeaveable = true;
+                if (!hitInfo.collider.GetComponent<WeaveableObject>().isFloatingIsland)
+                {
+                    currentWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
+                    isValidWeaveable = true;
+                }
             }
         }
 
@@ -250,8 +261,19 @@ public class WeaveController : MonoBehaviour
                 {
                     if (hitInfo.collider.GetComponent<WeaveableObject>() != currentWeaveable)
                     {
-                        selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
-                        currentWeaveable.CombineObject();
+                        if (!hitInfo.collider.GetComponent<WeaveableObject>().isFloatingIsland)
+                        {
+                            selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
+                            currentWeaveable.CombineObject();
+                        }
+                        else
+                        {
+                            if (currentWeaveable.TryGetComponent<CrystalScript>(out CrystalScript script))
+                            {
+                                selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
+                                currentWeaveable.CombineObject();
+                            }
+                        }
                     }
                 }
             }
@@ -267,8 +289,20 @@ public class WeaveController : MonoBehaviour
                 {
                     if (hitInfo.collider.GetComponent<WeaveableObject>() != currentWeaveable)
                     {
-                        selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
-                        currentWeaveable.CombineObject();
+                        if (!hitInfo.collider.GetComponent<WeaveableObject>().isFloatingIsland)
+                        {
+                            selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
+                            currentWeaveable.CombineObject();
+                        }
+                        else
+                        {
+                            if (currentWeaveable.TryGetComponent<CrystalScript>(out CrystalScript script))
+                            {
+                                selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
+                                currentWeaveable.CombineObject();
+                            }
+                        }
+                        
                     }
                 }
             }

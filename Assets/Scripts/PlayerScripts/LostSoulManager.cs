@@ -8,6 +8,11 @@ public class LostSoulManager : MonoBehaviour
     public GameObject lostSoulUI;
     public TextMeshProUGUI lostSoulText;
     public Animator animator;
+
+    [Header("Dialogue")]
+    public GameObject textbox;
+    public bool isSpeaking;
+    
     private readonly HashSet<GameObject> alreadyCollidedWith = new HashSet<GameObject>();
     private GameMasterScript gameMaster;
     private int level;
@@ -85,6 +90,11 @@ public class LostSoulManager : MonoBehaviour
             }
         }
         
+        if (isSpeaking && !textbox.activeSelf) // sloppy way of checking when dialogue is over
+        {
+            isSpeaking = false;
+            this.GetComponent<MovementScript>().ToggleCanMove(true);
+        }
     }
 
     void OnTriggerEnter(Collider hit)
@@ -93,6 +103,12 @@ public class LostSoulManager : MonoBehaviour
         {
             alreadyCollidedWith.Add(hit.gameObject);
             animator.SetBool("isOpen", true);
+
+            // lost soul dialogue -- add lil open animation
+            isSpeaking = true;
+            this.GetComponent<MovementScript>().ToggleCanMove(false);
+            DialogueManager.instance.StartDialogue(hit.GetComponent<LostSoulController>().lostSoulDialogue, textbox);
+
             //Gamemaster's lost soul count is added.
             gameMaster.totalLostSouls++;
             lostSoulText.text = "" + gameMaster.totalLostSouls;

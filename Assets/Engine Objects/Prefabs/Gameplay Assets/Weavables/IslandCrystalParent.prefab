@@ -272,7 +272,7 @@ Transform:
   m_GameObject: {fileID: 7121874167014565471}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -22.98, y: -7.45, z: -26.62}
-  m_LocalScale: {x: 1.4999998, y: 1.5, z: 1.4999998}
+  m_LocalScale: {x: 2.3, y: 1.5, z: 2.3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3912895618269914977}
@@ -300,10 +300,11 @@ MonoBehaviour:
   maxWeaveDistance: 25
   hasBeenCombined: 0
   canBeMoved: 1
+  rotAmount: 45
   myTransformPoints: []
   activeSnapPoint: {fileID: 0}
   objectToSnapTo: {fileID: 0}
-  weaveInteraction: {fileID: 0}
+  weaveInteraction: {fileID: 378752098834569543}
   listIndex: 0
   ID: 0
   weaveController: {fileID: 0}
@@ -372,6 +373,8 @@ MonoBehaviour:
   myFloatingIsland: {fileID: 0}
   vfxPrefab: {fileID: 595517454477082168, guid: f14bed05ed35ff44aa50e2a19404663e, type: 3}
   shatterFile: {fileID: 8300000, guid: fa5fcec46bff3b447ab20a4606f3cd68, type: 3}
+  startsWeaveable: 0
+  crystalPrefab: {fileID: 7121874167014565471}
 --- !u!114 &378752098834569543
 MonoBehaviour:
   m_ObjectHideFlags: 0

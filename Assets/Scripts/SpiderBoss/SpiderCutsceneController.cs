@@ -14,12 +14,12 @@ public class SpiderCutsceneController : MonoBehaviour
     void Update()
     {
         anim.SetFloat("Speed", spiderSpeed * 0.7f);
-        Debug.Log(anim.GetFloat("Speed"));
+        //Debug.Log(anim.GetFloat("Speed"));
     }
 
     public void DisableSpiderStuff()
     {
-        Debug.Log("Why");
+        //Debug.Log("Why");
         spiderAnimStuff.SetActive(false);
     }    
 }

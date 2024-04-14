@@ -469,7 +469,8 @@ public class CameraMasterScript : MonoBehaviour
         vcam.Priority = 0;
         cameraToSwitchTo.Priority = 1;
         floatingIsland.cameraswitched = true;
-        //floatingIsland.RaiseIsland();
+
+        Debug.Log("debug 1");
     }
 
     public void FloatingIslandCameraReturn(CinemachineVirtualCamera cameraToSwitchFrom)
@@ -477,6 +478,7 @@ public class CameraMasterScript : MonoBehaviour
         CinemachineVirtualCamera vcam = weaverCameras[weaverCameraOnPriority].GetComponent<CinemachineVirtualCamera>();
         vcam.Priority = 1;
         cameraToSwitchFrom.Priority = 0;
+        Debug.Log("debug 2");
     }
 
     

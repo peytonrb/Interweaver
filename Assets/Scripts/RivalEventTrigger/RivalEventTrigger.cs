@@ -74,6 +74,7 @@ public class RivalEventTrigger : MonoBehaviour
         {
             animator.SetTrigger("Leave");
             hasPlayed = true;
+            isSpeaking = false;
         }
         
     }

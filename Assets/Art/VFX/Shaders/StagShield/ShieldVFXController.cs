@@ -17,12 +17,18 @@ public class ShieldVFXController : MonoBehaviour
     {
         stagShield = this.transform.Find("StagShield").gameObject;
         outerSwirls = this.transform.Find("OuterShieldVFXGraph").gameObject;
-        groundEffect = this.transform.Find("GroundEffectVFX").gameObject;
+
+        if (this.transform.Find("GroundEffectVFX") != null)
+            groundEffect = this.transform.Find("GroundEffectVFX").gameObject;
+
         activateDeactivateEffect = this.transform.Find("ActivatingDeactivatingOrbVFXGraph").gameObject;
 
         stagShield.SetActive(false);
         outerSwirls.SetActive(false);
-        groundEffect.SetActive(false);
+
+        if (groundEffect != null)
+            groundEffect.SetActive(false);
+
         activateDeactivateEffect.SetActive(false);
     }
 
@@ -47,7 +53,9 @@ public class ShieldVFXController : MonoBehaviour
 
         stagShield.SetActive(true);
         outerSwirls.SetActive(true);
-        groundEffect.SetActive(true);
+
+        if (groundEffect != null)
+            groundEffect.SetActive(true);
     }
 
     IEnumerator EndVFX()
@@ -58,7 +66,10 @@ public class ShieldVFXController : MonoBehaviour
 
         stagShield.SetActive(false);
         outerSwirls.SetActive(false);
-        groundEffect.SetActive(false);
+
+        if (groundEffect != null)
+            groundEffect.SetActive(false);
+
         isActive = false;
     }
 }

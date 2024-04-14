@@ -10,6 +10,7 @@ public class MovementScript : MonoBehaviour
     private GameMasterScript GM; //This is refrencing the game master script
 
     [HideInInspector] public bool isInTutorial; //this is for the UI pop up and it only shows when they're in the tutorial
+    private GameObject pause;
 
     [Header("Movement Variables")]
     public bool canLook = true;
@@ -54,7 +55,6 @@ public class MovementScript : MonoBehaviour
     [Header("Animation")]
     [CannotBeNullObjectField] public CharacterAnimationHandler characterAnimationHandler;
 
-
     [Header("character's camera")]
     //Character Rotation values
     [SerializeField] private float timeToTurn = 0.1f;
@@ -66,10 +66,12 @@ public class MovementScript : MonoBehaviour
     public bool active; //Determines if movement controller is active
 
     [Header("Character's sounds")]
-    [SerializeField] private AudioClip footStepsClip;
+    [SerializeField] public AudioClip footStepsClip;
     [SerializeField] private AudioClip weaverFallClip;
     [SerializeField] private AudioClip owlGlideClip;
     [SerializeField] private AudioClip owlDiveClip;
+
+    public float footstepPitch = 1;
     private bool canPlayFallAudio = false;
 
     [Header("Dive VFX")]
@@ -100,6 +102,7 @@ public class MovementScript : MonoBehaviour
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControllerNew>();
         familiarScript = GameObject.FindGameObjectWithTag("Familiar").GetComponent<FamiliarScript>();
+        pause = playerController.pauseMenu;        
 
         isInTutorial = true; //this is the the funny boolean for being in tutorial
        originalGroundAcceleration = groundAcceleration;
@@ -268,7 +271,7 @@ public class MovementScript : MonoBehaviour
     {
         if (canMove)
         {
-            if (Time.timeScale != 0 && active && !inCutscene)
+            if (Time.timeScale != 0 && active && !inCutscene && !pause.activeSelf)
             {
                 // changes what acceleration/deceleration type is being used based on if controller is grouunded or not
                 acceleration = characterController.isGrounded ? groundAcceleration : aerialAcceleration;
@@ -287,12 +290,12 @@ public class MovementScript : MonoBehaviour
                         if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon))
                         {
                             if (!AudioManager.instance.footStepsChannel.isPlaying)
-                                AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.3f);
+                                AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, footstepPitch);
                         }
                         else
                         {
                             if (!AudioManager.instance.footStepsChannel.isPlaying)
-                                AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, 1.7f);
+                                AudioManager.instance.PlaySound(AudioManagerChannels.footStepsLoopChannel, footStepsClip, footstepPitch);
                         }
                     }
                     else
@@ -553,7 +556,9 @@ public class MovementScript : MonoBehaviour
     {
         StartCoroutine(ChangeMaterialOnDeath());
         deathVFX.Play();
-        FadeToBlack.instance.StartFadeToBlack();
+
+        if (FadeToBlack.instance != null)
+            FadeToBlack.instance.StartFadeToBlack();
 
 
         if (TryGetComponent<PlayerControllerNew>(out PlayerControllerNew playerCon))

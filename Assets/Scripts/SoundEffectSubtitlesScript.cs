@@ -65,37 +65,67 @@ public class SoundEffectSubtitlesScript : MonoBehaviour
             case AudioManagerChannels.MusicChannel:
                 if (AudioManager.instance.musicChannel.clip != null) {
                     string audioname = AudioManager.instance.musicChannel.clip.name;
-                    audiosourcetext.text = audioname;
+                    audiosourcetext.text = "Music";
                 }
             break;
             case AudioManagerChannels.SoundEffectChannel:
                 if (AudioManager.instance.soundeffectChannel.clip != null) {
                     string audioname = AudioManager.instance.soundeffectChannel.clip.name;
                     audiosourcetext.text = audioname;
+                    //I'm so fucking sorry about this cause it sucks so much ass
+                    if (audioname == "env_crystalShatter")
+                    {
+                        audiosourcetext.text = "Crystal Shatter";
+                    }
+                    else if (audioname == "Game_Posession")
+                    {
+                        audiosourcetext.text = "Posession";
+                    }
+                    else if (audioname == "Env_CatapultBuild")
+                    {
+                        audiosourcetext.text = "Building Catapult";
+                    }
+                    else if (audioname == "Env_CatapultLaunch")
+                    {
+                        audiosourcetext.text = "Catapult Launch";
+                    }
+                    else if (audioname == "Wyvern_Flamethrower")
+                    {
+                        audiosourcetext.text = "Wyvern Flamethrower";
+                    }
+                    else if (audioname == "Wyvern_Fireball")
+                    {
+                        audiosourcetext.text = "Wyvern Fireball";
+                    }
+
+                    else if (audioname == "Weaver_Dash")
+                    {
+                        audiosourcetext.text = "Dash";
+                    }
+
+                    else if (audioname == "Weaver_Death")
+                    {
+                        audiosourcetext.text = "";
+                    }
                 }
             break;
             case AudioManagerChannels.weaveLoopingChannel:
                 if (AudioManager.instance.weaveChannel.clip != null) {
                     string audioname = AudioManager.instance.weaveChannel.clip.name;
-                    audiosourcetext.text = audioname;
+                    audiosourcetext.text = "Weave";
                 }
             break;
             case AudioManagerChannels.footStepsLoopChannel:
                 if (AudioManager.instance.footStepsChannel.clip != null) {
                     string audioname = AudioManager.instance.footStepsChannel.clip.name;
-                    if (audioname == "Env_GrassStep") {
-                        audiosourcetext.text = "Footsteps";
-                    }
-                    else {
-                        audiosourcetext.text = audioname;
-                    }
-                    
+                    audiosourcetext.text = "Footsteps";
+
                 }
             break;
             case AudioManagerChannels.fallLoopChannel:
                 if (AudioManager.instance.fallChannel.clip != null) {
                     string audioname = AudioManager.instance.fallChannel.clip.name;
-                    audiosourcetext.text = audioname;
+                    audiosourcetext.text = "Falling";
                 }
             break;
         }

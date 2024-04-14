@@ -104,6 +104,7 @@ MonoBehaviour:
   maxWeaveDistance: 25
   hasBeenCombined: 0
   canBeMoved: 0
+  rotAmount: 45
   myTransformPoints: []
   activeSnapPoint: {fileID: 0}
   objectToSnapTo: {fileID: 0}
@@ -113,6 +114,128 @@ MonoBehaviour:
   weaveController: {fileID: 0}
   targetingArrow: {fileID: 0}
   originalMat: {fileID: 0}
+  isFloatingIsland: 1
+--- !u!1 &1428466366068042654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2478160713034663400}
+  - component: {fileID: 6944666835190736632}
+  - component: {fileID: 3534603142606897368}
+  - component: {fileID: 7085179240939069002}
+  - component: {fileID: 5931944165571392565}
+  m_Layer: 0
+  m_Name: Fake Crystal
+  m_TagString: Breakable
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2478160713034663400
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428466366068042654}
+  m_LocalRotation: {x: -0, y: 0.000000059604638, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 3.0900135, z: 0.000015266858}
+  m_LocalScale: {x: 1.5000002, y: 1, z: 1.5000001}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 909764873293299868}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &6944666835190736632
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428466366068042654}
+  m_Mesh: {fileID: 4702925393065980420, guid: 1b5ce9d94936c4b49bcd15f7f6397b98, type: 3}
+--- !u!23 &3534603142606897368
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428466366068042654}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: cdd3c8269cf40b44ba89a2b4d13e3003, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7085179240939069002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428466366068042654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1134f5b4119e7d4ca6a3f61e236ac60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vfxPrefab: {fileID: 595517454477082168, guid: f14bed05ed35ff44aa50e2a19404663e, type: 3}
+  shatterFile: {fileID: 8300000, guid: fa5fcec46bff3b447ab20a4606f3cd68, type: 3}
+  myFloatingIsland: {fileID: 1782404205510407289}
+--- !u!65 &5931944165571392565
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428466366068042654}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.12, y: 1.822218, z: 0.99}
+  m_Center: {x: -0.027409384, y: 0.9110179, z: 0.007528277}
 --- !u!1001 &6454076074029163879
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -121,6 +244,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1987947591067243578}
     m_Modifications:
+    - target: {fileID: 973573492536916862, guid: eaf1009e6c29a7c4fbb57b403d04e9fe, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7f466bc350eb2fd40982c55a19c717b7, type: 2}
     - target: {fileID: 4379241841909581374, guid: eaf1009e6c29a7c4fbb57b403d04e9fe, type: 3}
       propertyPath: m_Name
       value: Floating Island
@@ -132,6 +259,14 @@ PrefabInstance:
     - target: {fileID: 4696450466119618846, guid: eaf1009e6c29a7c4fbb57b403d04e9fe, type: 3}
       propertyPath: isFloating
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4696450466119618846, guid: eaf1009e6c29a7c4fbb57b403d04e9fe, type: 3}
+      propertyPath: myFakeCrystal
+      value: 
+      objectReference: {fileID: 1428466366068042654}
+    - target: {fileID: 4696450466119618846, guid: eaf1009e6c29a7c4fbb57b403d04e9fe, type: 3}
+      propertyPath: timerBeforeSwap
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4864688911685228496, guid: eaf1009e6c29a7c4fbb57b403d04e9fe, type: 3}
       propertyPath: m_LocalScale.x
@@ -225,8 +360,12 @@ PrefabInstance:
     - {fileID: 5489052820110539912, guid: eaf1009e6c29a7c4fbb57b403d04e9fe, type: 3}
     - {fileID: 5240943159767820596, guid: eaf1009e6c29a7c4fbb57b403d04e9fe, type: 3}
     - {fileID: 1926140711349057970, guid: eaf1009e6c29a7c4fbb57b403d04e9fe, type: 3}
+    - {fileID: 4387577231250320792, guid: eaf1009e6c29a7c4fbb57b403d04e9fe, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 6138786360273511931, guid: eaf1009e6c29a7c4fbb57b403d04e9fe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2478160713034663400}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eaf1009e6c29a7c4fbb57b403d04e9fe, type: 3}
 --- !u!4 &909764873293299868 stripped
@@ -234,3 +373,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6138786360273511931, guid: eaf1009e6c29a7c4fbb57b403d04e9fe, type: 3}
   m_PrefabInstance: {fileID: 6454076074029163879}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1782404205510407289 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4696450466119618846, guid: eaf1009e6c29a7c4fbb57b403d04e9fe, type: 3}
+  m_PrefabInstance: {fileID: 6454076074029163879}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91afd4a883fb8494aaf6252e5b72487f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

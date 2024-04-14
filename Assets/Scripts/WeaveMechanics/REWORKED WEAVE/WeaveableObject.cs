@@ -45,6 +45,8 @@ public class WeaveableObject : MonoBehaviour
     [HideInInspector] public GameObject targetingArrow;
     [HideInInspector] public Material originalMat;
 
+    [Header("Island Override")]
+    public bool isFloatingIsland;
     void Start()
     {
         weaveController = GameObject.FindWithTag("Player").GetComponent<WeaveController>();
@@ -97,10 +99,15 @@ public class WeaveableObject : MonoBehaviour
                 this.GetComponent<Rigidbody>().AddForce(rayDirection * Physics.gravity.y * hoverHeight);
             }
             // if object is too high, make sure it falls to the weaver's height
-            else if (!Physics.Raycast(transform.position, new Vector3(0f, -90f, 0f), out hit, weaveController.transform.position.y + hoverHeight + 0.5f))
+            else if (!Physics.Raycast(transform.position, new Vector3(0f, -90f, 0f), out hit, hoverHeight * 2f))
             {
-                Vector3 rayDirection = Vector3.up; // i??? idk??
-                this.GetComponent<Rigidbody>().AddForce(rayDirection * Physics.gravity.y * 6f * weaveController.transform.position.y);
+                Vector3 rayDirection = Vector3.up;
+                //this is def not the best solution but
+                if (this.transform.position.y > (weaveController.transform.position.y + hoverHeight))
+                {
+                    this.transform.position = Vector3.MoveTowards(this.transform.position, new Vector3(this.transform.position.x, weaveController.transform.position.y + hoverHeight, this.transform.position.z), 10f * Time.deltaTime);
+                    //this.GetComponent<Rigidbody>().AddForce(rayDirection * Physics.gravity.y * 6f * weaveController.transform.position.y);
+                }
             }
 
             // actually moves the weaveable with joystick or mouse
@@ -522,7 +529,7 @@ public class WeaveableObject : MonoBehaviour
         {
             riglyboy.useGravity = true;
         }
-        
+
         if (!hasBeenCombined)
         {
             listIndex = 0;

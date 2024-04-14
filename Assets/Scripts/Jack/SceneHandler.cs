@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SceneHandler : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class SceneHandler : MonoBehaviour
 
     public static SceneHandler instance;
     public string currentSceneName;
+    public GameObject sceneLoader;
+    public Slider progressBar;
     void OnEnable()
     {
         //Tell our 'OnLevelFinishedLoading' function to start listening for a scene change as soon as this script is enabled.
@@ -36,7 +39,8 @@ public class SceneHandler : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
- 
+        
+
     }
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
@@ -49,12 +53,15 @@ public class SceneHandler : MonoBehaviour
 
         AudioManager.instance.PlayMusicOnSceneChange(scene.name);
 
+
+
+        //why is this here?
         switch (scene.name)
         {
             case "Menu":
                 {
-                    
-                    
+
+
 
                     break;
                 }
@@ -64,10 +71,30 @@ public class SceneHandler : MonoBehaviour
     public void LoadLevel(string sceneToLoad)
     {
 
-        SceneManager.LoadScene(sceneToLoad);
+        StartCoroutine(LoadAsynchrously(sceneToLoad));
 
     }
 
+    IEnumerator LoadAsynchrously(string sceneToLoad)
+    {
+        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneToLoad);
 
+        sceneLoader.SetActive(true);
+
+
+        while (!loadOperation.isDone)
+        {
+            float progress = Mathf.Clamp01(loadOperation.progress / 0.9f);
+
+            progressBar.value = progress;
+
+            yield return null;
+        }
+
+        if (loadOperation.isDone)
+        {
+            sceneLoader.SetActive(false);
+        }
+    }
 
 }

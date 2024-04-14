@@ -19,9 +19,11 @@ public class InputManagerScript : MonoBehaviour
     public bool switching;
     public GameObject pauseScreen;
     private PauseScript pauseScript;
+    private bool hasControllerInvoke;
     public static InputManagerScript instance;
     [SerializeField] private bool devMode;
     [HideInInspector] public bool stopCutscene;
+    [HideInInspector] public bool isOnBlackboard;
 
 
     //the invoke bools are there so then it can only happen once instead of every frame in the update function
@@ -71,7 +73,7 @@ public class InputManagerScript : MonoBehaviour
     {
         wasFamiliarTurn = false;
         wasWeaverTurn = false;
-
+        hasControllerInvoke = false;
 
         if (instance == null)
         {
@@ -136,13 +138,32 @@ public class InputManagerScript : MonoBehaviour
     {
         FamiliarUI();
         WeaverUI();
+        CheckForControllers();
+    }
 
+    private void CheckForControllers()
+    {
+        if (Gamepad.current != null && !hasControllerInvoke)
+        {
+            ToggleControlScheme(true);
+            hasControllerInvoke = true;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else if (Gamepad.current == null && hasControllerInvoke) 
+        {
+            ToggleControlScheme(false);
+            hasControllerInvoke = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
     public void ToggleControlScheme(bool isController)
     {
         if (isController)
         {
+            Debug.Log("current control is gamepad");
             isGamepad = true;
             playerInput.SwitchCurrentControlScheme("Gamepad", Gamepad.current);
 
@@ -228,16 +249,15 @@ public class InputManagerScript : MonoBehaviour
             {
                 weaveController.currentWeaveable.MoveWeaveableToMouse();
             }
-            else
-            {
-                weaveController.MouseTargetingArrow(inputVector);
-            }
+            //else
+            //{
+            //    weaveController.MouseTargetingArrow(inputVector);
+            //}
         }
     }
 
     public void OnWeaverNPCInteractions(InputValue input)
     {
-
     }
 
     public void OnRotate(InputValue input)
@@ -284,7 +304,8 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnWyvernCameraToggle(InputValue input) // cant handle camera for both weaver and familiar yet
     {
-        if (wyvern != null) {
+        if (wyvern != null)
+        {
             bool isPressed = input.isPressed;
             WyvernLookAt wyvernLookAtScript;
 
@@ -339,7 +360,7 @@ public class InputManagerScript : MonoBehaviour
         FamiliarScript familiarScript = familiar.GetComponent<FamiliarScript>();
         CharacterController playerCharacterController = player.GetComponent<CharacterController>();
 
-        if (!familiarScript.myTurn && !weaveController.isWeaving && playerCharacterController.isGrounded && 
+        if (!familiarScript.myTurn && !weaveController.isWeaving && playerCharacterController.isGrounded &&
             !playerScript.inCutscene && canSwitch && !playerScript.talkingToNPC && movementScript.active && !playerScript.isDead)
         {
             playerScript.Possession();
@@ -403,6 +424,8 @@ public class InputManagerScript : MonoBehaviour
                 pauseScript = pauseScreen.GetComponent<PauseScript>();
                 pauseScreen.SetActive(true);
                 canSwitch = false;
+                AudioManager.instance.StopSound(AudioManagerChannels.fallLoopChannel);
+                AudioManager.instance.StopSound(AudioManagerChannels.footStepsLoopChannel);
                 Time.timeScale = 0;
             }
             else
@@ -442,6 +465,11 @@ public class InputManagerScript : MonoBehaviour
                 {
                     npcInteractScript.Interact();
                 }
+
+                if (familiar.GetComponent<LostSoulManager>().isSpeaking)
+                {
+                    DialogueManager.instance.DisplayNextSentence();
+                }
                 Debug.Log("Interacting Familiar");
             }
             else
@@ -453,9 +481,36 @@ public class InputManagerScript : MonoBehaviour
                 }
                 else
                 {
-                    npcInteractScript.Interact();
+                    if (!isOnBlackboard) 
+                    {
+                        npcInteractScript.Interact();
+                    }
+                    else
+                    {
+                        if (playerInput.currentControlScheme != "Gamepad")
+                        {
+                            npcInteractScript.Interact();
+                        }
+                    }
+                }
+
+                if (player.GetComponent<LostSoulManager>().isSpeaking)
+                {
+                    DialogueManager.instance.DisplayNextSentence();
                 }
                 Debug.Log("Interacting Weaver");
+            }
+        }
+    }
+
+    public void OnControllerNPCUninteract(InputValue input)
+    {
+        if (input.isPressed)
+        {
+            if (isOnBlackboard)
+            {
+                NPCInteractionScript npcInteractScript = player.GetComponent<NPCInteractionScript>();
+                npcInteractScript.Interact();
             }
         }
     }
@@ -787,7 +842,8 @@ public class InputManagerScript : MonoBehaviour
             case myEnums.Stag:
                 StagSwapScript stagSwapScript = familiar.GetComponent<StagSwapScript>();
                 StagLeapScript stagLeapScript = familiar.GetComponent<StagLeapScript>();
-                if (stagLeapScript.movementScript.enabled) {
+                if (stagLeapScript.movementScript.enabled)
+                {
                     if (isPressed && Time.timeScale != 0)
                     {
                         StartCoroutine(stagSwapScript.ChargeSwap());
@@ -851,28 +907,31 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnIncreaseLevelsCompleted(InputValue input)
     {
-        if (devMode) 
+        if (devMode)
         {
-            PlayerData.levelsCompleted ++;
+            PlayerData.levelsCompleted++;
             Debug.Log("Current Levels Completed: " + PlayerData.levelsCompleted);
         }
-        
+
     }
     public void OnDecreaseLevelsCompleted(InputValue input)
     {
-        if (devMode) 
+        if (devMode)
         {
-            PlayerData.levelsCompleted --;
+            PlayerData.levelsCompleted--;
             Debug.Log("Current Levels Completed: " + PlayerData.levelsCompleted);
         }
-        
+
     }
 
-    public void OnSkipCutscene(InputValue input) {
-        if (input.isPressed) {
+    public void OnSkipCutscene(InputValue input)
+    {
+        if (input.isPressed)
+        {
             stopCutscene = true;
         }
-        else {
+        else
+        {
             stopCutscene = false;
         }
     }

@@ -14,6 +14,7 @@ public class FlamethrowerController : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioClip  flamethrowerSound;
+    private AudioSource flamethrowerAudioSource;
 
     private void Start()
     {
@@ -21,6 +22,7 @@ public class FlamethrowerController : MonoBehaviour
         flamethrowerVFX = this.transform.GetChild(0).GetComponent<VisualEffect>();
         flamethrowerPS = this.transform.GetChild(1).GetComponent<ParticleSystem>();
         capsuleCollider = gameObject.GetComponent<CapsuleCollider>();
+        flamethrowerAudioSource = null;
 
         capsuleCollider.enabled = false;
     }
@@ -34,7 +36,9 @@ public class FlamethrowerController : MonoBehaviour
             flamethrowerVFX.Play();
             flamethrowerPS.gameObject.SetActive(true);
             flamethrowerPS.Play();
-            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, flamethrowerSound, .7f);
+            //AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, flamethrowerSound, .7f);
+            flamethrowerAudioSource = AudioManager.instance.AddSFX(flamethrowerSound, true, flamethrowerAudioSource);
+            
         }
         // if isActive is off and the VFX or PS is turned on, turn them off
         else if (!isActive && flamethrowerVFX.gameObject.activeSelf || !isActive && flamethrowerPS.gameObject.activeSelf)
@@ -42,6 +46,7 @@ public class FlamethrowerController : MonoBehaviour
             flamethrowerVFX.gameObject.SetActive(false);
             flamethrowerPS.gameObject.SetActive(false);
             capsuleCollider.enabled = false;
+            flamethrowerAudioSource = AudioManager.instance.KillAudioSource(flamethrowerAudioSource);
         }
 
         if (isActive)
@@ -66,27 +71,15 @@ public class FlamethrowerController : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             PlayerControllerNew playerController = other.gameObject.GetComponent<PlayerControllerNew>();
+            
             playerController.Death();
         }
         if (other.gameObject.CompareTag("Familiar"))
         {
             FamiliarScript familiarScript = other.gameObject.GetComponent<FamiliarScript>();
+
             familiarScript.Death();
         }
-        Debug.Log("Hit");
     }
 
-    /*
-    private void OnParticleCollision(GameObject other) {
-        if (other.CompareTag("Player")) {
-            PlayerControllerNew playerController = other.GetComponent<PlayerControllerNew>();
-            playerController.Death();
-        }
-        if (other.CompareTag("Familiar")) {
-            FamiliarScript familiarScript = other.GetComponent<FamiliarScript>();
-            familiarScript.Death();
-        }
-        Debug.Log("Collided");
-    }
-    */
 }

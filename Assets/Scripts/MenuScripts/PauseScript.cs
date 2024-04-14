@@ -26,6 +26,8 @@ public class PauseScript : MonoBehaviour
     [SerializeField] private GameObject spiderBoss;
     [SerializeField] private GameObject subtitlesCanvas;
 
+    private bool hasControllerInvoke;
+
     [Header("Audio Variables")]
     public AudioMixer theMixer;
     public Slider masterSlider, musicSlider, sfxSlider;
@@ -49,10 +51,16 @@ public class PauseScript : MonoBehaviour
     public Toggle subtitlesToggle;
     [HideInInspector] public int subtitlesInt;
 
+    [Header("Button UI Selection On Screen Change")]
+    [SerializeField] private Button defaultMenuButton;
+    [SerializeField] private Button defaultOptionsButton;
+
     public void Start()
     {
         toggle = GetComponentInChildren<Toggle>();
         eventSystem = FindObjectOfType<EventSystem>();
+        hasControllerInvoke = false;
+
 
         if (spiderBoss != null) {
             if (PlayerPrefs.HasKey("ArachnophobiaToggleState")) {
@@ -65,12 +73,17 @@ public class PauseScript : MonoBehaviour
 
             if (arachnophobiaInt == 0) {
                 SpiderBossScript spiderscript = spiderBoss.GetComponent<SpiderBossScript>();
-                spiderscript.ToggleArachnophobia(false);
+                if (spiderscript != null) {
+                    spiderscript.ToggleArachnophobia(false);
+                }
                 arachnophobiaToggle.isOn = false;
+                
             }
             else {
                 SpiderBossScript spiderscript = spiderBoss.GetComponent<SpiderBossScript>();
-                spiderscript.ToggleArachnophobia(true);
+                if (spiderscript != null) {
+                    spiderscript.ToggleArachnophobia(true);
+                }
                 arachnophobiaToggle.isOn = true;
             }
         }
@@ -161,6 +174,12 @@ public class PauseScript : MonoBehaviour
         sfxValueText.text = (sfxSlider.value + 80).ToString() + "%";
 
     }
+
+    private void Update()
+    {
+        CheckIfControllerOn();
+
+    }
     //Resumes the game
     public void Resume() {
         Time.timeScale = 1;
@@ -181,36 +200,25 @@ public class PauseScript : MonoBehaviour
     }
 
     //Switches between using controller and using keyboard
-    public void ToggleUsingController(bool isController)
+    public void CheckIfControllerOn()
     {
-        if (isController)
+
+
+        if (Gamepad.current == null && hasControllerInvoke)
         {
-            if (Gamepad.current == null)
-            {
-                toggle.isOn = false;
-            }
-            else
-            {
-                InputManagerScript.instance.ToggleControlScheme(true);
-                ControllerImage.SetActive(true);
-                KeyboardImage.SetActive(false);
-                usingController = true;
-            }
+            ControllerImage.SetActive(false);
+            KeyboardImage.SetActive(true);
+            hasControllerInvoke = false;
+            
         }
-        else
+        else if (Gamepad.current != null && !hasControllerInvoke)
         {
-            if (Keyboard.current == null)
-            {
-                toggle.isOn = true;
-            }
-            else
-            {
-                InputManagerScript.instance.ToggleControlScheme(false);
-                ControllerImage.SetActive(false);
-                KeyboardImage.SetActive(true);
-                usingController = false;
-            }
+            ControllerImage.SetActive(true);
+            KeyboardImage.SetActive(false);
+            hasControllerInvoke = true;
+            defaultMenuButton.Select();
         }
+
 
     }
 
@@ -223,6 +231,8 @@ public class PauseScript : MonoBehaviour
 
             optionGroup.GetComponent<CanvasGroup>().alpha = 0f;
             defaultGroup.GetComponent<CanvasGroup>().alpha = 1f;
+
+            
         }
         else
         {
@@ -231,6 +241,8 @@ public class PauseScript : MonoBehaviour
 
             optionGroup.GetComponent<CanvasGroup>().alpha = 1f;
             defaultGroup.GetComponent<CanvasGroup>().alpha = 0f;
+
+            defaultOptionsButton.Select();
         }
     }
 
@@ -258,11 +270,13 @@ public class PauseScript : MonoBehaviour
             {
                 controllerGroup.SetActive(true);
                 keyboardGroup.SetActive(false);
+                
             }
             else 
             {
                 controllerGroup.SetActive(false);
                 keyboardGroup.SetActive(true);
+               
             }
         }
     }
