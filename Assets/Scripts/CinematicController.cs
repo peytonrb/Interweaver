@@ -18,6 +18,11 @@ public class CinematicController : MonoBehaviour
     [Header("Clip 3")]
     public Animator animator;
 
+    [Header("Clip 4")]
+    public StagChargingVFXController stagChargingVFXScript;
+    public StagLeapVFXController stagLeapVFXScript;
+    public StagGroundPoundVFXController stagGroundPoundVFXScript;
+
     public void Clip1()
     {
         foreach (ParticleSystem ps in explosionPS.GetComponentsInChildren<ParticleSystem>())
@@ -56,5 +61,26 @@ public class CinematicController : MonoBehaviour
     public void AnimateLookUp()
     {
         animator.SetBool("LookUp", true);
+    }
+
+    public void StagCharge()
+    {
+        stagChargingVFXScript.StartEffect();
+    }
+
+    public void StagLeap()
+    {
+        stagLeapVFXScript.StartVFX(stagLeapVFXScript.transform.position);
+    }
+
+    public void StagSlam()
+    {
+        stagGroundPoundVFXScript.PlaySlammingVFX();
+    }
+
+    public void StagExplosion()
+    {
+        stagGroundPoundVFXScript.DisableSlammingVFX();
+        stagGroundPoundVFXScript.PlayExplosionVFX();
     }
 }
