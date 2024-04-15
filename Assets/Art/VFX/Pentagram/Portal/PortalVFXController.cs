@@ -13,6 +13,7 @@ public class PortalVFXController : MonoBehaviour
     public GameObject[] effects;
     public GameObject[] startingPS;
     public GameObject[] endingPS;
+    public float waitTime;
 
     void Update()
     {
@@ -66,7 +67,7 @@ public class PortalVFXController : MonoBehaviour
 
     IEnumerator Wait()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(waitTime);
         StartCoroutine(FadeOrb());
         //StartCoroutine(WaitAgain());
     }
