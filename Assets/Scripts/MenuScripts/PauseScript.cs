@@ -24,6 +24,8 @@ public class PauseScript : MonoBehaviour
     [SerializeField] private GameObject KeyboardImage;
 
     [SerializeField] private GameObject spiderBoss;
+    [HideInInspector] public bool changeSpiderlings;
+    [HideInInspector] public bool changeSpiderlingsTo; //Changes arachnophobia on the spider (either to true or false).
     [SerializeField] private GameObject subtitlesCanvas;
 
     private bool hasControllerInvoke;
@@ -335,6 +337,8 @@ public class PauseScript : MonoBehaviour
             if (spiderBoss != null) {
                 SpiderBossScript spiderboss = spiderBoss.GetComponent<SpiderBossScript>();
                 spiderboss.ToggleArachnophobia(false);
+                changeSpiderlings = true;
+                changeSpiderlingsTo = false;
             }
         }
         else {
@@ -342,6 +346,8 @@ public class PauseScript : MonoBehaviour
             if (spiderBoss != null) {
                 SpiderBossScript spiderboss = spiderBoss.GetComponent<SpiderBossScript>();
                 spiderboss.ToggleArachnophobia(true);
+                changeSpiderlings = true;
+                changeSpiderlingsTo = true;
             }
         }
     }
