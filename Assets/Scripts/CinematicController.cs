@@ -15,6 +15,9 @@ public class CinematicController : MonoBehaviour
     public GameObject portalVFX;
     public GameObject weaver;
 
+    [Header("Clip 3")]
+    public Animator animator;
+
     public void Clip1()
     {
         foreach (ParticleSystem ps in explosionPS.GetComponentsInChildren<ParticleSystem>())
@@ -48,5 +51,10 @@ public class CinematicController : MonoBehaviour
     public void DeactivateWeaver()
     {
         weaver.SetActive(false);
+    }
+
+    public void AnimateLookUp()
+    {
+        animator.SetBool("LookUp", true);
     }
 }

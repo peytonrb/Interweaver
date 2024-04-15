@@ -36,7 +36,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: -0.48636743, y: 1.5239179, z: 0.69678307}
+        value: {x: -0.3334387, y: 2.4297028, z: -1.7130184}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -46,8 +46,8 @@ AnimationClip:
       - serializedVersion: 3
         time: 3.5
         value: {x: 0.0025006908, y: 3.909935, z: -7.8558598}
-        inSlope: {x: 0.0003885632, y: 0.60715306, z: -1.219895}
-        outSlope: {x: 0.0003885632, y: 0.60715306, z: -1.219895}
+        inSlope: {x: 0.0003885581, y: 0.47711402, z: -1.2198949}
+        outSlope: {x: 0.0003885581, y: 0.47711402, z: -1.2198949}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
@@ -121,7 +121,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.48636743
+        value: -0.3334387
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -131,8 +131,8 @@ AnimationClip:
       - serializedVersion: 3
         time: 3.5
         value: 0.0025006908
-        inSlope: 0.0003885632
-        outSlope: 0.0003885632
+        inSlope: 0.0003885581
+        outSlope: 0.0003885581
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
@@ -160,7 +160,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1.5239179
+        value: 2.4297028
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -170,8 +170,8 @@ AnimationClip:
       - serializedVersion: 3
         time: 3.5
         value: 3.909935
-        inSlope: 0.60715306
-        outSlope: 0.60715306
+        inSlope: 0.47711402
+        outSlope: 0.47711402
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
@@ -199,7 +199,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.69678307
+        value: -1.7130184
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -209,8 +209,8 @@ AnimationClip:
       - serializedVersion: 3
         time: 3.5
         value: -7.8558598
-        inSlope: -1.219895
-        outSlope: -1.219895
+        inSlope: -1.2198949
+        outSlope: -1.2198949
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
@@ -335,19 +335,6 @@ AnimationClip:
   m_HasGenericRootTransform: 1
   m_HasMotionFloatCurves: 0
   m_Events: []
---- !u!114 &-8087406452372563171
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1e95aa6d658d694785bfde37c857fff, type: 3}
-  m_Name: RecorderClip
-  m_EditorClassIdentifier: 
-  settings: {fileID: 426146649516269220}
 --- !u!114 &-5645488358734619591
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -417,157 +404,14 @@ MonoBehaviour:
   m_Tracks:
   - {fileID: 8033343082114534331}
   - {fileID: -1282085764192450031}
-  - {fileID: 1534693707922390923}
+  - {fileID: 8479777691738008954}
   m_FixedDuration: 4.016666666666667
   m_EditorSettings:
     m_Framerate: 60
     m_ScenePreview: 1
   m_DurationMode: 1
   m_MarkerTrack: {fileID: 0}
---- !u!114 &426146649516269220
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fde0a8ac3e6b482c95fa602e65ab045, type: 3}
-  m_Name: RecorderClip
-  m_EditorClassIdentifier: 
-  enabled: 1
-  take: 3
-  captureEveryNthFrame: 1
-  fileNameGenerator:
-    m_Path:
-      m_Root: 5
-      m_Leaf: Recordings
-      m_ForceAssetFolder: 0
-      m_AbsolutePath: C:/Users/peyto/Desktop/University of Central Florida/Senior/Spring/GDWII
-    m_FileName: clip3_1
-  m_Version: 1
-  encoderSettings:
-    rid: 7791922556177481728
-  captureAlpha: 0
-  captureAudio: 1
-  m_ImageInputSelector:
-    m_Selected: gameViewInputSettings
-    gameViewInputSettings:
-      m_OutputResolution:
-        m_CustomWidth: 1024
-        m_CustomHeight: 1024
-        imageHeight: 1440
-        maxSupportedHeight: 2160
-        m_AspectRatio:
-          m_CustomAspectX: 1
-          m_CustomAspectY: 1
-          m_ImageAspect: 1
-      flipFinalOutput: 0
-    cameraInputSettings:
-      m_OutputResolution:
-        m_CustomWidth: 1024
-        m_CustomHeight: 1024
-        imageHeight: 0
-        maxSupportedHeight: 4320
-        m_AspectRatio:
-          m_CustomAspectX: 1
-          m_CustomAspectY: 1
-          m_ImageAspect: 1
-      source: 2
-      cameraTag: 
-      flipFinalOutput: 0
-      captureUI: 0
-    camera360InputSettings:
-      source: 2
-      cameraTag: 
-      flipFinalOutput: 0
-      renderStereo: 1
-      stereoSeparation: 0.065
-      mapSize: 1024
-      m_OutputWidth: 1024
-      m_OutputHeight: 2048
-    renderTextureInputSettings:
-      renderTexture: {fileID: 0}
-      flipFinalOutput: 0
-    renderTextureSamplerSettings:
-      source: 1
-      m_RenderWidth: 1280
-      m_RenderHeight: 720
-      m_OutputWidth: 1280
-      m_OutputHeight: 720
-      outputAspectRatio:
-        m_CustomAspectX: 1
-        m_CustomAspectY: 1
-        m_ImageAspect: 1
-      superSampling: 1
-      superKernelPower: 16
-      superKernelScale: 1
-      cameraTag: 
-      colorSpace: 0
-      flipFinalOutput: 0
-  m_AudioInputSettings:
-    preserveAudio: 1
-  _accumulationSettings:
-    rid: 7791922556177481729
-  outputFormat: 0
-  encodingQuality: 2
-  containerFormatSelected: 0
-  encoderSelected: 0
-  encoderPresetSelected: 0
-  encoderPresetSelectedName: 
-  encoderPresetSelectedOptions: 
-  encoderPresetSelectedSuffixes: 
-  encoderColorDefinitionSelected: 0
-  encoderCustomOptions: 
-  references:
-    version: 2
-    RefIds:
-    - rid: 7791922556177481728
-      type: {class: CoreEncoderSettings, ns: UnityEditor.Recorder.Encoder, asm: Unity.Recorder.Editor}
-      data:
-        targetBitRate: 8
-        gopSize: 25
-        numConsecutiveBFrames: 2
-        encodingProfile: 2
-        keyframeDistance: 25
-        codec: 0
-        encodingQuality: 2
-    - rid: 7791922556177481729
-      type: {class: AccumulationSettings, ns: , asm: Unity.Recorder.Editor}
-      data:
-        captureAccumulation: 0
-        samples: 1
-        shutterInterval: 1
-        shutterProfileType: 0
-        shutterProfileCurve:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 1
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 1
-            value: 1
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        shutterFullyOpen: 0.25
-        shutterBeginsClosing: 0.75
-        useSubPixelJitter: 1
---- !u!114 &1534693707922390923
+--- !u!114 &145918195254386177
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -576,89 +420,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e6cf5671577b7344ba25c25b4346ce4, type: 3}
-  m_Name: Recorder Track
+  m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
+  m_Name: AnimationPlayableAsset
   m_EditorClassIdentifier: 
-  m_Version: 3
-  m_AnimClip: {fileID: 0}
-  m_Locked: 0
-  m_Muted: 0
-  m_CustomPlayableFullTypename: 
-  m_Curves: {fileID: 0}
-  m_Parent: {fileID: 11400000}
-  m_Children: []
-  m_Clips:
-  - m_Version: 1
-    m_Start: 0
-    m_ClipIn: 0
-    m_Asset: {fileID: -8087406452372563171}
-    m_Duration: 4.016666666666667
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: 1534693707922390923}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: 0
-    m_BlendOutDuration: 0
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: RecorderClip
-  m_Markers:
-    m_Objects: []
+  m_Clip: {fileID: 7400000, guid: ccca1dca90beb0e4aa7930df18e629ef, type: 2}
+  m_Position: {x: 0, y: 0, z: 0}
+  m_EulerAngles: {x: 0, y: 0, z: 0}
+  m_UseTrackMatchFields: 1
+  m_MatchTargetFields: 63
+  m_RemoveStartOffset: 1
+  m_ApplyFootIK: 1
+  m_Loop: 0
+  m_Version: 1
+  m_Rotation: {x: 0, y: 0, z: 0, w: 1}
+--- !u!114 &2201193561429282987
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
+  m_Name: Signal Emitter
+  m_EditorClassIdentifier: 
+  m_Time: 0
+  m_Retroactive: 0
+  m_EmitOnce: 0
+  m_Asset: {fileID: 11400000, guid: 776ce477630b3144b8fe32dd34990f16, type: 2}
 --- !u!114 &8033343082114534331
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -752,3 +542,113 @@ MonoBehaviour:
   m_Markers:
     m_Objects: []
   m_PostPlaybackState: 3
+--- !u!114 &8479777691738008954
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d21dcc2386d650c4597f3633c75a1f98, type: 3}
+  m_Name: Animation Track (1)
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips:
+  - m_Version: 1
+    m_Start: 0
+    m_ClipIn: 0
+    m_Asset: {fileID: 145918195254386177}
+    m_Duration: 4.166666666666667
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 8479777691738008954}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: -1
+    m_BlendOutDuration: -1
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 1
+    m_PreExtrapolationMode: 1
+    m_PostExtrapolationTime: Infinity
+    m_PreExtrapolationTime: 0
+    m_DisplayName: A_Weaver_LookUp
+  m_Markers:
+    m_Objects: []
+  m_InfiniteClipPreExtrapolation: 0
+  m_InfiniteClipPostExtrapolation: 0
+  m_InfiniteClipOffsetPosition: {x: 0, y: 0, z: 0}
+  m_InfiniteClipOffsetEulerAngles: {x: 0, y: 0, z: 0}
+  m_InfiniteClipTimeOffset: 0
+  m_InfiniteClipRemoveOffset: 0
+  m_InfiniteClipApplyFootIK: 1
+  mInfiniteClipLoop: 0
+  m_MatchTargetFields: 63
+  m_Position: {x: 0, y: 0, z: 0}
+  m_EulerAngles: {x: 0, y: 0, z: 0}
+  m_AvatarMask: {fileID: 0}
+  m_ApplyAvatarMask: 1
+  m_TrackOffset: 0
+  m_InfiniteClip: {fileID: 0}
+  m_OpenClipOffsetRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_Rotation: {x: 0, y: 0, z: 0, w: 1}
+  m_ApplyOffsets: 0
