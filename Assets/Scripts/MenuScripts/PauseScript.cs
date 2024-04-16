@@ -288,9 +288,17 @@ public class PauseScript : MonoBehaviour
         InputManagerScript.instance.ResetCurrentCharacter();
     }
 
-    public void QuitToMenu()
+    public void QuitToScene(int level)
     {
-        SceneHandler.instance.LoadLevel("Menu");
+        switch (level) {
+            case 0:
+                SceneHandler.instance.LoadLevel("Menu");
+            break;
+            case 1:
+                SceneHandler.instance.LoadLevel("Hub");
+            break;
+        }
+        
     }
 
     /// <summary>
