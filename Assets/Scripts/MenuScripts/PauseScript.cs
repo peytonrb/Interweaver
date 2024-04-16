@@ -292,9 +292,11 @@ public class PauseScript : MonoBehaviour
     {
         switch (level) {
             case 0:
+                Time.timeScale = 1;
                 SceneHandler.instance.LoadLevel("Menu");
             break;
             case 1:
+                Time.timeScale = 1;
                 SceneHandler.instance.LoadLevel("Hub");
             break;
         }
