@@ -22,6 +22,7 @@ public class CinematicController : MonoBehaviour
     public StagChargingVFXController stagChargingVFXScript;
     public StagLeapVFXController stagLeapVFXScript;
     public StagGroundPoundVFXController stagGroundPoundVFXScript;
+    public SensorController sensor;
 
     public void Clip1()
     {
@@ -82,5 +83,10 @@ public class CinematicController : MonoBehaviour
     {
         stagGroundPoundVFXScript.DisableSlammingVFX();
         stagGroundPoundVFXScript.PlayExplosionVFX();
+    }
+
+    public void ActivateSensor()
+    {
+        sensor.isActive = true;
     }
 }
