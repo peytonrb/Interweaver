@@ -139,6 +139,7 @@ public class VideoCutsceneController : MonoBehaviour
     }
 
     public void ChangeCutscene(int scene) {
+        Debug.Log(scene);
         cutscene = scene;
     }
 }

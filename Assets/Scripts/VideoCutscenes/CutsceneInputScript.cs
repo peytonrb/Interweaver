@@ -95,10 +95,13 @@ public class CutsceneInputScript : MonoBehaviour
             }
         }
 
-        if (SceneHandler.instance.loadOperation.isDone) 
+        if (SceneHandler.instance.loadOperation != null) 
         {
-            hasPressedSkip = false;
-            vcc.isDonePlaying = false;
+            if (SceneHandler.instance.loadOperation.isDone)
+            {
+                hasPressedSkip = false;
+                vcc.isDonePlaying = false;
+            }
         }
     }
 
@@ -107,8 +110,10 @@ public class CutsceneInputScript : MonoBehaviour
         {
             if (usingController == false)
             {
+                Debug.Log("Input pressed");
                 if (skipCutsceneTextKeyboard.activeSelf && !hasPressedSkip) 
                 {
+                    Debug.Log("ACTUALLY DID THE THING");
                     vcc.SkipCutscene();
                     hasPressedSkip = true;
                 }

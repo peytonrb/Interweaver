@@ -17,6 +17,8 @@ public class SceneHandler : MonoBehaviour
     public GameObject sceneLoader;
     public Slider progressBar;
     [HideInInspector] public AsyncOperation loadOperation;
+
+    private bool isLoading = false;
     void OnEnable()
     {
         //Tell our 'OnLevelFinishedLoading' function to start listening for a scene change as soon as this script is enabled.
@@ -54,34 +56,25 @@ public class SceneHandler : MonoBehaviour
 
         AudioManager.instance.PlayMusicOnSceneChange(scene.name);
 
-
-
-        //why is this here?
-        switch (scene.name)
-        {
-            case "Menu":
-                {
-
-
-
-                    break;
-                }
-        }
     }
 
     public void LoadLevel(string sceneToLoad)
     {
-
-        StartCoroutine(LoadAsynchrously(sceneToLoad));
+        if (!isLoading)
+        {
+            StartCoroutine(LoadAsynchrously(sceneToLoad));
+            isLoading = true;
+        }
+        
 
     }
 
     IEnumerator LoadAsynchrously(string sceneToLoad)
     {
-         loadOperation = SceneManager.LoadSceneAsync(sceneToLoad);
 
         sceneLoader.SetActive(true);
 
+        loadOperation = SceneManager.LoadSceneAsync(sceneToLoad);
 
         while (!loadOperation.isDone)
         {
@@ -94,6 +87,7 @@ public class SceneHandler : MonoBehaviour
 
         if (loadOperation.isDone)
         {
+            isLoading = false;
             sceneLoader.SetActive(false);
         }
     }

@@ -15,6 +15,7 @@ public class DialogueTriggers : MonoBehaviour
     [Header("Optional")]
     public bool isAutoTrigger = false;
     public bool triggerOnlyOnce = false;
+    public bool doesAnimate = false;
     enum CharacterTriggerType
     {
         bothChars,
@@ -83,6 +84,9 @@ public class DialogueTriggers : MonoBehaviour
 
             if (!isInteracting)
             {
+                if (doesAnimate)
+                    ToggleAnim(true);
+
                 RefreshDynamicDialogue();
                 DialogueManager.instance.StartDialogue(dialogue, textBox);
                 DialogueManager.instance.currentTrigger = this;
@@ -101,6 +105,9 @@ public class DialogueTriggers : MonoBehaviour
         if (!triggerOnlyOnce)
         {
             myMoveScript = movementScript;
+
+            if (doesAnimate)
+                ToggleAnim(true);
 
             if (!isInteracting)
             {
@@ -121,6 +128,9 @@ public class DialogueTriggers : MonoBehaviour
 
     public void disableNPCDialogue()
     {
+        if (doesAnimate)
+        ToggleAnim(false);
+
         if (isAutoTrigger && triggerOnlyOnce)
         {
             triggerOnlyOnce = false;
@@ -178,6 +188,9 @@ public class DialogueTriggers : MonoBehaviour
         {
             if (isAutoTrigger)
             {
+                if (doesAnimate)
+                    ToggleAnim(true);
+
                 myMoveScript = collider.GetComponent<MovementScript>();
                 DialogueManager.instance.inAutoTriggeredDialogue = true;
                 DialogueManager.instance.currentTrigger = this;
@@ -194,6 +207,9 @@ public class DialogueTriggers : MonoBehaviour
         {
             if (isAutoTrigger)
             {
+                if (doesAnimate)
+                    ToggleAnim(true);
+
                 myMoveScript = collider.GetComponent<MovementScript>();
                 DialogueManager.instance.inAutoTriggeredDialogue = true;
                 DialogueManager.instance.currentTrigger = this;
@@ -233,6 +249,18 @@ public class DialogueTriggers : MonoBehaviour
         if (dialogueList.Count > PlayerData.levelsCompleted && dialogueList[PlayerData.levelsCompleted])
         {
             dialogue = dialogueList[PlayerData.levelsCompleted];
+        }
+    }
+
+    public void ToggleAnim(bool toggle)
+    {
+        if (toggle) 
+        {
+            GetComponent<Animator>().SetBool("Talking", true);
+        }
+        else
+        {
+            GetComponent<Animator>().SetBool("Talking", false);
         }
     }
 }
