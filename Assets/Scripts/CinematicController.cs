@@ -23,6 +23,7 @@ public class CinematicController : MonoBehaviour
     public StagLeapVFXController stagLeapVFXScript;
     public StagGroundPoundVFXController stagGroundPoundVFXScript;
     public SensorController sensor;
+    public GameObject moleVFX;
 
     public void Clip1()
     {
@@ -88,5 +89,10 @@ public class CinematicController : MonoBehaviour
     public void ActivateSensor()
     {
         sensor.isActive = true;
+    }
+
+    public void SetMoleVFXActive()
+    {
+        moleVFX.SetActive(true);
     }
 }
