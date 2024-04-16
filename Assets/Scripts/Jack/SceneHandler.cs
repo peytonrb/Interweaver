@@ -16,7 +16,7 @@ public class SceneHandler : MonoBehaviour
     public string currentSceneName;
     public GameObject sceneLoader;
     public Slider progressBar;
-    [HideInInspector] public AsyncOperation loadOperation;
+    [HideInInspector] public AsyncOperation loadOperation = null;
 
     private bool isLoading = false;
     void OnEnable()
