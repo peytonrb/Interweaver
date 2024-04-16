@@ -4,6 +4,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem;
+using System.Linq;
+using Unity.VisualScripting;
+using System;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -20,6 +23,11 @@ public class DialogueManager : MonoBehaviour
     public static DialogueManager instance;
     private MovementScript moveScript;
     public bool isActive;
+
+    [Header("Screen Shake")]
+    private bool shakeInvoked;
+    [SerializeField] private float screenShakeAmplitude;
+    [SerializeField] private float screenShakeFrequency;
 
     void Awake()
     {
@@ -49,6 +57,7 @@ public class DialogueManager : MonoBehaviour
         textBoxUI = textBox;
         textBoxUI.SetActive(true);
         isActive = true;
+        shakeInvoked = false; // avoid shaking at first sight of a number
 
         //int i = 0;
         foreach (string sentence in dialogue.sentences)
@@ -78,6 +87,20 @@ public class DialogueManager : MonoBehaviour
         string sentence = sentences.Dequeue();
         StopAllCoroutines();
         StartCoroutine(SentenceScroll(sentence));
+        
+        if (sentence.Contains("[SHAKE]"))
+        {
+            shakeInvoked = true;
+            DisplayNextSentence();
+        }
+        if (shakeInvoked)
+        {
+            //Debug.Log(sentence.Any(char.IsDigit));
+            double screenShakeLength = Convert.ToDouble(sentence);
+            CameraMasterScript.instance.ShakeCurrentCamera(screenShakeAmplitude, screenShakeFrequency, (float)screenShakeLength);
+            shakeInvoked = false;
+            DisplayNextSentence();
+        }
     }
 
     // word scroll functionality
