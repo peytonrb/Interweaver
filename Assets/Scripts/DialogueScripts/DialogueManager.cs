@@ -25,9 +25,9 @@ public class DialogueManager : MonoBehaviour
     public bool isActive;
 
     [Header("Screen Shake")]
-    private bool shakeInvoked;
     [SerializeField] private float screenShakeAmplitude;
     [SerializeField] private float screenShakeFrequency;
+    private bool shakeInvoked;
 
     void Awake()
     {
