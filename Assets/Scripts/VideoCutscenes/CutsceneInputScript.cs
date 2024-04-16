@@ -106,14 +106,12 @@ public class CutsceneInputScript : MonoBehaviour
     }
 
     public void OnSkipCutscene(InputValue input) {
-        if (input.isPressed) 
+        if (input.isPressed && gameStarted == true) 
         {
             if (usingController == false)
             {
-                Debug.Log("Input pressed");
                 if (skipCutsceneTextKeyboard.activeSelf && !hasPressedSkip) 
                 {
-                    Debug.Log("ACTUALLY DID THE THING");
                     vcc.SkipCutscene();
                     hasPressedSkip = true;
                 }
