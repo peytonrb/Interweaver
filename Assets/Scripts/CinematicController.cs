@@ -24,6 +24,8 @@ public class CinematicController : MonoBehaviour
     public StagGroundPoundVFXController stagGroundPoundVFXScript;
     public SensorController sensor;
     public GameObject moleVFX;
+    public GameObject speedlines1;
+    public GameObject speedlines2;
 
     public void Clip1()
     {
@@ -94,5 +96,11 @@ public class CinematicController : MonoBehaviour
     public void SetMoleVFXActive()
     {
         moleVFX.SetActive(true);
+    }
+
+    public void ActivateSpeedLines()
+    {
+        speedlines1.SetActive(true);
+        speedlines2.SetActive(true);
     }
 }
