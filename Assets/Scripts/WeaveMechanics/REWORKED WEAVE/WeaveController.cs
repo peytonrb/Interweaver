@@ -34,6 +34,7 @@ public class WeaveController : MonoBehaviour
     [HideInInspector] public Vector2 lookDirection;
     private MovementScript movementScript;
     private PlayerControllerNew playerControllerNew;
+    [SerializeField] private Transform targetSphere;
 
     void Start()
     {
@@ -95,7 +96,8 @@ public class WeaveController : MonoBehaviour
     // public void MouseTargetingArrow(Vector2 lookDir) <---this is what it was before for the method
     public void MouseTargetingArrow()
     {
-        
+    
+
         targetingArrow.SetActive(true);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitData;
@@ -107,6 +109,9 @@ public class WeaveController : MonoBehaviour
 
         Vector3 adjustedVector = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
         targetingArrow.transform.LookAt(adjustedVector);
+
+        //adjust target sphere location
+        targetSphere.position = hitData.point;
     }
 
     // no other objects are being woven. weave this object. 
