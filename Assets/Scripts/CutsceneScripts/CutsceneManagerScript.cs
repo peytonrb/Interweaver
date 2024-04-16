@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Playables;
 using UnityEngine.UI;
 
@@ -10,10 +11,13 @@ public class CutsceneManagerScript : MonoBehaviour
 {
     public CinemachineVirtualCamera[] cutsceneCams;
     public GameObject cutsceneTrigger;
-    [SerializeField] private GameObject skipCutsceneText;
+    [SerializeField] private GameObject skipCutsceneTextKeyboard;
+    //[SerializeField] private GameObject skipCutsceneTextGamepad;
+    private bool skipped;
     private bool isCutscene;
     private int cutscenePhase;
     private PlayableDirector director;
+    public bool playOnStart;
 
     [Header("Player Objects")]
     public GameObject player;
@@ -34,9 +38,7 @@ public class CutsceneManagerScript : MonoBehaviour
     private bool debugisOn;
     private bool startedPause = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
+    void Awake() {
         if (usingCutsceneWeaver) {
             cutsceneWeaver.SetActive(false);
             dummyScript = cutsceneWeaver.GetComponent<DummyWeaverScript>();
@@ -45,6 +47,11 @@ public class CutsceneManagerScript : MonoBehaviour
             cutsceneCanvas.SetActive(false);
             bpCanvasGroup = blackPanel.GetComponent<CanvasGroup>();
         }
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
         
         playerMovementScript = player.GetComponent<MovementScript>();
         director = GetComponent<PlayableDirector>();
@@ -53,11 +60,17 @@ public class CutsceneManagerScript : MonoBehaviour
 
         isCutscene = false;
         isTransitioning = false;
+        skipped = false;
         cutscenePhase = 0;
-        skipCutsceneText.SetActive(false);
+        skipCutsceneTextKeyboard.SetActive(false);
+        //skipCutsceneTextGamepad.SetActive(false);
 
         foreach (CinemachineVirtualCamera vcam in cutsceneCams) {
             vcam.Priority = 0;
+        }
+
+        if (playOnStart == true) {
+            StartCutscene();
         }
     }
 
@@ -68,25 +81,36 @@ public class CutsceneManagerScript : MonoBehaviour
             if (useTransitions) {
                 switch (cutscenePhase) {
                     case 0:
-                        if (!isTransitioning) {
-                            isTransitioning = true;
-                        }
-                        else {
-                            bpCanvasGroup.alpha = Mathf.MoveTowards(bpCanvasGroup.alpha, 1f, transitionSpeed * Time.deltaTime);
-                            if (bpCanvasGroup.alpha >= 1) {
-                                if (blackedoutPauseDuration == 0)
-                                {
-                                    BeginTimeline();
-                                    bpCanvasGroup.alpha = 1;
-                                }
-                                else if (!startedPause)
-                                {
-                                    StartCoroutine(CutsceneDelay());
-                                    startedPause = true;
-                                }
-                                
+                        //If play on start is true, cutscene will fade in from black instead of out and then back in.
+                        if (playOnStart) {
+                            BeginTimeline();
+                            if (useTransitions) {
+                                bpCanvasGroup.alpha = 1;
+                                isTransitioning = true;
                             }
                         }
+                        else {
+                            if (!isTransitioning) {
+                                isTransitioning = true;
+                            }
+                            else {
+                                bpCanvasGroup.alpha = Mathf.MoveTowards(bpCanvasGroup.alpha, 1f, transitionSpeed * Time.deltaTime);
+                                if (bpCanvasGroup.alpha >= 1) {
+                                    if (blackedoutPauseDuration == 0)
+                                    {
+                                        BeginTimeline();
+                                        bpCanvasGroup.alpha = 1;
+                                    }
+                                    else if (!startedPause)
+                                    {
+                                        StartCoroutine(CutsceneDelay());
+                                        startedPause = true;
+                                    }
+                                    
+                                }
+                            }
+                        }
+                        
                     break;
                     case 1:
                         if (isTransitioning) {
@@ -135,6 +159,7 @@ public class CutsceneManagerScript : MonoBehaviour
                                 bpCanvasGroup.alpha = 0;
                                 cutscenePhase = 0;
                                 isCutscene = false;
+                                InputManagerScript.instance.insideCutscene = false;
                             }
                         }
                     break;
@@ -163,14 +188,18 @@ public class CutsceneManagerScript : MonoBehaviour
             }
 
             if (InputManagerScript.instance.stopCutscene == true && isSkippable) {
+                skipped = true;
                 EndCutscene();
             }
 
+            /*
             if (debugisOn) {
                 if (Input.GetKeyDown(KeyCode.F)) {
+                    Debug.Log("Debug is on");
                     EndCutscene();
                 }
-            }   
+            } 
+            */  
         }
         
     }
@@ -178,6 +207,7 @@ public class CutsceneManagerScript : MonoBehaviour
     public void StartCutscene() {
         isCutscene = true;
         playerMovementScript.inCutscene = true;
+        InputManagerScript.instance.insideCutscene = true;
         if (useTransitions) {
             cutsceneCanvas.SetActive(true);
         }
@@ -189,7 +219,7 @@ public class CutsceneManagerScript : MonoBehaviour
 
     private void BeginTimeline() {
         director.Play();
-        skipCutsceneText.SetActive(true);
+        skipCutsceneTextKeyboard.SetActive(true);
         if (usingCutsceneWeaver) {
             cutsceneWeaver.SetActive(true); 
         }
@@ -202,7 +232,7 @@ public class CutsceneManagerScript : MonoBehaviour
     private void EndCutscene() {
         Destroy(cutsceneTrigger);
         director.Stop();
-        skipCutsceneText.SetActive(false);
+        skipCutsceneTextKeyboard.SetActive(false);
         foreach (CinemachineVirtualCamera vcam in cutsceneCams) {
             vcam.Priority = 0;  
         }
@@ -212,7 +242,18 @@ public class CutsceneManagerScript : MonoBehaviour
         
         playerMovementScript.inCutscene = false;
 
-        cutscenePhase += 1;
+        if (skipped == true) {
+            Debug.Log("Skipped = " + skipped);
+            isTransitioning = false;
+            bpCanvasGroup.alpha = 0;
+            cutscenePhase = 0;
+            isCutscene = false;
+            InputManagerScript.instance.insideCutscene = false;
+        }
+        else {
+            cutscenePhase += 1;
+        }
+        
     }
 
     public IEnumerator CutsceneDelay()

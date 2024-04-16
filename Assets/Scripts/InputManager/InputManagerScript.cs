@@ -23,6 +23,7 @@ public class InputManagerScript : MonoBehaviour
     public static InputManagerScript instance;
     [SerializeField] private bool devMode;
     [HideInInspector] public bool stopCutscene;
+    [HideInInspector] public bool insideCutscene;
     [HideInInspector] public bool isOnBlackboard;
 
 
@@ -380,7 +381,7 @@ public class InputManagerScript : MonoBehaviour
 
     public void OnPossessWeaver(InputValue input)
     {
-        if (input.isPressed && !familiarScript.isDead)
+        if (input.isPressed && !familiarScript.isDead && !insideCutscene)
         {
             PossessWeaver();
         }
@@ -924,7 +925,7 @@ public class InputManagerScript : MonoBehaviour
 
     }
 
-    public void OnSkipCutscene(InputValue input)
+    public void OnCutsceneSkip(InputValue input)
     {
         if (input.isPressed)
         {
