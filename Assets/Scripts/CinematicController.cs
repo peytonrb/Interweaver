@@ -27,6 +27,9 @@ public class CinematicController : MonoBehaviour
     public GameObject speedlines1;
     public GameObject speedlines2;
 
+    [Header("Clip 5")]
+    public Light pointLight;
+
     public void Clip1()
     {
         foreach (ParticleSystem ps in explosionPS.GetComponentsInChildren<ParticleSystem>())
@@ -102,5 +105,37 @@ public class CinematicController : MonoBehaviour
     {
         speedlines1.SetActive(true);
         speedlines2.SetActive(true);
+    }
+
+    public void FadeLightOn()
+    {
+        StartCoroutine(LightOn());
+    }
+
+    IEnumerator LightOn()
+    {
+        float t = 0;
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime;
+            pointLight.intensity = Mathf.Lerp(0f, 0.6f, t);
+            yield return null;
+        }
+
+        StartCoroutine(LightOff());
+    }
+
+    IEnumerator LightOff()
+    {
+        float t = 0;
+        float current = pointLight.intensity;
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime;
+            pointLight.intensity = Mathf.Lerp(current, 0f, t);
+            yield return null;
+        }
     }
 }
