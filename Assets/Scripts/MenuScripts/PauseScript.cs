@@ -234,6 +234,7 @@ public class PauseScript : MonoBehaviour
             optionGroup.GetComponent<CanvasGroup>().alpha = 0f;
             defaultGroup.GetComponent<CanvasGroup>().alpha = 1f;
 
+            defaultMenuButton.Select();
             
         }
         else
@@ -258,6 +259,8 @@ public class PauseScript : MonoBehaviour
 
             controlsPanel.GetComponent<CanvasGroup>().alpha = 0f;
             defaultGroup.GetComponent<CanvasGroup>().alpha = 1f;
+
+            defaultMenuButton.Select();
         }
         else 
         {
