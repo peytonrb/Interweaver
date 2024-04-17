@@ -55,11 +55,12 @@ public class WeaveController : MonoBehaviour
         }
 
         //unsure if this would cause problems but I'm pretty sure it won't
-        if (!InputManagerScript.instance.isGamepad)
+        if (!InputManagerScript.instance.isGamepad && movementScript.active)
         {
             MouseTargetingArrow();
         }
-       
+
+        
 
         if (this.GetComponent<PlayerControllerNew>().isDead)
         {
