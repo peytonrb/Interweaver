@@ -32,6 +32,7 @@ public class InputManagerScript : MonoBehaviour
     private bool hasFamiliarInvoke;
     private bool hasFamiliarInvoke2;
     private bool hasWeaverInvoke;
+    
     //*****************************************
 
     //These bools are here to keep track of the familiar and weavers turn for the marketing camera
@@ -75,6 +76,7 @@ public class InputManagerScript : MonoBehaviour
         wasFamiliarTurn = false;
         wasWeaverTurn = false;
         hasControllerInvoke = false;
+
 
         if (instance == null)
         {
@@ -302,6 +304,7 @@ public class InputManagerScript : MonoBehaviour
             //Disable this when in Hub
             WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
             weaveController.OnDrop();
+            popUiWeaverCanvas.gameObject.SetActive(false);
         }
     }
 
@@ -541,18 +544,34 @@ public class InputManagerScript : MonoBehaviour
     #endregion
 
     private void WeaverUI()
-    {
+    {       
         var weaverTargetingName = playerInput.actions["WeaverTargeting"].GetBindingDisplayString();
         var weaverRotatingName = playerInput.actions["Rotate"].GetBindingDisplayString();
-        if ((weaveController != null) && (weaveController.isWeaving) && !hasWeaverInvoke && movementScript.isInTutorial)
+        var weaverUnweaveName = playerInput.actions["Drop"].GetBindingDisplayString();
+        var weaverUncombineName = playerInput.actions["UncombineAction"].GetBindingDisplayString();
+
+
+        if ((WeaveableManager.Instance.combinedWeaveables[0].weaveableObjectGroup.Count >= 2)  && movementScript.isInTutorial && weaveController.currentWeaveable != null)
         {
             popUiWeaverCanvas.gameObject.SetActive(true);
 
             popUiWeaverCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                SetText("<sprite name=" + weaverTargetingName + ">" + " to move weave" +
-                "<br><sprite name=" + weaverRotatingName + ">" + " to rotate weave");
+           SetText("<sprite name=" + weaverTargetingName + ">" + " to move weave" +
+           "<br><sprite name=" + weaverRotatingName + ">" + " to rotate weave" +
+           "<br><sprite name=" + weaverUnweaveName + ">" + " to unweave" +
+           "<br><sprite name=" + weaverUncombineName + ">" + " to uncombine");
+        }
 
-            hasWeaverInvoke = true;
+        if ((weaveController != null) && (weaveController.isWeaving) && !hasWeaverInvoke && movementScript.isInTutorial)
+        {
+            popUiWeaverCanvas.gameObject.SetActive(true);
+
+
+            popUiWeaverCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
+                SetText("<sprite name=" + weaverTargetingName + ">" + " to move weave" +
+                "<br><sprite name=" + weaverRotatingName + ">" + " to rotate weave" +
+                "<br><sprite name=" + weaverUnweaveName + ">" + " to unweave");
+                 hasWeaverInvoke = true;
         }
 
         else if ((!weaveController.isWeaving) && hasWeaverInvoke)
