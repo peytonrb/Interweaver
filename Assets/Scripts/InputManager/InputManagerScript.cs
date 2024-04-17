@@ -31,7 +31,7 @@ public class InputManagerScript : MonoBehaviour
     //*****************************************
     private bool hasFamiliarInvoke;
     private bool hasFamiliarInvoke2;
-    public bool hasWeaverInvoke;
+    private bool hasWeaverInvoke;
     
     //*****************************************
 
@@ -142,6 +142,7 @@ public class InputManagerScript : MonoBehaviour
         FamiliarUI();
         WeaverUI();
         CheckForControllers();
+
     }
 
     private void CheckForControllers()
@@ -151,7 +152,6 @@ public class InputManagerScript : MonoBehaviour
             ToggleControlScheme(true);
             hasControllerInvoke = true;
             Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
         }
         else if (Gamepad.current == null && hasControllerInvoke) 
         {
@@ -262,9 +262,7 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
-    public void OnWeaverNPCInteractions(InputValue input)
-    {
-    }
+
 
     public void OnRotate(InputValue input)
     {
@@ -440,6 +438,7 @@ public class InputManagerScript : MonoBehaviour
             else
             {
                 pauseScript.Resume();
+                Cursor.visible = false;
             }
 
         }
@@ -493,12 +492,14 @@ public class InputManagerScript : MonoBehaviour
                     if (!isOnBlackboard) 
                     {
                         npcInteractScript.Interact();
+                        
                     }
+
                     else
                     {
                         if (playerInput.currentControlScheme != "Gamepad")
                         {
-                            npcInteractScript.Interact();
+                            npcInteractScript.Interact();                            
                         }
                     }
                 }
