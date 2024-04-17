@@ -165,6 +165,7 @@ public class InputManagerScript : MonoBehaviour
         if (isController)
         {
             Debug.Log("current control is gamepad");
+            weaveController.targetSphere.gameObject.SetActive(false);
             isGamepad = true;
             playerInput.SwitchCurrentControlScheme("Gamepad", Gamepad.current);
 
@@ -172,6 +173,7 @@ public class InputManagerScript : MonoBehaviour
         else
         {
             isGamepad = false;
+            weaveController.targetSphere.gameObject.SetActive(true);
             playerInput.SwitchCurrentControlScheme("Keyboard&Mouse", Keyboard.current, Mouse.current);
         }
     }

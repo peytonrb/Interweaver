@@ -34,7 +34,7 @@ public class WeaveController : MonoBehaviour
     [HideInInspector] public Vector2 lookDirection;
     private MovementScript movementScript;
     private PlayerControllerNew playerControllerNew;
-    [SerializeField] private Transform targetSphere;
+    [SerializeField] public Transform targetSphere;
 
     void Start()
     {
