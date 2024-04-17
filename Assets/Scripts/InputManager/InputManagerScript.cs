@@ -31,7 +31,7 @@ public class InputManagerScript : MonoBehaviour
     //*****************************************
     private bool hasFamiliarInvoke;
     private bool hasFamiliarInvoke2;
-    private bool hasWeaverInvoke;
+    public bool hasWeaverInvoke;
     
     //*****************************************
 
@@ -76,7 +76,7 @@ public class InputManagerScript : MonoBehaviour
         wasFamiliarTurn = false;
         wasWeaverTurn = false;
         hasControllerInvoke = false;
-
+        Cursor.visible = false;
 
         if (instance == null)
         {
@@ -157,8 +157,7 @@ public class InputManagerScript : MonoBehaviour
         {
             ToggleControlScheme(false);
             hasControllerInvoke = false;
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;           
         }
     }
 
@@ -230,6 +229,8 @@ public class InputManagerScript : MonoBehaviour
         if (input.isPressed)
         {
             weaveController.OnDrop();
+            hasWeaverInvoke = false;
+            popUiWeaverCanvas.gameObject.SetActive(false);
         }
     }
 
@@ -305,6 +306,7 @@ public class InputManagerScript : MonoBehaviour
             WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
             weaveController.OnDrop();
             popUiWeaverCanvas.gameObject.SetActive(false);
+            hasWeaverInvoke = false;
         }
     }
 
@@ -433,6 +435,7 @@ public class InputManagerScript : MonoBehaviour
                 AudioManager.instance.StopSound(AudioManagerChannels.fallLoopChannel);
                 AudioManager.instance.StopSound(AudioManagerChannels.footStepsLoopChannel);
                 Time.timeScale = 0;
+                Cursor.visible = true;
             }
             else
             {
@@ -550,18 +553,6 @@ public class InputManagerScript : MonoBehaviour
         var weaverUnweaveName = playerInput.actions["Drop"].GetBindingDisplayString();
         var weaverUncombineName = playerInput.actions["UncombineAction"].GetBindingDisplayString();
 
-
-        if ((WeaveableManager.Instance.combinedWeaveables[0].weaveableObjectGroup.Count >= 2)  && movementScript.isInTutorial && weaveController.currentWeaveable != null)
-        {
-            popUiWeaverCanvas.gameObject.SetActive(true);
-
-            popUiWeaverCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-           SetText("<sprite name=" + weaverTargetingName + ">" + " to move weave" +
-           "<br><sprite name=" + weaverRotatingName + ">" + " to rotate weave" +
-           "<br><sprite name=" + weaverUnweaveName + ">" + " to unweave" +
-           "<br><sprite name=" + weaverUncombineName + ">" + " to uncombine");
-        }
-
         if ((weaveController != null) && (weaveController.isWeaving) && !hasWeaverInvoke && movementScript.isInTutorial)
         {
             popUiWeaverCanvas.gameObject.SetActive(true);
@@ -571,14 +562,20 @@ public class InputManagerScript : MonoBehaviour
                 SetText("<sprite name=" + weaverTargetingName + ">" + " to move weave" +
                 "<br><sprite name=" + weaverRotatingName + ">" + " to rotate weave" +
                 "<br><sprite name=" + weaverUnweaveName + ">" + " to unweave");
-                 hasWeaverInvoke = true;
+            hasWeaverInvoke = true;
         }
 
-        else if ((!weaveController.isWeaving) && hasWeaverInvoke)
+        else if ((WeaveableManager.Instance.combinedWeaveables[0].weaveableObjectGroup.Count >= 2)  && movementScript.isInTutorial && weaveController.currentWeaveable != null)
         {
-            popUiWeaverCanvas.gameObject.SetActive(false);
-            hasWeaverInvoke = false;
+            popUiWeaverCanvas.gameObject.SetActive(true);
+
+            popUiWeaverCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
+           SetText("<sprite name=" + weaverTargetingName + ">" + " to move weave" +
+           "<br><sprite name=" + weaverRotatingName + ">" + " to rotate weave" +
+           "<br><sprite name=" + weaverUnweaveName + ">" + " to unweave" +
+           "<br><sprite name=" + weaverUncombineName + ">" + " to uncombine");
         }
+             
     }
     private void FamiliarUI()
     {
