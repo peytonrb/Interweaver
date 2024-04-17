@@ -9,15 +9,10 @@ public class DayblockPuzzleManager : MonoBehaviour
     //private bool parentFound;
     public int combinationpart; //Which part of the combination has been done
     private GameObject[] weaveables;
-    [HideInInspector] public WeaveableNew sunblockweaveparent;
-    [HideInInspector] public WeaveableNew sunriseblockweaveparent;
-    [HideInInspector] public WeaveableNew moonblockweaveparent;
-
     public List<GameObject> setKeyObjects = new List<GameObject>();
     private List<GameObject> fakeObjects = new List<GameObject>();
     public Transform[] failSpitPoint;
 
-    private WeaveableObject weaveableScript;
     private DayblockScript[] dayblockScripts;
 
     public GameObject vfxObject;
@@ -50,36 +45,9 @@ public class DayblockPuzzleManager : MonoBehaviour
         }
     }
 
-    public void FoundParent() 
-    {
-        foreach (GameObject weaveable in weaveables) {
-            weaveableScript = weaveable.GetComponent<WeaveableObject>();
-            //Finds the parent script
-            // switch (weaveableScript.ID) {
-            //     //Sunblock
-            //     case 0:
-            //         if (weaveableScript.isParent) {
-            //             sunblockweaveparent = weaveableScript;
-            //         }
-            //     break;
-
-            //     //Sunsetblock
-            //     case 1:
-            //         if (weaveableScript.isParent) {
-            //             sunriseblockweaveparent = weaveableScript;
-            //         }
-            //     break;
-
-            //     //Moonblock
-            //     case 2:
-            //         if (weaveableScript.isParent) {
-            //             moonblockweaveparent = weaveableScript;
-            //         }
-            //     break;
-            // }
-            
-        }
-    }
+    //NOTES:
+    //The dayblocks themselves are not order specific, only the slots they are placed in are order specific.
+    //
 
     public void GotCombination(int combination, WeaveableObject weaveableScript, bool isCorrect = true) {
         combinationpart += 1;
@@ -137,6 +105,7 @@ public class DayblockPuzzleManager : MonoBehaviour
     public IEnumerator RestartPuzzle(int correctKey, WeaveableObject weaveable) {
 
         yield return new WaitForSeconds(1f);
+        Debug.Log("Restarting");
 
         riseDefObj.SetActive(true);
         sunDefObj.SetActive(true);
@@ -166,9 +135,9 @@ public class DayblockPuzzleManager : MonoBehaviour
             
             obj.transform.position = failSpitPoint[count2].position;
             
-            Vector3 forceDirection = forceTransform.position - failSpitPoint[count2].position;
+            //Vector3 forceDirection = forceTransform.position - failSpitPoint[count2].position;
 
-            obj.GetComponent<Rigidbody>().AddForce(forceDirection * 5, ForceMode.Impulse);
+            //obj.GetComponent<Rigidbody>().AddForce(forceDirection * 5, ForceMode.Impulse);
 
             count2++;
         }

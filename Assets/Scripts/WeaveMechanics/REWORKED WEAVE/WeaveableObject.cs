@@ -16,6 +16,7 @@ public class WeaveableObject : MonoBehaviour
     public bool hasBeenCombined = false;
     private bool combineFinished = false;
     public bool canBeMoved = true;
+    public bool isDayblock;
 
     // rotation
     [HideInInspector] public enum rotateDir { forward, back, left, right }

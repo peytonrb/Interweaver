@@ -786,7 +786,7 @@ public class WeaveableNew : MonoBehaviour, IInteractable, ICombineable
                     parentWeaveable = weaveable;
                     if (dayblockPuzzle != null)
                     {
-                        dpm.FoundParent();
+                        //dpm.FoundParent();
                     }
                 }
             }
