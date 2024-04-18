@@ -62,8 +62,11 @@ public class CutsceneManagerScript : MonoBehaviour
         isTransitioning = false;
         skipped = false;
         cutscenePhase = 0;
-        skipCutsceneTextKeyboard.SetActive(false);
-        //skipCutsceneTextGamepad.SetActive(false);
+        if (skipCutsceneTextKeyboard != null) {
+            skipCutsceneTextKeyboard.SetActive(false);
+            //skipCutsceneTextGamepad.SetActive(false);
+        }
+        
 
         foreach (CinemachineVirtualCamera vcam in cutsceneCams) {
             vcam.Priority = 0;
@@ -219,7 +222,10 @@ public class CutsceneManagerScript : MonoBehaviour
 
     private void BeginTimeline() {
         director.Play();
-        skipCutsceneTextKeyboard.SetActive(true);
+        
+        if (skipCutsceneTextKeyboard != null) {
+            skipCutsceneTextKeyboard.SetActive(true);
+        }
         if (usingCutsceneWeaver) {
             cutsceneWeaver.SetActive(true); 
         }
@@ -232,7 +238,10 @@ public class CutsceneManagerScript : MonoBehaviour
     private void EndCutscene() {
         Destroy(cutsceneTrigger);
         director.Stop();
-        skipCutsceneTextKeyboard.SetActive(false);
+
+        if (skipCutsceneTextKeyboard != null) {
+            skipCutsceneTextKeyboard.SetActive(false);
+        }
         foreach (CinemachineVirtualCamera vcam in cutsceneCams) {
             vcam.Priority = 0;  
         }
