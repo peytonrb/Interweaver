@@ -19,7 +19,7 @@ public class DialogueManager : MonoBehaviour
 
     public AudioClip speechFile;
     public DialogueTriggers currentTrigger;
-    
+
     public static DialogueManager instance;
     private MovementScript moveScript;
     public bool isActive;
@@ -83,7 +83,7 @@ public class DialogueManager : MonoBehaviour
 
         if (textBoxUI == null)
         {
-            return; 
+            return;
         }
 
         if (sentences.Count == 0)
@@ -95,7 +95,7 @@ public class DialogueManager : MonoBehaviour
         string sentence = sentences.Dequeue();
         StopAllCoroutines();
         StartCoroutine(SentenceScroll(sentence));
-        
+
         if (sentence.Contains("[SHAKE]"))
         {
             shakeInvoked = true;
@@ -118,25 +118,76 @@ public class DialogueManager : MonoBehaviour
         dialogueText.text = "";
         isScrolling = true;
 
+        int currentPos = 0;
 
         foreach (char letter in sentence.ToCharArray()) // add array of clips w pitches to be randomly called from here
         {
-            if(!isActive)
+            if (!isActive)
             {
                 break;
             }
             if (!skipSentence)
             {
                 AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, speechFile, 1f);
+                if (letter.Equals('<'))
+                {
+                    GetPhrase(sentence, currentPos + 1);
+                    //check the phrase
+                    /*switch(GetPhrase(sentence, currentPos+1))
+                    {
+                        case "move":
+                            {
+
+                                break;
+                            }
+                    }*/
+
+                    // checks current control type
+
+                    //using the current input for that control type adds the entire <sprite name=whatever> phrase
+
+                }
+                else
+                {
+                    dialogueText.text += letter;
+                }
+
                 yield return new WaitForSeconds(0.02f);
             }
-            dialogueText.text += letter;
+            else
+            {
+
+                dialogueText.text = sentence;
+                break;
+            }
+
             yield return null;
+
+            currentPos++;
         }
 
         isScrolling = false;
         skipSentence = false;
         Debug.Log("Done displaying sentence");
+    }
+
+    private string GetPhrase(string sentence, int startPos)
+    {
+        string phrase = "";
+        char[] charArray = sentence.ToCharArray();
+
+        for (int i = startPos; i < charArray.Length; i++)
+        {
+            if (charArray[i].ToString() == ">")
+            {
+                break;
+            }
+            phrase += charArray[i];
+        }
+
+        Debug.Log("GARK");
+        Debug.Log(phrase);
+        return phrase;
     }
 
     public void EndDialogue()
