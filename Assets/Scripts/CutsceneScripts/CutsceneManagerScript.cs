@@ -1,11 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Playables;
-using UnityEngine.UI;
 
 public class CutsceneManagerScript : MonoBehaviour
 {
@@ -222,7 +219,7 @@ public class CutsceneManagerScript : MonoBehaviour
 
     private void BeginTimeline() {
         director.Play();
-        
+
         if (skipCutsceneTextKeyboard != null) {
             skipCutsceneTextKeyboard.SetActive(true);
         }
