@@ -23,11 +23,13 @@ public class DialogueManager : MonoBehaviour
     public static DialogueManager instance;
     private MovementScript moveScript;
     public bool isActive;
+    private bool isScrolling; // simply a bool that flags as true when a sentence is still scrolling
+    private bool skipSentence; // when true, finishes sentence
 
     [Header("Screen Shake")]
-    private bool shakeInvoked;
     [SerializeField] private float screenShakeAmplitude;
     [SerializeField] private float screenShakeFrequency;
+    private bool shakeInvoked;
 
     void Awake()
     {
@@ -73,6 +75,12 @@ public class DialogueManager : MonoBehaviour
     // when enter is hit, next sentence is displayed
     public void DisplayNextSentence()
     {
+        if (isScrolling)
+        {
+            skipSentence = true;
+            return;
+        }
+
         if (textBoxUI == null)
         {
             return; 
@@ -108,21 +116,27 @@ public class DialogueManager : MonoBehaviour
     {
         //Debug.Log(sentence); - prints 2 lines at a time
         dialogueText.text = "";
+        isScrolling = true;
 
-        
-            foreach (char letter in sentence.ToCharArray()) // add array of clips w pitches to be randomly called from here
+
+        foreach (char letter in sentence.ToCharArray()) // add array of clips w pitches to be randomly called from here
         {
             if(!isActive)
             {
                 break;
             }
-            //Debug.Log("Ahh");
-            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, speechFile, 1f);
-            yield return new WaitForSeconds(.02f);
+            if (!skipSentence)
+            {
+                AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, speechFile, 1f);
+                yield return new WaitForSeconds(0.02f);
+            }
             dialogueText.text += letter;
             yield return null;
-            
         }
+
+        isScrolling = false;
+        skipSentence = false;
+        Debug.Log("Done displaying sentence");
     }
 
     public void EndDialogue()
