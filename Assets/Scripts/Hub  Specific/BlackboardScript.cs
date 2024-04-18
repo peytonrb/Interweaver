@@ -62,8 +62,8 @@ public class BlackboardScript : MonoBehaviour
 
             popupUIPrompt.SetActive(true);
 
-            popupUIPrompt.gameObject.transform.GetComponent<TMP_Text>().SetText("<sprite name=" + weaverNPCInteraction + ">"
-                        + " Interact");
+            popupUIPrompt.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().SetText("<sprite name=" + weaverNPCInteraction + ">"
+                         + " ...");
         }
     }
 

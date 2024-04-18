@@ -4,6 +4,7 @@ using Cinemachine;
 using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class HubDiageticBookUIScript : MonoBehaviour
 {
@@ -25,35 +26,46 @@ public class HubDiageticBookUIScript : MonoBehaviour
         eventSystem = EventSystem.current;
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CinemachineBrain>();
         CloseAllPages();
-        //interactableUI.SetActive(false);
+        interactableUI.SetActive(false);
     }
 
-    void OnTriggerEnter(Collider other) {
-        if (other.gameObject.CompareTag("Player")) {
-            
+    void OnTriggerEnter(Collider other) 
+    {
+        if (other.gameObject.CompareTag("Player")) 
+        {
+            interactableUI.SetActive(true);
+            var weaverNPCInteraction = InputManagerScript.instance.playerInput.actions["NPCInteraction"].GetBindingDisplayString();
+            interactableUI.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().SetText("<sprite name=" + weaverNPCInteraction + ">"
+                         + " ...");
         }
     }
 
-    void OnTriggerExit(Collider other) {
-        if (other.gameObject.CompareTag("Player")) {
-            
+    void OnTriggerExit(Collider other) 
+    {
+        if (other.gameObject.CompareTag("Player")) 
+        {
+            interactableUI.SetActive(false);
         }
     }
 
-    public void GoToFromBook(MovementScript movementScript) {
-        if (inBook == false) {
+    public void GoToFromBook(MovementScript movementScript) 
+    {
+        if (inBook == false)
+        {
             movementScript.ToggleCanLook(false);
             movementScript.ToggleCanMove(false);
             characterReadingBook = movementScript;
             bookCamera.Priority = 2;
             StartCoroutine(WaitForBlendToFinish());
-            /*if (popupUIPrompt.activeSelf) {
-                popupUIPrompt.SetActive(false);
-            }*/
+            if (interactableUI.activeSelf) 
+            {
+                interactableUI.SetActive(false);
+            }
             inBook = true;
         }
-        else {
-            //interactableUI.SetActive(false);
+        else 
+        {
+            interactableUI.SetActive(false);
             movementScript.ToggleCanLook(true);
             movementScript.ToggleCanMove(true);
             CloseAllPages();
@@ -108,16 +120,19 @@ public class HubDiageticBookUIScript : MonoBehaviour
         pageList[currentPageNumber].SetActive(true);
     }
 
-    IEnumerator WaitForBlendToFinish() {
+    IEnumerator WaitForBlendToFinish() 
+    {
         yield return null;
-        while (mainCamera.IsBlending) {
+        while (mainCamera.IsBlending) 
+        {
             yield return null;
         }
-        if (inBook) {
+        if (inBook) 
+        {
             pageList[0].SetActive(true);
             pageTurnButtonCanvas.SetActive(true);
             currentPageNumber = 0;
-            //interactableUI.SetActive(true);
+            interactableUI.SetActive(true);
         }
         yield break;
     }
