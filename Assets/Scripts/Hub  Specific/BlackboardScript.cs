@@ -26,6 +26,11 @@ public class BlackboardScript : MonoBehaviour
     private int lostSoulTotalSepultus;
     public bool DebugLoadAnyLevel = true;
 
+    [Header("VFX")]
+    [SerializeField] private GameObject portalVFX;
+    [SerializeField] private GameObject player;
+    private GameObject activeVFX;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -70,17 +75,14 @@ public class BlackboardScript : MonoBehaviour
 
     public void GoToFromBlackboard(MovementScript movementScript) {
         if (onBlackboard == false) {
-            movementScript.ToggleCanLook(false);
-            movementScript.ToggleCanMove(false);
-            blackboardCamera.Priority = 2;
-            StartCoroutine(WaitForBlendToFinish());
-            if (popupUIPrompt.activeSelf) {
-                popupUIPrompt.SetActive(false);
-            }
-            InputManagerScript.instance.isOnBlackboard = true;
-            onBlackboard = true;
+            GameObject vfx = Instantiate(portalVFX, new Vector3(player.transform.position.x, player.transform.position.y - 1f, player.transform.position.z), Quaternion.identity);
+            vfx.GetComponent<PortalVFXController>().isActive = true;
+            activeVFX = vfx;
+            StartCoroutine(OpenBlackboard(movementScript));
+            
         }
         else {
+            activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
             interactableUI.SetActive(false);
             pressEToExit.gameObject.SetActive(false);
             movementScript.ToggleCanLook(true);
@@ -89,6 +91,20 @@ public class BlackboardScript : MonoBehaviour
             InputManagerScript.instance.isOnBlackboard = false;
             onBlackboard = false;
         }
+    }
+
+    IEnumerator OpenBlackboard(MovementScript movementScript)
+    {
+        yield return new WaitForSeconds(0.75f);
+        movementScript.ToggleCanLook(false);
+        movementScript.ToggleCanMove(false);
+        blackboardCamera.Priority = 2;
+        StartCoroutine(WaitForBlendToFinish());
+        if (popupUIPrompt.activeSelf) {
+            popupUIPrompt.SetActive(false);
+        }
+        InputManagerScript.instance.isOnBlackboard = true;
+        onBlackboard = true;
     }
 
     /// <summary>
@@ -102,31 +118,41 @@ public class BlackboardScript : MonoBehaviour
                 case 0:
                     //GO TO ALPINE
                     if (levelNumber <= levelsCompleted) {
-                        acc.ChangeCutscene(1);
-                        vcc.ChangeCutscene(1);
-                        SceneHandler.instance.LoadLevel("AnimaticCutscenes");
+                        activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
+                        blackboardCamera.Priority = 0;
+                        StartCoroutine(CutsceneLoader(1));
                     }
                 break;
                 case 1:
                     //GO TO CAVERN
                     if (levelNumber <= levelsCompleted || DebugLoadAnyLevel) {
-                        acc.ChangeCutscene(3);
-                        vcc.ChangeCutscene(3);
-                        SceneHandler.instance.LoadLevel("AnimaticCutscenes");
+                        activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
+                        blackboardCamera.Priority = 0;
+                        StartCoroutine(CutsceneLoader(3));
                     }
                 break;
 
                  case 2:
                     //GO TO SEPULTUS
                     if (levelNumber <= levelsCompleted || DebugLoadAnyLevel) {
-                        acc.ChangeCutscene(5);
-                        vcc.ChangeCutscene(5);
-                        SceneHandler.instance.LoadLevel("AnimaticCutscenes");
+                        activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
+                        blackboardCamera.Priority = 0;
+                        StartCoroutine(CutsceneLoader(5));
                     }
                 break;
             }
         }
         
+    }
+
+    IEnumerator CutsceneLoader(int index)
+    {
+        yield return new WaitForSeconds(0.75f);
+        player.GetComponent<DarknessMechanicScript>().enabled = true;
+        yield return new WaitForSeconds(1.25f);
+        acc.ChangeCutscene(index);
+        vcc.ChangeCutscene(index);
+        SceneHandler.instance.LoadLevel("AnimaticCutscenes");
     }
 
     IEnumerator WaitForBlendToFinish() {
