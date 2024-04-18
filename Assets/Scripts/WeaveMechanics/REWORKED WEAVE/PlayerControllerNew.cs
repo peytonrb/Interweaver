@@ -167,6 +167,7 @@ public class PlayerControllerNew : MonoBehaviour
         */
 
         characterAnimationHandler.ToggleRespawnAnim();
+        AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
 
         isDead = false;
         characterController.enabled = true;

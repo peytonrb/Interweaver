@@ -61,7 +61,7 @@ public class HawkFollowScript : MonoBehaviour
             objectPosition = Mathf.Pow(1 - tParam, 3) * p0 + 3 * Mathf.Pow(1 - tParam, 2) * tParam * p1 + 3 * (1 - tParam) * Mathf.Pow(tParam, 2) * p2 + Mathf.Pow(tParam, 3) * p3;
             transform.LookAt(objectPosition);
             transform.position = objectPosition;
-            Debug.Log("called!");
+//            Debug.Log("called!");
             yield return new WaitForFixedUpdate();
         }
 
