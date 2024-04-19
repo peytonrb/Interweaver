@@ -19,7 +19,7 @@ public class DialogueManager : MonoBehaviour
 
     public AudioClip speechFile;
     public DialogueTriggers currentTrigger;
-    
+
     public static DialogueManager instance;
     private MovementScript moveScript;
     public bool isActive;
@@ -83,7 +83,7 @@ public class DialogueManager : MonoBehaviour
 
         if (textBoxUI == null)
         {
-            return; 
+            return;
         }
 
         if (sentences.Count == 0)
@@ -95,7 +95,7 @@ public class DialogueManager : MonoBehaviour
         string sentence = sentences.Dequeue();
         StopAllCoroutines();
         StartCoroutine(SentenceScroll(sentence));
-        
+
         if (sentence.Contains("[SHAKE]"))
         {
             shakeInvoked = true;
@@ -118,25 +118,288 @@ public class DialogueManager : MonoBehaviour
         dialogueText.text = "";
         isScrolling = true;
 
+        int currentPos = 0;
 
         foreach (char letter in sentence.ToCharArray()) // add array of clips w pitches to be randomly called from here
         {
-            if(!isActive)
+            if (!isActive)
             {
                 break;
             }
             if (!skipSentence)
             {
                 AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, speechFile, 1f);
+                if (letter.Equals('{'))
+                {
+                    InsertIcon(sentence, currentPos);
+                    break;
+                }
+                else
+                {
+                    dialogueText.text += letter;
+                }
+
                 yield return new WaitForSeconds(0.02f);
             }
-            dialogueText.text += letter;
+            else
+            {
+                if (!sentence.Contains('{'))
+                dialogueText.text = sentence;
+                else
+                {
+                    InsertIcon(sentence, sentence.IndexOf('{'));
+                    break;
+                }
+                break;
+            }
+
             yield return null;
+
+            currentPos++;
         }
 
         isScrolling = false;
         skipSentence = false;
-        Debug.Log("Done displaying sentence");
+    }
+
+    private string GetPhrase(string sentence, int startPos)
+    {
+        string phrase = "";
+        char[] charArray = sentence.ToCharArray();
+
+        for (int i = startPos; i < charArray.Length; i++)
+        {
+            if (charArray[i].ToString() == "}")
+            {
+                break;
+            }
+            phrase += charArray[i];
+        }
+
+        return phrase;
+    }
+
+    private void InsertIcon(string sentence, int currentPos)
+    {
+        bool isController = InputManagerScript.instance.isGamepad;
+
+        GetPhrase(sentence, currentPos + 1);
+
+
+        dialogueText.text = sentence;
+
+
+        //check the phrase
+        switch (GetPhrase(sentence, currentPos + 1))
+        {
+            case "move":
+                {
+                    dialogueText.text = dialogueText.text.Remove(currentPos, 6);
+
+                    if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=LS>");
+                    }
+                    else
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=WASD>");               
+
+                    }
+                    break;
+                }
+            case "target":
+                {
+                    dialogueText.text = dialogueText.text.Remove(currentPos, 8);
+
+                    if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=RS>");
+                    }
+                    else
+                    {                       
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Delta>");
+                    }
+                    break;
+                }
+            case "weave":
+                {
+                    dialogueText.text = dialogueText.text.Remove(currentPos, 7);
+
+                    if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press RT>");
+                    }
+                    else
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press LMB>");
+                    }
+                    break;
+                }
+            case "drop":
+                {
+                    dialogueText.text = dialogueText.text.Remove(currentPos, 6);
+
+                    if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press Cross>");
+                    }
+                    else
+                    {                      
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press E>");
+                    }
+                    break;
+                }
+            case "unweave":
+                {
+                    dialogueText.text = dialogueText.text.Remove(currentPos, 9);
+
+                    if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press LT>");
+                    }
+                    else
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press Q>");
+                    }
+                    break;
+                }
+            case "rotate":
+                {
+                    dialogueText.text = dialogueText.text.Remove(currentPos, 8);
+
+                    if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=D-Pad>");
+                    }
+                    else
+                    {                        
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Arrows>");
+                    }
+                    break;
+                }
+            case "possess":
+                {
+                    dialogueText.text = dialogueText.text.Remove(currentPos, 9);
+
+                    if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press YCon>");
+                    }
+                    else
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press Tab>");
+                    }
+                    break;
+                }
+            case "dive":
+                {
+                    dialogueText.text = dialogueText.text.Remove(currentPos, 6);
+
+                    if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press RT>");
+                    }
+                    else
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press LMB>");
+                    }
+                    break;
+                }
+            case "dig":
+                {
+                    dialogueText.text = dialogueText.text.Remove(currentPos, 5);
+
+                    if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
+                    {                       
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press Cross>");
+                    }
+                    else
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press E>");
+                    }
+                    break;
+                }
+            case "raise":
+                {
+                    dialogueText.text = dialogueText.text.Remove(currentPos, 7);
+
+                    if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
+                    {                       
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press RT>");
+                    }
+                    else
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press LMB>");
+                    }
+                    break;
+                }
+            case "lower":
+                {
+                    dialogueText.text = dialogueText.text.Remove(currentPos, 7);
+                    if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press LT>");
+                    }
+                    else
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press RMB>");
+                    }
+                    break;
+                }
+            case "jump":
+                {
+                    dialogueText.text = dialogueText.text.Remove(currentPos, 6);
+                    if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press ACon>");
+                    }
+                    else
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press Space>");
+                    }
+                    break;
+                }
+            case "swap":
+                {
+                    dialogueText.text = dialogueText.text.Remove(currentPos, 6);
+
+                    if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
+                    {                      
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press B>");
+                    }
+                    else
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press E>");
+                    }
+                    break;
+                }
+            case "slam":
+                {
+                    if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
+                    {
+                        dialogueText.text = dialogueText.text.Remove(currentPos, 6);
+
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press ACon>");
+                    }
+                    else
+                    {
+                        dialogueText.text = dialogueText.text.Remove(currentPos, 6);
+
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press Space>");
+
+                    }
+                    break;
+                }
+        }
+
+        if (dialogueText.text.Contains('{'))
+        {
+            Debug.Log(dialogueText.text.IndexOf('{'));
+
+            InsertIcon(dialogueText.text, dialogueText.text.IndexOf('{'));
+        }
+
+
     }
 
     public void EndDialogue()

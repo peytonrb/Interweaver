@@ -643,6 +643,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5794105977935440986, guid: bc844348221ec094b9ef3958c5433909, type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 1413479739080941240}
+    - target: {fileID: 5794105977935440986, guid: bc844348221ec094b9ef3958c5433909, type: 3}
       propertyPath: launchSound
       value: 
       objectReference: {fileID: 8300000, guid: 4b1164eec66777540a482582e44a498f, type: 3}
@@ -693,13 +697,42 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3276655793776585276, guid: bc844348221ec094b9ef3958c5433909, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1413479739080941240}
   m_SourcePrefab: {fileID: 100100000, guid: bc844348221ec094b9ef3958c5433909, type: 3}
 --- !u!4 &3026347279100397132 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3317995236195453757, guid: bc844348221ec094b9ef3958c5433909, type: 3}
   m_PrefabInstance: {fileID: 573186160023670129}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3066204588549269325 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3276655793776585276, guid: bc844348221ec094b9ef3958c5433909, type: 3}
+  m_PrefabInstance: {fileID: 573186160023670129}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1413479739080941240
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3066204588549269325}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2249583175f68d74092f815cf39a3c6c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6732973341438154268 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6522353907182148461, guid: bc844348221ec094b9ef3958c5433909, type: 3}

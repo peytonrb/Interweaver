@@ -59,7 +59,7 @@ public class FadeToBlack : MonoBehaviour
            
             myImage.color = newColor;
 
-            Debug.Log(myImage.color.a);
+           // Debug.Log(myImage.color.a);
             yield return null;
         }
 

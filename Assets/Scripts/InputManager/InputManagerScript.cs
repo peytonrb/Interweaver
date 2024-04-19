@@ -566,15 +566,19 @@ public class InputManagerScript : MonoBehaviour
             hasWeaverInvoke = true;
         }
 
-        else if ((WeaveableManager.Instance.combinedWeaveables[0].weaveableObjectGroup.Count >= 2)  && movementScript.isInTutorial && weaveController.currentWeaveable != null)
+        else if (weaveController.isWeaving)
         {
-            popUiWeaverCanvas.gameObject.SetActive(true);
+            if ((WeaveableManager.Instance.combinedWeaveables[0].weaveableObjectGroup.Count >= 2) && movementScript.isInTutorial && weaveController.currentWeaveable != null)
+            {
+                popUiWeaverCanvas.gameObject.SetActive(true);
 
-            popUiWeaverCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-           SetText("<sprite name=" + weaverTargetingName + ">" + " to move weave" +
-           "<br><sprite name=" + weaverRotatingName + ">" + " to rotate weave" +
-           "<br><sprite name=" + weaverUnweaveName + ">" + " to unweave" +
-           "<br><sprite name=" + weaverUncombineName + ">" + " to uncombine");
+                popUiWeaverCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
+                SetText("<sprite name=" + weaverTargetingName + ">" + " to move weave" +
+                "<br><sprite name=" + weaverRotatingName + ">" + " to rotate weave" +
+                "<br><sprite name=" + weaverUnweaveName + ">" + " to unweave" +
+                "<br><sprite name=" + weaverUncombineName + ">" + " to uncombine");
+            }
+
         }
              
     }
