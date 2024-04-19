@@ -56,6 +56,8 @@ public class PauseScript : MonoBehaviour
     [Header("Button UI Selection On Screen Change")]
     [SerializeField] private Button defaultMenuButton;
     [SerializeField] private Button defaultOptionsButton;
+    [SerializeField] private Button defaultControlsKeyboardButton;
+    [SerializeField] private Button defaultControlsControllerButton;
 
     public void Start()
     {
@@ -275,13 +277,13 @@ public class PauseScript : MonoBehaviour
             {
                 controllerGroup.SetActive(true);
                 keyboardGroup.SetActive(false);
-                
+                defaultControlsControllerButton.Select();
             }
             else 
             {
                 controllerGroup.SetActive(false);
                 keyboardGroup.SetActive(true);
-               
+                defaultControlsKeyboardButton.Select();
             }
         }
     }
@@ -291,6 +293,12 @@ public class PauseScript : MonoBehaviour
         InputManagerScript.instance.ResetCurrentCharacter();
     }
 
+    /// <summary>
+    /// Quits to either the menu or hub scene.
+    /// </summary>
+    /// <param name="level">
+    /// 0 for Menu, 1 for Hub
+    /// </param>
     public void QuitToScene(int level)
     {
         switch (level) {
