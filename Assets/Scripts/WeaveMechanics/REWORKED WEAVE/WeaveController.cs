@@ -97,8 +97,6 @@ public class WeaveController : MonoBehaviour
     // public void MouseTargetingArrow(Vector2 lookDir) <---this is what it was before for the method
     public void MouseTargetingArrow()
     {
-    
-
         targetingArrow.SetActive(true);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitData;
@@ -130,14 +128,17 @@ public class WeaveController : MonoBehaviour
             // boxcast in controller targeted direction
             RaycastHit hitInfo;
 
+            
+
             // check for Weaveable object within range of BoxCast - adjust width of boxcast if necessary
-            if (Physics.BoxCast(transform.position, transform.localScale, targetingArrow.transform.forward, out hitInfo,
+            if (Physics.BoxCast(transform.position, transform.localScale * 1.2f, targetingArrow.transform.forward, out hitInfo,
                                 transform.rotation, weaveDistance, weaveableLayerMask))
             {
                 if (!hitInfo.collider.GetComponent<WeaveableObject>().isFloatingIsland)
                 {
                     currentWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
                     isValidWeaveable = true;
+                    
                 }
                 
             }
@@ -271,9 +272,10 @@ public class WeaveController : MonoBehaviour
             {
                 // boxcast in controller targeted direction
                 RaycastHit hitInfo;
+                ExtDebug.DrawBoxCastBox(currentWeaveable.transform.position - new Vector3(0, currentWeaveable.hoverHeight, 0), transform.localScale * 1.2f, transform.rotation, currentWeaveable.targetingArrow.transform.forward, weaveDistance, Color.green);
 
                 // check for Weaveable object within range of BoxCast sent from CURRENTWEAVEABLE
-                if (Physics.BoxCast(currentWeaveable.transform.position, transform.localScale,
+                if (Physics.BoxCast(currentWeaveable.transform.position - new Vector3(0, currentWeaveable.hoverHeight, 0), transform.localScale * 1.2f,
                                     currentWeaveable.targetingArrow.transform.forward, out hitInfo,
                                     currentWeaveable.transform.rotation, weaveDistance, weaveableLayerMask))
                 {
@@ -326,4 +328,5 @@ public class WeaveController : MonoBehaviour
             }
         }
     }
+
 }
