@@ -131,21 +131,8 @@ public class DialogueManager : MonoBehaviour
                 AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, speechFile, 1f);
                 if (letter.Equals('<'))
                 {
-                    GetPhrase(sentence, currentPos + 1);
-                    //check the phrase
-                    /*switch(GetPhrase(sentence, currentPos+1))
-                    {
-                        case "move":
-                            {
-
-                                break;
-                            }
-                    }*/
-
-                    // checks current control type
-
-                    //using the current input for that control type adds the entire <sprite name=whatever> phrase
-
+                    InsertIcon(sentence, currentPos, sentence.IndexOf('>'));
+                    break;
                 }
                 else
                 {
@@ -156,8 +143,13 @@ public class DialogueManager : MonoBehaviour
             }
             else
             {
-
+                if (!sentence.Contains('<'))
                 dialogueText.text = sentence;
+                else
+                {
+                    InsertIcon(sentence, sentence.IndexOf('<'), sentence.IndexOf('>'));
+                    break;
+                }
                 break;
             }
 
@@ -168,7 +160,6 @@ public class DialogueManager : MonoBehaviour
 
         isScrolling = false;
         skipSentence = false;
-        Debug.Log("Done displaying sentence");
     }
 
     private string GetPhrase(string sentence, int startPos)
@@ -185,9 +176,47 @@ public class DialogueManager : MonoBehaviour
             phrase += charArray[i];
         }
 
-        Debug.Log("GARK");
-        Debug.Log(phrase);
         return phrase;
+    }
+
+    private void InsertIcon(string sentence, int currentPos, int lastPos)
+    {
+        bool isController = InputManagerScript.instance.isGamepad;
+
+        GetPhrase(sentence, currentPos + 1);
+
+
+        dialogueText.text = sentence;
+
+
+        //check the phrase
+        switch (GetPhrase(sentence, currentPos + 1))
+        {
+            case "move":
+                {
+                    if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
+                    {
+                        for(int i = currentPos; i < currentPos; i++)
+                        {
+                            sentence.Remove(currentPos);
+                        }
+                        
+                        sentence.Insert(currentPos, "sprite name=LS");
+                    }
+                    else
+                    {
+                        dialogueText.text = dialogueText.text.Remove(currentPos);
+
+                        dialogueText.text += "<sprite name=WASD>";               
+
+                    }
+                    break;
+                }
+        }
+
+        
+
+
     }
 
     public void EndDialogue()
