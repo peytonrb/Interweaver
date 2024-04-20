@@ -13,6 +13,7 @@ public class InputManagerScript : MonoBehaviour
     public GameObject familiar;
     public GameObject wyvern;
     public GameObject FFC;
+    public GameObject rivalTrigger;
     public bool canSwitch = true; // bool which determines if possession can occur
     public Vector2 movement;
     public Vector2 weaveCursor;
@@ -483,6 +484,7 @@ public class InputManagerScript : MonoBehaviour
             else
             {
                 NPCInteractionScript npcInteractScript = player.GetComponent<NPCInteractionScript>();
+                RivalEventTrigger rivalEventTrigger = rivalTrigger.GetComponent<RivalEventTrigger>();
                 if (DialogueManager.instance.inAutoTriggeredDialogue)
                 {
                     DialogueManager.instance.DisplayNextSentence();
@@ -508,6 +510,12 @@ public class InputManagerScript : MonoBehaviour
                 {
                     DialogueManager.instance.DisplayNextSentence();
                 }
+
+                if (rivalEventTrigger.isSpeaking) 
+                {
+                    DialogueManager.instance.DisplayNextSentence();
+                }
+
                 Debug.Log("Interacting Weaver");
             }
         }

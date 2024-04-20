@@ -19,7 +19,7 @@ public class RivalEventTrigger : MonoBehaviour
     [CannotBeNullObjectField] public Dialogue dialogue;
     [CannotBeNullObjectField] public GameObject textBox;
     [Range(0, 10)] public int secondsUntilDialogueAppears = 2;
-    private bool isSpeaking = false;
+    [HideInInspector] public bool isSpeaking = false;
     [HideInInspector] public VisualEffect smoke;
 
     [CannotBeNullObjectField] public Animator animator;
@@ -37,16 +37,12 @@ public class RivalEventTrigger : MonoBehaviour
     void Update()
     {
         if (isSpeaking)
-        {
-            if (Input.GetKeyDown(KeyCode.E)) // will refactor, fastest way to fix this for rn
-            {
-                DialogueManager.instance.DisplayNextSentence();
-
-                if(!DialogueManager.instance.isActive)
-                {
-                    animator.SetTrigger("Laugh");
-                }
-            }
+        {          
+           if(!DialogueManager.instance.isActive)
+           {
+              animator.SetTrigger("Laugh");
+           }
+            
         }
 
         if (!DialogueManager.instance.isActive && hasPlayed)
@@ -79,6 +75,10 @@ public class RivalEventTrigger : MonoBehaviour
         
     }
 
+    public void NextSentenceForRival()
+    {
+        DialogueManager.instance.DisplayNextSentence();
+    }
     IEnumerator DialogueStart()
     {
         yield return new WaitForSeconds(secondsUntilDialogueAppears);
