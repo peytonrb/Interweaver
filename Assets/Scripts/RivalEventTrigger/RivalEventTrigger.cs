@@ -41,6 +41,7 @@ public class RivalEventTrigger : MonoBehaviour
            if(!DialogueManager.instance.isActive)
            {
               animator.SetTrigger("Laugh");
+                
            }
             
         }
@@ -73,6 +74,7 @@ public class RivalEventTrigger : MonoBehaviour
             hasPlayed = true;
             isSpeaking = false;
             InputManagerScript.instance.isRivalTrigger = false;
+            this.GetComponent<BoxCollider>().enabled = false;
         }
         
     }
