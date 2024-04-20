@@ -33,12 +33,7 @@ public class NPCInteractionScript : MonoBehaviour
             }
             if (hitCollider.gameObject.tag == "RivalTrigger")
             {
-                RivalEventTrigger rivalTrigger = hitCollider.gameObject.GetComponent<RivalEventTrigger>();
-                
-                if (rivalTrigger != null) 
-                {
-                    rivalTrigger.NextSentenceForRival();
-                }
+                 hitCollider.gameObject.GetComponent<RivalEventTrigger>().NextSentenceForRival();                
 
                 break;
             }

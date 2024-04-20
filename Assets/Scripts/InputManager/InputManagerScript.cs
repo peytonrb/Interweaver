@@ -26,6 +26,7 @@ public class InputManagerScript : MonoBehaviour
     [HideInInspector] public bool stopCutscene;
     [HideInInspector] public bool insideCutscene;
     [HideInInspector] public bool isOnBlackboard;
+    [HideInInspector] public bool isRivalTrigger;
 
 
     //the invoke bools are there so then it can only happen once instead of every frame in the update function
@@ -484,7 +485,7 @@ public class InputManagerScript : MonoBehaviour
             else
             {
                 NPCInteractionScript npcInteractScript = player.GetComponent<NPCInteractionScript>();
-                RivalEventTrigger rivalEventTrigger = rivalTrigger.GetComponent<RivalEventTrigger>();
+
                 if (DialogueManager.instance.inAutoTriggeredDialogue)
                 {
                     DialogueManager.instance.DisplayNextSentence();
@@ -504,17 +505,18 @@ public class InputManagerScript : MonoBehaviour
                             npcInteractScript.Interact();                            
                         }
                     }
-                }
 
+                   
+                }
+                if (isRivalTrigger)
+                {
+                    npcInteractScript.Interact();
+                }
                 if (player.GetComponent<LostSoulManager>().isSpeaking)
                 {
                     DialogueManager.instance.DisplayNextSentence();
                 }
-
-                if (rivalEventTrigger.isSpeaking) 
-                {
-                    DialogueManager.instance.DisplayNextSentence();
-                }
+                
 
                 Debug.Log("Interacting Weaver");
             }

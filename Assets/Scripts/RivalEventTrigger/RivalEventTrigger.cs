@@ -60,6 +60,7 @@ public class RivalEventTrigger : MonoBehaviour
             moveScript.ToggleCanMove(false);
             smoke = Instantiate(smokePrefab, rival.transform.position - new Vector3(0, 1.5f, 0), Quaternion.identity).GetComponent<VisualEffect>();
             smoke.Play();
+            InputManagerScript.instance.isRivalTrigger = true;            
             StartCoroutine(DialogueStart());
         }
     }
@@ -71,6 +72,7 @@ public class RivalEventTrigger : MonoBehaviour
             animator.SetTrigger("Leave");
             hasPlayed = true;
             isSpeaking = false;
+            InputManagerScript.instance.isRivalTrigger = false;
         }
         
     }
