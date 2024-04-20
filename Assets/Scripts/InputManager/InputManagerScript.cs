@@ -509,7 +509,7 @@ public class InputManagerScript : MonoBehaviour
                 }
                 if (isRivalTrigger)
                 {
-                    npcInteractScript.Interact();
+                    DialogueManager.instance.DisplayNextSentence();
                 }
                 if (player.GetComponent<LostSoulManager>().isSpeaking)
                 {

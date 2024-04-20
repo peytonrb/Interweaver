@@ -31,12 +31,7 @@ public class NPCInteractionScript : MonoBehaviour
                     bookscript.GoToFromBook(GetComponent<MovementScript>());
                 }
             }
-            if (hitCollider.gameObject.tag == "RivalTrigger")
-            {
-                 hitCollider.gameObject.GetComponent<RivalEventTrigger>().NextSentenceForRival();                
-
-                break;
-            }
+           
         }
     }
 }
