@@ -75,12 +75,6 @@ public class DialogueManager : MonoBehaviour
     // when enter is hit, next sentence is displayed
     public void DisplayNextSentence()
     {
-        if (isScrolling)
-        {
-            skipSentence = true;
-            return;
-        }
-
         if (textBoxUI == null)
         {
             return;
@@ -93,22 +87,32 @@ public class DialogueManager : MonoBehaviour
         }
 
         string sentence = sentences.Dequeue();
-        StopAllCoroutines();
-        StartCoroutine(SentenceScroll(sentence));
+        
+        if (shakeInvoked)
+        {
+            double screenShakeLength = Convert.ToDouble(sentence);
+            CameraMasterScript.instance.ShakeCurrentCamera(screenShakeAmplitude, screenShakeFrequency, (float)screenShakeLength);
+            shakeInvoked = false;
+            DisplayNextSentence();
+            return;
+        }
 
         if (sentence.Contains("[SHAKE]"))
         {
             shakeInvoked = true;
             DisplayNextSentence();
+            return;
         }
-        if (shakeInvoked)
+
+        if (isScrolling)
         {
-            //Debug.Log(sentence.Any(char.IsDigit));
-            double screenShakeLength = Convert.ToDouble(sentence);
-            CameraMasterScript.instance.ShakeCurrentCamera(screenShakeAmplitude, screenShakeFrequency, (float)screenShakeLength);
-            shakeInvoked = false;
-            DisplayNextSentence();
+            skipSentence = true;
+            return;
         }
+
+        StopAllCoroutines();
+        StartCoroutine(SentenceScroll(sentence));
+
     }
 
     // word scroll functionality
@@ -161,6 +165,7 @@ public class DialogueManager : MonoBehaviour
         isScrolling = false;
         skipSentence = false;
     }
+
 
     private string GetPhrase(string sentence, int startPos)
     {
