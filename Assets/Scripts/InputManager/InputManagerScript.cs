@@ -13,7 +13,6 @@ public class InputManagerScript : MonoBehaviour
     public GameObject familiar;
     public GameObject wyvern;
     public GameObject FFC;
-    public GameObject rivalTrigger;
     public bool canSwitch = true; // bool which determines if possession can occur
     public Vector2 movement;
     public Vector2 weaveCursor;
