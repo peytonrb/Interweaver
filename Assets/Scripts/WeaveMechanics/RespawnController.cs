@@ -6,48 +6,26 @@ using UnityEngine;
 public class RespawnController : MonoBehaviour
 {
     [CannotBeNullObjectField] public List<GameObject> shieldPuzzleWeaveables;
-     public List<GameObject> myRespawnables;
+    public List<GameObject> myRespawnables;
     [HideInInspector] public List<Vector3> startPositions;
     [HideInInspector] public List<Quaternion> startRotations;
-
-     private bool AutoAssignMyWeavables = true;
-
+    private bool AutoAssignMyWeavables = true;
     public LayerMask layersToCheck;
     public Vector3 boxCastHalfExtent;
-    
-
     public List<GameObject> rayList;
-
     private float timeBeforeCheck = 3;
+    private WeaveController player;
 
     public void Start()
     {
         rayList = new List<GameObject>();
+        player = GameObject.FindWithTag("Player").GetComponent<WeaveController>();
 
-        //if (AutoAssignMyWeavables)
-        //{
-        //    myRespawnables = new List<GameObject>();
-        //    RaycastHit[] hits = Physics.BoxCastAll(transform.position, boxCastHalfExtent, transform.up, transform.rotation, layersToCheck);
-
-        //    foreach (RaycastHit hit in hits)
-        //    {
-        //        if (!hit.collider.CompareTag("FloatingIsland") && hit.collider.GetComponent<WeaveableNew>() != null)
-        //        {
-        //            myRespawnables.Add(hit.collider.gameObject);
-        //            startPositions.Add(hit.collider.gameObject.transform.position);
-        //            startRotations.Add(hit.collider.gameObject.transform.rotation);
-        //        }
-        //    }
-        //}
-        //else
-        //{
-            foreach(GameObject obj in myRespawnables)
-            {
-                startPositions.Add(obj.transform.position);
-                startRotations.Add(obj.transform.rotation);
-            }
-        //}
-        
+        foreach (GameObject obj in myRespawnables)
+        {
+            startPositions.Add(obj.transform.position);
+            startRotations.Add(obj.transform.rotation);
+        }
     }
 
     public void Update()
@@ -65,21 +43,16 @@ public class RespawnController : MonoBehaviour
     public void CheckAndRespawnWeaveables()
     {
         rayList.Clear();
-
         RaycastHit[] hits = Physics.BoxCastAll(transform.position, boxCastHalfExtent, transform.up, transform.rotation, layersToCheck);
-
         rayList = new List<GameObject>(myRespawnables);
-        
+
         //remove elements that are still found in the box
         foreach (RaycastHit hit in hits)
         {
-            
             foreach (GameObject obj in myRespawnables)
             {
-                
                 if (hit.collider.gameObject == obj)
                 {
-                    
                     //Debug.Log(hit.collider.gameObject);
                     rayList.Remove(hit.collider.gameObject);
                 }
@@ -102,12 +75,17 @@ public class RespawnController : MonoBehaviour
     //// can be called in puzzles and other events that require respawning objects
     public void RespawnObject(GameObject objectToRespawn)
     {
-        if(objectToRespawn.TryGetComponent<CrystalScript>(out CrystalScript crystal))
+        if (objectToRespawn.TryGetComponent<CrystalScript>(out CrystalScript crystal))
         {
-            if(crystal.myFloatingIsland != null)
+            if (crystal.myFloatingIsland != null)
             {
                 return;
             }
+        }
+
+        if (objectToRespawn.TryGetComponent<WeaveableObject>(out WeaveableObject weaveable))
+        {
+            player.OnDrop();
         }
 
         objectToRespawn.transform.position = startPositions[myRespawnables.IndexOf(objectToRespawn)];
@@ -140,6 +118,6 @@ public class RespawnController : MonoBehaviour
     void OnDrawGizmos()
     {
         ExtDebug.DrawBox(transform.position, boxCastHalfExtent, transform.rotation, Color.red);
-        
+
     }
 }
