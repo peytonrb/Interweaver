@@ -22,6 +22,7 @@ public class PressurePlateScript : MonoBehaviour
     public Material activeMat;
     public Material defaultMat;
     private VisualEffect wireVFX;
+    private ParticleSystem activatePS;
 
     [Header("Audio")]
     [SerializeField] private AudioClip pressurePlateSound;
@@ -38,6 +39,9 @@ public class PressurePlateScript : MonoBehaviour
         
         if (wireVFX != null)
             wireVFX.gameObject.SetActive(false);
+        
+        activatePS = this.transform.GetChild(0).GetComponent<ParticleSystem>();
+        activatePS.gameObject.SetActive(false);
     }
 
     void Update() {
@@ -74,11 +78,15 @@ public class PressurePlateScript : MonoBehaviour
         if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Familiar")) 
         {
             standingOnPlate = false;
+            activatePS.Stop();
+            activatePS.gameObject.SetActive(false);
         }
 
         if (activatedByWeaveable && other.gameObject.CompareTag("Weaveable"))
         {
             standingOnPlate = false;
+            activatePS.Stop();
+            activatePS.gameObject.SetActive(false);
         }
     }
 
@@ -107,6 +115,9 @@ public class PressurePlateScript : MonoBehaviour
     }
 
     void Activation() {
+        activatePS.gameObject.SetActive(true);
+        activatePS.Play();
+
         if (wires.Length > 0 && wireVFX != null)
         {
             wireVFX.gameObject.SetActive(true);
