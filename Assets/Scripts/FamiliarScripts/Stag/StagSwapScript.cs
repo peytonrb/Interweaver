@@ -8,6 +8,7 @@ public class StagSwapScript : MonoBehaviour
     [Header("References")]
     private GameObject weaver;
     private GameObject wyvern;
+    private MovementScript movementScript;
     private WyvernBossManager bossManager;
     [Header("Variables")]
     [SerializeField] private float timeToHold = 1f;
@@ -26,6 +27,7 @@ public class StagSwapScript : MonoBehaviour
 
     void Start()
     {
+        movementScript = GetComponent<MovementScript>();
         weaver = GameObject.FindGameObjectWithTag("Player");
         wyvern = GameObject.FindGameObjectWithTag("Boss");
         if (wyvern != null)
@@ -47,6 +49,12 @@ public class StagSwapScript : MonoBehaviour
 
     public IEnumerator ChargeSwap()
     {
+
+        if (!movementScript.canMove) // prevent swapping while unable to move
+        {
+            yield break;
+        }
+
         float startTime = Time.time;
         timeHeld = 0f;
         isHolding = true;
@@ -83,6 +91,11 @@ public class StagSwapScript : MonoBehaviour
 
     public void DoSwap()
     {
+        if (!movementScript.canMove) // prevent swapping while unable to move
+        {
+            return;
+        }
+
         isHolding = false;
         chargeVFX.Stop();
 
