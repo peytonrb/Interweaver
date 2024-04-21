@@ -55,7 +55,7 @@ public class HubDiageticBookUIScript : MonoBehaviour
 
     private void Update()
     {
-        if (pageList[0].activeInHierarchy && !soundPageInvoke) 
+        if (0 < pageList.Count && pageList[0].activeInHierarchy && !soundPageInvoke) 
         {
             defaultButtonforSound.Select();
             soundPageInvoke = true;
@@ -63,14 +63,14 @@ public class HubDiageticBookUIScript : MonoBehaviour
             gamePageInvoke = false;
         }
 
-        if (pageList[1].activeInHierarchy && !videoPageInvoke)
+        if (1 < pageList.Count && pageList[1].activeInHierarchy && !videoPageInvoke)
         {
             defaultButtonforVideo.Select();
             soundPageInvoke = false;
             videoPageInvoke = true;
             gamePageInvoke = false;
         }
-        if (pageList[2].activeInHierarchy && !gamePageInvoke)
+        if (2 < pageList.Count && pageList[2].activeInHierarchy && !gamePageInvoke)
         {
             defaultButtonforGame.Select();
             soundPageInvoke = false;
