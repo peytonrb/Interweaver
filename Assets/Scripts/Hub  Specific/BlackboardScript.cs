@@ -31,6 +31,12 @@ public class BlackboardScript : MonoBehaviour
     [SerializeField] private GameObject player;
     private GameObject activeVFX;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip portalSpawning;
+    [SerializeField] private AudioClip portalSustain;
+    [SerializeField] private AudioClip portalEnd;
+    private AudioSource portalSustainSource;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,6 +60,8 @@ public class BlackboardScript : MonoBehaviour
         lostSoulCountCavern.gameObject.SetActive(false);
         lostSoulCountSepultus.gameObject.SetActive(false);
         popupUIPrompt.SetActive(false);
+
+        portalSustainSource = null;
     }
 
     void OnTriggerEnter(Collider other) {
@@ -78,6 +86,8 @@ public class BlackboardScript : MonoBehaviour
             GameObject vfx = Instantiate(portalVFX, new Vector3(player.transform.position.x, player.transform.position.y - 1f, player.transform.position.z), Quaternion.identity);
             vfx.GetComponent<PortalVFXController>().isActive = true;
             activeVFX = vfx;
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, portalSpawning, 1f);
+            StartCoroutine(PlayDelayedPortalSound());
             StartCoroutine(OpenBlackboard(movementScript));
             
         }
@@ -90,8 +100,16 @@ public class BlackboardScript : MonoBehaviour
             blackboardCamera.Priority = 0;
             InputManagerScript.instance.isOnBlackboard = false;
             onBlackboard = false;
+            portalSustainSource = AudioManager.instance.KillAudioSource(portalSustainSource);
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, portalEnd, 1f);
         }
     }
+
+        IEnumerator PlayDelayedPortalSound()
+            {
+                yield return new WaitForSeconds(2.596f); 
+                portalSustainSource = AudioManager.instance.AddSFX(portalSustain, true, portalSustainSource);
+            }
 
     IEnumerator OpenBlackboard(MovementScript movementScript)
     {
@@ -119,6 +137,8 @@ public class BlackboardScript : MonoBehaviour
                     //GO TO ALPINE
                     if (levelNumber <= levelsCompleted) {
                         activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
+                        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, portalEnd, 1f);
+                        portalSustainSource = AudioManager.instance.KillAudioSource(portalSustainSource);
                         blackboardCamera.Priority = 0;
                         StartCoroutine(CutsceneLoader(1));
                     }
@@ -127,6 +147,8 @@ public class BlackboardScript : MonoBehaviour
                     //GO TO CAVERN
                     if (levelNumber <= levelsCompleted || DebugLoadAnyLevel) {
                         activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
+                        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, portalEnd, 1f);
+                        portalSustainSource = AudioManager.instance.KillAudioSource(portalSustainSource);
                         blackboardCamera.Priority = 0;
                         StartCoroutine(CutsceneLoader(3));
                     }
@@ -136,6 +158,8 @@ public class BlackboardScript : MonoBehaviour
                     //GO TO SEPULTUS
                     if (levelNumber <= levelsCompleted || DebugLoadAnyLevel) {
                         activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
+                        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, portalEnd, 1f);
+                        portalSustainSource = AudioManager.instance.KillAudioSource(portalSustainSource);
                         blackboardCamera.Priority = 0;
                         StartCoroutine(CutsceneLoader(5));
                     }
