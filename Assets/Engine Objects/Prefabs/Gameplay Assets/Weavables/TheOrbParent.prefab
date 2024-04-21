@@ -33,7 +33,7 @@ Transform:
   m_Children:
   - {fileID: 7544083150625084406}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1711824533889246084
 BoxCollider:
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBeingWoven: 0
-  hoverHeight: 2
+  hoverHeight: 2.04
   objectMoveOverride: 1
   weaveableLayers:
     serializedVersion: 2
@@ -104,6 +104,8 @@ MonoBehaviour:
   maxWeaveDistance: 25
   hasBeenCombined: 0
   canBeMoved: 1
+  isDayblock: 0
+  rotAmount: 45
   myTransformPoints: []
   activeSnapPoint: {fileID: 0}
   objectToSnapTo: {fileID: 0}
@@ -113,6 +115,7 @@ MonoBehaviour:
   weaveController: {fileID: 0}
   targetingArrow: {fileID: 0}
   originalMat: {fileID: 0}
+  isFloatingIsland: 0
 --- !u!1001 &2181168921022794155
 PrefabInstance:
   m_ObjectHideFlags: 0
