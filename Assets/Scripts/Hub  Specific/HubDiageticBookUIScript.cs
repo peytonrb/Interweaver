@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class HubDiageticBookUIScript : MonoBehaviour
 {
@@ -13,7 +14,27 @@ public class HubDiageticBookUIScript : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera bookCamera;
     [SerializeField] private GameObject interactableUI;
     [SerializeField] private List<GameObject> pageList = new List<GameObject>();
-    [SerializeField] private GameObject pageTurnButtonCanvas;
+
+    ////sets of buttons that are going to be active in the different pages
+    ////*******************************************************
+    //[SerializeField] private GameObject pageTurnButtonCanvasSound;
+    //[SerializeField] private GameObject pageTurnButtonCanvasVideo;
+    //[SerializeField] private GameObject pageTurnButtonCanvasGame;
+    ////*******************************************************
+
+    //bools for the different pages that are going to be active
+    //*******************************************************
+    private bool soundPageInvoke;
+    private bool videoPageInvoke;
+    private bool gamePageInvoke;
+    //*******************************************************
+
+    //the default buttons that are going to be selected for the pages
+    //*******************************************************
+    [SerializeField] private Button defaultButtonforSound;
+    [SerializeField] private Button defaultButtonforVideo;
+    [SerializeField] private Button defaultButtonforGame;
+    //*******************************************************
     private MovementScript characterReadingBook;
     [Header("Variables")]
     private int currentPageNumber = 0;
@@ -27,6 +48,35 @@ public class HubDiageticBookUIScript : MonoBehaviour
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CinemachineBrain>();
         CloseAllPages();
         interactableUI.SetActive(false);
+        soundPageInvoke = false;
+        videoPageInvoke = false;
+        gamePageInvoke = false;
+    }
+
+    private void Update()
+    {
+        if (pageList[0].activeInHierarchy && !soundPageInvoke) 
+        {
+            defaultButtonforSound.Select();
+            soundPageInvoke = true;
+            videoPageInvoke = false;
+            gamePageInvoke = false;
+        }
+
+        if (pageList[1].activeInHierarchy && !videoPageInvoke)
+        {
+            defaultButtonforVideo.Select();
+            soundPageInvoke = false;
+            videoPageInvoke = true;
+            gamePageInvoke = false;
+        }
+        if (pageList[2].activeInHierarchy && !gamePageInvoke)
+        {
+            defaultButtonforGame.Select();
+            soundPageInvoke = false;
+            videoPageInvoke = false;
+            gamePageInvoke = true;
+        }
     }
 
     void OnTriggerEnter(Collider other) 
@@ -109,7 +159,7 @@ public class HubDiageticBookUIScript : MonoBehaviour
         {
             page.SetActive(false);
         }
-        pageTurnButtonCanvas.SetActive(false);
+        
         currentPageNumber = 0;
     }
 
@@ -130,7 +180,7 @@ public class HubDiageticBookUIScript : MonoBehaviour
         if (inBook) 
         {
             pageList[0].SetActive(true);
-            pageTurnButtonCanvas.SetActive(true);
+            
             currentPageNumber = 0;
             interactableUI.SetActive(true);
         }
