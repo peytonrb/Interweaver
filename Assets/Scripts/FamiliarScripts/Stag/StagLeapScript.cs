@@ -50,6 +50,7 @@ public class StagLeapScript : MonoBehaviour
     private StagChargingVFXController stagChargingVFXScript;
     private StagLeapVFXController stagLeapVFXScript;
     private StagGroundPoundVFXController stagGroundPoundVFXScript;
+    public GameObject breakPrefab;
 
     [Header("Audio")]
     [SerializeField] private AudioClip  chargeLeapSound;
@@ -268,6 +269,7 @@ public class StagLeapScript : MonoBehaviour
                 {
                     //AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, destroySound, 1f);
                     //destroyAudioSource = AudioManager.instance.AddSFX(destroySound, true, destroyAudioSource);
+                    Instantiate(breakPrefab, hitCollider.transform.position, Quaternion.identity);
                     Destroy(hitCollider.gameObject); // call the thing being broken here!
                     //destroyAudioSource = AudioManager.instance.KillAudioSource(destroyAudioSource);
                 }
