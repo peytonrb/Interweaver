@@ -74,11 +74,13 @@ public class CameraZoneScript : MonoBehaviour
         }
         else
         {
-            if (currentCharacters.Count <= 0)
+            // look into this later, if shit gets fucked we may have to bring it back
+            /*if (currentCharacters.Count <= 0)
             {
+                Debug.Log(gameObject + " SCRONK");
                 myWeaverCamera.Priority = 0;
                 myFamiliarCamera.Priority = 0; 
-            }
+            }*/
         }
     }
 
@@ -86,7 +88,6 @@ public class CameraZoneScript : MonoBehaviour
     {
         if (!tripped) // if a trigger is newly entered
         {
-            Debug.Log("tripped");
             if (bounds.Contains(collider.transform.position))
             {
                 MovementScript colliderMovementScript = collider.gameObject.GetComponent<MovementScript>();
@@ -108,6 +109,7 @@ public class CameraZoneScript : MonoBehaviour
             {
                 tripped = false;
                 myWeaverCamera.Priority = 0;
+                Debug.Log("Setting current cam to prio 1 in the on trigger stay function");
                 cameraMasterScript.currentCam.Priority = 1;
                 currentCharacters.Remove(collider.gameObject);
             }
