@@ -86,13 +86,15 @@ public class CameraZoneScript : MonoBehaviour
     {
         if (!tripped) // if a trigger is newly entered
         {
+            Debug.Log("tripped");
             if (bounds.Contains(collider.transform.position))
             {
                 MovementScript colliderMovementScript = collider.gameObject.GetComponent<MovementScript>();
 
                 if (colliderMovementScript.active && !currentCharacters.Contains(collider.gameObject))
                 {
-                        SetCameraPriority(collider.gameObject);
+                    Debug.Log(collider.gameObject);
+                    SetCameraPriority(collider.gameObject);
                         currentCharacters.Add(collider.gameObject);
                         tripped = true;
                 }
@@ -123,6 +125,7 @@ public class CameraZoneScript : MonoBehaviour
         else
         {
             myFamiliarCamera.Priority = 1;
+            Debug.Log("test");
             myFamiliarCamera.Follow = newTargetToFollow.transform;
         }
     }
