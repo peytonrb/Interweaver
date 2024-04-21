@@ -569,9 +569,9 @@ public class InputManagerScript : MonoBehaviour
 
 
             popUiWeaverCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                SetText("<sprite name=" + weaverTargetingName + ">" + " to move weave" +
-                "<br><sprite index=81>" + " to rotate weave" +
-                "<br><sprite name=" + weaverUnweaveName + ">" + " to unweave");
+                SetText("<sprite name=" + weaverTargetingName + ">" + " move weave" +
+                "<br><sprite index=81>" + " rotate weave" +
+                "<br><sprite name=" + weaverUnweaveName + ">" + " unweave");
             hasWeaverInvoke = true;
         }
 
@@ -582,10 +582,10 @@ public class InputManagerScript : MonoBehaviour
                 popUiWeaverCanvas.gameObject.SetActive(true);
 
                 popUiWeaverCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                SetText("<sprite name=" + weaverTargetingName + ">" + " to move weave" +
-                "<br><sprite name=" + weaverRotatingName + ">" + " to rotate weave" +
-                "<br><sprite name=" + weaverUnweaveName + ">" + " to unweave" +
-                "<br><sprite name=" + weaverUncombineName + ">" + " to uncombine");
+                SetText("<sprite name=" + weaverTargetingName + ">" + " move weave" +
+                "<br><sprite name=" + weaverRotatingName + ">" + " rotate weave" +
+                "<br><sprite name=" + weaverUnweaveName + ">" + " unweave" +
+                "<br><sprite name=" + weaverUncombineName + ">" + " uncombine");
             }
 
         }
@@ -605,7 +605,7 @@ public class InputManagerScript : MonoBehaviour
                     //this is where I would put the ui being active and showing the button for digging
                     popUiFamiliarCanvas.gameObject.SetActive(true);
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                        SetText("<sprite name=" + inputName + ">" + " to dive");
+                        SetText("<sprite name=" + inputName + ">" + " dive");
                     //playerInput.actions["FamiliarInteract"].GetBindingDisplayString()
                     hasFamiliarInvoke = true;
                 }
@@ -630,7 +630,7 @@ public class InputManagerScript : MonoBehaviour
                     //this is where I would put the ui being active and showing the button for digging
                     popUiFamiliarCanvas.gameObject.SetActive(true);
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                        SetText("<sprite name=" + digInputName + ">" + " to dig");
+                        SetText("<sprite name=" + digInputName + ">" + " dig");
 
                     hasFamiliarInvoke = true;
 
@@ -655,7 +655,7 @@ public class InputManagerScript : MonoBehaviour
                 else if ((!moleDigScript.startedToDig) && hasFamiliarInvoke2)
                 {
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                    SetText("<sprite name=" + digInputName + ">" + " to dig");
+                    SetText("<sprite name=" + digInputName + ">" + " dig");
                     hasFamiliarInvoke2 = false;
                 }
 
