@@ -33,6 +33,8 @@ public class NetProjectileScript : MonoBehaviour
         MSF = GameObject.FindWithTag("Familiar").GetComponent<MovementScript>();
 
         decayingLifeTime = lifetime;
+
+        Physics.IgnoreLayerCollision(8,21);
     }
 
     private void Update()
