@@ -105,7 +105,7 @@ public class StagSwapScript : MonoBehaviour
             transform.position = weaver.transform.position;
             weaver.transform.position = prevPosition;
             AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, swapCompleteSound, 1f);
-            if (bossManager != null && wyvern != null) // pissing and shitty
+            if (bossManager != null && wyvern != null) // pissing and shitting
             {
                 int prevPhase = bossManager.phases;
                 if (wyvern.activeSelf && wyvern != null)

@@ -76,7 +76,7 @@ public class DialogueManager : MonoBehaviour
     public void DisplayNextSentence()
     {
         
-        if (isScrolling && !shakeInvoked)
+        if (isScrolling && !shakeInvoked) // we specifically call out that shake hasn't been invoked here since elsewise there can be a frame difference which causes shake to be just straight up be read
         {
             skipSentence = true;
             return;
