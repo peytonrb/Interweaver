@@ -25,6 +25,7 @@ public class InputManagerScript : MonoBehaviour
     [HideInInspector] public bool stopCutscene;
     [HideInInspector] public bool insideCutscene;
     [HideInInspector] public bool isOnBlackboard;
+    [HideInInspector] public bool isRivalTrigger;
 
 
     //the invoke bools are there so then it can only happen once instead of every frame in the update function
@@ -483,6 +484,7 @@ public class InputManagerScript : MonoBehaviour
             else
             {
                 NPCInteractionScript npcInteractScript = player.GetComponent<NPCInteractionScript>();
+
                 if (DialogueManager.instance.inAutoTriggeredDialogue)
                 {
                     DialogueManager.instance.DisplayNextSentence();
@@ -502,12 +504,19 @@ public class InputManagerScript : MonoBehaviour
                             npcInteractScript.Interact();                            
                         }
                     }
-                }
 
+                   
+                }
+                if (isRivalTrigger)
+                {
+                    DialogueManager.instance.DisplayNextSentence();
+                }
                 if (player.GetComponent<LostSoulManager>().isSpeaking)
                 {
                     DialogueManager.instance.DisplayNextSentence();
                 }
+                
+
                 Debug.Log("Interacting Weaver");
             }
         }
@@ -561,7 +570,7 @@ public class InputManagerScript : MonoBehaviour
 
             popUiWeaverCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
                 SetText("<sprite name=" + weaverTargetingName + ">" + " to move weave" +
-                "<br><sprite name=" + weaverRotatingName + ">" + " to rotate weave" +
+                "<br><sprite index=81>" + " to rotate weave" +
                 "<br><sprite name=" + weaverUnweaveName + ">" + " to unweave");
             hasWeaverInvoke = true;
         }

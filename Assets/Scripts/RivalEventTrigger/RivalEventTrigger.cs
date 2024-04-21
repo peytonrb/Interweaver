@@ -19,7 +19,7 @@ public class RivalEventTrigger : MonoBehaviour
     [CannotBeNullObjectField] public Dialogue dialogue;
     [CannotBeNullObjectField] public GameObject textBox;
     [Range(0, 10)] public int secondsUntilDialogueAppears = 2;
-    private bool isSpeaking = false;
+    [HideInInspector] public bool isSpeaking = false;
     [HideInInspector] public VisualEffect smoke;
 
     [CannotBeNullObjectField] public Animator animator;
@@ -37,16 +37,13 @@ public class RivalEventTrigger : MonoBehaviour
     void Update()
     {
         if (isSpeaking)
-        {
-            if (Input.GetKeyDown(KeyCode.E)) // will refactor, fastest way to fix this for rn
-            {
-                DialogueManager.instance.DisplayNextSentence();
-
-                if(!DialogueManager.instance.isActive)
-                {
-                    animator.SetTrigger("Laugh");
-                }
-            }
+        {          
+           if(!DialogueManager.instance.isActive)
+           {
+              animator.SetTrigger("Laugh");
+                
+           }
+            
         }
 
         if (!DialogueManager.instance.isActive && hasPlayed)
@@ -64,6 +61,7 @@ public class RivalEventTrigger : MonoBehaviour
             moveScript.ToggleCanMove(false);
             smoke = Instantiate(smokePrefab, rival.transform.position - new Vector3(0, 1.5f, 0), Quaternion.identity).GetComponent<VisualEffect>();
             smoke.Play();
+            InputManagerScript.instance.isRivalTrigger = true;            
             StartCoroutine(DialogueStart());
         }
     }
@@ -75,10 +73,16 @@ public class RivalEventTrigger : MonoBehaviour
             animator.SetTrigger("Leave");
             hasPlayed = true;
             isSpeaking = false;
+            InputManagerScript.instance.isRivalTrigger = false;
+            this.GetComponent<BoxCollider>().enabled = false;
         }
         
     }
 
+    public void NextSentenceForRival()
+    {
+        DialogueManager.instance.DisplayNextSentence();
+    }
     IEnumerator DialogueStart()
     {
         yield return new WaitForSeconds(secondsUntilDialogueAppears);

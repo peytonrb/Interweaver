@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 using UnityEngine.InputSystem;
 using UnityEditor;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
@@ -21,6 +22,12 @@ public class MainMenu : MonoBehaviour
 
     public AudioClip cancelFile;
 
+    [Header("Button UI Selection On Screen Change")]
+    [SerializeField] private Button defaultNew;
+    [SerializeField] private Button defaultContinue;
+    [SerializeField] private Button defaultOptionsButton;
+    [SerializeField] private Button defaultCreditsButton;
+
     EventSystem eventSystem;
     void Start()
     {
@@ -31,6 +38,13 @@ public class MainMenu : MonoBehaviour
         }
         else {
             continueButton.SetActive(false);
+        }
+
+        if (continueButton.activeSelf) {
+            defaultContinue.Select();
+        }
+        else {
+            defaultNew.Select();
         }
 
         eventSystem = EventSystem.current;
@@ -54,6 +68,12 @@ public class MainMenu : MonoBehaviour
         mainMenu.alpha = 1;
         mainMenu.blocksRaycasts = true;
         TitleLogo.SetActive(true);
+        if (continueButton.activeSelf) {
+            defaultContinue.Select();
+        }
+        else {
+            defaultNew.Select();
+        }
         PlayButtonSound();
     }
 
@@ -74,6 +94,7 @@ public class MainMenu : MonoBehaviour
         optionsMenu.blocksRaycasts = true;
         optionsMenu.gameObject.SetActive(true);
         ChangeActiveButtons(1);
+        defaultOptionsButton.Select();
         CloseMainMenu();
     }
 
@@ -97,6 +118,7 @@ public class MainMenu : MonoBehaviour
         creditsMenu.gameObject.SetActive(true);
         creditsMenu.alpha = 1;
         creditsMenu.blocksRaycasts = true;
+        defaultCreditsButton.Select();
         CloseMainMenu();
 
     }

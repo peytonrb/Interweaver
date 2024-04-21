@@ -7,7 +7,7 @@ public class WeaveableObject : MonoBehaviour
 {
     [Header("State Variables")]
     public bool isBeingWoven; // accessed by WeaveController
-    [SerializeField][Range(1, 5)] private float hoverHeight = 2f;
+    [SerializeField][Range(1, 5)] public float hoverHeight = 2f;
     public enum ObjectMoveOverrides { Default, ThisAlwaysMoves, ThisNeverMoves }
     public ObjectMoveOverrides objectMoveOverride;
     [SerializeField] private LayerMask weaveableLayers;

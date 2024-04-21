@@ -31,6 +31,7 @@ public class NPCInteractionScript : MonoBehaviour
                     bookscript.GoToFromBook(GetComponent<MovementScript>());
                 }
             }
+           
         }
     }
 }

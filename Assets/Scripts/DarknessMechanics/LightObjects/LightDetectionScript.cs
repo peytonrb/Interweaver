@@ -63,11 +63,11 @@ public class LightDetectionScript : MonoBehaviour
             
             if (collision.GetComponent<SensorController>() != null)
             {
-                AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, sensorHitClip);
                 if (LightSourceScript.Instance.lightsArray[transform.parent.transform.parent.GetComponent<LightCrystalScript>().arrayIndex].isOn &&
                     !collision.GetComponent<SensorController>().isActive)
                 {
                     collision.GetComponent<SensorController>().isActive = true;
+                    AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, sensorHitClip);
 
                     if (collision.GetComponent<SensorController>().sensorEvent != null)
                         collision.GetComponent<SensorController>().StartEvent();

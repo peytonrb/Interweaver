@@ -21,21 +21,20 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: t_crystal_static_cluster
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-  m_Parent: {fileID: 2100000, guid: b3888ceff4d719c4abfac786ecb89221, type: 2}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
+  m_Shader: {fileID: -6465566751694194690, guid: d95a611853229e347b07bdb5404b0602, type: 3}
+  m_Parent: {fileID: 2100000, guid: 5518d61dbcb7b64429fd2d0aba24a502, type: 2}
+  m_ModifiedSerializedProperties: 2
+  m_ValidKeywords: []
+  m_InvalidKeywords:
   - _METALLICSPECGLOSSMAP
   - _NORMALMAP
   - _OCCLUSIONMAP
   - _PARALLAXMAP
-  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap:
-    RenderType: Opaque
+  stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
@@ -67,10 +66,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Metallic: -4.86
-    - _Smoothness: -0.17
+    - _FresnelSize: 1.55
+    - _FresnelStrength: 0.68
+    - _Metallic: -4.83
+    - _Smoothness: 2.2
     m_Colors:
     - _BaseColor: {r: 0.0024919407, g: 0.3962264, b: 0.26181394, a: 1}
-    - _Color: {r: 0.0024919407, g: 0.3962264, b: 0.26181394, a: 1}
+    - _Color: {r: 0, g: 0.3962264, b: 0.26150945, a: 1}
     - _EmissionColor: {r: 0, g: 0.24528301, b: 0.050718382, a: 1}
   m_BuildTextureStacks: []
