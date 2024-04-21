@@ -583,7 +583,7 @@ public class InputManagerScript : MonoBehaviour
 
                 popUiWeaverCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
                 SetText("<sprite name=" + weaverTargetingName + ">" + " move weave" +
-                "<br><sprite name=" + weaverRotatingName + ">" + " rotate weave" +
+                "<br><sprite index=81>" + " rotate weave" +
                 "<br><sprite name=" + weaverUnweaveName + ">" + " unweave" +
                 "<br><sprite name=" + weaverUncombineName + ">" + " uncombine");
             }
