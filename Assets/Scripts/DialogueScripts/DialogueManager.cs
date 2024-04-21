@@ -75,6 +75,13 @@ public class DialogueManager : MonoBehaviour
     // when enter is hit, next sentence is displayed
     public void DisplayNextSentence()
     {
+        
+        if (isScrolling && !shakeInvoked) // we specifically call out that shake hasn't been invoked here since elsewise there can be a frame difference which causes shake to be just straight up be read
+        {
+            skipSentence = true;
+            return;
+        }
+
         if (textBoxUI == null)
         {
             return;
@@ -87,7 +94,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         string sentence = sentences.Dequeue();
-        
+
         if (shakeInvoked)
         {
             double screenShakeLength = Convert.ToDouble(sentence);
@@ -104,15 +111,8 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        if (isScrolling)
-        {
-            skipSentence = true;
-            return;
-        }
-
         StopAllCoroutines();
         StartCoroutine(SentenceScroll(sentence));
-
     }
 
     // word scroll functionality
