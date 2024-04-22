@@ -43,8 +43,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip hubMusic; 
     [SerializeField] private AudioClip hubIntroMusic;
 
-  //  [Header("SFX")]
-   // [SerializeField] private List<AudioClip> soundEffects = new List<AudioClip>();  
+   [Header("SFX")]
+   private List<AudioSource> soundEffectSources = new List<AudioSource>();  
    
 
     void Awake()
@@ -78,6 +78,16 @@ public class AudioManager : MonoBehaviour
     public void PlayMusicOnSceneChange(string sceneName)
     {
         StopSound(AudioManagerChannels.MusicChannel);
+        introMusicSource.Stop(); // teehee
+
+        if (0 < soundEffectSources.Count)
+        {
+            foreach(AudioSource soundEffectSource in soundEffectSources)
+            {
+                soundEffectSource.Stop();
+                KillAudioSource(soundEffectSource);
+            }
+        }
 
         switch (sceneName) 
         {
@@ -391,6 +401,7 @@ public class AudioManager : MonoBehaviour
         if (newSFX != null)
         {
             AudioSource sfx = gameObject.AddComponent(typeof (AudioSource)) as AudioSource;
+            soundEffectSources.Add(sfx);
             sfx.clip = newSFX;
             sfx.Play();
             sfx.outputAudioMixerGroup = soundeffectChannel.outputAudioMixerGroup;
@@ -412,6 +423,7 @@ public class AudioManager : MonoBehaviour
         if (audioSource)
         {
             //Debug.Log("Killed " + audioSource + " that was playing " + audioSource.clip.name);
+            soundEffectSources.Remove(audioSource);
             Destroy(audioSource);
         }
         return null;
