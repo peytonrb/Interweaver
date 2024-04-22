@@ -60,7 +60,7 @@ public class WeaveController : MonoBehaviour
             MouseTargetingArrow();
         }
 
-        
+
 
         if (this.GetComponent<PlayerControllerNew>().isDead)
         {
@@ -128,7 +128,7 @@ public class WeaveController : MonoBehaviour
             // boxcast in controller targeted direction
             RaycastHit hitInfo;
 
-            
+
 
             // check for Weaveable object within range of BoxCast - adjust width of boxcast if necessary
             if (Physics.BoxCast(transform.position, transform.localScale * 1.2f, targetingArrow.transform.forward, out hitInfo,
@@ -138,9 +138,9 @@ public class WeaveController : MonoBehaviour
                 {
                     currentWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
                     isValidWeaveable = true;
-                    
+
                 }
-                
+
             }
         }
         else
@@ -150,7 +150,7 @@ public class WeaveController : MonoBehaviour
             RaycastHit hitInfo;
 
             // checks for a Weavable object within distance of Ray
-            
+
             if (Physics.SphereCast(transform.position, 1f, rayPlayer.direction, out hitInfo, direction, weaveableLayerMask)) // changed to spherecast so horizontal objects are easier to pick up
             {
                 if (!hitInfo.collider.GetComponent<WeaveableObject>().isFloatingIsland)
@@ -254,7 +254,7 @@ public class WeaveController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
         isWeaving = true;
-        
+
         //Enables the Weaving bool in the animator for the animation blending
         playerControllerNew.WeaveAnimation(true);
     }
@@ -322,7 +322,7 @@ public class WeaveController : MonoBehaviour
                                 currentWeaveable.CombineObject();
                             }
                         }
-                        
+
                     }
                 }
             }
