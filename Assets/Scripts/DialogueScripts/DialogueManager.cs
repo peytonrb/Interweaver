@@ -25,6 +25,7 @@ public class DialogueManager : MonoBehaviour
     public bool isActive;
     private bool isScrolling; // simply a bool that flags as true when a sentence is still scrolling
     private bool skipSentence; // when true, finishes sentence
+    private RivalEventTrigger rivalTrigger;
 
     [Header("Screen Shake")]
     [SerializeField] private float screenShakeAmplitude;
@@ -48,6 +49,7 @@ public class DialogueManager : MonoBehaviour
         sentences = new Queue<string>();
         isActive = false;
         moveScript = GameObject.FindWithTag("Player").GetComponent<MovementScript>();
+        rivalTrigger = GameObject.FindWithTag("RivalTrigger").GetComponent<RivalEventTrigger>();
     }
 
     // begins the dialogue
@@ -90,6 +92,10 @@ public class DialogueManager : MonoBehaviour
         if (sentences.Count == 0)
         {
             EndDialogue();
+            if (InputManagerScript.instance.isRivalTrigger && rivalTrigger.isSpeaking)
+            {
+                rivalTrigger.TriggerEndsOnDialogue();
+            }
             return;
         }
 
@@ -419,6 +425,8 @@ public class DialogueManager : MonoBehaviour
 
         moveScript.ToggleCanMove(true);
         isActive = false;
+
+       
     }
 
     // initializes the text objects for intended dialogue

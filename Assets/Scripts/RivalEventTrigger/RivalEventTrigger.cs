@@ -34,23 +34,7 @@ public class RivalEventTrigger : MonoBehaviour
         myVirtualCam = transform.GetChild(1).GetComponent<CinemachineVirtualCamera>();
     }
 
-    void Update()
-    {
-        if (isSpeaking)
-        {          
-           if(!DialogueManager.instance.isActive)
-           {
-              animator.SetTrigger("Laugh");
-                
-           }
-            
-        }
-
-        if (!DialogueManager.instance.isActive && hasPlayed)
-        {
-            myVirtualCam.Priority = 0;
-        }
-    }
+    
 
     public void OnTriggerEnter(Collider collider)
     {
@@ -66,22 +50,38 @@ public class RivalEventTrigger : MonoBehaviour
         }
     }
 
-    public void OnTriggerExit(Collider collider)
+    //public void OnTriggerExit(Collider collider)
+    //{
+    //    if (collider.CompareTag("Player") && !hasPlayed)
+    //    {
+    //        animator.SetTrigger("Leave");
+    //        hasPlayed = true;
+    //        isSpeaking = false;
+    //        InputManagerScript.instance.isRivalTrigger = false;
+    //        this.GetComponent<BoxCollider>().enabled = false;
+    //    }
+        
+    //}
+
+    public void TriggerEndsOnDialogue()
     {
-        if (collider.CompareTag("Player") && !hasPlayed)
+        if (!hasPlayed) 
         {
-            animator.SetTrigger("Leave");
+            Debug.Log("is this being called at all?");
+            myVirtualCam.Priority = 0;
+            animator.SetTrigger("Laugh");            
             hasPlayed = true;
             isSpeaking = false;
             InputManagerScript.instance.isRivalTrigger = false;
             this.GetComponent<BoxCollider>().enabled = false;
+            StartCoroutine(RivalDisappears());
         }
-        
     }
 
-    public void NextSentenceForRival()
+    IEnumerator RivalDisappears() 
     {
-        DialogueManager.instance.DisplayNextSentence();
+        yield return new WaitForSeconds(1);
+        animator.SetTrigger("Leave");
     }
     IEnumerator DialogueStart()
     {
