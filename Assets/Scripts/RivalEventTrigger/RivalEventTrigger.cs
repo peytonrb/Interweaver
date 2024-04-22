@@ -43,7 +43,7 @@ public class RivalEventTrigger : MonoBehaviour
             myVirtualCam.Priority = 2;
             rival.SetActive(true); // make more interesting w animation
             moveScript.ToggleCanMove(false);
-            smoke = Instantiate(smokePrefab, rival.transform.position - new Vector3(0, 1.5f, 0), Quaternion.identity).GetComponent<VisualEffect>();
+            smoke = Instantiate(smokePrefab, rival.transform.position, Quaternion.identity).GetComponent<VisualEffect>();
             smoke.Play();
             InputManagerScript.instance.isRivalTrigger = true;            
             StartCoroutine(DialogueStart());
