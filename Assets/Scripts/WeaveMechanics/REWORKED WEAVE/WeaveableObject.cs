@@ -558,6 +558,14 @@ public class WeaveableObject : MonoBehaviour
         // vfx
         weaveController.weaveFXScript.StopAura(gameObject);
         weaveController.weaveFXScript.DisableWeave();
+
+        // reset material
+        Renderer rend = this.transform.GetChild(0).GetComponent<Renderer>();
+        Material[] mats = rend.materials;
+        Material existingMat = mats[0];
+        Material[] newMats = new Material[1];
+        newMats[0] = existingMat;
+        rend.materials = newMats;
         //StartCoroutine(WaitForPhysics());
     }
 
