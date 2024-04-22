@@ -78,6 +78,7 @@ public class AudioManager : MonoBehaviour
     public void PlayMusicOnSceneChange(string sceneName)
     {
         StopSound(AudioManagerChannels.MusicChannel);
+        introMusicSource.Stop(); // teehee
 
         switch (sceneName) 
         {
