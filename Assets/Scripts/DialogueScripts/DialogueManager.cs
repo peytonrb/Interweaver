@@ -26,6 +26,8 @@ public class DialogueManager : MonoBehaviour
     private bool isScrolling; // simply a bool that flags as true when a sentence is still scrolling
     private bool skipSentence; // when true, finishes sentence
     private RivalEventTrigger rivalTrigger;
+    [SerializeField] private List<RivalEventTrigger> rivalEventTriggers = new List<RivalEventTrigger>();
+
 
     [Header("Screen Shake")]
     [SerializeField] private float screenShakeAmplitude;
@@ -92,10 +94,15 @@ public class DialogueManager : MonoBehaviour
         if (sentences.Count == 0)
         {
             EndDialogue();
-            if (InputManagerScript.instance.isRivalTrigger && rivalTrigger.isSpeaking)
+
+            foreach (RivalEventTrigger rivalTriggersInScene in rivalEventTriggers)
             {
-                rivalTrigger.TriggerEndsOnDialogue();
+                if (InputManagerScript.instance.isRivalTrigger && rivalTriggersInScene.isSpeaking)
+                {
+                    rivalTriggersInScene.TriggerEndsOnDialogue();
+                }
             }
+            
             return;
         }
 
