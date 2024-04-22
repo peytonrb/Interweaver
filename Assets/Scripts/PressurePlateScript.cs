@@ -21,7 +21,7 @@ public class PressurePlateScript : MonoBehaviour
     public GameObject[] wires;
     public Material activeMat;
     public Material defaultMat;
-    private VisualEffect wireVFX;
+    [SerializeField] private VisualEffect wireVFX;
     private ParticleSystem activatePS;
 
     [Header("Audio")]
@@ -33,9 +33,6 @@ public class PressurePlateScript : MonoBehaviour
         bottomedOut = false;
         toppedOut = true;
         activated = false;
-
-        if (this.transform.childCount > 0 && this.transform.GetChild(0) != null)
-            wireVFX = this.transform.GetChild(0).GetComponent<VisualEffect>();
         
         if (wireVFX != null)
             wireVFX.gameObject.SetActive(false);
