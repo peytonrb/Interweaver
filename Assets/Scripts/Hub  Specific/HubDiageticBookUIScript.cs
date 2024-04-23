@@ -122,6 +122,10 @@ public class HubDiageticBookUIScript : MonoBehaviour
             characterReadingBook = null;
             bookCamera.Priority = 0;
             inBook = false;
+            if (!InputManagerScript.instance.isGamepad)
+            {
+                Cursor.visible = false;
+            }
         }
     }
 
@@ -183,6 +187,10 @@ public class HubDiageticBookUIScript : MonoBehaviour
             
             currentPageNumber = 0;
             interactableUI.SetActive(true);
+            if (!InputManagerScript.instance.isGamepad)
+            {
+                Cursor.visible = true;
+            }
         }
         yield break;
     }

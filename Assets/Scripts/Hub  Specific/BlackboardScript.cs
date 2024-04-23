@@ -102,6 +102,10 @@ public class BlackboardScript : MonoBehaviour
             onBlackboard = false;
             portalSustainSource = AudioManager.instance.KillAudioSource(portalSustainSource);
             AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, portalEnd, 1f);
+            if (!InputManagerScript.instance.isGamepad)
+            {
+                Cursor.visible = false;
+            }
         }
     }
 
@@ -116,6 +120,10 @@ public class BlackboardScript : MonoBehaviour
         yield return new WaitForSeconds(0.75f);
         movementScript.ToggleCanLook(false);
         movementScript.ToggleCanMove(false);
+        if (!InputManagerScript.instance.isGamepad)
+        {
+            Cursor.visible = true;
+        }
         blackboardCamera.Priority = 2;
         StartCoroutine(WaitForBlendToFinish());
         if (popupUIPrompt.activeSelf) {
