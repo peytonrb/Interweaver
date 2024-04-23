@@ -5,6 +5,7 @@ public class WeaveController : MonoBehaviour
 {
     [Header("General")]
     public bool usingAudio = true;
+    public LayerMask weaveableLayers;
 
     [Header("Camera")]
     private Camera mainCamera;
@@ -35,6 +36,7 @@ public class WeaveController : MonoBehaviour
     private MovementScript movementScript;
     private PlayerControllerNew playerControllerNew;
     [SerializeField] public Transform targetSphere;
+    [HideInInspector] public bool isHoveringObject;
 
     void Start()
     {
@@ -65,6 +67,15 @@ public class WeaveController : MonoBehaviour
         if (this.GetComponent<PlayerControllerNew>().isDead)
         {
             OnDrop();
+        }
+
+        if (!movementScript.canMove && targetSphere.gameObject.activeSelf)
+        {
+            targetSphere.gameObject.SetActive(false);
+        }
+        else if (movementScript.canMove && !targetSphere.gameObject.activeSelf)
+        {
+            targetSphere.gameObject.SetActive(true);
         }
     }
 
@@ -111,6 +122,30 @@ public class WeaveController : MonoBehaviour
 
         //adjust target sphere location
         targetSphere.position = hitData.point;
+
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 1000f, weaveableLayers)) // this is.... expensive
+        {
+            if (hit.collider.GetComponent<WeaveableObject>() != null)
+            {
+                if (!hit.collider.GetComponent<WeaveableObject>().materialIsOn)
+                {
+                    Renderer rend = hit.collider.transform.GetChild(0).GetComponent<Renderer>();
+                    Material[] mats = rend.materials;
+                    Material existingMat = mats[0];
+                    Material[] newMats = new Material[2];
+                    newMats[0] = existingMat;
+                    newMats[1] = weaveFXScript.emissiveMat;
+                    rend.materials = newMats;
+                    hit.collider.GetComponent<WeaveableObject>().materialIsOn = true;
+                    isHoveringObject = true;
+                }
+            }
+        }
+        else
+        {
+            isHoveringObject = false;
+        }
     }
 
     // no other objects are being woven. weave this object. 

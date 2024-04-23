@@ -48,6 +48,9 @@ public class WeaveableObject : MonoBehaviour
 
     [Header("Island Override")]
     public bool isFloatingIsland;
+
+    [HideInInspector] public bool materialIsOn;
+
     void Start()
     {
         weaveController = GameObject.FindWithTag("Player").GetComponent<WeaveController>();
@@ -120,6 +123,17 @@ public class WeaveableObject : MonoBehaviour
         else if (isBeingWoven && !canBeMoved)
         {
             FreezeConstraints("all");
+        }
+
+        if (materialIsOn && !weaveController.isHoveringObject && !isBeingWoven && !hasBeenCombined) // is expensive cont.
+        {
+            materialIsOn = false;
+            Renderer rend = this.transform.GetChild(0).GetComponent<Renderer>();
+            Material[] mats = rend.materials;
+            Material existingMat = mats[0];
+            Material[] newMats = new Material[1];
+            newMats[0] = existingMat;
+            rend.materials = newMats;
         }
     }
 
@@ -238,7 +252,7 @@ public class WeaveableObject : MonoBehaviour
                 rb.velocity = Vector3.zero;
             }
         }
-            
+
     }
 
     // rotates the object after being called by InputManager
