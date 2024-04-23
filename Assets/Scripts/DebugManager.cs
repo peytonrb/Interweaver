@@ -7,7 +7,7 @@ using UnityEngine;
 public class DebugManager : MonoBehaviour
 {
     public static DebugManager instance;
-    public static bool debugIsOn = true;
+    public static bool debugIsOn = false;
     private bool debugUIison;
     [SerializeField] private GameObject debugUI;
     private FamiliarScript familiarScript;
