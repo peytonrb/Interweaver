@@ -68,7 +68,7 @@ public class AudioManager : MonoBehaviour
         footStepsChannel = GetComponents<AudioSource>()[3];
         fallChannel = GetComponents<AudioSource>()[4];
 
-        instance.PlaySound(AudioManagerChannels.MusicChannel, titleMusic, 1f);
+        //instance.PlaySound(AudioManagerChannels.MusicChannel, titleMusic, 1f);
     }
 
     /// <summary>
@@ -132,6 +132,12 @@ public class AudioManager : MonoBehaviour
                     PlaySequencedMusic(hubIntroMusic);
                     break;
                 }
+                case "AnimaticCutscenes":
+                {
+                    Debug.Log("EEEE");
+                    //PlaySound(AudioManagerChannels.MusicChannel, hubMusic);
+                    break;
+                }
         }
     }
     /// <summary>
@@ -171,6 +177,7 @@ public class AudioManager : MonoBehaviour
     /// <param name="clip">Audioclip to play</param>
     public void PlaySound(AudioManagerChannels target, AudioClip clip)
     {
+        Debug.Log("meow");
         switch (target)
         {
             case AudioManagerChannels.MusicChannel:
