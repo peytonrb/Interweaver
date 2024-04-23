@@ -348,7 +348,7 @@ public class WeaveController : MonoBehaviour
                         {
                             selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
 
-                            if (Vector3.Distance(selectedWeaveable, currentWeaveable) <= 10f)
+                            if (Vector3.Distance(selectedWeaveable.transform.position, currentWeaveable.transform.position) <= 10f)
                                 currentWeaveable.CombineObject();
                         }
                         else
@@ -357,7 +357,7 @@ public class WeaveController : MonoBehaviour
                             {
                                 selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
 
-                                if (Vector3.Distance(selectedWeaveable, currentWeaveable) <= 10f)
+                                if (Vector3.Distance(selectedWeaveable.transform.position, currentWeaveable.transform.position) <= 10f)
                                     currentWeaveable.CombineObject();
                             }
                         }
