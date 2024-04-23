@@ -26,6 +26,11 @@ public class BlackboardScript : MonoBehaviour
     private int lostSoulTotalSepultus;
     public bool DebugLoadAnyLevel = true;
 
+    [Header("LevelButtons")]
+    [SerializeField] private GameObject alpineButton;
+    [SerializeField] private GameObject cavernButton;
+    [SerializeField] private GameObject sepultusButton;
+
     [Header("VFX")]
     [SerializeField] private GameObject portalVFX;
     [SerializeField] private GameObject player;
@@ -43,7 +48,7 @@ public class BlackboardScript : MonoBehaviour
         acc = GetComponent<AnimaticCutsceneController>();
         vcc = GetComponent<VideoCutsceneController>();
 
-        interactableUI.SetActive(false);
+        //interactableUI.SetActive(false);
         pressEToExit.gameObject.SetActive(false);
         blackboardCamera.Priority = 0;
         onBlackboard = false;
@@ -62,6 +67,28 @@ public class BlackboardScript : MonoBehaviour
         popupUIPrompt.SetActive(false);
 
         portalSustainSource = null;
+
+        switch (levelsCompleted)
+        {
+            case 0:
+                {
+                    alpineButton.SetActive(true);
+                    break;
+                }
+            case 1: 
+                {
+                    alpineButton.SetActive(true);
+                    cavernButton.SetActive(true);
+                    break;
+                }
+            case 2:
+                {
+                    alpineButton.SetActive(true);
+                    cavernButton.SetActive(true);
+                    sepultusButton.SetActive(true);
+                    break;
+                }
+        }
     }
 
     void OnTriggerEnter(Collider other) {
@@ -93,7 +120,7 @@ public class BlackboardScript : MonoBehaviour
         }
         else {
             activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
-            interactableUI.SetActive(false);
+            //interactableUI.SetActive(false);
             pressEToExit.gameObject.SetActive(false);
             movementScript.ToggleCanLook(true);
             movementScript.ToggleCanMove(true);
