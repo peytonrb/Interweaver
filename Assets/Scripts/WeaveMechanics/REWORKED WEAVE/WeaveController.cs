@@ -21,6 +21,7 @@ public class WeaveController : MonoBehaviour
     [HideInInspector] public WeaveFXScript weaveFXScript;
     private GameObject weaveSpawn;
     public int maxCombinedObjects = 4;
+    [SerializeField] private float combineRange = 10;
 
     [Header("Audio")]
     [SerializeField] private AudioClip startWeaveClip;
@@ -348,16 +349,17 @@ public class WeaveController : MonoBehaviour
                         {
                             selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
 
-                            if (Vector3.Distance(selectedWeaveable.transform.position, currentWeaveable.transform.position) <= 10f)
+                            if (Vector3.Distance(selectedWeaveable.transform.position, currentWeaveable.transform.position) <= combineRange)
                                 currentWeaveable.CombineObject();
                         }
                         else
                         {
                             if (currentWeaveable.TryGetComponent<CrystalScript>(out CrystalScript script))
                             {
+                                Debug.Log("this is going off");
                                 selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
 
-                                if (Vector3.Distance(selectedWeaveable.transform.position, currentWeaveable.transform.position) <= 10f)
+                                if (Vector3.Distance(selectedWeaveable.transform.position, currentWeaveable.transform.position) <= combineRange)
                                     currentWeaveable.CombineObject();
                             }
                         }

@@ -292,7 +292,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBeingWoven: 0
-  hoverHeight: 2
+  hoverHeight: 1
   objectMoveOverride: 1
   weaveableLayers:
     serializedVersion: 2
@@ -300,6 +300,7 @@ MonoBehaviour:
   maxWeaveDistance: 25
   hasBeenCombined: 0
   canBeMoved: 1
+  isDayblock: 0
   rotAmount: 45
   myTransformPoints: []
   activeSnapPoint: {fileID: 0}
@@ -310,6 +311,8 @@ MonoBehaviour:
   weaveController: {fileID: 0}
   targetingArrow: {fileID: 0}
   originalMat: {fileID: 0}
+  isFloatingIsland: 0
+  materialIsOn: 0
 --- !u!54 &7363687465188076450
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -371,10 +374,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myFloatingIsland: {fileID: 0}
-  vfxPrefab: {fileID: 595517454477082168, guid: f14bed05ed35ff44aa50e2a19404663e, type: 3}
-  shatterFile: {fileID: 8300000, guid: fa5fcec46bff3b447ab20a4606f3cd68, type: 3}
   startsWeaveable: 0
-  crystalPrefab: {fileID: 7121874167014565471}
 --- !u!114 &378752098834569543
 MonoBehaviour:
   m_ObjectHideFlags: 0

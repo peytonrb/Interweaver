@@ -236,6 +236,9 @@ public class CutsceneManagerScript : MonoBehaviour
         Destroy(cutsceneTrigger);
         director.Stop();
 
+        if (playOnStart)
+        playerMovementScript.UnfreezePlayer();
+
         if (skipCutsceneTextKeyboard != null) {
             skipCutsceneTextKeyboard.SetActive(false);
         }

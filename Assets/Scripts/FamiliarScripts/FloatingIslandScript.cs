@@ -83,7 +83,7 @@ public class FloatingIslandScript : MonoBehaviour
     public void StartFloating(GameObject realCrystal)
     {
         StartCoroutine(WaitForSnap());
-
+        InputManagerScript.instance.canSwitch = false;
         //Assign Real Crystal, disable it and reset it!
         myRealCrystal = realCrystal;
         
@@ -117,6 +117,7 @@ public class FloatingIslandScript : MonoBehaviour
 
     public void AnimateIsland(bool isFalling)
     {
+
         fallenVector = new Vector3(transform.parent.transform.position.x, transform.parent.transform.position.y - 125f, transform.parent.transform.position.z);
         risenVector = new Vector3(transform.parent.transform.position.x, transform.parent.transform.position.y + 125f, transform.parent.transform.position.z);
         //StartCoroutine(AnimationCoroutine(isFalling));
@@ -175,6 +176,7 @@ public class FloatingIslandScript : MonoBehaviour
         if (!isFalling && !isFloatingIslandInTheTube)
         {
             CameraMasterScript.instance.FloatingIslandCameraReturn(myFloatCamera);
+            InputManagerScript.instance.canSwitch = true;
         }
 
         yield return new WaitForSeconds(timerBeforeSwap / 2);
