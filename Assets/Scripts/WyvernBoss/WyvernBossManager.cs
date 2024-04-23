@@ -280,7 +280,7 @@ public class WyvernBossManager : MonoBehaviour
 
     void ThrowFireball() {
         if (fireballAmount > 0) {
-            Instantiate(fireball,transform.position,Quaternion.identity);
+            Instantiate(fireball,transform.position + new Vector3(0,6f,0),Quaternion.identity);
             fireballAmount -= 1;
         }
         else {
