@@ -88,6 +88,7 @@ MonoBehaviour:
   maxWeaveDistance: 25
   hasBeenCombined: 0
   canBeMoved: 1
+  isDayblock: 0
   rotAmount: 45
   myTransformPoints: []
   activeSnapPoint: {fileID: 0}
@@ -98,6 +99,8 @@ MonoBehaviour:
   weaveController: {fileID: 0}
   targetingArrow: {fileID: 0}
   originalMat: {fileID: 0}
+  isFloatingIsland: 0
+  materialIsOn: 0
 --- !u!114 &7636904946249874634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -816,6 +819,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 731653050842024387, guid: d1ce34917741f704299972973f5a521b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5035146709308024871}
+    - targetCorrespondingSourceObject: {fileID: 731653050842024387, guid: d1ce34917741f704299972973f5a521b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 951261096120345740}
   m_SourcePrefab: {fileID: 100100000, guid: d1ce34917741f704299972973f5a521b, type: 3}
 --- !u!1 &2271986794828312404 stripped
 GameObject:
@@ -834,6 +840,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a40f9df248670c14ba38be0993988aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!23 &951261096120345740
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2271986794828312404}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!4 &4284370402559378823 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3374824838683452176, guid: d1ce34917741f704299972973f5a521b, type: 3}

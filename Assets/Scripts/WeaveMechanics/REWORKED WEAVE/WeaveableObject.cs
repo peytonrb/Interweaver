@@ -140,7 +140,7 @@ public class WeaveableObject : MonoBehaviour
     private void OnDestroy()
     {
         //Makes sure that if the weaver is weaving, it doesn't drop it if its not a fireball.
-        if (weaveController != null && gameObject.GetComponent<WyvernFireball>() == null)
+        if (weaveController != null && isBeingWoven)
             weaveController.OnDrop();
     }
 

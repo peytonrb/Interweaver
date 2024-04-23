@@ -73,6 +73,10 @@ public class WyvernBossManager : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioClip wyvernHurtSound;
 
+    [Header("Animation")]
+    [SerializeField] private CharacterAnimationHandler characterAnimationHandler;
+    [SerializeField] private Transform wyvernMouthTransform;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -280,14 +284,20 @@ public class WyvernBossManager : MonoBehaviour
 
     void ThrowFireball() {
         if (fireballAmount > 0) {
-            Instantiate(fireball,transform.position + new Vector3(0,6f,0),Quaternion.identity);
+            //Instantiate(fireball,wyvernMouthTransform.position,Quaternion.identity);
+            characterAnimationHandler.ToggleFireballAnim();
+            Debug.Log("Fwoosh");
             fireballAmount -= 1;
         }
         else {
             reseting = true;
             fireballAmount = startingFireballAmount;
         }
-        
+    }
+
+    public void InstantiateFireball()
+    {
+        Instantiate(fireball,wyvernMouthTransform.position,Quaternion.identity);
     }
 
     void SpawnMagicCircle() {
