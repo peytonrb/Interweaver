@@ -78,4 +78,11 @@ public class CharacterAnimationHandler : MonoBehaviour
     {
         animator.SetTrigger("Respawn");
     }
+
+    public void ToggleFireballAnim()
+    {
+        animator.SetTrigger("Fireball");
+    }
+
+    
 }

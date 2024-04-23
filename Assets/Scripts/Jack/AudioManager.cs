@@ -177,7 +177,6 @@ public class AudioManager : MonoBehaviour
     /// <param name="clip">Audioclip to play</param>
     public void PlaySound(AudioManagerChannels target, AudioClip clip)
     {
-        Debug.Log("meow");
         switch (target)
         {
             case AudioManagerChannels.MusicChannel:
