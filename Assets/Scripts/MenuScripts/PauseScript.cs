@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class PauseScript : MonoBehaviour
-{   
+{
     private bool usingController = false;
     private Toggle toggle;
     private EventSystem eventSystem;
@@ -15,7 +15,7 @@ public class PauseScript : MonoBehaviour
     [SerializeField] private GameObject optionGroup;
     [SerializeField] private GameObject defaultGroup;
     [SerializeField] private GameObject controlsPanel;
-    [CannotBeNullObjectField] [SerializeField] private GameObject inputManager;
+    [CannotBeNullObjectField][SerializeField] private GameObject inputManager;
 
     [SerializeField] private GameObject keyboardGroup;
     [SerializeField] private GameObject controllerGroup;
@@ -59,6 +59,15 @@ public class PauseScript : MonoBehaviour
     [SerializeField] private Button defaultControlsKeyboardButton;
     [SerializeField] private Button defaultControlsControllerButton;
 
+    [Header("Debugging")]
+    [SerializeField] private bool arachnophobiaState;
+    [SerializeField] private bool subtitlesState;
+    [SerializeField] private bool fullscreenState;
+    [SerializeField] private bool vysncState;
+    [SerializeField] private float masterVolState;
+    [SerializeField] private float musicVolState;
+    [SerializeField] private float sfxVolState;
+
     public void Start()
     {
         toggle = GetComponentInChildren<Toggle>();
@@ -66,111 +75,202 @@ public class PauseScript : MonoBehaviour
         hasControllerInvoke = false;
 
 
-        if (spiderBoss != null) {
-            if (PlayerPrefs.HasKey("ArachnophobiaToggleState")) {
-                arachnophobiaInt = PlayerPrefs.GetInt("ArachnophobiaToggleState");
-            }
-            else {
-                //Arachnophobia setting stays off by default
-                arachnophobiaInt = 0;
-            }
+        if (spiderBoss != null)
+        {
+            // if (PlayerPrefs.HasKey("ArachnophobiaToggleState"))
+            // {
+            //     arachnophobiaInt = PlayerPrefs.GetInt("ArachnophobiaToggleState");
+            // }
+            // else
+            // {
+            //     //Arachnophobia setting stays off by default
+            //     arachnophobiaInt = 0;
+            // }
 
-            if (arachnophobiaInt == 0) {
+            // if (arachnophobiaInt == 0)
+            // {
+            //     SpiderBossScript spiderscript = spiderBoss.GetComponent<SpiderBossScript>();
+            //     if (spiderscript != null)
+            //     {
+            //         spiderscript.ToggleArachnophobia(false);
+            //     }
+            //     arachnophobiaToggle.isOn = false;
+            //     arachnophobiaState = false;
+            // }
+            // else
+            // {
+            //     SpiderBossScript spiderscript = spiderBoss.GetComponent<SpiderBossScript>();
+            //     if (spiderscript != null)
+            //     {
+            //         spiderscript.ToggleArachnophobia(true);
+            //     }
+            //     arachnophobiaToggle.isOn = true;
+            //     arachnophobiaState = true;
+            // }
+
+            if (SceneHandler.instance.arachnophobiaState)
+            {
                 SpiderBossScript spiderscript = spiderBoss.GetComponent<SpiderBossScript>();
-                if (spiderscript != null) {
-                    spiderscript.ToggleArachnophobia(false);
-                }
-                arachnophobiaToggle.isOn = false;
-                
-            }
-            else {
-                SpiderBossScript spiderscript = spiderBoss.GetComponent<SpiderBossScript>();
-                if (spiderscript != null) {
+                if (spiderscript != null)
+                {
                     spiderscript.ToggleArachnophobia(true);
                 }
                 arachnophobiaToggle.isOn = true;
+                arachnophobiaState = true;
+            }
+            else
+            {
+                SpiderBossScript spiderscript = spiderBoss.GetComponent<SpiderBossScript>();
+                if (spiderscript != null)
+                {
+                    spiderscript.ToggleArachnophobia(false);
+                }
+                arachnophobiaToggle.isOn = false;
+                arachnophobiaState = false;
             }
         }
 
-        if (subtitlesCanvas != null) {
-            if (PlayerPrefs.HasKey("SubtitlesToggleState")) {
-                subtitlesInt = PlayerPrefs.GetInt("SubtitlesToggleState");
-            }  
-            else {
-                subtitlesInt = 0;
-            } 
+        if (subtitlesCanvas != null)
+        {
+            // if (PlayerPrefs.HasKey("SubtitlesToggleState"))
+            // {
+            //     subtitlesInt = PlayerPrefs.GetInt("SubtitlesToggleState");
+            // }
+            // else
+            // {
+            //     subtitlesInt = 0;
+            // }
 
-            if (subtitlesInt == 1) {
+            // if (subtitlesInt == 1)
+            // {
+            //     subtitlesToggle.isOn = true;
+            //     subtitlesCanvas.SetActive(true);
+            //     subtitlesState = true;
+            // }
+            // else
+            // {
+            //     subtitlesToggle.isOn = false;
+            //     subtitlesCanvas.SetActive(false);
+            //     subtitlesState = false;
+            // }
+
+            if (SceneHandler.instance.subtitlesState)
+            {
                 subtitlesToggle.isOn = true;
                 subtitlesCanvas.SetActive(true);
+                subtitlesState = true;
             }
-            else {
+            else
+            {
                 subtitlesToggle.isOn = false;
                 subtitlesCanvas.SetActive(false);
+                subtitlesState = false;
             }
         }
 
-        //Check if there is a key for the playerprefs for the fullscreen and set the int depending on it
-        if (PlayerPrefs.HasKey("FullscreenToggleState"))
-            fullscreenInt = PlayerPrefs.GetInt("FullscreenToggleState");
-        else
-            fullscreenInt = 1;
+        // //Check if there is a key for the playerprefs for the fullscreen and set the int depending on it
+        // if (PlayerPrefs.HasKey("FullscreenToggleState"))
+        //     fullscreenInt = PlayerPrefs.GetInt("FullscreenToggleState");
+        // else
+        //     fullscreenInt = 1;
 
-        if (fullscreenInt == 1)
+        // if (fullscreenInt == 1)
+        // {
+        //     fullscreenToggle.isOn = true;
+        //     Screen.fullScreen = true;
+        //     fullscreenState = true;
+        // }
+        // else
+        // {
+        //     fullscreenToggle.isOn = false;
+        //     Screen.fullScreen = false;
+        //     fullscreenState = false;
+        // }
+
+        if (SceneHandler.instance.fullscreenState)
         {
             fullscreenToggle.isOn = true;
             Screen.fullScreen = true;
+            fullscreenState = true;
         }
         else
         {
             fullscreenToggle.isOn = false;
             Screen.fullScreen = false;
+            fullscreenState = false;
         }
 
         //Check if there is a key for the playerprefs for the vsync and set the int depending on it
-        if (PlayerPrefs.HasKey("VsyncToggleState"))
-            vsyncInt = PlayerPrefs.GetInt("VsyncToggleState");
-        else
-            vsyncInt = 1;
+        // if (PlayerPrefs.HasKey("VsyncToggleState"))
+        //     vsyncInt = PlayerPrefs.GetInt("VsyncToggleState");
+        // else
+        //     vsyncInt = 1;
 
-        if (vsyncInt == 1)
+        // if (vsyncInt == 1)
+        // {
+        //     vSyncToggle.isOn = true;
+        //     QualitySettings.vSyncCount = 1;
+        //     vysncState = true;
+        // }
+        // else
+        // {
+        //     vSyncToggle.isOn = false;
+        //     QualitySettings.vSyncCount = 0;
+        //     vysncState = false;
+        // }
+
+        if (SceneHandler.instance.vysncState)
         {
             vSyncToggle.isOn = true;
             QualitySettings.vSyncCount = 1;
+            vysncState = true;
         }
         else
         {
             vSyncToggle.isOn = false;
             QualitySettings.vSyncCount = 0;
+            vysncState = false;
         }
 
         //Check if the master volume has a key via playerprefs and adjusts it value according to value stored in key
-        if (PlayerPrefs.HasKey("MasterVolume"))
-        {
-            theMixer.SetFloat("MasterVol", ConvertToLog(PlayerPrefs.GetFloat("MasterVolume")));
-            masterSlider.value = PlayerPrefs.GetFloat("MasterVolume");
-        }
+        // if (PlayerPrefs.HasKey("MasterVolume"))
+        // {
+        //     theMixer.SetFloat("MasterVol", ConvertToLog(PlayerPrefs.GetFloat("MasterVolume")));
+        //     masterSlider.value = PlayerPrefs.GetFloat("MasterVolume");
+        //     masterVolState = PlayerPrefs.GetFloat("MasterVolume");
+        // }
+
+        theMixer.SetFloat("MasterVol", ConvertToLog(SceneHandler.instance.masterVolState));
+        masterSlider.value = SceneHandler.instance.masterVolState;
+
         //Check if the music volume has a key via playerprefs and adjusts it value according to value stored in key
-        if (PlayerPrefs.HasKey("MusicVolume"))
-        {
-            theMixer.SetFloat("MusicVol", ConvertToLog(PlayerPrefs.GetFloat("MusicVolume")));
-            musicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
-        }
-        else
-        {
-            musicSlider.value = -40f;
-        }
+        // if (PlayerPrefs.HasKey("MusicVolume"))
+        // {
+        //     theMixer.SetFloat("MusicVol", ConvertToLog(PlayerPrefs.GetFloat("MusicVolume")));
+        //     musicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
+        //     musicVolState = PlayerPrefs.GetFloat("MusicVolume");
+        // }
+        // else
+        // {
+        //     musicSlider.value = -40f;
+        // }
+        theMixer.SetFloat("MusicVol", ConvertToLog(SceneHandler.instance.musicVolState));
+        musicSlider.value = SceneHandler.instance.musicVolState;
 
         //Check if the sfx volume has a key via playerprefs and adjusts it value according to value stored in key
-        if (PlayerPrefs.HasKey("SfxVolume"))
-        {
-            theMixer.SetFloat("SFXVol", ConvertToLog(PlayerPrefs.GetFloat("SfxVolume")));
-            sfxSlider.value = PlayerPrefs.GetFloat("SfxVolume");
-        }
-        else
-        {
-            sfxSlider.value = -40f;
-        }
+        // if (PlayerPrefs.HasKey("SfxVolume"))
+        // {
+        //     theMixer.SetFloat("SFXVol", ConvertToLog(PlayerPrefs.GetFloat("SfxVolume")));
+        //     sfxSlider.value = PlayerPrefs.GetFloat("SfxVolume");
+        //     sfxVolState = PlayerPrefs.GetFloat("SfxVolume");
+        // }
+        // else
+        // {
+        //     sfxSlider.value = -40f;
+        // }
+
+        theMixer.SetFloat("SFXVol", ConvertToLog(SceneHandler.instance.sfxVolState));
+        sfxSlider.value = SceneHandler.instance.sfxVolState;
 
         //Adjust the value of the value texts to the right of the slider using the value stored in playerprefs
         masterValueText.text = (masterSlider.value + 80).ToString() + "%";
@@ -185,17 +285,21 @@ public class PauseScript : MonoBehaviour
 
     }
     //Resumes the game
-    public void Resume() {
+    public void Resume()
+    {
         Time.timeScale = 1;
-        if (optionGroup.activeSelf) {
+        if (optionGroup.activeSelf)
+        {
             optionGroup.SetActive(false);
             optionGroup.GetComponent<CanvasGroup>().alpha = 0;
         }
-        if (controlsPanel.activeSelf) {
+        if (controlsPanel.activeSelf)
+        {
             controlsPanel.SetActive(false);
             controlsPanel.GetComponent<CanvasGroup>().alpha = 0;
         }
-        if (defaultGroup.activeSelf == false) {
+        if (defaultGroup.activeSelf == false)
+        {
             defaultGroup.SetActive(true);
             defaultGroup.GetComponent<CanvasGroup>().alpha = 1;
         }
@@ -213,7 +317,7 @@ public class PauseScript : MonoBehaviour
             ControllerImage.SetActive(false);
             KeyboardImage.SetActive(true);
             hasControllerInvoke = false;
-            
+
         }
         else if (Gamepad.current != null && !hasControllerInvoke)
         {
@@ -237,7 +341,7 @@ public class PauseScript : MonoBehaviour
             defaultGroup.GetComponent<CanvasGroup>().alpha = 1f;
 
             defaultMenuButton.Select();
-            
+
         }
         else
         {
@@ -251,7 +355,7 @@ public class PauseScript : MonoBehaviour
         }
     }
 
-    public void ToggleControls() 
+    public void ToggleControls()
     {
         if (controlsPanel.activeSelf)
         {
@@ -264,7 +368,7 @@ public class PauseScript : MonoBehaviour
 
             defaultMenuButton.Select();
         }
-        else 
+        else
         {
             controlsPanel.SetActive(true);
             defaultGroup.SetActive(false);
@@ -279,7 +383,7 @@ public class PauseScript : MonoBehaviour
                 keyboardGroup.SetActive(false);
                 defaultControlsControllerButton.Select();
             }
-            else 
+            else
             {
                 controllerGroup.SetActive(false);
                 keyboardGroup.SetActive(true);
@@ -301,17 +405,18 @@ public class PauseScript : MonoBehaviour
     /// </param>
     public void QuitToScene(int level)
     {
-        switch (level) {
+        switch (level)
+        {
             case 0:
                 Time.timeScale = 1;
                 SceneHandler.instance.LoadLevel("Menu");
-            break;
+                break;
             case 1:
                 Time.timeScale = 1;
                 SceneHandler.instance.LoadLevel("Hub");
-            break;
+                break;
         }
-        
+
     }
 
     /// <summary>
@@ -326,11 +431,13 @@ public class PauseScript : MonoBehaviour
             isFullscreenOn = false;
             PlayerPrefs.SetInt("FullscreenToggleState", 0);
             Debug.Log("Exiting FullScreen");
+            SceneHandler.instance.fullscreenState = false;
         }
         else
         {
             isFullscreenOn = true;
             PlayerPrefs.SetInt("FullscreenToggleState", 1);
+            SceneHandler.instance.fullscreenState = true;
         }
     }
 
@@ -344,47 +451,63 @@ public class PauseScript : MonoBehaviour
             PlayerPrefs.SetInt("VsyncToggleState", 0);
             QualitySettings.vSyncCount = 0;
             Debug.Log("The Vsync is Off");
+            SceneHandler.instance.vysncState = false;
         }
         else
         {
             PlayerPrefs.SetInt("VsyncToggleState", 1);
             QualitySettings.vSyncCount = 1;
+            SceneHandler.instance.vysncState = true;
         }
     }
 
-    public void AdjustArachnophobia() {
-        if (arachnophobiaToggle.isOn == false) {
-            PlayerPrefs.SetInt("ArachnophobiaToggleState",0);
-            if (spiderBoss != null) {
+    public void AdjustArachnophobia()
+    {
+        if (arachnophobiaToggle.isOn == false)
+        {
+            PlayerPrefs.SetInt("ArachnophobiaToggleState", 0);
+            if (spiderBoss != null)
+            {
                 SpiderBossScript spiderboss = spiderBoss.GetComponent<SpiderBossScript>();
                 spiderboss.ToggleArachnophobia(false);
                 changeSpiderlings = true;
                 changeSpiderlingsTo = false;
+                SceneHandler.instance.arachnophobiaState = false;
             }
         }
-        else {
-            PlayerPrefs.SetInt("ArachnophobiaToggleState",1);
-            if (spiderBoss != null) {
+        else
+        {
+            PlayerPrefs.SetInt("ArachnophobiaToggleState", 1);
+            if (spiderBoss != null)
+            {
                 SpiderBossScript spiderboss = spiderBoss.GetComponent<SpiderBossScript>();
                 spiderboss.ToggleArachnophobia(true);
                 changeSpiderlings = true;
                 changeSpiderlingsTo = true;
+                SceneHandler.instance.arachnophobiaState = true;
             }
         }
     }
 
-    public void AdjustSubtitles() {
-        if (subtitlesToggle.isOn == false) {
+    public void AdjustSubtitles()
+    {
+        if (subtitlesToggle.isOn == false)
+        {
             PlayerPrefs.SetInt("SubtitlesToggleState", 0);
-            if (subtitlesCanvas != null) {
+            if (subtitlesCanvas != null)
+            {
                 subtitlesCanvas.SetActive(false);
             }
+            SceneHandler.instance.subtitlesState = false;
         }
-        else {
+        else
+        {
             PlayerPrefs.SetInt("SubtitlesToggleState", 1);
-            if (subtitlesCanvas != null) {
+            if (subtitlesCanvas != null)
+            {
                 subtitlesCanvas.SetActive(true);
             }
+            SceneHandler.instance.subtitlesState = true;
         }
     }
 
@@ -406,6 +529,7 @@ public class PauseScript : MonoBehaviour
         masterValueText.text = (masterSlider.value + 80).ToString() + "%";
         theMixer.SetFloat("MasterVol", ConvertToLog(masterSlider.value));
         PlayerPrefs.SetFloat("MasterVolume", masterSlider.value);
+        SceneHandler.instance.masterVolState = masterSlider.value;
     }
 
     //Function to adjust the music volume by readjusting the value text and slider and setting the float for playerprefs
@@ -414,6 +538,7 @@ public class PauseScript : MonoBehaviour
         musicValueText.text = (musicSlider.value + 80).ToString() + "%";
         theMixer.SetFloat("MusicVol", ConvertToLog(musicSlider.value));
         PlayerPrefs.SetFloat("MusicVolume", musicSlider.value);
+        SceneHandler.instance.musicVolState = musicSlider.value;
     }
 
     //Function to adjust the sfx volume by readjusting the value text and slider and setting the float for playerprefs
@@ -422,6 +547,7 @@ public class PauseScript : MonoBehaviour
         sfxValueText.text = (sfxSlider.value + 80).ToString() + "%";
         theMixer.SetFloat("SFXVol", ConvertToLog(sfxSlider.value));
         PlayerPrefs.SetFloat("SfxVolume", sfxSlider.value);
+        SceneHandler.instance.sfxVolState = sfxSlider.value;
     }
 
     //Function to change screen resolution
