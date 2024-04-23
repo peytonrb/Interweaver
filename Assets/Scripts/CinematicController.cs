@@ -30,6 +30,9 @@ public class CinematicController : MonoBehaviour
     [Header("Clip 5")]
     public Light pointLight;
 
+    [Header("Final Clip")]
+    public ParticleSystem impactPS;
+
     public void Clip1()
     {
         foreach (ParticleSystem ps in explosionPS.GetComponentsInChildren<ParticleSystem>())
@@ -137,5 +140,11 @@ public class CinematicController : MonoBehaviour
             pointLight.intensity = Mathf.Lerp(current, 0f, t);
             yield return null;
         }
+    }
+
+    public void FireballPS()
+    {
+        impactPS.gameObject.SetActive(true);
+        impactPS.Play();
     }
 }
