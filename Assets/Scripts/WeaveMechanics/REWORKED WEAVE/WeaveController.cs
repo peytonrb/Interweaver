@@ -347,14 +347,18 @@ public class WeaveController : MonoBehaviour
                         if (!hitInfo.collider.GetComponent<WeaveableObject>().isFloatingIsland)
                         {
                             selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
-                            currentWeaveable.CombineObject();
+
+                            if (Vector3.Distance(selectedWeaveable.transform.position, currentWeaveable.transform.position) <= 10f)
+                                currentWeaveable.CombineObject();
                         }
                         else
                         {
                             if (currentWeaveable.TryGetComponent<CrystalScript>(out CrystalScript script))
                             {
                                 selectedWeaveable = hitInfo.collider.GetComponent<WeaveableObject>();
-                                currentWeaveable.CombineObject();
+
+                                if (Vector3.Distance(selectedWeaveable.transform.position, currentWeaveable.transform.position) <= 10f)
+                                    currentWeaveable.CombineObject();
                             }
                         }
 
