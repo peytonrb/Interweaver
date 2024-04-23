@@ -11,6 +11,7 @@ public class IntroSequenceScript : MonoBehaviour
     [SerializeField] [Tooltip("For debug purposes. If true, this will skip any intro sequence.")] private bool debugGameStarted;
     private VideoPlayer videoPlayer;
     [Header("")]
+    [SerializeField] private GameObject loadScreen;
     [SerializeField] private GameObject panel;
     private CanvasGroup canvasGroup;
     [SerializeField] private float transitionSpeed;
@@ -23,6 +24,7 @@ public class IntroSequenceScript : MonoBehaviour
         videoPlayer = GetComponent<VideoPlayer>();
         canvasGroup = panel.GetComponent<CanvasGroup>();
         videoStarted = false;
+        loadScreen.SetActive(false);
         if (debugGameStarted)
         {
             gameStarted = true;
