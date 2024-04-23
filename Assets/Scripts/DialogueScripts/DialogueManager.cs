@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using System.Linq;
 using Unity.VisualScripting;
 using System;
+using Cinemachine;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -34,6 +35,8 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private float screenShakeFrequency;
     private bool shakeInvoked;
 
+    private CinemachineVirtualCamera currentRivalCam;
+
     void Awake()
     {
         if (instance == null)
@@ -55,7 +58,7 @@ public class DialogueManager : MonoBehaviour
     }
 
     // begins the dialogue
-    public void StartDialogue(Dialogue dialogue, GameObject textBox)
+    public void StartDialogue(Dialogue dialogue, GameObject textBox, CinemachineVirtualCamera rivalCam = null)
     {
         initialize(textBox);
         nameText.text = dialogue.name;
@@ -73,13 +76,18 @@ public class DialogueManager : MonoBehaviour
             sentences.Enqueue(sentence);
         }
 
+        currentRivalCam = rivalCam;
+
         DisplayNextSentence();
+
+
     }
+
 
     // when enter is hit, next sentence is displayed
     public void DisplayNextSentence()
     {
-        
+        Debug.Log(sentences);
         if (isScrolling && !shakeInvoked) // we specifically call out that shake hasn't been invoked here since elsewise there can be a frame difference which causes shake to be just straight up be read
         {
             skipSentence = true;
@@ -111,7 +119,15 @@ public class DialogueManager : MonoBehaviour
         if (shakeInvoked)
         {
             double screenShakeLength = Convert.ToDouble(sentence);
-            CameraMasterScript.instance.ShakeCurrentCamera(screenShakeAmplitude, screenShakeFrequency, (float)screenShakeLength);
+            if (currentRivalCam != null)
+            {
+                CameraMasterScript.instance.ShakeCurrentCamera(screenShakeAmplitude, screenShakeFrequency, (float)screenShakeLength, currentRivalCam);
+            }
+            else
+            {
+                CameraMasterScript.instance.ShakeCurrentCamera(screenShakeAmplitude, screenShakeFrequency, (float)screenShakeLength);
+            }
+            
             shakeInvoked = false;
             DisplayNextSentence();
             return;
@@ -119,6 +135,7 @@ public class DialogueManager : MonoBehaviour
 
         if (sentence.Contains("[SHAKE]"))
         {
+            Debug.Log("oingo boingo");
             shakeInvoked = true;
             DisplayNextSentence();
             return;

@@ -86,7 +86,7 @@ public class RivalEventTrigger : MonoBehaviour
     IEnumerator DialogueStart()
     {
         yield return new WaitForSeconds(secondsUntilDialogueAppears);
-        DialogueManager.instance.StartDialogue(dialogue, textBox);
+        DialogueManager.instance.StartDialogue(dialogue, textBox, myVirtualCam);
         moveScript.ToggleCanMove(false);
         isSpeaking = true;
     }
