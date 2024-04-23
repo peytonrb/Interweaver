@@ -219,7 +219,7 @@ public class WeaveController : MonoBehaviour
     {
         // VFX
         weaveFXScript.ActivateWeave(currentWeaveable.transform);
-
+        CameraMasterScript.instance.ShakeCurrentCamera(Random.Range(.3f,.6f), 1f, .32f);
         // Audio
         if (usingAudio)
         {

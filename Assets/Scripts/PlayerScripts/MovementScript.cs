@@ -146,11 +146,11 @@ public class MovementScript : MonoBehaviour
     //Freeze Player at Start
     public IEnumerator FreezePlayerAtStart()
     {
+        pentagramVFX.SetActive(true);
         yield return new WaitForSeconds(freezeTime);
         GetComponent<WeaveController>().enabled = true;
         canMove = true;
         canLook = true;
-        pentagramVFX.SetActive(true);
         yield break;
     }
     
