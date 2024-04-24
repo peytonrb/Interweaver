@@ -68,11 +68,17 @@ public class PauseScript : MonoBehaviour
     [SerializeField] private float musicVolState;
     [SerializeField] private float sfxVolState;
 
+    void Awake()
+    {
+        Debug.Log("Res: " + PlayerPrefs.GetInt("resType"));
+    }
+
     public void Start()
     {
         toggle = GetComponentInChildren<Toggle>();
         eventSystem = FindObjectOfType<EventSystem>();
         hasControllerInvoke = false;
+        
 
 
         if (spiderBoss != null)
@@ -351,6 +357,8 @@ public class PauseScript : MonoBehaviour
         {
             defaultGroup.SetActive(false);
             optionGroup.SetActive(true);
+            Debug.Log("GWUH");
+            resDropdown.value = PlayerPrefs.GetInt("resType");
 
             optionGroup.GetComponent<CanvasGroup>().alpha = 1f;
             defaultGroup.GetComponent<CanvasGroup>().alpha = 0f;
@@ -557,36 +565,34 @@ public class PauseScript : MonoBehaviour
     //Function to change screen resolution
     public void AdjustResolution()
     {
-
-
         switch (resDropdown.value)
         {
             case 0:
                 {
                     Screen.SetResolution(1920, 1080, fullscreenToggle.isOn);
-                    PlayerPrefs.SetInt("resType", 1);
-                    resolutionType = 1;
+                    PlayerPrefs.SetInt("resType", 0);
+                    resolutionType = PlayerPrefs.GetInt("resType");
                     break;
                 }
             case 1:
                 {
                     Screen.SetResolution(1600, 900, fullscreenToggle.isOn);
-                    PlayerPrefs.SetInt("resType", 2);
-                    resolutionType = 2;
+                    PlayerPrefs.SetInt("resType", 1);
+                    resolutionType = PlayerPrefs.GetInt("resType");
                     break;
                 }
             case 2:
                 {
                     Screen.SetResolution(1366, 768, fullscreenToggle.isOn);
-                    PlayerPrefs.SetInt("resType", 3);
-                    resolutionType = 3;
+                    PlayerPrefs.SetInt("resType", 2);
+                    resolutionType = PlayerPrefs.GetInt("resType");
                     break;
                 }
             case 3:
                 {
                     Screen.SetResolution(1280, 720, fullscreenToggle.isOn);
-                    PlayerPrefs.SetInt("resType", 4);
-                    resolutionType = 3;
+                    PlayerPrefs.SetInt("resType", 3);
+                    resolutionType = PlayerPrefs.GetInt("resType");
                     break;
                 }
         }
