@@ -254,13 +254,27 @@ public class DialogueManager : MonoBehaviour
                     }
                     break;
                 }
+            case "dash":
+                {
+                    dialogueText.text = dialogueText.text.Remove(currentPos, 8);
+
+                    if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
+                    {
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=RS>");
+                    }
+                    else
+                    {                       
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press Shift>");
+                    }
+                    break;
+                }
             case "weave":
                 {
                     dialogueText.text = dialogueText.text.Remove(currentPos, 7);
 
                     if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
                     {
-                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press RT>");
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press B>");
                     }
                     else
                     {
