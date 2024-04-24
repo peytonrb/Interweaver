@@ -382,6 +382,12 @@ public class WyvernBossManager : MonoBehaviour
             //WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
             //wyvernFlamethrower.KillThyself();
             flamethrower.GetComponent<FlamethrowerController>().isActive = false;
+            if (familiarScript.myTurn) {
+                transform.LookAt(new Vector3(stag.transform.position.x,transform.position.y,stag.transform.position.z));
+            }
+            else {
+                transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
+            }
         }
     }
 
@@ -454,6 +460,7 @@ public class WyvernBossManager : MonoBehaviour
         else {
             familiarCurrentPhase = newphase;
         }
+
         switch (previousphase) {
             case 1:
                 fireballAmount = startingFireballAmount;
@@ -471,6 +478,12 @@ public class WyvernBossManager : MonoBehaviour
                 if (flamethrower.GetComponent<FlamethrowerController>().isActive)
                 {
                     flamethrower.GetComponent<FlamethrowerController>().isActive = false;
+                }
+                if (isWeaversTurn == false) {
+                    transform.LookAt(new Vector3(stag.transform.position.x,transform.position.y,stag.transform.position.z));
+                }
+                else {
+                    transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
                 }
 
                 ResetPhase3();
