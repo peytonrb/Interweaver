@@ -67,6 +67,11 @@ public class WeaveController : MonoBehaviour
 
         if (this.GetComponent<PlayerControllerNew>().isDead)
         {
+            if (currentWeaveable.GetComponent<WeaveableObject>().hasBeenCombined)
+            {
+                WeaveableManager.Instance.DestroyJoints(currentWeaveable.listIndex);
+            }
+
             OnDrop();
         }
 
@@ -219,7 +224,7 @@ public class WeaveController : MonoBehaviour
     {
         // VFX
         weaveFXScript.ActivateWeave(currentWeaveable.transform);
-        CameraMasterScript.instance.ShakeCurrentCamera(Random.Range(.3f,.6f), 1f, .32f);
+        CameraMasterScript.instance.ShakeCurrentCamera(Random.Range(.3f, .6f), 1f, .32f);
         // Audio
         if (usingAudio)
         {
