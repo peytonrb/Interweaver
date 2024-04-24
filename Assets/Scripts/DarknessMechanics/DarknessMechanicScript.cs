@@ -18,6 +18,7 @@ public class DarknessMechanicScript : MonoBehaviour
 
     private float lastCount;
     float t = 0;
+    [SerializeField] private GameObject weaverIcon;
 
     [SerializeField] private AnimationCurve shakeCurve;
 
@@ -34,7 +35,7 @@ public class DarknessMechanicScript : MonoBehaviour
             isSafe = false;
         else
             isSafe = true;
-
+        weaverIcon.SetActive(false);
         hasInvoked = false;
         countDown = 0f;
         StartCoroutine(DarknessTimer());
@@ -80,6 +81,7 @@ public class DarknessMechanicScript : MonoBehaviour
 
                 CameraMasterScript.instance.ShakeCurrentCamera(shakeIntensity, .2f, 0.1f);
 
+                weaverIcon.SetActive(true);
             }
 
             yield return null;

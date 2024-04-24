@@ -19,8 +19,7 @@ public class InputManagerScript : MonoBehaviour
     public bool switching;
     public GameObject pauseScreen;
     private PauseScript pauseScript;
-    private bool hasControllerInvoke;
-    [SerializeField] private GameObject weaverIcon;
+    private bool hasControllerInvoke;  
     public static InputManagerScript instance;
     [SerializeField] private bool devMode;
     [HideInInspector] public bool stopCutscene;
@@ -28,10 +27,7 @@ public class InputManagerScript : MonoBehaviour
     [HideInInspector] public bool isOnBlackboard;
     [HideInInspector] public bool isRivalTrigger;
 
-    //weaver icon blink intensity
-    //******************************
-
-    //******************************
+    
 
 
     //the invoke bools are there so then it can only happen once instead of every frame in the update function
@@ -132,7 +128,7 @@ public class InputManagerScript : MonoBehaviour
                 break;
             case myEnums.Mole:
                 moleDigScript = familiar.GetComponent<MoleDigScript>();
-                weaverIcon.SetActive(false);
+              
                 isMole = true;
                 isStag = false;
                 isOwl = false;
@@ -391,10 +387,7 @@ public class InputManagerScript : MonoBehaviour
             playerInput.SwitchCurrentActionMap("Familiar");
         }
 
-        if (moleDigScript != null) 
-        {
-            weaverIcon.SetActive(true);
-        }
+      
     }
 
     public void OnPossessWeaver(InputValue input)
@@ -429,10 +422,7 @@ public class InputManagerScript : MonoBehaviour
             playerInput.SwitchCurrentActionMap("Weaver");
         }
 
-        if (moleDigScript != null) 
-        {
-            weaverIcon.SetActive(false);
-        }
+       
     }
 
     #endregion//******************************************************
