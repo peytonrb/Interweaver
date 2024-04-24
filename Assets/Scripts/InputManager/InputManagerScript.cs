@@ -678,7 +678,7 @@ public class InputManagerScript : MonoBehaviour
                 {
                     popUiFamiliarCanvas.gameObject.SetActive(true);
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                        SetText("<sprite name=" + jumpInputName + ">" + " Hold to jump");
+                        SetText("<sprite name=" + jumpInputName + ">" + "    <sprite name=stagLeap>");
 
 
                 }
