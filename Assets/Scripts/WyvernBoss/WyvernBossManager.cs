@@ -18,6 +18,9 @@ public class WyvernBossManager : MonoBehaviour
     private int currentRoom; //Gets current room
     [SerializeField] private Transform[] roomDestinations; //Room destinations that the boss moves towards when changing rooms
     private bool gotDestination;
+    
+    [Header("Debug Funsies")]
+    [SerializeField] private bool killWithLKey;
 
     [Header("Fireballs")]
     public GameObject fireball;
@@ -140,6 +143,11 @@ public class WyvernBossManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (killWithLKey && Input.GetKeyDown(KeyCode.L))
+        {
+            HurtWyvern();
+        }
+
         if (moveToNextRoom == false) {
             if (familiarScript.myTurn) {
                 if (windup == false) {
@@ -210,6 +218,7 @@ public class WyvernBossManager : MonoBehaviour
                 case 3:
                     if (!blowFire) {
                         if (windup == true) {
+                            characterAnimationHandler.ToggleFlamethrowerAnim(true);
                             WindingUp();
                         }
                         else {
@@ -270,13 +279,15 @@ public class WyvernBossManager : MonoBehaviour
     /// <param name="currentroom"></param>
     void ChangeRooms(int currentroom) {
         int newroom = currentroom + 1;
-        if (newroom <= roomDestinations.Length) {
-            Vector3 newdestination = new Vector3(roomDestinations[newroom].transform.position.x, transform.position.y, roomDestinations[newroom].transform.position.z);
-            transform.position = newdestination;
+        if (newroom < roomDestinations.Length - 1) {
+            //Vector3 newdestination = new Vector3(roomDestinations[newroom].transform.position.x, transform.position.y, roomDestinations[newroom].transform.position.z);
+            transform.position = roomDestinations[newroom].transform.position;
             currentRoom = newroom;
         }
         else {
+            Debug.Log("LEVEL BEAT!!");
             ect.StartCutscene();
+            
             //SceneHandler.instance.LoadLevel("AnimaticCutscenes");
         }
         gotDestination = true;
@@ -286,7 +297,6 @@ public class WyvernBossManager : MonoBehaviour
         if (fireballAmount > 0) {
             //Instantiate(fireball,wyvernMouthTransform.position,Quaternion.identity);
             characterAnimationHandler.ToggleFireballAnim();
-            Debug.Log("Fwoosh");
             fireballAmount -= 1;
         }
         else {
@@ -380,6 +390,7 @@ public class WyvernBossManager : MonoBehaviour
         windupTimer = startingWindupTimer;
         blowFireTimer = startingBlowFireTimer;
         blowFire = false;
+        characterAnimationHandler.ToggleFlamethrowerAnim(blowFire);
         windup = false;
         reseting = true;
     }
@@ -569,8 +580,13 @@ public class WyvernBossManager : MonoBehaviour
                 ResetPhase3();
             break;
         }
-        ActivateOnHurt(); 
+        characterAnimationHandler.ToggleHurtAnim();
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, wyvernHurtSound, 1f);
+    }
+
+    public void Perish() // gets called from SyncedWyvernScript after its hurt and fly animations have played
+    {
+        ActivateOnHurt(); 
         moveToNextRoom = true;
         Debug.Log("Wyvern is hurt! Ouch!");
     }
@@ -580,7 +596,7 @@ public class WyvernBossManager : MonoBehaviour
     /// </summary>
     /// <param name="room"></param>
     void ActivateOnHurt() {
-        if (onHurtWyvern[currentRoom] != null) {
+        if (currentRoom < onHurtWyvern.Length) {
             onHurtWyvern[currentRoom].Invoke();
         }
     }
