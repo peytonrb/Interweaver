@@ -8,6 +8,11 @@ public class SyncedWyvernScript : MonoBehaviour
 
     private void InstantiateFireball()
     {
-        wyvernBossManager.InstantiateFireball(); // I don't like this, ngl
+        wyvernBossManager.InstantiateFireball(); // I don't like this, ngl, but yippeee
+    }
+
+    private void TeleportAway()
+    {
+        wyvernBossManager.Perish();
     }
 }

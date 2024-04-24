@@ -84,5 +84,14 @@ public class CharacterAnimationHandler : MonoBehaviour
         animator.SetTrigger("Fireball");
     }
 
-    
+    public void ToggleFlamethrowerAnim(bool flamethrower)
+    {
+        animator.SetBool("Flamethrower", flamethrower);
+    }
+
+    public void ToggleHurtAnim()
+    {
+        animator.SetTrigger("Hurt");
+    }
+
 }
