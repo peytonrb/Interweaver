@@ -53,6 +53,7 @@ public class BlackboardScript : MonoBehaviour
         blackboardCamera.Priority = 0;
         onBlackboard = false;
         levelsCompleted = PlayerData.instance.GetLevelsCompleted();
+        Debug.Log("levels completed is " + levelsCompleted);
         lostSoulTotalAlpine = PlayerData.instance.GetAlpineLostSoulCount();
         lostSoulTotalCavern = PlayerData.instance.GetCavernLostSoulCount();
         lostSoulTotalSepultus = PlayerData.instance.GetSepultusLostSoulCount();
@@ -73,15 +74,25 @@ public class BlackboardScript : MonoBehaviour
             case 0:
                 {
                     alpineButton.SetActive(true);
+                    cavernButton.SetActive(false);
+                    sepultusButton.SetActive(false);
                     break;
                 }
             case 1: 
                 {
                     alpineButton.SetActive(true);
                     cavernButton.SetActive(true);
+                    sepultusButton.SetActive(false);
                     break;
                 }
             case 2:
+                {
+                    alpineButton.SetActive(true);
+                    cavernButton.SetActive(true);
+                    sepultusButton.SetActive(true);
+                    break;
+                }
+            case 3:
                 {
                     alpineButton.SetActive(true);
                     cavernButton.SetActive(true);
