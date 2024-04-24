@@ -674,11 +674,13 @@ public class InputManagerScript : MonoBehaviour
                 #region //StagPopUI
                 //*************************************
                 var jumpInputName = playerInput.actions["StagFamiliarInteract"].GetBindingDisplayString();
+                var swapName = playerInput.actions["StagAltFamiliarInteract"].GetBindingDisplayString();
                 if (familiarMovement.isInTutorial && familiarMovement.active)
                 {
                     popUiFamiliarCanvas.gameObject.SetActive(true);
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                        SetText("<sprite name=" + jumpInputName + ">" + "       <sprite name=stagLeap>");
+                        SetText("<sprite name=" + jumpInputName + ">" + "       <sprite name=stagLeap>" +
+                        "\n \n<br><sprite name=" + swapName + ">" +" Swap");
 
 
                 }
