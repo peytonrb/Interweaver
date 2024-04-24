@@ -108,18 +108,15 @@ public class RespawnController : MonoBehaviour
     //    // populate once this case occurs, unsure how these will get initialized rn
     //}
 
-    public void RespawnInShieldPuzzle()
+    public void CheckAndRespawnShieldPuzzleWeaveables()
     {
-
-        for (int i = 0; i < shieldPuzzleWeaveables.Count; i++)
+        foreach (GameObject obj in shieldPuzzleWeaveables)
         {
-            shieldPuzzleWeaveables[i].GetComponent<WeaveableNew>().Uncombine();
-            shieldPuzzleWeaveables[i].GetComponent<WeaveableNew>().Uninteract();
-            shieldPuzzleWeaveables[i].GetComponent<WeaveableNew>().player.weaveVisualizer.StopAura(shieldPuzzleWeaveables[i]);
-            shieldPuzzleWeaveables[i].GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
-            //shieldPuzzleWeaveables[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
-            shieldPuzzleWeaveables[i].transform.localPosition = shieldPuzzleWeaveables[i].GetComponent<WeaveableNew>().startPos;
-            shieldPuzzleWeaveables[i].transform.rotation = shieldPuzzleWeaveables[i].GetComponent<WeaveableNew>().startRot;
+            //Call respawn
+            if (obj != null)
+            {
+                RespawnObject(obj);
+            }
         }
     }
 

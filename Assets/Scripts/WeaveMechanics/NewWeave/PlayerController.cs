@@ -389,7 +389,7 @@ public class PlayerController : MonoBehaviour
 
         if (GM.WeaverCheckPointNum == 0 && respawnController != null) // first checkpoint in shield puzzle - should also specify scene
         {
-            respawnController.RespawnInShieldPuzzle();
+            //respawnController.RespawnInShieldPuzzle();
         }
 
         characterAnimationHandler.ToggleRespawnAnim();

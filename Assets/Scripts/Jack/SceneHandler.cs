@@ -26,6 +26,7 @@ public class SceneHandler : MonoBehaviour
     public float masterVolState = 0f;
     public float musicVolState = 0f;
     public float sfxVolState = 0f;
+    public int resValue = 1;
 
     private bool isLoading = false;
     void OnEnable()
@@ -51,8 +52,6 @@ public class SceneHandler : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        
-
     }
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
