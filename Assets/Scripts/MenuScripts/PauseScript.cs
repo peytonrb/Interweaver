@@ -272,6 +272,9 @@ public class PauseScript : MonoBehaviour
         theMixer.SetFloat("SFXVol", ConvertToLog(SceneHandler.instance.sfxVolState));
         sfxSlider.value = SceneHandler.instance.sfxVolState;
 
+        resolutionType = SceneHandler.instance.resValue;
+        resDropdown.value = SceneHandler.instance.resValue - 1;
+
         //Adjust the value of the value texts to the right of the slider using the value stored in playerprefs
         masterValueText.text = (masterSlider.value + 80).ToString() + "%";
         musicValueText.text = (musicSlider.value + 80).ToString() + "%";
@@ -565,6 +568,7 @@ public class PauseScript : MonoBehaviour
                 {
                     Screen.SetResolution(1920, 1080, fullscreenToggle.isOn);
                     PlayerPrefs.SetInt("resType", 1);
+                    SceneHandler.instance.resValue = 1;
                     resolutionType = 1;
                     break;
                 }
@@ -572,6 +576,7 @@ public class PauseScript : MonoBehaviour
                 {
                     Screen.SetResolution(1600, 900, fullscreenToggle.isOn);
                     PlayerPrefs.SetInt("resType", 2);
+                    SceneHandler.instance.resValue = 2;
                     resolutionType = 2;
                     break;
                 }
@@ -579,6 +584,7 @@ public class PauseScript : MonoBehaviour
                 {
                     Screen.SetResolution(1366, 768, fullscreenToggle.isOn);
                     PlayerPrefs.SetInt("resType", 3);
+                    SceneHandler.instance.resValue = 3;
                     resolutionType = 3;
                     break;
                 }
@@ -586,6 +592,7 @@ public class PauseScript : MonoBehaviour
                 {
                     Screen.SetResolution(1280, 720, fullscreenToggle.isOn);
                     PlayerPrefs.SetInt("resType", 4);
+                    SceneHandler.instance.resValue = 4;
                     resolutionType = 3;
                     break;
                 }
