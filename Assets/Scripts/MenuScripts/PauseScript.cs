@@ -68,17 +68,11 @@ public class PauseScript : MonoBehaviour
     [SerializeField] private float musicVolState;
     [SerializeField] private float sfxVolState;
 
-    void Awake()
-    {
-        //Debug.Log("Res: " + PlayerPrefs.GetInt("resType"));
-    }
-
     public void Start()
     {
         toggle = GetComponentInChildren<Toggle>();
         eventSystem = FindObjectOfType<EventSystem>();
         hasControllerInvoke = false;
-        
 
 
         if (spiderBoss != null)
@@ -360,8 +354,6 @@ public class PauseScript : MonoBehaviour
         {
             defaultGroup.SetActive(false);
             optionGroup.SetActive(true);
-            //Debug.Log("GWUH");
-            //resDropdown.value = PlayerPrefs.GetInt("resType");
 
             optionGroup.GetComponent<CanvasGroup>().alpha = 1f;
             defaultGroup.GetComponent<CanvasGroup>().alpha = 0f;
@@ -568,6 +560,8 @@ public class PauseScript : MonoBehaviour
     //Function to change screen resolution
     public void AdjustResolution()
     {
+
+
         switch (resDropdown.value)
         {
             case 0:
