@@ -65,7 +65,7 @@ public class WyvernFireball : MonoBehaviour
         if (familiarscript.myTurn)
         {
             HomingMissile();
-            if (transform.position.magnitude > 1000)
+            if (Vector3.Distance(wyvernBossManager.transform.position, transform.position) > 500f)
             {
                 isDoomed = true;
                 isDoomedPosition = new Vector3(this.transform.position.x, this.transform.position.y - 1f, this.transform.position.z);
@@ -77,7 +77,7 @@ public class WyvernFireball : MonoBehaviour
             if (weaveable.isBeingWoven == false)
             {
                 HomingMissile();
-                if (transform.position.magnitude > 1000)
+                if (Vector3.Distance(wyvernBossManager.transform.position, transform.position) > 500f)
                 {
                     isDoomed = true;
                     isDoomedPosition = new Vector3(this.transform.position.x, this.transform.position.y - 1f, this.transform.position.z);
@@ -161,6 +161,7 @@ public class WyvernFireball : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
+        Debug.Log(other.gameObject.name);
         Vector3 pos;
 
         if (!other.gameObject.CompareTag("Boss"))
