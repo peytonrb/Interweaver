@@ -13,6 +13,7 @@ public class CatapultScript : MonoBehaviour
     [SerializeField] private Transform stagSocketPosition;
     [SerializeField] private GameObject wyvern;
     [SerializeField] private Animator anim;
+    private bool cooldown;
 
     [Header("Audio")]
     [SerializeField] private AudioClip launchSound;
@@ -24,13 +25,14 @@ public class CatapultScript : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.CompareTag("Familiar"))
+        if (collider.CompareTag("Familiar") && !cooldown)
         {
             collider.gameObject.transform.position = stagSocketPosition.position; // move character to bowl position
             MovementScript movementScript = collider.GetComponent<MovementScript>(); 
             movementScript.ZeroCurrentSpeed();
             movementScript.ChangeVelocity(Vector3.zero);
             AudioManager.instance.footStepsChannel.Stop();
+            cooldown = true;
             StartCoroutine(PrepareToLaunch(collider.gameObject));
         }
     }
@@ -77,6 +79,7 @@ public class CatapultScript : MonoBehaviour
             movementScript.ToggleCanMove(true);
         }
         
+        cooldown = false;
         movementScript.ChangeVelocity(new Vector3(0f, 0f, 0f));
     }
 
