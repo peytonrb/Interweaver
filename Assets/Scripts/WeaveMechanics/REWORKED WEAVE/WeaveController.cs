@@ -242,7 +242,8 @@ public class WeaveController : MonoBehaviour
     public void OnDrop()
     {
         isWeaving = false;
-
+        InputManagerScript.instance.popUiWeaverCanvas.SetActive(false);
+        InputManagerScript.instance.hasWeaverInvoke = false;
         //Disables the Weaving bool in the animator for the animation blending
         playerControllerNew.WeaveAnimation(false);
 

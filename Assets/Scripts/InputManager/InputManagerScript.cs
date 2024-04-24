@@ -34,7 +34,7 @@ public class InputManagerScript : MonoBehaviour
     //*****************************************
     private bool hasFamiliarInvoke;
     private bool hasFamiliarInvoke2;
-    private bool hasWeaverInvoke;
+    [HideInInspector] public bool hasWeaverInvoke;
     
     //*****************************************
 
