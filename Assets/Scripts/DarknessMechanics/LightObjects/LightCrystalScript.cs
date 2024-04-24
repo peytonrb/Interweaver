@@ -11,6 +11,7 @@ public class LightCrystalScript : MonoBehaviour
     public int arrayIndex;
     public float brightness = 0.3f;
     public bool isWeaveable = true;
+    private bool audioDisabled = true;
     [TextArea] [SerializeField] private string Notes = "Array Index should be the INDEX of the light in LIGHTARRAY "
                                                      + "in the LightsManager";
     [Header("Focusing Crystals")]
@@ -27,6 +28,8 @@ public class LightCrystalScript : MonoBehaviour
 
     void Start()
     {
+        StartCoroutine(DelayAudio());
+
         isActiveDefault = isActive;
         if (transform.GetChild(0).TryGetComponent<Light>(out crystalLight))
         {
@@ -68,6 +71,14 @@ public class LightCrystalScript : MonoBehaviour
         }
     }
 
+    IEnumerator DelayAudio()
+    {
+        yield return new WaitForSeconds(3f);
+
+        audioDisabled = false;
+        yield break;
+    }
+
     void Update()
     {
         // sets value in darkness struct depending on isActive variable
@@ -104,7 +115,13 @@ public class LightCrystalScript : MonoBehaviour
                 beamEffect.enabled = true;
                 beamEffect.Play();
                 focusingCrystalScript.isActive = true;
-                AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, crystalOnClip);
+
+                if (!audioDisabled)
+                {
+                    Debug.Log("testing");
+                    AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, crystalOnClip);
+                }
+                
             }
         }
 
@@ -175,6 +192,6 @@ public class LightCrystalScript : MonoBehaviour
 
     public void Test()
     {
-        Debug.Log("testing");
+        
     }
 }

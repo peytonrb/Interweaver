@@ -7,6 +7,7 @@ public class LightDetectionScript : MonoBehaviour
     public bool isTimedMushroom;
     private LightCrystalScript crystalScript;
     private bool wasCrystalOn = false;
+    private bool isAudioDisabled = true;
 
      [Header("Audio")]
     [SerializeField] private AudioClip  sensorHitClip;
@@ -40,8 +41,18 @@ public class LightDetectionScript : MonoBehaviour
                 lightComponent.range = radius;
             }
         }
+
+        StartCoroutine(EnableAudio());
     }
 
+
+    IEnumerator EnableAudio()
+    {
+        yield return new WaitForSeconds(3f);
+
+        isAudioDisabled = false;
+        yield break;
+    }
     public void OnTriggerEnter(Collider collision)
     {
         if (!isTimedMushroom)
@@ -67,6 +78,8 @@ public class LightDetectionScript : MonoBehaviour
                     !collision.GetComponent<SensorController>().isActive)
                 {
                     collision.GetComponent<SensorController>().isActive = true;
+
+                    if (!isAudioDisabled)
                     AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, sensorHitClip);
 
                     if (collision.GetComponent<SensorController>().sensorEvent != null)
