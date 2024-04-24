@@ -70,7 +70,7 @@ public class PauseScript : MonoBehaviour
 
     void Awake()
     {
-        Debug.Log("Res: " + PlayerPrefs.GetInt("resType"));
+        //Debug.Log("Res: " + PlayerPrefs.GetInt("resType"));
     }
 
     public void Start()
@@ -278,6 +278,9 @@ public class PauseScript : MonoBehaviour
         theMixer.SetFloat("SFXVol", ConvertToLog(SceneHandler.instance.sfxVolState));
         sfxSlider.value = SceneHandler.instance.sfxVolState;
 
+        resolutionType = SceneHandler.instance.resValue;
+        resDropdown.value = SceneHandler.instance.resValue - 1;
+
         //Adjust the value of the value texts to the right of the slider using the value stored in playerprefs
         masterValueText.text = (masterSlider.value + 80).ToString() + "%";
         musicValueText.text = (musicSlider.value + 80).ToString() + "%";
@@ -357,8 +360,8 @@ public class PauseScript : MonoBehaviour
         {
             defaultGroup.SetActive(false);
             optionGroup.SetActive(true);
-            Debug.Log("GWUH");
-            resDropdown.value = PlayerPrefs.GetInt("resType");
+            //Debug.Log("GWUH");
+            //resDropdown.value = PlayerPrefs.GetInt("resType");
 
             optionGroup.GetComponent<CanvasGroup>().alpha = 1f;
             defaultGroup.GetComponent<CanvasGroup>().alpha = 0f;
@@ -570,29 +573,33 @@ public class PauseScript : MonoBehaviour
             case 0:
                 {
                     Screen.SetResolution(1920, 1080, fullscreenToggle.isOn);
-                    PlayerPrefs.SetInt("resType", 0);
-                    resolutionType = PlayerPrefs.GetInt("resType");
+                    PlayerPrefs.SetInt("resType", 1);
+                    SceneHandler.instance.resValue = 1;
+                    resolutionType = 1;
                     break;
                 }
             case 1:
                 {
                     Screen.SetResolution(1600, 900, fullscreenToggle.isOn);
-                    PlayerPrefs.SetInt("resType", 1);
-                    resolutionType = PlayerPrefs.GetInt("resType");
+                    PlayerPrefs.SetInt("resType", 2);
+                    SceneHandler.instance.resValue = 2;
+                    resolutionType = 2;
                     break;
                 }
             case 2:
                 {
                     Screen.SetResolution(1366, 768, fullscreenToggle.isOn);
-                    PlayerPrefs.SetInt("resType", 2);
-                    resolutionType = PlayerPrefs.GetInt("resType");
+                    PlayerPrefs.SetInt("resType", 3);
+                    SceneHandler.instance.resValue = 3;
+                    resolutionType = 3;
                     break;
                 }
             case 3:
                 {
                     Screen.SetResolution(1280, 720, fullscreenToggle.isOn);
-                    PlayerPrefs.SetInt("resType", 3);
-                    resolutionType = PlayerPrefs.GetInt("resType");
+                    PlayerPrefs.SetInt("resType", 4);
+                    SceneHandler.instance.resValue = 4;
+                    resolutionType = 3;
                     break;
                 }
         }
