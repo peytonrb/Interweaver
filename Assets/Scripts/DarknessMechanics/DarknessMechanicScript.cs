@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class DarknessMechanicScript : MonoBehaviour
 {
@@ -28,6 +25,9 @@ public class DarknessMechanicScript : MonoBehaviour
     UnityEngine.Rendering.Universal.Vignette vignette;
 
     public bool disableVignette;
+
+    public Sprite spiderIcon;
+    public Sprite nonSpiderIcon;
 
     void Start()
     {
@@ -115,6 +115,14 @@ public class DarknessMechanicScript : MonoBehaviour
             {
                 StartCoroutine(DarknessTimer());
                 hasInvoked = false;
+                if (SceneHandler.instance.arachnophobiaState)
+                {
+                    weaverIcon.GetComponent<Image>().sprite = nonSpiderIcon;
+                }
+                else
+                {
+                    weaverIcon.GetComponent<Image>().sprite = spiderIcon;
+                }
                 weaverIcon.SetActive(true);
                 Debug.Log("player is now not safe");
             }

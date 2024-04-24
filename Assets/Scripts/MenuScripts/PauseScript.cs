@@ -470,25 +470,25 @@ public class PauseScript : MonoBehaviour
         if (arachnophobiaToggle.isOn == false)
         {
             PlayerPrefs.SetInt("ArachnophobiaToggleState", 0);
+            SceneHandler.instance.arachnophobiaState = false;
             if (spiderBoss != null)
             {
                 SpiderBossScript spiderboss = spiderBoss.GetComponent<SpiderBossScript>();
                 spiderboss.ToggleArachnophobia(false);
                 changeSpiderlings = true;
                 changeSpiderlingsTo = false;
-                SceneHandler.instance.arachnophobiaState = false;
             }
         }
         else
         {
             PlayerPrefs.SetInt("ArachnophobiaToggleState", 1);
+            SceneHandler.instance.arachnophobiaState = true;
             if (spiderBoss != null)
             {
                 SpiderBossScript spiderboss = spiderBoss.GetComponent<SpiderBossScript>();
                 spiderboss.ToggleArachnophobia(true);
                 changeSpiderlings = true;
                 changeSpiderlingsTo = true;
-                SceneHandler.instance.arachnophobiaState = true;
             }
         }
     }

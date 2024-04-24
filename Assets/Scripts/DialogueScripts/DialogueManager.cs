@@ -87,7 +87,6 @@ public class DialogueManager : MonoBehaviour
     // when enter is hit, next sentence is displayed
     public void DisplayNextSentence()
     {
-        Debug.Log(sentences);
         if (isScrolling && !shakeInvoked) // we specifically call out that shake hasn't been invoked here since elsewise there can be a frame difference which causes shake to be just straight up be read
         {
             skipSentence = true;
@@ -135,7 +134,6 @@ public class DialogueManager : MonoBehaviour
 
         if (sentence.Contains("[SHAKE]"))
         {
-            Debug.Log("oingo boingo");
             shakeInvoked = true;
             DisplayNextSentence();
             return;
