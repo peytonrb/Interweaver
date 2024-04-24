@@ -21,7 +21,7 @@ public class SceneHandler : MonoBehaviour
     // pause stuff (i couldnt find a better solution tehe)
     public bool arachnophobiaState = false;
     public bool subtitlesState = false;
-    public bool fullscreenState = false;
+    public bool fullscreenState = true;
     public bool vysncState = false;
     public float masterVolState = 0f;
     public float musicVolState = 0f;
