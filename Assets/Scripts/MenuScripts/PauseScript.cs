@@ -304,6 +304,10 @@ public class PauseScript : MonoBehaviour
             defaultGroup.GetComponent<CanvasGroup>().alpha = 1;
         }
         InputManagerScript.instance.canSwitch = true;
+        if (InputManagerScript.instance.familiar.GetComponent<FamiliarScript>().myTurn)
+            InputManagerScript.instance.playerInput.SwitchCurrentActionMap("Familiar");
+        else
+            InputManagerScript.instance.playerInput.SwitchCurrentActionMap("Weaver");
         gameObject.SetActive(false);
     }
 
