@@ -81,7 +81,7 @@ public class DarknessMechanicScript : MonoBehaviour
 
                 CameraMasterScript.instance.ShakeCurrentCamera(shakeIntensity, .2f, 0.1f);
 
-                weaverIcon.SetActive(true);
+               
             }
 
             yield return null;
@@ -101,6 +101,7 @@ public class DarknessMechanicScript : MonoBehaviour
             StopCoroutine(DarknessTimer());
             hasInvoked = true;
             Debug.Log("player is now safe");
+            weaverIcon.SetActive(false);
         }
 
     }
@@ -114,6 +115,7 @@ public class DarknessMechanicScript : MonoBehaviour
             {
                 StartCoroutine(DarknessTimer());
                 hasInvoked = false;
+                weaverIcon.SetActive(true);
                 Debug.Log("player is now not safe");
             }
         }
@@ -144,7 +146,7 @@ public class DarknessMechanicScript : MonoBehaviour
 
                     lastCount = countDown;
                     t = 0;
-
+                    weaverIcon.SetActive(false);
                     StopCoroutine(DarknessTimer());
                 }
             }
@@ -164,7 +166,7 @@ public class DarknessMechanicScript : MonoBehaviour
 
                     lastCount = countDown;
                     t = 0;
-
+                    weaverIcon.SetActive(false);
                     StopCoroutine(DarknessTimer());
                 }
             }
@@ -176,7 +178,7 @@ public class DarknessMechanicScript : MonoBehaviour
 
                 lastCount = countDown;
                 t = 0;
-
+                weaverIcon.SetActive(false);
                 StopCoroutine(DarknessTimer());
             }
         }
