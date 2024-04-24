@@ -133,6 +133,7 @@ public class FamiliarScript : MonoBehaviour
     {
         movementScript.active = false;
         isDead = true;
+        characterController.enabled = false;
         AudioManager.instance.fallChannel.Stop();
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, deathClip);
         Invoke("ResetToCheckpoint", 3);
@@ -140,7 +141,7 @@ public class FamiliarScript : MonoBehaviour
 
     public void ResetToCheckpoint()
     {
-        characterController.enabled = false;
+        //characterController.enabled = false;
         transform.position = GM.FamiliarCheckPointPos;
         movementScript.HardResetMovementStats();
 

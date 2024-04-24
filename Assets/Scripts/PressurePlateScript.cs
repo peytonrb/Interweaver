@@ -26,6 +26,7 @@ public class PressurePlateScript : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioClip pressurePlateSound;
+    private AudioSource pressurePlateSource;
 
     void Start() {
         bottomtargetposition = transform.position.y - 0.2f;
@@ -39,6 +40,8 @@ public class PressurePlateScript : MonoBehaviour
         
         activatePS = this.transform.GetChild(0).GetComponent<ParticleSystem>();
         activatePS.gameObject.SetActive(false);
+
+        pressurePlateSource = null;
     }
 
     void Update() {
@@ -61,13 +64,13 @@ public class PressurePlateScript : MonoBehaviour
         if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Familiar"))
         {
             standingOnPlate = true;
-            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, pressurePlateSound, 1f);
+            pressurePlateSource = AudioManager.instance.AddSFX(pressurePlateSound, false, pressurePlateSource);
         }
 
         if (activatedByWeaveable && other.gameObject.CompareTag("Weaveable"))
         {
             standingOnPlate = true;
-            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, pressurePlateSound, 1f);
+            pressurePlateSource = AudioManager.instance.AddSFX(pressurePlateSound, false, pressurePlateSource);
         }
     }
 

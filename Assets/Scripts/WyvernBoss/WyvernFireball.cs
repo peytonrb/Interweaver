@@ -31,14 +31,16 @@ public class WyvernFireball : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioClip fireballSound;
+    private AudioSource fireballSource;
 
     // Start is called before the first frame update
     void Start()
     {
+        fireballSource = null;
         weaver = GameObject.FindGameObjectWithTag("Player");
         familiar = GameObject.FindGameObjectWithTag("Familiar");
         wyvern = GameObject.FindGameObjectWithTag("Boss");
-        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, fireballSound, 1f);
+        fireballSource = AudioManager.instance.AddSFX(fireballSound, false, fireballSource);
         wyvernBossManager = wyvern.GetComponent<WyvernBossManager>();
         phaseTriggerManager = wyvernBossManager.wyvernTriggerManager;
         wptm = phaseTriggerManager.GetComponent<WyvernPhaseTriggerManager>();
