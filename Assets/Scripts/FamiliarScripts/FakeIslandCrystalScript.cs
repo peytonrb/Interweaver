@@ -10,6 +10,8 @@ public class FakeIslandCrystalScript : MonoBehaviour, IDamageable
     public AudioClip shatterFile;
 
     public FloatingIslandScript myFloatingIsland;
+
+    public GameObject gustsToSpawn;
     public void Damage()
     {
         GameObject shatterVFX = Instantiate(vfxPrefab, transform.position, transform.rotation);
@@ -18,6 +20,11 @@ public class FakeIslandCrystalScript : MonoBehaviour, IDamageable
         if (myFloatingIsland != null)
         {
             myFloatingIsland.StartFalling();
+        }
+
+        if (gustsToSpawn != null)
+        {
+            gustsToSpawn.SetActive(true);
         }
 
         Destroy(shatterVFX.gameObject, 1f);

@@ -65,7 +65,6 @@ public class RespawnController : MonoBehaviour
             //Call respawn
             if (obj != null)
             {
-                Debug.Log("respawned " + obj.name);
                 RespawnObject(obj);
             }
         }
@@ -75,10 +74,20 @@ public class RespawnController : MonoBehaviour
     //// can be called in puzzles and other events that require respawning objects
     public void RespawnObject(GameObject objectToRespawn)
     {
+        if (!objectToRespawn.activeSelf)
+        {
+            Debug.Log("object wasn't active");
+            return;
+
+        }
+
         if (objectToRespawn.TryGetComponent<CrystalScript>(out CrystalScript crystal))
         {
             if (crystal.myFloatingIsland != null)
             {
+                objectToRespawn.transform.position = startPositions[myRespawnables.IndexOf(objectToRespawn)];
+                objectToRespawn.transform.rotation = startRotations[myRespawnables.IndexOf(objectToRespawn)];
+                objectToRespawn.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 return;
             }
         }
