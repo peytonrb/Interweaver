@@ -132,12 +132,6 @@ public class AudioManager : MonoBehaviour
                     PlaySequencedMusic(hubIntroMusic);
                     break;
                 }
-                case "AnimaticCutscenes":
-                {
-                    Debug.Log("EEEE");
-                    //PlaySound(AudioManagerChannels.MusicChannel, hubMusic);
-                    break;
-                }
         }
     }
     /// <summary>

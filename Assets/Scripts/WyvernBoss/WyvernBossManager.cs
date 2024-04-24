@@ -18,6 +18,9 @@ public class WyvernBossManager : MonoBehaviour
     private int currentRoom; //Gets current room
     [SerializeField] private Transform[] roomDestinations; //Room destinations that the boss moves towards when changing rooms
     private bool gotDestination;
+    
+    [Header("Debug Funsies")]
+    [SerializeField] private bool killWithLKey;
 
     [Header("Fireballs")]
     public GameObject fireball;
@@ -140,9 +143,8 @@ public class WyvernBossManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
+        if (killWithLKey && Input.GetKeyDown(KeyCode.L))
         {
-            Debug.Log("GWUH");
             HurtWyvern();
         }
 
@@ -277,7 +279,7 @@ public class WyvernBossManager : MonoBehaviour
     /// <param name="currentroom"></param>
     void ChangeRooms(int currentroom) {
         int newroom = currentroom + 1;
-        if (newroom <= roomDestinations.Length) {
+        if (newroom < roomDestinations.Length - 1) {
             //Vector3 newdestination = new Vector3(roomDestinations[newroom].transform.position.x, transform.position.y, roomDestinations[newroom].transform.position.z);
             transform.position = roomDestinations[newroom].transform.position;
             currentRoom = newroom;
@@ -594,7 +596,7 @@ public class WyvernBossManager : MonoBehaviour
     /// </summary>
     /// <param name="room"></param>
     void ActivateOnHurt() {
-        if (onHurtWyvern[currentRoom] != null) {
+        if (currentRoom < onHurtWyvern.Length) {
             onHurtWyvern[currentRoom].Invoke();
         }
     }
