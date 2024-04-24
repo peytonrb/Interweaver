@@ -23,7 +23,7 @@ public class InputManagerScript : MonoBehaviour
     public static InputManagerScript instance;
     [SerializeField] private bool devMode;
     [HideInInspector] public bool stopCutscene;
-    [HideInInspector] public bool insideCutscene;
+     public bool insideCutscene;
     [HideInInspector] public bool isOnBlackboard;
     [HideInInspector] public bool isRivalTrigger;
 
@@ -63,7 +63,7 @@ public class InputManagerScript : MonoBehaviour
 
     [SerializeField] private GameObject popUiFamiliarCanvas;
 
-    [SerializeField] private GameObject popUiWeaverCanvas;
+    public GameObject popUiWeaverCanvas;
     private bool isMole, isOwl, isStag;
     public enum myEnums
     {

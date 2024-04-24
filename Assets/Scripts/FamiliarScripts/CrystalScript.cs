@@ -37,7 +37,7 @@ public class CrystalScript : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         gameObject.SetActive(false);
         weaveController.OnDrop();
-
+        InputManagerScript.instance.popUiWeaverCanvas.gameObject.SetActive(false);
         yield break;
     }
 

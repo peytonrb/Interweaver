@@ -159,7 +159,7 @@ public class CutsceneManagerScript : MonoBehaviour
                                 bpCanvasGroup.alpha = 0;
                                 cutscenePhase = 0;
                                 isCutscene = false;
-                                InputManagerScript.instance.insideCutscene = false;
+                                InputManagerScript.instance.insideCutscene = false;                                
                             }
                         }
                     break;
@@ -233,6 +233,7 @@ public class CutsceneManagerScript : MonoBehaviour
     }
 
     private void EndCutscene() {
+        InputManagerScript.instance.insideCutscene = false;
         Destroy(cutsceneTrigger);
         director.Stop();
 
@@ -258,6 +259,7 @@ public class CutsceneManagerScript : MonoBehaviour
             cutscenePhase = 0;
             isCutscene = false;
             InputManagerScript.instance.insideCutscene = false;
+            skipped = false;
         }
         else {
             cutscenePhase += 1;
