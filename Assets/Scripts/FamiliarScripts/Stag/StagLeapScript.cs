@@ -282,7 +282,10 @@ public class StagLeapScript : MonoBehaviour
                         }
                         else {
                             FamiliarScript familiarScript = gameObject.GetComponent<FamiliarScript>();
-                            familiarScript.Death();
+                            if (!wyvernBossManager.isDoingHurtTransition)
+                            {
+                                familiarScript.Death();
+                            }
                         }
                     }
                 }

@@ -161,7 +161,6 @@ public class WyvernFireball : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        Debug.Log(other.gameObject.name);
         Vector3 pos;
 
         if (!other.gameObject.CompareTag("Boss"))
