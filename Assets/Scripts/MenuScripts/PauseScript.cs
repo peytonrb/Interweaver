@@ -275,6 +275,8 @@ public class PauseScript : MonoBehaviour
         resolutionType = SceneHandler.instance.resValue;
         resDropdown.value = SceneHandler.instance.resValue - 1;
 
+        AdjustResolution();
+
         //Adjust the value of the value texts to the right of the slider using the value stored in playerprefs
         masterValueText.text = (masterSlider.value + 80).ToString() + "%";
         musicValueText.text = (musicSlider.value + 80).ToString() + "%";
