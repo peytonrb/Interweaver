@@ -219,6 +219,7 @@ public class WyvernBossManager : MonoBehaviour
                     if (!blowFire) {
                         if (windup == true) {
                             characterAnimationHandler.ToggleFlamethrowerAnim(true);
+                            characterAnimationHandler.ToggleFireballAnim();
                             WindingUp();
                         }
                         else {
@@ -307,6 +308,10 @@ public class WyvernBossManager : MonoBehaviour
 
     public void InstantiateFireball()
     {
+        if (blowFire || windup) 
+        {
+            return;
+        }
         Instantiate(fireball,wyvernMouthTransform.position,Quaternion.identity);
     }
 
