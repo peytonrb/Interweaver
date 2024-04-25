@@ -31,8 +31,8 @@ public class WeaveController : MonoBehaviour
 
     [Header("Other Script References - DO NOT MODIFY")]
     [HideInInspector] public bool isWeaving;
-    [HideInInspector] public WeaveableObject currentWeaveable;
-    [HideInInspector] public WeaveableObject selectedWeaveable;
+     public WeaveableObject currentWeaveable;
+     public WeaveableObject selectedWeaveable;
     [HideInInspector] public Vector2 lookDirection;
     private MovementScript movementScript;
     private PlayerControllerNew playerControllerNew;
