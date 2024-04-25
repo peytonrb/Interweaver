@@ -19,19 +19,23 @@ public class InputManagerScript : MonoBehaviour
     public bool switching;
     public GameObject pauseScreen;
     private PauseScript pauseScript;
-    private bool hasControllerInvoke;
+    private bool hasControllerInvoke;  
     public static InputManagerScript instance;
     [SerializeField] private bool devMode;
     [HideInInspector] public bool stopCutscene;
-    [HideInInspector] public bool insideCutscene;
+     public bool insideCutscene;
     [HideInInspector] public bool isOnBlackboard;
+    [HideInInspector] public bool isRivalTrigger;
+
+    
 
 
     //the invoke bools are there so then it can only happen once instead of every frame in the update function
     //*****************************************
     private bool hasFamiliarInvoke;
     private bool hasFamiliarInvoke2;
-    private bool hasWeaverInvoke;
+    [HideInInspector] public bool hasWeaverInvoke;
+    
     //*****************************************
 
     //These bools are here to keep track of the familiar and weavers turn for the marketing camera
@@ -59,7 +63,7 @@ public class InputManagerScript : MonoBehaviour
 
     [SerializeField] private GameObject popUiFamiliarCanvas;
 
-    [SerializeField] private GameObject popUiWeaverCanvas;
+    public GameObject popUiWeaverCanvas;
     private bool isMole, isOwl, isStag;
     public enum myEnums
     {
@@ -75,6 +79,7 @@ public class InputManagerScript : MonoBehaviour
         wasFamiliarTurn = false;
         wasWeaverTurn = false;
         hasControllerInvoke = false;
+        Cursor.visible = false;
 
         if (instance == null)
         {
@@ -123,6 +128,7 @@ public class InputManagerScript : MonoBehaviour
                 break;
             case myEnums.Mole:
                 moleDigScript = familiar.GetComponent<MoleDigScript>();
+              
                 isMole = true;
                 isStag = false;
                 isOwl = false;
@@ -140,6 +146,7 @@ public class InputManagerScript : MonoBehaviour
         FamiliarUI();
         WeaverUI();
         CheckForControllers();
+
     }
 
     private void CheckForControllers()
@@ -149,14 +156,12 @@ public class InputManagerScript : MonoBehaviour
             ToggleControlScheme(true);
             hasControllerInvoke = true;
             Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
         }
         else if (Gamepad.current == null && hasControllerInvoke) 
         {
             ToggleControlScheme(false);
             hasControllerInvoke = false;
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;           
         }
     }
 
@@ -165,6 +170,7 @@ public class InputManagerScript : MonoBehaviour
         if (isController)
         {
             Debug.Log("current control is gamepad");
+            weaveController.targetSphere.gameObject.SetActive(false);
             isGamepad = true;
             playerInput.SwitchCurrentControlScheme("Gamepad", Gamepad.current);
 
@@ -172,6 +178,7 @@ public class InputManagerScript : MonoBehaviour
         else
         {
             isGamepad = false;
+            weaveController.targetSphere.gameObject.SetActive(true);
             playerInput.SwitchCurrentControlScheme("Keyboard&Mouse", Keyboard.current, Mouse.current);
         }
     }
@@ -226,6 +233,8 @@ public class InputManagerScript : MonoBehaviour
         if (input.isPressed)
         {
             weaveController.OnDrop();
+            hasWeaverInvoke = false;
+            popUiWeaverCanvas.gameObject.SetActive(false);
         }
     }
 
@@ -257,9 +266,7 @@ public class InputManagerScript : MonoBehaviour
         }
     }
 
-    public void OnWeaverNPCInteractions(InputValue input)
-    {
-    }
+
 
     public void OnRotate(InputValue input)
     {
@@ -300,6 +307,8 @@ public class InputManagerScript : MonoBehaviour
             //Disable this when in Hub
             WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
             weaveController.OnDrop();
+            popUiWeaverCanvas.gameObject.SetActive(false);
+            hasWeaverInvoke = false;
         }
     }
 
@@ -377,6 +386,8 @@ public class InputManagerScript : MonoBehaviour
             }
             playerInput.SwitchCurrentActionMap("Familiar");
         }
+
+      
     }
 
     public void OnPossessWeaver(InputValue input)
@@ -410,6 +421,8 @@ public class InputManagerScript : MonoBehaviour
             }
             playerInput.SwitchCurrentActionMap("Weaver");
         }
+
+       
     }
 
     #endregion//******************************************************
@@ -428,10 +441,12 @@ public class InputManagerScript : MonoBehaviour
                 AudioManager.instance.StopSound(AudioManagerChannels.fallLoopChannel);
                 AudioManager.instance.StopSound(AudioManagerChannels.footStepsLoopChannel);
                 Time.timeScale = 0;
+                Cursor.visible = true;
             }
             else
             {
                 pauseScript.Resume();
+                Cursor.visible = false;
             }
 
         }
@@ -476,6 +491,7 @@ public class InputManagerScript : MonoBehaviour
             else
             {
                 NPCInteractionScript npcInteractScript = player.GetComponent<NPCInteractionScript>();
+
                 if (DialogueManager.instance.inAutoTriggeredDialogue)
                 {
                     DialogueManager.instance.DisplayNextSentence();
@@ -485,20 +501,29 @@ public class InputManagerScript : MonoBehaviour
                     if (!isOnBlackboard) 
                     {
                         npcInteractScript.Interact();
+                        
                     }
+
                     else
                     {
                         if (playerInput.currentControlScheme != "Gamepad")
                         {
-                            npcInteractScript.Interact();
+                            npcInteractScript.Interact();                            
                         }
                     }
-                }
 
+                   
+                }
+                if (isRivalTrigger)
+                {
+                    DialogueManager.instance.DisplayNextSentence();
+                }
                 if (player.GetComponent<LostSoulManager>().isSpeaking)
                 {
                     DialogueManager.instance.DisplayNextSentence();
                 }
+                
+
                 Debug.Log("Interacting Weaver");
             }
         }
@@ -539,25 +564,39 @@ public class InputManagerScript : MonoBehaviour
     #endregion
 
     private void WeaverUI()
-    {
+    {       
         var weaverTargetingName = playerInput.actions["WeaverTargeting"].GetBindingDisplayString();
         var weaverRotatingName = playerInput.actions["Rotate"].GetBindingDisplayString();
+        var weaverUnweaveName = playerInput.actions["Drop"].GetBindingDisplayString();
+        var weaverUncombineName = playerInput.actions["UncombineAction"].GetBindingDisplayString();
+
         if ((weaveController != null) && (weaveController.isWeaving) && !hasWeaverInvoke && movementScript.isInTutorial)
         {
             popUiWeaverCanvas.gameObject.SetActive(true);
 
-            popUiWeaverCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                SetText("<sprite name=" + weaverTargetingName + ">" + " to move weave" +
-                "<br><sprite name=" + weaverRotatingName + ">" + " to rotate weave");
 
+            popUiWeaverCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
+                SetText("<sprite name=" + weaverTargetingName + ">" + " move weave" +
+                "\n<br><sprite index=85>" + "     <sprite name=weaveRotate>" +
+                "\n \n<br><sprite name=" + weaverUnweaveName + ">" + "        <sprite name=weaveDrop>");
             hasWeaverInvoke = true;
         }
 
-        else if ((!weaveController.isWeaving) && hasWeaverInvoke)
+        else if (weaveController.isWeaving)
         {
-            popUiWeaverCanvas.gameObject.SetActive(false);
-            hasWeaverInvoke = false;
+            if ((WeaveableManager.Instance.combinedWeaveables[0].weaveableObjectGroup.Count >= 2) && movementScript.isInTutorial && weaveController.currentWeaveable != null)
+            {
+                popUiWeaverCanvas.gameObject.SetActive(true);
+
+                popUiWeaverCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
+                SetText("<sprite name=" + weaverTargetingName + ">" + " move weave" +
+                "\n<br><sprite index=85>" + "     <sprite name=weaveRotate>" +
+                "\n \n<br><sprite name=" + weaverUnweaveName + ">" + "        <sprite name=weaveDrop>" +
+                "\n \n<br><sprite name=" + weaverUncombineName + ">" + "           <sprite name=weaveUncombine>");
+            }
+
         }
+             
     }
     private void FamiliarUI()
     {
@@ -573,7 +612,7 @@ public class InputManagerScript : MonoBehaviour
                     //this is where I would put the ui being active and showing the button for digging
                     popUiFamiliarCanvas.gameObject.SetActive(true);
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                        SetText("<sprite name=" + inputName + ">" + " to dive");
+                        SetText("<sprite name=" + inputName + ">" + " Dive");
                     //playerInput.actions["FamiliarInteract"].GetBindingDisplayString()
                     hasFamiliarInvoke = true;
                 }
@@ -598,7 +637,7 @@ public class InputManagerScript : MonoBehaviour
                     //this is where I would put the ui being active and showing the button for digging
                     popUiFamiliarCanvas.gameObject.SetActive(true);
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                        SetText("<sprite name=" + digInputName + ">" + " to dig");
+                        SetText("<sprite name=" + digInputName + ">" + "      <sprite name=moleBurrow>");
 
                     hasFamiliarInvoke = true;
 
@@ -614,16 +653,16 @@ public class InputManagerScript : MonoBehaviour
                 if ((moleDigScript.startedToDig) && !hasFamiliarInvoke2 && familiarMovement.isInTutorial && familiarMovement.active)
                 {
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                    SetText("<sprite name=" + pillarInputName + ">" + " Build " +
-                 "/  <sprite name=" + lowerPillarInputName + ">" + " Deconstruct" +
-                        "<br><sprite name=" + digInputName + ">" + " Dig");
+                    SetText("<sprite name=" + pillarInputName + ">" + "      <sprite name=moleUpper>" +
+                 "\n \n \n <sprite name=" + lowerPillarInputName + ">" + "      <sprite name=moleLower>" +
+                        "\n \n \n<br><sprite name=" + digInputName + ">" + "      <sprite name=moleBurrow>");
                     hasFamiliarInvoke2 = true;
                 }
 
                 else if ((!moleDigScript.startedToDig) && hasFamiliarInvoke2)
                 {
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                    SetText("<sprite name=" + digInputName + ">" + " to dig");
+                    SetText("<sprite name=" + digInputName + ">" + "      <sprite name=moleBurrow>");
                     hasFamiliarInvoke2 = false;
                 }
 
@@ -635,11 +674,13 @@ public class InputManagerScript : MonoBehaviour
                 #region //StagPopUI
                 //*************************************
                 var jumpInputName = playerInput.actions["StagFamiliarInteract"].GetBindingDisplayString();
+                var swapName = playerInput.actions["StagAltFamiliarInteract"].GetBindingDisplayString();
                 if (familiarMovement.isInTutorial && familiarMovement.active)
                 {
                     popUiFamiliarCanvas.gameObject.SetActive(true);
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
-                        SetText("<sprite name=" + jumpInputName + ">" + " Hold to jump");
+                        SetText("<sprite name=" + jumpInputName + ">" + "       <sprite name=stagLeap>" +
+                        "\n \n<br><sprite name=" + swapName + ">" +" Swap");
 
 
                 }

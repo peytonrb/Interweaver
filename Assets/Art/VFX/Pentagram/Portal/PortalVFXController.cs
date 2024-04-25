@@ -14,6 +14,8 @@ public class PortalVFXController : MonoBehaviour
     public GameObject[] startingPS;
     public GameObject[] endingPS;
     public float waitTime;
+    public bool toggleWait;
+    public bool isWaiting = true;
 
     void Update()
     {
@@ -67,8 +69,21 @@ public class PortalVFXController : MonoBehaviour
 
     IEnumerator Wait()
     {
-        yield return new WaitForSeconds(waitTime);
-        StartCoroutine(FadeOrb());
+        isWaiting = true;
+        if (toggleWait)
+        {
+            while (isWaiting)
+                yield return null;
+            
+            StartCoroutine(FadeOrb());
+            isWaiting = true;
+        }
+        else
+        {
+            yield return new WaitForSeconds(waitTime);
+            StartCoroutine(FadeOrb());
+        }
+        
         //StartCoroutine(WaitAgain());
     }
 

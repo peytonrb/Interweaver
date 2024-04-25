@@ -7,7 +7,7 @@ public class WeaveableObject : MonoBehaviour
 {
     [Header("State Variables")]
     public bool isBeingWoven; // accessed by WeaveController
-    [SerializeField][Range(1, 5)] private float hoverHeight = 2f;
+    [SerializeField][Range(1, 5)] public float hoverHeight = 2f;
     public enum ObjectMoveOverrides { Default, ThisAlwaysMoves, ThisNeverMoves }
     public ObjectMoveOverrides objectMoveOverride;
     [SerializeField] private LayerMask weaveableLayers;
@@ -16,6 +16,7 @@ public class WeaveableObject : MonoBehaviour
     public bool hasBeenCombined = false;
     private bool combineFinished = false;
     public bool canBeMoved = true;
+    public bool isDayblock;
 
     // rotation
     [HideInInspector] public enum rotateDir { forward, back, left, right }
@@ -47,6 +48,9 @@ public class WeaveableObject : MonoBehaviour
 
     [Header("Island Override")]
     public bool isFloatingIsland;
+
+    [HideInInspector] public bool materialIsOn;
+
     void Start()
     {
         weaveController = GameObject.FindWithTag("Player").GetComponent<WeaveController>();
@@ -120,12 +124,23 @@ public class WeaveableObject : MonoBehaviour
         {
             FreezeConstraints("all");
         }
+
+        if (materialIsOn && !weaveController.isHoveringObject && !isBeingWoven && !hasBeenCombined) // is expensive cont.
+        {
+            materialIsOn = false;
+            Renderer rend = this.transform.GetChild(0).GetComponent<Renderer>();
+            Material[] mats = rend.materials;
+            Material existingMat = mats[0];
+            Material[] newMats = new Material[1];
+            newMats[0] = existingMat;
+            rend.materials = newMats;
+        }
     }
 
     private void OnDestroy()
     {
         //Makes sure that if the weaver is weaving, it doesn't drop it if its not a fireball.
-        if (weaveController != null && gameObject.GetComponent<WyvernFireball>() == null)
+        if (weaveController != null && isBeingWoven)
             weaveController.OnDrop();
     }
 
@@ -237,7 +252,7 @@ public class WeaveableObject : MonoBehaviour
                 rb.velocity = Vector3.zero;
             }
         }
-            
+
     }
 
     // rotates the object after being called by InputManager
@@ -557,6 +572,14 @@ public class WeaveableObject : MonoBehaviour
         // vfx
         weaveController.weaveFXScript.StopAura(gameObject);
         weaveController.weaveFXScript.DisableWeave();
+
+        // reset material
+        Renderer rend = this.transform.GetChild(0).GetComponent<Renderer>();
+        Material[] mats = rend.materials;
+        Material existingMat = mats[0];
+        Material[] newMats = new Material[1];
+        newMats[0] = existingMat;
+        rend.materials = newMats;
         //StartCoroutine(WaitForPhysics());
     }
 

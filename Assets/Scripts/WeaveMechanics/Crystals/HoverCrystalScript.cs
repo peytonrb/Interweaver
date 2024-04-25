@@ -29,7 +29,9 @@ public class HoverCrystalScript : MonoBehaviour
         pointToRiseTo = transform.position + (Vector3.up * hoverHeight);
         rigidBody.constraints = RigidbodyConstraints.FreezeAll;
         distance = Vector3.Distance(transform.position, pointToRiseTo);
-
+        gameObject.layer = LayerMask.NameToLayer("Default");
+        Debug.Log(other);
+        other.layer = LayerMask.NameToLayer("Default");
         StartCoroutine(Hover(other));
     }
 
@@ -61,6 +63,8 @@ public class HoverCrystalScript : MonoBehaviour
     IEnumerator ShatterCountdown(GameObject other)
     {
         yield return new WaitForSeconds(TimeToShatter);
+        gameObject.layer = LayerMask.NameToLayer("weaveObject");
+        other.layer = LayerMask.NameToLayer("weaveObject");
         rigidBody.constraints = RigidbodyConstraints.None;
         WeaveableManager.Instance.DestroyJoints(other.GetComponent<WeaveableObject>().listIndex);
         isCombined = false;

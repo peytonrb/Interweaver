@@ -14,7 +14,7 @@ public class LostSoulController : MonoBehaviour
         Vector3 directionToPlayer = transform.position - player.transform.position;
         float distanceToPlayer = directionToPlayer.magnitude;
         
-        if (distanceToPlayer > 0.5 && distanceToPlayer < 5)
+        if (distanceToPlayer > 0.5 && distanceToPlayer <= 5)
         {
             gameObject.GetComponent<Rigidbody>().isKinematic = false;
             float attractionForce = attractionStrength / distanceToPlayer;
@@ -23,6 +23,10 @@ public class LostSoulController : MonoBehaviour
         else if (distanceToPlayer <= 0.5)
         {
             gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        }
+        else if (distanceToPlayer > 5)
+        {
+            gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
         }
     }
 

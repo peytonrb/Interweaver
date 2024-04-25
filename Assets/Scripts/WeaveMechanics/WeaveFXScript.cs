@@ -65,12 +65,20 @@ public class WeaveFXScript : MonoBehaviour
             {
                 psShape.radius = sphere.bounds.size.x;
             }
-            
+
             Instantiate(objectSelectPS, weaveable.transform.position, Quaternion.Euler(-90f, 0f, 0f));
 
             if (weaveable.transform.GetChild(0).GetComponent<Renderer>() != null)
             {
-                weaveable.transform.GetChild(0).GetComponent<Renderer>().material = emissiveMat;
+                //weaveable.transform.GetChild(0).GetComponent<Renderer>().material = emissiveMat;
+
+                Renderer rend = weaveable.transform.GetChild(0).GetComponent<Renderer>();
+                Material[] mats = rend.materials;
+                Material existingMat = mats[0];
+                Material[] newMats = new Material[2];
+                newMats[0] = existingMat;
+                newMats[1] = emissiveMat;
+                rend.materials = newMats;
             }
             // else
             // {

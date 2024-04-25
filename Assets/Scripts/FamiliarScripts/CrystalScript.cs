@@ -25,9 +25,9 @@ public class CrystalScript : MonoBehaviour
 
     public void ResetCrystal()
     {
-        gameObject.SetActive(false);
-        transform.position = startPos;
         StartCoroutine(ResetWeave());
+        transform.position = startPos;
+
     }
 
     public IEnumerator ResetWeave()
@@ -35,9 +35,9 @@ public class CrystalScript : MonoBehaviour
         WeaveableManager.Instance.DestroyJoints(weaveController.currentWeaveable.listIndex);
 
         yield return new WaitForSeconds(0.1f);
-
+        gameObject.SetActive(false);
         weaveController.OnDrop();
-
+        InputManagerScript.instance.popUiWeaverCanvas.gameObject.SetActive(false);
         yield break;
     }
 

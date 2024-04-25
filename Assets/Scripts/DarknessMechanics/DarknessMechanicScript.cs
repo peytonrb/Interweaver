@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class DarknessMechanicScript : MonoBehaviour
 {
@@ -18,6 +15,7 @@ public class DarknessMechanicScript : MonoBehaviour
 
     private float lastCount;
     float t = 0;
+    [SerializeField] private GameObject weaverIcon;
 
     [SerializeField] private AnimationCurve shakeCurve;
 
@@ -28,13 +26,16 @@ public class DarknessMechanicScript : MonoBehaviour
 
     public bool disableVignette;
 
+    public Sprite spiderIcon;
+    public Sprite nonSpiderIcon;
+
     void Start()
     {
         if (canKillPlayer)
             isSafe = false;
         else
             isSafe = true;
-
+        weaverIcon.SetActive(false);
         hasInvoked = false;
         countDown = 0f;
         StartCoroutine(DarknessTimer());
@@ -80,6 +81,7 @@ public class DarknessMechanicScript : MonoBehaviour
 
                 CameraMasterScript.instance.ShakeCurrentCamera(shakeIntensity, .2f, 0.1f);
 
+               
             }
 
             yield return null;
@@ -99,6 +101,7 @@ public class DarknessMechanicScript : MonoBehaviour
             StopCoroutine(DarknessTimer());
             hasInvoked = true;
             Debug.Log("player is now safe");
+            weaverIcon.SetActive(false);
         }
 
     }
@@ -112,6 +115,15 @@ public class DarknessMechanicScript : MonoBehaviour
             {
                 StartCoroutine(DarknessTimer());
                 hasInvoked = false;
+                if (SceneHandler.instance.arachnophobiaState)
+                {
+                    weaverIcon.GetComponent<Image>().sprite = nonSpiderIcon;
+                }
+                else
+                {
+                    weaverIcon.GetComponent<Image>().sprite = spiderIcon;
+                }
+                weaverIcon.SetActive(true);
                 Debug.Log("player is now not safe");
             }
         }
@@ -142,7 +154,7 @@ public class DarknessMechanicScript : MonoBehaviour
 
                     lastCount = countDown;
                     t = 0;
-
+                    weaverIcon.SetActive(false);
                     StopCoroutine(DarknessTimer());
                 }
             }
@@ -162,7 +174,7 @@ public class DarknessMechanicScript : MonoBehaviour
 
                     lastCount = countDown;
                     t = 0;
-
+                    weaverIcon.SetActive(false);
                     StopCoroutine(DarknessTimer());
                 }
             }
@@ -174,7 +186,7 @@ public class DarknessMechanicScript : MonoBehaviour
 
                 lastCount = countDown;
                 t = 0;
-
+                weaverIcon.SetActive(false);
                 StopCoroutine(DarknessTimer());
             }
         }

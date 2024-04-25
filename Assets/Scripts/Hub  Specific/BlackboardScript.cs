@@ -26,17 +26,34 @@ public class BlackboardScript : MonoBehaviour
     private int lostSoulTotalSepultus;
     public bool DebugLoadAnyLevel = true;
 
+    [Header("LevelButtons")]
+    [SerializeField] private GameObject alpineButton;
+    [SerializeField] private GameObject cavernButton;
+    [SerializeField] private GameObject sepultusButton;
+
+    [Header("VFX")]
+    [SerializeField] private GameObject portalVFX;
+    [SerializeField] private GameObject player;
+    private GameObject activeVFX;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip portalSpawning;
+    [SerializeField] private AudioClip portalSustain;
+    [SerializeField] private AudioClip portalEnd;
+    private AudioSource portalSustainSource;
+
     // Start is called before the first frame update
     void Start()
     {
         acc = GetComponent<AnimaticCutsceneController>();
         vcc = GetComponent<VideoCutsceneController>();
 
-        interactableUI.SetActive(false);
+        //interactableUI.SetActive(false);
         pressEToExit.gameObject.SetActive(false);
         blackboardCamera.Priority = 0;
         onBlackboard = false;
         levelsCompleted = PlayerData.instance.GetLevelsCompleted();
+        Debug.Log("levels completed is " + levelsCompleted);
         lostSoulTotalAlpine = PlayerData.instance.GetAlpineLostSoulCount();
         lostSoulTotalCavern = PlayerData.instance.GetCavernLostSoulCount();
         lostSoulTotalSepultus = PlayerData.instance.GetSepultusLostSoulCount();
@@ -49,6 +66,40 @@ public class BlackboardScript : MonoBehaviour
         lostSoulCountCavern.gameObject.SetActive(false);
         lostSoulCountSepultus.gameObject.SetActive(false);
         popupUIPrompt.SetActive(false);
+
+        portalSustainSource = null;
+
+        switch (levelsCompleted)
+        {
+            case 0:
+                {
+                    alpineButton.SetActive(true);
+                    cavernButton.SetActive(false);
+                    sepultusButton.SetActive(false);
+                    break;
+                }
+            case 1: 
+                {
+                    alpineButton.SetActive(true);
+                    cavernButton.SetActive(true);
+                    sepultusButton.SetActive(false);
+                    break;
+                }
+            case 2:
+                {
+                    alpineButton.SetActive(true);
+                    cavernButton.SetActive(true);
+                    sepultusButton.SetActive(true);
+                    break;
+                }
+            case 3:
+                {
+                    alpineButton.SetActive(true);
+                    cavernButton.SetActive(true);
+                    sepultusButton.SetActive(true);
+                    break;
+                }
+        }
     }
 
     void OnTriggerEnter(Collider other) {
@@ -57,8 +108,8 @@ public class BlackboardScript : MonoBehaviour
 
             popupUIPrompt.SetActive(true);
 
-            popupUIPrompt.gameObject.transform.GetComponent<TMP_Text>().SetText("<sprite name=" + weaverNPCInteraction + ">"
-                        + " Interact");
+            popupUIPrompt.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().SetText("<sprite name=" + weaverNPCInteraction + ">"
+                         + " ...");
         }
     }
 
@@ -70,25 +121,54 @@ public class BlackboardScript : MonoBehaviour
 
     public void GoToFromBlackboard(MovementScript movementScript) {
         if (onBlackboard == false) {
-            movementScript.ToggleCanLook(false);
-            movementScript.ToggleCanMove(false);
-            blackboardCamera.Priority = 2;
-            StartCoroutine(WaitForBlendToFinish());
-            if (popupUIPrompt.activeSelf) {
-                popupUIPrompt.SetActive(false);
-            }
-            InputManagerScript.instance.isOnBlackboard = true;
-            onBlackboard = true;
+            GameObject vfx = Instantiate(portalVFX, new Vector3(player.transform.position.x, player.transform.position.y - 1f, player.transform.position.z), Quaternion.identity);
+            vfx.GetComponent<PortalVFXController>().isActive = true;
+            activeVFX = vfx;
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, portalSpawning, 1f);
+            StartCoroutine(PlayDelayedPortalSound());
+            StartCoroutine(OpenBlackboard(movementScript));
+            
         }
         else {
-            interactableUI.SetActive(false);
+            activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
+            //interactableUI.SetActive(false);
             pressEToExit.gameObject.SetActive(false);
             movementScript.ToggleCanLook(true);
             movementScript.ToggleCanMove(true);
             blackboardCamera.Priority = 0;
             InputManagerScript.instance.isOnBlackboard = false;
             onBlackboard = false;
+            portalSustainSource = AudioManager.instance.KillAudioSource(portalSustainSource);
+            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, portalEnd, 1f);
+            if (!InputManagerScript.instance.isGamepad)
+            {
+                Cursor.visible = false;
+            }
         }
+    }
+
+        IEnumerator PlayDelayedPortalSound()
+            {
+                yield return new WaitForSeconds(2.596f); 
+                portalSustainSource = AudioManager.instance.AddSFX(portalSustain, true, portalSustainSource);
+            }
+
+    IEnumerator OpenBlackboard(MovementScript movementScript)
+    {
+        yield return new WaitForSeconds(0.75f);
+        movementScript.ToggleCanLook(false);
+        movementScript.ToggleCanMove(false);
+        if (!InputManagerScript.instance.isGamepad)
+        {
+            Cursor.visible = true;
+        }
+        blackboardCamera.Priority = 2;
+        StartCoroutine(WaitForBlendToFinish());
+        if (popupUIPrompt.activeSelf) {
+            popupUIPrompt.SetActive(false);
+        }
+        InputManagerScript.instance.isOnBlackboard = true;
+        onBlackboard = true;
     }
 
     /// <summary>
@@ -102,31 +182,47 @@ public class BlackboardScript : MonoBehaviour
                 case 0:
                     //GO TO ALPINE
                     if (levelNumber <= levelsCompleted) {
-                        acc.ChangeCutscene(1);
-                        vcc.ChangeCutscene(1);
-                        SceneHandler.instance.LoadLevel("AnimaticCutscenes");
+                        activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
+                        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, portalEnd, 1f);
+                        portalSustainSource = AudioManager.instance.KillAudioSource(portalSustainSource);
+                        blackboardCamera.Priority = 0;
+                        StartCoroutine(CutsceneLoader(1));
                     }
                 break;
                 case 1:
                     //GO TO CAVERN
                     if (levelNumber <= levelsCompleted || DebugLoadAnyLevel) {
-                        acc.ChangeCutscene(3);
-                        vcc.ChangeCutscene(3);
-                        SceneHandler.instance.LoadLevel("AnimaticCutscenes");
+                        activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
+                        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, portalEnd, 1f);
+                        portalSustainSource = AudioManager.instance.KillAudioSource(portalSustainSource);
+                        blackboardCamera.Priority = 0;
+                        StartCoroutine(CutsceneLoader(3));
                     }
                 break;
 
                  case 2:
                     //GO TO SEPULTUS
                     if (levelNumber <= levelsCompleted || DebugLoadAnyLevel) {
-                        acc.ChangeCutscene(5);
-                        vcc.ChangeCutscene(5);
-                        SceneHandler.instance.LoadLevel("AnimaticCutscenes");
+                        activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
+                        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, portalEnd, 1f);
+                        portalSustainSource = AudioManager.instance.KillAudioSource(portalSustainSource);
+                        blackboardCamera.Priority = 0;
+                        StartCoroutine(CutsceneLoader(5));
                     }
                 break;
             }
         }
         
+    }
+
+    IEnumerator CutsceneLoader(int index)
+    {
+        yield return new WaitForSeconds(0.75f);
+        player.GetComponent<DarknessMechanicScript>().enabled = true;
+        yield return new WaitForSeconds(1.25f);
+        acc.ChangeCutscene(index);
+        vcc.ChangeCutscene(index);
+        SceneHandler.instance.LoadLevel("AnimaticCutscenes");
     }
 
     IEnumerator WaitForBlendToFinish() {

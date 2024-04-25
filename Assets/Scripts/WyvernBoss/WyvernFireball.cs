@@ -31,14 +31,16 @@ public class WyvernFireball : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioClip fireballSound;
+    private AudioSource fireballSource;
 
     // Start is called before the first frame update
     void Start()
     {
+        fireballSource = null;
         weaver = GameObject.FindGameObjectWithTag("Player");
         familiar = GameObject.FindGameObjectWithTag("Familiar");
         wyvern = GameObject.FindGameObjectWithTag("Boss");
-        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, fireballSound, 1f);
+        fireballSource = AudioManager.instance.AddSFX(fireballSound, false, fireballSource);
         wyvernBossManager = wyvern.GetComponent<WyvernBossManager>();
         phaseTriggerManager = wyvernBossManager.wyvernTriggerManager;
         wptm = phaseTriggerManager.GetComponent<WyvernPhaseTriggerManager>();
@@ -63,7 +65,7 @@ public class WyvernFireball : MonoBehaviour
         if (familiarscript.myTurn)
         {
             HomingMissile();
-            if (transform.position.magnitude > 1000)
+            if (Vector3.Distance(wyvernBossManager.transform.position, transform.position) > 500f)
             {
                 isDoomed = true;
                 isDoomedPosition = new Vector3(this.transform.position.x, this.transform.position.y - 1f, this.transform.position.z);
@@ -75,7 +77,7 @@ public class WyvernFireball : MonoBehaviour
             if (weaveable.isBeingWoven == false)
             {
                 HomingMissile();
-                if (transform.position.magnitude > 1000)
+                if (Vector3.Distance(wyvernBossManager.transform.position, transform.position) > 500f)
                 {
                     isDoomed = true;
                     isDoomedPosition = new Vector3(this.transform.position.x, this.transform.position.y - 1f, this.transform.position.z);

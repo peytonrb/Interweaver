@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.VFX;
+using UnityEngine.SceneManagement;
 
 public class NetProjectileScript : MonoBehaviour
 {
@@ -33,6 +34,8 @@ public class NetProjectileScript : MonoBehaviour
         MSF = GameObject.FindWithTag("Familiar").GetComponent<MovementScript>();
 
         decayingLifeTime = lifetime;
+
+        Physics.IgnoreLayerCollision(8,21);
     }
 
     private void Update()
@@ -57,6 +60,13 @@ public class NetProjectileScript : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             other.GetComponent<MovementScript>().GoToCheckPoint();
+
+            if (GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>().WeaverCheckPointNum == 1 && SceneManager.GetActiveScene().name == "AlpineCombined")
+            {
+                RespawnController rc = GameObject.FindWithTag("ShieldPuzzleRespawnController").GetComponent<RespawnController>();
+                rc.CheckAndRespawnShieldPuzzleWeaveables();
+            }
+
             Destroy(clone.gameObject, 1f);
             gameObject.SetActive(false);
             decayingLifeTime = lifetime;

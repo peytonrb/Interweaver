@@ -16,13 +16,18 @@ public class OwlDiveScript : MonoBehaviour
     public bool divePressed; // defines the initial press of the dive
 
     [Header("Variables")]
-    [SerializeField][Range(-40, -3)]private float diveAcceleration = -20f;
-    [SerializeField][Range(-50, -25)]private float terminalVelocity = -30f;
-    [SerializeField][Range(0f, 20f)]private float aerialAcceleration = 4f;
-    [SerializeField][Range(0f, 30f)]private float aerialDeceleration = 2f;
+    [SerializeField][Range(-40, -3)] private float diveAcceleration = -20f;
+    [SerializeField][Range(-50, -25)] private float terminalVelocity = -30f;
+    [SerializeField][Range(0f, 20f)] private float aerialAcceleration = 4f;
+    [SerializeField][Range(0f, 30f)] private float aerialDeceleration = 2f;
     [HideInInspector] public bool isDiving;
     private bool onCooldown = false;
     public AudioClip islandBreakFile;
+
+    [Header("VFX")]
+    public GameObject groundMarker;
+    private GameObject marker;
+    private bool started = false;
 
     void Awake()
     {
@@ -39,11 +44,49 @@ public class OwlDiveScript : MonoBehaviour
         {
             EndDive();
         }
+
+        if (!characterController.isGrounded && !started)
+        {
+            StartCoroutine(ShowGroundMarker());
+            started = true;
+        }
+    }
+
+    IEnumerator ShowGroundMarker()
+    {
+        bool hasSpawned = false;
+        Vector3 groundLocation;
+        RaycastHit hit;
+        
+        while (!characterController.isGrounded)
+        {
+            Physics.SphereCast(transform.position + characterController.center, 1f, Vector3.down, out hit);
+            if (hit.collider != null)
+            {
+                groundLocation = hit.point;
+
+                if (!hasSpawned)
+                {
+                    Debug.Log("location: " + groundLocation);
+                    marker = Instantiate(groundMarker, groundLocation, Quaternion.identity);
+                    hasSpawned = true;
+                }
+                
+                marker.transform.position = groundLocation;
+            }
+
+            yield return null;
+        }
+
+        Destroy(marker);
+        marker = null;
+        started = false;
     }
 
     public void DivePressed()
     {
-        if (!characterController.isGrounded) {
+        if (!characterController.isGrounded)
+        {
 
             if (!isDiving)
             {
@@ -64,7 +107,7 @@ public class OwlDiveScript : MonoBehaviour
         {
             characterAnimationHandler.ToggleDiveAnim(false);
             EndDive();
-        } 
+        }
     }
 
     public void StartDiveCooldown(float duration)
@@ -93,8 +136,8 @@ public class OwlDiveScript : MonoBehaviour
         yield return new WaitForFixedUpdate();
 
         //movementScript.ChangeGravity(200);
-        movementScript.ChangeVelocity(new Vector3 (movementScript.GetVelocity().x, 20f, movementScript.GetVelocity().z));
-        
+        movementScript.ChangeVelocity(new Vector3(movementScript.GetVelocity().x, 20f, movementScript.GetVelocity().z));
+
         yield return new WaitForSeconds(duration);
 
         movementScript.ChangeGravity(-50);
@@ -104,9 +147,9 @@ public class OwlDiveScript : MonoBehaviour
         movementScript.ResetGravity();
 
         yield return new WaitForSeconds(2f);
-        
+
         onCooldown = false;
-        
+
         yield break;
     }
 
@@ -128,7 +171,7 @@ public class OwlDiveScript : MonoBehaviour
             if (isDiving)
             {
                 Bounce();
-                
+
                 if (collision.gameObject.TryGetComponent(out IDamageable damageObject))
                 {
                     damageObject.Damage();

@@ -30,6 +30,8 @@ public class BlueprintScript : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioClip buildSound;
 
+
+    public GameObject stagIndic;
     void Start()
     {
         foreach(GameObject dummyCraftingResult in dummyCraftingResults)
@@ -92,5 +94,6 @@ public class BlueprintScript : MonoBehaviour
         ParticleSystem guh = grunk.GetComponent<ParticleSystem>();
         guh.Play();
         craftingResult.SetActive(true); // make crafted object visible
+        stagIndic.SetActive(true);
     }
 }

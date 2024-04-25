@@ -21,6 +21,10 @@ public class LostSoulManager : MonoBehaviour
     [Header("FOR TESTING PURPOSES ONLY - DO NOT TOUCH")]
     [HideInInspector] public GameObject[] lostSouls;
     [SerializeField] private List<GameObject> lostSoulsList = new List<GameObject>();
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip lostSoulGetSound;
+    private AudioSource lostSoulGetSource;
     
     void Start()
     {
@@ -36,6 +40,8 @@ public class LostSoulManager : MonoBehaviour
             
             lostSoulsList.Insert(soulController.soulID, lostSouls[i]);
         }
+
+        lostSoulGetSource = null;
 
     }
 
@@ -103,6 +109,7 @@ public class LostSoulManager : MonoBehaviour
         {
             alreadyCollidedWith.Add(hit.gameObject);
             animator.SetBool("isOpen", true);
+            lostSoulGetSource = AudioManager.instance.AddSFX(lostSoulGetSound, false, lostSoulGetSource);
 
             // lost soul dialogue -- add lil open animation
             isSpeaking = true;

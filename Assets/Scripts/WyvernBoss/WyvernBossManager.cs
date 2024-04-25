@@ -15,9 +15,13 @@ public class WyvernBossManager : MonoBehaviour
     public int phases; //0 = no phase, 1 = fireball, 2 = magic circle, 3 = flamethrower, 4 = flee
     [HideInInspector] public int startingPhase;
     private bool moveToNextRoom; //If moving to next room
+    public bool isDoingHurtTransition; // bool to determine if wyvern has been hurt and is doing his animation
     private int currentRoom; //Gets current room
     [SerializeField] private Transform[] roomDestinations; //Room destinations that the boss moves towards when changing rooms
     private bool gotDestination;
+    
+    [Header("Debug Funsies")]
+    [SerializeField] private bool killWithLKey;
 
     [Header("Fireballs")]
     public GameObject fireball;
@@ -72,6 +76,10 @@ public class WyvernBossManager : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioClip wyvernHurtSound;
+
+    [Header("Animation")]
+    [SerializeField] private CharacterAnimationHandler characterAnimationHandler;
+    [SerializeField] private Transform wyvernMouthTransform;
 
     // Start is called before the first frame update
     void Start()
@@ -136,6 +144,11 @@ public class WyvernBossManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (killWithLKey && Input.GetKeyDown(KeyCode.L))
+        {
+            HurtWyvern();
+        }
+
         if (moveToNextRoom == false) {
             if (familiarScript.myTurn) {
                 if (windup == false) {
@@ -206,6 +219,8 @@ public class WyvernBossManager : MonoBehaviour
                 case 3:
                     if (!blowFire) {
                         if (windup == true) {
+                            characterAnimationHandler.ToggleFlamethrowerAnim(true);
+                            characterAnimationHandler.ToggleFireballAnim();
                             WindingUp();
                         }
                         else {
@@ -266,13 +281,15 @@ public class WyvernBossManager : MonoBehaviour
     /// <param name="currentroom"></param>
     void ChangeRooms(int currentroom) {
         int newroom = currentroom + 1;
-        if (newroom <= roomDestinations.Length) {
-            Vector3 newdestination = new Vector3(roomDestinations[newroom].transform.position.x, transform.position.y, roomDestinations[newroom].transform.position.z);
-            transform.position = newdestination;
+        if (newroom < roomDestinations.Length - 1) {
+            //Vector3 newdestination = new Vector3(roomDestinations[newroom].transform.position.x, transform.position.y, roomDestinations[newroom].transform.position.z);
+            transform.position = roomDestinations[newroom].transform.position;
             currentRoom = newroom;
         }
         else {
+            Debug.Log("LEVEL BEAT!!");
             ect.StartCutscene();
+            
             //SceneHandler.instance.LoadLevel("AnimaticCutscenes");
         }
         gotDestination = true;
@@ -280,14 +297,23 @@ public class WyvernBossManager : MonoBehaviour
 
     void ThrowFireball() {
         if (fireballAmount > 0) {
-            Instantiate(fireball,transform.position,Quaternion.identity);
+            //Instantiate(fireball,wyvernMouthTransform.position,Quaternion.identity);
+            characterAnimationHandler.ToggleFireballAnim();
             fireballAmount -= 1;
         }
         else {
             reseting = true;
             fireballAmount = startingFireballAmount;
         }
-        
+    }
+
+    public void InstantiateFireball()
+    {
+        if (blowFire || windup) 
+        {
+            return;
+        }
+        Instantiate(fireball,wyvernMouthTransform.position,Quaternion.identity);
     }
 
     void SpawnMagicCircle() {
@@ -362,6 +388,12 @@ public class WyvernBossManager : MonoBehaviour
             //WyvernFlamethrower wyvernFlamethrower = GetComponentInChildren<WyvernFlamethrower>();
             //wyvernFlamethrower.KillThyself();
             flamethrower.GetComponent<FlamethrowerController>().isActive = false;
+            if (familiarScript.myTurn) {
+                transform.LookAt(new Vector3(stag.transform.position.x,transform.position.y,stag.transform.position.z));
+            }
+            else {
+                transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
+            }
         }
     }
 
@@ -370,6 +402,7 @@ public class WyvernBossManager : MonoBehaviour
         windupTimer = startingWindupTimer;
         blowFireTimer = startingBlowFireTimer;
         blowFire = false;
+        characterAnimationHandler.ToggleFlamethrowerAnim(blowFire);
         windup = false;
         reseting = true;
     }
@@ -433,6 +466,7 @@ public class WyvernBossManager : MonoBehaviour
         else {
             familiarCurrentPhase = newphase;
         }
+
         switch (previousphase) {
             case 1:
                 fireballAmount = startingFireballAmount;
@@ -450,6 +484,12 @@ public class WyvernBossManager : MonoBehaviour
                 if (flamethrower.GetComponent<FlamethrowerController>().isActive)
                 {
                     flamethrower.GetComponent<FlamethrowerController>().isActive = false;
+                }
+                if (isWeaversTurn == false) {
+                    transform.LookAt(new Vector3(stag.transform.position.x,transform.position.y,stag.transform.position.z));
+                }
+                else {
+                    transform.LookAt(new Vector3(weaver.transform.position.x,transform.position.y,weaver.transform.position.z));
                 }
 
                 ResetPhase3();
@@ -559,9 +599,16 @@ public class WyvernBossManager : MonoBehaviour
                 ResetPhase3();
             break;
         }
-        ActivateOnHurt(); 
+        characterAnimationHandler.ToggleHurtAnim();
+        isDoingHurtTransition = true;
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, wyvernHurtSound, 1f);
+    }
+
+    public void Perish() // gets called from SyncedWyvernScript after its hurt and fly animations have played
+    {
+        ActivateOnHurt(); 
         moveToNextRoom = true;
+        isDoingHurtTransition = false;
         Debug.Log("Wyvern is hurt! Ouch!");
     }
 
@@ -570,7 +617,7 @@ public class WyvernBossManager : MonoBehaviour
     /// </summary>
     /// <param name="room"></param>
     void ActivateOnHurt() {
-        if (onHurtWyvern[currentRoom] != null) {
+        if (currentRoom < onHurtWyvern.Length) {
             onHurtWyvern[currentRoom].Invoke();
         }
     }
@@ -627,7 +674,7 @@ public class WyvernBossManager : MonoBehaviour
     void OnCollisionEnter(Collision other) {
         if (other.gameObject.CompareTag("Player")) {
             PlayerControllerNew player = other.gameObject.GetComponent<PlayerControllerNew>();
-            if (player != null) {
+            if (player != null && !isDoingHurtTransition) {
                 player.Death();
             }
         }

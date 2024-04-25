@@ -32,10 +32,12 @@ public class DoorScript : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioClip doorOpenSound;
+    private AudioSource doorOpenSource;
 
     void Start()
     {
         originalPosition = transform.position;
+        doorOpenSource = null;
     }
 
     void Update()
@@ -217,7 +219,7 @@ public class DoorScript : MonoBehaviour
             if (pressurePlates != null && !pplateTriggered && !doorIsOpen)
             {
                 StartCoroutine(OpenDoor());
-                 AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, doorOpenSound, 1f);
+                doorOpenSource = AudioManager.instance.AddSFX(doorOpenSound, true, doorOpenSource);
                 pplateTriggered = true;
             }
             else if (pressurePlates == null && !doorIsOpen)
@@ -262,6 +264,7 @@ public class DoorScript : MonoBehaviour
     {
         if (distance >= 0.3f)
         {
+            Debug.Log("Open Door Called");
             yield return new WaitForEndOfFrame();
             transform.position = Vector3.MoveTowards(transform.position, targetPoint, doorSpeed * Time.deltaTime);
             distance = Vector3.Distance(transform.position, targetPoint);
@@ -281,6 +284,7 @@ public class DoorScript : MonoBehaviour
             //when its fully open
             doorOpening = false;
             doorIsOpen = true;
+            doorOpenSource = AudioManager.instance.KillAudioSource(doorOpenSource);
         }
 
         yield break;
@@ -298,6 +302,7 @@ public class DoorScript : MonoBehaviour
 
         if (distance >= 0.3f)
         {
+            Debug.Log("MoveBack Called");
             yield return new WaitForEndOfFrame();
             doorClosing = true;
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, doorSpeed * Time.deltaTime);
@@ -310,6 +315,7 @@ public class DoorScript : MonoBehaviour
             //when its fully closed
             doorClosing = false;
             doorIsOpen = false;
+            doorOpenSource = AudioManager.instance.KillAudioSource(doorOpenSource);
             distance = -1;
         }
 

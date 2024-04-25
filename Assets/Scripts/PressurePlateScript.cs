@@ -16,28 +16,35 @@ public class PressurePlateScript : MonoBehaviour
     private float toptargetposition;
     public bool activatedByWeaveable = false;
     public UnityEvent pressEvent;
-
+    private Vector3 initialLocalPos;
     [Header("VFX")]
     public GameObject[] wires;
     public Material activeMat;
     public Material defaultMat;
-    private VisualEffect wireVFX;
+    [SerializeField] private VisualEffect wireVFX;
+    private ParticleSystem activatePS;
 
     [Header("Audio")]
     [SerializeField] private AudioClip pressurePlateSound;
+    private AudioSource pressurePlateSource;
 
     void Start() {
-        bottomtargetposition = transform.position.y - 0.2f;
-        toptargetposition = transform.position.y;
+        bottomtargetposition = transform.localPosition.y - 0.2f;
+        toptargetposition = transform.localPosition.y;
+
+        initialLocalPos = transform.localPosition;
+
         bottomedOut = false;
         toppedOut = true;
         activated = false;
-
-        if (this.transform.childCount > 0 && this.transform.GetChild(0) != null)
-            wireVFX = this.transform.GetChild(0).GetComponent<VisualEffect>();
         
         if (wireVFX != null)
             wireVFX.gameObject.SetActive(false);
+        
+        activatePS = this.transform.GetChild(0).GetComponent<ParticleSystem>();
+        activatePS.gameObject.SetActive(false);
+
+        pressurePlateSource = null;
     }
 
     void Update() {
@@ -60,13 +67,13 @@ public class PressurePlateScript : MonoBehaviour
         if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Familiar"))
         {
             standingOnPlate = true;
-            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, pressurePlateSound, 1f);
+            pressurePlateSource = AudioManager.instance.AddSFX(pressurePlateSound, false, pressurePlateSource);
         }
 
         if (activatedByWeaveable && other.gameObject.CompareTag("Weaveable"))
         {
             standingOnPlate = true;
-            AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, pressurePlateSound, 1f);
+            pressurePlateSource = AudioManager.instance.AddSFX(pressurePlateSound, false, pressurePlateSource);
         }
     }
 
@@ -74,20 +81,26 @@ public class PressurePlateScript : MonoBehaviour
         if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Familiar")) 
         {
             standingOnPlate = false;
+            activatePS.Stop();
+            activatePS.gameObject.SetActive(false);
         }
 
         if (activatedByWeaveable && other.gameObject.CompareTag("Weaveable"))
         {
             standingOnPlate = false;
+            activatePS.Stop();
+            activatePS.gameObject.SetActive(false);
         }
     }
 
     void PushPlate() {
-        if (transform.position.y > bottomtargetposition) {
-            float newposition = Mathf.MoveTowards(transform.position.y, bottomtargetposition, weight * Time.deltaTime);
-            transform.position = new Vector3(transform.position.x, newposition, transform.position.z);
+        if (transform.localPosition.y > bottomtargetposition) {
+            float newposition = Mathf.MoveTowards(transform.localPosition.y, bottomtargetposition, weight * Time.deltaTime);
+            transform.localPosition = new Vector3(transform.localPosition.x, newposition, transform.localPosition.z);
+            Debug.Log(new Vector3(transform.localPosition.x, newposition, transform.localPosition.z));
         }
         else {
+            
             bottomedOut = true;
             activated = true;
         }
@@ -95,18 +108,22 @@ public class PressurePlateScript : MonoBehaviour
     }
 
     void PullPlate() {
-        if (transform.position.y < toptargetposition) {
-            float newposition = Mathf.MoveTowards(transform.position.y, toptargetposition, weight * Time.deltaTime);
-            transform.position = new Vector3(transform.position.x, newposition, transform.position.z);
+        if (transform.localPosition.y < toptargetposition) {
+            float newposition = Mathf.MoveTowards(transform.localPosition.y, toptargetposition, weight * Time.deltaTime);
+            transform.localPosition = new Vector3(transform.localPosition.x, newposition, transform.localPosition.z);
         }
         else {
             toppedOut = true;
+            transform.localPosition = transform.localPosition;
         }
         bottomedOut = false;
         activated = false;
     }
 
     void Activation() {
+        activatePS.gameObject.SetActive(true);
+        activatePS.Play();
+
         if (wires.Length > 0 && wireVFX != null)
         {
             wireVFX.gameObject.SetActive(true);

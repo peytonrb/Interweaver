@@ -48,7 +48,10 @@ public class MoleDigScript : MonoBehaviour
     [SerializeField] private float diggingMovementPitch;
     [SerializeField] private float originalFootstepsPitch;
 
-   
+    [Header("Lights")]
+    [SerializeField] private GameObject headLamp;
+    [SerializeField] private GameObject dirtLight;
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -198,7 +201,9 @@ public class MoleDigScript : MonoBehaviour
     {
         //Debug.Log("we're digging bois");
         startedToDig = true;
-       
+
+        headLamp.SetActive(false);
+        dirtLight.SetActive(true);
 
         coolDown = true;
         MakePillarsDiggable();
@@ -254,6 +259,9 @@ public class MoleDigScript : MonoBehaviour
 
     IEnumerator DiggingOut(float animLength)
     {
+        headLamp.SetActive(true);
+        dirtLight.SetActive(false);
+
         borrowed = false;
         AudioManager.instance.footStepsChannel.Stop();
         movementScript.ZeroCurrentSpeed();

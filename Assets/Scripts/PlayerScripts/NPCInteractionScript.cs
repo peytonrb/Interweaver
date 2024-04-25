@@ -14,7 +14,6 @@ public class NPCInteractionScript : MonoBehaviour
             if (hitCollider.gameObject.tag == "NPC")
             {
                 hitCollider.gameObject.GetComponent<DialogueTriggers>().TriggerDialogue(GetComponent<MovementScript>());
-                Debug.Log("Test");
                 break;
             }
             if (hitCollider.gameObject.tag == "Blackboard") 
@@ -32,6 +31,7 @@ public class NPCInteractionScript : MonoBehaviour
                     bookscript.GoToFromBook(GetComponent<MovementScript>());
                 }
             }
+           
         }
     }
 }

@@ -88,6 +88,7 @@ public class MovementScript : MonoBehaviour
     [Header("DeathVFX")]
     [SerializeField] private VisualEffect deathVFX;
 
+    [SerializeField] private GameObject pentagramVFX;
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -129,18 +130,25 @@ public class MovementScript : MonoBehaviour
 
         if (freezePlayerAtStart)
         {
+            GetComponent<WeaveController>().enabled = false;
             canMove = false;
             canLook = false;
 
-            StartCoroutine(FreezePlayerAtStart());
+            
         }
+    }
+
+    public void UnfreezePlayer()
+    {
+        StartCoroutine(FreezePlayerAtStart());
     }
 
     //Freeze Player at Start
     public IEnumerator FreezePlayerAtStart()
     {
+        pentagramVFX.SetActive(true);
         yield return new WaitForSeconds(freezeTime);
-
+        GetComponent<WeaveController>().enabled = true;
         canMove = true;
         canLook = true;
         yield break;

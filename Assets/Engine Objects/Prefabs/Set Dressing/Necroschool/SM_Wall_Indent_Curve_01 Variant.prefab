@@ -52,16 +52,57 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6048805534980806986, guid: c0cd0e112f7d4634fbc9efd6cf9aa4a6, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: -4160783787440136727, guid: c0cd0e112f7d4634fbc9efd6cf9aa4a6, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 3edf9ac48fb4b3d47b66a13c8fc4ab7a, type: 2}
+      objectReference: {fileID: 2100000, guid: 3dbee1850ccb06342ac70487d522bdad, type: 2}
     - target: {fileID: 919132149155446097, guid: c0cd0e112f7d4634fbc9efd6cf9aa4a6, type: 3}
       propertyPath: m_Name
       value: SM_Wall_Indent_Curve_01 Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c0cd0e112f7d4634fbc9efd6cf9aa4a6, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3161274793577121673, guid: c0cd0e112f7d4634fbc9efd6cf9aa4a6, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -998598223312707096, guid: 9d4fe4e434858c14b8c6cdd92e2592b6, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c0cd0e112f7d4634fbc9efd6cf9aa4a6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5574966084253004683}
   m_SourcePrefab: {fileID: 100100000, guid: c0cd0e112f7d4634fbc9efd6cf9aa4a6, type: 3}
+--- !u!1 &5265402413355263995 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: c0cd0e112f7d4634fbc9efd6cf9aa4a6, type: 3}
+  m_PrefabInstance: {fileID: 5031398508046539434}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &5574966084253004683
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5265402413355263995}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 8.000004, y: 12.002568, z: 2.6198637}
+  m_Center: {x: 0, y: 5.998739, z: -0.61533296}

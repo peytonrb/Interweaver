@@ -31,7 +31,7 @@ Transform:
   m_Children:
   - {fileID: 6901887951866011917}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9121758069783006443
 MonoBehaviour:
@@ -45,9 +45,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e730ffb2b8f8ff841ac30544086c14e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentSceneName: 
+  currentSceneName: Alpine
   sceneLoader: {fileID: 0}
   progressBar: {fileID: 0}
+  arachnophobiaState: 0
+  subtitlesState: 0
+  fullscreenState: 1
+  vysncState: 0
+  masterVolState: 0
+  musicVolState: 0
+  sfxVolState: 0
 --- !u!1001 &4733948500426542412
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59,6 +66,10 @@ PrefabInstance:
     - target: {fileID: 768601330497369157, guid: 0c7e3aa7d5ac6cd4a8a89cd252359945, type: 3}
       propertyPath: m_Name
       value: LoadingScreenCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 768601330497369157, guid: 0c7e3aa7d5ac6cd4a8a89cd252359945, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2196124471032507457, guid: 0c7e3aa7d5ac6cd4a8a89cd252359945, type: 3}
       propertyPath: m_Pivot.x
@@ -144,8 +155,32 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2815732498832887882, guid: 0c7e3aa7d5ac6cd4a8a89cd252359945, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2815732498832887882, guid: 0c7e3aa7d5ac6cd4a8a89cd252359945, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 2815732498832887882, guid: 0c7e3aa7d5ac6cd4a8a89cd252359945, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 5571728840021476968, guid: 0c7e3aa7d5ac6cd4a8a89cd252359945, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6176608767886340402, guid: 0c7e3aa7d5ac6cd4a8a89cd252359945, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6176608767886340402, guid: 0c7e3aa7d5ac6cd4a8a89cd252359945, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 58e5bbe51da485f4896ac652a055f534, type: 3}
+    - target: {fileID: 6176608767886340402, guid: 0c7e3aa7d5ac6cd4a8a89cd252359945, type: 3}
+      propertyPath: m_Color.a
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6821573730970732204, guid: 0c7e3aa7d5ac6cd4a8a89cd252359945, type: 3}
@@ -153,7 +188,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 892917799011502501, guid: 0c7e3aa7d5ac6cd4a8a89cd252359945, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c7e3aa7d5ac6cd4a8a89cd252359945, type: 3}

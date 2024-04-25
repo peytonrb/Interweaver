@@ -45,7 +45,7 @@ public class EndCutsceneTrigger : MonoBehaviour
         PlayerData.instance.SaveGame();
         amc.ChangeCutscene(cutsceneToPlay);
         vcc.ChangeCutscene(cutsceneToPlay);
-        SceneManager.LoadScene("AnimaticCutscenes");
+        SceneHandler.instance.LoadLevel("AnimaticCutscenes");
     }
     
 }

@@ -97,6 +97,13 @@ public class CutsceneInputScript : MonoBehaviour
 
         if (SceneHandler.instance.loadOperation != null) 
         {
+            if (SceneHandler.instance.sceneLoader.activeSelf)
+            {
+                skipCutsceneTextKeyboard.SetActive(false);
+                skipCutsceneTextGamepad.SetActive(false);
+            }
+           
+
             if (SceneHandler.instance.loadOperation.isDone)
             {
                 hasPressedSkip = false;
