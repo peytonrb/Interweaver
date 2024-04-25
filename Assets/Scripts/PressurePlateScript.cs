@@ -16,7 +16,7 @@ public class PressurePlateScript : MonoBehaviour
     private float toptargetposition;
     public bool activatedByWeaveable = false;
     public UnityEvent pressEvent;
-
+    private Vector3 initialLocalPos;
     [Header("VFX")]
     public GameObject[] wires;
     public Material activeMat;
@@ -29,8 +29,11 @@ public class PressurePlateScript : MonoBehaviour
     private AudioSource pressurePlateSource;
 
     void Start() {
-        bottomtargetposition = transform.position.y - 0.2f;
-        toptargetposition = transform.position.y;
+        bottomtargetposition = transform.localPosition.y - 0.2f;
+        toptargetposition = transform.localPosition.y;
+
+        initialLocalPos = transform.localPosition;
+
         bottomedOut = false;
         toppedOut = true;
         activated = false;
@@ -91,11 +94,13 @@ public class PressurePlateScript : MonoBehaviour
     }
 
     void PushPlate() {
-        if (transform.position.y > bottomtargetposition) {
-            float newposition = Mathf.MoveTowards(transform.position.y, bottomtargetposition, weight * Time.deltaTime);
-            transform.position = new Vector3(transform.position.x, newposition, transform.position.z);
+        if (transform.localPosition.y > bottomtargetposition) {
+            float newposition = Mathf.MoveTowards(transform.localPosition.y, bottomtargetposition, weight * Time.deltaTime);
+            transform.localPosition = new Vector3(transform.localPosition.x, newposition, transform.localPosition.z);
+            Debug.Log(new Vector3(transform.localPosition.x, newposition, transform.localPosition.z));
         }
         else {
+            
             bottomedOut = true;
             activated = true;
         }
@@ -103,12 +108,13 @@ public class PressurePlateScript : MonoBehaviour
     }
 
     void PullPlate() {
-        if (transform.position.y < toptargetposition) {
-            float newposition = Mathf.MoveTowards(transform.position.y, toptargetposition, weight * Time.deltaTime);
-            transform.position = new Vector3(transform.position.x, newposition, transform.position.z);
+        if (transform.localPosition.y < toptargetposition) {
+            float newposition = Mathf.MoveTowards(transform.localPosition.y, toptargetposition, weight * Time.deltaTime);
+            transform.localPosition = new Vector3(transform.localPosition.x, newposition, transform.localPosition.z);
         }
         else {
             toppedOut = true;
+            transform.localPosition = transform.localPosition;
         }
         bottomedOut = false;
         activated = false;

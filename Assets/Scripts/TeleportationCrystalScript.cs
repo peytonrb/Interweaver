@@ -24,11 +24,8 @@ public class TeleportationCrystalScript : MonoBehaviour
         //this takes the current object (teleport crystal) and then tells the weaveable object to go to the linked crystal
      other.GetComponent<WeaveableObject>().objectToSnapTo.transform.position = new Vector3(linkedCrystal.transform.position.x,
      linkedCrystal.transform.position.y, linkedCrystal.transform.position.z + 3);
-
-
         //audio here
         StartCoroutine(DisconnectOnTeleport());
-     
     }
 
     public void TeleportToFunction(GameObject other)
