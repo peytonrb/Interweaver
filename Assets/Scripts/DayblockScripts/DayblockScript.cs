@@ -9,7 +9,7 @@ public class DayblockScript : MonoBehaviour
     //Script will act as a trigger for objects in dayblock.
     public int shapeNeeded; //Identifies the shape of the blocks
     public int shapesCombined;
-
+    public Transform correctSpawnLoc;
     public bool gotShape;
 
     public DayblockPuzzleManager dpm;
@@ -41,21 +41,21 @@ public class DayblockScript : MonoBehaviour
                                             CallTheManager(managerCall.correct, weaveScript, 0);
                                             gotShape = true;
                                             other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
-                                            other.transform.position = new Vector3(915, 63, -106);
+                                            other.transform.position = correctSpawnLoc.position;
                                             break;
                                         }
                                     case 1:
                                         {
                                             CallTheManager(managerCall.incorrect, weaveScript, 0);
                                             other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
-                                            other.transform.position = new Vector3(915, 63, -106);
+                                            other.transform.position = dpm.failSpitPoint[1].position;
                                             break;
                                         }
                                     case 2:
                                         {
                                             CallTheManager(managerCall.incorrect, weaveScript, 0);
                                             other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
-                                            other.transform.position = new Vector3(915, 63, -106);
+                                            other.transform.position = dpm.failSpitPoint[1].position;
                                             break;
                                         }
                                 }
@@ -70,7 +70,7 @@ public class DayblockScript : MonoBehaviour
                                         {
                                             CallTheManager(managerCall.incorrect, weaveScript, 1);
                                             other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
-                                            other.transform.position = new Vector3(915, 63, -106);
+                                            other.transform.position = dpm.failSpitPoint[2].position;
                                             break;
                                         }
                                     case 1:
@@ -78,14 +78,14 @@ public class DayblockScript : MonoBehaviour
                                             CallTheManager(managerCall.correct, weaveScript, 1);
                                             gotShape = true;
                                             other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
-                                            other.transform.position = new Vector3(915, 63, -106);
+                                            other.transform.position = correctSpawnLoc.position;
                                             break;
                                         }
                                     case 2:
                                         {
                                             CallTheManager(managerCall.incorrect, weaveScript, 1);
                                             other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
-                                            other.transform.position = new Vector3(915, 63, -106);
+                                            other.transform.position = dpm.failSpitPoint[2].position;
                                             break;
                                         }
                                 }
@@ -100,21 +100,21 @@ public class DayblockScript : MonoBehaviour
                                         {
                                             CallTheManager(managerCall.incorrect, weaveScript, 2);
                                             other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
-                                            other.transform.position = new Vector3(915, 63, -106);
+                                            other.transform.position = dpm.failSpitPoint[3].position;
                                             break;
                                         }
                                     case 1:
                                         {
                                             CallTheManager(managerCall.incorrect, weaveScript, 2);
                                             other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
-                                            other.transform.position = new Vector3(915, 63, -106);
+                                            other.transform.position = dpm.failSpitPoint[3].position;
                                             break;
                                         }
                                     case 2:
                                         {
                                             CallTheManager(managerCall.complete, weaveScript, 2);
                                             other.gameObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
-                                            other.transform.position = new Vector3(915, 63, -106);
+                                            other.transform.position = correctSpawnLoc.position;
                                             break;
                                         }
                                 }
