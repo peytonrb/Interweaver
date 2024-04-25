@@ -15,6 +15,7 @@ public class WyvernBossManager : MonoBehaviour
     public int phases; //0 = no phase, 1 = fireball, 2 = magic circle, 3 = flamethrower, 4 = flee
     [HideInInspector] public int startingPhase;
     private bool moveToNextRoom; //If moving to next room
+    public bool isDoingHurtTransition; // bool to determine if wyvern has been hurt and is doing his animation
     private int currentRoom; //Gets current room
     [SerializeField] private Transform[] roomDestinations; //Room destinations that the boss moves towards when changing rooms
     private bool gotDestination;
@@ -599,6 +600,7 @@ public class WyvernBossManager : MonoBehaviour
             break;
         }
         characterAnimationHandler.ToggleHurtAnim();
+        isDoingHurtTransition = true;
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, wyvernHurtSound, 1f);
     }
 
@@ -606,6 +608,7 @@ public class WyvernBossManager : MonoBehaviour
     {
         ActivateOnHurt(); 
         moveToNextRoom = true;
+        isDoingHurtTransition = false;
         Debug.Log("Wyvern is hurt! Ouch!");
     }
 
@@ -671,7 +674,7 @@ public class WyvernBossManager : MonoBehaviour
     void OnCollisionEnter(Collision other) {
         if (other.gameObject.CompareTag("Player")) {
             PlayerControllerNew player = other.gameObject.GetComponent<PlayerControllerNew>();
-            if (player != null) {
+            if (player != null && !isDoingHurtTransition) {
                 player.Death();
             }
         }
