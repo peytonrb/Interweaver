@@ -78,12 +78,17 @@ public class AudioManager : MonoBehaviour
     public void PlayMusicOnSceneChange(string sceneName)
     {
         StopSound(AudioManagerChannels.MusicChannel);
+        StopSound(AudioManagerChannels.SoundEffectChannel);
+        StopSound(AudioManagerChannels.weaveLoopingChannel);
+        StopSound(AudioManagerChannels.fallLoopChannel);
+        StopSound(AudioManagerChannels.footStepsLoopChannel);
         introMusicSource.Stop(); // teehee
 
         if (0 < soundEffectSources.Count)
         {
             foreach(AudioSource soundEffectSource in soundEffectSources)
             {
+                Debug.Log("I just killed " + soundEffectSource.name + " and it felt good :)");
                 soundEffectSource.Stop();
                 KillAudioSource(soundEffectSource);
             }
