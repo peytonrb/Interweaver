@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -125,9 +126,9 @@ public class BlackboardScript : MonoBehaviour
             vfx.GetComponent<PortalVFXController>().isActive = true;
             activeVFX = vfx;
             AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, portalSpawning, 1f);
+            portalSustainSource = AudioManager.instance.KillAudioSource(portalSustainSource);
             StartCoroutine(PlayDelayedPortalSound());
             StartCoroutine(OpenBlackboard(movementScript));
-            
         }
         else {
             activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
@@ -150,6 +151,10 @@ public class BlackboardScript : MonoBehaviour
         IEnumerator PlayDelayedPortalSound()
             {
                 yield return new WaitForSeconds(2.596f); 
+                if (!onBlackboard)
+                {
+                    yield break;
+                }
                 portalSustainSource = AudioManager.instance.AddSFX(portalSustain, true, portalSustainSource);
             }
 
