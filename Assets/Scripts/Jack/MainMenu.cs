@@ -115,9 +115,10 @@ public class MainMenu : MonoBehaviour
     public void OpenCredits()
     {
         PlayButtonSound();
-        creditsMenu.gameObject.SetActive(true);
         creditsMenu.alpha = 1;
         creditsMenu.blocksRaycasts = true;
+        creditsMenu.gameObject.SetActive(true);
+        ChangeActiveButtons(2);
         defaultCreditsButton.Select();
         CloseMainMenu();
 
@@ -129,8 +130,8 @@ public class MainMenu : MonoBehaviour
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, cancelFile, 1f);
         creditsMenu.alpha = 0;
         creditsMenu.blocksRaycasts = false;
-        creditsMenu.gameObject.SetActive(false);
         EventSystem.current.SetSelectedGameObject(null);
+        creditsMenu.gameObject.SetActive(false);
         OpenMainMenu();
     }
 
@@ -202,13 +203,17 @@ public class MainMenu : MonoBehaviour
     {
         if (input.IsPressed() && eventSystem.currentSelectedGameObject == null)
         {
-            if (!optionsMenu.gameObject.activeInHierarchy)
+            if (optionsMenu.gameObject.activeInHierarchy)
             {
-                ChangeActiveButtons(0);
-            } else {
                 ChangeActiveButtons(1);
             }
-            
+            else if (creditsMenu.gameObject.activeInHierarchy)
+            {
+                ChangeActiveButtons(2);
+            } 
+            else {
+                ChangeActiveButtons(0);
+            }
         }
     }
 }
