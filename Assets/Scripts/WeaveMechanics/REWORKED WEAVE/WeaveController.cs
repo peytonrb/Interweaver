@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 public class WeaveController : MonoBehaviour
 {
@@ -96,6 +97,33 @@ public class WeaveController : MonoBehaviour
         {
             float targetAngle = Mathf.Atan2(lookDir.x, lookDir.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
             targetingArrow.transform.rotation = Quaternion.Euler(0, targetAngle, 0);
+
+            RaycastHit hit;
+            if(Physics.BoxCast(transform.position, transform.localScale * 0.7f,
+                                    targetingArrow.transform.forward, out hit,
+                                    transform.rotation, weaveDistance, weaveableLayerMask))
+            {
+                if (hit.collider.GetComponent<WeaveableObject>() != null)
+                {
+                    if (!hit.collider.GetComponent<WeaveableObject>().materialIsOn && Vector3.Distance(this.transform.position, hit.collider.transform.position) < 20f)
+                    {
+                        Renderer rend = hit.collider.transform.GetChild(0).GetComponent<Renderer>();
+                        Material[] mats = rend.materials;
+                        Material existingMat = mats[0];
+                        Material[] newMats = new Material[2];
+                        newMats[0] = existingMat;
+                        newMats[1] = weaveFXScript.emissiveMat;
+                        rend.materials = newMats;
+                        hit.collider.GetComponent<WeaveableObject>().materialIsOn = true;
+                        isHoveringObject = true;
+                    }
+                }
+            }
+            else
+            {
+                isHoveringObject = false;
+            }
+
             if (isWeaving)
             {
                 targetingArrow.SetActive(false);

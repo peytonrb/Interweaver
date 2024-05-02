@@ -48,7 +48,7 @@ Transform:
   - {fileID: 8424446364716030329}
   - {fileID: 4239651421292664161}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5842488839676496880
 MonoBehaviour:
@@ -75,7 +75,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 576
   weaveFXScript: {fileID: 0}
-  maxCombinedObjects: 4
+  maxCombinedObjects: 2
+  combineRange: 10
   startWeaveClip: {fileID: 8300000, guid: 2119735134b10dc4c83fe5f337405aa5, type: 3}
   weavingLoopClip: {fileID: 8300000, guid: dac3c33ede1950b43af3b2b2cd6fb9f2, type: 3}
   weavingIntroClip: {fileID: 8300000, guid: e863415412e53cb4e92172fbe2a8e524, type: 3}
@@ -85,6 +86,7 @@ MonoBehaviour:
   selectedWeaveable: {fileID: 0}
   lookDirection: {x: 0, y: 0}
   targetSphere: {fileID: 413826511565028155}
+  isHoveringObject: 0
 --- !u!114 &1087018741832568820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,6 +157,7 @@ MonoBehaviour:
   dissolveMat: {fileID: 2100000, guid: 6f71add89b90ccc418119200d1371ae9, type: 2}
   materialHolder: {fileID: 1943273838071094526}
   deathVFX: {fileID: 0}
+  pentagramVFX: {fileID: 0}
 --- !u!114 &2871888646774845234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,6 +284,7 @@ MonoBehaviour:
   deathTime: 5
   isSafe: 0
   canKillPlayer: 1
+  weaverIcon: {fileID: 0}
   shakeCurve:
     serializedVersion: 2
     m_Curve:
@@ -330,6 +334,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   disableVignette: 0
+  spiderIcon: {fileID: 0}
+  nonSpiderIcon: {fileID: 0}
 --- !u!1 &2758525740792125746
 GameObject:
   m_ObjectHideFlags: 0
@@ -5731,7 +5737,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6471388089332486267}
   m_LocalRotation: {x: 0.37783775, y: -0.14655736, z: 0.060706038, w: 0.9121811}
-  m_LocalPosition: {x: 2.0307317, y: 13.538212, z: -10.830569}
+  m_LocalPosition: {x: 3.1065397, y: 13.538212, z: -10.572347}
   m_LocalScale: {x: 0.67691094, y: 0.6769105, z: 0.6769106}
   m_ConstrainProportionsScale: 0
   m_Children:

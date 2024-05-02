@@ -276,7 +276,7 @@ public class DialogueManager : MonoBehaviour
 
                     if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
                     {
-                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press B>");
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press RT>");
                     }
                     else
                     {

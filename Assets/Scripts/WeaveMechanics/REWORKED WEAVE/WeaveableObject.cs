@@ -241,7 +241,7 @@ public class WeaveableObject : MonoBehaviour
                 else
                 {
                     // move object with joystick movement
-                    rb.velocity = rayDirection * 13f;
+                    rb.velocity = rayDirection * 9f;
                 }
 
                 UnfreezeConstraints("position", 'y');
