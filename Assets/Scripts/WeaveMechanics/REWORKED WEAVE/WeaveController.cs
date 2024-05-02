@@ -89,6 +89,8 @@ public class WeaveController : MonoBehaviour
     // <param> the direction that the player is looking in
     public void GamepadTargetingArrow(Vector2 lookDir)
     {
+        targetSphere.gameObject.SetActive(false);
+
         lookDirection = lookDir;
         if (lookDir.magnitude >= 0.1f)
         {

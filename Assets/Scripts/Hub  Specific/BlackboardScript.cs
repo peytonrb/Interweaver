@@ -242,10 +242,10 @@ public class BlackboardScript : MonoBehaviour
             //Changes the text on the exit prompt depending on the control scheme
             PlayerInput playerInput = InputManagerScript.instance.GetComponent<PlayerInput>();
             if (playerInput.currentControlScheme == "Gamepad") {
-                pressEToExit.text = "Press B to Exit";
+                pressEToExit.text = "Press B to Exit \n Press A to Select";
             }
             else {
-                pressEToExit.text = "Press E to Exit";
+                pressEToExit.text = "Press E to Exit \n Click to Select";
             }
         }
         yield break;

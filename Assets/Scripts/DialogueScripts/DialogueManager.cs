@@ -54,6 +54,8 @@ public class DialogueManager : MonoBehaviour
         sentences = new Queue<string>();
         isActive = false;
         moveScript = GameObject.FindWithTag("Player").GetComponent<MovementScript>();
+
+        if (GameObject.FindWithTag("RivalTrigger"))
         rivalTrigger = GameObject.FindWithTag("RivalTrigger").GetComponent<RivalEventTrigger>();
     }
 
