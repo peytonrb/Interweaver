@@ -308,6 +308,16 @@ public class WeaveController : MonoBehaviour
         // toggle off animation here
     }
 
+    public void DelayingWeaveDrop()
+    {
+        StartCoroutine(DelayedWeaveDrop());
+    }
+
+    IEnumerator DelayedWeaveDrop()
+    {
+        yield return new WaitForSeconds(0.1f);
+        OnDrop();
+    }
     // stops all audio if audio is enabled
     IEnumerator EndWeaveAudio()
     {
@@ -316,6 +326,7 @@ public class WeaveController : MonoBehaviour
             AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingOutroClip);
             yield return new WaitForSeconds(.732f);
             AudioManager.instance.StopSound(AudioManagerChannels.weaveLoopingChannel);
+            Debug.Log("this should be called once and kill the weave sound?");
         }
 
         yield break;
