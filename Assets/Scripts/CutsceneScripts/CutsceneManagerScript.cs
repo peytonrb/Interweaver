@@ -253,7 +253,6 @@ public class CutsceneManagerScript : MonoBehaviour
         playerMovementScript.inCutscene = false;
 
         if (skipped == true) {
-            Debug.Log("Skipped = " + skipped);
             isTransitioning = false;
             bpCanvasGroup.alpha = 0;
             cutscenePhase = 0;

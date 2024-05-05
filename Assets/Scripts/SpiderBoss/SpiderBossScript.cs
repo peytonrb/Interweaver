@@ -7,23 +7,19 @@ public class SpiderBossScript : MonoBehaviour
     public GameObject arachnophobiaBoss;
     public GameObject defaultBoss;
     [HideInInspector] public bool arachnophobiaSetting;
-    private int toggleState;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (PlayerPrefs.HasKey("ArachnophobiaToggleState")) {
-            toggleState = PlayerPrefs.GetInt("ArachnophobiaToggleState");
-        }
-        if (toggleState == 0) {
-            arachnophobiaBoss.SetActive(false);
-            defaultBoss.SetActive(true);
-            arachnophobiaSetting = false;   
-        }
-        else {
+        if (SceneHandler.instance.arachnophobiaState) {
             arachnophobiaBoss.SetActive(true);
             defaultBoss.SetActive(false);
             arachnophobiaSetting = true;
+        }
+        else {
+            arachnophobiaBoss.SetActive(false);
+            defaultBoss.SetActive(true);
+            arachnophobiaSetting = false; 
         }
     }
 

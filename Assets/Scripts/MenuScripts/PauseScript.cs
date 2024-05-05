@@ -12,6 +12,8 @@ public class PauseScript : MonoBehaviour
     private Toggle toggle;
     private EventSystem eventSystem;
 
+    [SerializeField] private bool disableOnStart;
+
     [SerializeField] private GameObject optionGroup;
     [SerializeField] private GameObject defaultGroup;
     [SerializeField] private GameObject controlsPanel;
@@ -24,8 +26,6 @@ public class PauseScript : MonoBehaviour
     [SerializeField] private GameObject KeyboardImage;
 
     [SerializeField] private GameObject spiderBoss;
-    [HideInInspector] public bool changeSpiderlings;
-    [HideInInspector] public bool changeSpiderlingsTo; //Changes arachnophobia on the spider (either to true or false).
     [SerializeField] private GameObject subtitlesCanvas;
 
     private bool hasControllerInvoke;
@@ -74,61 +74,6 @@ public class PauseScript : MonoBehaviour
         eventSystem = FindObjectOfType<EventSystem>();
         hasControllerInvoke = false;
 
-
-        if (spiderBoss != null)
-        {
-            // if (PlayerPrefs.HasKey("ArachnophobiaToggleState"))
-            // {
-            //     arachnophobiaInt = PlayerPrefs.GetInt("ArachnophobiaToggleState");
-            // }
-            // else
-            // {
-            //     //Arachnophobia setting stays off by default
-            //     arachnophobiaInt = 0;
-            // }
-
-            // if (arachnophobiaInt == 0)
-            // {
-            //     SpiderBossScript spiderscript = spiderBoss.GetComponent<SpiderBossScript>();
-            //     if (spiderscript != null)
-            //     {
-            //         spiderscript.ToggleArachnophobia(false);
-            //     }
-            //     arachnophobiaToggle.isOn = false;
-            //     arachnophobiaState = false;
-            // }
-            // else
-            // {
-            //     SpiderBossScript spiderscript = spiderBoss.GetComponent<SpiderBossScript>();
-            //     if (spiderscript != null)
-            //     {
-            //         spiderscript.ToggleArachnophobia(true);
-            //     }
-            //     arachnophobiaToggle.isOn = true;
-            //     arachnophobiaState = true;
-            // }
-
-            if (SceneHandler.instance.arachnophobiaState)
-            {
-                SpiderBossScript spiderscript = spiderBoss.GetComponent<SpiderBossScript>();
-                if (spiderscript != null)
-                {
-                    spiderscript.ToggleArachnophobia(true);
-                }
-                arachnophobiaToggle.isOn = true;
-                arachnophobiaState = true;
-            }
-            else
-            {
-                SpiderBossScript spiderscript = spiderBoss.GetComponent<SpiderBossScript>();
-                if (spiderscript != null)
-                {
-                    spiderscript.ToggleArachnophobia(false);
-                }
-                arachnophobiaToggle.isOn = false;
-                arachnophobiaState = false;
-            }
-        }
 
         if (subtitlesCanvas != null)
         {
@@ -282,6 +227,9 @@ public class PauseScript : MonoBehaviour
         musicValueText.text = (musicSlider.value + 80).ToString() + "%";
         sfxValueText.text = (sfxSlider.value + 80).ToString() + "%";
 
+        if (disableOnStart == true) {
+            gameObject.SetActive(false);
+        }
     }
 
     private void Update()
@@ -480,8 +428,10 @@ public class PauseScript : MonoBehaviour
             {
                 SpiderBossScript spiderboss = spiderBoss.GetComponent<SpiderBossScript>();
                 spiderboss.ToggleArachnophobia(false);
-                changeSpiderlings = true;
-                changeSpiderlingsTo = false;
+                SpiderlingScript[] spiderlingScripts = FindObjectsOfType<SpiderlingScript>();
+                foreach (SpiderlingScript ss in spiderlingScripts) {
+                    ss.ToggleArachnophobia(false);
+                }
             }
         }
         else
@@ -492,8 +442,10 @@ public class PauseScript : MonoBehaviour
             {
                 SpiderBossScript spiderboss = spiderBoss.GetComponent<SpiderBossScript>();
                 spiderboss.ToggleArachnophobia(true);
-                changeSpiderlings = true;
-                changeSpiderlingsTo = true;
+                SpiderlingScript[] spiderlingScripts = FindObjectsOfType<SpiderlingScript>();
+                foreach (SpiderlingScript ss in spiderlingScripts) {
+                    ss.ToggleArachnophobia(true);
+                }
             }
         }
     }
