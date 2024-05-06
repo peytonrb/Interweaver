@@ -88,9 +88,17 @@ public class AudioManager : MonoBehaviour
         {
             foreach(AudioSource soundEffectSource in soundEffectSources)
             {
-                Debug.Log("I just killed " + soundEffectSource.name + " and it felt good :)");
-                soundEffectSource.Stop();
-                KillAudioSource(soundEffectSource);
+                if (soundEffectSource == null)
+                {
+                    //Debug.Log("A null source is here, what's up with that?");
+                    soundEffectSources.Remove(soundEffectSource);
+                }
+                else
+                {
+                    //Debug.Log("I just killed " + soundEffectSource.name + " and it felt good :)");
+                    soundEffectSource.Stop();
+                    KillAudioSource(soundEffectSource);
+                }
             }
         }
 

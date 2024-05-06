@@ -56,8 +56,8 @@ public class SceneHandler : MonoBehaviour
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("Level Loaded");
-        Debug.Log(scene.name);
+        //Debug.Log("Level Loaded");
+        //Debug.Log(scene.name);
         //Debug.Log(mode);
 
         currentSceneName = scene.name;
