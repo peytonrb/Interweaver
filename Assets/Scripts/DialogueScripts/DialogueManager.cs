@@ -443,7 +443,7 @@ public class DialogueManager : MonoBehaviour
 
         if (dialogueText.text.Contains('{'))
         {
-            Debug.Log(dialogueText.text.IndexOf('{'));
+            //Debug.Log(dialogueText.text.IndexOf('{'));
 
             InsertIcon(dialogueText.text, dialogueText.text.IndexOf('{'));
         }

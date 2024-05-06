@@ -486,7 +486,7 @@ public class InputManagerScript : MonoBehaviour
                 {
                     DialogueManager.instance.DisplayNextSentence();
                 }
-                Debug.Log("Interacting Familiar");
+                //Debug.Log("Interacting Familiar");
             }
             else
             {
@@ -524,7 +524,7 @@ public class InputManagerScript : MonoBehaviour
                 }
                 
 
-                Debug.Log("Interacting Weaver");
+                //Debug.Log("Interacting Weaver");
             }
         }
     }
