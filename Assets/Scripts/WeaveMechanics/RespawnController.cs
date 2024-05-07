@@ -15,35 +15,50 @@ public class RespawnController : MonoBehaviour
     public List<GameObject> rayList;
     private float timeBeforeCheck = 3;
     private WeaveController player;
+    private FamiliarScript familiar;
+    private const float delay = 2f;
+    private bool hasBeenCheckedOnce;
 
     public void Start()
     {
         rayList = new List<GameObject>();
         player = GameObject.FindWithTag("Player").GetComponent<WeaveController>();
+        familiar = GameObject.FindWithTag("Familiar").GetComponent<FamiliarScript>();
 
-        foreach (GameObject obj in myRespawnables)
-        {
-            startPositions.Add(obj.transform.position);
-            startRotations.Add(obj.transform.rotation);
-        }
+        StartCoroutine(StartDelay());
     }
 
     public void Update()
     {
-        timeBeforeCheck -= Time.deltaTime;
-
-        if (timeBeforeCheck < 0)
+        //Weaveable respawns can only be checked on the weaver's turn
+        if (familiar.myTurn == false) 
         {
-            //Check here
-            CheckAndRespawnWeaveables();
-            timeBeforeCheck = 3;
-        }
+            timeBeforeCheck -= Time.deltaTime;
+
+            if (timeBeforeCheck < 0)
+            {
+                for (int i = 0; i < startPositions.Count; i++) 
+                {
+                    if (myRespawnables[i].transform.position != startPositions[i]) 
+                    {
+                        //This makes sure if multiple respawn weaveables have moved, the controller will only check once per timer delay instead of running it multiple times in one frame.
+                        if (hasBeenCheckedOnce == false) {
+                            //Check here
+                            CheckAndRespawnWeaveables();
+                            hasBeenCheckedOnce = true;
+                        }
+                    }
+                }
+                hasBeenCheckedOnce = false;
+                timeBeforeCheck = 3;
+            }
+        } 
     }
 
     public void CheckAndRespawnWeaveables()
     {
         rayList.Clear();
-        RaycastHit[] hits = Physics.BoxCastAll(transform.position, boxCastHalfExtent, transform.up, transform.rotation, layersToCheck);
+        RaycastHit[] hits = Physics.BoxCastAll(transform.position, boxCastHalfExtent, transform.up, transform.rotation, Mathf.Infinity, layersToCheck);
         rayList = new List<GameObject>(myRespawnables);
 
         //remove elements that are still found in the box
@@ -118,6 +133,18 @@ public class RespawnController : MonoBehaviour
                 RespawnObject(obj);
             }
         }
+    }
+
+    IEnumerator StartDelay() {
+        yield return new WaitForSeconds(delay);
+
+        foreach (GameObject obj in myRespawnables)
+        {
+            startPositions.Add(obj.transform.position);
+            startRotations.Add(obj.transform.rotation);
+        }
+
+        yield break;
     }
 
 
