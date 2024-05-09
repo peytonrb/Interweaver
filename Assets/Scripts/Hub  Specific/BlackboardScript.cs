@@ -142,7 +142,9 @@ public class BlackboardScript : MonoBehaviour
         }
         else
         {
-            activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
+            if (activeVFX != null) {
+                activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
+            }
             //interactableUI.SetActive(false);
             pressEToExit.gameObject.SetActive(false);
             movementScript.ToggleCanLook(true);
