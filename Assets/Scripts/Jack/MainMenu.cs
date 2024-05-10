@@ -178,12 +178,11 @@ public class MainMenu : MonoBehaviour
     {
         if (PlayerData.instance.GetSaveData() == true) {
             PlayerData.instance.NewGame();
+            AnimaticCutsceneController acc = gameObject.GetComponent<AnimaticCutsceneController>();
+            acc.ChangeCutscene(0);
+            VideoCutsceneController vcc = gameObject.GetComponent<VideoCutsceneController>();
+            vcc.ChangeCutscene(0);
         }
-
-        AnimaticCutsceneController acc = gameObject.GetComponent<AnimaticCutsceneController>();
-        acc.ChangeCutscene(0);
-        VideoCutsceneController vcc = gameObject.GetComponent<VideoCutsceneController>();
-        vcc.ChangeCutscene(0);
 
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startFile, 1f);
         SceneHandler.instance.LoadLevel("AnimaticCutscenes");
