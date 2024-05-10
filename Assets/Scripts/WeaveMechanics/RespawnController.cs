@@ -58,17 +58,17 @@ public class RespawnController : MonoBehaviour
     public void CheckAndRespawnWeaveables()
     {
         rayList.Clear();
-        RaycastHit[] hits = Physics.BoxCastAll(transform.position, boxCastHalfExtent, transform.up, transform.rotation, Mathf.Infinity, layersToCheck);
+        RaycastHit[] hits = Physics.BoxCastAll(transform.position, boxCastHalfExtent, transform.up, transform.rotation, layersToCheck);
         rayList = new List<GameObject>(myRespawnables);
 
         //remove elements that are still found in the box
         foreach (RaycastHit hit in hits)
         {
+            //Debug.Log(hit.collider.gameObject);
             foreach (GameObject obj in myRespawnables)
             {
                 if (hit.collider.gameObject == obj)
                 {
-                    //Debug.Log(hit.collider.gameObject);
                     rayList.Remove(hit.collider.gameObject);
                 }
             }
@@ -93,7 +93,6 @@ public class RespawnController : MonoBehaviour
         {
             Debug.Log("object wasn't active");
             return;
-
         }
 
         if (objectToRespawn.TryGetComponent<CrystalScript>(out CrystalScript crystal))

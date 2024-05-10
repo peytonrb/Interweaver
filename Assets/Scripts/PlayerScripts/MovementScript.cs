@@ -610,6 +610,11 @@ public class MovementScript : MonoBehaviour
         yield break;
     }
 
+    public void StartMaterialChange()
+    {
+        StartCoroutine(ChangeMaterialOnDeath());
+    }
+
     public IEnumerator DelayBeforeFallAudio()
     {
         yield return new WaitForSeconds(3);
