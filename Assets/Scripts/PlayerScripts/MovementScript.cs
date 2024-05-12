@@ -14,9 +14,9 @@ public class MovementScript : MonoBehaviour
 
     [Header("Movement Variables")]
     public bool canLook = true;
-    [field: SerializeField] public bool canMove {get;  private set;} = true; 
+    [field: SerializeField] public bool canMove { get; private set; } = true;
     public float speed; //Base walk speed for player
-    [HideInInspector] public float currentSpeed {get;  private set;} // the current speed for the player
+    [HideInInspector] public float currentSpeed { get; private set; } // the current speed for the player
     private bool turning;
     [HideInInspector] public bool freeMove; // bases movement off input rather than direction 
     private CharacterController characterController; //references the character controller component  
@@ -103,10 +103,10 @@ public class MovementScript : MonoBehaviour
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControllerNew>();
         familiarScript = GameObject.FindGameObjectWithTag("Familiar").GetComponent<FamiliarScript>();
-        pause = playerController.pauseMenu;        
+        pause = playerController.pauseMenu;
 
         isInTutorial = true; //this is the the funny boolean for being in tutorial
-       originalGroundAcceleration = groundAcceleration;
+        originalGroundAcceleration = groundAcceleration;
         originalGroundDeceleration = groundDeceleration;
         originalTimeToTurn = timeToTurn;
         originalGravity = gravity; // get original gravity of controller
@@ -134,7 +134,7 @@ public class MovementScript : MonoBehaviour
             canMove = false;
             canLook = false;
 
-            
+
         }
     }
 
@@ -153,7 +153,7 @@ public class MovementScript : MonoBehaviour
         canLook = true;
         yield break;
     }
-    
+
     // Update is called once per frame
     void Update()
     {
@@ -169,36 +169,43 @@ public class MovementScript : MonoBehaviour
                     LookAndMove();
 
                     //Skipping checkpoints only allowed when debug mode is on
-                    if (debugisOn) {
-                        if (Input.GetKeyDown(KeyCode.LeftBracket)) {
+                    if (debugisOn)
+                    {
+                        if (Input.GetKeyDown(KeyCode.LeftBracket))
+                        {
                             GM.GoToPreviousCheckpoint();
                         }
 
-                        if (Input.GetKeyDown(KeyCode.RightBracket)) {
+                        if (Input.GetKeyDown(KeyCode.RightBracket))
+                        {
                             GM.GoToNextCheckpoint();
                         }
 
                         //Go forward one scene
-                        if (Input.GetKeyDown(KeyCode.Equals)) {
-                            switch (SceneHandler.instance.currentSceneName) {
+                        if (Input.GetKeyDown(KeyCode.Equals))
+                        {
+                            switch (SceneHandler.instance.currentSceneName)
+                            {
                                 case "AlpineCombined":
                                     SceneHandler.instance.LoadLevel("Cavern");
-                                break;
+                                    break;
                                 case "Cavern":
                                     SceneHandler.instance.LoadLevel("Menu");
-                                break;
+                                    break;
                             }
                         }
 
                         //Go backwards one scene
-                        if (Input.GetKeyDown(KeyCode.Minus)) {
-                            switch (SceneHandler.instance.currentSceneName) {
+                        if (Input.GetKeyDown(KeyCode.Minus))
+                        {
+                            switch (SceneHandler.instance.currentSceneName)
+                            {
                                 case "AlpineCombined":
                                     SceneHandler.instance.LoadLevel("Menu");
-                                break;
+                                    break;
                                 case "Cavern":
                                     SceneHandler.instance.LoadLevel("AlpineCombined");
-                                break;
+                                    break;
                             }
                         }
                     }
@@ -256,22 +263,29 @@ public class MovementScript : MonoBehaviour
 
     }
 
-    public void ToggleCanLook(bool look) {
-        if (familiarScript.myTurn) {
-            if (look) {
+    public void ToggleCanLook(bool look)
+    {
+        if (familiarScript.myTurn)
+        {
+            if (look)
+            {
                 canLook = true;
             }
-            else {
+            else
+            {
                 canLook = false;
             }
         }
-        else {
-           if (look) {
+        else
+        {
+            if (look)
+            {
                 canLook = true;
             }
-            else {
+            else
+            {
                 canLook = false;
-            } 
+            }
         }
     }
 
@@ -414,11 +428,12 @@ public class MovementScript : MonoBehaviour
                 AudioManager.instance.StopSound(AudioManagerChannels.footStepsLoopChannel);
             }
         }
-        else 
+        else
         {
             velocity.y += gravity * Time.deltaTime;
             characterController.Move(velocity * Time.deltaTime);
-            if (characterController.isGrounded) {
+            if (characterController.isGrounded)
+            {
                 characterAnimationHandler.ToggleFallAnim(false);
             }
         }
@@ -427,7 +442,7 @@ public class MovementScript : MonoBehaviour
     public void LookAndMove()
     {
         direction = new Vector3(movement.x, 0, movement.y).normalized; //direction of movement
-        
+
         //Character rotations
         if (direction.magnitude >= 0.2f && canLook)
         {
@@ -435,7 +450,7 @@ public class MovementScript : MonoBehaviour
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref rotationVelocity, timeToTurn);
             transform.rotation = Quaternion.Euler(0, angle, 0);
             newDirection = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
-            
+
             if (Vector3.Distance(transform.forward, newDirection) > 0.8 && !freeMove)
             {
                 turning = true;
@@ -582,6 +597,9 @@ public class MovementScript : MonoBehaviour
 
     public IEnumerator ChangeMaterialOnDeath()
     {
+        if (AudioManager.instance.footStepsChannel.isPlaying)
+            AudioManager.instance.StopSoundAfterLoop(AudioManagerChannels.footStepsLoopChannel);
+            
         if (defaultMat != null)
         {
             materialHolder.GetComponent<SkinnedMeshRenderer>().material = dissolveMat;
@@ -605,7 +623,7 @@ public class MovementScript : MonoBehaviour
 
             materialHolder.GetComponent<SkinnedMeshRenderer>().material = defaultMat;
         }
-        
+
 
         yield break;
     }
