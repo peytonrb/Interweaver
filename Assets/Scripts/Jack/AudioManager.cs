@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
@@ -44,7 +45,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip hubIntroMusic;
 
    [Header("SFX")]
-   private List<AudioSource> soundEffectSources = new List<AudioSource>();  
+   public List<AudioSource> soundEffectSources = new List<AudioSource>();  
    
 
     void Awake()
@@ -86,7 +87,7 @@ public class AudioManager : MonoBehaviour
 
         if (0 < soundEffectSources.Count)
         {
-            foreach(AudioSource soundEffectSource in soundEffectSources)
+            foreach(AudioSource soundEffectSource in soundEffectSources.ToList())
             {
                 if (soundEffectSource == null)
                 {

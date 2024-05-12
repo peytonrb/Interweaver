@@ -51,7 +51,7 @@ public class RespawnController : MonoBehaviour
                     if (hasBeenCheckedOnce == false)
                     {
                         //Check here
-                        Debug.Log("here");
+                        //Debug.Log("here");
                         CheckAndRespawnWeaveables();
                         hasBeenCheckedOnce = true;
                     }

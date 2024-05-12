@@ -29,7 +29,7 @@ public class FadeToBlack : MonoBehaviour
 
         myImage = GetComponent<Image>();
         baseImageColor = myImage.color;
-        Debug.Log(myImage.gameObject.name);
+        //Debug.Log(myImage.gameObject.name);
     }
 
     // Gets called by death methods to start the UI fader process
