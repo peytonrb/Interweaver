@@ -156,12 +156,14 @@ public class InputManagerScript : MonoBehaviour
             ToggleControlScheme(true);
             hasControllerInvoke = true;
             Cursor.lockState = CursorLockMode.Locked;
+            pauseScript.usingController = true;
         }
         else if (Gamepad.current == null && hasControllerInvoke) 
         {
             ToggleControlScheme(false);
             hasControllerInvoke = false;
-            Cursor.lockState = CursorLockMode.None;           
+            Cursor.lockState = CursorLockMode.None;
+            pauseScript.usingController = false;
         }
     }
 

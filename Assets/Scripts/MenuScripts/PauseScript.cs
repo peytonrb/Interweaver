@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class PauseScript : MonoBehaviour
 {
-    private bool usingController = false;
+    public bool usingController = false;
     private Toggle toggle;
     private EventSystem eventSystem;
 
@@ -329,7 +329,7 @@ public class PauseScript : MonoBehaviour
         {
             controlsPanel.SetActive(true);
             defaultGroup.SetActive(false);
-            inputManager.SetActive(false);
+            //inputManager.SetActive(false);
 
             controlsPanel.GetComponent<CanvasGroup>().alpha = 1f;
             defaultGroup.GetComponent<CanvasGroup>().alpha = 0f;
