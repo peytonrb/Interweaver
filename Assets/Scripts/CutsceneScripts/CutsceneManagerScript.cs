@@ -72,6 +72,11 @@ public class CutsceneManagerScript : MonoBehaviour
         if (playOnStart == true) {
             StartCutscene();
         }
+
+        if (cutsceneCanvas != null && !isSkippable)
+            cutsceneCanvas.transform.GetChild(1).gameObject.SetActive(false);
+        else
+            cutsceneCanvas.transform.GetChild(1).gameObject.SetActive(true);
     }
 
     // Update is called once per frame
@@ -253,7 +258,6 @@ public class CutsceneManagerScript : MonoBehaviour
         playerMovementScript.inCutscene = false;
 
         if (skipped == true) {
-            Debug.Log("Skipped = " + skipped);
             isTransitioning = false;
             bpCanvasGroup.alpha = 0;
             cutscenePhase = 0;

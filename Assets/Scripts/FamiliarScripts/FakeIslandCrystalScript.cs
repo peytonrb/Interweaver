@@ -7,15 +7,21 @@ public class FakeIslandCrystalScript : MonoBehaviour, IDamageable
 
     public GameObject vfxPrefab;
 
-    public AudioClip shatterFile;
+    [SerializeField] private AudioClip shatterFile;
+    private AudioSource shatterSource;
 
     public FloatingIslandScript myFloatingIsland;
 
     public GameObject gustsToSpawn;
+
+    void  Start()
+    {
+        shatterSource = null;
+    }
     public void Damage()
     {
         GameObject shatterVFX = Instantiate(vfxPrefab, transform.position, transform.rotation);
-        AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, shatterFile, 1f);
+        shatterSource = AudioManager.instance.AddSFX(shatterFile, false, shatterSource);
 
         if (myFloatingIsland != null)
         {

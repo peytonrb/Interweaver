@@ -8,13 +8,22 @@ public class WeaveInteraction_HoverObject : WeaveInteraction
     {
         if (!other.TryGetComponent<FloatingIslandScript>(out FloatingIslandScript amongus))
         {
-            HoverCrystalScript hoverScript;
+            StartCoroutine(DelayingStartHover());
 
+            
+        }
+
+
+        IEnumerator DelayingStartHover()
+        {
+            HoverCrystalScript hoverScript;
+            
             if (other.TryGetComponent<HoverCrystalScript>(out hoverScript))
             {
                 if (!hoverScript.hoverBegan)
                 {
-                    wovenObject.GetComponent<WeaveableObject>().weaveController.OnDrop();
+                    wovenObject.GetComponent<WeaveableObject>().weaveController.DelayingWeaveDrop();
+                    yield return new WaitForSeconds(0.1f);
                     hoverScript.StartHover(wovenObject);
                 }
             }
@@ -24,7 +33,8 @@ public class WeaveInteraction_HoverObject : WeaveInteraction
                 if (!hoverScript.hoverBegan)
                 {
                     // drops weaveable from weaving control
-                    other.GetComponent<WeaveableObject>().weaveController.OnDrop();
+                    other.GetComponent<WeaveableObject>().weaveController.DelayingWeaveDrop();
+                    yield return new WaitForSeconds(0.1f);
                     hoverScript.StartHover(other);
                 }
             }

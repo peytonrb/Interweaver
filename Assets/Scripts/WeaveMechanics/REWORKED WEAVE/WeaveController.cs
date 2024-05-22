@@ -31,8 +31,8 @@ public class WeaveController : MonoBehaviour
 
     [Header("Other Script References - DO NOT MODIFY")]
     [HideInInspector] public bool isWeaving;
-    [HideInInspector] public WeaveableObject currentWeaveable;
-    [HideInInspector] public WeaveableObject selectedWeaveable;
+     public WeaveableObject currentWeaveable;
+     public WeaveableObject selectedWeaveable;
     [HideInInspector] public Vector2 lookDirection;
     private MovementScript movementScript;
     private PlayerControllerNew playerControllerNew;
@@ -89,11 +89,40 @@ public class WeaveController : MonoBehaviour
     // <param> the direction that the player is looking in
     public void GamepadTargetingArrow(Vector2 lookDir)
     {
+        targetSphere.gameObject.SetActive(false);
+
         lookDirection = lookDir;
         if (lookDir.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(lookDir.x, lookDir.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
             targetingArrow.transform.rotation = Quaternion.Euler(0, targetAngle, 0);
+
+            RaycastHit hit;
+            if(Physics.BoxCast(transform.position, transform.localScale * 0.7f,
+                                    targetingArrow.transform.forward, out hit,
+                                    transform.rotation, weaveDistance, weaveableLayerMask))
+            {
+                if (hit.collider.GetComponent<WeaveableObject>() != null)
+                {
+                    if (!hit.collider.GetComponent<WeaveableObject>().materialIsOn && Vector3.Distance(this.transform.position, hit.collider.transform.position) < 20f)
+                    {
+                        Renderer rend = hit.collider.transform.GetChild(0).GetComponent<Renderer>();
+                        Material[] mats = rend.materials;
+                        Material existingMat = mats[0];
+                        Material[] newMats = new Material[2];
+                        newMats[0] = existingMat;
+                        newMats[1] = weaveFXScript.emissiveMat;
+                        rend.materials = newMats;
+                        hit.collider.GetComponent<WeaveableObject>().materialIsOn = true;
+                        isHoveringObject = true;
+                    }
+                }
+            }
+            else
+            {
+                isHoveringObject = false;
+            }
+
             if (isWeaving)
             {
                 targetingArrow.SetActive(false);
@@ -278,6 +307,16 @@ public class WeaveController : MonoBehaviour
         // toggle off animation here
     }
 
+    public void DelayingWeaveDrop()
+    {
+        StartCoroutine(DelayedWeaveDrop());
+    }
+
+    IEnumerator DelayedWeaveDrop()
+    {
+        yield return new WaitForSeconds(0.1f);
+        OnDrop();
+    }
     // stops all audio if audio is enabled
     IEnumerator EndWeaveAudio()
     {
@@ -286,6 +325,7 @@ public class WeaveController : MonoBehaviour
             AudioManager.instance.PlaySound(AudioManagerChannels.weaveLoopingChannel, weavingOutroClip);
             yield return new WaitForSeconds(.732f);
             AudioManager.instance.StopSound(AudioManagerChannels.weaveLoopingChannel);
+            Debug.Log("this should be called once and kill the weave sound?");
         }
 
         yield break;

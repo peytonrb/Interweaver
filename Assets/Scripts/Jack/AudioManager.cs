@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
@@ -44,7 +45,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip hubIntroMusic;
 
    [Header("SFX")]
-   private List<AudioSource> soundEffectSources = new List<AudioSource>();  
+   public List<AudioSource> soundEffectSources = new List<AudioSource>();  
    
 
     void Awake()
@@ -78,14 +79,27 @@ public class AudioManager : MonoBehaviour
     public void PlayMusicOnSceneChange(string sceneName)
     {
         StopSound(AudioManagerChannels.MusicChannel);
+        StopSound(AudioManagerChannels.SoundEffectChannel);
+        StopSound(AudioManagerChannels.weaveLoopingChannel);
+        StopSound(AudioManagerChannels.fallLoopChannel);
+        StopSound(AudioManagerChannels.footStepsLoopChannel);
         introMusicSource.Stop(); // teehee
 
         if (0 < soundEffectSources.Count)
         {
-            foreach(AudioSource soundEffectSource in soundEffectSources)
+            foreach(AudioSource soundEffectSource in soundEffectSources.ToList())
             {
-                soundEffectSource.Stop();
-                KillAudioSource(soundEffectSource);
+                if (soundEffectSource == null)
+                {
+                    //Debug.Log("A null source is here, what's up with that?");
+                    soundEffectSources.Remove(soundEffectSource);
+                }
+                else
+                {
+                    //Debug.Log("I just killed " + soundEffectSource.name + " and it felt good :)");
+                    soundEffectSource.Stop();
+                    KillAudioSource(soundEffectSource);
+                }
             }
         }
 

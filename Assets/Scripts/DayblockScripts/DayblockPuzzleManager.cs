@@ -34,6 +34,8 @@ public class DayblockPuzzleManager : MonoBehaviour
     public Transform moonVFX;
 
     public Transform forceTransform;
+
+    public GameObject orbObj;
     // Start is called before the first frame update
     void Start()
     {
@@ -165,7 +167,8 @@ public class DayblockPuzzleManager : MonoBehaviour
 
         GameObject effect = Instantiate(vfxObject, transform.position, transform.rotation);
         effect.transform.localScale = new Vector3(2, 2, 2);
-        Instantiate(orbObject, transform.position, transform.rotation);
+
+        orbObj.SetActive(true);
 
         yield break;
     }

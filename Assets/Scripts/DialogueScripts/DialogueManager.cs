@@ -54,6 +54,8 @@ public class DialogueManager : MonoBehaviour
         sentences = new Queue<string>();
         isActive = false;
         moveScript = GameObject.FindWithTag("Player").GetComponent<MovementScript>();
+
+        if (GameObject.FindWithTag("RivalTrigger"))
         rivalTrigger = GameObject.FindWithTag("RivalTrigger").GetComponent<RivalEventTrigger>();
     }
 
@@ -274,7 +276,7 @@ public class DialogueManager : MonoBehaviour
 
                     if (isController) // checks current control type. Using the current input for that control type adds the entire <sprite name=whatever> phrase
                     {
-                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press B>");
+                        dialogueText.text = dialogueText.text.Insert(currentPos, "<sprite name=Press RT>");
                     }
                     else
                     {
@@ -441,7 +443,7 @@ public class DialogueManager : MonoBehaviour
 
         if (dialogueText.text.Contains('{'))
         {
-            Debug.Log(dialogueText.text.IndexOf('{'));
+            //Debug.Log(dialogueText.text.IndexOf('{'));
 
             InsertIcon(dialogueText.text, dialogueText.text.IndexOf('{'));
         }

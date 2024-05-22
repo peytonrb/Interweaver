@@ -66,6 +66,7 @@ public class HoverCrystalScript : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("weaveObject");
         other.layer = LayerMask.NameToLayer("weaveObject");
         rigidBody.constraints = RigidbodyConstraints.None;
+        InputManagerScript.instance.player.GetComponent<WeaveController>().OnDrop();
         WeaveableManager.Instance.DestroyJoints(other.GetComponent<WeaveableObject>().listIndex);
         isCombined = false;
         yield return null;

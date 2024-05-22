@@ -131,6 +131,7 @@ public class FamiliarScript : MonoBehaviour
 
     public void Death() // this should be an interface EVENTUALLY WAHOO // I AGREE OMG OMG SAME BESTIE
     {
+        this.GetComponent<MovementScript>().StartMaterialChange();
         movementScript.active = false;
         isDead = true;
         characterController.enabled = false;

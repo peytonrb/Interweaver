@@ -21,7 +21,6 @@ public class PlayerControllerNew : MonoBehaviour
 
     [Header("Cutscenes/UI")]
     [CannotBeNullObjectField] public GameObject pauseMenu;
-    private PauseScript pauseScript;
     [HideInInspector] public bool inCutscene;
     [HideInInspector] public bool talkingToNPC;
 
@@ -49,12 +48,9 @@ public class PlayerControllerNew : MonoBehaviour
     void Start()
     {
         familiarScript = familiar.GetComponent<FamiliarScript>();
-        pauseScript = pauseMenu.GetComponent<PauseScript>();
         possessing = false;
         vCamRotationState = 0;
         talkingToNPC = false;
-
-        pauseMenu.SetActive(false);
 
         //these two lines are grabing the game master's last checkpoint position
         GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMasterScript>();

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -19,7 +20,7 @@ public class BlackboardScript : MonoBehaviour
     private AnimaticCutsceneController acc;
     private VideoCutsceneController vcc;
     public GameObject popupUIPrompt;
-    [HideInInspector] [Tooltip ("If true, then you are currently staring at the blackboard, and blackboard functionality is on.")] public bool onBlackboard;
+    [HideInInspector][Tooltip("If true, then you are currently staring at the blackboard, and blackboard functionality is on.")] public bool onBlackboard;
     private int levelsCompleted;
     private int lostSoulTotalAlpine;
     private int lostSoulTotalCavern;
@@ -57,7 +58,7 @@ public class BlackboardScript : MonoBehaviour
         lostSoulTotalAlpine = PlayerData.instance.GetAlpineLostSoulCount();
         lostSoulTotalCavern = PlayerData.instance.GetCavernLostSoulCount();
         lostSoulTotalSepultus = PlayerData.instance.GetSepultusLostSoulCount();
-        
+
         lostSoulCountAlpine.text = "SOULS COLLECTED: " + lostSoulTotalAlpine;
         lostSoulCountCavern.text = "SOULS COLLECTED: " + lostSoulTotalCavern;
         lostSoulCountSepultus.text = "SOULS COLLECTED: " + lostSoulTotalSepultus;
@@ -78,7 +79,7 @@ public class BlackboardScript : MonoBehaviour
                     sepultusButton.SetActive(false);
                     break;
                 }
-            case 1: 
+            case 1:
                 {
                     alpineButton.SetActive(true);
                     cavernButton.SetActive(true);
@@ -102,8 +103,10 @@ public class BlackboardScript : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other) {
-        if (other.gameObject.CompareTag("Player")) {
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
             var weaverNPCInteraction = InputManagerScript.instance.playerInput.actions["NPCInteraction"].GetBindingDisplayString();
 
             popupUIPrompt.SetActive(true);
@@ -113,24 +116,35 @@ public class BlackboardScript : MonoBehaviour
         }
     }
 
-    void OnTriggerExit(Collider other) {
-        if (other.gameObject.CompareTag("Player")) {
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
             popupUIPrompt.SetActive(false);
         }
     }
 
-    public void GoToFromBlackboard(MovementScript movementScript) {
-        if (onBlackboard == false) {
-            GameObject vfx = Instantiate(portalVFX, new Vector3(player.transform.position.x, player.transform.position.y - 1f, player.transform.position.z), Quaternion.identity);
-            vfx.GetComponent<PortalVFXController>().isActive = true;
-            activeVFX = vfx;
+    public void GoToFromBlackboard(MovementScript movementScript)
+    {
+        if (onBlackboard == false)
+        {
+            if (activeVFX == null || activeVFX.GetComponent<PortalVFXController>().isActive == false)
+            {
+                GameObject vfx = Instantiate(portalVFX, new Vector3(player.transform.position.x, player.transform.position.y - 1f, player.transform.position.z), Quaternion.identity);
+                vfx.GetComponent<PortalVFXController>().isActive = true;
+                activeVFX = vfx;
+            }
+
             AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, portalSpawning, 1f);
+            portalSustainSource = AudioManager.instance.KillAudioSource(portalSustainSource);
             StartCoroutine(PlayDelayedPortalSound());
             StartCoroutine(OpenBlackboard(movementScript));
-            
         }
-        else {
-            activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
+        else
+        {
+            if (activeVFX != null) {
+                activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
+            }
             //interactableUI.SetActive(false);
             pressEToExit.gameObject.SetActive(false);
             movementScript.ToggleCanLook(true);
@@ -147,11 +161,15 @@ public class BlackboardScript : MonoBehaviour
         }
     }
 
-        IEnumerator PlayDelayedPortalSound()
-            {
-                yield return new WaitForSeconds(2.596f); 
-                portalSustainSource = AudioManager.instance.AddSFX(portalSustain, true, portalSustainSource);
-            }
+    IEnumerator PlayDelayedPortalSound()
+    {
+        yield return new WaitForSeconds(2.596f);
+        if (!onBlackboard)
+        {
+            yield break;
+        }
+        portalSustainSource = AudioManager.instance.AddSFX(portalSustain, true, portalSustainSource);
+    }
 
     IEnumerator OpenBlackboard(MovementScript movementScript)
     {
@@ -164,7 +182,8 @@ public class BlackboardScript : MonoBehaviour
         }
         blackboardCamera.Priority = 2;
         StartCoroutine(WaitForBlendToFinish());
-        if (popupUIPrompt.activeSelf) {
+        if (popupUIPrompt.activeSelf)
+        {
             popupUIPrompt.SetActive(false);
         }
         InputManagerScript.instance.isOnBlackboard = true;
@@ -176,43 +195,49 @@ public class BlackboardScript : MonoBehaviour
     /// 0 is for Alpine, 1 is for Cavern.
     /// </summary>
     /// <param name="levelNumber"></param>
-    public void GoToLevel(int levelNumber) {
-        if (onBlackboard == true) {
-            switch (levelNumber) {
+    public void GoToLevel(int levelNumber)
+    {
+        if (onBlackboard == true)
+        {
+            switch (levelNumber)
+            {
                 case 0:
                     //GO TO ALPINE
-                    if (levelNumber <= levelsCompleted) {
+                    if (levelNumber <= levelsCompleted)
+                    {
                         activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
                         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, portalEnd, 1f);
                         portalSustainSource = AudioManager.instance.KillAudioSource(portalSustainSource);
                         blackboardCamera.Priority = 0;
                         StartCoroutine(CutsceneLoader(1));
                     }
-                break;
+                    break;
                 case 1:
                     //GO TO CAVERN
-                    if (levelNumber <= levelsCompleted || DebugLoadAnyLevel) {
+                    if (levelNumber <= levelsCompleted || DebugLoadAnyLevel)
+                    {
                         activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
                         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, portalEnd, 1f);
                         portalSustainSource = AudioManager.instance.KillAudioSource(portalSustainSource);
                         blackboardCamera.Priority = 0;
                         StartCoroutine(CutsceneLoader(3));
                     }
-                break;
+                    break;
 
-                 case 2:
+                case 2:
                     //GO TO SEPULTUS
-                    if (levelNumber <= levelsCompleted || DebugLoadAnyLevel) {
+                    if (levelNumber <= levelsCompleted || DebugLoadAnyLevel)
+                    {
                         activeVFX.GetComponent<PortalVFXController>().isWaiting = false;
                         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, portalEnd, 1f);
                         portalSustainSource = AudioManager.instance.KillAudioSource(portalSustainSource);
                         blackboardCamera.Priority = 0;
                         StartCoroutine(CutsceneLoader(5));
                     }
-                break;
+                    break;
             }
         }
-        
+
     }
 
     IEnumerator CutsceneLoader(int index)
@@ -225,22 +250,27 @@ public class BlackboardScript : MonoBehaviour
         SceneHandler.instance.LoadLevel("AnimaticCutscenes");
     }
 
-    IEnumerator WaitForBlendToFinish() {
+    IEnumerator WaitForBlendToFinish()
+    {
         yield return null;
-        while (mainCamera.IsBlending) {
+        while (mainCamera.IsBlending)
+        {
             yield return null;
         }
-        if (onBlackboard) {
+        if (onBlackboard)
+        {
             defaultButton.Select();
             interactableUI.SetActive(true);
             pressEToExit.gameObject.SetActive(true);
             //Changes the text on the exit prompt depending on the control scheme
             PlayerInput playerInput = InputManagerScript.instance.GetComponent<PlayerInput>();
-            if (playerInput.currentControlScheme == "Gamepad") {
-                pressEToExit.text = "Press B to Exit";
+            if (playerInput.currentControlScheme == "Gamepad")
+            {
+                pressEToExit.text = "Press B to Exit \n Press A to Select";
             }
-            else {
-                pressEToExit.text = "Press E to Exit";
+            else
+            {
+                pressEToExit.text = "Press E to Exit \n Click to Select";
             }
         }
         yield break;

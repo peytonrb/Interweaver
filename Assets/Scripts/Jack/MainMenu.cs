@@ -51,6 +51,9 @@ public class MainMenu : MonoBehaviour
         optionsMenu.gameObject.SetActive(false);
         creditsMenu.gameObject.SetActive(false);
         Time.timeScale = 1;
+
+        if (!Cursor.visible)
+            Cursor.visible = true;
     }
 
     //Function for switching the active button using the eventsystem using a parameter
@@ -115,9 +118,10 @@ public class MainMenu : MonoBehaviour
     public void OpenCredits()
     {
         PlayButtonSound();
-        creditsMenu.gameObject.SetActive(true);
         creditsMenu.alpha = 1;
         creditsMenu.blocksRaycasts = true;
+        creditsMenu.gameObject.SetActive(true);
+        ChangeActiveButtons(2);
         defaultCreditsButton.Select();
         CloseMainMenu();
 
@@ -129,8 +133,8 @@ public class MainMenu : MonoBehaviour
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, cancelFile, 1f);
         creditsMenu.alpha = 0;
         creditsMenu.blocksRaycasts = false;
-        creditsMenu.gameObject.SetActive(false);
         EventSystem.current.SetSelectedGameObject(null);
+        creditsMenu.gameObject.SetActive(false);
         OpenMainMenu();
     }
 
@@ -177,11 +181,12 @@ public class MainMenu : MonoBehaviour
     {
         if (PlayerData.instance.GetSaveData() == true) {
             PlayerData.instance.NewGame();
-            AnimaticCutsceneController acc = gameObject.GetComponent<AnimaticCutsceneController>();
-            acc.ChangeCutscene(0);
-            VideoCutsceneController vcc = gameObject.GetComponent<VideoCutsceneController>();
-            vcc.ChangeCutscene(0);
         }
+
+        AnimaticCutsceneController acc = gameObject.GetComponent<AnimaticCutsceneController>();
+        acc.ChangeCutscene(0);
+        VideoCutsceneController vcc = gameObject.GetComponent<VideoCutsceneController>();
+        vcc.ChangeCutscene(0);
 
         AudioManager.instance.PlaySound(AudioManagerChannels.SoundEffectChannel, startFile, 1f);
         SceneHandler.instance.LoadLevel("AnimaticCutscenes");
@@ -202,13 +207,17 @@ public class MainMenu : MonoBehaviour
     {
         if (input.IsPressed() && eventSystem.currentSelectedGameObject == null)
         {
-            if (!optionsMenu.gameObject.activeInHierarchy)
+            if (optionsMenu.gameObject.activeInHierarchy)
             {
-                ChangeActiveButtons(0);
-            } else {
                 ChangeActiveButtons(1);
             }
-            
+            else if (creditsMenu.gameObject.activeInHierarchy)
+            {
+                ChangeActiveButtons(2);
+            } 
+            else {
+                ChangeActiveButtons(0);
+            }
         }
     }
 }

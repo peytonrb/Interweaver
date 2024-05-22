@@ -156,12 +156,14 @@ public class InputManagerScript : MonoBehaviour
             ToggleControlScheme(true);
             hasControllerInvoke = true;
             Cursor.lockState = CursorLockMode.Locked;
+            pauseScript.usingController = true;
         }
         else if (Gamepad.current == null && hasControllerInvoke) 
         {
             ToggleControlScheme(false);
             hasControllerInvoke = false;
-            Cursor.lockState = CursorLockMode.None;           
+            Cursor.lockState = CursorLockMode.None;
+            pauseScript.usingController = false;
         }
     }
 
@@ -486,7 +488,7 @@ public class InputManagerScript : MonoBehaviour
                 {
                     DialogueManager.instance.DisplayNextSentence();
                 }
-                Debug.Log("Interacting Familiar");
+                //Debug.Log("Interacting Familiar");
             }
             else
             {
@@ -524,7 +526,7 @@ public class InputManagerScript : MonoBehaviour
                 }
                 
 
-                Debug.Log("Interacting Weaver");
+                //Debug.Log("Interacting Weaver");
             }
         }
     }
@@ -680,7 +682,7 @@ public class InputManagerScript : MonoBehaviour
                     popUiFamiliarCanvas.gameObject.SetActive(true);
                     popUiFamiliarCanvas.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().
                         SetText("<sprite name=" + jumpInputName + ">" + "       <sprite name=stagLeap>" +
-                        "\n \n<br><sprite name=" + swapName + ">" +" Swap");
+                        "\n \n<br><sprite name=" + swapName + ">" +"    Swap");
 
 
                 }
